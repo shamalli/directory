@@ -1,0 +1,1537 @@
+# Translation of Themes - Sydney in Russian
+# This file is distributed under the same license as the Themes - Sydney package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2020-04-09 12:35:17+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
+"X-Generator: GlotPress/3.0.0-alpha.2\n"
+"Language: ru\n"
+"Project-Id-Version: Themes - Sydney\n"
+
+#. Theme Name of the theme
+#: inc/onboarding/theme-info.php:136 inc/theme-dashboard-settings.php:21
+msgid "Sydney"
+msgstr "Sydney"
+
+#: inc/customizer.php:304 inc/customizer.php:2369
+msgid "Click the pencil icon to change this text"
+msgstr "Щёлкните значок карандаша чтобы изменить этот текст"
+
+#: inc/customizer.php:322 inc/customizer.php:2385
+msgid "or go to the Customizer"
+msgstr "или перейдите к настройке темы"
+
+#: inc/template-tags.php:86
+msgctxt "post date"
+msgid "Posted %s"
+msgstr "Опубликовано %s"
+
+#. Template Name of the theme
+#: inc/integrations/lifter/customize.php:71
+#: inc/integrations/lifter/customize.php:125
+#: inc/integrations/learnpress/customize.php:31
+#: inc/integrations/learnpress/customize.php:53
+#: inc/integrations/learndash/customize.php:51
+#: inc/integrations/learndash/customize.php:84
+msgid "No sidebar"
+msgstr "Нет боковой колонки"
+
+#: inc/customizer.php:1701
+msgid "Single post title size"
+msgstr "Размер заголовка отдельной записи"
+
+#: inc/customizer.php:1056 inc/customizer.php:2280
+msgid "Classic (alternative)"
+msgstr "Классический (альтернатива)"
+
+#. Template Name of the theme
+msgid "Page builder ready"
+msgstr "Page builder ready"
+
+#: inc/onboarding/theme-info.php:242
+msgid "Priority support"
+msgstr "Приоритетная поддержка"
+
+#: inc/onboarding/theme-info.php:30
+msgid "Hello, %s,"
+msgstr "Привет, %s,"
+
+#: inc/onboarding/theme-info.php:232 inc/theme-dashboard-settings.php:117
+msgid "WooCommerce compatible"
+msgstr "Совместим с WooCommerce"
+
+#: inc/onboarding/theme-info.php:227
+msgid "Single Post/Page Options"
+msgstr "Отдельная запись/параметры страницы"
+
+#: inc/onboarding/theme-info.php:137 inc/theme-dashboard-settings.php:22
+msgid "Sydney Pro"
+msgstr "Sydney Pro"
+
+#: inc/onboarding/theme-info.php:157 inc/theme-dashboard-settings.php:42
+msgid "Social Icons"
+msgstr "Социальные иконки"
+
+#: inc/onboarding/theme-info.php:127
+msgid "See the Documentation"
+msgstr "Смотрите документацию"
+
+#: inc/onboarding/theme-info.php:135 inc/theme-dashboard-settings.php:20
+msgid "Feature"
+msgstr "Особенность"
+
+#: inc/onboarding/theme-info.php:119
+msgid "Visit our forums"
+msgstr "Посетите наши форумы"
+
+#: inc/onboarding/theme-info.php:121
+msgid "Visit the forums"
+msgstr "Посетить форумы"
+
+#: inc/onboarding/theme-info.php:142 inc/theme-dashboard-settings.php:27
+msgid "Access to all Google Fonts"
+msgstr "Доступ ко всем шрифтам Google"
+
+#: inc/onboarding/theme-info.php:107 inc/onboarding/theme-info.php:182
+#: inc/theme-dashboard-settings.php:67
+msgid "Color options"
+msgstr "Настройки цвета"
+
+#: inc/onboarding/theme-info.php:192 inc/theme-dashboard-settings.php:77
+msgid "Widgetized footer"
+msgstr "Подвал с виджетами"
+
+#: inc/onboarding/theme-info.php:197 inc/theme-dashboard-settings.php:82
+msgid "Background image support"
+msgstr "Поддержка фонового изображения"
+
+#: inc/onboarding/theme-info.php:202 inc/theme-dashboard-settings.php:87
+msgid "Footer Credits option"
+msgstr "Настройка текста подвала"
+
+#: inc/onboarding/theme-info.php:152 inc/theme-dashboard-settings.php:37
+msgid "Parallax backgrounds"
+msgstr "Фоны Parallax"
+
+#: inc/onboarding/theme-info.php:40
+msgid "Free vs Pro"
+msgstr "Бесплатная и Pro версия"
+
+#: inc/onboarding/theme-info.php:38
+msgid "Getting started"
+msgstr "Начало работы"
+
+#: inc/onboarding/theme-info.php:95
+msgid "Go to the automatic importer"
+msgstr "Перейти к автоматическому импорту"
+
+#: inc/onboarding/theme-info.php:177 inc/theme-dashboard-settings.php:62
+msgid "Polylang integration"
+msgstr "Интеграция Polylang"
+
+#: inc/onboarding/theme-info.php:172 inc/theme-dashboard-settings.php:57
+msgid "Translation ready"
+msgstr "Поддержка переводов"
+
+#: inc/onboarding/theme-info.php:167 inc/theme-dashboard-settings.php:52
+msgid "Front Page Blocks"
+msgstr "Блоки главной страницы"
+
+#: inc/onboarding/theme-info.php:162 inc/theme-dashboard-settings.php:47
+msgid "Slider, image or video header"
+msgstr "Слайдер, изображение, или видео заголовок"
+
+#: inc/onboarding/theme-info.php:222
+msgid "Header support for shortcodes"
+msgstr "Поддержка шорткодов в заголовке"
+
+#: inc/onboarding/theme-info.php:217
+msgid "Header support for Crelly Slider"
+msgstr "Поддержка Crelly Slider в заголовке"
+
+#: inc/onboarding/theme-info.php:212 inc/theme-dashboard-settings.php:97
+msgid "Extra Customizer Options (Front Page Section Titles, Single Employees, Single Projects, Header Contact Info, Buttons)"
+msgstr "Дополнительные параметры настройки темы (Заголовки секций главной страницы, Отдельные сотрудники, Отдельные проекты, Контактная информация в заголовке, Кнопки)"
+
+#: inc/onboarding/theme-info.php:237
+msgid "5 Extra Page Templates (Contact, Featured Header - Default, Featured Header - Wide, No Header - Default, No Header - Wide)"
+msgstr "5 дополнительных шаблонов страниц (Контакт, Уникальный заголовок - обычный, Уникальный заголовок - широкий, Без заголовка - обычный, Без заголовка - широкий)"
+
+#: inc/onboarding/theme-info.php:207
+msgid "Extra widgets (timeline, latest news in carousel, pricing tables, a new employees widget and a new contact widget)"
+msgstr "Дополнительные виджеты (временной график, карусель последних новостей, таблицы цен, новый виджет сотрудников и новый виджет обратной связи)"
+
+#: inc/onboarding/theme-info.php:126
+msgid "Our documentation can help you learn how to use the theme and also provides you with premade code snippets and answers to FAQs."
+msgstr "Документация может помочь вам узнать как использовать тему. Также там есть готовые фрагменты кода и ответы на часто задаваемые вопросы."
+
+#: inc/onboarding/theme-info.php:120
+msgid "Need help? Go ahead and visit our support forums and we'll be happy to assist you with any theme related questions you might have"
+msgstr "Нужна помощь? Посетите наши форумы поддержки и мы с удовольствием поможем вам с вопросами по использованию нашей темы"
+
+#: inc/onboarding/plugins/class-sydney-recommended-plugins.php:88
+msgid "Install and activate"
+msgstr "Установить и активировать"
+
+#: inc/onboarding/theme-info.php:147 inc/theme-dashboard-settings.php:32
+#: inc/customizer.php:228 inc/customizer.php:2296
+msgid "Responsive"
+msgstr "Адаптивно"
+
+#: inc/customizer.php:227 inc/customizer.php:2295
+msgid "Full screen"
+msgstr "На весь экран"
+
+#: inc/customizer.php:223
+msgid "Slider mobile behavior"
+msgstr "Поведение слайдера на мобильных устройствах"
+
+#: inc/customizer.php:1911
+msgid "Mobile menu button"
+msgstr "Кнопка мобильного меню"
+
+#: widgets/video-widget.php:26
+msgid "Video mode:"
+msgstr "Режим видео:"
+
+#: widgets/video-widget.php:28
+msgid "Normal"
+msgstr "Нормальный"
+
+#: widgets/video-widget.php:29
+msgid "Lightbox"
+msgstr "Лайтбокс"
+
+#: widgets/video-widget.php:32
+msgid "Text before the play button (only for lightbox mode):"
+msgstr "Текст перед кнопкой проигрывания (только для режима \"Лайтбокс\"):"
+
+#: inc/customizer.php:1852
+msgid "Menu items hover"
+msgstr "Эффект при наведении на элементы меню"
+
+#: inc/customizer.php:173 inc/customizer.php:196 inc/customizer.php:2224
+msgid "Video"
+msgstr "Видео"
+
+#: inc/page-builder.php:65 inc/so-page-builder.php:65
+msgid "Add a value in the field to change the top/bottom row padding, otherwise 100px will be applied by default"
+msgstr "Добавьте значение в поле ввода чтобы изменить верхний и нижний отступы раздела, иначе будет применено начальное значение (100 пикселей)"
+
+#: widgets/fp-services-type-b.php:54 widgets/fp-services-type-a.php:46
+msgid "Excerpt"
+msgstr "Отрывок"
+
+#: widgets/fp-services-type-b.php:53 widgets/fp-services-type-a.php:45
+msgid "Full content"
+msgstr "Всё содержимое"
+
+#: widgets/fp-services-type-b.php:51 widgets/fp-services-type-a.php:43
+msgid "Content to display:"
+msgstr "Содержимое для отображения:"
+
+#: inc/upsell/class-customize.php:77 inc/theme-dashboard-settings.php:301
+msgid "Get Sydney Pro"
+msgstr "Получить Sydney Pro"
+
+#: inc/upsell/class-customize.php:76
+msgid "Ready for more?"
+msgstr "Готовы к большему?"
+
+#: inc/customizer.php:1713
+msgid "Colors"
+msgstr "Цвета"
+
+#: inc/page-builder.php:194 inc/so-page-builder.php:194
+msgid "Headings color"
+msgstr "Цвет заголовка"
+
+#: inc/page-builder.php:180 inc/so-page-builder.php:180
+msgid "Right"
+msgstr "Справа"
+
+#: inc/page-builder.php:179 inc/so-page-builder.php:179
+msgid "Center"
+msgstr "Центр"
+
+#: inc/page-builder.php:178 inc/so-page-builder.php:178
+msgid "Left"
+msgstr "Слева"
+
+#: inc/customizer.php:1718
+msgid "Header"
+msgstr "Заголовок"
+
+#: inc/page-builder.php:174 inc/so-page-builder.php:174
+msgid "Content alignment"
+msgstr "Выравнивание содержимого"
+
+#: inc/page-builder.php:113 inc/so-page-builder.php:113
+msgid "Overlay color"
+msgstr "Цвет наложения"
+
+#: inc/page-builder.php:187 inc/so-page-builder.php:187
+msgid "Widget title color"
+msgstr "Цвет заголовка виджета"
+
+#: inc/page-builder.php:107 inc/so-page-builder.php:107
+msgid "Disable row overlay?"
+msgstr "Отключить наложение раздела?"
+
+#: inc/customizer.php:2092
+msgid "[DEPRECATED] Please use the color option from Edit Row > Design > Overlay color"
+msgstr "[Уже не поддерживается] Пожалуйста, используйте параметр \"Цвет наложения\" в разделе Редактировать строку > Дизайн"
+
+#: inc/page-builder.php:183 inc/so-page-builder.php:183
+msgid "This setting depends on the content, it may or may not work"
+msgstr "Работа этого параметра зависит от содержимого."
+
+#: inc/page-builder.php:198 inc/so-page-builder.php:198
+msgid "This applies to all headings in the widget, except the widget title"
+msgstr "Это применяется ко всем заголовкам в виджете, кроме заголовка виджета"
+
+#: widgets/fp-portfolio.php:163
+msgid "Show project title?"
+msgstr "Показывать названия проекта?"
+
+#: widgets/fp-portfolio.php:13
+msgid "Sydney FP: Portfolio"
+msgstr "Sydney FP: Portfolio"
+
+#: widgets/fp-portfolio.php:35 widgets/fp-portfolio.php:148
+msgid "Show all"
+msgstr "Показать всё"
+
+#: widgets/fp-portfolio.php:12
+msgid "Display your projects in a grid."
+msgstr "Отображайте свои проекты по сетке."
+
+#: widgets/fp-portfolio.php:154
+msgid "Number of projects to show (-1 shows all of them):"
+msgstr "Количество проектов для показа (-1 для показа их всех)"
+
+#: widgets/fp-portfolio.php:160
+msgid "\"Show all\" text:"
+msgstr "Текст вместо \"Показать всё\":"
+
+#: widgets/fp-portfolio.php:156
+msgid "Enter the slugs (comma separated) for your categories or leave empty to show all projects."
+msgstr "Введите слаги своих рубрик (отделённые запятыми), или оставьте поле пустым, чтобы показывать все проекты."
+
+#: widgets/fp-portfolio.php:159
+msgid "Show navigation filter? (Category slugs must be specified)."
+msgstr "Отображать навигационный фильтр? (должны быть указаны слаги рубрик)."
+
+#: inc/customizer.php:108
+msgid "Page wrapper - bottom padding"
+msgstr "Вместилище страницы — нижний отступ"
+
+#: widgets/fp-clients.php:35
+msgid "Open clients links in a new tab?"
+msgstr "Открывать ссылки клиентов в новой вкладке?"
+
+#: inc/customizer.php:78
+msgid "83"
+msgstr "83"
+
+#: inc/customizer.php:101
+msgid "100"
+msgstr "100"
+
+#: inc/customizer.php:88
+msgid "Top padding for the page wrapper (the space between the header and the page title)"
+msgstr "Верхний отступ для вместилища страницы (пространство между заголовком сайта и заголовком страницы)"
+
+#: inc/customizer.php:85
+msgid "Page wrapper - top padding"
+msgstr "Вместилище страницы — верхний отступ"
+
+#: inc/customizer.php:111
+msgid "Bottom padding for the page wrapper (the space between the page content and the footer)"
+msgstr "Нижний отступ для вместилища страницы (пространство между содержимым страницы и подвалом)"
+
+#: theme-dashboard/class-theme-dashboard.php:615
+#: inc/onboarding/theme-info.php:39
+msgid "Support"
+msgstr "Поддержка"
+
+#: widgets/fp-testimonials.php:33
+msgid "Autoplay time [ms]"
+msgstr "Время задержки [мс]"
+
+#: theme-dashboard/class-theme-dashboard.php:550
+#: inc/onboarding/theme-info.php:125
+msgid "Documentation"
+msgstr "Документация"
+
+#: inc/onboarding/theme-info.php:21
+msgid "Sydney Info"
+msgstr "Информация о Sydney"
+
+#. Template Name of the theme
+#: inc/customizer.php:736
+msgid "Full width"
+msgstr "на всю ширину"
+
+#. Template Name of the theme
+msgid "Front Page"
+msgstr "Главная страница"
+
+#: widgets/fp-testimonials.php:7
+msgid "Sydney FP: Testimonials"
+msgstr "Sydney FP: Testimonials"
+
+#: widgets/video-widget.php:7
+msgid "Sydney: Video"
+msgstr "Sydney: Video"
+
+#: widgets/video-widget.php:6
+msgid "Display a video from Youtube, Vimeo etc."
+msgstr "Отображение видео с Youtube, Vimeo, и т. д."
+
+#: widgets/fp-testimonials.php:20
+msgid "In order to display this widget, you must first add some testimonials from your admin area."
+msgstr "Чтобы отображать этот виджет, вы должны сначала добавить рекомендации из своей консоли."
+
+#: widgets/fp-testimonials.php:108
+msgid "See all our testimonials"
+msgstr "Увидеть все наши рекомендации"
+
+#: widgets/fp-testimonials.php:29
+msgid "The text for the button [Defaults to <em>See all our testimonials</em> if left empty]"
+msgstr "Текст кнопки [По умолчанию <em>Увидеть все наши рекомендации</em>, если поле оставить пустым]"
+
+#: widgets/fp-testimonials.php:25
+msgid "Number of testimonials to show (-1 shows all of them):"
+msgstr "Количество рекомендаций для показа (-1 для показа их всех)"
+
+#: widgets/fp-testimonials.php:27
+msgid "The URL for your button [In case you want a button below your testimonials block]"
+msgstr "Ссылка кнопки [Если вы хотите кнопку под разделом ваших рекомендаций]"
+
+#: widgets/fp-testimonials.php:6
+msgid "Display your testimonials in a slider."
+msgstr "Отображайте свои рекомендации в слайдере."
+
+#: widgets/video-widget.php:24
+msgid "Paste the URL of the video (only from a network that supports oEmbed, like Youtube, Vimeo etc.):"
+msgstr "Вставьте ссылку видео (только из сети, которая поддерживает oEmbed, например Youtube, Vimeo, и т. д.):"
+
+#: widgets/fp-testimonials.php:31
+msgid "Enter the slug for your category or leave empty to show all testimonials."
+msgstr "Введите слаг своей рубрики, или оставьте поле пустым, чтобы показывать все рекомендации."
+
+#: widgets/fp-social.php:65
+msgid "&mdash; Select &mdash;"
+msgstr "&mdash; Выбрать &mdash;"
+
+#: widgets/fp-social.php:61
+msgid "In order to display your social icons in a widget, all you need to do is go to <strong>Appearance > Menus</strong> and create a menu containing links to your social profiles, then assign that menu here. Supported networks: Facebook, Twitter, Google Plus, Instagram, Dribble, Vimeo, Linkedin, Youtube, Flickr, Pinterest, Tumblr, Foursquare, Behance."
+msgstr "Чтобы отображать иконки социальных сетей в виджете, перейдите во <strong>Внешний вид &rarr; Меню</strong> и создайте меню со ссылками на ваши профили социальных сетей, потом выберите это меню здесь. Поддерживаемые социальные сети: Facebook, Twitter, Google Plus, Instagram, Dribble, Vimeo, Linkedin, Youtube, Flickr, Pinterest, Tumblr, Foursquare, Behance."
+
+#: widgets/fp-social.php:63
+msgid "Select your social menu:"
+msgstr "Выберите меню социальных сетей:"
+
+#: widgets/fp-social.php:53
+msgid "No menus have been created yet. <a href=\"%s\">Create some</a>."
+msgstr "Ни одного меню ещё не создано. <a href=\"%s\">Создать</a>"
+
+#: widgets/fp-skills.php:7
+msgid "Sydney FP: Skills"
+msgstr "Sydney FP: Skills"
+
+#: widgets/fp-social.php:6
+msgid "Sydney FP: Social Profile"
+msgstr "Sydney FP: Social Profile"
+
+#: widgets/fp-skills.php:35
+msgid "First skill value"
+msgstr "Значение первого навыка"
+
+#: widgets/fp-skills.php:46
+msgid "Second skill value"
+msgstr "Значение второго навыка"
+
+#: widgets/fp-skills.php:57
+msgid "Third skill value"
+msgstr "Значение третьего навыка"
+
+#: widgets/fp-skills.php:68
+msgid "Fourth skill value"
+msgstr "Значение четвёртого навыка"
+
+#: widgets/fp-skills.php:30
+msgid "First skill name"
+msgstr "Название первого навыка"
+
+#: widgets/fp-skills.php:41
+msgid "Second skill name"
+msgstr "Название второго навыка"
+
+#: widgets/fp-skills.php:52
+msgid "Third skill name"
+msgstr "Название третьего навыка"
+
+#: widgets/fp-skills.php:63
+msgid "Fourth skill name"
+msgstr "Название четвёртого навыка"
+
+#: widgets/fp-skills.php:6
+msgid "Show your visitors some of your skills."
+msgstr "Покажите своим посетителям некоторые из ваших навыков."
+
+#: widgets/fp-social.php:5
+msgid "Display your social profile on your front page"
+msgstr "Отображайте свой профиль социальной сети на главной странице"
+
+#: widgets/fp-services-type-b.php:41
+msgid "Number of columns:"
+msgstr "Количество столбцов:"
+
+#: widgets/fp-services-type-a.php:12
+msgid "Sydney FP: Services Type A"
+msgstr "Sydney FP: Services Type A"
+
+#: widgets/fp-services-type-b.php:12
+msgid "Sydney FP: Services type B"
+msgstr "Sydney FP: Services type B"
+
+#: widgets/fp-list.php:72
+msgid "Call to action button URL:"
+msgstr "Ссылка кнопки призыва к действию:"
+
+#: widgets/fp-list.php:75
+msgid "Call to action button text:"
+msgstr "Текст кнопки призыва к действию:"
+
+#: widgets/fp-services-type-b.php:27 widgets/fp-services-type-a.php:28
+msgid "In order to display this widget, you must first add some services from your admin area."
+msgstr "Чтобы отображать этот виджет, вы должны сначала добавить услуги из своей Консоли."
+
+#: widgets/fp-services-type-b.php:32 widgets/fp-services-type-a.php:33
+msgid "Number of services to show (-1 shows all of them):"
+msgstr "Количество услуг для показа (-1 для показа их всех)"
+
+#: widgets/fp-services-type-b.php:34 widgets/fp-services-type-a.php:35
+msgid "The URL for your button [In case you want a button below your services block]"
+msgstr "Ссылка кнопки [Если вы хотите кнопку под разделом ваших услуг]"
+
+#: widgets/fp-services-type-b.php:36 widgets/fp-services-type-a.php:37
+msgid "The text for the button [Defaults to <em>See all our services</em> if left empty]"
+msgstr "Текст кнопки [По умолчанию <em>Увидеть все наши услуги</em>, если поле оставить пустым]"
+
+#: widgets/fp-services-type-a.php:42
+msgid "Display services in two columns instead of three?"
+msgstr "Отображать услуги в две колонки вместо трёх?"
+
+#: widgets/fp-services-type-b.php:160 widgets/fp-services-type-a.php:145
+msgid "See all our services"
+msgstr "Увидеть все наши услуги"
+
+#: widgets/fp-services-type-b.php:11 widgets/fp-services-type-a.php:11
+msgid "Show what services you are able to provide."
+msgstr "Покажите какие услуги вы можете предоставить."
+
+#: widgets/fp-list.php:66
+msgid "Add a bit of text here. It will be displayed."
+msgstr "Добавьте здесь немного текста. Он будет отображаться."
+
+#: widgets/fp-list.php:69
+msgid "Add your list items here. One item per row, start each row with <strong>^</strong>. Example: <strong>^ list item </strong>"
+msgstr "Добавьте элементы списка сюда. Один элемент на строку, начинайте каждую строку символом <strong>^</strong>. Пример: <strong>^ элемент списка</strong>"
+
+#: widgets/fp-services-type-b.php:38 widgets/fp-services-type-a.php:39
+msgid "Enter the slug for your category or leave empty to show all services."
+msgstr "Введите слаг своей рубрики, или оставьте поле пустым, чтобы показывать все услуги."
+
+#: widgets/fp-social.php:58 widgets/fp-list.php:63 widgets/fp-portfolio.php:152
+msgid "Title:"
+msgstr "Заголовок:"
+
+#: widgets/fp-clients.php:7
+msgid "Sydney FP: Clients"
+msgstr "Sydney FP: Clients"
+
+#: widgets/fp-clients.php:26
+msgid "Number of clients to show (-1 shows all of them):"
+msgstr "Количество клиентов для показа (-1 для показа их всех)"
+
+#: widgets/fp-clients.php:111
+msgid "See all our clients"
+msgstr "Увидеть всех наших клиентов"
+
+#: widgets/fp-clients.php:30
+msgid "The text for the button [Defaults to <em>See all our clients</em> if left empty]"
+msgstr "Текст кнопки [По умолчанию <em>Увидеть всех наших клиентов</em>, если поле оставить пустым]"
+
+#: widgets/fp-clients.php:28
+msgid "The URL for your button [In case you want a button below your clients block]"
+msgstr "Ссылка кнопки [Если вы хотите кнопку под разделом ваших клиентов]"
+
+#: widgets/fp-employees.php:7
+msgid "Sydney FP: Employees"
+msgstr "Sydney FP: Employees"
+
+#: widgets/fp-facts.php:8
+msgid "Sydney FP: Facts"
+msgstr "Sydney FP: Facts"
+
+#: widgets/fp-facts.php:30
+msgid "here."
+msgstr "здесь."
+
+#: widgets/fp-latest-news.php:7
+msgid "Sydney FP: Latest News"
+msgstr "Sydney FP: Latest News"
+
+#: widgets/fp-list.php:13
+msgid "Sydney FP: List"
+msgstr "Sydney FP: List"
+
+#: widgets/fp-call-to-action.php:27
+msgid "Display the button inline with the text?"
+msgstr "Отображать кнопку вровень с текстом?"
+
+#: widgets/fp-clients.php:21
+msgid "In order to display this widget, you must first add some clients from your admin area. Set your client logos as featured images."
+msgstr "Чтобы отображать этот виджет, вы должны сначала добавить клиентов из своей Консоли. Задавайте логотипы и миниатюры для своих клиентов."
+
+#: widgets/fp-employees.php:140
+msgid "See all our employees"
+msgstr "Увидеть всех наших сотрудников"
+
+#: widgets/fp-latest-news.php:51 widgets/fp-latest-news.php:53
+msgid "See all our news"
+msgstr "Увидеть все наши новости"
+
+#: widgets/fp-employees.php:30
+msgid "The text for the button [Defaults to <em>See all our employees</em> if left empty]"
+msgstr "Текст кнопки [По умолчанию <em>Увидеть всех наших сотрудников</em>, если поле оставить пустым]"
+
+#: widgets/fp-latest-news.php:26
+msgid "Add the text for the button here if you want to change the default <em>See all our news</em>"
+msgstr "Добавьте текст кнопки здесь, если вы хотите изменить значение по умолчанию <em>Увидеть все наши новости</em>"
+
+#: widgets/fp-employees.php:26
+msgid "Number of employees to show (-1 shows all of them):"
+msgstr "Количество сотрудников для показа (-1 для показа их всех)"
+
+#: widgets/fp-employees.php:35
+msgid "Center the employees? (use only if you have 1 or 2 employees)"
+msgstr "Отцентровать сотрудников? (используйте только если у вас 1 или 2 сотрудника)"
+
+#: widgets/fp-facts.php:30
+msgid "You can find a list of the available icons "
+msgstr "Вы можете найти список доступных иконок"
+
+#: widgets/fp-facts.php:30
+msgid "Usage example: <strong>fa-android</strong>"
+msgstr "Пример использования: <strong>fa-android</strong>"
+
+#: widgets/fp-facts.php:38
+msgid "First fact name"
+msgstr "Название первого факта"
+
+#: widgets/fp-facts.php:54
+msgid "Second fact name"
+msgstr "Название второго факта"
+
+#: widgets/fp-facts.php:43
+msgid "First fact value"
+msgstr "Значение первого факта"
+
+#: widgets/fp-facts.php:48
+msgid "First fact icon"
+msgstr "Иконка первого факта"
+
+#: widgets/fp-facts.php:59
+msgid "Second fact value"
+msgstr "Значение второго факта"
+
+#: widgets/fp-facts.php:64
+msgid "Second fact icon"
+msgstr "Иконка второго факта"
+
+#: widgets/fp-facts.php:70
+msgid "Third fact name"
+msgstr "Название третьего факта"
+
+#: widgets/fp-facts.php:75
+msgid "Third fact value"
+msgstr "Значение третьего факта"
+
+#: widgets/fp-facts.php:80
+msgid "Third fact icon"
+msgstr "Иконка третьего факта"
+
+#: widgets/fp-facts.php:86
+msgid "Fourth fact name"
+msgstr "Название четвёртого факта"
+
+#: widgets/fp-facts.php:91
+msgid "Fourth fact value"
+msgstr "Значение четвёртого факта"
+
+#: widgets/fp-facts.php:96
+msgid "Fourth fact icon"
+msgstr "Иконка четвёртого факта"
+
+#: widgets/fp-list.php:11
+msgid "A simple list widget"
+msgstr "Виджет для простых списков"
+
+#: widgets/fp-latest-news.php:6
+msgid "Show the latest news from your blog."
+msgstr "Показывать последние новости из вашего блога."
+
+#: widgets/fp-employees.php:6
+msgid "Display your team members in a stylish way."
+msgstr "Отображайте участников своей команды стильно."
+
+#: widgets/fp-employees.php:28
+msgid "Enter an URL here if you want to section to link somewhere."
+msgstr "Введите здесь ссылку, если вы хотите, чтобы этот раздел куда-то ссылался."
+
+#: widgets/fp-clients.php:6
+msgid "Display your clients list."
+msgstr "Отображайте список своих клиентов."
+
+#: widgets/fp-clients.php:32
+msgid "Enter the slug for your category or leave empty to show all clients."
+msgstr "Введите слаг своей рубрики, или оставьте поле пустым, чтобы показывать всех клиентов."
+
+#: widgets/fp-employees.php:32
+msgid "Enter the slug for your category or leave empty to show all employees."
+msgstr "Введите слаг своей рубрики, или оставьте поле пустым, чтобы показывать всех сотрудников."
+
+#: widgets/fp-latest-news.php:23
+msgid "Enter the slug for your category or leave empty to show posts from all categories."
+msgstr "Введите слаг своей рубрики, или оставьте поле пустым, чтобы показывать записи всех рубрик."
+
+#: widgets/fp-employees.php:21
+msgid "In order to display this widget, you must first add some employees from the dashboard. Add as many as you want and the theme will automatically display them all."
+msgstr "Чтобы отображать этот виджет, вы должны сначала добавить сотрудников из Консоли. Добавляйте их столько, сколько хотите, и тема автоматически будет отображать их всех."
+
+#: widgets/fp-facts.php:7
+msgid "Show your visitors some facts about your company."
+msgstr "Покажите своим посетителям некоторые факты о своей компании."
+
+#: widgets/contact-info.php:24
+msgid "Enter your address"
+msgstr "Введите свой адрес"
+
+#: widgets/contact-info.php:27
+msgid "Enter your phone number"
+msgstr "Введите свой номер телефона"
+
+#: widgets/contact-info.php:30
+msgid "Enter your email address"
+msgstr "Введите свой адрес электронной почты"
+
+#: widgets/fp-call-to-action.php:24
+msgid "Title for the button"
+msgstr "Заголовок кнопки"
+
+#: widgets/fp-call-to-action.php:7
+msgid "Sydney FP: Call to action"
+msgstr "Sydney FP: Call to action"
+
+#: widgets/fp-call-to-action.php:22
+msgid "Link for the button"
+msgstr "Ссылка кнопки"
+
+#: widgets/fp-call-to-action.php:6
+msgid "Display a call to action block."
+msgstr "Отображение блока призыва к действию."
+
+#: widgets/fp-call-to-action.php:20
+msgid "Enter your call to action."
+msgstr "Введите свой призыв к действию."
+
+#: widgets/fp-services-type-b.php:29 widgets/fp-testimonials.php:22
+#: widgets/video-widget.php:20 widgets/fp-call-to-action.php:18
+#: widgets/fp-employees.php:23 widgets/fp-skills.php:24 widgets/fp-facts.php:32
+#: widgets/fp-clients.php:23 widgets/fp-services-type-a.php:30
+#: widgets/contact-info.php:20 widgets/fp-latest-news.php:19
+msgid "Title"
+msgstr "Заголовок"
+
+#: widgets/contact-info.php:7
+msgid "Sydney: Contact info"
+msgstr "Sydney: Contact info"
+
+#: widgets/contact-info.php:6
+msgid "Display your contact info"
+msgstr "Отображайте свою контактную информацию"
+
+#: search.php:16
+msgid "Search Results for: %s"
+msgstr "Результаты поиска: %s"
+
+#: inc/onboarding/plugins/class-sydney-recommended-plugins.php:92
+#: inc/onboarding/plugins/class-sydney-recommended-plugins.php:112
+msgid "Activate"
+msgstr "Активировать"
+
+#: inc/template-tags.php:178
+msgid "Archives"
+msgstr "Архивы"
+
+#. translators: 1: Taxonomy singular name, 2: Current taxonomy term
+#: inc/template-tags.php:176
+msgid "%1$s: %2$s"
+msgstr "%1$s: %2$s"
+
+#: inc/template-tags.php:172
+msgid "Archives: %s"
+msgstr "Архивы: %s"
+
+#: inc/template-tags.php:169
+msgctxt "post format archive title"
+msgid "Chats"
+msgstr "Чаты"
+
+#: inc/template-tags.php:167
+msgctxt "post format archive title"
+msgid "Audio"
+msgstr "Аудио"
+
+#: inc/template-tags.php:165
+msgctxt "post format archive title"
+msgid "Statuses"
+msgstr "Статусы"
+
+#: inc/template-tags.php:163
+msgctxt "post format archive title"
+msgid "Links"
+msgstr "Ссылки"
+
+#: inc/template-tags.php:161
+msgctxt "post format archive title"
+msgid "Quotes"
+msgstr "Цитаты"
+
+#: inc/template-tags.php:159
+msgctxt "post format archive title"
+msgid "Videos"
+msgstr "Видео"
+
+#: inc/template-tags.php:157
+msgctxt "post format archive title"
+msgid "Images"
+msgstr "Изображения"
+
+#: inc/template-tags.php:155
+msgctxt "post format archive title"
+msgid "Galleries"
+msgstr "Галереи"
+
+#: inc/template-tags.php:153
+msgctxt "post format archive title"
+msgid "Asides"
+msgstr "Заметки"
+
+#: inc/template-tags.php:150
+msgctxt "daily archives date format"
+msgid "F j, Y"
+msgstr "d.m.Y"
+
+#: inc/template-tags.php:150
+msgid "Day: %s"
+msgstr "День: %s"
+
+#: inc/template-tags.php:148
+msgctxt "monthly archives date format"
+msgid "F Y"
+msgstr "F Y"
+
+#: inc/template-tags.php:148
+msgid "Month: %s"
+msgstr "Месяц: %s"
+
+#: inc/template-tags.php:146
+msgctxt "yearly archives date format"
+msgid "Y"
+msgstr "Y"
+
+#: inc/template-tags.php:146
+msgid "Year: %s"
+msgstr "Год: %s"
+
+#: inc/template-tags.php:144
+msgid "Author: %s"
+msgstr "Автор: %s"
+
+#: inc/template-tags.php:142
+msgid "Tag: %s"
+msgstr "Метка: %s"
+
+#: inc/template-tags.php:140
+msgid "Category: %s"
+msgstr "Рубрика: %s"
+
+#: inc/template-tags.php:105
+msgid "Posted in %1$s"
+msgstr "Опубликовано в рубрике %1$s"
+
+#: inc/template-tags.php:103
+msgid ", "
+msgstr ", "
+
+#: inc/template-tags.php:99
+msgid "% Comments"
+msgstr "Комментарии (%)"
+
+#: inc/template-tags.php:99
+msgid "1 Comment"
+msgstr "1 комментарий"
+
+#: inc/template-tags.php:99
+msgid "Leave a comment"
+msgstr "Оставить комментарий"
+
+#. translators: %s: post date.
+#: inc/template-tags.php:282
+msgctxt "post date"
+msgid "Posted on %s"
+msgstr "Опубликовано %s"
+
+#: inc/template-tags.php:56
+msgid "Post navigation"
+msgstr "Навигация по записям"
+
+#: inc/template-tags.php:31
+msgid "Newer posts"
+msgstr "Следующие записи"
+
+#: inc/template-tags.php:27
+msgid "Older posts"
+msgstr "Предыдущие записи"
+
+#: inc/template-tags.php:23
+msgid "Posts navigation"
+msgstr "Навигация по записям"
+
+#: inc/page-builder.php:98 inc/so-page-builder.php:98
+msgid "0"
+msgstr "0"
+
+#: inc/page-builder.php:99 inc/so-page-builder.php:99
+msgid "15px"
+msgstr "15 пикселей"
+
+#: inc/page-builder.php:100 inc/so-page-builder.php:100
+msgid "30px"
+msgstr "30 пикселей"
+
+#: inc/page-builder.php:101 inc/so-page-builder.php:101
+msgid "45px"
+msgstr "45 пикселей"
+
+#: inc/page-builder.php:97 inc/so-page-builder.php:97
+msgid "Default"
+msgstr "По умолчанию"
+
+#: inc/page-builder.php:93 inc/so-page-builder.php:93
+msgid "Mobile padding"
+msgstr "Отступы в мобильном режиме"
+
+#: inc/page-builder.php:95 inc/so-page-builder.php:95
+msgid "Here you can select a top/bottom row padding for screen sizes < 1024px"
+msgstr "Здесь вы можете задать верхний и нижний отступ раздела для экранов шириной до 1024 пикселей"
+
+#: inc/page-builder.php:87 inc/so-page-builder.php:87
+msgid "Background image of the row."
+msgstr "Фоновое изображение раздела."
+
+#: inc/page-builder.php:85 inc/so-page-builder.php:85
+msgid "Background Image"
+msgstr "Фоновое изображение"
+
+#: inc/page-builder.php:80 inc/so-page-builder.php:80
+msgid "Color of the row."
+msgstr "Цвет раздела."
+
+#: inc/page-builder.php:78 inc/so-page-builder.php:78
+msgid "Color"
+msgstr "Цвет"
+
+#: inc/page-builder.php:57 inc/so-page-builder.php:57
+msgid "Bottom Border Color"
+msgstr "Цвет нижней границы"
+
+#: inc/page-builder.php:44 inc/so-page-builder.php:44
+msgid "Sydney Theme Widgets"
+msgstr "Виджеты темы Sydney"
+
+#: inc/page-builder.php:63 inc/so-page-builder.php:63
+msgid "Top/bottom padding"
+msgstr "Верхний и нижний отступ"
+
+#: inc/page-builder.php:70 inc/so-page-builder.php:70
+msgid "Center align the content?"
+msgstr "Выровнять содержимое по центру?"
+
+#: inc/page-builder.php:72 inc/so-page-builder.php:72
+msgid "This may or may not work. It depends on the widget styles."
+msgstr "Это может не работать. Зависит от стилей виджета."
+
+#: inc/customizer.php:2225
+msgid "Nothing (only menu)"
+msgstr "Ничего (только меню)"
+
+#: inc/customizer.php:2071
+msgid "Footer color"
+msgstr "Цвет подвала"
+
+#: inc/customizer.php:2105
+msgid "1. Documentation for Sydney can be found "
+msgstr "1. Документация Sydney находится "
+
+#: inc/customizer.php:2105
+msgid "2. A full theme demo can be found "
+msgstr "2. Образец темы находится "
+
+#: inc/customizer.php:2103
+msgid "Theme info"
+msgstr "Информация о теме"
+
+#: inc/customizer.php:2090
+msgid "Rows overlay"
+msgstr "Наложение разделов"
+
+#: inc/customizer.php:1752
+msgid "Primary color"
+msgstr "Основной цвет"
+
+#: inc/customizer.php:1772
+msgid "Menu background"
+msgstr "Фон меню"
+
+#: inc/customizer.php:2051
+msgid "Footer background"
+msgstr "Фон подвала"
+
+#: inc/customizer.php:1682
+msgid "Body font size"
+msgstr "Размер шрифта тела"
+
+#: inc/customizer.php:1951
+msgid "Body text"
+msgstr "Основной текст"
+
+#: inc/customizer.php:1931
+msgid "Header slider text"
+msgstr "Текст слайдера заголовка"
+
+#: inc/customizer.php:2031
+msgid "Footer widget area color"
+msgstr "Цвет области виджетов подвала"
+
+#: inc/customizer.php:2011
+msgid "Footer widget area background"
+msgstr "Фон области виджетов подвала"
+
+#: inc/customizer.php:1833
+msgid "Top level menu items"
+msgstr "Элементы меню первого уровня"
+
+#: inc/customizer.php:1873
+msgid "Sub-menu items"
+msgstr "Элементы подменю"
+
+#: inc/customizer.php:1892
+msgid "Sub-menu background"
+msgstr "Фон подменю"
+
+#: inc/customizer.php:1991
+msgid "Sidebar color"
+msgstr "Цвет боковой колонки"
+
+#: inc/customizer.php:1971
+msgid "Sidebar background"
+msgstr "Фон боковой колонки"
+
+#: inc/customizer.php:1663
+msgid "H6 font size"
+msgstr "Размер шрифта H6"
+
+#: inc/customizer.php:1530 inc/customizer.php:1813
+msgid "Site description"
+msgstr "Описание сайта"
+
+#: inc/customizer.php:1644
+msgid "H5 font size"
+msgstr "H5 размер шрифта"
+
+#: inc/customizer.php:1625
+msgid "H4 font size"
+msgstr "H4 размер шрифта"
+
+#: inc/customizer.php:1587
+msgid "H2 font size"
+msgstr "H2 размер шрифта"
+
+#: inc/customizer.php:1606
+msgid "H3 font size"
+msgstr "H3 размер шрифта"
+
+#: inc/customizer.php:1568
+msgid "H1 font size"
+msgstr "H1 размер шрифта"
+
+#: inc/customizer.php:1549
+msgid "Menu items"
+msgstr "Элементы меню"
+
+#: inc/customizer.php:1511 inc/customizer.php:1792
+msgid "Site title"
+msgstr "Название сайта"
+
+#: inc/customizer.php:1493
+msgid "Font sizes"
+msgstr "Размеры шрифтов"
+
+#: inc/customizer.php:1428
+msgid "Headings fonts"
+msgstr "Шрифты заголовков"
+
+#: inc/customizer.php:1380 inc/customizer.php:1446
+msgid "Font family"
+msgstr "Семейство шрифтов"
+
+#: inc/customizer.php:1360
+msgid "Body fonts"
+msgstr "Основной шрифт"
+
+#: inc/customizer.php:1286 inc/customizer.php:2255
+msgid "Three"
+msgstr "Три"
+
+#: inc/customizer.php:1287 inc/customizer.php:2256
+msgid "Four"
+msgstr "Четыри"
+
+#: inc/customizer.php:1298
+msgid "Fonts"
+msgstr "Шрифты"
+
+#: inc/customizer.php:1284 inc/customizer.php:2253
+msgid "One"
+msgstr "Один"
+
+#: inc/customizer.php:1285 inc/customizer.php:2254
+msgid "Two"
+msgstr "Два"
+
+#: inc/customizer.php:1282
+msgid "Select the number of widget areas you want in the footer. After that, go to Appearance > Widgets and add your widgets."
+msgstr "Выберите количество областей виджетов подвала. После этого, перейдите к разделу Внешний вид &rarr; Виджеты, и добавьте свои виджеты."
+
+#: inc/customizer.php:1280
+msgid "Footer widget area"
+msgstr "Область виджетов подвала"
+
+#: inc/customizer.php:1264 inc/customizer.php:1734
+msgid "Footer"
+msgstr "Подвал"
+
+#: inc/customizer.php:1219
+msgid "Check this box to hide featured images on index, archives etc."
+msgstr "Отметьте этот элемент, чтобы скрывать миниатюры на главной странице, в архивах, и т. д."
+
+#: inc/customizer.php:1235
+msgid "Check this box to hide featured images on single posts"
+msgstr "Отметьте этот элемент, чтобы скрывать миниатюры в отдельных записях"
+
+#: inc/customizer.php:1202
+msgid "Featured images"
+msgstr "Миниатюры записей"
+
+#: inc/customizer.php:1172
+msgid "Hide post meta on index, archives?"
+msgstr "Скрывать метаданные записи на главной странице и в архивах?"
+
+#: inc/customizer.php:1189
+msgid "Hide post meta on singles?"
+msgstr "Скрывать метаданные в отдельных записях?"
+
+#: inc/customizer.php:1154
+msgid "Meta"
+msgstr "Мета"
+
+#: inc/customizer.php:1059 inc/customizer.php:2283
+msgid "Masonry (grid style)"
+msgstr "Кирпичная (сеточный стиль)"
+
+#: inc/customizer.php:1087
+msgid "Content/excerpt"
+msgstr "Содержимое/отрывок"
+
+#: inc/customizer.php:1105
+msgid "Check this box to display the full content of your posts on the home page."
+msgstr "Отметьте этот элемент, чтобы отображать всё содержимое ваших записей на главной странице."
+
+#: inc/customizer.php:1121
+msgid "Check this box to display the full content of your posts on all archives."
+msgstr "Отметьте этот элемент, чтобы отображать всё содержимое ваших записей во всех архивах."
+
+#: inc/customizer.php:1139
+msgid "Choose your excerpt length. Default: 55 words"
+msgstr "Выберите длину отрывка. По умолчанию 55 слов."
+
+#: inc/customizer.php:1138
+msgid "Excerpt length"
+msgstr "Длина отрывка"
+
+#: inc/customizer.php:1058 inc/customizer.php:2282
+msgid "Full width (no sidebar)"
+msgstr "На всю ширину (без боковой колонки)"
+
+#: inc/customizer.php:1074
+msgid "Full width single posts?"
+msgstr "Отдельные записи на всю ширину?"
+
+#: inc/customizer.php:1055 inc/customizer.php:2279
+msgid "Classic"
+msgstr "Классическая"
+
+#: inc/customizer.php:1051
+msgid "Blog layout"
+msgstr "Разметка блога"
+
+#: inc/customizer.php:958 inc/customizer.php:2242
+msgid "Contain"
+msgstr "Вместить"
+
+#: inc/integrations/learndash/customize.php:18 inc/customizer.php:1034
+msgid "Layout"
+msgstr "Разметка"
+
+#: inc/onboarding/theme-info.php:109 inc/onboarding/theme-info.php:187
+#: inc/theme-dashboard-settings.php:72 inc/customizer.php:1022
+msgid "Blog options"
+msgstr "Параметры блога"
+
+#: inc/customizer.php:1010
+msgid "Upload your logo"
+msgstr "Загрузить свой логотип"
+
+#: inc/customizer.php:974
+msgid "Header height [default: 300px]"
+msgstr "Высота заголовка сайта [по умолчанию 300 пикселей]"
+
+#: inc/customizer.php:992
+msgid "Disable the overlay?"
+msgstr "Отключить наложение?"
+
+#: inc/customizer.php:694 inc/customizer.php:2268
+msgid "Static"
+msgstr "Статично"
+
+#: inc/customizer.php:957 inc/customizer.php:2241
+msgid "Cover"
+msgstr "перекрытие"
+
+#: inc/customizer.php:954
+msgid "Header background size"
+msgstr "Размер фона заголовка"
+
+#: inc/customizer.php:715 inc/customizer.php:2308
+msgid "Centered (menu and site logo)"
+msgstr "По центру (меню и логотип сайта)"
+
+#: inc/customizer.php:714 inc/customizer.php:2307
+msgid "Inline"
+msgstr "Линейно"
+
+#: inc/customizer.php:690
+msgid "Sticky menu"
+msgstr "Прилипающее меню"
+
+#: inc/customizer.php:693 inc/customizer.php:2267
+msgid "Sticky"
+msgstr "Прилеплена"
+
+#: inc/customizer.php:654
+msgid "Click to begin"
+msgstr "Нажмите, чтобы начать"
+
+#: inc/customizer.php:711
+msgid "Menu style"
+msgstr "Стиль меню"
+
+#: inc/customizer.php:628
+msgid "Call to action button"
+msgstr "Кнопка призыва к действию"
+
+#: inc/customizer.php:614
+msgid "Subtitle for the fifth slide"
+msgstr "Подзаголовок пятого слайда"
+
+#: inc/customizer.php:401
+msgid "Subtitle for the second slide"
+msgstr "Подзаголовок второго слайда"
+
+#: inc/customizer.php:383
+msgid "Title for the second slide"
+msgstr "Заголовок второго слайда"
+
+#: inc/customizer.php:454
+msgid "Title for the third slide"
+msgstr "Заголовок третьего слайда"
+
+#: inc/customizer.php:472
+msgid "Subtitle for the third slide"
+msgstr "Подзаголовок третьего слайда"
+
+#: inc/customizer.php:596
+msgid "Title for the fifth slide"
+msgstr "Заголовок пятого слайда"
+
+#: inc/customizer.php:525
+msgid "Title for the fourth slide"
+msgstr "Заголовок четвёртого слайда"
+
+#: inc/customizer.php:543
+msgid "Subtitle for the fourth slide"
+msgstr "Подзаголовок четвёртого слайда"
+
+#: inc/customizer.php:415
+msgid "Third slide"
+msgstr "Третий слайд"
+
+#: inc/customizer.php:486
+msgid "Fourth slide"
+msgstr "Четвёртый слайд"
+
+#: inc/customizer.php:557
+msgid "Fifth slide"
+msgstr "Пятый слайд"
+
+#: inc/customizer.php:363
+msgid "Upload your second image for the slider"
+msgstr "Загрузить второе изображение слайдера"
+
+#: inc/customizer.php:434
+msgid "Upload your third image for the slider"
+msgstr "Загрузить третье изображение слайдера"
+
+#: inc/customizer.php:505
+msgid "Upload your fourth image for the slider"
+msgstr "Загрузить четвертое изображение слайдера"
+
+#: inc/customizer.php:576
+msgid "Upload your fifth image for the slider"
+msgstr "Загрузить пятое изображение слайдера"
+
+#: inc/customizer.php:645
+msgid "URL for your call to action button"
+msgstr "Ссылка кнопки призыва к действию"
+
+#: inc/customizer.php:662
+msgid "Text for your call to action button"
+msgstr "Текст кнопки призыва к действию"
+
+#: inc/customizer.php:205
+msgid "Header Slider"
+msgstr "Слайдер заголовка"
+
+#: inc/onboarding/theme-info.php:31 inc/theme-dashboard-settings.php:156
+msgid "Welcome to Sydney"
+msgstr "Добро пожаловать к Sydney"
+
+#: inc/customizer.php:236
+msgid "4000"
+msgstr "4000"
+
+#: inc/customizer.php:260
+msgid "Stop the text slider?"
+msgstr "Остановить текстовый слайдер?"
+
+#: inc/customizer.php:246
+msgid "Slider speed in miliseconds. Use 0 to disable [default: 4000]"
+msgstr "Скорость слайдера в миллисекундах. Используйте 0 для отключения [по умолчанию: 4000]"
+
+#: inc/customizer.php:190
+msgid "Site header type"
+msgstr "Тип заголовка сайта"
+
+#: inc/customizer.php:174 inc/customizer.php:197
+msgid "No header (only menu)"
+msgstr "Без заголовка (только меню)"
+
+#: inc/customizer.php:192
+msgid "Select the header type for all pages except the front page"
+msgstr "Выберите тип заголовка для всех страниц кроме главной страницы"
+
+#: inc/customizer.php:312
+msgid "Title for the first slide"
+msgstr "Заголовок первого слайда"
+
+#: inc/customizer.php:330
+msgid "Subtitle for the first slide"
+msgstr "Подзаголовок первого слайда"
+
+#: inc/customizer.php:206
+msgid "You can add up to 5 images in the slider. Make sure you select where to display your slider from the Header Type section found above. You can also add a Call to action button (scroll down to find the options)"
+msgstr "Вы можете добавить до 5 изображений слайдера. Убедитесь, что вы выбрали где отображать слайдер из раздела \"Тип заголовка\", который находится выше. Также вы можете добавить кнопку призыва к действию (прокрутите страницу вниз, чтобы найти параметры)"
+
+#: inc/customizer.php:243
+msgid "Slider speed"
+msgstr "Скорость слайдера"
+
+#: inc/customizer.php:273
+msgid "First slide"
+msgstr "Первый слайд"
+
+#: inc/customizer.php:344
+msgid "Second slide"
+msgstr "Второй слайд"
+
+#: inc/customizer.php:292
+msgid "Upload your first image for the slider"
+msgstr "Загрузить первое изображение слайдера"
+
+#: inc/customizer.php:172 inc/customizer.php:195 inc/customizer.php:2223
+msgid "Image"
+msgstr "Изображение"
+
+#: inc/customizer.php:171 inc/customizer.php:194 inc/customizer.php:2222
+msgid "Full screen slider"
+msgstr "Полноэкранный слайдер"
+
+#: inc/customizer.php:167
+msgid "Front page header type"
+msgstr "Тип заголовка главной страницы"
+
+#: inc/customizer.php:169
+msgid "Select the header type for your front page"
+msgstr "Выберите тип заголовка для своей главной страницы"
+
+#: inc/customizer.php:152
+msgid "You can select your header type from here. After that, continue below to the next two tabs (Header Slider and Header Image) and configure them."
+msgstr "Здесь вы можете выбрать тип своего заголовка. После этого можно настроить слайдер заголовка и изображение заголовка с помощью двух вкладок снизу."
+
+#: inc/customizer.php:149
+msgid "Header type"
+msgstr "Тип заголовка"
+
+#: inc/customizer.php:143
+msgid "Header area"
+msgstr "Область заголовка"
+
+#: inc/integrations/lifter/customize.php:18 inc/customizer.php:17
+#: inc/customizer.php:70 inc/customizer.php:1317
+msgid "General"
+msgstr "Общие"
+
+#: inc/customizer.php:16
+msgid "Site title/tagline/logo"
+msgstr "Название сайта, ключевая фраза, логотип"
+
+#: header.php:29
+msgid "Skip to content"
+msgstr "Перейти к содержимому"
+
+#: functions.php:280
+msgid "Create your menu here"
+msgstr "Создайте своё меню здесь"
+
+#: functions.php:117
+msgid "Footer "
+msgstr "Подвал"
+
+#: functions.php:104 inc/customizer.php:1726
+msgid "Sidebar"
+msgstr "Боковая колонка"
+
+#: functions.php:57
+msgid "Primary Menu"
+msgstr "Основное меню"
+
+#: footer.php:26
+msgid "Theme: %2$s by %1$s."
+msgstr "Тема: %2$s от %1$s."
+
+#: footer.php:24
+msgid "Proudly powered by %s"
+msgstr "Сайт работает на %s"
+
+#: footer.php:24
+msgid "https://wordpress.org/"
+msgstr "https://ru.wordpress.org/"
+
+#: content-page.php:31 inc/template-tags.php:123
+msgid "Edit"
+msgstr "Изменить"
+
+#: content-page.php:24 content-classic-alt.php:34 content.php:34
+#: content-search.php:32 content-modern.php:35 content-single.php:36
+msgid "Pages:"
+msgstr "Страниц:"
+
+#: content-none.php:28
+msgid "It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps searching can help."
+msgstr "Запрошенную информацию найти не удалось. Возможно, будет полезен поиск по сайту."
+
+#: content-none.php:23
+msgid "Sorry, but nothing matched your search terms. Please try again with some different keywords."
+msgstr "Извините, по вашему запросу ничего не найдено. Попробуйте другие ключевые слова."
+
+#: content-none.php:19
+msgid "Ready to publish your first post? <a href=\"%1$s\">Get started here</a>."
+msgstr "Готовы опубликовать свою первую запись? <a href=\"%1$s\">Начните отсюда</a>."
+
+#: content-none.php:13
+msgid "Nothing Found"
+msgstr "Ничего не найдено"
+
+#: comments.php:66
+msgid "Comments are closed."
+msgstr "Обсуждение закрыто."
+
+#: comments.php:38 comments.php:56
+msgid "Newer Comments &rarr;"
+msgstr "Следующие комментарии &rarr;"
+
+#: comments.php:37 comments.php:55
+msgid "&larr; Older Comments"
+msgstr "&larr; Предыдущие комментарии"
+
+#: comments.php:36 comments.php:54
+msgid "Comment navigation"
+msgstr "Навигация по комментариям"
+
+#: comments.php:29
+msgctxt "comments title"
+msgid "One thought on &ldquo;%2$s&rdquo;"
+msgid_plural "%1$s thoughts on &ldquo;%2$s&rdquo;"
+msgstr[0] "%2$s: %1$s комментарий"
+msgstr[1] "%2$s: %1$s комментария"
+msgstr[2] "%2$s: %1$s комментариев"
+
+#: 404.php:19
+msgid "It looks like nothing was found at this location. Maybe try one of the links below or a search?"
+msgstr "По данному адресу ничего не найдено. Попробуйте воспользоваться одной из ссылок ниже или поиском."
+
+#: 404.php:15
+msgid "Oops! That page can&rsquo;t be found."
+msgstr "Ой! Страница не найдена."
+
+#. Author of the theme
+#: theme-dashboard/class-theme-dashboard.php:542
+msgid "aThemes"
+msgstr "aThemes"
+
+#. Author URI of the theme
+msgid "https://athemes.com"
+msgstr "https://athemes.com"
+
+#. Theme URI of the theme
+msgid "https://athemes.com/theme/sydney"
+msgstr "https://athemes.com/theme/sydney"

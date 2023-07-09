@@ -1,0 +1,2053 @@
+# Translation of Themes - Zerif Lite in Italian
+# This file is distributed under the same license as the Themes - Zerif Lite package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2020-01-12 12:38:11+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/2.4.0-alpha\n"
+"Language: it\n"
+"Project-Id-Version: Themes - Zerif Lite\n"
+
+#. Description of the theme
+#: functions.php:209
+msgid "Zerif LITE is a free one page WordPress theme. It's perfect for web agency business,corporate business,personal and parallax business portfolio, photography sites and freelancer.Is built on BootStrap with parallax support, is responsive, clean, modern, flat and minimal. Zerif Lite is ecommerce (WooCommerce) Compatible, WPML, RTL, Retina-Ready, SEO Friendly and with parallax, full screen image is one of the best business themes."
+msgstr "Zerif LITE è un tema a pagina unica gratuito per WordPress. È perfetto per web agency, aziende, portfolio affari e personale con effetto parallasse, siti di fotografia e di liberi professionisti. È costruito con BootStrap con il supporto del parallasse, è responsive, pulito, moderno, essenziale e minimale. Zerif Lite è compatibile con l'ecommerce (WooCommerce), WPML, RTL, Retina-Ready, SEO Friendly, con effetto parallasse e immagine a schermo intero. È uno dei migliori temi di business."
+
+#. Theme Name of the theme
+#: inc/class/class-customizer-theme-info-control/class-customizer-theme-info-root.php:83
+msgid "Zerif Lite"
+msgstr "Zerif Lite"
+
+#: ti-about-page/class-ti-about-page.php:166
+msgid "See Neve theme"
+msgstr "Visualizza il tema Neve"
+
+#. translators: %s - theme name
+#: ti-about-page/class-ti-about-page.php:164
+msgid "We strongly encourage you to switch to %1$s. Also, we've made sure you can easily migrate your old content into a template similar to %2$s."
+msgstr "Ti suggeriamo vivamente di cambiare a %1$s. Abbiamo fatto in modo che tu possa facilmente spostare il tuo contenuto all'interno di un template molto simile a %2$s."
+
+#. translators: %s - theme name
+#: ti-about-page/class-ti-about-page.php:162
+msgid "We're saying %s in favor of our more powerful Neve free WordPress theme. This means that there will not be any new features added although we will continue to update the theme for major security issues."
+msgstr "Stiamo parlando di %s, che non svilupperemo più a favore del nostro tema free per WordPress più potente: Neve. Questo significa che non saranno più implementate nuove funzionalità anche se continueremo ad aggiornare il tema per garantirne la sicurezza."
+
+#. translators: %s - theme name
+#: ti-about-page/class-ti-about-page.php:160
+msgid "%s is no longer maintained"
+msgstr "%s non è più manutenuto"
+
+#. translators: %s - theme name
+#: ti-about-page/class-ti-about-page.php:154
+msgid "With Neve you get a super fast, multi-purpose theme, fully AMP optimized and responsive, that works perfectly with Gutenberg and the most popular page builders like Elementor, Beaver Builder, and many more."
+msgstr "Con Neve hai un tema super veloce, multiscopo, completamente ottimizzato per AMP e responsivo (si adatta alla visualizzazione su tutti i dispositivi), che funziona perfettamente con Gutenberg e i pagebuilder più popolari come Elementor, Beaver Builder e molti altri."
+
+#. translators: %s - theme name
+#: ti-about-page/class-ti-about-page.php:153
+msgid "We've made it easy for you to try the new Neve theme and import your existing content into a template similar to %s with just a few clicks."
+msgstr "Abbiamo reso semplice per te provare con solo pochi clic il nuovo tema Neve e importare i tuoi contenuti esistenti in un template molto simile a %s."
+
+#. translators: %s - theme name
+#: ti-about-page/class-ti-about-page.php:136
+msgid "%s is no longer maintained. Switch to Neve today and get more powerful features (for free)."
+msgstr "%s non è più manutenuto. Passa a Neve oggi stesso e ottieni funzionalità ancora più potenti (free)."
+
+#: ti-about-page/class-ti-about-page.php:151
+msgid "Switch to Neve today"
+msgstr "Passa a Neve oggi stesso"
+
+#: ti-about-page/class-ti-about-page.php:133
+msgid "Your theme is no longer maintained. A New, Modern WordPress Theme is Here!"
+msgstr "Il tuo tema non è più aggiornato. Un nuovo e moderno tema per WordPress è qui!"
+
+#: inc/customizer.php:2496
+msgid "Or add the shortcode of your choice here."
+msgstr "Oppure aggiungi un shortcode di tua scelta."
+
+#: inc/customizer.php:2495
+msgid "Contact Form Shortcode"
+msgstr "Shortcode del modulo di contatto"
+
+#: inc/customizer.php:1878
+msgid "Clients area title"
+msgstr "Titolo area clienti"
+
+#. Translators: %s: widget title
+#: functions.php:934
+msgid "Go to %s"
+msgstr "Vai a %s"
+
+#. Translators: %s: ThemeIsle link
+#: footer.php:215
+msgid "developed by %s"
+msgstr "sviluppato da %s"
+
+#: inc/customizer.php:1184
+msgid "You can replace the homepage slider with any plugin you like, just copy the shortcode generated and paste it here."
+msgstr "Puoi sostituire lo slider nella pagina home con qualsiasi plugin tu preferisca, devi solo copiare lo shortcode generato e incollarlo qui. "
+
+#: inc/customizer.php:1183
+msgid "Slider shortcode"
+msgstr "Shortcode dello slider "
+
+#: ti-about-page/class-ti-about-page.php:1081
+#: ti-customizer-notify/class-ti-customizer-notify.php:174
+msgid "Activating"
+msgstr "Attivazione in corso"
+
+#: functions.php:409 functions.php:441 functions.php:494
+msgid "Install and Activate"
+msgstr "Installa e attiva"
+
+#: inc/admin/welcome-screen/sections/getting-started.php:149
+msgid "Recommended plugins"
+msgstr "Plugin raccomandati"
+
+#: inc/admin/welcome-screen/welcome-screen.php:230
+#: inc/admin/welcome-screen/sections/getting-started.php:30
+msgid "Getting started"
+msgstr "Inizia"
+
+#. translators: ResponsiveBoat child theme
+#: inc/admin/welcome-screen/sections/child-themes.php:120
+msgid "Get %s now"
+msgstr "Prendi %s ora"
+
+#: functions.php:399
+msgid "Remove \"Zerif Lite developed by ThemeIsle\" copyright from the footer."
+msgstr "Rimuovi il copyright  \"Zerif lite developed by ThemeIsle\" dal footer"
+
+#: inc/customizer-info/class/class-zerif-customize-upsell.php:73
+msgid "Get it"
+msgstr "Prendi"
+
+#: inc/customizer.php:858
+msgid "Keep the old static frontpage template?"
+msgstr "Vuoi mantenere il template della vecchia pagina statica?"
+
+#: functions.php:284 functions.php:286
+msgid "Recommended actions"
+msgstr "Azioni consigliate"
+
+#: inc/customizer.php:872
+msgid "Blog Header Options"
+msgstr "Opzioni dell'header del blog"
+
+#: front-page.php:38 home.php:13 inc/customizer.php:900
+msgid "Zerif supports a custom frontpage"
+msgstr "Zerif supporta una pagina principale personalizzata"
+
+#: inc/customizer.php:2188
+msgid "Change this text in BottomButton Ribbon"
+msgstr "Cambia questo testo nel menu della Sezione Ribbon"
+
+#: sections/ribbon_with_right_button.php:16 inc/customizer.php:2259
+msgid "Change this text in RightButton Ribbon"
+msgstr "Cambia questo testo nel menu della Sezione Ribbon"
+
+#. translators: ThemeIsle Companion
+#. translators: ThemeIsle Companion install link
+#: sections/our_focus.php:49 sections/our_focus.php:52
+msgid "You need to install the %s plugin to be able to add Team members, Testimonials, Our Focus and Clients widgets."
+msgstr "Devi installare il plugin %s per poter aggiungere i widget Componenti del team, Testimonianze, Il nostro focus e Clienti."
+
+#: inc/customizer.php:2850 footer.php:35
+msgid "youremail@site.com"
+msgstr "latuaremail@site.com"
+
+#. translators: Pirate Forms plugin install link
+#. translators: PirateForms plugin
+#: content-frontpage.php:107 template-frontpage.php:109 inc/customizer.php:2467
+msgid "You need to install %s to create a contact form."
+msgstr "Devi installare %s per inserire un modulo di contatto."
+
+#: inc/customizer.php:2912 footer.php:43
+msgid "0 332 548 954"
+msgstr "0 332 548 954"
+
+#: inc/customizer.php:2603
+msgid "Footer options"
+msgstr "Opzioni del footer"
+
+#: inc/customizer.php:740
+msgid "Advanced options"
+msgstr "Opzioni avanzate"
+
+#: functions.php:219
+msgid "Useful Plugins"
+msgstr "Plugin utili"
+
+#. translators: ThemeIsle Companion install link
+#: functions.php:488
+msgid "If you want to take full advantage of the options this theme has to offer, please install and activate %s"
+msgstr "Se vuoi ottenere tutti i vantaggi dalle opzioni che questo tema offre, installa e attiva %s"
+
+#: inc/class/class-customizer-theme-info-control/class-customizer-theme-info-root.php:102
+msgid "Ribbon Section"
+msgstr "Sezione ribbon"
+
+#: inc/customizer.php:157
+msgid "Get full color schemes support for your site."
+msgstr "Ottieni il supporto completo degli schemi colori per il tuo sito."
+
+#: inc/class/class-customizer-theme-info-control/class-customizer-theme-info-root.php:101
+#: inc/customizer.php:127
+msgid "Subscribe section"
+msgstr "Sezione iscrizione"
+
+#: inc/class/class-customizer-theme-info-control/class-customizer-theme-info-root.php:100
+#: inc/customizer.php:126
+msgid "Packages section"
+msgstr "Sezione pacchetti (servizi e prezzi)"
+
+#: inc/customizer.php:125 inc/customizer.php:154
+msgid "Extra colors"
+msgstr "Colori extra"
+
+#: inc/customizer.php:123 inc/customizer.php:182
+msgid "Background video"
+msgstr "Video di sfondo"
+
+#: inc/customizer.php:122
+msgid "Section Reordering"
+msgstr "Ri-ordina le sezioni"
+
+#: functions.php:454
+msgid "Makes your contact page more engaging by creating a good-looking contact form on your website. The interaction with your visitors was never easier."
+msgstr "Rendi la tua pagina dei contatti più coinvolgente attraverso un attraente modulo di contatto sul tuo sito. Le interazioni con i tuoi visitatori non sono mai state così semplici."
+
+#: functions.php:447
+msgid "It is highly recommended that you install the companion plugin to have access to the frontpage sections widgets."
+msgstr "Ti suggeriamo l'installazione del plugin integrativo per accedere alla sezione dei widget nella pagina principale."
+
+#: functions.php:411 functions.php:443 functions.php:496
+msgid "Deactivate"
+msgstr "Disattiva"
+
+#: functions.php:408
+msgid "Version: "
+msgstr "Versione:"
+
+#: functions.php:285
+msgid "We have compiled a list of steps for you, to take make sure the experience you will have using one of our products is very easy to follow."
+msgstr "Abbiamo compilato una lista di azioni per te, per assicurarci che tu abbia la migliore esperienza possibile con i nostri prodotti. "
+
+#: functions.php:247
+msgid "Want to get the gist on the latest theme changes? Just consult our changelog below to get a taste of the recent fixes and features implemented."
+msgstr "Desideri ricevere le informazioni sugli ultimi cambiamenti introdotti nel tema? Consulta il changelog di seguito per vedere i recenti miglioramenti e le caratteristiche implementate."
+
+#: functions.php:227 functions.php:230
+msgid "Contact Support"
+msgstr "Contatta il supporto"
+
+#: functions.php:202 functions.php:204
+msgid "About Zerif Lite"
+msgstr "Info su Zerif Lite"
+
+#. translators: %s: post title
+#: comments.php:28
+msgctxt "comments title"
+msgid "One thought on &ldquo;%s&rdquo;"
+msgstr "Un commento su &ldquo;%s&rdquo;"
+
+#. translators: Theme Name
+#: functions.php:207
+msgid "Welcome to %s! - Version "
+msgstr "Benvenuto su %s! - Versione"
+
+#. translators: Older posts arrow
+#. translators: Older post arrow
+#. translators: Older posts navigation arrow
+#: archive.php:61 archive-download.php:60 template-blog.php:63
+#: front-page.php:88 template-blog-large.php:66 home.php:67 search.php:49
+#: index.php:50
+msgid "%s Older posts"
+msgstr "%s articoli meno recenti"
+
+#. translators: Newer posts arrow
+#. translators: Newer post arrow
+#. translators: Newer posts navigation arrow
+#: archive.php:59 archive-download.php:58 template-blog.php:61
+#: front-page.php:86 template-blog-large.php:64 home.php:65 search.php:47
+#: index.php:48
+msgid "Newer posts %s"
+msgstr "Articoli più recenti %s"
+
+#. Template Name of the theme
+msgid "Frontpage"
+msgstr "Home page"
+
+#. translators: Testimonials section
+#. translators: Testimonials section link in customizer
+#. translators: Our team section
+#. translators: Our team section in customizer
+#: sections/testimonials.php:48 sections/testimonials.php:51
+#: sections/our_team.php:36 sections/our_team.php:39
+msgid "Add widgets in this area by going to the %s"
+msgstr "Aggiungi i widget in quest'area andando su %s"
+
+#: inc/customizer.php:2976
+msgid "The preloader is used as a creative way to make waiting a bit less boring for the visitor."
+msgstr "Il preloader è usato per rendere l'attesa di tuoi visitatori meno noiosa."
+
+#: inc/customizer.php:2976
+msgid "The preloader is the circular progress element that first appears on the site. When the loader finishes its progress animation, the whole page elements are revealed."
+msgstr "Il preloader è l'elemento circolare che appare subito sul tuo e che si completa progressivamente. Quando il preloader finisce la sua animazione, viene visualizzata l'intera pagina."
+
+#: inc/customizer.php:2975
+msgid "With smooth scrolling, it slides down smoothly, so you can see how much it scrolls. This makes it easier to resume reading from where you were before."
+msgstr "Con lo scorrimento continuo, scorri la pagina senza problemi, così puoi vedere le parti sottostanti. Questo rende più facile riprendere la lettura da dove eri prima."
+
+#: inc/customizer.php:2975
+msgid "Smooth scrolling can be very useful if you read a lot of long pages. Normally, when you press Page Down, the view jumps directly down one page."
+msgstr "Lo scorrimento continuo può essere molto utile se stai leggendo molte pagine lunghe. Normalmente, quando premi Pagina giù, la vista si sposterà direttamente giù di una pagina."
+
+#: inc/customizer.php:2974
+msgid "Web accessibility also benefits others, including older people with changing abilities due to aging."
+msgstr "L'accessibilità del Web va a vantaggio di tanti, compresi gli anziani le cui abilità cambiano a causa dell'invecchiamento."
+
+#: inc/customizer.php:2974
+msgid "Web accessibility means that people with disabilities can use the Web. More specifically, Web accessibility means that people with disabilities can perceive, understand, navigate, and interact with the Web, and that they can contribute to the Web."
+msgstr "L'accessibilità del web significa che persone con disabilità possono usare il web. Più specificamente, rendere accessibile il web significa fare in modo che persone con disabilità possano percepire, comprendere, navigare e interagire con il web, oltre a contribuire al suo sviluppo."
+
+#: inc/customizer.php:2973
+msgid "If you are using other scripts like Cyrillic or Greek , you need to check this box to enable the safe fonts for better compatibility."
+msgstr "Se stai utilizzando altri script come l’alfabeto cirillico o greco, è necessario selezionare questa casella per abilitare i font sicuri per una migliore compatibilità."
+
+#: inc/customizer.php:2973
+msgid "Zerif Lite main font is Montserrat, which only supports the Latin script."
+msgstr "Zerif Lite usa come font principale Montserrat, che supporta solo caratteri latini."
+
+#: sections/about_us.php:64 sections/about_us.php:71 sections/about_us.php:78
+#: sections/about_us.php:85 inc/customizer.php:1585 inc/customizer.php:1661
+#: inc/customizer.php:1737 inc/customizer.php:1813
+msgid "Edit skill"
+msgstr "Modifica le competenze"
+
+#. translators: Our focus section
+#. translators: About us section
+#. translators: Our team section
+#. translators: Our focus section in customizer
+#. translators: Our team section in customizer
+#. translators: About us section in customizer
+#: inc/customizer.php:1345 inc/customizer.php:1476 inc/customizer.php:1987
+#: inc/template-tags.php:276 inc/template-tags.php:317
+#: inc/template-tags.php:479
+msgid "Change this subtitle in %s"
+msgstr "Cambia questo sottotitolo nella %s"
+
+#: sections/big_title.php:48 sections/big_title.php:60 inc/customizer.php:1078
+#: inc/customizer.php:1128
+msgid "Customize this button"
+msgstr "Personalizza questo pulsante"
+
+#. translators: Big title section
+#. translators: Customizer link for Big title section
+#: inc/customizer.php:1041 inc/template-tags.php:433
+msgid "This piece of text can be changed in %s"
+msgstr "Questa parte di testo può essere cambiata nella %s"
+
+#: inc/customizer-info/class/class-zerif-customize-upsell.php:95
+msgid "It adds 5 new sections, the ability to re-order existing ones and easily add custom content to frontpage."
+msgstr "Aggiunge 5 nuove sezioni, la possibilità di riordinare le sezioni esistenti e aggiungere facilmente un contenuto personalizzato alla homepage."
+
+#: inc/customizer-info/class/class-zerif-customize-upsell.php:83
+msgid "It adds a background video and a background slider."
+msgstr "Aggiunge un video e uno slider sullo sfondo."
+
+#: functions.php:218 functions.php:492
+msgid "Recommended Actions"
+msgstr "Azioni suggerite"
+
+#: functions.php:961
+msgid "Go to"
+msgstr "Vai a "
+
+#: functions.php:556
+msgid "Read more about "
+msgstr "Leggi di più"
+
+#. translators: About use section in customizer
+#. translators: BottomButton Ribbon in customizer
+#. translators: About us section
+#: sections/about_us.php:53 sections/ribbon_with_bottom_button.php:17
+#: inc/customizer.php:1536
+msgid "Change this text in %s"
+msgstr "Cambia questo testo nella %s"
+
+#: content-large.php:75 content.php:68
+msgid "[&hellip;]"
+msgstr "[&hellip;]"
+
+#. translators: %2$s: plugin name in screen reader markup
+#: class-tgm-plugin-activation.php:2627
+msgid "Activate %2$s"
+msgstr "Attiva %2$s"
+
+#. translators: %2$s: plugin name in screen reader markup
+#: class-tgm-plugin-activation.php:2621
+msgid "Update %2$s"
+msgstr "Aggiorna %2$s"
+
+#. translators: %2$s: plugin name in screen reader markup
+#: class-tgm-plugin-activation.php:2616
+msgid "Install %2$s"
+msgstr "Installa %2$s"
+
+#: class-tgm-plugin-activation.php:2546
+msgid "No plugins to install, update or activate."
+msgstr "Nessun plugin da installare, aggiornare o attivare."
+
+#. translators: 1: install status, 2: update status
+#: class-tgm-plugin-activation.php:2355
+msgctxt "Install/Update Status"
+msgid "%1$s, %2$s"
+msgstr "%1$s, %2$s"
+
+#. translators: %s: version number
+#: class-tgm-plugin-activation.php:1995
+msgid "TGMPA v%s"
+msgstr "TGMPA v%s"
+
+#: class-tgm-plugin-activation.php:394
+msgid "There are one or more required or recommended plugins to install, update or activate."
+msgstr "Ci sono uno o più plugin obbligatori o raccomandati da installare, aggiornare o attivare."
+
+#. translators: %s: plugin name.
+#: class-tgm-plugin-activation.php:330
+msgid "Updating Plugin: %s"
+msgstr "Aggiornamento in corso del plugin: %s"
+
+#. Template Name of the theme
+msgid "Full width with no title template"
+msgstr "Modello a larghezza piena senza titolo"
+
+#: inc/admin/welcome-screen/sections/github.php:29
+msgid "Get involved at WordPress.org."
+msgstr "Contribuisci a WordPress.org"
+
+#: inc/admin/welcome-screen/sections/github.php:27
+msgid "Are you a polyglot? Want to translate Zerif Lite into your own language?"
+msgstr "Sei poliglotta? Vuoi tradurre Zerif Lite nella tua lingua?"
+
+#: inc/admin/welcome-screen/sections/github.php:16
+msgid "Found a bug? Want to contribute with a fix or create a new feature?"
+msgstr "Hai trovato un errore di programma? Vuoi contribuire con una correzione o creare una nuova funzionalità?"
+
+#: inc/admin/welcome-screen/sections/github.php:11
+msgid "How can I contribute?"
+msgstr "Come posso contribuire?"
+
+#: inc/admin/welcome-screen/sections/getting-started.php:269
+msgid "Download Easy Content Types"
+msgstr "Scarica Easy Content Types"
+
+#: inc/admin/welcome-screen/sections/getting-started.php:259
+msgid "Custom Post Types, Taxonomies and Metaboxes in Minutes"
+msgstr "Personalizza i tipi di articoli, tassonomie e metabox in pochi minuti"
+
+#: inc/admin/welcome-screen/sections/getting-started.php:258
+msgid "Easy Content Types"
+msgstr "Easy Content Types"
+
+#: inc/admin/welcome-screen/sections/getting-started.php:166
+msgid "Install Page Builder by SiteOrigin"
+msgstr "Installa Page Builder di SiteOrigin"
+
+#: inc/admin/welcome-screen/sections/getting-started.php:156
+msgid "Build responsive page layouts using the widgets you know and love using this simple drag and drop page builder."
+msgstr "Costruisci un layout di pagina che si adatta a ogni dispositivo usando il widget che conosci e ami con questo semplice Page Builder drag and drop (costruttore di pagina seleziona e trascina)."
+
+#: inc/admin/welcome-screen/sections/getting-started.php:155
+msgid "Page Builder by SiteOrigin"
+msgstr "Page Builder di SiteOrigin"
+
+#: functions.php:274 inc/admin/welcome-screen/sections/getting-started.php:55
+msgid "In the below documentation you will find an easy way to build a great looking landing page using a drag-and-drop content builder plugin."
+msgstr "Nella documentazione di seguito trovi un modo facile per costruire pagine di destinazione con un aspetto piacevole usando un plugin creatore di contenuti drag-and-drop (seleziona e trascina)."
+
+#: functions.php:272 inc/admin/welcome-screen/sections/getting-started.php:54
+msgid "Build a landing page with a drag-and-drop content builder"
+msgstr "Costruisci una pagina di destinazione con un creatore di contenuti drag-and-drop (seleziona e trascina)"
+
+#: content-large.php:75 content.php:68 sections/latest_news.php:97
+#: sections/latest_news.php:137
+msgid "about "
+msgstr "Chi siamo"
+
+#: inc/customizer.php:2726
+msgid "Footer Content"
+msgstr "Contenuto del footer"
+
+#: inc/customizer.php:676 inc/customizer.php:2717 footer.php:202
+msgid "Instagram link"
+msgstr "Link a Instagram"
+
+#: inc/customizer.php:2610
+msgid "Footer Social Icons"
+msgstr "Icone per i social network nel footer"
+
+#: inc/customizer.php:2744
+msgid "Footer Copyright"
+msgstr "Copyright nel footer"
+
+#. translators: Footer area number
+#: functions.php:613
+msgid "Footer area %d"
+msgstr "Area del footer %d"
+
+#: inc/admin/welcome-screen/sections/getting-started.php:289
+msgid "Install Revive Old Post"
+msgstr "Installa Revive Old Post"
+
+#: inc/admin/welcome-screen/sections/getting-started.php:279
+msgid "A plugin to share about your old posts on twitter, facebook, linkedin to get more hits for them and keep them alive."
+msgstr "Un plugin per condividere i vecchi post su twitter, facebook, linkedin, ottenere nuove visualizzazioni e farli rivivere."
+
+#: inc/admin/welcome-screen/sections/getting-started.php:278
+msgid "Revive Old Post"
+msgstr "Revive Old Post"
+
+#: sections/latest_news.php:97 sections/latest_news.php:137
+#: inc/admin/welcome-screen/sections/getting-started.php:130
+msgid "Read more"
+msgstr "Leggi tutto"
+
+#: inc/admin/welcome-screen/sections/getting-started.php:129
+msgid " At the address below you will find a cool set of original WordPress plugins that can give you great benefits despite being a little lesser known out there."
+msgstr "All'indirizzo qui sotto puoi trovare una serie di plugin originali che ti possono essere molto utili non ostante siano poco conosciuti."
+
+#: inc/admin/welcome-screen/sections/getting-started.php:128
+msgid "30 Experts Share: The Top *Non-Obvious* WordPress Plugins That'll Make You a Better Blogger"
+msgstr "30 esperti condividono: i migliori plugin *non ovvi* per WordPress che ti faranno diventare un blogger migliore"
+
+#: inc/admin/welcome-screen/sections/getting-started.php:79
+msgid "Find out how to add a search bar in the top menu bar, in an easy way be following the link below."
+msgstr "Scopri come aggiungere in modo semplice una barra per la ricerca nella barra dei menu in alto seguendo il link qui sotto."
+
+#: inc/admin/welcome-screen/sections/getting-started.php:78
+msgid "Add a search bar in the top menu"
+msgstr "Aggiungi una barra per la ricerca nel menu in alto"
+
+#: inc/admin/welcome-screen/sections/child-themes.php:126
+msgid "ResponsiveBoat - Current theme"
+msgstr "ResponsiveBoat - Tema attuale"
+
+#. translators: Zerif Pro name
+#: functions.php:317
+msgid "Get %s now!"
+msgstr "Acquista %s adesso!"
+
+#: inc/admin/welcome-screen/sections/child-themes.php:111
+#: inc/admin/welcome-screen/sections/child-themes.php:113
+msgid "ResponsiveBoat"
+msgstr "ResponsiveBoat"
+
+#: inc/admin/welcome-screen/sections/child-themes.php:37
+msgid "Get now"
+msgstr "Ottieni adesso"
+
+#: inc/admin/welcome-screen/sections/getting-started.php:123
+msgid "Set up your portfolio section in an easy way be following the link below."
+msgstr "Seguendo il link puoi impostare in modo semplice la tua sezione portfolio."
+
+#: inc/admin/welcome-screen/sections/getting-started.php:122
+msgid "Configure the portfolio"
+msgstr "Configura il portfolio"
+
+#: inc/admin/welcome-screen/sections/getting-started.php:61
+msgid "In the below documentation you will find an easy way to translate Zerif Lite into your native language or any other language you need for you site."
+msgstr "Nella documentazione seguente puoi trovare un modo semplice per tradurre Zerif Lite nella tua lingua madre o in ogni altra lingua di cui tu abbia bisogno per il tuo sito."
+
+#: inc/customizer.php:2410
+msgid "For more advanced settings please go to Settings -> Pirate Forms"
+msgstr "Per le impostazioni avanzate  vai a Impostazioni-> Pirate Forms"
+
+#: inc/customizer.php:2072
+msgid "Use pinterest layout?"
+msgstr "Vuoi usare il layout di pinterest?"
+
+#: inc/customizer.php:1921
+msgid "Content"
+msgstr "Contenuto"
+
+#: inc/customizer.php:1257
+msgid "Image 2"
+msgstr "Immagine 2"
+
+#: inc/customizer.php:1235
+msgid "Image 1"
+msgstr "Immagine 1"
+
+#: inc/customizer.php:1215
+msgid "Use parallax effect?"
+msgstr "Vuoi usare l'effetto parallasse? "
+
+#: inc/customizer.php:1145
+msgid "Green button label"
+msgstr "Etichetta del pulsante verde"
+
+#: inc/customizer.php:819
+msgid "Enable accessibility?"
+msgstr "Vuoi attivare l'accessibilità? "
+
+#: functions.php:222 inc/admin/welcome-screen/welcome-screen.php:235
+msgid "Free VS PRO"
+msgstr "Confronto fra la versione free e PRO"
+
+#: functions.php:221 functions.php:245 functions.php:248
+#: inc/admin/welcome-screen/welcome-screen.php:234
+msgid "Changelog"
+msgstr "Changelog"
+
+#: inc/admin/welcome-screen/welcome-screen.php:233
+msgid "Contribute"
+msgstr "Contribuisci"
+
+#: inc/admin/welcome-screen/welcome-screen.php:232
+msgid "Child themes"
+msgstr "Temi Child"
+
+#: inc/admin/welcome-screen/welcome-screen.php:231
+msgid "Actions required"
+msgstr "Azioni richieste"
+
+#. translators: Welcome page link
+#: inc/admin/welcome-screen/welcome-screen.php:76
+msgid "Get started with Zerif Lite"
+msgstr "Inizia con Zerif Lite"
+
+#. translators: Welcome page link
+#: inc/admin/welcome-screen/welcome-screen.php:75
+msgid "Welcome! Thank you for choosing Zerif Lite! To fully take advantage of the best our theme can offer please make sure you visit our %1$swelcome page%2$s."
+msgstr "Benvenuto! Grazie per aver scelto Zerif Lite! Per sfruttare pienamente tutte le potenzialità del nostro tema visita la nostra  %1$spagina di benvenuto%2$s."
+
+#. translators: wordpress.org review page
+#: inc/admin/welcome-screen/sections/github.php:40
+msgid "Rate our theme on %1$sWordPress.org%2$s. We'd really appreciate it!"
+msgstr "Vota il nostro tema su %1$sWordPress.org%2$s. Ti saremo riconoscenti!"
+
+#: inc/admin/welcome-screen/sections/github.php:38
+msgid "Are you enjoying Zerif Lite?"
+msgstr "Ti piace Zerif Lite? "
+
+#: inc/admin/welcome-screen/sections/github.php:32
+#: inc/admin/welcome-screen/sections/getting-started.php:60
+msgid "Translate Zerif Lite"
+msgstr "Traduci Zerif Lite"
+
+#: inc/admin/welcome-screen/sections/github.php:21
+msgid "Zerif Lite on GitHub"
+msgstr "Zerif Lite su GitHub"
+
+#: inc/admin/welcome-screen/sections/github.php:18
+msgid "GitHub is the place to go!"
+msgstr "GitHub è il posto dove andare!"
+
+#: inc/admin/welcome-screen/sections/getting-started.php:249
+msgid "Install Visualizer"
+msgstr "Installa Visualizer"
+
+#: inc/admin/welcome-screen/sections/getting-started.php:239
+msgid "A simple, easy to use and quite powerful chart tool to create, manage and embed interactive charts into your WordPress posts and pages."
+msgstr "Uno strumento grafico semplice, facile da usare e abbastanza potente per creare, gestire e incorporare grafici interattivi negli articoli e nelle pagine di WordPress."
+
+#: inc/admin/welcome-screen/sections/getting-started.php:238
+msgid "Visualizer: Charts and Graphs"
+msgstr "Visualizer: grafici e diagrammi"
+
+#: inc/admin/welcome-screen/sections/getting-started.php:208
+msgid "Install Custom Login Customizer"
+msgstr "Installa Custom Login Customizer"
+
+#: inc/admin/welcome-screen/sections/getting-started.php:198
+msgid "Login Customizer plugin allows you to easily customize your login page straight from your WordPress Customizer! You can preview your changes before you save them!"
+msgstr "Il plugin Login Customizer permette di personalizzare facilmente la pagina di login direttamente da WordPress Customizer! È possibile vedere l'anteprima dei cambiamenti prima di salvarli!"
+
+#: inc/admin/welcome-screen/sections/getting-started.php:197
+msgid "Custom Login Customizer"
+msgstr "Custom Login Customizer"
+
+#: inc/admin/welcome-screen/sections/getting-started.php:187
+msgid "Install WP Product Review"
+msgstr "Installa WP Product Review"
+
+#: functions.php:407 inc/admin/welcome-screen/sections/getting-started.php:160
+#: inc/admin/welcome-screen/sections/getting-started.php:181
+#: inc/admin/welcome-screen/sections/getting-started.php:202
+#: inc/admin/welcome-screen/sections/getting-started.php:221
+#: inc/admin/welcome-screen/sections/getting-started.php:243
+#: inc/admin/welcome-screen/sections/getting-started.php:263
+#: inc/admin/welcome-screen/sections/getting-started.php:283
+#: inc/admin/welcome-screen/sections/getting-started.php:302
+msgid "Already activated"
+msgstr "Già attivato"
+
+#: inc/admin/welcome-screen/sections/getting-started.php:177
+msgid "Easily turn your basic posts into in-depth reviews with ratings, pros and cons, affiliate links, rich snippets and user reviews."
+msgstr "È facile trasformare i tuoi articoli di base in recensioni approfondite con valutazione, pro e contro, link di affiliazione, rich snippets e recensioni degli utenti."
+
+#: inc/admin/welcome-screen/sections/getting-started.php:176
+msgid "WP Product Review"
+msgstr "WP Product Review"
+
+#: functions.php:493
+msgid "Recommended Plugins"
+msgstr "Plugin raccomandati"
+
+#: functions.php:239 functions.php:293
+#: inc/admin/welcome-screen/sections/getting-started.php:142
+msgid "Read full documentation"
+msgstr "Leggi la documentazione completa"
+
+#: functions.php:238 functions.php:294
+#: inc/admin/welcome-screen/sections/getting-started.php:141
+msgid "Need more details? Please check our full documentation for detailed information on how to use Zerif Lite."
+msgstr "Hai bisogno di maggiori dettagli? Leggi la documentazione completa che fornisce informazioni dettagliate su come usare Zerif Lite."
+
+#: inc/admin/welcome-screen/sections/getting-started.php:140
+msgid "View full documentation"
+msgstr "Consulta la documentazione completa"
+
+#: inc/admin/welcome-screen/sections/getting-started.php:117
+msgid "You don't like the way Zerif Lite looks with its background opacity? No problem. Just remove it using the steps below."
+msgstr "Non ti piace il modo in cui Zerif Lite appare con lo sfondo opaco? Nessun problema. Si può rimuovere usando la procedura seguente."
+
+#: inc/admin/welcome-screen/sections/getting-started.php:116
+msgid "Remove the opacity"
+msgstr "Rimuovi l'opacità"
+
+#: inc/admin/welcome-screen/sections/getting-started.php:111
+msgid "Zerif Lite has three page templates available, two for the blog and one for full width pages. To make sure you take full advantage of those page templates, make sure you read the documentation."
+msgstr "Zerif Lite ha tre modelli di pagina disponibili, due per il blog e uno per le pagine intere. Assicurati di sfruttare pienamente tutte le caratteristiche di questi template di pagina, leggendo la documentazione."
+
+#: inc/admin/welcome-screen/sections/getting-started.php:110
+msgid "Change the page template"
+msgstr "Cambia il template della pagina"
+
+#: inc/admin/welcome-screen/sections/getting-started.php:105
+msgid "To better suit your site's needs, you can change each section's anchor to what you want. The entire process is described below."
+msgstr "Per meglio rispondere alle esigenze del tuo sito, è possibile cambiare l'ancoraggio delle sezioni a quello che vuoi. L'intero processo è descritto di seguito."
+
+#: inc/admin/welcome-screen/sections/getting-started.php:104
+msgid "Change anchors"
+msgstr "Cambia le ancore"
+
+#: inc/admin/welcome-screen/sections/getting-started.php:99
+msgid "Linking the frontpage sections with the top menu is very simple, all you need to do is assign section anchors to the menu. In the below documentation you will find a nice tutorial about this."
+msgstr "Collegare le sezioni del frontpage al menu in alto è molto semplice; è sufficiente, infatti, assegnare un'ancora di sezione al menu. Trovi un semplice tutorial nella documentazione seguente."
+
+#: inc/admin/welcome-screen/sections/getting-started.php:98
+msgid "Link Menu to sections"
+msgstr "Menu link alle sezioni"
+
+#: functions.php:265 inc/admin/welcome-screen/sections/getting-started.php:93
+msgid "If you find yourself in the situation where everything on your site is running very slow, you might consider having a look at the below documentation where you will find the most common issues causing this and possible solutions for each of the issues."
+msgstr "Se il tuo sito reagisce lentamente, puoi provare a leggere la documentazione qui sotto dove è possibile trovare i motivi più comuni che causano il rallentamento e le possibili soluzioni."
+
+#: functions.php:263 inc/admin/welcome-screen/sections/getting-started.php:92
+msgid "Speed up your site"
+msgstr "Rendi più veloce il tuo sito"
+
+#: inc/admin/welcome-screen/sections/getting-started.php:73
+msgid "You can turn off the animation effects you see when Zerif Lite loads a section in an easy way with just few changes. Check the documentation below."
+msgstr "Puoi disattivare gli effetti di animazione  che Zerif Lite inserisce al caricamento di una sezione in un modo semplice e in pochi passaggi. Per sapere come, leggi la documentazione sotto."
+
+#: inc/admin/welcome-screen/sections/getting-started.php:72
+msgid "Turn off the animations"
+msgstr "Disattiva le animazioni"
+
+#: inc/admin/welcome-screen/sections/getting-started.php:67
+msgid "In the below documentation you will find an easy way to change the default dimensions for you social icons."
+msgstr "Nella documentazione seguente puoi trovare un modo semplice per cambiare le dimensioni preimpostate delle icone dei social network."
+
+#: inc/admin/welcome-screen/sections/getting-started.php:66
+msgid "Change dimensions for footer social icons"
+msgstr "Cambia le dimensioni delle icone dei social network nel footer"
+
+#: inc/admin/welcome-screen/sections/getting-started.php:85
+msgid "If you are in the position where you want to change the default appearance of the big title section, you may want to replace it with a nice looking slider. This can be accomplished by following the documention below."
+msgstr "Se vuoi, puoi cambiare l'aspetto della sezione del Titolo centrale e sostituire la slider preimpostata. Nella documentazione seguente trovi le istruzioni su come procedere. "
+
+#: inc/admin/welcome-screen/sections/getting-started.php:84
+msgid "Slider in big title section"
+msgstr "Slider nella sezione del Titolo centrale"
+
+#: functions.php:257 functions.php:266 functions.php:275
+#: inc/admin/welcome-screen/sections/getting-started.php:50
+#: inc/admin/welcome-screen/sections/getting-started.php:56
+#: inc/admin/welcome-screen/sections/getting-started.php:62
+#: inc/admin/welcome-screen/sections/getting-started.php:68
+#: inc/admin/welcome-screen/sections/getting-started.php:74
+#: inc/admin/welcome-screen/sections/getting-started.php:80
+#: inc/admin/welcome-screen/sections/getting-started.php:86
+#: inc/admin/welcome-screen/sections/getting-started.php:94
+#: inc/admin/welcome-screen/sections/getting-started.php:100
+#: inc/admin/welcome-screen/sections/getting-started.php:106
+#: inc/admin/welcome-screen/sections/getting-started.php:112
+#: inc/admin/welcome-screen/sections/getting-started.php:118
+#: inc/admin/welcome-screen/sections/getting-started.php:124
+msgid "View how to do this"
+msgstr "Guarda come fare "
+
+#: functions.php:256 inc/admin/welcome-screen/sections/getting-started.php:49
+msgid "If you want to make changes to the theme's files, those changes are likely to be overwritten when you next update the theme. In order to prevent that from happening, you need to create a child theme. For this, please follow the documentation below."
+msgstr "Se fai dei cambiamenti nei file del tema, questi cambiamenti saranno sovrascritti quando il tema verrà aggiornato. Per evitare questo problema puoi creare un tema Child. Per sapere come fare,  leggi la documentazione sotto. "
+
+#: functions.php:254 inc/admin/welcome-screen/sections/getting-started.php:48
+msgid "Create a child theme"
+msgstr "Crea un tema child"
+
+#: inc/admin/welcome-screen/sections/getting-started.php:42
+msgid "FAQ"
+msgstr "FAQ"
+
+#: functions.php:302 functions.php:304
+#: inc/admin/welcome-screen/sections/getting-started.php:34
+msgid "Go to Customizer"
+msgstr "Vai a Personalizza"
+
+#: functions.php:303 inc/admin/welcome-screen/sections/getting-started.php:33
+msgid "Using the WordPress Customizer you can easily customize every aspect of the theme."
+msgstr "Usando Personalizza di WordPress puoi personalizzare facilmente ogni aspetto del tema."
+
+#: inc/admin/welcome-screen/sections/getting-started.php:32
+msgid "Customize everything in a single place."
+msgstr "Personalizza ogni aspetto da un solo menu."
+
+#: functions.php:217
+msgid "Getting Started"
+msgstr "Inizia"
+
+#: functions.php:229 inc/admin/welcome-screen/sections/getting-started.php:22
+msgid "We want to make sure you have the best experience using Zerif Lite and that is why we gathered here all the necessary informations for you. We hope you will enjoy using Zerif Lite, as much as we enjoy creating great products."
+msgstr "Vogliamo essere sicuri che tu abbia la migliore esperienza nell'uso di Zerif Lite e per questo abbiamo raccolto qui tutte le informazioni necessarie. Speriamo che ti diverta usare Zerif Lite, così come noi ci divertiamo a creare grandi prodotti."
+
+#: inc/admin/welcome-screen/sections/getting-started.php:21
+msgid "Our most popular free one page WordPress theme, Zerif Lite!"
+msgstr "Uno dei temi one page più popolare di Wordpress gratis, Zerif Lite!"
+
+#: inc/admin/welcome-screen/sections/free_pro.php:136
+msgid "Get Zerif PRO now!"
+msgstr "Acquista Zerif PRO ora!"
+
+#: inc/admin/welcome-screen/sections/free_pro.php:128
+msgid "Remove \"Zerif Lite powered by WordPress\" copyright from the footer."
+msgstr "Rimuovi il copyright \"Zerif Lite  powered by WordPress\" dal footer."
+
+#: functions.php:398 inc/admin/welcome-screen/sections/free_pro.php:127
+msgid "No credit footer link"
+msgstr "Nessun link per i credit nel footer"
+
+#: functions.php:393 inc/admin/welcome-screen/sections/free_pro.php:120
+msgid "Write an original text in each Contact us section field."
+msgstr "Scrivi un testo originale in ogni campo della sezione Contatti."
+
+#: functions.php:392 inc/admin/welcome-screen/sections/free_pro.php:119
+msgid "Change labels for the Contact Us section"
+msgstr "Cambia le etichette nella sezione Contatti."
+
+#: functions.php:387 inc/admin/welcome-screen/sections/free_pro.php:112
+msgid "Add pricing tables for your products and use newsletter forms to attract the clients."
+msgstr "Aggiungi un prezzario per i tuoi prodotti e usa la Newsletter per attirare clienti."
+
+#: functions.php:386 inc/admin/welcome-screen/sections/free_pro.php:111
+msgid "Packages/Subscribe sections"
+msgstr "Sezione Pacchetti (servizi e prezzi)/Iscrizione"
+
+#: functions.php:381 inc/admin/welcome-screen/sections/free_pro.php:104
+msgid "You will benefit of our full support for any issues you have with the theme."
+msgstr "Potrai beneficiare di tutto il nostro supporto per qualsiasi problema tu abbia con il tema."
+
+#: functions.php:220 functions.php:380 inc/customizer.php:129
+#: inc/admin/welcome-screen/sections/free_pro.php:103
+msgid "Support"
+msgstr "Supporto"
+
+#: functions.php:375 inc/admin/welcome-screen/sections/free_pro.php:96
+msgid "Apart from static images, you can use videos or sliders on the background."
+msgstr "Oltre alle immagini statiche,  puoi usare video e sliders nello sfondo. "
+
+#: functions.php:374 inc/admin/welcome-screen/sections/free_pro.php:95
+msgid "Background slider/video"
+msgstr "Slider/video di sfondo"
+
+#: functions.php:369 inc/admin/welcome-screen/sections/free_pro.php:88
+msgid "Arrange the sections by your priorities."
+msgstr "Ordina le sezioni in base alle proprie priorità."
+
+#: functions.php:368 inc/admin/welcome-screen/sections/free_pro.php:87
+msgid "Sections order"
+msgstr "Ordine delle sezioni"
+
+#: functions.php:363 inc/admin/welcome-screen/sections/free_pro.php:80
+msgid "Showcase your best projects in the portfolio section."
+msgstr "Mostra i migliori progetti nella sezione Portfolio."
+
+#: functions.php:362
+#: inc/class/class-customizer-theme-info-control/class-customizer-theme-info-root.php:99
+#: inc/customizer.php:124 inc/admin/welcome-screen/sections/free_pro.php:79
+msgid "Portfolio"
+msgstr "Portfolio"
+
+#: functions.php:357 inc/admin/welcome-screen/sections/free_pro.php:72
+msgid "Embed your current location to your website by using a Google map."
+msgstr "Inserisci la tua posizione corrente al sito usando una Google map. "
+
+#: functions.php:356
+#: inc/class/class-customizer-theme-info-control/class-customizer-theme-info-root.php:103
+#: inc/customizer.php:128 inc/admin/welcome-screen/sections/free_pro.php:71
+msgid "Google map section"
+msgstr "Sezione Google map"
+
+#: functions.php:351 inc/admin/welcome-screen/sections/free_pro.php:64
+msgid "You can change the colors of each section. You have unlimited options."
+msgstr "Puoi cambiare i colori di ogni sezione. Hai opzioni illimitate. "
+
+#: functions.php:350 inc/admin/welcome-screen/sections/free_pro.php:63
+msgid "Unlimited color option"
+msgstr "Opzione di colore illimitato "
+
+#: functions.php:345 inc/admin/welcome-screen/sections/free_pro.php:56
+msgid "You can use any background image you want."
+msgstr "Puoi usare qualsiasi immagine di sfondo tu voglia. "
+
+#: functions.php:344 inc/admin/welcome-screen/sections/free_pro.php:55
+msgid "Background image"
+msgstr "Immagine di sfondo"
+
+#: functions.php:339 inc/admin/welcome-screen/sections/free_pro.php:48
+msgid "Big title, Our focus, About us, Our team, Testimonials, Ribbons, Latest news, Contat us"
+msgstr "Titolo centrale, la Nostra attività, Chi siamo, Il nostro team,  Testimonianze, Ribbon, Ultime notizie, Contatti "
+
+#: functions.php:338 inc/customizer.php:959
+#: inc/admin/welcome-screen/sections/free_pro.php:47
+msgid "Frontpage sections"
+msgstr "Sezione Home"
+
+#: functions.php:333 inc/admin/welcome-screen/sections/free_pro.php:40
+msgid "Ready for e-commerce. You can build an online store here."
+msgstr "Pronto per l'ecommerce. Qui puoi realizzare un negozio online. "
+
+#: functions.php:332 inc/admin/welcome-screen/sections/free_pro.php:39
+msgid "WooCommerce Compatible"
+msgstr "Compatibile con WooCommerce"
+
+#: functions.php:327 inc/admin/welcome-screen/sections/free_pro.php:32
+msgid "Responsive layout. Works on every device."
+msgstr "Layout responsive. Si adatta ad ogni dispositivo. "
+
+#: functions.php:326 inc/admin/welcome-screen/sections/free_pro.php:31
+msgid "Mobile friendly"
+msgstr "Compatibile con i dispositivi mobili"
+
+#: functions.php:321 inc/admin/welcome-screen/sections/free_pro.php:24
+msgid "Smooth, catchy and easy scrolling experience."
+msgstr "Esperienza di scorrimento fluida,  accattivante e facile. "
+
+#: functions.php:320 inc/customizer.php:1197
+#: inc/admin/welcome-screen/sections/free_pro.php:23
+msgid "Parallax effect"
+msgstr "Effetto di parallasse "
+
+#: inc/admin/welcome-screen/sections/child-themes.php:97
+msgid "Zifer Child - Current theme"
+msgstr "Zifer Child - Tema corrente"
+
+#: inc/admin/welcome-screen/sections/child-themes.php:84
+msgid "Zifer"
+msgstr "Zifer"
+
+#: inc/admin/welcome-screen/sections/child-themes.php:82
+msgid "Zifer Child Theme"
+msgstr "Tema Zifer Child "
+
+#: inc/admin/welcome-screen/sections/child-themes.php:153
+msgid "Zerius - Current theme"
+msgstr "Zerius - Tema corrente"
+
+#: inc/admin/welcome-screen/sections/child-themes.php:140
+msgid "Zerius"
+msgstr "Zerius"
+
+#: inc/admin/welcome-screen/sections/child-themes.php:138
+msgid "Zerius Child Theme"
+msgstr "Tema Zerius Child"
+
+#: inc/admin/welcome-screen/sections/child-themes.php:70
+msgid "OnePirate - Current theme"
+msgstr "One Pirate -  Tema corrente"
+
+#. translators: ZblackBeard install link
+#. translators: Zifer Child install link
+#. translators: Zerius install link
+#: inc/admin/welcome-screen/sections/child-themes.php:64
+#: inc/admin/welcome-screen/sections/child-themes.php:91
+#: inc/admin/welcome-screen/sections/child-themes.php:147
+msgid "Install %s now"
+msgstr "Installa %s ora"
+
+#: inc/admin/welcome-screen/sections/child-themes.php:57
+msgid "OnePirate"
+msgstr "OnePirate"
+
+#: inc/admin/welcome-screen/sections/child-themes.php:55
+msgid "OnePirate Child Theme"
+msgstr "Tema One Pirate Child"
+
+#: inc/admin/welcome-screen/sections/child-themes.php:44
+#: inc/admin/welcome-screen/sections/child-themes.php:71
+#: inc/admin/welcome-screen/sections/child-themes.php:98
+#: inc/admin/welcome-screen/sections/child-themes.php:127
+#: inc/admin/welcome-screen/sections/child-themes.php:154
+msgid "Customize"
+msgstr "Personalizzazione"
+
+#: inc/admin/welcome-screen/sections/child-themes.php:43
+msgid "Zblackbeard - Current theme"
+msgstr "Zblackbeard - Tema corrente"
+
+#: inc/admin/welcome-screen/sections/child-themes.php:30
+msgid "ZBlackBeard"
+msgstr "ZBlackBeard"
+
+#: inc/admin/welcome-screen/sections/child-themes.php:28
+msgid "ZBlackBeard Child Theme"
+msgstr "Tema ZBlackBeard Child"
+
+#: inc/admin/welcome-screen/sections/child-themes.php:18
+msgid "Below you will find a selection of Zerif Lite child themes that will totally transform the look of your site."
+msgstr "Di seguito  trovi una selezione di temi child di Zerif Lite che potranno trasformare completamente l'aspetto del tuo sito. "
+
+#: inc/admin/welcome-screen/sections/child-themes.php:16
+msgid "Get a whole new look for your site"
+msgstr "Dai al tuo sito un nuovo aspetto"
+
+#: inc/admin/welcome-screen/welcome-screen.php:118
+#: inc/admin/welcome-screen/sections/actions-required.php:86
+msgid "Hooray! There are no required actions for you right now."
+msgstr "Evviva! Non sono richieste azioni per ora. "
+
+#: inc/admin/welcome-screen/sections/actions-required.php:11
+msgid "Keep up with Zerif Lite's latest news"
+msgstr "Tieniti aggiornato con le ultime notizie di Zerif Lite "
+
+#: inc/template-tags.php:530
+msgid "Skip to content"
+msgstr "Salta il contenuto"
+
+#: functions.php:1701
+msgid "Open links in new window?"
+msgstr "Vuoi aprire i link in una nuova finestra?"
+
+#: functions.php:1451
+msgid "Zerif - Team member widget"
+msgstr "Widget Zerif - componente del Team"
+
+#: functions.php:1340 functions.php:1347
+msgid "Client"
+msgstr "Cliente"
+
+#: functions.php:1306
+msgid "Zerif - Clients widget"
+msgstr "Widget Zerif - Clienti"
+
+#: functions.php:1100
+msgid "Zerif - Testimonial widget"
+msgstr "Widget Zerif -  Testimoni"
+
+#: functions.php:1066 functions.php:1271 functions.php:1417 functions.php:1729
+msgid "Uploaded image"
+msgstr "Immagine caricata "
+
+#: functions.php:896
+msgid "Zerif - Our focus widget"
+msgstr "Widget Zerif -  Il nostro focus"
+
+#: functions.php:861
+msgid "Our team section widgets"
+msgstr "Widgets della sezione Il nostro team"
+
+#: functions.php:857
+msgid "Testimonials section widgets"
+msgstr "Widgets della sezione Testimonianze "
+
+#: functions.php:853
+msgid "Our focus section widgets"
+msgstr "Widgets della sezione La nostra attività "
+
+#. translators: %s: Name of current post
+#: content-page-no-title.php:17 content-page.php:27
+msgid "Continue reading %s <span class=\"meta-nav\">&rarr;</span>"
+msgstr "Continua la lettura di %s <span class=\"meta-nav\">&rarr;</span>"
+
+#: class-tgm-plugin-activation.php:2770
+msgid "No plugins were selected to be installed. No action taken."
+msgstr "Nessun plugin è stato selezionato per l'installazione. L'azione non è  stata eseguita"
+
+#: class-tgm-plugin-activation.php:2772
+msgid "No plugins were selected to be updated. No action taken."
+msgstr "Nessun plugin è stato selezionato per l'aggiornamento. L'azione non è  stata eseguita"
+
+#: class-tgm-plugin-activation.php:2815
+msgid "No plugins are available to be updated at this time."
+msgstr "Nessun plugin è al momento disponibile per  l'aggiornamento. "
+
+#: class-tgm-plugin-activation.php:2921
+msgid "No plugins were selected to be activated. No action taken."
+msgstr "Nessun plugin è stato selezionato per l'attivazione. L'azione non è  stata eseguita. "
+
+#. translators: 1: plugin name, 2: action number 3: total number of actions.
+#: class-tgm-plugin-activation.php:3513
+msgid "Updating Plugin %1$s (%2$d/%3$d)"
+msgstr "Aggiornamento plugin %1$s (%2$d/%3$d)"
+
+#: class-tgm-plugin-activation.php:2697
+msgid "Upgrade message from the plugin author:"
+msgstr "Messaggio di aggiornamento dall'autore del plugin:"
+
+#: class-tgm-plugin-activation.php:2736
+msgid "Update"
+msgstr "Aggiornamento"
+
+#: class-tgm-plugin-activation.php:2566
+msgid "Version"
+msgstr "Versione"
+
+#: class-tgm-plugin-activation.php:2511
+msgid "Minimum required version:"
+msgstr "Versione minima richiesta:"
+
+#: class-tgm-plugin-activation.php:2503
+msgid "Installed version:"
+msgstr "Versione installata:"
+
+#: class-tgm-plugin-activation.php:2495
+msgctxt "as in: \"version nr unknown\""
+msgid "unknown"
+msgstr "sconosciuto"
+
+#. translators: 1: number of plugins.
+#: class-tgm-plugin-activation.php:2413
+msgid "To Activate <span class=\"count\">(%s)</span>"
+msgid_plural "To Activate <span class=\"count\">(%s)</span>"
+msgstr[0] "Attivare il <span class=\"count\">(%s)</span>"
+msgstr[1] "Attivare i <span class=\"count\">(%s)</span>"
+
+#: class-tgm-plugin-activation.php:2523
+msgid "Available version:"
+msgstr "Versione disponibile:"
+
+#. translators: 1: number of plugins.
+#: class-tgm-plugin-activation.php:2409
+msgid "Update Available <span class=\"count\">(%s)</span>"
+msgid_plural "Update Available <span class=\"count\">(%s)</span>"
+msgstr[0] "Aggiornamento disponibile <span class=\"count\">(%s)</span>"
+msgstr[1] "Aggiornamenti disponibili <span class=\"count\">(%s)</span>"
+
+#. translators: 1: number of plugins.
+#: class-tgm-plugin-activation.php:2405
+msgid "To Install <span class=\"count\">(%s)</span>"
+msgid_plural "To Install <span class=\"count\">(%s)</span>"
+msgstr[0] "Installare il <span class=\"count\">(%s)</span>"
+msgstr[1] "Installare i <span class=\"count\">(%s)</span>"
+
+#. translators: 1: number of plugins.
+#: class-tgm-plugin-activation.php:2401
+msgctxt "plugins"
+msgid "All <span class=\"count\">(%s)</span>"
+msgid_plural "All <span class=\"count\">(%s)</span>"
+msgstr[0] "Tutto <span class=\"count\">(%s)</span>"
+msgstr[1] "Tutti <span class=\"count\">(%s)</span>"
+
+#: class-tgm-plugin-activation.php:2346
+msgid "Update recommended"
+msgstr "Aggiornamento consigliato"
+
+#: class-tgm-plugin-activation.php:2343
+msgid "Requires Update"
+msgstr "Aggiornamento richiesto"
+
+#: class-tgm-plugin-activation.php:2340
+msgid "Required Update not Available"
+msgstr "L'aggiornamento richiesto non è disponibile"
+
+#: class-tgm-plugin-activation.php:2334
+msgid "Active"
+msgstr "Attivo"
+
+#: class-tgm-plugin-activation.php:2308
+msgid "External Source"
+msgstr "Fonte esterna "
+
+#: class-tgm-plugin-activation.php:1129 class-tgm-plugin-activation.php:2961
+msgctxt "plugin A *and* plugin B"
+msgid "and"
+msgstr "e"
+
+#: class-tgm-plugin-activation.php:941
+msgid "The remote plugin package consists of more than one file, but the files are not packaged in a folder."
+msgstr "Il pacchetto remoto del plugin comprende più file ma questi file on sono raggruppati in una cartella. "
+
+#: class-tgm-plugin-activation.php:933 class-tgm-plugin-activation.php:941
+msgid "Please contact the plugin provider and ask them to package their plugin according to the WordPress guidelines."
+msgstr "Contatta il fornitore del plugin per chiedergli di preparare il plugin secondo le linee guida di WordPress. "
+
+#: class-tgm-plugin-activation.php:933
+msgid "The remote plugin package does not contain a folder with the desired slug and renaming did not work."
+msgstr "Il pacchetto remoto del plugin non contiene una cartella con lo slug desiderato e non è possibile rinominare. "
+
+#: class-tgm-plugin-activation.php:521
+msgid "Update Required"
+msgstr "È necessario l'aggiornamento "
+
+#: class-tgm-plugin-activation.php:520
+msgid "This plugin needs to be updated to be compatible with your theme."
+msgstr "Questo plugin deve essere aggiornato per essere compatibile con il tema. "
+
+#: class-tgm-plugin-activation.php:395
+msgid "Please contact the administrator of this site for help."
+msgstr "Contattare l'amministratore del sito per chiedere aiuto. "
+
+#. translators: 1: plugin name.
+#: class-tgm-plugin-activation.php:390
+msgid "Plugin not activated. A higher version of %s is needed for this theme. Please update the plugin."
+msgstr "Il plugin non è stato attivato. Per questo tema è necessaria una versione più recente di %s. Aggiornare il plugin. "
+
+#. translators: 1: plugin name.
+#: class-tgm-plugin-activation.php:388
+msgid "No action taken. Plugin %1$s was already active."
+msgstr "Non verrà eseguita alcuna azione. Il plugin %1$s è già attivo. "
+
+#: class-tgm-plugin-activation.php:373
+msgid "Begin updating plugin"
+msgid_plural "Begin updating plugins"
+msgstr[0] "Aggiorna il plugin"
+msgstr[1] "Aggiorna i plugin"
+
+#. translators: 1: plugin name(s).
+#: class-tgm-plugin-activation.php:350
+msgid "There is an update available for: %1$s."
+msgid_plural "There are updates available for the following plugins: %1$s."
+msgstr[0] "C'è un aggiornamento disponibile per: %1$s."
+msgstr[1] "Sono disponibili degli aggiornamenti per i seguenti plugin: %1$s."
+
+#. Template Name of the theme
+msgid "Full Width Page"
+msgstr "Pagina a larghezza piena"
+
+#: front-page.php:37 home.php:12 inc/customizer.php:881
+msgid "Blog"
+msgstr "Blog"
+
+#. Author of the theme
+#. Translators: %s: ThemeIsle link
+#: footer.php:215
+msgid "ThemeIsle"
+msgstr "ThemeIsle"
+
+#: sidebar.php:40
+msgid "Meta"
+msgstr "Meta"
+
+#: sections/latest_news.php:174
+msgid "Next"
+msgstr "Successivo"
+
+#: sections/latest_news.php:167
+msgid "Previous"
+msgstr "Precedente"
+
+#: inc/template-tags.php:392
+msgid "Latest news"
+msgstr "Ultime notizie "
+
+#. translators: Search query
+#: search.php:30
+msgid "Search Results for: %s"
+msgstr "Risultati della ricerca di: %s"
+
+#. translators: 1 - Publish date, 2 - Author
+#: inc/template-tags.php:78
+msgid "<span class=\"posted-on\">Posted on %1$s</span><span class=\"byline\"> by %2$s</span>"
+msgstr "<span class=\"posted-on\">Pubblicato il %1$s</span><span class=\"byline\"> da %2$s</span>"
+
+#: single.php:30 inc/template-tags.php:39
+msgctxt "Next post link"
+msgid "%title <span class=\"meta-nav\">&rarr;</span>"
+msgstr "%title <span class=\"meta-nav\">&rarr;</span>"
+
+#: single.php:31 inc/template-tags.php:37
+msgctxt "Previous post link"
+msgid "<span class=\"meta-nav\">&larr;</span> %title"
+msgstr "<span class=\"meta-nav\">&larr;</span> %title"
+
+#: inc/template-tags.php:31
+msgid "Post navigation"
+msgstr "Navigazione articolo"
+
+#: inc/class/class-customizer-theme-info-control/class-customizer-theme-info-root.php:106
+#: inc/customizer.php:100 inc/customizer.php:132 inc/customizer.php:160
+#: inc/customizer.php:185
+#: inc/customizer-info/class/class-zerif-customize-upsell.php:71
+#: inc/customizer-info/class/class-zerif-customize-upsell.php:83
+#: inc/customizer-info/class/class-zerif-customize-upsell.php:95
+msgid "View PRO version"
+msgstr "Dai un'occhiata alla versione PRO"
+
+#: functions.php:236 functions.php:295
+#: inc/class/class-customizer-theme-info-control/class-customizer-theme-info-root.php:85
+msgid "Documentation"
+msgstr "Documentazione"
+
+#: inc/customizer.php:2586
+msgid "Secret key"
+msgstr "Chiave segreta "
+
+#: inc/customizer.php:2569
+msgid "Create an account here"
+msgstr "Qui puoi creare un account"
+
+#: inc/customizer.php:2568
+msgid "Site key"
+msgstr "Chiave del sito"
+
+#: inc/customizer.php:2550
+msgid "Hide reCaptcha?"
+msgstr "Vuoi nascondere reCaptcha? "
+
+#: inc/customizer.php:2524
+msgid "Send Message"
+msgstr "Invia Messaggio"
+
+#: inc/customizer.php:2514
+msgid "Email address"
+msgstr "Indirizzo email"
+
+#: inc/customizer.php:2479
+msgid "Contact us section subtitle"
+msgstr "Sottotitolo della sezione Contatti "
+
+#: inc/customizer.php:2458
+msgid "Contact us section title"
+msgstr "Titolo della sezione Contatti"
+
+#: content-frontpage.php:94 sections/ribbon_with_right_button.php:17
+#: sections/ribbon_with_bottom_button.php:18 template-frontpage.php:96
+#: inc/customizer.php:2189 inc/customizer.php:2260 inc/customizer.php:2446
+msgid "Get in touch"
+msgstr "Mettiti in contatto"
+
+#: inc/customizer.php:2439
+msgid "Hide contact us section?"
+msgstr "Vuoi nascondere la sezione Contatti? "
+
+#: inc/customizer.php:2416
+msgid "Contact us section"
+msgstr "Sezione Contatti "
+
+#: inc/customizer.php:2267
+msgid "RightButton Ribbon"
+msgstr "Pulsante destro della sezione Ribbon "
+
+#: inc/customizer.php:2245 inc/customizer.php:2325
+msgid "Button link"
+msgstr "Link pulsante"
+
+#: inc/customizer.php:2226 inc/customizer.php:2306 inc/customizer.php:2532
+msgid "Button label"
+msgstr "Etichetta pulsante"
+
+#. translators: BottomButton Ribbon in customizer
+#: sections/ribbon_with_bottom_button.php:17 inc/customizer.php:2174
+msgid "BottomButton Ribbon"
+msgstr "Pulsante in fondo della sezione Ribbon"
+
+#: inc/customizer.php:2152 inc/customizer.php:2165
+msgid "Ribbon sections"
+msgstr "Sezione Ribbon "
+
+#: inc/customizer.php:2396
+msgid "Latest News subtitle"
+msgstr "Sottotitolo della sezione Ultime notizie "
+
+#: inc/customizer.php:2378
+msgid "Latest News title"
+msgstr "Titolo della sezione Ultime notizie "
+
+#: inc/customizer.php:2360
+msgid "Hide latest news section?"
+msgstr "Vuoi nascondere la sezione Ultime notizie? "
+
+#: inc/customizer.php:2338
+msgid "Latest News section"
+msgstr "Sezione Ultime notizie "
+
+#: inc/customizer.php:2119
+msgid "Testimonials subtitle"
+msgstr "Sottotitolo della sezione Testimonianze "
+
+#: inc/customizer.php:2084 inc/template-tags.php:341
+msgid "Testimonials"
+msgstr "Testimonianze"
+
+#: inc/customizer.php:2054
+msgid "Hide testimonials section?"
+msgstr "Vuoi nascondere la sezione Testimonianze? "
+
+#: inc/customizer.php:2004
+msgid "Our team subtitle"
+msgstr "Sottotitolo della sezione Il nostro team"
+
+#: inc/customizer.php:1957 inc/template-tags.php:296
+msgid "YOUR TEAM"
+msgstr "Il tuo team"
+
+#: inc/customizer.php:1945
+msgid "Hide our team section?"
+msgstr "Vuoi nascondere la sezione Il nostro team? "
+
+#: inc/customizer.php:1908
+msgid "Clients area"
+msgstr "Sezione Clienti"
+
+#: inc/customizer.php:1866
+msgid "Feature no4 percentage"
+msgstr "Percentuale della caratteristica nr. 4"
+
+#: inc/customizer.php:1846
+msgid "Feature no4 text"
+msgstr "Testo della caratteristica nr. 4"
+
+#: inc/customizer.php:1829
+msgid "Feature no4 title"
+msgstr "Titolo della caratteristica nr. 4"
+
+#: inc/customizer.php:1801
+msgid "Feature no#4"
+msgstr "Caratteristica nr. #4"
+
+#: inc/customizer.php:1791
+msgid "Feature no3 percentage"
+msgstr "Percentuale della caratteristica nr. 3"
+
+#: inc/customizer.php:1771
+msgid "Feature no3 text"
+msgstr "Testo della caratteristica nr. 3"
+
+#: inc/customizer.php:1754
+msgid "Feature no3 title"
+msgstr "Titolo della caratteristica nr. 3"
+
+#: inc/customizer.php:1725
+msgid "Feature no#3"
+msgstr "Caratteristica nr. #3"
+
+#: inc/customizer.php:1715
+msgid "Feature no2 percentage"
+msgstr "Percentuale della caratteristica nr. 2"
+
+#: inc/customizer.php:1695
+msgid "Feature no2 text"
+msgstr "Testo della caratteristica nr. 2"
+
+#: inc/customizer.php:1678
+msgid "Feature no2 title"
+msgstr "Titolo della caratteristica nr. 2"
+
+#: inc/customizer.php:1649
+msgid "Feature no#2"
+msgstr "Caratteristica nr. 2"
+
+#: inc/customizer.php:1639
+msgid "Feature no1 percentage"
+msgstr "Percentuale della caratteristica nr. 1"
+
+#: inc/customizer.php:1619
+msgid "Feature no1 text"
+msgstr "Testo della caratteristica nr. 1"
+
+#: inc/customizer.php:1602
+msgid "Feature no1 title"
+msgstr "Titolo della caratteristica numero1"
+
+#: inc/customizer.php:1573
+msgid "Feature no#1"
+msgstr "Caratteristica nr.#1"
+
+#: inc/customizer.php:1527
+msgid "Big left side title"
+msgstr "Lato sinistro del titolo grande "
+
+#: inc/customizer.php:909 inc/customizer.php:1493
+msgid "Subtitle"
+msgstr "Sottotitolo"
+
+#: inc/customizer.php:1446 inc/template-tags.php:458
+msgid "About"
+msgstr "Chi siamo"
+
+#: inc/customizer.php:1000 inc/customizer.php:1415
+msgid "Main content"
+msgstr "Contenuto principale"
+
+#: inc/customizer.php:1434
+msgid "Hide about us section?"
+msgstr "Vuoi nascondere la sezione Chi siamo? "
+
+#: inc/customizer.php:1362
+msgid "Our focus subtitle"
+msgstr "Sottotitolo della sezione Il nostro Focus"
+
+#: inc/customizer.php:1316 inc/template-tags.php:254
+msgid "FEATURES"
+msgstr "CARATTERISTICHE"
+
+#: inc/customizer.php:1294
+msgid "Hide our focus section?"
+msgstr "Vuoi nascondere la sezione Il nostro Focus? "
+
+#: inc/customizer.php:1163
+msgid "Green button link"
+msgstr "Link del pulsante verde"
+
+#: inc/customizer.php:1113
+msgid "Red button link"
+msgstr "Link del pulsante rosso"
+
+#: inc/customizer.php:1095
+msgid "Red button label"
+msgstr "Etichetta del pulsante rosso"
+
+#: inc/customizer.php:1019
+msgid "Hide big title section?"
+msgstr "Vuoi nascondere la sezione del Titolo centrale? "
+
+#. translators: Big title section
+#. translators: Customizer link for Big title section
+#: inc/customizer.php:977 inc/customizer.php:990 inc/customizer.php:1041
+#: inc/template-tags.php:433
+msgid "Big title section"
+msgstr "Sezione del Titolo centrale"
+
+#: inc/customizer.php:2805
+msgid "Address"
+msgstr "Indirizzo"
+
+#: inc/customizer.php:2775
+msgid "Address section - icon"
+msgstr "Sezione Indirizzo -  icona"
+
+#: inc/customizer.php:2929
+msgid "Phone number"
+msgstr "Numero di telefono"
+
+#: inc/customizer.php:2899
+msgid "Phone number section - icon"
+msgstr "Sezione Numero di telefono -  icona"
+
+#: inc/customizer.php:2867
+msgid "Email"
+msgstr "Email"
+
+#: inc/customizer.php:2837
+msgid "Email section - icon"
+msgstr "Sezione email -  icona"
+
+#: inc/customizer.php:2699
+msgid "Dribbble link"
+msgstr "Link a Dribble"
+
+#: inc/customizer.php:801
+msgid "Disable smooth scroll?"
+msgstr "Vuoi disabilitare lo smooth scroll? "
+
+#: inc/customizer.php:783
+msgid "Disable preloader?"
+msgstr "Vuoi disabilitare il preloader? "
+
+#: inc/customizer.php:748
+msgid "General options"
+msgstr "Opzioni generali"
+
+#: header.php:73
+msgid "Toggle navigation"
+msgstr "Mostra o nascondi la navigazione"
+
+#. translators: ZblackBeard install link
+#. translators: Zifer Child install link
+#. translators: ResponsiveBoat child theme
+#. translators: Zerius install link
+#: inc/admin/welcome-screen/sections/child-themes.php:38
+#: inc/admin/welcome-screen/sections/child-themes.php:65
+#: inc/admin/welcome-screen/sections/child-themes.php:92
+#: inc/admin/welcome-screen/sections/child-themes.php:121
+#: inc/admin/welcome-screen/sections/child-themes.php:148
+msgid "Live Preview"
+msgstr "Anteprima"
+
+#: functions.php:1580 functions.php:1689 inc/customizer.php:649
+#: inc/customizer.php:2663 footer.php:190
+msgid "Linkedin link"
+msgstr "Link a Linkedin"
+
+#: functions.php:1569 functions.php:1681 inc/customizer.php:667 footer.php:198
+msgid "Dribble link"
+msgstr "Link a Dribble"
+
+#: functions.php:1558 functions.php:1673 inc/customizer.php:658
+#: inc/customizer.php:2681 footer.php:194
+msgid "Behance link"
+msgstr "Link a Behance"
+
+#: functions.php:1547 functions.php:1665 inc/customizer.php:640
+#: inc/customizer.php:2646 footer.php:186
+msgid "Twitter link"
+msgstr "Link a Twitter"
+
+#: functions.php:1534 functions.php:1657 inc/customizer.php:631
+#: inc/customizer.php:2628 footer.php:182
+msgid "Facebook link"
+msgstr "Link a Facebook "
+
+#: functions.php:1649
+msgid "Description"
+msgstr "Descrizione"
+
+#: functions.php:1641
+msgid "Position"
+msgstr "Posizione"
+
+#: functions.php:1633
+msgid "Name"
+msgstr "Nome"
+
+#: functions.php:1231
+msgid "Author details"
+msgstr "Dettagli autore"
+
+#: functions.php:1223
+msgid "Author link"
+msgstr "Link autore"
+
+#: functions.php:1215
+msgid "Author"
+msgstr "Autore"
+
+#: functions.php:1074 functions.php:1279 functions.php:1425 functions.php:1737
+msgid "Upload Image"
+msgstr "Carica un’immagine"
+
+#: functions.php:1042 functions.php:1247 functions.php:1391 functions.php:1705
+msgid "Image"
+msgstr "Immagine"
+
+#: functions.php:1034 functions.php:1383
+msgid "Link"
+msgstr "Link"
+
+#: functions.php:1026 functions.php:1239 inc/customizer.php:1564
+#: inc/customizer.php:2207 inc/customizer.php:2287
+msgid "Text"
+msgstr "Testo"
+
+#: functions.php:1018 inc/customizer.php:890 inc/customizer.php:1058
+#: inc/customizer.php:1332 inc/customizer.php:1463 inc/customizer.php:1895
+#: inc/customizer.php:1974 inc/customizer.php:2101
+msgid "Title"
+msgstr "Titolo"
+
+#: functions.php:818
+msgid "Default title"
+msgstr "Titolo preimpostato"
+
+#: class-tgm-plugin-activation.php:331
+msgid "Something went wrong with the plugin API."
+msgstr "Qualcosa è andato storto con le API del plugin."
+
+#: functions.php:645
+msgctxt "Monserrat font: on or off"
+msgid "on"
+msgstr "on"
+
+#: functions.php:638
+msgctxt "Homemade font: on or off"
+msgid "on"
+msgstr "on"
+
+#: functions.php:637
+msgctxt "Lato font: on or off"
+msgid "on"
+msgstr "on"
+
+#. translators: Our team section
+#. translators: Our team section in customizer
+#: sections/our_team.php:36 sections/our_team.php:39 inc/customizer.php:1987
+#: inc/customizer.php:2018 inc/template-tags.php:317
+msgid "Our team section"
+msgstr "Sezione Il nostro team"
+
+#. translators: About use section in customizer
+#. translators: About us section
+#. translators: About us section in customizer
+#: functions.php:600 sections/about_us.php:53 inc/customizer.php:1393
+#: inc/customizer.php:1406 inc/customizer.php:1476 inc/customizer.php:1536
+#: inc/template-tags.php:479
+msgid "About us section"
+msgstr "Sezione Chi siamo"
+
+#. translators: Testimonials section
+#. translators: Testimonials section link in customizer
+#: sections/testimonials.php:48 sections/testimonials.php:51
+#: inc/customizer.php:2032 inc/customizer.php:2133
+msgid "Testimonials section"
+msgstr "Sezione Testimonianze"
+
+#. translators: Our focus section
+#. translators: Our focus section in customizer
+#: inc/customizer.php:1272 inc/customizer.php:1345 inc/customizer.php:1375
+#: inc/template-tags.php:276
+msgid "Our focus section"
+msgstr "Sezione Il nostro focus "
+
+#: functions.php:589
+msgid "Sidebar"
+msgstr "Barra laterale"
+
+#: functions.php:79 functions.php:1876
+msgid "Primary Menu"
+msgstr "Menu principale"
+
+#: inc/customizer.php:2788 footer.php:27
+msgid "Company address"
+msgstr "Indirizzo dell'azienda"
+
+#. translators: 1 - Categories list, 2 - Tags list, 3- Permalink
+#: content-single.php:70
+msgid "This entry was posted in %1$s. Bookmark the <a href=\"%3$s\" rel=\"bookmark\">permalink</a>."
+msgstr "Questo articolo è stato pubblicato in %1$s . Bookmark <a href=\"%3$s\" rel=\"bookmark\"> permalink </a>."
+
+#. translators: 1 - Categories list, 2 - Tags list, 3- Permalink
+#: content-single.php:66
+msgid "This entry was posted in %1$s and tagged %2$s. Bookmark the <a href=\"%3$s\" rel=\"bookmark\">permalink</a>."
+msgstr "Questo articolo è stato pubblicato in %1$s e taggato con %2$s . Bookmark <a href=\"%3$s\" rel=\"bookmark\"> permalink </a>."
+
+#. translators: Permalink
+#: content-single.php:58
+msgid "Bookmark the <a href=\"%3$s\" rel=\"bookmark\">permalink</a>."
+msgstr "Bookmark <a href=\"%3$s\" rel=\"segnalibro\"> permalink </a>."
+
+#. translators: Permalink
+#: content-single.php:54
+msgid "This entry was tagged %2$s. Bookmark the <a href=\"%3$s\" rel=\"bookmark\">permalink</a>."
+msgstr "Questo articolo è stato taggato con %2$s . Bookmark <a href=\"%3$s\" rel=\"bookmark\"> permalink </a>."
+
+#: content-none.php:29
+msgid "It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps searching can help."
+msgstr "Non riusciamo a trovare quello che cerchi. Forse eseguire una ricerca potrebbe essere di aiuto."
+
+#: content-none.php:23
+msgid "Sorry, but nothing matched your search terms. Please try again with some different keywords."
+msgstr "Non c’è nessuna corrispondenza con i termini di ricerca che hai indicato. Riprova con termini diversi."
+
+#. translators: Add new post link
+#: content-none.php:19
+msgid "Ready to publish your first post? <a href=\"%1$s\">Get started here</a>."
+msgstr "Sei pronto a pubblicare il tuo primo articolo? <a href=\"%1$s\">Comincia da qui</a>."
+
+#: content-none.php:12
+msgid "Nothing Found"
+msgstr "Non è stato trovato nulla"
+
+#: content-large.php:154 content.php:125 content-page-no-title.php:33
+#: content-page.php:43 content-single.php:85
+msgid "Edit"
+msgstr "Modifica"
+
+#: content-large.php:150 content.php:120
+msgid "% Comments"
+msgstr "% commenti"
+
+#: content-large.php:150 content.php:120
+msgid "1 Comment"
+msgstr "1 commento"
+
+#: content-large.php:150 content.php:120
+msgid "Leave a comment"
+msgstr "Lascia un commento"
+
+#. translators: Tags list
+#: content-large.php:140 content.php:110
+msgid "Tagged %1$s"
+msgstr "Taggato  %1$s"
+
+#. translators: Categories list
+#. Translators: Categories list
+#: content-large.php:122 content.php:95
+msgid "Posted in %1$s"
+msgstr "Pubblicato in %1$s"
+
+#. translators: used between list items, there is a space after the comma
+#: content-large.php:114 content-large.php:132 content.php:88 content.php:103
+#: content-single.php:43 content-single.php:47
+msgid ", "
+msgstr ", "
+
+#: content-large.php:82 content.php:75 content-page-no-title.php:24
+#: content-page.php:34 content-single.php:29
+msgid "Pages:"
+msgstr "Pagine:"
+
+#: comments.php:97
+msgid "Comments are closed."
+msgstr "I commenti sono chiusi."
+
+#: comments.php:55 comments.php:84
+msgid "Newer Comments &rarr;"
+msgstr "Commenti più recenti &rarr;"
+
+#: comments.php:53 comments.php:82
+msgid "&larr; Older Comments"
+msgstr "&larr; Commenti meno recenti"
+
+#: comments.php:51 comments.php:80
+msgid "Comment navigation"
+msgstr "Navigazione commenti"
+
+#. translators: 1: number of comments, 2: post title
+#: comments.php:32
+msgctxt "comments title"
+msgid "%1$s thought on &ldquo;%2$s&rdquo;"
+msgid_plural "%1$s thoughts on &ldquo;%2$s&rdquo;"
+msgstr[0] "%1$s commento su &ldquo;%2$s&rdquo;"
+msgstr[1] "%1$s commenti su &ldquo;%2$s&rdquo;"
+
+#. translators: 1: plugin name, 2: action number 3: total number of actions.
+#: class-tgm-plugin-activation.php:3535
+msgid "Installing Plugin %1$s (%2$d/%3$d)"
+msgstr "Installazione del plugin %1$s in corso (%2$d/%3$d)"
+
+#: class-tgm-plugin-activation.php:3533
+msgid "All installations have been completed."
+msgstr "Tutte le installazioni sono state completate."
+
+#. translators: 1: plugin name.
+#: class-tgm-plugin-activation.php:3532
+msgid "%1$s installed successfully."
+msgstr "%1$s installato con successo"
+
+#. translators: 1: plugin name.
+#: class-tgm-plugin-activation.php:3518
+msgid "The installation of %1$s failed."
+msgstr "L'installazione di %1$s non è andata a buon fine."
+
+#. translators: 1: plugin name, 2: error message.
+#: class-tgm-plugin-activation.php:3516
+msgid "An error occurred while installing %1$s: <strong>%2$s</strong>."
+msgstr "Errore durante l'installazione %1$s: <strong>%2$s</strong>."
+
+#: class-tgm-plugin-activation.php:3530
+msgid "The installation process is starting. This process may take a while on some hosts, so please be patient."
+msgstr "Il processo di installazione sta iniziando. Questo processo su alcuni host può richiedere alcuni minuti, attendi con pazienza."
+
+#. translators: 1: plugin name, 2: action number 3: total number of actions.
+#: class-tgm-plugin-activation.php:3527
+msgid "Installing and Activating Plugin %1$s (%2$d/%3$d)"
+msgstr "Installazione ed attivazione del plugin %1$s in corso (%2$d/%3$d)"
+
+#: class-tgm-plugin-activation.php:3525
+msgid "All installations and activations have been completed."
+msgstr "Tutte le installazioni e le attivazioni sono state completate."
+
+#. translators: 1: plugin name.
+#: class-tgm-plugin-activation.php:3524 class-tgm-plugin-activation.php:3532
+msgid "Hide Details"
+msgstr "Nascondi i dettagli"
+
+#. translators: 1: plugin name.
+#: class-tgm-plugin-activation.php:3524 class-tgm-plugin-activation.php:3532
+msgid "Show Details"
+msgstr "Mostra i dettagli"
+
+#. translators: 1: plugin name.
+#: class-tgm-plugin-activation.php:3524
+msgid "%1$s installed and activated successfully."
+msgstr "%1$s installato e attivato con successo"
+
+#: class-tgm-plugin-activation.php:3522
+msgid "The installation and activation process is starting. This process may take a while on some hosts, so please be patient."
+msgstr "Il processo di installazione e attivazione sta iniziando. Questo processo potrebbe richiedere del tempo su alcuni host, quindi sii paziente."
+
+#: class-tgm-plugin-activation.php:3171
+msgid "Plugin activation failed."
+msgstr "L'attivazione del plugin è fallita."
+
+#: class-tgm-plugin-activation.php:2947
+msgid "No plugins are available to be activated at this time."
+msgstr "Nessun plugin è disponibile per l'attivazione. "
+
+#: class-tgm-plugin-activation.php:2813
+msgid "No plugins are available to be installed at this time."
+msgstr "Nessun plugin è  disponibile per l'installazione. "
+
+#: class-tgm-plugin-activation.php:2567
+msgid "Status"
+msgstr "Stato"
+
+#: class-tgm-plugin-activation.php:2562
+msgid "Type"
+msgstr "Tipo"
+
+#: class-tgm-plugin-activation.php:2561
+msgid "Source"
+msgstr "Sorgente"
+
+#: class-tgm-plugin-activation.php:2560
+msgid "Plugin"
+msgstr "Plugin"
+
+#: functions.php:410 functions.php:442 functions.php:495
+#: class-tgm-plugin-activation.php:2739
+msgid "Activate"
+msgstr "Attiva"
+
+#: class-tgm-plugin-activation.php:2730
+#: inc/admin/welcome-screen/sections/getting-started.php:227
+#: inc/admin/welcome-screen/sections/getting-started.php:308
+msgid "Install"
+msgstr "Installa"
+
+#: class-tgm-plugin-activation.php:2332
+msgid "Installed But Not Activated"
+msgstr "Installato ma non attivato"
+
+#: class-tgm-plugin-activation.php:2328
+msgid "Not Installed"
+msgstr "Non installato"
+
+#: class-tgm-plugin-activation.php:2289
+msgid "Recommended"
+msgstr "Raccomandato"
+
+#: class-tgm-plugin-activation.php:2286
+msgid "Required"
+msgstr "Obbligatorio"
+
+#: class-tgm-plugin-activation.php:2305
+msgid "WordPress Repository"
+msgstr "WordPress Repository"
+
+#: class-tgm-plugin-activation.php:2311
+msgid "Pre-Packaged"
+msgstr "Incorporato"
+
+#: class-tgm-plugin-activation.php:384 class-tgm-plugin-activation.php:825
+#: class-tgm-plugin-activation.php:2546 class-tgm-plugin-activation.php:3595
+msgid "Return to the Dashboard"
+msgstr "Ritorna alla Bacheca"
+
+#: class-tgm-plugin-activation.php:393
+msgid "Dismiss this notice"
+msgstr "Ignora questo avviso"
+
+#. translators: 1: dashboard link.
+#: class-tgm-plugin-activation.php:392
+msgid "All plugins installed and activated successfully. %1$s"
+msgstr "Tutti i plugin sono stati installati e attivati ​​con successo. %1$s"
+
+#: class-tgm-plugin-activation.php:386 class-tgm-plugin-activation.php:2965
+msgid "The following plugin was activated successfully:"
+msgid_plural "The following plugins were activated successfully:"
+msgstr[0] "Il seguente plugin è stato attivato con successo:"
+msgstr[1] ""
+
+#: class-tgm-plugin-activation.php:385 class-tgm-plugin-activation.php:3172
+msgid "Plugin activated successfully."
+msgstr "Il plugin è stato attivato con successo."
+
+#: class-tgm-plugin-activation.php:383
+msgid "Return to Required Plugins Installer"
+msgstr "Ritorna all’area di installazione dei plugin"
+
+#: class-tgm-plugin-activation.php:378
+msgid "Begin activating plugin"
+msgid_plural "Begin activating plugins"
+msgstr[0] "Attiva il plugin"
+msgstr[1] "Attiva i plugin"
+
+#: class-tgm-plugin-activation.php:368
+msgid "Begin installing plugin"
+msgid_plural "Begin installing plugins"
+msgstr[0] "Installa il plugin"
+msgstr[1] "Installa i plugin"
+
+#. translators: 1: plugin name(s).
+#: class-tgm-plugin-activation.php:344
+msgid "The following plugin needs to be updated to its latest version to ensure maximum compatibility with this theme: %1$s."
+msgid_plural "The following plugins need to be updated to their latest version to ensure maximum compatibility with this theme: %1$s."
+msgstr[0] "Il seguente plugin deve essere aggiornato per garantire la massima compatibilità con questo tema: %1$s."
+msgstr[1] "I seguenti plugin devono essere aggiornati per garantire la massima compatibilità con questo tema: %1$s."
+
+#. translators: 1: plugin name(s).
+#: class-tgm-plugin-activation.php:362
+msgid "The following recommended plugin is currently inactive: %1$s."
+msgid_plural "The following recommended plugins are currently inactive: %1$s."
+msgstr[0] "Il seguente plugin raccomandato &egrave; al momento inattivo: %1$s."
+msgstr[1] "I seguenti plugin raccomandati sono al momento inattivi: %1$s."
+
+#. translators: 1: plugin name(s).
+#: class-tgm-plugin-activation.php:356
+msgid "The following required plugin is currently inactive: %1$s."
+msgid_plural "The following required plugins are currently inactive: %1$s."
+msgstr[0] "Il seguente plugin necessario &egrave; al momento inattivo: %1$s."
+msgstr[1] "I seguenti plugin necessari sono al momento inattivi: %1$s."
+
+#. translators: 1: plugin name(s).
+#: class-tgm-plugin-activation.php:338
+msgid "This theme recommends the following plugin: %1$s."
+msgid_plural "This theme recommends the following plugins: %1$s."
+msgstr[0] "Questo tema raccomanda il seguente plugin: %1$s."
+msgstr[1] "Questo tema raccomanda i seguenti plugin: %1$s."
+
+#. translators: 1: plugin name(s).
+#: class-tgm-plugin-activation.php:332
+msgid "This theme requires the following plugin: %1$s."
+msgid_plural "This theme requires the following plugins: %1$s."
+msgstr[0] "Questo tema richiede il seguente plugin: %1$s."
+msgstr[1] "Questo tema richiede i seguenti plugin: %1$s."
+
+#. translators: %s: plugin name.
+#: class-tgm-plugin-activation.php:328
+msgid "Installing Plugin: %s"
+msgstr "Installazione in corso del plugin: %s"
+
+#: class-tgm-plugin-activation.php:326
+msgid "Install Plugins"
+msgstr "Installa i plugin"
+
+#: class-tgm-plugin-activation.php:325
+msgid "Install Required Plugins"
+msgstr "Installa i plugins necessari"
+
+#: sidebar.php:25
+msgid "Archives"
+msgstr "Archivi"
+
+#: inc/template-tags.php:174
+msgid "It looks like nothing was found at this location. Maybe try one of the links below or a search?"
+msgstr "Sembra non vi sia nulla in questa posizione. Provare con qualcuno dei link qua sotto o una ricerca?"
+
+#: inc/template-tags.php:163
+msgid "Oops! That page can&rsquo;t be found."
+msgstr "Oops! Questa pagina non si trova."
+
+#. Author URI of the theme
+msgid "https://themeisle.com"
+msgstr "https://themeisle.com"
+
+#. Theme URI of the theme
+msgid "https://themeisle.com/themes/zerif-lite/"
+msgstr "https://themeisle.com/themes/zerif-lite/"

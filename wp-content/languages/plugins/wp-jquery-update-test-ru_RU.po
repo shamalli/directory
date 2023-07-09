@@ -1,0 +1,141 @@
+# Translation of Plugins - Test jQuery Updates - Stable (latest release) in Russian
+# This file is distributed under the same license as the Plugins - Test jQuery Updates - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2020-11-30 20:33:27+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
+"X-Generator: GlotPress/3.0.0-alpha.2\n"
+"Language: ru\n"
+"Project-Id-Version: Plugins - Test jQuery Updates - Stable (latest release)\n"
+
+#: class_wp_jquery_update_test.php:371
+msgid "Settings"
+msgstr "Настройки"
+
+#: class_wp_jquery_update_test.php:336
+msgid "jQuery UI version"
+msgstr "Версия jQuery UI"
+
+#: class_wp_jquery_update_test.php:330
+msgid "Disable"
+msgstr "Отключить"
+
+#: class_wp_jquery_update_test.php:324
+msgid "Enable"
+msgstr "Включить"
+
+#: class_wp_jquery_update_test.php:318
+msgid "jQuery Migrate"
+msgstr "jQuery Migrate"
+
+#: class_wp_jquery_update_test.php:306 class_wp_jquery_update_test.php:342
+msgid "Default"
+msgstr "По умолчанию"
+
+#: class_wp_jquery_update_test.php:300
+msgid "jQuery version"
+msgstr "Версия jQuery"
+
+#: class_wp_jquery_update_test.php:293
+msgid "This plugin outputs these versions in the browser console."
+msgstr "Этот плагин выводит эти версии в консоль браузера."
+
+#: class_wp_jquery_update_test.php:292
+msgid "When reporting an issue please include the versions of jQuery, jQuery Migrate, and jQuery UI."
+msgstr "Сообщая о проблеме, укажите версии jQuery, jQuery Migrate и jQuery UI."
+
+#: class_wp_jquery_update_test.php:288
+msgid "If the bug is in a jQuery plugin please also check if there is <a href=\"%s\">a new version on NPM</a>."
+msgstr "Если ошибка связана с подключаемым модулем jQuery, также проверьте, есть ли <a href=\"%s\">новая версия в NPM</a>."
+
+#: class_wp_jquery_update_test.php:282
+msgid "If you find a jQuery related bug <a href=\"%s\">please report it</a>."
+msgstr "Если вы обнаружили ошибку, связанную с jQuery, <a href=\"%s\">сообщите об этом</a>."
+
+#: class_wp_jquery_update_test.php:275
+msgid "This is tentatively planned for WordPress 5.7 or later depending on test results."
+msgstr "Это предварительно планируется для WordPress 5.7 или новее, в зависимости от результатов тестирования."
+
+#: class_wp_jquery_update_test.php:274
+msgid "Latest jQuery (without jQuery Migrate), and latest jQuery UI."
+msgstr "Последний jQuery (без jQuery Migrate) и последняя версия jQuery UI."
+
+#: class_wp_jquery_update_test.php:271
+msgid "This is tentatively planned for WordPress 5.6 depending on test results."
+msgstr "Это предварительно планируется для WordPress 5.6 в зависимости от результатов тестирования."
+
+#: class_wp_jquery_update_test.php:270
+msgid "Latest jQuery with latest jQuery Migrate and latest jQuery UI."
+msgstr "Последний jQuery с последней версией jQuery Migrate и последней версией jQuery UI."
+
+#: class_wp_jquery_update_test.php:264
+msgid "<a href=\"%s\">jQuery Core 3.5 Upgrade Guide</a>."
+msgstr "<a href=\"%s\">Руководство по обновлению jQuery Core 3.5</a>."
+
+#: class_wp_jquery_update_test.php:258
+msgid "<a href=\"%s\">jQuery Core 3.0 Upgrade Guide</a>,"
+msgstr "<a href=\"%s\">Руководство по обновлению jQuery Core 3.0</a>."
+
+#: class_wp_jquery_update_test.php:255
+msgid "More information:"
+msgstr "Дополнительная информация:"
+
+#: class_wp_jquery_update_test.php:254
+msgid "Latest jQuery with the latest jQuery Migrate."
+msgstr "Последняя версия jQuery с последней версией jQuery Migrate."
+
+#: class_wp_jquery_update_test.php:251
+msgid "This is planned for WordPress 5.5 and is the default setting."
+msgstr "Это запланировано для WordPress 5.5 и является настройкой по умолчанию."
+
+#: class_wp_jquery_update_test.php:250
+msgid "Use the current version of jQuery in WordPress but disable jQuery Migrate."
+msgstr "Используйте текущую версию jQuery в WordPress, но отключите jQuery Migrate."
+
+#: class_wp_jquery_update_test.php:245
+msgid "To test:"
+msgstr "Тестировать:"
+
+#: class_wp_jquery_update_test.php:241
+msgid "jQuery UI has been re-built for full backwards compatibility with WordPress."
+msgstr "jQuery UI был переработан для полной обратной совместимости с WordPress."
+
+#: class_wp_jquery_update_test.php:240
+msgid "It includes jQuery 3.5.1, jQuery Migrate 3.3.0, and jQuery UI 1.12.1."
+msgstr "Он включает jQuery 3.5.1, jQuery Migrate 3.3.0 и jQuery UI 1.12.1."
+
+#: class_wp_jquery_update_test.php:236
+msgid "It is not intended for use in production."
+msgstr "Не предназначен для использования на рабочем сайте."
+
+#: class_wp_jquery_update_test.php:235
+msgid "This plugin is intended for testing of different versions of jQuery and jQuery UI before updating them in WordPress."
+msgstr "Этот плагин предназначен для тестирования различных версий jQuery и jQuery UI перед их обновлением в WordPress."
+
+#: class_wp_jquery_update_test.php:230
+msgid "Settings saved."
+msgstr "Настройки сохранены."
+
+#. Author URI of the plugin
+msgid "https://wordpress.org"
+msgstr "https://ru.wordpress.org"
+
+#. Author of the plugin
+msgid "The WordPress Team"
+msgstr "Команда WordPress"
+
+#. Description of the plugin
+msgid "A feature plugin to help with testing updates of the jQuery and jQuery UI JavaScript libraries (not intended for use in production)."
+msgstr "Подключаемый плагин для тестирования обновлений библиотек JavaScript jQuery и jQuery UI (не предназначен для использования в производственной среде)."
+
+#. Plugin URI of the plugin
+msgid "https://wordpress.org/plugins/wp-jquery-update-test"
+msgstr "https://ru.wordpress.org/plugins/wp-jquery-update-test"
+
+#. Plugin Name of the plugin
+#: class_wp_jquery_update_test.php:226 class_wp_jquery_update_test.php:360
+msgid "Test jQuery Updates"
+msgstr "Тестирование обновлений jQuery"

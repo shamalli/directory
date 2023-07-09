@@ -1,0 +1,134 @@
+.woocommerce div.product .woocommerce-tabs ul.tabs.wc-tabs {
+    overflow: visible;
+    padding: 0;
+    margin: 0;
+
+    &:before {
+        display: none !important;
+    }
+
+    li {
+        background-color: #f4f4f4;
+        border: 0 !important;
+        border-radius: 3px;
+        margin: 0 5px;
+
+        @media (max-width: $tablet) {
+            display: block !important;
+            float: none !important;
+            margin: 0 0 20px 0 !important;
+        }
+
+        &.active {
+            background-color: $color-primary;
+            color: #fff;
+            position: relative;
+
+            &:after {
+                border: 5px solid transparent;
+                border-radius: 0;
+                border-top-color: $color-primary;
+                bottom: -10px;
+                box-shadow: none;
+                content: '';
+                display: block;
+                height: 0;
+                left: 50%;
+                position: absolute;
+                transform: translateX(-50%);
+                width: 0;
+            }
+        }
+
+        &:first-child {
+            margin-left: 0;
+        }
+
+        &:before, &:after {
+            display: none;
+
+        }
+
+        a {
+            font-size: 13px;
+            font-weight: 400;
+            line-height: 1;
+            padding: 12px 0;
+        }
+    }
+}
+
+.woocommerce #content div.product .woocommerce-tabs {
+    .panel {
+        @include susy-clearfix();
+
+        border: 1px solid #f4f4f4;
+        border-radius: 3px;
+        margin: 30px 0;
+        padding: 25px;
+
+        > h2 {
+            display: none;
+        }
+
+        dl {
+            dt {
+                float: left;
+                font-size: 13px;
+                font-weight: 500;
+                line-height: 24px;
+                padding: 10px 0;
+                width: 120px;
+            }
+
+            dd {
+                border-bottom: 1px solid rgba(#000, .06);
+                line-height: 24px;
+                margin: 0;
+                padding: 10px 0;
+
+                &:last-child {
+                    border-bottom: 0;
+                }
+            }
+        }
+
+        ul.amenities {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+
+            li {
+                float: left;
+                display: block;
+                margin: 0 40px 0 0;
+                padding: 8px 0;
+
+                @media (max-width: $tablet) {
+                    float: none;
+                }
+
+                &:before {
+                    color: $color-primary;
+                    content: '\f00c';
+                    display: inline-block;
+                    font-size: 12px;
+                    font-family: 'FontAwesome';
+                    height: 28px;
+                    line-height: 28px;
+                    margin: 0 20px 0 0;
+                    text-align: center;
+                    vertical-align: middle;
+                    width: 28px;
+                }
+            }            
+        }
+    }
+}
+
+.listing-manager-social-network {
+    @media (max-width: $tablet) {
+        float: none;
+        width: 100%;
+    }
+}

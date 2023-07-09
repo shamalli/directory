@@ -1,0 +1,2 @@
+2023-03-13T07:19:06+00:00 CRITICAL Out of memory (allocated 18874368) (tried to allocate 32768 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\woocommerce-subscriptions-master\includes\gateways\paypal\includes\admin\class-wcs-paypal-admin.php on line 189
+

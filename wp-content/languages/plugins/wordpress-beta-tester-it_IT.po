@@ -1,0 +1,90 @@
+# Translation of Plugins - WordPress Beta Tester - Stable (latest release) in Italian
+# This file is distributed under the same license as the Plugins - WordPress Beta Tester - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2023-03-18 15:52:25+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/4.0.0-alpha.4\n"
+"Language: it\n"
+"Project-Id-Version: Plugins - WordPress Beta Tester - Stable (latest release)\n"
+
+#: src/WPBT/WPBT_Core.php:178 src/WPBT/WPBT_Help.php:48
+msgctxt "URL to database backup instructions on HelpHub"
+msgid "https://wordpress.org/support/article/wordpress-backups/"
+msgstr "https://wordpress.org/support/article/wordpress-backups/"
+
+#: src/WPBT/WPBT_Help.php:43
+msgid "Overview"
+msgstr "Panoramica"
+
+#. translators: Used to join items in a list with only 2 items.
+#: src/WPBT/WPBT_Core.php:484
+msgid "%1$s or %2$s"
+msgstr "%1$s o %2$s"
+
+#. translators: Used to join last two items in a list with more than 2 times.
+#: src/WPBT/WPBT_Core.php:482
+msgid "%1$s, or %2$s"
+msgstr "%1$s, o %2$s"
+
+#. translators: Used to join items in a list with more than 2 items.
+#: src/WPBT/WPBT_Core.php:480
+msgid "%1$s, %2$s"
+msgstr "%1$s, %2$s"
+
+#. translators: %l: next version numbers
+#: src/WPBT/WPBT_Core.php:390
+msgid "version %l"
+msgstr "versione %l"
+
+#. translators: %s: version number
+#: src/WPBT/WPBT_Core.php:379
+msgid "version %s"
+msgstr "versione %s"
+
+#: src/WPBT/WPBT_Extras.php:171
+msgid "Just an example."
+msgstr "Solo un esempio."
+
+#: src/WPBT/WPBT_Settings.php:228
+msgid "Saved."
+msgstr "Salvato."
+
+#. Plugin Name of the plugin
+msgid "WordPress Beta Tester"
+msgstr "WordPress Beta Tester"
+
+#. Plugin URI of the plugin
+msgid "https://wordpress.org/plugins/wordpress-beta-tester/"
+msgstr "https://wordpress.org/plugins/wordpress-beta-tester/"
+
+#. Description of the plugin
+msgid "Allows you to easily upgrade to Beta releases."
+msgstr "Ti permette di eseguire l'aggiornamento alle versioni Beta con facilità "
+
+#. Author URI of the plugin
+msgid "https://blog.ftwr.co.uk/"
+msgstr "https://blog.ftwr.co.uk/"
+
+#. translators: 1: link to backing up database, 2: link to make.wp.org/core, 3:
+#. link to beta support forum
+#: src/WPBT/WPBT_Core.php:177
+msgid "By their nature, these releases are unstable and should not be used anyplace where your data is important. So please <a href=\"%1$s\">back up your database</a> before upgrading to a test release. In order to hear about the latest beta releases, your best bet is to watch the <a href=\"%2$s\">development blog</a> and the <a href=\"%3$s\">beta forum</a>."
+msgstr "Per loro natura, queste versioni sono instabili e non dovrebbero essere installate in nessun posto dove ci sono dati importanti. Per questo effettua un <a href=\"%1$s\">back up del tuo database</a> prima di aggiornare a questa versione di test. Per conoscere le ultime novità sulla versione beta, la soluzione migliore è quello di leggere gli aggiornamenti su <a href=\"%2$s\">development blog</a> e su <a href=\"%3$s\">beta forum</a>."
+
+#: src/WPBT/WPBT_Core.php:180 src/WPBT/WPBT_Help.php:50
+msgctxt "URL to beta support forum"
+msgid "https://wordpress.org/support/forum/alphabeta"
+msgstr "https://wordpress.org/support/forum/alphabeta"
+
+#. translators: %s: link to new trac ticket
+#: src/WPBT/WPBT_Core.php:185
+msgid "Thank you for helping test WordPress. Please <a href=\"%s\">report any bugs you find</a>."
+msgstr "Grazie per aiutarci a testare WordPress. <a href=\"%s\">Segnala ogni bug che troverai</a>."
+
+#: src/WPBT/WPBT_Settings.php:82 src/WPBT/WPBT_Settings.php:260
+msgid "Beta Testing WordPress"
+msgstr "WordPress Beta Testing"

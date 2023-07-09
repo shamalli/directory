@@ -1,0 +1,18 @@
+.faq-wrapper {
+	@include susy-clearfix();
+}
+
+.faq-item {
+	@media (min-width: $tablet) {
+		@include span(6 of 12);
+
+		&:nth-child(2n) {
+			@include last();
+		}
+	}
+
+	h3 {
+		font-size: 16px;
+		font-weight: 600;
+	}
+}

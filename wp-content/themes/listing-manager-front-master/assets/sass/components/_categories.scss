@@ -1,0 +1,129 @@
+.listing-manager-categories {
+	@include susy-clearfix();
+
+	list-style: none;
+	margin: 0;
+	padding: 0;
+
+	> li {
+		margin-bottom: 30px;
+		margin-top: 30px;
+
+		@media (min-width: $desktop) {
+			@include span(2 of 10);
+
+			&:nth-child(5n+1) {
+				@include last();
+			}
+		}
+
+		> ul {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			position: relative;
+
+			&:before {
+				background-color: rgba($color-black, .04);
+				bottom: 14px;
+				content: '';
+				display: block;
+				left: 3px;
+				position: absolute;
+				top: 14px;
+				width: 1px;
+			}
+
+			a {
+				@include susy-clearfix();
+
+				color: rgba($color-black, .7);
+				display: block;
+				font-size: 13px;
+				padding: 6px 0;
+				transition: all .2s ease;
+
+				span {
+					display: inline-block;
+					transform: translate3d(0, 0, 1px);
+					transition: all .4s ease;
+					vertical-align: middle;
+				}
+
+				strong {
+					background-color: rgba($color-black, .04);
+					border-radius: 3px;
+					display: inline-block;
+					float: right;
+					font-size: 10px;
+					font-weight: 600;
+					margin: 2px 0 0 0;
+					padding: 3px 8px;
+				}
+
+				&:before {
+					border: 2px solid $color-gray;  
+					border-radius: 50%;
+					content: '';
+					display: inline-block;
+					height: 3px;
+					margin: 0 10px 0 0;
+					transition: border-color .4s ease;
+					vertical-align: -1px;
+					width: 3px;
+				}
+
+				&:hover {
+					color: $color-black;
+
+					span {
+						padding-left: 2px;
+					}
+
+					&:before {
+						border-color: $color-primary;
+					}
+				}
+			}
+		}
+	}
+
+	h4 {
+		font-size: 16px;
+		font-weight: 400;
+		margin: 0 0 20px 0;
+		padding: 0 0 10px 0;
+		position: relative;
+
+		a {
+			color: $color-black;
+			display: block;
+		}
+
+		&:before {		
+			background-color: $color-primary;
+			bottom: 0;
+			content: '';
+			display: block;
+			height: 2px;
+			left: 0;
+			position: absolute;
+			width: 80px;
+			z-index: 2;
+		}
+
+		&:after {
+			background-color: rgba($color-black, .08);
+			bottom: 0;
+			content: ''; 
+			display: block;
+			height: 1px;
+			content: '';
+			display: block;
+			left: 0;
+			position: absolute;
+			right: 0;
+			z-index: 1;
+		}
+	}
+}

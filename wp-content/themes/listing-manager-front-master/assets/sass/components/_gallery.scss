@@ -1,0 +1,41 @@
+.listing-manager-form-gallery {
+  @include susy-clearfix();
+
+  margin: 0 0 30px 0;
+}
+
+.listing-manager-form-gallery-image {
+  float: left;
+  margin: 0 20px 0 0;
+  position: relative;
+
+  img {
+    display: block;
+    width: 48px;
+  }
+
+  a {
+    font-size: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    &:after {
+      -webkit-font-smoothing: antialiased;
+
+      background-color: $color-red;
+      border-radius: 50%;
+      content: '\f00d';
+      color: #fff;
+      display: block;
+      font-family: 'FontAwesome';
+      font-size: 10px;
+      height: 18px;
+      letter-spacing: -1px;
+      line-height: 16px;
+      text-align: center;
+      transform: translateX(50%) translateY(-50%);
+      width: 18px;
+    }
+  }
+}

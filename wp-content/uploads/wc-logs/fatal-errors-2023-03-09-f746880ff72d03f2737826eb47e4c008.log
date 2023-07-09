@@ -1,0 +1,12 @@
+2023-03-09T07:59:56+00:00 CRITICAL Out of memory (allocated 31457280) (tried to allocate 65536 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\woocommerce\packages\woocommerce-blocks\src\BlockTypes\AbstractProductGrid.php on line 570
+
+2023-03-09T08:31:56+00:00 CRITICAL Out of memory (allocated 12582912) (tried to allocate 65536 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\woocommerce\packages\woocommerce-blocks\src\BlockTypes\AbstractProductGrid.php on line 570
+
+2023-03-09T10:58:14+00:00 CRITICAL Out of memory (allocated 27262976) (tried to allocate 65536 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\woocommerce\packages\woocommerce-blocks\src\BlockTypes\AbstractProductGrid.php on line 570
+
+2023-03-09T12:08:14+00:00 CRITICAL Out of memory (allocated 35651584) (tried to allocate 65536 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\woocommerce\packages\woocommerce-blocks\src\BlockTypes\AbstractProductGrid.php on line 570
+
+2023-03-09T12:10:14+00:00 CRITICAL Out of memory (allocated 16777216) (tried to allocate 12288 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\ratings-reviews\classes\widgets\elementor\widgets\slider.php on line 56
+
+2023-03-09T15:26:47+00:00 CRITICAL Out of memory (allocated 14680064) (tried to allocate 65536 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\elementor\core\admin\menu\admin-menu-manager.php on line 44
+

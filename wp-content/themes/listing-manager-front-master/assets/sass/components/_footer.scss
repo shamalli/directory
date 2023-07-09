@@ -1,0 +1,110 @@
+.footer-wrapper {
+    background-image: linear-gradient(to right, #2A2F35, #444D59);
+}
+
+.footer {
+    @include container($width-page);
+    padding: 30px;
+}
+
+.footer-inner {
+    @include susy-clearfix();
+    color: rgba(#fff, .7);    
+    font-size: 13px;
+
+    a {
+        color: #fff;
+    }
+
+    p {
+        line-height: 30px;
+        margin: 0;
+    }
+
+    .widget {
+        margin: 0;
+        padding: 0;
+    }
+
+    .textwidget {
+        line-height: 30px;
+    }
+
+    .menu {
+        margin: 0;
+        padding: 0;
+
+        li {
+            display: inline-block;
+            margin: 0 0 0 20px;
+        }
+
+        a {
+            border: 0;
+        }
+
+        .fa {
+            background-color: rgba(#fff, .1);
+            border-radius: 50%;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            width: 30px;
+
+            &.fa-facebook {
+                background-color: $color-facebook;
+            }
+
+            &.fa-twitter {
+                background-color: $color-twitter;
+            }
+
+            &.fa-linkedin {
+                background-color: $color-linkedin;
+            }
+
+            &.fa-google {
+                background-color: $color-google-plus;
+            }
+        }
+    }
+
+    #menu-social {
+        a {
+            display: block;
+            height: 30px;
+        }
+
+        li {
+            &:first-child {
+                margin-left: 0;
+            }
+        }
+    }
+}
+
+.footer-left {
+    float: left;
+
+    @media (max-width: $tablet) {
+        float: none;
+        padding: 0 0 30px 0;
+    }
+}
+
+.footer-right {
+    float: right;
+
+    @media (max-width: $tablet) {
+        border-top: 1px solid rgba(#fff, .08);
+        float: none;
+        padding: 30px 0 0 0;
+    }    
+}
+
+.footer-promo {
+    background-image: linear-gradient(to right, #2A2F35, #444D59);
+    color: rgba(#fff, .7);
+    padding: 30px 0;
+    text-align: center;
+}

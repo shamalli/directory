@@ -1,0 +1,598 @@
+# Translation of Plugins - WP Crontrol - Stable (latest release) in Russian
+# This file is distributed under the same license as the Plugins - WP Crontrol - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2023-06-13 07:45:03+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
+"X-Generator: GlotPress/4.0.0-alpha.4\n"
+"Language: ru\n"
+"Project-Id-Version: Plugins - WP Crontrol - Stable (latest release)\n"
+
+#: src/event-list-table.php:434
+msgid "Delete all events with this hook"
+msgstr "Удалить все события с помощью этого хука"
+
+#. translators: Pause is a verb
+#: src/event-list-table.php:407
+msgid "Pause this hook"
+msgstr "Приостановить этот хук"
+
+#. translators: Resume is a verb
+#: src/event-list-table.php:396
+msgid "Resume this hook"
+msgstr "Возобновить этот хук"
+
+#. translators: 1: Date and time, 2: Timezone
+#: src/bootstrap.php:1585 src/bootstrap.php:1730
+msgid "Site time when page loaded: %1$s (%2$s)"
+msgstr "Время загрузки страницы на сайте: %1$s (%2$s)"
+
+#. translators: 1: The name of the cron event.
+#: src/bootstrap.php:1664
+msgid "Resumed the %s hook."
+msgstr "Возобновлён хук %s."
+
+#. translators: 1: The name of the cron event.
+#: src/bootstrap.php:1659
+msgid "Paused the %s hook."
+msgstr "Приостановлен хук %s."
+
+#: src/bootstrap.php:637 src/bootstrap.php:679
+msgid "You are not allowed to pause or resume cron events."
+msgstr "Вам не разрешено приостанавливать или возобновлять события cron."
+
+#. translators: 1: The name of the cron event.
+#: src/event.php:302
+msgid "Failed to resume the cron event %s."
+msgstr "Не удалось возобновить событие cron %s."
+
+#. translators: 1: The name of the cron event.
+#: src/event.php:271
+msgid "Failed to pause the cron event %s."
+msgstr "Не удалось приостановить событие cron %s."
+
+#. translators: State of a cron event, adjective
+#: src/event-list-table.php:498
+msgid "Paused"
+msgstr "Приостановлено"
+
+#: src/event-list-table.php:233
+msgid "Paused events"
+msgstr "Приостановленные события"
+
+#. translators: %s: Function name
+#: src/bootstrap.php:1925
+msgid "Function %s does not exist"
+msgstr "Функция %s не существует"
+
+#: src/bootstrap.php:1668
+msgid "An unknown error occurred."
+msgstr "Произошла неизвестная ошибка."
+
+#: src/bootstrap.php:740
+msgid "Could not save CSV file."
+msgstr "Не удалось сохранить файл CSV."
+
+#: src/event-list-table.php:291
+msgid "Export"
+msgstr "Экспорт"
+
+#. translators: 1: The name of the cron event.
+#: src/bootstrap.php:1610
+msgid "Scheduled the cron event %s to run now. The original event will not be affected."
+msgstr "Запуск события cron %s запланировано. Исходное событие не будет затронуто."
+
+#: src/bootstrap.php:875 src/bootstrap.php:905 src/bootstrap.php:923
+msgid "Help"
+msgstr "Помощь"
+
+#. translators: %s: URL to the documentation
+#: src/bootstrap.php:867
+msgid "<a href=\"%s\">Read the WordPress.org documentation on WP-Cron</a> for more technical details about the WP-Cron system for developers."
+msgstr "<a href=\"%s\">Прочтите документацию на WordPress.org о WP-Cron</a> для получения дополнительных технических сведений о системе WP-Cron для разработчиков."
+
+#. translators: %s: URL to the documentation
+#: src/bootstrap.php:860
+msgid "<a href=\"%s\">Read the Frequently Asked Questions (FAQ)</a> which cover many common questions and answers."
+msgstr "<a href=\"%s\">Прочтите часто задаваемые вопросы (FAQ)</a>, которые охватывают множество общих вопросов и ответов."
+
+#. translators: %s: URL to the documentation
+#: src/bootstrap.php:853
+msgid "<a href=\"%s\">Read the WP Crontrol wiki</a> which contains information about events that have missed their schedule, problems with spawning a call to the WP-Cron system, and much more."
+msgstr "<a href=\"%s\">Прочтите документацию WP Crontrol</a>, которая содержит информацию о событиях, которые пропустили свое расписание, проблемах с запуском событий в системе WP-Cron и многое другое."
+
+#: src/bootstrap.php:848
+msgid "There are several places to get help with issues relating to WP-Cron:"
+msgstr "Есть несколько мест, где можно получить помощь по вопросам, связанным с WP-Cron:"
+
+#: src/event-list-table.php:459
+msgid "This is a WordPress core event and cannot be deleted"
+msgstr "Это основное событие WordPress и не может быть удалено"
+
+#: src/event-list-table.php:232
+msgid "Custom events"
+msgstr "Пользовательские события"
+
+#: src/event-list-table.php:231
+msgid "WordPress core events"
+msgstr "Основные события WordPress"
+
+#: src/event-list-table.php:230
+msgid "Events with no action"
+msgstr "События без действий"
+
+#: src/event-list-table.php:229
+msgid "All events"
+msgstr "Все события"
+
+#: src/event.php:141
+msgid "Invalid timestamp provided."
+msgstr "Предоставлена ​​неверная временная метка."
+
+#. translators: 1: The name of the cron event.
+#: src/event.php:113 src/event.php:194
+msgid "Failed to schedule the cron event %s."
+msgstr "Не удалось запланировать событие cron %s."
+
+#. translators: 1: The name of the cron event.
+#: src/event.php:74 src/event.php:376
+msgid "The cron event %s could not be found."
+msgstr "Событие cron %s не найдено."
+
+#: src/event-list-table.php:671
+msgid "No matching cron events."
+msgstr "Подходящих событий cron не найдено."
+
+#. translators: %s: Help page URL.
+#: src/event-list-table.php:100
+msgid "One or more cron events have missed their schedule."
+msgstr "Одно или несколько событий cron пропустили свое расписание."
+
+#: src/bootstrap.php:1709
+msgid "Add New"
+msgstr "Добавить новое"
+
+#: src/bootstrap.php:1425
+msgid "Event Type"
+msgstr "Тип события"
+
+#: src/bootstrap.php:1318
+msgid "The event you are trying to edit does not exist."
+msgstr "Событие, которое вы пытаетесь редактировать, не существует."
+
+#: src/bootstrap.php:1193 src/bootstrap.php:1221 src/event-list-table.php:102
+msgid "More information"
+msgstr "Больше информации"
+
+#. translators: %s: Help page URL.
+#: src/bootstrap.php:1191
+msgid "PHP default timezone is not set to UTC. This may cause issues with cron event timings."
+msgstr "Часовой пояс PHP по умолчанию не установлен на UTC. Это может вызвать проблемы с синхронизацией событий cron."
+
+#: src/bootstrap.php:86
+msgctxt "verb"
+msgid "Sponsor"
+msgstr "Спонсор"
+
+#. translators: 1: The name of the configuration constant, 2: The value of the
+#. configuration constant
+#: src/event-list-table.php:649 src/schedule-list-table.php:201
+msgid "This interval is less than the %1$s constant which is set to %2$s seconds. Events that use it may not run on time."
+msgstr "Этот интервал меньше константы %1$s, равной %2$s секунд. События, которые его используют, могут не запускаться вовремя."
+
+#: src/bootstrap.php:2063
+msgid "The scheduled cron events have changed since you first opened this page. Reload the page to see the up to date list."
+msgstr "Запланированные события cron изменились с тех пор, как вы открыли эту страницу. Перезагрузите страницу, чтобы увидеть обновленный список."
+
+#: src/event-list-table.php:669
+msgid "There are currently no scheduled cron events."
+msgstr "В настоящее время нет запланированных событий cron."
+
+#. translators: %s: Time period, for example "8 minutes"
+#: src/event-list-table.php:612
+msgid "%s ago"
+msgstr "%s назад"
+
+#. translators: 1: Line number, 2: Error message text
+#: src/event-list-table.php:519
+msgid "Line %1$s: %2$s"
+msgstr "Строка %1$s: %2$s"
+
+#: src/event-list-table.php:466
+msgid "Select this row"
+msgstr "Выбрать эту строку"
+
+#. translators: %s: UTC offset
+#: src/event-list-table.php:174
+msgid "Next Run (%s)"
+msgstr "Следующий запуск (%s)"
+
+#: src/event-list-table.php:170
+msgid "Hook"
+msgstr "Хук"
+
+#: src/schedule-list-table.php:234
+msgid "There are no schedules."
+msgstr "Расписаний нет."
+
+#: src/schedule-list-table.php:120
+msgid "This schedule is added by another plugin and cannot be deleted"
+msgstr "Это расписание добавлено другим плагином и не может быть удалено"
+
+#: src/schedule-list-table.php:118 src/schedule-list-table.php:154
+msgid "This is a WordPress core schedule and cannot be deleted"
+msgstr "Это основное расписание WordPress, и его нельзя удалить."
+
+#. translators: %s: Schedule name
+#: src/event.php:423
+msgid "Unknown (%s)"
+msgstr "Неизвестно (%s)"
+
+#: src/bootstrap.php:1717
+msgid "Search Hook Names"
+msgstr "Поиск по названию хуков"
+
+#. translators: 1: The name of the cron event.
+#: src/bootstrap.php:1654
+msgid "Failed to save the cron event %s."
+msgstr "Не удалось сохранить событие cron %s."
+
+#: src/bootstrap.php:1649
+msgid "Deleted the selected cron events."
+msgstr "Выбранные события cron удалены."
+
+#. translators: 1: The name of the cron event.
+#: src/bootstrap.php:1635
+msgid "Deleted the cron event %s."
+msgstr "Событие cron %s удалено."
+
+#. translators: 1: The name of the cron event.
+#: src/bootstrap.php:1630
+msgid "Created the cron event %s."
+msgstr "Создано событие cron %s."
+
+#. translators: 1: The name of the cron event.
+#: src/bootstrap.php:1625
+msgid "Saved the cron event %s."
+msgstr "Событие cron %s сохранено."
+
+#. translators: 1: The name of the cron event.
+#: src/bootstrap.php:1620
+msgid "There are no %s cron events to delete."
+msgstr "Нет события cron %s для удаления."
+
+#. translators: 1: The name of the cron event.
+#: src/bootstrap.php:1615
+msgid "Deleted all %s cron events."
+msgstr "Удалены все события cron %s."
+
+#: src/bootstrap.php:1391 src/bootstrap.php:1825
+msgid "Edit Cron Event"
+msgstr "Изменить событие Cron"
+
+#: src/bootstrap.php:1370
+msgid "Add Event"
+msgstr "Добавить событие"
+
+#: src/bootstrap.php:1357
+msgid "Update Event"
+msgstr "Обновить событие"
+
+#. translators: 1: The name of the plugin that controls the running of cron
+#. events.
+#: src/bootstrap.php:1108
+msgid "WP-Cron spawning is being managed by the %s plugin."
+msgstr "Запуск WP-Cron управляется плагином %s."
+
+#. translators: 1: The name of the cron schedule.
+#: src/bootstrap.php:962
+msgid "Added the cron schedule %s."
+msgstr "Добавлено расписание cron %s."
+
+#. translators: 1: The name of the cron schedule.
+#: src/bootstrap.php:957
+msgid "Deleted the cron schedule %s."
+msgstr "Расписание cron %s удалено."
+
+#: src/bootstrap.php:900
+msgid "Schedules"
+msgstr "Расписания"
+
+#: src/bootstrap.php:895
+msgid "Events"
+msgstr "События"
+
+#. translators: %s: An input field for specifying a date and time
+#: src/bootstrap.php:1539
+msgid "At: %s"
+msgstr "В: %s"
+
+#: src/bootstrap.php:1530
+msgid "Tomorrow"
+msgstr "Завтра"
+
+#: src/bootstrap.php:1524
+msgid "Now"
+msgstr "Сейчас"
+
+#: src/bootstrap.php:507 src/bootstrap.php:559
+msgid "You are not allowed to delete PHP cron events."
+msgstr "Вам не разрешено удалять события PHP cron."
+
+#: src/bootstrap.php:254 src/bootstrap.php:338
+msgid "You are not allowed to edit PHP cron events."
+msgstr "Вы не можете редактировать события PHP cron."
+
+#. translators: 1, 2, and 3: Example values for an input field.
+#: src/bootstrap.php:1501
+msgid "Use a JSON encoded array, e.g. %1$s, %2$s, or %3$s"
+msgstr "Используйте массив в кодировке JSON, например: %1$s, %2$s, или %3$s"
+
+#. translators: The PHP tag name
+#: src/bootstrap.php:1452
+msgid "The opening %s tag must not be included."
+msgstr "Открывающий тег %s не должен быть включен."
+
+#: src/schedule-list-table.php:122
+msgid "This custom schedule is in use and cannot be deleted"
+msgstr "Это пользовательское расписание уже используется и не может быть удалено"
+
+#. Author URI of the plugin
+msgid "https://github.com/johnbillion/wp-crontrol/graphs/contributors"
+msgstr "https://github.com/johnbillion/wp-crontrol/graphs/contributors"
+
+#. Author of the plugin
+msgid "John Blackbourn & crontributors"
+msgstr "John Blackbourn & авторы"
+
+#. translators: 1: The name of the PHP cron event.
+#: src/event-list-table.php:486
+msgid "PHP Cron (%s)"
+msgstr "PHP Cron (%s)"
+
+#: src/event-list-table.php:177
+msgid "Action"
+msgstr "Действие"
+
+#: src/bootstrap.php:1594
+msgid "You cannot add, edit, or delete PHP cron events because your user account does not have the ability to edit files."
+msgstr "Вы не можете добавлять, редактировать или удалять события PHP cron, потому что ваша учетная запись пользователя не имеет возможности редактировать файлы."
+
+#. translators: %s Timezone name.
+#: src/bootstrap.php:1559
+msgid "Timezone: %s"
+msgstr "Часовой пояс: %s"
+
+#: src/bootstrap.php:1491
+msgid "Arguments (optional)"
+msgstr "Аргументы (по желанию)"
+
+#: src/bootstrap.php:1464
+msgid "Event Name (optional)"
+msgstr "Название события (по желанию)"
+
+#. translators: %s: A file name
+#: src/bootstrap.php:1334
+msgid "Cron events trigger actions in your code. A cron event needs a corresponding action hook somewhere in code, e.g. the %1$s file in your theme."
+msgstr "События Cron запускают действия в вашем коде. Событию cron требуется соответствующий хук где-нибудь в коде, например в файле %1$s в вашей теме."
+
+#: src/bootstrap.php:1330
+msgid "Cron events trigger actions in your code. Enter the schedule of the event, as well as the PHP code to execute when the action is triggered."
+msgstr "События Cron запускают действия в вашем коде. Введите расписание события, а также код PHP, который будет выполняться при запуске действия."
+
+#. translators: 1: The name of the PHP constant that is set.
+#: src/bootstrap.php:1125
+msgid "The %s constant is set to true."
+msgstr "Константа %s имеет значение true."
+
+#. translators: 1: The name of the PHP constant that is set.
+#: src/bootstrap.php:1117
+msgid "The %s constant is set to true. WP-Cron spawning is disabled."
+msgstr "Константа %s имеет значение true. Запуск WP-Cron отключен."
+
+#. translators: 1: The HTTP response code.
+#: src/bootstrap.php:1158
+msgid "Unexpected HTTP response code: %s"
+msgstr "Неожиданный код ответа HTTP: %s"
+
+#: src/bootstrap.php:997 src/bootstrap.php:1019
+msgid "Add Cron Schedule"
+msgstr "Добавить расписание Cron"
+
+#: src/bootstrap.php:825 src/bootstrap.php:826 src/bootstrap.php:1707
+#: src/bootstrap.php:1789
+msgid "Cron Events"
+msgstr "События Cron"
+
+#: src/bootstrap.php:141 src/bootstrap.php:192
+msgid "You are not allowed to add new PHP cron events."
+msgstr "Вам не разрешено добавлять новые события PHP cron."
+
+#. Description of the plugin
+msgid "WP Crontrol enables you to view and control what's happening in the WP-Cron system."
+msgstr "WP Crontrol позволяет вам просматривать и контролировать то, что происходит в системе WP-Cron."
+
+#. Plugin URI of the plugin
+msgid "https://wordpress.org/plugins/wp-crontrol/"
+msgstr "https://wordpress.org/plugins/wp-crontrol/"
+
+#. Plugin Name of the plugin
+#: src/bootstrap.php:770 src/event-list-table.php:564
+msgid "WP Crontrol"
+msgstr "WP Crontrol"
+
+#: src/bootstrap.php:2011
+msgid "now"
+msgstr "сейчас"
+
+#. translators: 1: The number of seconds in an interval of time.
+#: src/bootstrap.php:2007
+msgid "%s second"
+msgid_plural "%s seconds"
+msgstr[0] "%s секунда"
+msgstr[1] "%s секунды"
+msgstr[2] "%s секунд"
+
+#. translators: 1: The number of minutes in an interval of time.
+#: src/bootstrap.php:2005
+msgid "%s minute"
+msgid_plural "%s minutes"
+msgstr[0] "%s минута"
+msgstr[1] "%s минуты"
+msgstr[2] "%s минут"
+
+#. translators: 1: The number of hours in an interval of time.
+#: src/bootstrap.php:2003
+msgid "%s hour"
+msgid_plural "%s hours"
+msgstr[0] "%s час"
+msgstr[1] "%s часа"
+msgstr[2] "%s часов"
+
+#. translators: 1: The number of days in an interval of time.
+#: src/bootstrap.php:2001
+msgid "%s day"
+msgid_plural "%s days"
+msgstr[0] "%s день"
+msgstr[1] "%s дня"
+msgstr[2] "%s дней"
+
+#. translators: 1: The number of weeks in an interval of time.
+#: src/bootstrap.php:1999
+msgid "%s week"
+msgid_plural "%s weeks"
+msgstr[0] "%s неделя"
+msgstr[1] "%s недели"
+msgstr[2] "%s недель"
+
+#. translators: 1: The number of months in an interval of time.
+#: src/bootstrap.php:1997
+msgid "%s month"
+msgid_plural "%s months"
+msgstr[0] "%s месяц"
+msgstr[1] "%s месяца"
+msgstr[2] "%s месяцев"
+
+#. translators: 1: The number of years in an interval of time.
+#: src/bootstrap.php:1995
+msgid "%s year"
+msgid_plural "%s years"
+msgstr[0] "%s год"
+msgstr[1] "%s года"
+msgstr[2] "%s лет"
+
+#: src/event-list-table.php:383
+msgid "Run now"
+msgstr "Запустить сейчас"
+
+#: src/event-list-table.php:369
+msgid "Edit"
+msgstr "Изменить"
+
+#: src/bootstrap.php:762 src/bootstrap.php:1444 src/event-list-table.php:513
+msgid "PHP Code"
+msgstr "PHP код"
+
+#: src/bootstrap.php:229 src/bootstrap.php:348 src/event-list-table.php:488
+msgid "PHP Cron"
+msgstr "PHP Cron"
+
+#: src/event-list-table.php:543 src/event-list-table.php:576
+msgid "None"
+msgstr "Отсутствует"
+
+#: src/bootstrap.php:1569 src/event-list-table.php:178
+msgid "Recurrence"
+msgstr "Повторение"
+
+#: src/bootstrap.php:1516
+msgid "Next Run"
+msgstr "Следующий запуск"
+
+#: src/bootstrap.php:1480
+msgid "Hook Name"
+msgstr "Название хука"
+
+#: src/event-list-table.php:171
+msgid "Arguments"
+msgstr "Аргументы"
+
+#: src/bootstrap.php:1393 src/bootstrap.php:1820
+msgid "Add Cron Event"
+msgstr "Добавьте событие Cron"
+
+#. translators: 1: Error message text.
+#: src/bootstrap.php:1217
+msgid "There was a problem spawning a call to the WP-Cron system on your site. This means WP-Cron events on your site may not work. The problem was: %s"
+msgstr "Возникла проблема с запуском системы WP-Cron на вашем сайте. Это означает, что события WP-Cron на вашем сайте могут не работать. Описание ошибки: %s"
+
+#: src/bootstrap.php:1008
+msgid "Interval (seconds)"
+msgstr "Интервал (секунды)"
+
+#: src/bootstrap.php:1002 src/schedule-list-table.php:79
+msgid "Internal Name"
+msgstr "Название интервала"
+
+#: src/bootstrap.php:998
+msgid "Adding a new cron schedule will allow you to schedule events that re-occur at the given interval."
+msgstr "Добавление нового расписания cron позволит вам запланировать события, которые повторяются с заданным интервалом."
+
+#: src/event-list-table.php:213 src/event-list-table.php:421
+#: src/schedule-list-table.php:131
+msgid "Delete"
+msgstr "Удалить"
+
+#: src/bootstrap.php:1014 src/schedule-list-table.php:81
+msgid "Display Name"
+msgstr "Отображаемое имя"
+
+#: src/schedule-list-table.php:80
+msgid "Interval"
+msgstr "Интервал"
+
+#: src/bootstrap.php:818 src/bootstrap.php:819 src/bootstrap.php:989
+#: src/bootstrap.php:1793
+msgid "Cron Schedules"
+msgstr "Расписания Cron"
+
+#: src/bootstrap.php:602
+msgid "You are not allowed to run cron events."
+msgstr "Вам не разрешено запускать события cron."
+
+#: src/bootstrap.php:457 src/bootstrap.php:499 src/bootstrap.php:552
+msgid "You are not allowed to delete cron events."
+msgstr "Вам не разрешено удалять события cron."
+
+#: src/bootstrap.php:442
+msgid "You are not allowed to delete cron schedules."
+msgstr "Вам не разрешено удалять расписания cron."
+
+#: src/bootstrap.php:424
+msgid "You are not allowed to add new cron schedules."
+msgstr "Вам не разрешено добавлять новые расписания cron."
+
+#: src/bootstrap.php:246
+msgid "You are not allowed to edit cron events."
+msgstr "Вам не разрешено редактировать события cron."
+
+#: src/bootstrap.php:134
+msgid "You are not allowed to add new cron events."
+msgstr "Вам не разрешено добавлять новые события cron."
+
+#: src/bootstrap.php:787 src/event-list-table.php:658 src/schedule.php:105
+msgid "Non-repeating"
+msgstr "Не повторяющееся"
+
+#. translators: 1: The name of the cron event.
+#: src/bootstrap.php:1640 src/event.php:240
+msgid "Failed to the delete the cron event %s."
+msgstr "Не удалось удалить событие cron %s."
+
+#. translators: 1: The name of the cron event.
+#: src/bootstrap.php:1645
+msgid "Failed to the execute the cron event %s."
+msgstr "Не удалось выполнить событие cron %s."

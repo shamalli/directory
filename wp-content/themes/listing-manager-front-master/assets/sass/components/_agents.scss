@@ -1,0 +1,169 @@
+.single-agent .post-content {
+  > img {
+    display: block;
+    float: left;
+    height: auto;
+    margin: 0 25px 0 0;
+    width: 274px;
+  }
+}
+
+.single-agent .post-social,
+.agent .post-social {
+  margin: 20px 0 0 0;
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    display: inline-block;
+
+    &:after {
+      color: rgba($color-black, .2);
+      content: '/';
+      font-size: 10px;
+      margin: 0 15px;
+      vertical-align: middle;
+    }
+
+    &:last-child {
+      &:after {
+        display: none;
+      }
+    }
+  }
+
+  a {
+    color: rgba($color-black, .7);
+  }
+}
+
+.single-agent .post-social {
+  border-bottom: 1px solid rgba(#000, .06);
+  margin: 0 0 20px 0;
+  padding: 0 0 20px 0;
+}
+
+.single-agent .post-overview,
+.agent .post-overview {
+  @include susy-clearfix();
+
+  margin: 20px 0 0 0;
+
+  dl {
+    color: rgba($color-black, .7);
+    margin: 0;
+    line-height: 30px;
+  }
+
+  dt {
+    color: rgba($color-black, .5);
+    float: left;
+    line-height: 30px;
+    width: 120px;
+  }
+}
+
+
+.agent {
+  @include susy-clearfix();
+
+  border-bottom: 1px solid rgba(#000, .06);
+  margin: 0 0 25px 0;
+  padding: 0 0 25px 0;
+
+  .post-thumbnail {
+    float: left;
+    margin: 0 25px 0 0;
+
+    img {
+      display: block;
+      height: auto;
+      width: 274px;
+    }
+  }
+
+  .post-title {
+    font-size: 20px;
+    font-weight: 400;
+    margin: 0 0 15px 0;
+    padding: 0;
+
+    a {
+      color: $color-black;
+    }
+  }
+
+  .post-subtitle {
+    color: rgba($color-black, .5);
+    font-size: 14px;
+    margin: 0 0 ;
+    padding: 0;
+  }
+}
+
+.agent-small {
+  @include susy-clearfix();
+
+  border-bottom: 1px solid rgba(#000, .06);
+  margin: 0 0 16px 0;
+  padding: 0 0 16px 0;
+  position: relative;
+
+  &:last-child {
+    border-bottom: 0;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+}
+
+.agent-small-thumbnail {
+  border-radius: 50%;
+  display: inline-block;
+  height: 42px;
+  margin: 0 12px 0 0;
+  overflow: hidden;
+  vertical-align: middle;
+  width: 42px;
+
+  img {
+    display: block;
+    max-width: 42px;
+  }
+}
+
+.agent-small-content {
+  display: inline-block;
+  vertical-align: middle;
+
+  h3 {
+    font-size: 14px;
+    font-weight: 400;
+    margin: 0;
+    padding: 0;
+
+    a {
+      color: $color-black;
+
+      &:after {
+        color: $color-primary;
+        content: '\f054';
+        font-family: 'FontAwesome';
+        font-size: 8px;
+        position: absolute;
+        right: 0;
+        top: 18px;
+      }
+    }
+  }
+
+  h4 {
+    color: rgba($color-black, .5);
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+  }
+}

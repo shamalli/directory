@@ -1,0 +1,22 @@
+2023-03-10T10:37:03+00:00 CRITICAL Out of memory (allocated 20971520) (tried to allocate 32768 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\js_composer\include\classes\editors\class-vc-frontend-editor.php on line 1008
+
+2023-03-10T11:28:23+00:00 CRITICAL Out of memory (allocated 8388608) (tried to allocate 12288 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\ratings-reviews\classes\widgets\elementor\widgets\slider.php on line 56
+
+2023-03-10T12:18:23+00:00 CRITICAL Out of memory (allocated 12582912) (tried to allocate 12288 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\ratings-reviews\classes\widgets\elementor\widgets\slider.php on line 56
+
+2023-03-10T14:48:12+00:00 CRITICAL Out of memory (allocated 10485760) (tried to allocate 32768 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\js_composer\include\classes\editors\class-vc-frontend-editor.php on line 729
+
+2023-03-10T15:40:10+00:00 CRITICAL Out of memory (allocated 20971520) (tried to allocate 12288 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\ratings-reviews\classes\widgets\elementor\widgets\slider.php on line 56
+
+2023-03-10T15:56:10+00:00 CRITICAL Out of memory (allocated 27262976) (tried to allocate 12288 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\ratings-reviews\classes\widgets\elementor\widgets\slider.php on line 56
+
+2023-03-10T16:04:10+00:00 CRITICAL Out of memory (allocated 20971520) (tried to allocate 65536 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\woocommerce\packages\woocommerce-blocks\src\BlockTypes\AbstractProductGrid.php on line 570
+
+2023-03-10T21:36:25+00:00 CRITICAL Out of memory (allocated 31457280) (tried to allocate 65536 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\woocommerce\packages\woocommerce-blocks\src\BlockTypes\AbstractProductGrid.php on line 570
+
+2023-03-10T21:58:26+00:00 CRITICAL Out of memory (allocated 46137344) (tried to allocate 65536 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\woocommerce\packages\woocommerce-blocks\src\BlockTypes\AbstractProductGrid.php on line 570
+
+2023-03-10T22:02:26+00:00 CRITICAL Out of memory (allocated 29360128) (tried to allocate 12288 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\ratings-reviews\classes\widgets\elementor\widgets\slider.php on line 56
+
+2023-03-10T22:34:29+00:00 CRITICAL Out of memory (allocated 8388608) (tried to allocate 12288 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\wp-maintenance-mode\vendor\codeinwp\themeisle-sdk\src\Product.php on line 181
+

@@ -1,0 +1,14 @@
+/************************ Misc ************************/
+a.w2rr-hint-icon {
+  left: 24px;
+  right: auto;
+}
+
+/************************ Frontpanel Buttons ************************/
+.w2rr-review-frontpanel a.w2rr-btn {
+  margin: 10px 0 10px 10px;
+}
+
+.woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link--ratings-reviews a::after {
+  margin-right: 5px;
+}

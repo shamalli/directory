@@ -1,0 +1,94 @@
+.buttons {
+	.button {
+		margin: 0 15px;		
+	}
+}
+
+.woocommerce a.button,
+.woocommerce button.button,
+.woocommerce input.button,
+.woocommerce input.button:disabled[disabled],
+.button:not(.menu-item), .woocommerce button.button:disabled[disabled] { 
+	background-color: $color-black;
+	border: 0;
+	border-radius: 3px;
+	color: #fff;
+	display: inline-block;
+	font-size: 12px;
+	font-weight: 500;
+	height: 44px;
+	line-height: 44px;
+	padding: 0 25px;
+	position: relative;
+	text-align: center;
+	text-decoration: none;
+	transition: background-color .2s ease;
+
+	&:hover {
+		background-color: lighten($color-black, 10%) !important;
+		color: #fff;
+	}
+
+	&:active, &:focus {
+		box-shadow: none;
+		outline: none;
+	}
+
+	.description {
+		color: #fff;
+		display: block;
+		font-family: 'Handlee', 'Arial', sans-serif;
+		font-size: 14px;
+		font-weight: 400;
+		letter-spacing: 1px;
+		line-height: 1.5;
+		margin: -30px 0 0 70px;
+		position: absolute;
+		text-align: left;
+		transform: translateX(100%) rotate(-8deg);		
+		white-space: nowrap;
+
+		@media (max-width: $tablet) {
+			display: none;
+		}
+
+		&:after {
+			background-image: url('../img/arrow.png');
+			background-repeat: no-repeat;
+			background-position: top left;
+			background-size: 32px 24px;
+			content: '';
+			display: block;
+			height: 24px;
+			left: -50px;
+			position: absolute;
+			transform: rotate(8deg);
+			top: -5px;
+			width: 32px;
+		}
+	}
+}
+
+.woocommerce .button-primary:not(.menu-item),
+.woocommerce button.button-primary.button:disabled[disabled],
+.button-primary:not(.menu-item) {
+	background-color: $color-primary !important;
+	color: #fff !important;
+
+	&:hover {
+		background-color: darken($color-primary, 2%) !important;
+		color: #fff !important;
+	}
+}
+
+.woocommerce .button-white:not(.menu-item),
+.woocommerce button.button-white.button:disabled[disabled]
+.button-white:not(.menu-item) {
+	background-color: #fff;
+	color: $color-black;
+
+	&:hover {
+		background-color: #fff !important;
+		color: $color-black;
+	}
+}

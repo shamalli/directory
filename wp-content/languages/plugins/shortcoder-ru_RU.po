@@ -1,0 +1,633 @@
+# Translation of Plugins - Shortcoder — Create Shortcodes for Anything - Stable (latest release) in Russian
+# This file is distributed under the same license as the Plugins - Shortcoder — Create Shortcodes for Anything - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2023-06-05 09:01:11+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
+"X-Generator: GlotPress/4.0.0-alpha.4\n"
+"Language: ru\n"
+"Project-Id-Version: Plugins - Shortcoder — Create Shortcodes for Anything - Stable (latest release)\n"
+
+#: admin/settings.php:76
+msgid "List the shortcode content in \"All shortcodes\" page."
+msgstr "Перечислите содержимое шорткода на странице \"Все шорткоды\"."
+
+#: admin/settings.php:74
+msgid "200 characters"
+msgstr "200 символов"
+
+#: admin/settings.php:73
+msgid "100 characters"
+msgstr "100 символов"
+
+#: admin/settings.php:72
+msgid "Hidden"
+msgstr "Скрытый"
+
+#: admin/settings.php:68
+msgid "Show content in \"All shortcodes\" page"
+msgstr "Показать содержимое на странице \"Все шорткоды\""
+
+#: admin/insert.php:76
+msgid "View/Edit"
+msgstr "Просмотр/Правка"
+
+#: admin/insert.php:27
+msgid "Check out:"
+msgstr "Проверьте:"
+
+#: admin/edit.php:54
+msgid "Support"
+msgstr "Поддержка"
+
+#: admin/settings.php:86
+msgid "Save settings"
+msgstr "Сохранить настройки"
+
+#: admin/edit.php:238
+msgid "Note: Your user role does not permit saving unrestricted HTML. Some tags and attributes will be removed before saving the content."
+msgstr "Примечание. Ваша роль пользователя не позволяет сохранять неограниченный HTML-код. Некоторые теги и атрибуты будут удалены перед сохранением."
+
+#: admin/admin.php:268
+msgid "Upgrade to PRO"
+msgstr "Улучшить до PRO"
+
+#: admin/admin.php:267
+msgid "View shortcodes"
+msgstr "Просмотр шорткодов"
+
+#: admin/edit.php:85
+msgid "Description of the shortcode for identification"
+msgstr "Описание шорткода для идентификации"
+
+#: admin/edit.php:81 admin/manage.php:25
+msgid "Description"
+msgstr "Описание"
+
+#: admin/edit.php:39
+msgid "Settings"
+msgstr "Настройки"
+
+#: admin/edit.php:302
+msgid "Pull a custom field value of the current post and display it inside the shortcode content."
+msgstr "Извлеките значение настраиваемого поля текущей записи и отобразите его внутри содержимого шорткода."
+
+#: admin/edit.php:291 admin/edit.php:302
+msgid "More information"
+msgstr "Дополнительная информация"
+
+#: admin/edit.php:291
+msgid "Insert parameters in content and replace them with custom values when using the shortcode."
+msgstr "Вставка параметров в контент и замена их на пользовательские значения при использовании шорткода."
+
+#: admin/settings.php:65
+msgid "The default shortcode content when creating new shortcodes"
+msgstr "Содержимое шорткода по умолчанию при создании новых шорткодов"
+
+#: admin/settings.php:60
+msgid "Default shortcode content"
+msgstr "Содержимое шорткода по умолчанию"
+
+#: admin/settings.php:57
+msgid "The default editor mode when creating new shortcodes"
+msgstr "Режим редактора по умолчанию при создании новых шорткодов"
+
+#: admin/settings.php:49
+msgid "Default editor"
+msgstr "Редактор кода"
+
+#: admin/edit.php:56
+msgid "WordPress News"
+msgstr "Новости WordPress"
+
+#: shortcoder.php:361
+msgid "Post slug"
+msgstr "Ярлык записи"
+
+#: shortcoder.php:392 shortcoder.php:395
+msgid "Shortcode enclosed content"
+msgstr "Закрытый шорткодом содержимое"
+
+#: shortcoder.php:388
+msgid "Year - 2 digit"
+msgstr "Год -2 цифры"
+
+#: shortcoder.php:387
+msgid "Year"
+msgstr "Год"
+
+#: shortcoder.php:386
+msgid "Month - words - full form"
+msgstr "Месяц - слова - полная форма"
+
+#: shortcoder.php:385
+msgid "Month - words - short form"
+msgstr "Месяц - слова - краткая форма"
+
+#: shortcoder.php:384
+msgid "Month - leading zeros"
+msgstr "Месяц - ведущие нули"
+
+#: shortcoder.php:383
+msgid "Month"
+msgstr "Месяц"
+
+#: shortcoder.php:382
+msgid "Day - words - full form"
+msgstr "День - слова - полная форма"
+
+#: shortcoder.php:381
+msgid "Day - words - short form"
+msgstr "День - слова - краткая форма"
+
+#: shortcoder.php:380
+msgid "Day - leading zeros"
+msgstr "День - ведущие нули"
+
+#: shortcoder.php:379
+msgid "Day"
+msgstr "День"
+
+#: shortcoder.php:376
+msgid "Date parameters"
+msgstr "Настройки даты"
+
+#: shortcoder.php:372
+msgid "RSS 2.0 feed URL"
+msgstr "Ссылка канала RSS 2.0"
+
+#: shortcoder.php:371
+msgid "Atom feed URL"
+msgstr "Ссылка канала Atom"
+
+#: shortcoder.php:370
+msgid "Active theme's directory"
+msgstr "Активные темы каталога"
+
+#: shortcoder.php:369
+msgid "Active theme's stylesheet URL"
+msgstr "Активные темы стилей ссылка"
+
+#: shortcoder.php:368
+msgid "WordPress version"
+msgstr "Версия WordPress"
+
+#: shortcoder.php:367
+msgid "Site character set"
+msgstr "Кодировка сайта"
+
+#: shortcoder.php:366
+msgid "WordPress URL"
+msgstr "URL WordPress"
+
+#: shortcoder.php:365
+msgid "Site URL"
+msgstr "Ссылка на сайт"
+
+#: shortcoder.php:364
+msgid "Site description"
+msgstr "Описание сайта"
+
+#: shortcoder.php:363
+msgid "Site title"
+msgstr "Название сайта"
+
+#: shortcoder.php:360
+msgid "Post comments count"
+msgstr "Количество комментариев к записи"
+
+#: shortcoder.php:359
+msgid "Post modified date"
+msgstr "Дата изменения записи"
+
+#: shortcoder.php:358
+msgid "Post date"
+msgstr "Дата записи"
+
+#: shortcoder.php:357
+msgid "Post author"
+msgstr "Автор записи"
+
+#: shortcoder.php:356
+msgid "Post excerpt"
+msgstr "Отрывок записи"
+
+#: shortcoder.php:355
+msgid "Post featured image URL"
+msgstr "Запись с признаком ссылкой изображения"
+
+#: shortcoder.php:354
+msgid "Post ID"
+msgstr "ID записи"
+
+#: shortcoder.php:352
+msgid "Short URL of the post/location"
+msgstr "Короткая ссылка записи/местоположения"
+
+#: shortcoder.php:351
+msgid "Title of the post/location"
+msgstr "Название записи/местоположения"
+
+#: shortcoder.php:350
+msgid "URL of the post/location"
+msgstr "Ссылка записи/местоположения"
+
+#: shortcoder.php:347
+msgid "WordPress information"
+msgstr "Информация WordPress"
+
+#: admin/admin.php:258
+msgid "Open documentation"
+msgstr "Открыть документацию"
+
+#: admin/admin.php:257
+msgid "To import from other sources like CSV, excel please read the below linked documentation."
+msgstr "Для импорта из других источников, таких как CSV, excel, пожалуйста, ознакомьтесь с приведенной ниже связанной документацией."
+
+#: admin/admin.php:254
+msgid "Go to import page"
+msgstr "Перейти на страницу импорта"
+
+#: admin/admin.php:253
+msgid "The XML file downloaded through the native export process can be imported via WordPress's own import tool. Navigate to <code>Tools -> Import</code>, install the importer plugin if not installed and run the importer under WordPress section."
+msgstr "XML-файл, загруженный через собственный процесс экспорта, может быть импортирован с помощью собственного инструмента импорта WordPress. Перейдите в раздел <code>Инструменты -> Импорт</code>, установите плагин importer, если он не установлен, и запустите импортер в разделе WordPress."
+
+#: admin/admin.php:250
+msgid "Go to export page"
+msgstr "Перейти на страницу экспорта"
+
+#: admin/admin.php:249
+msgid "WordPress has a native exporter tool which can be used to export shortcoder data. Navigate to <code>Tools -> Export</code> and select \"Shortcoder\" as the content to export."
+msgstr "WordPress имеет собственный инструмент для экспортера, который может использоваться для экспорта данных shortcoder. Перейдите в раздел <code>Инструменты -> Экспорт</code> и выберите \"Шорткодер\" в качестве содержимого для экспорта."
+
+#: admin/admin.php:246
+msgid "Documentation"
+msgstr "Документация"
+
+#: admin/admin.php:243 admin/admin.php:257
+msgid "Import from other sources"
+msgstr "Импорт из других источников"
+
+#: admin/admin.php:242 admin/admin.php:253
+msgid "Import"
+msgstr "Импорт"
+
+#: admin/admin.php:241 admin/admin.php:249
+msgid "Export"
+msgstr "Экспорт"
+
+#: admin/admin.php:220
+msgid "Continue using Shortcoder"
+msgstr "Продолжать использовать Шорткодер"
+
+#: admin/admin.php:158
+msgid "Switching editor will refresh the page. Please save your changes before refreshing. Do you want to refresh the page now ?"
+msgstr "Переключение редактора обновит страницу. Пожалуйста, сохраните ваши изменения перед обновлением. Вы хотите обновить страницу прямо сейчас ?"
+
+#: admin/admin.php:107
+msgid "Tags list navigation"
+msgstr "Навигация по меткам"
+
+#: admin/admin.php:106
+msgid "Tags list"
+msgstr "Список меток"
+
+#: admin/admin.php:105
+msgid "No tags"
+msgstr "Меток нет"
+
+#: admin/admin.php:104
+msgid "Not Found"
+msgstr "Не найдено"
+
+#: admin/admin.php:103
+msgid "Search Tags"
+msgstr "Поиск меток"
+
+#: admin/admin.php:102
+msgid "Popular Tags"
+msgstr "Популярные метки"
+
+#: admin/admin.php:101
+msgid "Choose from the most used"
+msgstr "Выберите один из наиболее часто используемых"
+
+#: admin/admin.php:100
+msgid "Add or remove tags"
+msgstr "Добавить или удалить метки"
+
+#: admin/admin.php:99
+msgid "Separate tags with commas"
+msgstr "Метки разделяются запятыми"
+
+#: admin/admin.php:98
+msgid "View Tag"
+msgstr "Просмотреть метку"
+
+#: admin/admin.php:97
+msgid "Update Tag"
+msgstr "Обновить метку"
+
+#: admin/admin.php:96
+msgid "Edit Tag"
+msgstr "Изменить метку"
+
+#: admin/admin.php:95
+msgid "Add New Tag"
+msgstr "Создать метку"
+
+#: admin/admin.php:94
+msgid "New Tag Name"
+msgstr "Имя новой метки"
+
+#: admin/admin.php:93
+msgid "Parent Tag:"
+msgstr "Родительская метка:"
+
+#: admin/admin.php:92
+msgid "Parent Tag"
+msgstr "Родительская метка"
+
+#: admin/admin.php:91
+msgid "All Tags"
+msgstr "Все метки"
+
+#: admin/admin.php:90
+msgid "Tags"
+msgstr "Метки"
+
+#: admin/admin.php:89
+msgctxt "Taxonomy Singular Name"
+msgid "Tag"
+msgstr "Метка"
+
+#: admin/admin.php:88
+msgctxt "Taxonomy General Name"
+msgid "Tags"
+msgstr "Метки"
+
+#: admin/admin.php:56
+msgid "Filter shortcodes list"
+msgstr "Фильтр списка шорткодов"
+
+#: admin/admin.php:55
+msgid "Shortcodes list navigation"
+msgstr "Навигация по списку шорткодов"
+
+#: admin/admin.php:54
+msgid "Shortcodes list"
+msgstr "Лист шорткодов"
+
+#: admin/admin.php:53
+msgid "Uploaded to this shortcode"
+msgstr "Загружено в этот шорткод"
+
+#: admin/admin.php:52
+msgid "Insert into shortcode"
+msgstr "Вставить в шорткод"
+
+#: admin/admin.php:51
+msgid "Use as featured image"
+msgstr "Используйте в качестве избранного изображения"
+
+#: admin/admin.php:50
+msgid "Remove featured image"
+msgstr "Удалить избранное изображение"
+
+#: admin/admin.php:49
+msgid "Set featured image"
+msgstr "Установить рекомендуемые изображения"
+
+#: admin/admin.php:48
+msgid "Featured Image"
+msgstr "Избранное изображение"
+
+#: admin/admin.php:47
+msgid "Not found in Trash"
+msgstr "Не найдено в корзине"
+
+#: admin/admin.php:46
+msgid "Not found"
+msgstr "Не найдено"
+
+#: admin/admin.php:45
+msgid "Search Shortcode"
+msgstr "Поиск шорткода"
+
+#: admin/admin.php:44
+msgid "View Shortcodes"
+msgstr "Просмотр шорткодов"
+
+#: admin/admin.php:43
+msgid "View Shortcode"
+msgstr "Просмотр шорткода"
+
+#: admin/admin.php:41
+msgid "Edit Shortcode"
+msgstr "Изменить шорткод"
+
+#: admin/admin.php:40
+msgid "New Shortcode"
+msgstr "Новый шорткод"
+
+#: admin/admin.php:37
+msgid "All Shortcodes"
+msgstr "Все шорткоды"
+
+#: admin/admin.php:36
+msgid "Parent Shortcode:"
+msgstr "Родители шорткода:"
+
+#: admin/admin.php:35
+msgid "Shortcode Attributes"
+msgstr "Шорткод атрибуты"
+
+#: admin/admin.php:34
+msgid "Shortcode Archives"
+msgstr "Архивы шорткодов"
+
+#: admin/admin.php:31
+msgctxt "Post Type Singular Name"
+msgid "Shortcode"
+msgstr "Шорткод"
+
+#: admin/admin.php:30
+msgctxt "Post Type General Name"
+msgid "Shortcoder"
+msgstr "Шорткодер"
+
+#: admin/admin.php:33 admin/admin.php:60 admin/manage.php:24
+msgid "Shortcode"
+msgstr "Шорткод"
+
+#: admin/edit.php:306
+msgid "Only alphabets, numbers, underscore and hyphens are allowed. Cannot be empty."
+msgstr "Допускаются только алфавиты, цифры, подчеркивание и дефисы. Не может быть пустым."
+
+#: admin/edit.php:305
+msgid "Insert custom field"
+msgstr "Вставить пользовательское поле"
+
+#: admin/edit.php:303
+msgid "Enter custom field name"
+msgstr "Введите имя пользовательского поля"
+
+#: admin/edit.php:300
+msgid "Custom Fields"
+msgstr "Произвольные поля"
+
+#: admin/edit.php:297
+msgid "Only alphabets, numbers, underscores and hyphens are allowed. Custom parameters are case insensitive"
+msgstr "Допускаются только буквы, цифры, подчеркивания и дефисы. Пользовательские параметры не чувствительны к регистру"
+
+#: admin/edit.php:296
+msgid "Insert parameter"
+msgstr "Вставить параметр"
+
+#: admin/edit.php:294
+msgid "Default value"
+msgstr "Значение по умолчанию"
+
+#: admin/edit.php:292
+msgid "Enter custom parameter name"
+msgstr "Введите имя пользовательского параметра"
+
+#: admin/edit.php:289
+msgid "Custom parameter"
+msgstr "Кастомный параметр"
+
+#: admin/edit.php:211
+msgid "Insert shortcode parameters"
+msgstr "Вставить параметры шорткода"
+
+#: admin/edit.php:191
+msgid "Switch editor"
+msgstr "Переключить редактор"
+
+#: admin/edit.php:185 admin/settings.php:55
+msgid "Code editor"
+msgstr "Редактор кода"
+
+#: admin/edit.php:184 admin/settings.php:54
+msgid "Visual editor"
+msgstr "Визуальный редактор"
+
+#: admin/edit.php:183 admin/settings.php:53
+msgid "Text editor"
+msgstr "Текстовый редактор"
+
+#: admin/edit.php:116
+msgid "Select the devices where the shortcode should be executed. Note: If any caching plugin is used, a separate caching for desktop and mobile might be required."
+msgstr "Выберите устройства, на которых должен быть выполнен шорткод. Примечание: Если используется какой-либо плагин кэширования, может потребоваться отдельное кэширование для настольных и мобильных устройств."
+
+#: admin/edit.php:108
+msgid "Execute shortcode on devices"
+msgstr "Выполнение шорткода на устройствах"
+
+#: admin/edit.php:105
+msgid "Select to disable the shortcode from executing for administrators."
+msgstr "Выберите этот параметр, чтобы отключить выполнение шорткода для администраторов."
+
+#: admin/edit.php:98
+msgid "Disable shortcode for administrators"
+msgstr "Отключить шорткод для администраторов"
+
+#: admin/edit.php:95
+msgid "Select to disable the shortcode from executing in all the places where it is used."
+msgstr "Выберите этот параметр, чтобы отключить выполнение шорткода во всех местах, где он используется."
+
+#: admin/edit.php:78
+msgid "Name of the shortcode to display when it is listed"
+msgstr "Имя шорткода, отображаемого при его появлении в списке"
+
+#: admin/edit.php:74
+msgid "Display name"
+msgstr "Отображаемое имя"
+
+#: admin/edit.php:52
+msgid "Shortcode settings"
+msgstr "Параметры шорткода"
+
+#: admin/edit.php:36
+msgid "Your shortcode"
+msgstr "Ваш шорткод"
+
+#: admin/edit.php:32
+msgid "Enter shortcode name"
+msgstr "Введите имя шорткода"
+
+#: admin/edit.php:32
+msgid "Name of the shortcode. Allowed characters are alphabets, numbers, hyphens and underscore."
+msgstr "Имя шорткода. Допустимыми символами являются алфавиты, цифры, дефисы и подчеркивание."
+
+#: admin/insert.php:115
+msgid "No shortcodes match search term !"
+msgstr "Ни один шорткод не соответствует поисковому запросу !"
+
+#: admin/insert.php:107
+msgid "Has enclosed content parameter"
+msgstr "Имеет вложенный параметр content"
+
+#: admin/insert.php:105
+msgid "Insert shortcode"
+msgstr "Вставить шорткод"
+
+#: admin/insert.php:101
+msgid "No parameters present in this shortcode"
+msgstr "В этом шорткоде нет параметров"
+
+#: admin/insert.php:86
+msgid "Available parameters"
+msgstr "Доступные параметры"
+
+#: admin/insert.php:79
+msgid "Insert"
+msgstr "Вставить"
+
+#: admin/edit.php:38 admin/insert.php:78 admin/manage.php:40
+msgid "Copy"
+msgstr "Копировать"
+
+#: admin/tools.php:83
+msgid "Insert shortcode to editor"
+msgstr "Вставить шорткод в редактор"
+
+#. Description of the plugin
+msgid "Shortcoder plugin allows to create a custom shortcodes for HTML, JavaScript and other snippets. Now the shortcodes can be used in posts/pages and the snippet will be replaced in place."
+msgstr "Плагин Шорткодер(Shortcoder) позволяет создавать собственные шорткоды для HTML, JavaScript и других сниппетов. Теперь шорткоды можно использовать в постах/страницах,а сниппет будет заменен на место."
+
+#. Plugin URI of the plugin
+msgid "https://www.aakashweb.com/wordpress-plugins/shortcoder/"
+msgstr "https://www.aakashweb.com/wordpress-plugins/shortcoder/"
+
+#. Author URI of the plugin
+msgid "https://www.aakashweb.com/"
+msgstr "http://www.aakashweb.com/"
+
+#. Author of the plugin
+msgid "Aakash Chakravarthy"
+msgstr "Aakash Chakravarthy"
+
+#. Plugin Name of the plugin
+#: admin/admin.php:32
+msgid "Shortcoder"
+msgstr "Shortcoder"
+
+#: admin/edit.php:88
+msgid "Temporarily disable shortcode"
+msgstr "Временно отключить этот шорткод"
+
+#: admin/admin.php:42
+msgid "Update Shortcode"
+msgstr "Обновить шорткод"
+
+#: admin/admin.php:38 admin/admin.php:39
+msgid "Create shortcode"
+msgstr "Создать шорткод"
+
+#: admin/insert.php:16
+msgid "Create Shortcode"
+msgstr "Создать шорткод"

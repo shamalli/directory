@@ -1,0 +1,12 @@
+{
+  "blogname": "Listing Manager Front",
+  "blogdescription": "Listings & Directory Plugin",
+  "show_on_front": "page",
+  "permalink_structure": "/%postname%/",
+  "page_on_front": "home",
+  "page_for_posts": "blog",
+  "locations": {
+    "primary": "primary",
+    "authenticated": "authenticated"
+  }
+}

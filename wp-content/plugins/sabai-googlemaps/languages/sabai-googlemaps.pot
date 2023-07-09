@@ -1,0 +1,238 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the sabai-directory package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: sabai-googlemaps\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-11-01 01:01+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Icon"
+msgstr ""
+
+msgid "Customize the format of address"
+msgstr ""
+
+msgid "Custom format"
+msgstr ""
+
+msgid "Link to Google Maps or native map application"
+msgstr ""
+
+msgid "Country code"
+msgstr ""
+
+msgid ""
+"Enter one of the <a href=\"http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2\" "
+"target=\"_blank\">two-letter country codes</a> to restrict location "
+"autocomplete suggestions to a specific country."
+msgstr ""
+
+msgid "Require a location on map if the address field is not empty"
+msgstr ""
+
+msgid "Map type"
+msgstr ""
+
+msgid "Map height"
+msgstr ""
+
+msgid "Enter the height of map in pixels."
+msgstr ""
+
+msgid "Default latitude"
+msgstr ""
+
+msgid "Enter the latitude of the default map location in decimals."
+msgstr ""
+
+msgid "Default longitude"
+msgstr ""
+
+msgid "Enter the longitude of the default map location in decimals."
+msgstr ""
+
+msgid "Default zoom level"
+msgstr ""
+
+msgid "Default map type"
+msgstr ""
+
+msgid "Default style"
+msgstr ""
+
+msgid "Google map style"
+msgstr ""
+
+msgid "Enable scrollwheel zooming"
+msgstr ""
+
+msgid "Enable directions search"
+msgstr ""
+
+msgid "Map infobox width"
+msgstr ""
+
+msgid "Enter a location"
+msgstr ""
+
+msgid "Get Directions"
+msgstr ""
+
+msgid "By public transit"
+msgstr ""
+
+msgid "Wakling"
+msgstr ""
+
+msgid "Bicycling"
+msgstr ""
+
+msgid "Google (roadmap)"
+msgstr ""
+
+msgid "Google (satellite)"
+msgstr ""
+
+msgid "Google (hybrid)"
+msgstr ""
+
+msgid "OpenStreetMap"
+msgstr ""
+
+msgid "Location"
+msgstr ""
+
+msgid "Filter by"
+msgstr ""
+
+msgid "City"
+msgstr ""
+
+msgid "State / Province / Region"
+msgstr ""
+
+msgid "Postal / Zip code"
+msgstr ""
+
+msgid "Country"
+msgstr ""
+
+msgid "Form element type"
+msgstr ""
+
+msgid "Checkboxes"
+msgstr ""
+
+msgid "Select list"
+msgstr ""
+
+msgid "Display inline"
+msgstr ""
+
+msgid "Check this to align all options on the same line."
+msgstr ""
+
+msgid "Number of options to display"
+msgstr ""
+
+msgid ""
+"If there are more options than the number specified here, those options will "
+"be displayed in a popup window."
+msgstr ""
+
+msgid "Label for link to open popup window"
+msgstr ""
+
+#, php-format
+msgid "More %s"
+msgstr ""
+
+msgid "Min. length of keywords in characters"
+msgstr ""
+
+msgid "Match any or all"
+msgstr ""
+
+msgid "Match any"
+msgstr ""
+
+msgid "Match all"
+msgstr ""
+
+msgid "Exact match"
+msgstr ""
+
+msgctxt "option"
+msgid "Any"
+msgstr ""
+
+msgid "Google Map"
+msgstr ""
+
+msgid "Find on map"
+msgstr ""
+
+msgid "Get from map"
+msgstr ""
+
+msgid "Enter address details manually"
+msgstr ""
+
+msgid "Latitude"
+msgstr ""
+
+msgid "Longitude"
+msgstr ""
+
+msgid "Please select a valid location on map."
+msgstr ""
+
+msgid "Map renderer"
+msgstr ""
+
+msgid "Enter coordinates manually"
+msgstr ""
+
+msgid "Do not load Google Maps API"
+msgstr ""
+
+msgid "Do not load Google Maps API in admin dashboard"
+msgstr ""
+
+msgid "Google Maps API type"
+msgstr ""
+
+msgid "Google Maps API (free)"
+msgstr ""
+
+msgid "Google Maps API for Business"
+msgstr ""
+
+msgid "Google Geocoding API key"
+msgstr ""
+
+#, php-format
+msgid ""
+"The API key for the Google Geocoding service can be obtained from the "
+"following URL: %s"
+msgstr ""
+
+msgid "Google Maps API for Work client ID"
+msgstr ""
+
+#, php-format
+msgid ""
+"Enter the cliend ID provided by Google. Also add the following code to any "
+"line in wp-config.php: %s"
+msgstr ""

@@ -1,0 +1,79 @@
+.listing-manager-social-networks {
+    @include susy-clearfix();
+    margin-bottom: -25px;
+}
+
+.listing-manager-social-network {
+    float: left;
+    height: 34px;
+    margin: 0 0 25px 0;
+    width: 20%;
+
+    a {
+        color: $color-black-light;
+
+        &:before {
+            background-color: rgba(#000, .1);
+            border-radius: 50%;
+            color: #fff;
+            display: inline-block;
+            font-family: 'FontAwesome';
+            height: 34px;
+            line-height: 34px;
+            margin: 0 10px 0 0;
+            text-align: center;
+            vertical-align: middle;
+            width: 34px;
+        }
+
+        &.facebook:before {
+            background-color: $color-facebook;
+            content: '\f09a';
+        }
+
+        &.twitter:before {
+            background-color: $color-twitter;
+            content: '\f099';
+        }
+
+        &.linkedin:before {
+            background-color: $color-linkedin;
+            content: '\f0e1';
+        }
+
+        &.google:before {
+            background-color: $color-google-plus;
+            content: '\f1a0';
+        }
+
+        &.youtube:before {
+            background-color: $color-youtube;
+            content: '\f167';
+        }
+
+        &.vimeo:before {
+            background-color: $color-vimeo;
+            content: '\f27d';
+        }
+
+        &.foursquare:before {
+            background-color: $color-foursquare;
+            content: '\f180';
+        }
+
+        &.skype:before {
+            background-color: $color-skype;
+            content: '\f17e';
+        }
+
+        &.dribbble:before {
+            background-color: $color-dribbble;
+            content: '\f17d';
+        }
+
+        &.behance:before {
+            background-color: $color-behance;
+            content: '\f1b4';
+        }
+    }
+}

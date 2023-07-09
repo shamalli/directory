@@ -1,0 +1,29 @@
+.w2rr-updated,
+.w2rr-error,
+.w2rr-no-found-reviews {
+	margin-bottom: 20px;
+	padding: 10px;
+	border-radius: $border-radius;
+	border-style: solid;
+	border-width: 1px;
+	display: block;
+}
+.w2rr-updated p,
+.w2rr-updated div,
+.w2rr-error p,
+.w2rr-error div {
+	margin: 1em !important;
+	padding: 0;
+}
+.w2rr-updated {
+	background-color: $message-updated-background-color;
+	border-color: $message-updated-border-color;
+}
+.w2rr-error {
+	background-color: $message-error-background-color;
+	border-color: $message-error-border-color;
+}
+.w2rr-no-found-reviews {
+	background-color: $message-no-found-background-color;
+	border-color: $message-no-found-border-color;
+}

@@ -1,0 +1,79 @@
+.site-wrapper {
+	overflow-x: hidden;
+	width: 100%;
+
+	.admin-bar & {
+		border-top: 32px solid transparent;
+
+		@media (max-width: 782px) {
+			border-top-width: 46px;
+		}
+	}
+}
+
+.main {		
+	@include container($width-page);
+
+	background-color: #fff;
+	border-radius: 3px;
+	box-sizing: border-box;;
+	margin-top: -100px;
+	padding: 30px;
+	position: relative;
+
+	.page-template-page-front-page & { 
+		background-color: transparent;
+		box-sizing: content-box;;
+		height: auto;
+		margin-top: auto;
+	}
+}
+
+.main-inner {
+	min-height: calc(100vh - 306px);
+	box-sizing: border-box;
+}
+
+.has-sidebar {
+	.content {
+		@include span(9 of 12);
+	}
+
+	.sidebar {
+		@include span(3 of 12);
+		@include last();
+	}
+}
+
+.main-simple-wrapper {
+	@include container($width-page);
+
+	left: 50%;
+	position: absolute;
+	top: 50%;
+	transform: translateX(-50%) translateY(-50%);
+	width: 100%
+}
+
+.main-simple {
+	@include span(4 of 10);
+	@include push(3 of 10);
+
+	h1 {
+		color: #fff;
+		text-align: center;
+	}
+
+	form {
+		button {
+			@extend .button-primary;
+			float: right;
+		}
+	}
+
+	a {
+		border-bottom: 1px solid rgba(#fff, .3);
+		color: #fff;
+		padding-bottom: 3px;
+	}
+}

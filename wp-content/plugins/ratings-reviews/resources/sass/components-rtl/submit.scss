@@ -1,0 +1,51 @@
+ul.w2rr-categorychecklist li ul.children {
+	margin-right: 12px;
+	margin-left: 0;
+}
+ul.w2rr-categorychecklist li label {
+	padding-right: 5px;
+	padding-left: 0;
+}
+ul.w2rr-categorychecklist span.w2rr-category-has-checked {
+	left: -2px;
+	right: 0;
+}
+ul.w2rr-categorychecklist li ul {
+	border-right: 1px solid $border-color;
+	border-left: 0;
+    padding: 0 25px 0 0;
+}
+ul.w2rr-categorychecklist li ul li:before {
+    right: -20px;
+	left: auto;
+}
+
+/* Content fields */
+.w2rr-delete-selection-item {
+	float: right;
+}
+
+.w2rr-icon,
+.w2rr-png-image,
+.w2rr-fa-icon {
+	float: right;
+}
+.w2rr-attached-item,
+.w2rr-upload-item {
+	float: right;
+	margin: 0 0 20px 20px;
+}
+
+.w2rr-fa.w2rr-attached-item-delete {
+	left: 10px;
+	right: auto;
+}
+.w2rr-attached-item-metadata {
+	right: 10px;
+	left: auto;
+}
+
+.w2rr-content-fields-metabox .w2rr-field-checkbox-input {
+	float: right;
+	text-align: right;
+}

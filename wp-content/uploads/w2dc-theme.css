@@ -1,0 +1,15 @@
+.header {
+	background-color: #2c2d33;
+}
+
+.header {
+	padding-bottom: 10px;
+}
+
+.site-navigation li {
+	margin-left: 35px;
+}
+
+.site-navigation a {
+	font-size: 14px;
+}

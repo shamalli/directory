@@ -1,0 +1,122 @@
+.blog .posts .type-post {
+	width: 31%;
+}
+
+.type-post {
+	margin-bottom: 30px;
+	position: relative;	
+
+	&:hover {
+		.post-thumbnail {
+			img {
+				transform: scale(1.04) translate3d(0, 0, 0);
+			}
+		}
+	}
+
+	.post-thumbnail {
+		margin: 0 0 15px 0;
+		overflow: hidden;
+
+		img {
+			display: block;
+			height: auto;
+			opacity: .85;
+			transform: translate3d(0, 0, 1px);
+			transition: all .6s ease;
+			width: 100%;
+		}
+	}
+
+	.post-title {
+		h3 {
+			margin: 0;
+			padding: 0;
+		}
+
+		h4 {
+			color: $color-gray;
+			font-size: 13px;
+			margin: 0;
+			padding: 0;
+		}
+
+		a {
+			color: $color-black;
+			font-size: 16px;
+			font-weight: 600;
+		}
+	}
+
+	.post-content {
+		p {
+			color: rgba($color-black, .7);
+			font-size: 14px;
+			line-height: 28px;
+		}	
+
+		.read-more {
+			font-size: 13px;
+			height: 36px;
+			line-height: 36px;
+			margin: 0;
+			padding: 0px 18px;
+		}
+	}
+}
+
+.post-content {
+	h1 {
+		font-size: 30px;
+		font-weight: 300;
+	}
+
+	h2 {
+		font-size: 26px;
+		font-weight: 300;
+	}
+
+	h3 {
+		font-size: 22px;
+		font-weight: 400;
+	}
+
+	h4 {
+		font-size: 18px;
+		font-weight: 400;
+	}
+
+	h5 {
+		font-size: 16px;
+		font-weight: 400;
+	}		
+
+	h6 {
+		font-size: 12px;
+		font-weight: 700;
+		text-transform: uppercase;
+	}	
+
+	blockquote {
+		background-color: rgba($color-black, .04);
+		margin: 0;
+		overflow: hidden;
+		padding: 30px;
+		position: relative;	
+
+		cite {
+			display: block;
+			font-weight: bold;
+		}
+
+		&:after {
+			bottom: -30px;
+			color: $color-primary;
+			content: '\f10d';
+			font-family: 'FontAwesome';
+			font-size: 100px;
+			position: absolute;
+			right: 25px;
+		}
+	}
+}

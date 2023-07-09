@@ -1,0 +1,32 @@
+.listing-manager-filter-form {
+	@include susy-clearfix();
+
+	background-color: $color-body-background;
+	border-radius: 3px;
+
+	.content &, .content-top & {
+		margin-bottom: 30px;
+		padding: 25px 25px 5px 25px;
+
+		.form-group {
+			@media (min-width: $tablet) {
+				@include span(3 of 12);
+
+				&:nth-child(4n) {
+					@include last();
+				}
+			}
+
+			@media (max-width: $tablet) {
+				&:last-child {
+					margin-bottom: 20px;
+				}
+			}
+		}
+	}
+
+	.sidebar & {
+		padding: 16px 16px 6px 16px;
+	}
+}
+

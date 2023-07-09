@@ -1,0 +1,42 @@
+.w2rr-content select:not(.w2rr-week-day-input) {
+  background-position: 8px 50%, 13px 50%, 0 0 !important;
+}
+
+.w2rr-content .w2rr-checkbox,
+.w2rr-content .w2rr-radio {
+  text-align: right;
+}
+
+.w2rr-content .w2rr-checkbox label,
+.w2rr-content .w2rr-radio label {
+  position: relative;
+  padding-left: 20px;
+  padding-right: 30px;
+}
+
+.w2rr-checkbox input,
+.w2rr-radio input {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+}
+
+.w2rr-checkbox .w2rr-control-indicator,
+.w2rr-radio .w2rr-control-indicator {
+  right: 0;
+  left: auto;
+  margin-right: 0;
+  margin-left: 5px;
+}
+
+/* Checkbox tick */
+.w2rr-checkbox .w2rr-control-indicator:after {
+  font-size: 12px;
+  left: 0;
+  right: 5px;
+}
+
+/* Radio button inner circle */
+.w2rr-radio .w2rr-control-indicator:after {
+  right: 6px;
+}

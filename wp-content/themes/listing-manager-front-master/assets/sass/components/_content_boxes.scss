@@ -1,0 +1,50 @@
+.content-box {
+  padding: 25px;
+  position: relative;
+  text-align: center;
+
+  &:after {
+    background-color: rgba(#000, .06);
+    bottom: 10px;
+    content: '';
+    position: absolute;
+    right: -15px;
+    top: 10px;
+    width: 1px;
+
+    @media (max-width: $tablet) {
+      display: none;
+    }
+  }
+
+  &:before {
+    background-color: rgba(#000, .06);
+    bottom: -15px;
+    content: '';
+    height: 1px;
+    left: 10px;
+    position: absolute;
+    right: 10px;
+  }
+
+  .fa {
+    display: block;
+    color: $color-primary;
+    font-size: 30px;
+    margin: 10px 0 30px 0;
+  }
+
+  h4 {
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0 0 20px 0;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  p {
+    font-size: 13px;
+    margin: 0;
+    text-align: center;
+  }
+}

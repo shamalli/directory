@@ -1,0 +1,114 @@
+/************************   Bootstrap Additional CSS rules   ************************/
+.w2rr-content {
+	.w2rr-form-control,
+	.w2rr-form-control:focus {
+		width: 100%;
+		max-width: 100%;
+		float: none;
+		color: $input-color;
+		border: $input-border-width solid $input-border-color;
+		border-radius: $input-border-radius;
+		height: $input-height;
+		font-size: $input-font-size;
+		box-shadow: none !important;
+		padding: $input-padding;
+	}
+	textarea.w2rr-form-control,
+	textarea.w2rr-form-control:focus {
+		height: auto;
+	}
+	input.w2rr-form-control::-webkit-input-placeholder {
+		color: $input-placeholder-color;
+	}
+	input.w2rr-form-control::-moz-placeholder {
+		color: $input-placeholder-color;
+	}
+	input.w2rr-form-control:-moz-placeholder {
+		color: $input-placeholder-color;
+	}
+	input.w2rr-form-control:-ms-input-placeholder {
+		color: $input-placeholder-color;
+	}
+	.w2rr-form-horizontal .w2rr-control-label {
+		text-align: left;
+		margin: 0;
+		padding: 0;
+	}
+	.w2rr-has-feedback .w2rr-form-control:focus {
+		padding-right: 42.5px;
+	}
+	.w2rr-form-control-feedback {
+		z-index: 0;
+		display: inline;
+		top: 0;
+		cursor: pointer;
+		height: 100%;
+		line-height: $input-height;
+	}
+	.w2rr-label {
+		display: inline-block;
+		padding: 3px 5px;
+		margin-bottom: 3px;
+		vertical-align: inherit;
+	}
+	.w2rr-form-control-feedback.w2rr-glyphicon {
+		color: $input-placeholder-color;
+		font-size: 18px;
+	}
+	.w2rr-form-group {
+		margin-bottom: 15px !important; /* !important needed so JS COmposer can not break this by his *:last-child rules */
+		overflow: hidden;
+	}
+	.w2rr-nav-tabs > li.w2rr-active > a,
+	.w2rr-nav-tabs > li.w2rr-active > a:hover,
+	.w2rr-nav-tabs > li.w2rr-active > a:focus {
+		cursor: pointer;
+	}
+	.w2rr-popover {
+		max-width: 500px;
+	}
+	.w2rr-list-group {
+		margin-left: 0;
+	}
+	@media print {
+		a[href]:after {
+			content: none !important;
+		}
+	}
+	.w2rr-tooltip-inner {
+		background-color: #3b3b3b;
+		border-radius: 2px;
+		padding: 10px;
+	}
+	.w2rr-tooltip.w2rr-top .w2rr-tooltip-arrow {
+		border-top-color: #3b3b3b;
+	}
+	.w2rr-tooltip.w2rr-in {
+		opacity: 1;
+	}
+	.w2rr-btn-default:hover {
+		background-color: $label-background-color;
+	}
+	input[type="checkbox"],
+	input[type="radio"] {
+		position: relative;
+	}
+	.w2rr-btn-group .w2rr-dashboard-btn-mobile + .w2rr-btn,
+	.w2rr-btn-group .w2rr-dashboard-btn-mobile + .w2rr-dashboard-btn-mobile {
+		margin-left: -1px;
+	}
+	.w2rr-progress-bar {
+		-webkit-box-shadow: none;
+		box-shadow: none;
+	}
+	.w2rr-panel-heading {
+		padding: 10px 15px;
+		padding-bottom: 30px;
+		border-bottom: 1px solid transparent;
+		border-top-right-radius: 3px;
+		border-top-left-radius: 3px;
+	}
+	.w2rr-panel-heading > .w2rr-dropdown .w2rr-dropdown-toggle {
+		color: inherit;
+	}
+}

@@ -1,0 +1,1898 @@
+# Translation of Plugins - Page Builder by SiteOrigin - Stable (latest release) in Danish
+# This file is distributed under the same license as the Plugins - Page Builder by SiteOrigin - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2020-12-10 12:06:29+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/3.0.0-alpha.2\n"
+"Language: da_DK\n"
+"Project-Id-Version: Plugins - Page Builder by SiteOrigin - Stable (latest release)\n"
+
+#: inc/settings.php:457
+msgid "Page Builder Layout CSS Output Location"
+msgstr "Page Builder Layout CSS output placering"
+
+#: inc/settings.php:455
+msgid "Footer"
+msgstr "Sidefod"
+
+#: inc/settings.php:454
+msgid "Header"
+msgstr "Sidehoved"
+
+#: inc/settings.php:453
+msgid "Automatic"
+msgstr "Automatisk"
+
+#: inc/settings.php:426
+msgid "The default margin below rows on mobile."
+msgstr "Standard margin under rækker på mobilenheder."
+
+#: inc/settings.php:425
+msgid "Row Mobile Bottom Margin"
+msgstr "Række bundmargin på mobilenheder"
+
+#: inc/settings.php:293
+msgid "Disable row/widget background parallax when the browser is smaller than the mobile width."
+msgstr "Deaktiver række/widget parallax baggrund når browseren er mindre end bredden på mobil enheder."
+
+#: inc/settings.php:292
+msgid "Disable Parallax On Mobile"
+msgstr "Deaktiver parallax på mobil enheder"
+
+#: inc/styles.php:112
+msgid "CSS declarations applied when in mobile view."
+msgstr "CSS deklarationer tilføjes når webstedet vises på mobil-enheder."
+
+#: inc/styles.php:109
+msgid "Mobile CSS Declarations"
+msgstr "CSS deklarationer for mobil-enheder"
+
+#: inc/styles.php:104
+msgid "One declaration per line."
+msgstr "En deklaration pr. linje"
+
+#: inc/styles.php:101
+msgid "CSS Declarations"
+msgstr "CSS deklarationer"
+
+#: inc/widgets/post-loop.php:378
+msgid "Help"
+msgstr "Hjælp"
+
+#: inc/styles.php:286
+msgid "Vertical space between cells in a collapsed mobile row. Default is %spx."
+msgstr "Lodret afstand mellem cellerne i en sammenklappet mobilenheds række. Standard er %spx."
+
+#: inc/styles.php:283
+msgid "Mobile Cell Margins"
+msgstr "Celle margin - mobilenheder"
+
+#: widgets/widgets.php:163
+msgid "It'll be moved to a separate plugin after Page Builder 2.6 is released. "
+msgstr "Det vil blive flyttet til en separat plugin når Page Builder 2,6 frigives. "
+
+#: widgets/widgets.php:162
+msgid "Ideally you should move to using widgets from the SiteOrigin Widgets Bundle instead. "
+msgstr "Ideelt set bør du i stedet anvende widgets fra SiteOrigin Widgets Bundle. "
+
+#: widgets/widgets.php:161
+msgid "This is a legacy widget. "
+msgstr "Dette er en ældre widget. "
+
+#: inc/styles.php:370
+msgid "Color of links inside this widget."
+msgstr "Farve på link indeni denne widget."
+
+#: inc/styles.php:351
+msgid "Margins around the widget."
+msgstr "Margin rundt om widget."
+
+#: inc/styles.php:348
+msgid "Margin"
+msgstr "Margin"
+
+#: inc/styles.php:330
+msgid "Color of links inside this cell."
+msgstr "Farve på links inde i denne celle."
+
+#: inc/styles.php:327 inc/styles.php:367
+msgid "Links Color"
+msgstr "Linkfarve"
+
+#: inc/styles.php:322
+msgid "Color of text inside this cell."
+msgstr "Farve på tekst inde i denne celle."
+
+#: inc/styles.php:309
+msgid "Use row setting"
+msgstr "Anvend række indstillinger"
+
+#: inc/styles.php:305
+msgid "Vertical Alignment"
+msgstr "Lodret justering"
+
+#: inc/styles.php:302
+msgid "Cell"
+msgstr "Celle"
+
+#: inc/styles.php:278
+msgid "Space below the row on mobile devices. Default is %spx."
+msgstr "Mellemrum under rækken på mobil-enheder. Standard er %spx."
+
+#: inc/styles.php:275
+msgid "Mobile Bottom Margin"
+msgstr "Bund margin på mobil-enheder"
+
+#: inc/styles.php:266 inc/styles.php:313
+msgid "Stretch"
+msgstr "Stræk"
+
+#: inc/styles.php:259
+msgid "Cell Vertical Alignment"
+msgstr "Lodret celle justering"
+
+#: inc/styles.php:252
+msgid "Right on Top"
+msgstr "Øverst til højre"
+
+#: inc/styles.php:251
+msgid "Left on Top"
+msgstr "Øverst til venstre"
+
+#: inc/styles.php:246
+msgid "Collapse Order"
+msgstr "Sammenfoldet rækkefølge"
+
+#: inc/styles.php:240
+msgid "No Collapse"
+msgstr "Ingen sammenfoldning"
+
+#: inc/styles.php:235
+msgid "Collapse Behaviour"
+msgstr "Sammenfoldet handling"
+
+#: inc/styles.php:229
+msgid "Full Width Stretched Padded"
+msgstr "Fuld bredde, udstrakt padding"
+
+#: inc/styles.php:217
+msgid "Amount of space between cells. Default is %spx."
+msgstr "Antallet af mellemrum mellem celler. Standard er %spx."
+
+#: inc/styles.php:209
+msgid "Space below the row. Default is %spx."
+msgstr "Mellemrum under rækken. Standard er %spx."
+
+#: inc/styles.php:167
+msgid "Parallax (Original Size)"
+msgstr "Parallax (Oprindelig størrelse)"
+
+#: inc/styles.php:165
+msgid "Fixed"
+msgstr "Fastgjort"
+
+#: inc/styles.php:164
+msgid "Contain"
+msgstr "Indehold"
+
+#: inc/styles.php:133
+msgid "Padding when on mobile devices."
+msgstr "Padding når mobil-enhed anvendes."
+
+#: inc/styles.php:130
+msgid "Mobile Padding"
+msgstr "Mobil padding"
+
+#: inc/styles.php:93
+msgid "%s Class"
+msgstr "%s Klasse"
+
+#: inc/styles.php:88
+msgid "A custom ID used for this %s."
+msgstr "Et brugertilpasset ID, der anvendes for dette %s."
+
+#: inc/styles.php:85
+msgid "%s ID"
+msgstr "%s ID"
+
+#: inc/widgets/layout.php:84
+msgid "This widget can currently only be used in the WordPress admin interface."
+msgstr "Denne widget kan i øjeblikket kun anvendes i WordPress Admin grænsefladen."
+
+#: inc/widgets/post-loop-helper.php:57
+msgid "Posts query"
+msgstr "Indlæg forespørgelse"
+
+#: inc/widgets/post-loop-helper.php:51
+msgid "More link"
+msgstr "Flere link"
+
+#: inc/admin.php:1511
+msgid "Block Editor"
+msgstr "Blok Editor"
+
+#: inc/admin.php:1509
+msgid "Toggle editor selection menu"
+msgstr "Skift editor-vælger menu"
+
+#: inc/admin.php:1348
+msgid "This post type is set to use the Classic Editor by default for new posts. If you’d like to change this to the block editor, please go to <a href=\"%s\" class=\"components-notice__action is-link\">Page Builder Settings</a> and uncheck <strong>Use Classic Editor for new posts</strong>"
+msgstr "Denne indlægstype er angivet til, at bruge den Klassiske Editor som standard til nye indlæg. Hvis du vil ændre dette til Blok Editoren, skal du gå til <a href=\"%s\" class=\"components-notice__action is-link\">Page Builder Indstillinger</a> og fjerne markeringen <strong>Brug Klassisk Editor til nye indlæg</strong>"
+
+#: inc/admin.php:1324
+msgid "Get premium email support for SiteOrigin Page Builder"
+msgstr "Få premium e-mail support for SiteOrigin Page Builder"
+
+#: inc/admin.php:1320
+msgid "Get the row, cell and widget animations addon"
+msgstr "Få række, celle og widget animation udvidelsen"
+
+#: inc/admin.php:1316
+msgid "Get a lightbox addon for SiteOrigin widgets"
+msgstr "Få en Lightbox udvidelse for SiteOrigin widgets"
+
+#: inc/admin.php:1273
+msgid "%s Widget"
+msgid_plural "%s Widgets"
+msgstr[0] "%s widget"
+msgstr[1] "%s widgets"
+
+#: inc/admin.php:1166
+msgid "Missing widget type."
+msgstr "Manglende widget type."
+
+#: inc/admin.php:1165
+msgid "Please specify the type of widget form to be rendered."
+msgstr "Angiv den type af widget-formular, der skal gengives."
+
+#: inc/admin.php:493
+msgid "Unknown error. Failed to load the form. Please check your internet connection, contact your web site administrator, or try again later."
+msgstr "Ukendt fejl. Formularen kunne ikke indlæses. Kontroller din internet forbindelse, kontakt din websted administrator eller prøv igen senere."
+
+#: inc/admin.php:475
+msgid "Read our %s if you need help."
+msgstr "Læs vores %s hvis du behøver hjælp."
+
+#: inc/admin.php:470
+msgid "Add a {{%= items[0] %}}, {{%= items[1] %}} or {{%= items[2] %}} to get started."
+msgstr "Tilføj en {{%= items[0] %}}, {{%= items[1] %}} eller {{%= items[2] %}} for at komme i gang."
+
+#: inc/admin.php:469
+msgid "Add a {{%= items[0] %}} or {{%= items[1] %}} to get started."
+msgstr "Tilføj en {{%= items[0] %}} eller {{%= items[1] %}} for at komme i gang."
+
+#: inc/admin.php:468
+msgid "Add a {{%= items[0] %}} to get started."
+msgstr "Tilføj en {{%= items[0] %}} for at komme i gang."
+
+#: inc/admin.php:467
+msgid "Hmmm... Adding layout elements is not enabled. Please check if Page Builder has been configured to allow adding elements."
+msgstr "Hmmm... Tilføjelse af layout elementer er ikke aktiveret. Kontroller, om Page Builder er konfigureret til at tillade tilføjelse af elementer."
+
+#: inc/admin.php:463
+msgid "New Row"
+msgstr "Ny række"
+
+#: inc/admin.php:461
+msgid "Untitled"
+msgstr "Unavngiven"
+
+#: inc/admin.php:460
+msgid "Draft"
+msgstr "Kladde"
+
+#: inc/admin.php:458
+msgid "Paste Row"
+msgstr "Indsæt række"
+
+#: inc/admin.php:457
+msgid "Copy Row"
+msgstr "Kopier række"
+
+#: inc/admin.php:453
+msgid "Row Actions"
+msgstr "Række handlinger"
+
+#: inc/admin.php:451
+msgid "Paste Widget Below"
+msgstr "Indsæt widget nedenfor"
+
+#: inc/admin.php:450
+msgid "Copy Widget"
+msgstr "Kopier widget"
+
+#: inc/admin.php:449
+msgid "Delete Widget"
+msgstr "Slet widget"
+
+#: inc/admin.php:448
+msgid "Duplicate Widget"
+msgstr "Dupliker widget"
+
+#: inc/admin.php:447
+msgid "Edit Widget"
+msgstr "Rediger widget"
+
+#: inc/admin.php:446
+msgid "Widget Actions"
+msgstr "Widget handlinger"
+
+#: inc/admin.php:444
+msgid "Paste Widget"
+msgstr "Indsæt widget"
+
+#: inc/admin.php:443
+msgid "Cell Actions"
+msgstr "Celle handlinger"
+
+#: inc/admin.php:432
+msgid "%s is ready to insert."
+msgstr "%s er klar til indsættelse."
+
+#: inc/admin.php:414
+msgid "Row pasted"
+msgstr "Række indsat"
+
+#: inc/styles-admin.php:256
+msgid "External URL"
+msgstr "Ekstern URL"
+
+#: inc/styles-admin.php:199 inc/styles.php:265 inc/styles.php:312
+msgid "Bottom"
+msgstr "Bund"
+
+#: inc/styles-admin.php:191 inc/styles.php:263 inc/styles.php:310
+msgid "Top"
+msgstr "Top"
+
+#: inc/styles-admin.php:92
+msgid "Mobile Layout"
+msgstr "Mobilt Layout"
+
+#: inc/styles-admin.php:51
+msgid "Cell%s Styles"
+msgstr "Celle%s typografier"
+
+#: inc/styles-admin.php:34
+msgid "Missing style form type."
+msgstr "Manglende typografi-formular type."
+
+#: inc/styles-admin.php:33
+msgid "Please specify the type of style form to be rendered."
+msgstr "Angiv den type af typografi-formular, der skal gengives."
+
+#: inc/styles-admin.php:24 inc/admin.php:1159
+msgid "Invalid nonce."
+msgstr "Ugyldigt input."
+
+#: inc/styles-admin.php:23 inc/admin.php:1158
+msgid "The supplied nonce is invalid."
+msgstr "Det angivende input er ugyldigt."
+
+#: inc/admin-layouts.php:387
+msgid "There was a problem fetching the layout. Please try again later."
+msgstr "Der opstod et problem under indlæsningen af layoutet. Prøv igen senere."
+
+#: inc/admin-layouts.php:341
+msgid "Missing layout ID or no such layout exists"
+msgstr "Manglende layout ID eller layout eksisterer ikke"
+
+#: inc/admin-layouts.php:308
+msgid " - Results For:"
+msgstr " -Resultater for:"
+
+#: inc/admin-layouts.php:270
+msgid "Clone %s"
+msgstr "Klon: %s"
+
+#: inc/admin-layouts.php:199
+msgid "Theme Defined Layouts"
+msgstr "Tema definerede layouts"
+
+#: inc/admin-layouts.php:184
+msgid "Invalid request."
+msgstr "Ugyldig forespørgsel."
+
+#: inc/settings.php:476
+msgid "Include styles into your Post Content. This keeps page layouts, even when Page Builder is deactivated."
+msgstr "Inkludere typografi i dine indlæg. Dette bevarer side layoutet selv når Page Builder er deaktiveret."
+
+#: inc/settings.php:475
+msgid "Copy Styles"
+msgstr "Kopier typografi"
+
+#: inc/settings.php:432
+msgid "Allow margin in last row."
+msgstr "Tillad margin i sidste række."
+
+#: inc/settings.php:431
+msgid "Last Row With Margin"
+msgstr "Sidste række med margin"
+
+#: inc/settings.php:419
+msgid "Default margin below rows and widgets."
+msgstr "Standard margin under rækker og widgets."
+
+#: inc/settings.php:418
+msgid "Row/Widget Bottom Margin"
+msgstr "Række/Widget bund margin"
+
+#: inc/settings.php:405
+msgid "Device width, in pixels, to collapse into a tablet view ."
+msgstr "Enhedens bredde i pixels, før det sammenfoldes ved tablet-visning ."
+
+#: inc/settings.php:404
+msgid "Tablet Width"
+msgstr "Tabel bredde"
+
+#: inc/settings.php:398
+msgid "The CSS and HTML uses floats instead of flexbox for compatibility with very old browsers."
+msgstr "CSS og HTML anvendes som flydende i stedet for flexboks for kompatibilitet med ældre browsere."
+
+#: inc/settings.php:397
+msgid "Use Legacy Layout Engine"
+msgstr "Brug ældre layout program"
+
+#: inc/settings.php:395
+msgid "Always"
+msgstr "Altid"
+
+#: inc/settings.php:394
+msgid "Never"
+msgstr "Aldrig"
+
+#: inc/settings.php:393
+msgid "Detect older browsers"
+msgstr "Find ældre browsere"
+
+#: inc/settings.php:387
+msgid "Collapses columns differently on tablet devices."
+msgstr "Sammenfold kolonner forskelligt på tablet-enheder."
+
+#: inc/settings.php:386
+msgid "Use Tablet Layout"
+msgstr "Brug tablet layout"
+
+#: inc/settings.php:366
+msgid "Open a widget form as soon as its added to a page."
+msgstr "Åbn widget-formular, så snart den er tilføjet en side."
+
+#: inc/settings.php:365
+msgid "Instant Open Widgets"
+msgstr "Åbn øjeblikkelig widgets"
+
+#: inc/settings.php:348
+msgid "Add the widget class to Page Builder widgets. Disable this if you're experiencing conflicts."
+msgstr "Tilføj widget klassen til Page Builder widgets. Deaktiver dette, hvis du oplever konflikter."
+
+#: inc/settings.php:347
+msgid "Add Widget Class"
+msgstr "Tilføj widget klasse"
+
+#: inc/settings.php:329
+msgid "Whether to display layout blocks in edit mode or preview mode in the block editor."
+msgstr "Angiver om layout blokke skal vises i redigeringstilstand eller visningstilstand i Blok Editoren."
+
+#: inc/settings.php:327
+msgid "Preview"
+msgstr "Forhåndsvis"
+
+#: inc/settings.php:323
+msgid "Layout Block Default Mode"
+msgstr "Layout blok, standardtilstand"
+
+#: inc/settings.php:316
+msgid "New Classic Editor posts/pages that you create will start with the Page Builder loaded. The %s\"Use Classic Editor for new posts\"%s setting must be enabled."
+msgstr "Nye Klassisk Editor indlæg/sider, som du opretter, vil starte med Page Builder indlæst. Indstillingen %s\"Brug Klassisk Editor til nye indlæg/sider\"%s skal være aktiveret."
+
+#: inc/settings.php:314
+msgid "Default To Page Builder Interface"
+msgstr "Standard til Page Builder grænseflade"
+
+#: inc/settings.php:306
+msgid "Display the %sSiteOrigin Premium%s upgrade teaser in the Page Builder toolbar."
+msgstr "Viser %sSiteOrigin Premium%s opgraderings teaseren i Page Builder værktøjsbaren."
+
+#: inc/settings.php:304
+msgid "Upgrade Teaser"
+msgstr "Opgraderings teaser"
+
+#: inc/settings.php:299
+msgid "Page Builder will create an emulated sidebar, that contains all widgets in the page."
+msgstr "Page Builder vil oprette en emuleret sidebar, der indeholder alle widgets på siden."
+
+#: inc/settings.php:298
+msgid "Sidebars Emulator"
+msgstr "Sidebar emulator"
+
+#: inc/settings.php:287
+msgid "How many pixels of scrolling result in a single pixel of parallax motion. 0 means automatic. Lower values give more noticeable effect."
+msgstr "Hvor mange pixels af rulning, der resulterer i e enkelt pixel af parallax bevægelse. 0 betyder automatisk. Lavere værdier giver bedre mærkbar effekt."
+
+#: inc/settings.php:286
+msgid "Limit Parallax Motion"
+msgstr "Begræns Parallax bevægelse"
+
+#: inc/settings.php:281
+msgid "Display a widget count in the admin lists of posts/pages where you're using Page Builder."
+msgstr "Viser widget antallet i admin oversigten af indlæg/sider når du anvender Page Builder."
+
+#: inc/settings.php:280
+msgid "Display Widget Count"
+msgstr "Viser widgets antal"
+
+#: inc/settings.php:272
+msgid "Display a %sSiteOrigin Page Builder%s post state in the admin lists of posts/pages to indicate Page Builder is active."
+msgstr "Viser et %sSiteOrigin Page Builder%s indlægstilstand i admin oversigten af indlæg/sider det angiver at Page Builder er aktiveret."
+
+#: inc/settings.php:270
+msgid "Display Post State"
+msgstr "Vis indlægstilstand"
+
+#: inc/settings.php:265
+msgid "Display a Live Editor button in the admin bar."
+msgstr "Viser en knap til Live Editor i admin baren."
+
+#: inc/settings.php:264
+msgid "Live Editor Quick Link"
+msgstr "Live Editor Quick Link"
+
+#: inc/settings.php:259
+msgid "New posts of the above Post Types will be created using the Classic Editor."
+msgstr "Nye indlæg af ovennævnte indlægstyper vil blive oprettet ved hjælp af den klassiske editor."
+
+#: inc/settings.php:258
+msgid "Use Classic Editor for New Posts"
+msgstr "Brug klassisk editor til nye indlæg"
+
+#: inc/settings.php:253
+msgid "The post types on which to use Page Builder."
+msgstr "De indlægs typer, du vil bruge Page Builder på."
+
+#: inc/admin-dashboard.php:107
+msgid "Get Premium"
+msgstr "Få Premium"
+
+#. translators: accessibility text
+#: inc/admin-dashboard.php:88
+msgid "(email SiteOrigin support)"
+msgstr "(e-mail SiteOrigin support)"
+
+#: inc/admin-dashboard.php:86
+msgid "Email Support"
+msgstr "E-mail support"
+
+#. translators: accessibility text
+#: inc/admin-dashboard.php:78 inc/admin-dashboard.php:97
+#: inc/admin-dashboard.php:109
+msgid "(opens in a new window)"
+msgstr "(åbner i et nyt vindue)"
+
+#: inc/admin-dashboard.php:76
+msgid "Blog"
+msgstr "Blog"
+
+#: inc/admin-dashboard.php:23
+msgid "SiteOrigin Page Builder News"
+msgstr "SiteOrigin Page Builder nyheder"
+
+#: siteorigin-panels.php:419
+msgctxt "Word count type. Do not translate!"
+msgid "words"
+msgstr "ord"
+
+#: tpl/js-templates.php:613
+msgid "Add SiteOrigin Layout Block"
+msgstr "Tilføj SiteOrigin layout blok"
+
+#: tpl/js-templates.php:564
+msgid "Toggle mobile mode"
+msgstr "Skift mobil visning"
+
+#: tpl/js-templates.php:561
+msgid "Toggle tablet mode"
+msgstr "Skift tablet visning"
+
+#: tpl/js-templates.php:558
+msgid "Toggle desktop mode"
+msgstr "Skift skrivebords visning"
+
+#: tpl/js-templates.php:554 tpl/js-templates.php:555
+msgid "Update"
+msgstr "Opdater"
+
+#: tpl/js-templates.php:553
+msgid "Save Draft"
+msgstr "Gem kladde"
+
+#: tpl/js-templates.php:422
+msgid "Replace current"
+msgstr "Erstat nuværende"
+
+#: tpl/js-templates.php:421
+msgid "Insert before"
+msgstr "Indsæt før"
+
+#: tpl/js-templates.php:420
+msgid "Insert after"
+msgstr "Indsæt efter"
+
+#: tpl/js-templates.php:378
+msgid "Page Builder Layouts"
+msgstr "Page Builder layouts"
+
+#: tpl/js-templates.php:71
+msgid "Pro Tip"
+msgstr "Pro Tip"
+
+#: tpl/js-templates.php:64 inc/admin.php:476
+msgid "documentation"
+msgstr "dokumentation"
+
+#: tpl/js-templates.php:63 inc/admin.php:473
+msgid "Prebuilt Layout"
+msgstr "Prebygget layout"
+
+#: tpl/js-templates.php:62 inc/styles.php:193 inc/admin.php:464
+#: inc/admin.php:472
+msgid "Row"
+msgstr "Række"
+
+#: tpl/js-templates.php:61 inc/styles.php:345 inc/admin.php:471
+msgid "Widget"
+msgstr "Widget"
+
+#: tpl/js-templates.php:60
+msgid "Add a %s, %s or %s to get started. Read our %s if you need help."
+msgstr "Tilføj en %s, %s eller %s for at komme hurtigere i gang. Læs vores %s hvis du har brug for hjælp."
+
+#: tpl/js-templates.php:48
+msgid "Revert to Editor"
+msgstr "Vend tilbage til editoren"
+
+#: tpl/js-templates.php:44 inc/admin.php:165
+msgid "Addons"
+msgstr "Udvidelser"
+
+#: tpl/js-templates.php:42
+msgid "Page Builder Addons"
+msgstr "Page Builder udvidelser"
+
+#: tpl/js-templates.php:29
+msgid "Edit History"
+msgstr "Rediger historik"
+
+#: tpl/js-templates.php:24
+msgid "Layouts"
+msgstr "Layout"
+
+#: settings/tpl/welcome.php:38
+msgid "%s is a single plugin that adds additional settings and functionality to Page Builder, SiteOrigin widgets and SiteOrign themes. SiteOrigin Premium also includes our next level email support service. If you need expert advice and quick replies, consider SiteOrigin Premium."
+msgstr "%s er et enkelt plug in som tilføjer yderligere indstillinger og funktionalitet til Page Builder, SiteOrigin widgets og SiteOrigin temaer. SiteOrigin Premium inkludere også vores næste niveau af e-mail support. Hvis du behøver ekspert råd og hurtig svar, bør du overveje SiteOrigin Premium."
+
+#: settings/tpl/welcome.php:35
+msgid "Get More Features"
+msgstr "Få flere funktioner"
+
+#: settings/tpl/welcome.php:32
+msgid "Row and widget styles give you all the control you need to make your content uniquely your own. Change attributes like paddings, background colours and column spacing. You can also enter custom CSS and CSS classes if you need even finer grained control."
+msgstr "Række og widget typografier giver dig al den kontrol du behøver for, at gøre dit indhold unikt. Ændre egenskaber som marginer, baggrundsfarver og kolonne mellemrum. Du kan også skrive brugertilpasset CSS og CSS klasser hvis du behøver yderligere kontrol."
+
+#: settings/tpl/welcome.php:29
+msgid "Row and Widget Styles"
+msgstr "Række og widgets typografier"
+
+#: settings/tpl/welcome.php:26
+msgid "Worry free editing is having the freedom to experiment without fearing mistakes. The History Browser lets you roll forward and back through your changes. Preview changes, then roll back to that version without skipping a beat. Your personal safety net."
+msgstr "Redigering uden bekymringer med frihed til at eksperimentere uden frygt for fejltagelser. Historik browseren gør det muligt at fortryde en handling. Gennemse ændringer og vend tilbage til før ændringerne. Dit personlige sikkerhedsnet."
+
+#: settings/tpl/welcome.php:23
+msgid "History Browser"
+msgstr "Historik browser"
+
+#: settings/tpl/welcome.php:20
+msgid "The live editor gives you an exact preview of your content, that you can edit in real-time. You can use this to pin-point the sections and widgets you want to edit, then see those edits without leaving the page. Create content in a fraction of the time."
+msgstr "Live Editoren gør det muligt, at se en nøjagtig forhåndsvisning af dit indhold som du redigerer. Du kan anvende dette til at fastgøre de sektioner og widgets du ønsker at redigere samtidig med du ser ændringerne. Opret indhold på et brøkdel af tiden."
+
+#: settings/tpl/welcome.php:17
+msgid "Live Editing"
+msgstr "Live redigering"
+
+#: settings/tpl/welcome.php:14
+msgid "Reorder rows, move widgets, resize columns and build your page, all with your mouse. Page Builder makes it easy to nudge every detail into place, no matter how often you change your mind. We've meticulously crafted each and every interaction to make sure they all feel natural. It's intuitive content editing that doesn't sacrifice on functionality."
+msgstr "Omarranger rækker, flytte widgets, ændre størrelsen på kolonner og opbygge din side, alle med musen. Page Builder gør det nemt at skubbe alle detaljer på plads, uanset hvor ofte du skifter mening. Vi har omhyggeligt udformet hver eneste interaktion for at sikre, at de alle føles naturlige. Det er intuitiv indhold redigering, der ikke spare på funktionalitet."
+
+#: settings/tpl/welcome.php:11
+msgid "Simple Drag and Drop"
+msgstr "Enkelt Træk & Slip"
+
+#: settings/tpl/welcome.php:8
+msgid "Page Builder works with standard WordPress widgets, so you’ll always find the widget you need. We've also created the %s to give you a wide range of additional functionality. All the widgets are built on our powerful framework, giving you advanced forms, unlimited colours and 1500+ icons."
+msgstr "Page Builder fungere med standard WordPress widgets, så du vil altid kunne finde den widget du behøver. Vi har også oprettet %s som giver dig en bred vifte af yderligere funktioner. Alle widgets er bygget på vores kraftfulde framework, hvilket giver dig avancerede formularer, ubegrænsede farver og 1500+ ikoner."
+
+#: settings/tpl/welcome.php:4
+msgid "Page Builder by SiteOrigin makes it easy to create responsive column based content, using the widgets you know and love. Your content will accurately adapt to all mobile devices, ensuring your site is mobile-ready."
+msgstr "Page Builder fra SiteOrigin gør det let, at oprette responsive kolonne baseret indhold ved brug af widgets som du kender og holder af. Dit indhold tilpasser sig automatisk til alle mobile enheder og sikre at dit websted er mobil-venligt."
+
+#: settings/tpl/welcome.php:1
+msgid "Welcome To SiteOrigin Page Builder"
+msgstr "Velkommen til SiteOrigin Page Builder"
+
+#: settings/tpl/settings.php:25
+msgid "Welcome"
+msgstr "Velkommen"
+
+#: compat/layout-block.php:92
+msgid "You need to add a widget, row, or prebuilt layout before you'll see anything here. :)"
+msgstr "Du skal tilføje en widget, række eller prefremstillet layout før du kan se noget her. :)"
+
+#. Author URI of the plugin
+msgid "https://siteorigin.com"
+msgstr "https://siteorigin.com"
+
+#. Author of the plugin
+msgid "SiteOrigin"
+msgstr "SiteOrigin"
+
+#. Description of the plugin
+msgid "A drag and drop, responsive page builder that simplifies building your website."
+msgstr "Et 'Træk og Slip', responsive side design plugin, der forenkler opbygningen af din hjemmeside."
+
+#. Plugin URI of the plugin
+msgid "https://siteorigin.com/page-builder/"
+msgstr "https://siteorigin.com/page-builder/"
+
+#. Plugin Name of the plugin
+msgid "Page Builder by SiteOrigin"
+msgstr "Page Builder af SiteOrigin"
+
+#: widgets/widgets.php:964
+msgid "Auto Play Video"
+msgstr "Afspil video automatisk"
+
+#: widgets/widgets.php:959
+msgid "An image that displays before the video starts playing."
+msgstr "Et billede der vises inden videoen afspilles."
+
+#: widgets/widgets.php:957
+msgid "Poster URL"
+msgstr "Poster URL"
+
+#: widgets/widgets.php:953
+msgid "Video URL"
+msgstr "Video URL"
+
+#: widgets/widgets.php:911
+msgid "A self hosted video player."
+msgstr "Afspil videoer fra egen server."
+
+#: widgets/widgets.php:909
+msgid "Self Hosted Video (PB)"
+msgstr "Video på egen server (PB)"
+
+#: widgets/widgets.php:893
+msgid "Video"
+msgstr "Video"
+
+#: widgets/widgets.php:855
+msgid "Embeds a video."
+msgstr "Indlejrer en video."
+
+#: widgets/widgets.php:853
+msgid "Embedded Video (PB)"
+msgstr "Indlejret Video (PB)"
+
+#: widgets/widgets.php:802
+msgid "Displays a simple image."
+msgstr "Vis et simpelt billede."
+
+#: widgets/widgets.php:800
+msgid "Image (PB)"
+msgstr "Billede (PB)"
+
+#: widgets/widgets.php:782
+msgid "File"
+msgstr "Fil"
+
+#: widgets/widgets.php:781
+msgid "Attachment Page"
+msgstr "Sidevedhæftning"
+
+#: widgets/widgets.php:779
+msgid "Link To"
+msgstr "Link til"
+
+#: widgets/widgets.php:774
+msgid "Columns"
+msgstr "Kolonner"
+
+#: widgets/widgets.php:769
+msgid "Gallery Type"
+msgstr "Galleriets type"
+
+#: widgets/widgets.php:761
+msgid "Full"
+msgstr "Fuld"
+
+#: widgets/widgets.php:760
+msgid "Thumbnail"
+msgstr "Thumbnail"
+
+#: widgets/widgets.php:759
+msgid "Medium"
+msgstr "Medium"
+
+#: widgets/widgets.php:758
+msgid "Large"
+msgstr "Stor"
+
+#: widgets/widgets.php:755
+msgid "Image Size"
+msgstr "Billede størrelse"
+
+#: widgets/widgets.php:751
+msgid "Comma separated attachment IDs. Defaults to all current page's attachments."
+msgstr "Komma separeret vedhæftnings ID. Alle nuværende siders vedhæftninger indstilles."
+
+#: widgets/widgets.php:747
+msgid "edit gallery"
+msgstr "rediger galleri"
+
+#: widgets/widgets.php:746
+msgid "Gallery Images"
+msgstr "Galleri billeder"
+
+#: widgets/widgets.php:707
+msgid "Displays a gallery."
+msgstr "Vises som et galleri."
+
+#: widgets/widgets.php:705
+msgid "Gallery (PB)"
+msgstr "Galleri (PB)"
+
+#: widgets/widgets.php:644
+msgid "Additional Arguments"
+msgstr "Yderligere argumenter"
+
+#: widgets/widgets.php:244
+msgid "%s Style"
+msgstr "%s stil"
+
+#: widgets/widgets.php:220
+msgid "Style"
+msgstr "Stil"
+
+#: widgets/widgets/testimonial/testimonial.php:32
+msgid "URL"
+msgstr "URL"
+
+#: widgets/widgets/testimonial/testimonial.php:23
+msgid "Image"
+msgstr "Billede"
+
+#: widgets/widgets/testimonial/testimonial.php:19
+msgid "Location"
+msgstr "Beliggenhed"
+
+#: widgets/widgets/testimonial/testimonial.php:8
+msgid "Displays a bullet list of points"
+msgstr "Viser en punktopstillet liste som punkter"
+
+#: widgets/widgets/testimonial/testimonial.php:6
+msgid "Testimonial (PB)"
+msgstr "Vidnesbyrd (PB)"
+
+#: widgets/widgets/price-box/price-box.php:50
+msgid "Feature List"
+msgstr "Egenskaber liste"
+
+#: widgets/widgets/price-box/price-box.php:31
+msgid "Features Text"
+msgstr "Egenskaber tekst"
+
+#: widgets/widgets/price-box/price-box.php:27
+msgid "Information Text"
+msgstr "Information tekst"
+
+#: widgets/widgets/price-box/price-box.php:23
+msgid "Per"
+msgstr "Per"
+
+#: widgets/widgets/price-box/price-box.php:19
+msgid "Price"
+msgstr "Pris"
+
+#: widgets/widgets/price-box/price-box.php:6
+msgid "Price Box (PB)"
+msgstr "Pris tabel (PB)"
+
+#: widgets/widgets/list/list.php:20 widgets/widgets/price-box/price-box.php:32
+msgid "Start each new point with an asterisk (*)"
+msgstr "Begynd hvert nyt punkt med en asterisk (*)"
+
+#: widgets/widgets/list/list.php:8 widgets/widgets/price-box/price-box.php:8
+msgid "Displays a bullet list of elements"
+msgstr "Viser en liste opsat i punkter"
+
+#: widgets/widgets/list/list.php:6
+msgid "List (PB)"
+msgstr "Vis (PB)"
+
+#: widgets/widgets/price-box/price-box.php:49
+#: widgets/widgets/call-to-action/call-to-action.php:37
+msgid "Button"
+msgstr "Knap"
+
+#: widgets/widgets/price-box/price-box.php:40
+#: widgets/widgets/call-to-action/call-to-action.php:27
+msgid "Button URL"
+msgstr "Knap URL"
+
+#: widgets/widgets/price-box/price-box.php:36
+#: widgets/widgets/call-to-action/call-to-action.php:23
+msgid "Button Text"
+msgstr "Knap tekst"
+
+#: widgets/widgets/call-to-action/call-to-action.php:19
+msgid "Sub Title"
+msgstr "Undertitel"
+
+#: widgets/widgets/call-to-action/call-to-action.php:8
+msgid "A Call to Action block"
+msgstr "En kald til en handling blok"
+
+#: widgets/widgets/call-to-action/call-to-action.php:6
+msgid "Call To Action (PB)"
+msgstr "Kald til en handling (PB)"
+
+#: widgets/widgets/button/button.php:32
+msgid "Justify"
+msgstr "Juster"
+
+#: widgets/widgets/button/button.php:31 inc/styles.php:264 inc/styles.php:311
+msgid "Center"
+msgstr "Center"
+
+#: widgets/widgets/button/button.php:30 inc/styles-admin.php:195
+msgid "Right"
+msgstr "Højre"
+
+#: widgets/widgets/button/button.php:29 inc/styles-admin.php:203
+msgid "Left"
+msgstr "Venstre"
+
+#: widgets/widgets/button/button.php:27
+msgid "Button Alignment"
+msgstr "Juster knappen"
+
+#: widgets/widgets/price-box/price-box.php:44
+#: widgets/widgets/call-to-action/call-to-action.php:31
+#: widgets/widgets/button/button.php:23
+#: widgets/widgets/testimonial/testimonial.php:36
+msgid "Open In New Window"
+msgstr "Åben i et nyt vindue"
+
+#: widgets/widgets.php:839 widgets/widgets/button/button.php:19
+msgid "Destination URL"
+msgstr "Destinations URL"
+
+#: widgets/widgets/list/list.php:19 widgets/widgets/button/button.php:15
+#: widgets/widgets/testimonial/testimonial.php:27
+msgid "Text"
+msgstr "Tekst"
+
+#: widgets/widgets/button/button.php:6
+msgid "Button (PB)"
+msgstr "Knap (PB)"
+
+#: widgets/widgets/animated-image/animated-image.php:25
+msgid "Slide Right"
+msgstr "Glid til højre"
+
+#: widgets/widgets/animated-image/animated-image.php:24
+msgid "Slide Left"
+msgstr "Glid til venstre"
+
+#: widgets/widgets/animated-image/animated-image.php:23
+msgid "Slide Down"
+msgstr "Glid ned"
+
+#: widgets/widgets/animated-image/animated-image.php:22
+msgid "Slide Up"
+msgstr "Glid op"
+
+#: widgets/widgets/animated-image/animated-image.php:21
+msgid "Fade In"
+msgstr "Fade ind"
+
+#: widgets/widgets/animated-image/animated-image.php:19
+msgid "Animation"
+msgstr "Animation"
+
+#: widgets/widgets.php:835 widgets/widgets/animated-image/animated-image.php:15
+msgid "Image URL"
+msgstr "Billede URL"
+
+#: widgets/widgets/animated-image/animated-image.php:8
+msgid "An image that animates in when it enters the screen."
+msgstr "Et billede der er animeret når det vises på skærmen."
+
+#: widgets/widgets/animated-image/animated-image.php:6
+msgid "Animated Image (PB)"
+msgstr "Animeret billede (PB)"
+
+#: widgets/widgets.php:648 inc/widgets/post-loop.php:372
+msgid "Additional query arguments. See 1{query_posts}."
+msgstr "Yderligere forespørgsel argumenter. Se 1 {query_posts}."
+
+#: inc/widgets/post-loop.php:365
+msgid "Additional "
+msgstr "Ekstra "
+
+#: widgets/widgets.php:638 inc/widgets/post-loop.php:360
+msgid "Only Sticky"
+msgstr "Kun den låste artikel"
+
+#: widgets/widgets.php:637 inc/widgets/post-loop.php:359
+msgid "Exclude Sticky"
+msgstr "Ekskluder den låste artikel"
+
+#: widgets/widgets.php:636 inc/widgets/post-loop.php:358
+msgid "Ignore Sticky"
+msgstr "Ignorer den låste artikel"
+
+#: widgets/widgets.php:635 widgets/widgets.php:757 inc/styles.php:250
+#: inc/widgets/post-loop.php:357
+msgid "Default"
+msgstr "Standard"
+
+#: widgets/widgets.php:633 inc/widgets/post-loop.php:355
+msgid "Sticky Posts"
+msgstr "Låst artikel"
+
+#: widgets/widgets.php:626 inc/widgets/post-loop.php:350
+msgid "Ascending"
+msgstr "Stigende"
+
+#: widgets/widgets.php:627 inc/widgets/post-loop.php:349
+msgid "Descending"
+msgstr "Faldende"
+
+#: widgets/widgets.php:624 inc/widgets/post-loop.php:347
+msgid "Order"
+msgstr "Sorter"
+
+#: inc/widgets/post-loop.php:342
+msgid "Post In Order"
+msgstr "Artikler sorteret"
+
+#: widgets/widgets.php:618 inc/widgets/post-loop.php:341
+msgid "Menu Order"
+msgstr "Menu rækkefølge"
+
+#: widgets/widgets.php:617 inc/widgets/post-loop.php:340
+msgid "Comment Count"
+msgstr "Antallet af kommentarer"
+
+#: widgets/widgets.php:616 inc/widgets/post-loop.php:339
+msgid "Random"
+msgstr "Tilfældig"
+
+#: widgets/widgets.php:615 inc/widgets/post-loop.php:338
+msgid "Parent"
+msgstr "Forældre"
+
+#: widgets/widgets.php:614 inc/widgets/post-loop.php:337
+msgid "Modified"
+msgstr "Ændret"
+
+#: widgets/widgets.php:613 inc/widgets/post-loop.php:336
+msgid "Date"
+msgstr "Dato"
+
+#: widgets/widgets.php:611 widgets/widgets.php:612
+#: widgets/widgets/testimonial/testimonial.php:15 inc/widgets/post-loop.php:334
+#: inc/widgets/post-loop.php:335
+msgid "Name"
+msgstr "Navn"
+
+#: widgets/widgets.php:610 inc/widgets/post-loop.php:333
+msgid "Author"
+msgstr "Forfatter"
+
+#: widgets/widgets.php:609 inc/widgets/post-loop.php:332
+msgid "Post ID"
+msgstr "Artikel ID"
+
+#: widgets/widgets.php:606 inc/widgets/post-loop.php:329
+msgid "Order By"
+msgstr "Sorter efter"
+
+#: widgets/widgets.php:601 inc/widgets/post-loop.php:324
+msgid "Posts Per Page"
+msgstr "Antallet af artikler per side"
+
+#: widgets/widgets.php:594 inc/widgets/post-loop.php:315
+msgid "Post Type"
+msgstr "Indholdstype"
+
+#: inc/widgets/post-loop-helper.php:52 inc/widgets/post-loop.php:300
+msgid "If the template supports it, cut posts and display the more link."
+msgstr "Hvis skabelonen tillader det, så afkort indholdet og vis et læs mere link."
+
+#: inc/widgets/post-loop.php:298
+msgid "More Link"
+msgstr "Flere link"
+
+#: inc/widgets/post-loop-helper.php:45 inc/widgets/post-loop.php:282
+msgid "Template"
+msgstr "Skabelon"
+
+#: inc/widgets/post-loop.php:248
+msgid "Your theme doesn't have any post loops."
+msgstr "Dit tema har ingen indholdsløkker."
+
+#: inc/widgets/post-loop-helper.php:33 inc/widgets/post-loop.php:26
+msgid "Displays a post loop."
+msgstr "Vis en indholdsløkke."
+
+#: inc/widgets/post-loop-helper.php:31 inc/widgets/post-loop.php:24
+msgid "Post Loop"
+msgstr "Indholdsløkke"
+
+#: inc/widgets/post-content.php:67
+msgid "Display Content"
+msgstr "Vis indhold"
+
+#: inc/widgets/post-content.php:62
+msgid "Featured Image"
+msgstr "Fremhævet billede"
+
+#: widgets/widgets/list/list.php:15 widgets/widgets/price-box/price-box.php:15
+#: widgets/widgets/call-to-action/call-to-action.php:15
+#: inc/widgets/post-loop-helper.php:41 inc/widgets/post-content.php:61
+#: inc/widgets/post-loop.php:278
+msgid "Title"
+msgstr "Titel"
+
+#: widgets/widgets.php:608 widgets/widgets.php:783
+#: inc/widgets/post-content.php:60 inc/widgets/post-loop.php:331
+msgid "None"
+msgstr "Ingen"
+
+#: inc/widgets/post-content.php:14
+msgid "Displays content from the current post."
+msgstr "Viser indhold fra det aktuelle indlæg."
+
+#: inc/widgets/post-content.php:12
+msgid "Post Content"
+msgstr "Indlæggets indhold"
+
+#: inc/widgets/layout.php:114
+msgid "Open Builder"
+msgstr "Open Builder"
+
+#: inc/widgets/layout.php:15
+msgid "A complete SiteOrigin Page Builder layout as a widget."
+msgstr "Et komplet SiteOrigin Page Builder layout som en widget."
+
+#: inc/widgets/layout.php:13
+msgid "Layout Builder"
+msgstr "Layout Builder"
+
+#: tpl/js-templates.php:603
+msgid "No Results"
+msgstr "Intet resultat"
+
+#: tpl/js-templates.php:530
+msgid "Restore Version"
+msgstr "Gendan version"
+
+#: tpl/js-templates.php:515
+msgid "Page Builder Change History"
+msgstr "Page Builder historik"
+
+#: tpl/js-templates.php:504
+msgid "Download Layout"
+msgstr "Download layout"
+
+#: tpl/js-templates.php:490
+msgid "Select Import File"
+msgstr "Vælg import fil"
+
+#: tpl/js-templates.php:487
+msgid "Or"
+msgstr "Eller"
+
+#: tpl/js-templates.php:486
+msgid "Drop import file here"
+msgstr "Slip import filen her"
+
+#: tpl/js-templates.php:476
+msgid "Next"
+msgstr "Næste"
+
+#: tpl/js-templates.php:475
+msgid "Previous"
+msgstr "Forrige"
+
+#: tpl/js-templates.php:447
+msgid "Your search didn't return any results"
+msgstr "Din søgning gav intet resultat"
+
+#: tpl/js-templates.php:434
+msgid "Enable"
+msgstr "Aktiver"
+
+#: tpl/js-templates.php:433
+msgid "Do you want to browse the Prebuilt Layouts directory?"
+msgstr "Vil du gennemse mappen med prebygget layouts?"
+
+#: tpl/js-templates.php:404
+msgid "Clone: %s"
+msgstr "Klon: %s"
+
+#: tpl/js-templates.php:397
+msgid "Import/Export"
+msgstr "Import/Eksport"
+
+#: inc/admin-layouts.php:40 inc/admin-layouts.php:220
+msgid "Layouts Directory"
+msgstr "Layout mappe"
+
+#: tpl/js-templates.php:382
+msgid "Search"
+msgstr "Søg"
+
+#: tpl/js-templates.php:22 tpl/js-templates.php:387
+msgid "Prebuilt Layouts"
+msgstr "Layout skabeloner"
+
+#: tpl/js-templates.php:358 tpl/js-templates.php:416
+msgid "Insert"
+msgstr "Indsæt"
+
+#: tpl/js-templates.php:339
+msgid "Set"
+msgstr "Indstil"
+
+#: tpl/js-templates.php:333
+msgid "1{Set row layout}: %1$s columns with a ratio of %2$s going from %3$s"
+msgstr "1{Set row layout}: %1$s kolonner med et forhold på %2$s startende fra %3$s"
+
+#: tpl/js-templates.php:322
+msgid "Right to Left"
+msgstr "Fra højre til venstre"
+
+#: tpl/js-templates.php:321
+msgid "Left to Right"
+msgstr "Fra venstre til højre"
+
+#: tpl/js-templates.php:236 tpl/js-templates.php:556
+msgid "Close"
+msgstr "Luk"
+
+#: tpl/js-templates.php:220
+msgid "Add New Widget %s"
+msgstr "Tilføj ny Widget %s"
+
+#: tpl/js-templates.php:206 tpl/js-templates.php:271 tpl/js-templates.php:360
+msgid "Done"
+msgstr "Udført"
+
+#: tpl/js-templates.php:143 tpl/js-templates.php:267 tpl/js-templates.php:352
+msgid "Delete"
+msgstr "Slet"
+
+#: tpl/js-templates.php:142 tpl/js-templates.php:268 tpl/js-templates.php:353
+msgid "Duplicate"
+msgstr "Kopier"
+
+#: tpl/js-templates.php:141 inc/settings.php:326
+msgid "Edit"
+msgstr "Rediger"
+
+#: tpl/js-templates.php:97 inc/admin.php:456
+msgid "Delete Row"
+msgstr "Slet række"
+
+#: tpl/js-templates.php:96 inc/admin.php:455
+msgid "Duplicate Row"
+msgstr "Kopier række"
+
+#: tpl/js-templates.php:95 inc/admin.php:454
+msgid "Edit Row"
+msgstr "Rediger række"
+
+#: tpl/js-templates.php:34 tpl/js-templates.php:36 siteorigin-panels.php:521
+msgid "Live Editor"
+msgstr "Live redigering"
+
+#: tpl/js-templates.php:31
+msgid "History"
+msgstr "Historie"
+
+#: tpl/js-templates.php:12 tpl/js-templates.php:14
+msgid "Add Widget"
+msgstr "Tilføj Widget"
+
+#: tpl/help.php:18
+msgid "Read the 1{full documentation} on SiteOrigin. Ask a question on our 2{support forum} if you need help and sign up to 3{our newsletter} to stay up to date with future developments."
+msgstr "Læs den 1{full documentation} ved SiteOrigin. Stil et spørgsmål i vores 2{support forum} hvis du har brug for hjælp, og tilmeld dig 3{our newsletter} for at blive opdateret om fremtidig udvikling."
+
+#: tpl/help.php:3
+msgid "The page layouts are responsive and fully customizable."
+msgstr "Denne sides layout er responsiv og kan tilpasses som du ønsker det."
+
+#: tpl/help.php:2
+msgid "You can use SiteOrigin Page Builder to create home and sub pages, filled your own widgets."
+msgstr "Du kan bruge SiteOrigin Page Builder til at skabe sider og undersider som er fyldt med dine egne widgets."
+
+#: tpl/admin-home-page.php:64
+msgid "This interface requires Javascript"
+msgstr "Denne grænseflade kræver Javascript"
+
+#: tpl/admin-home-page.php:60
+msgid "Save Home Page"
+msgstr "Gem forside"
+
+#: tpl/admin-home-page.php:41
+msgid "Home page updated. 1{View page}."
+msgstr "Forsiden er opdateret. 1 {Vis side}."
+
+#: tpl/admin-home-page.php:25
+msgid "Custom Home Page"
+msgstr "Unik forside"
+
+#: tpl/admin-home-page.php:21
+msgid "Off"
+msgstr "Slukket"
+
+#: tpl/admin-home-page.php:21
+msgid "On"
+msgstr "Tændt"
+
+#: inc/admin-dashboard.php:95 inc/admin.php:162
+msgid "Support Forum"
+msgstr "Support Forum"
+
+#: inc/admin.php:980
+msgid "The widget 1{%1$s} is not available. Please try locate and install the missing plugin. Post on the 2{support forums} if you need help."
+msgstr "Widget 1{%1$s} er ikke tilgængelig. Vær venlig at installerer manuelt. Skriv eventuelt på 2{support forums} hvis du behøver hjælp."
+
+#: inc/admin.php:964
+msgid "Save and reload this page to start using the widget after you've installed it."
+msgstr "Gem og genindlæs denne side, for at begynde at bruge denne widget efter du har indstalleret den."
+
+#: inc/admin.php:958
+msgid "You need to install 1{%1$s} to use the widget 2{%2$s}."
+msgstr "Du skal installere 1{%1$s} for at kunne bruge widget 2{%2$s}."
+
+#: siteorigin-panels.php:501
+msgid "Edit Home Page"
+msgstr "Rediger forside"
+
+#: siteorigin-panels.php:353
+msgid "Read More"
+msgstr "Læs mere"
+
+#: inc/admin.php:778
+msgid "Untitled Widget"
+msgstr "Unavngiven Widget"
+
+#: inc/admin.php:486
+msgid "Error uploading or importing file."
+msgstr "Der opstod en fejl efter upload eller import."
+
+#: inc/admin.php:485
+msgid "Page Builder layouts"
+msgstr "Page Builder layouts"
+
+#: inc/admin.php:441
+msgid "Column"
+msgstr "Kolonne"
+
+#: tpl/js-templates.php:17 tpl/js-templates.php:19 inc/admin.php:440
+msgid "Add Row"
+msgstr "Tilføj en række"
+
+#: tpl/js-templates.php:224 inc/admin.php:438
+msgid "Search Widgets"
+msgstr "Søg Widgets"
+
+#: inc/admin.php:437
+msgid "Add Widget to Cell"
+msgstr "Tilføj Widget til celle"
+
+#: inc/admin.php:436
+msgid "Add Widget Below"
+msgstr "Tilføj Widget nedenunder"
+
+#: tpl/js-templates.php:97 tpl/js-templates.php:422 inc/admin.php:430
+msgid "Are you sure?"
+msgstr "Er du sikker?"
+
+#: inc/admin.php:428
+msgid "Layout Builder Widget"
+msgstr "Layout Builder Widget"
+
+#: inc/admin.php:426
+msgid "Would you like to clear your Page Builder content and revert to using the standard visual editor?"
+msgstr "Vil du slette Page Builder indholdet og gå tilbage til standard editor?"
+
+#: inc/admin.php:425
+msgid "Would you like to copy this editor's existing content to Page Builder?"
+msgstr "Vil du kopiere det eksisterende indhold til Page Builder?"
+
+#: inc/admin.php:424
+msgid "Loading prebuilt layout"
+msgstr "Indlæs eksisterende layout"
+
+#: inc/admin.php:420
+msgid "Prebuilt layout loaded"
+msgstr "Eksisterende layout er indlæst"
+
+#: inc/admin.php:417
+msgid "Cell resized"
+msgstr "Cellen er ændret i størrelse"
+
+#: inc/admin.php:412
+msgid "Row duplicated"
+msgstr "Rækken er kopieret"
+
+#: inc/admin.php:410
+msgid "Row moved"
+msgstr "Rækken er flyttet"
+
+#: inc/admin.php:408
+msgid "Row edited"
+msgstr "Rækken er redigeret"
+
+#: inc/admin.php:406
+msgid "Row added"
+msgstr "Rækken er tilføjet"
+
+#: inc/admin.php:404
+msgid "Row deleted"
+msgstr "Rækken er slettet"
+
+#: inc/admin.php:400
+msgid "Widget moved"
+msgstr "Widget er flyttet"
+
+#: inc/admin.php:398
+msgid "Widget duplicated"
+msgstr "Widget er kopieret"
+
+#: inc/admin.php:396
+msgid "Widget edited"
+msgstr "Widget er redigeret"
+
+#: inc/admin.php:394
+msgid "Widget added"
+msgstr "Widget er tilføjet"
+
+#: inc/admin.php:392
+msgid "Widget deleted"
+msgstr "Widget er slettet"
+
+#: inc/admin.php:388
+msgid "Converted to editor"
+msgstr "Konverteret til editor"
+
+#: inc/admin.php:387
+msgid "Version restored"
+msgstr "Version er gendannet"
+
+#: inc/admin.php:386
+msgid "Original"
+msgstr "Original"
+
+#: inc/admin.php:385
+msgid "Current"
+msgstr "Nuværende"
+
+#: inc/admin.php:381
+msgid "Now"
+msgstr "Nu"
+
+#: inc/admin.php:380
+msgid "%s before"
+msgstr "%s før"
+
+#: inc/admin.php:377
+msgid "%d hour"
+msgstr "%d time"
+
+#: inc/admin.php:375
+msgid "%d minute"
+msgstr "%d minut"
+
+#: inc/admin.php:373
+msgid "%d second"
+msgstr "%d sekund"
+
+#: inc/admin.php:370
+msgid "%d hours"
+msgstr "%d timer"
+
+#: inc/admin.php:368
+msgid "%d minutes"
+msgstr "%d minutter"
+
+#: inc/admin.php:366
+msgid "%d seconds"
+msgstr "%d sekunder"
+
+#: inc/admin.php:362
+msgid "Page Builder doesn't know about this widget."
+msgstr "Page Builder kender ikke til denne widget."
+
+#: inc/admin.php:361
+msgid "Missing Widget"
+msgstr "Manglende widget"
+
+#: inc/admin.php:334
+msgid "All Widgets"
+msgstr "Alle widgets"
+
+#: inc/home.php:26 inc/admin.php:677
+msgid "Home Page"
+msgstr "Forside"
+
+#: inc/home.php:25
+msgid "Custom Home Page Builder"
+msgstr "Byg en unik forside"
+
+#: settings/tpl/settings.php:84
+msgid "Save Settings"
+msgstr "Gem indstillinger"
+
+#: settings/tpl/settings.php:30
+msgid "Settings Saved"
+msgstr "Indstillingerne er gemt"
+
+#: settings/tpl/settings.php:12
+msgid "Search Settings"
+msgstr "Søg i indstillinger"
+
+#: settings/tpl/help.php:6
+msgid "Please read the 1{settings guide} of the Page Builder documentation for help."
+msgstr "Læs venligst 1{guiden for indstillinger} i Page Builder dokumentationen for at få hjælp."
+
+#: inc/settings.php:470
+msgid "Copy content from Page Builder to post content."
+msgstr "Kopier indhold fra Page Builder til indlægget."
+
+#: inc/settings.php:469
+msgid "Copy Content"
+msgstr "Kopier indhold"
+
+#: inc/settings.php:463
+msgid "Content"
+msgstr "Indhold"
+
+#: inc/settings.php:446
+msgid "The container used for the full width layout."
+msgstr "Indholdsblokken som bruges i layouts med fuld bredde."
+
+#: inc/settings.php:445
+msgid "Full Width Container"
+msgstr "Indholdsblok i fuld bredde"
+
+#: inc/settings.php:439
+msgid "Default spacing between columns in each row."
+msgstr "Standard afstand mellem kolonner i hver række."
+
+#: inc/settings.php:438
+msgid "Row Gutter"
+msgstr "Række gitter bredde"
+
+#: inc/settings.php:412
+msgid "Device width, in pixels, to collapse into a mobile view ."
+msgstr "Visnings bredde, i pixel, når der sammenfoldes på mobil enhed."
+
+#: inc/settings.php:411
+msgid "Mobile Width"
+msgstr "Bredde mobil enhed"
+
+#: inc/settings.php:381
+msgid "Collapse widgets, rows and columns on mobile devices."
+msgstr "Sammenfold widgets, rækker og kolonner på mobile enheder."
+
+#: inc/settings.php:380
+msgid "Responsive Layout"
+msgstr "Responsive layout"
+
+#: inc/settings.php:360
+msgid "Display recommend widgets in Page Builder add widget dialog."
+msgstr "Vis anbefalede widgets i Page Builder tilføj widget dialogen."
+
+#: inc/settings.php:354
+msgid "Load legacy widgets from Page Builder 1."
+msgstr "Indlæs originale widgets fra Page Builder version 1."
+
+#: inc/settings.php:353
+msgid "Legacy Bundled Widgets"
+msgstr "Originale inkluderede widgets"
+
+#: inc/settings.php:342
+msgid "The HTML used for widget titles. {{title}} is replaced with the widget title."
+msgstr "HTML som bliver brugt i widgets titler.  {{title}} bliver erstattet med widget titlen."
+
+#: inc/settings.php:341
+msgid "Widget Title HTML"
+msgstr "Widget titel HTML"
+
+#: inc/settings.php:335
+msgid "Widgets"
+msgstr "Widgets"
+
+#: inc/settings.php:251
+msgid "Post Types"
+msgstr "Indholdstyper"
+
+#: inc/settings.php:245
+msgid "General"
+msgstr "Generelt"
+
+#: inc/settings.php:229
+msgid "Page Builder Settings"
+msgstr "Page Builder indstillinger"
+
+#: tpl/js-templates.php:197 inc/settings.php:202 inc/admin.php:179
+#: inc/admin.php:594 inc/admin.php:1255 inc/admin.php:1260
+msgid "Page Builder"
+msgstr "Page Builder"
+
+#: settings/tpl/settings.php:9 inc/settings.php:202 inc/admin.php:1510
+#: inc/admin.php:1557
+msgid "SiteOrigin Page Builder"
+msgstr "SiteOrigin Page Builder"
+
+#: inc/settings.php:359 inc/admin-widget-dialog.php:185
+msgid "Recommended Widgets"
+msgstr "Anbefalede Widgets"
+
+#: inc/admin-widget-dialog.php:177
+msgid "BBPress"
+msgstr "BBPress"
+
+#: inc/admin-widget-dialog.php:166
+msgid "Jetpack"
+msgstr "Jetpack"
+
+#: inc/admin-widget-dialog.php:155
+msgid "WooCommerce"
+msgstr "WooCommerce"
+
+#: inc/admin-widget-dialog.php:145
+msgid "WordPress Widgets"
+msgstr "Wordpress Widgets"
+
+#: inc/admin-widget-dialog.php:137
+msgid "You can enable the legacy (PB) widgets in the 1{Page Builder settings}."
+msgstr "Du kan aktivere de originale (PB) widgets i 1{Page Builder Indstillinger}"
+
+#: inc/admin-widget-dialog.php:129
+msgid "Page Builder Widgets"
+msgstr "Page Builder Widgets"
+
+#: inc/admin-widget-dialog.php:121
+msgid "Install the 1{Widgets Bundle} to get extra widgets."
+msgstr "Installer 1{widgets pakken} for at få flere widgets."
+
+#: inc/admin-widget-dialog.php:114
+msgid "Enable more widgets in the 1{Widgets Bundle settings}."
+msgstr "Aktiver flere widgets i 1{Widgets Pakkens indstillinger}."
+
+#: widgets/widgets.php:164 inc/admin-widget-dialog.php:99
+msgid "Widgets Bundle"
+msgstr "Widgets pakke"
+
+#: inc/data/widgets-bundle.php:68
+msgid "Display your posts as a carousel."
+msgstr "Vis dine indlæg som en karusel."
+
+#: inc/data/widgets-bundle.php:67
+msgid "SiteOrigin Post Carousel"
+msgstr "SiteOrigin indlægskarusel"
+
+#: inc/data/widgets-bundle.php:56
+msgid "Display site features as a collection of icons."
+msgstr "Vis sidens muligheder som en samling af ikoner."
+
+#: inc/data/widgets-bundle.php:55
+msgid "SiteOrigin Features"
+msgstr "SiteOrigin muligheder"
+
+#: inc/data/widgets-bundle.php:44
+msgid "A basic slider widget."
+msgstr "En basis widget med lysbilleder."
+
+#: inc/data/widgets-bundle.php:43
+msgid "SiteOrigin Slider"
+msgstr "SiteOrigin Lysbilleder"
+
+#: inc/data/widgets-bundle.php:32
+msgid "Choose images from your media library."
+msgstr "Vælg et billede fra billedbiblioteket."
+
+#: inc/data/widgets-bundle.php:31
+msgid "SiteOrigin Image"
+msgstr "SiteOrigin billede"
+
+#: widgets/widgets/button/button.php:8 inc/data/widgets-bundle.php:20
+msgid "A simple button"
+msgstr "En simpel knap"
+
+#: inc/data/widgets-bundle.php:19
+msgid "SiteOrigin Button"
+msgstr "SiteOrigin knap"
+
+#: inc/data/widgets-bundle.php:11 inc/data/widgets-bundle.php:23
+#: inc/data/widgets-bundle.php:35 inc/data/widgets-bundle.php:47
+#: inc/data/widgets-bundle.php:59 inc/data/widgets-bundle.php:71
+#: inc/admin-widget-dialog.php:120
+msgid "SiteOrigin Widgets Bundle"
+msgstr "SiteOrigin Widgets Pakke"
+
+#: inc/data/widgets-bundle.php:8
+msgid "A rich text editor"
+msgstr "Visuel editor"
+
+#: inc/data/widgets-bundle.php:7
+msgid "SiteOrigin Editor"
+msgstr "SiteOrigin Editor"
+
+#: inc/styles-admin.php:273 inc/settings.php:529
+msgid "Enabled"
+msgstr "Aktiver"
+
+#: inc/styles-admin.php:253
+msgid "Remove"
+msgstr "Fjern"
+
+#: inc/styles-admin.php:248
+msgid "Select Image"
+msgstr "Vælg et billede"
+
+#: inc/styles-admin.php:106
+msgid "Theme"
+msgstr "Tema"
+
+#: inc/styles-admin.php:96
+msgid "Design"
+msgstr "Design"
+
+#: inc/styles-admin.php:88 inc/settings.php:372
+msgid "Layout"
+msgstr "Layout"
+
+#: inc/styles-admin.php:84
+msgid "Attributes"
+msgstr "Attributter"
+
+#: inc/styles-admin.php:55
+msgid "Widget Styles"
+msgstr "Widget stile"
+
+#: inc/styles-admin.php:46
+msgid "Row Styles"
+msgstr "Række stile"
+
+#: inc/revisions.php:83
+msgid "Page Builder Content"
+msgstr "Page Builder Indhold"
+
+#: inc/admin-widgets-bundle.php:77
+msgid "Installing %s"
+msgstr "Installerer %s"
+
+#: inc/admin-widgets-bundle.php:19 inc/admin-widgets-bundle.php:20
+msgid "Install Page Builder Plugin"
+msgstr "Installer Page Builder Plugin"
+
+#: inc/styles.php:362
+msgid "Color of text inside this widget."
+msgstr "Tekstfarve i denne widget."
+
+#: inc/styles.php:319 inc/styles.php:359
+msgid "Font Color"
+msgstr "Skrifttype farve"
+
+#: inc/styles.php:177
+msgid "Border color of the %s."
+msgstr "Rammefarven på %s."
+
+#: inc/styles.php:174
+msgid "Border Color"
+msgstr "Ramme farve"
+
+#: inc/styles.php:169
+msgid "How the background image is displayed."
+msgstr "Sådan vises baggrundsbilledet."
+
+#: inc/styles.php:166
+msgid "Parallax"
+msgstr "Parallax"
+
+#: inc/styles.php:163
+msgid "Centered, with original size"
+msgstr "Midterstillet med original størrelse"
+
+#: inc/styles.php:162
+msgid "Cover"
+msgstr "Dæk"
+
+#: inc/styles.php:161
+msgid "Tiled Image"
+msgstr "Billeder flisebelagt"
+
+#: inc/styles.php:157
+msgid "Background Image Display"
+msgstr "Vis baggrundsbillede"
+
+#: inc/styles.php:152
+msgid "Background image of the %s."
+msgstr "Baggrundsbillede på %s."
+
+#: inc/styles.php:149
+msgid "Background Image"
+msgstr "Baggrundsbillede"
+
+#: inc/styles.php:144
+msgid "Background color of the %s."
+msgstr "Baggrundsfarven på %s."
+
+#: inc/styles.php:141
+msgid "Background Color"
+msgstr "Baggrund farve"
+
+#: inc/styles.php:228
+msgid "Full Width Stretched"
+msgstr "Fuld bredde udstrukket"
+
+#: inc/styles.php:227
+msgid "Full Width"
+msgstr "Fuld bredde"
+
+#: inc/styles.php:226 inc/styles.php:239
+msgid "Standard"
+msgstr "Standard"
+
+#: inc/styles.php:222
+msgid "Row Layout"
+msgstr "Række layout"
+
+#: inc/styles.php:122
+msgid "Padding around the entire %s."
+msgstr "Indvendig afstand omkring hele %s."
+
+#: inc/styles.php:119
+msgid "Padding"
+msgstr "Indvendig afstand"
+
+#: inc/styles.php:214
+msgid "Gutter"
+msgstr "Gitter afstand"
+
+#: inc/styles.php:206
+msgid "Bottom Margin"
+msgstr "Nederste Margin"
+
+#: inc/styles.php:199
+msgid "Class added to all cells in this row."
+msgstr "Klasse tilføjet alle celler i denne række."
+
+#: inc/styles.php:196
+msgid "Cell Class"
+msgstr "Celle klasse"
+
+#: inc/styles.php:96
+msgid "A CSS class"
+msgstr "En CSS klasse"

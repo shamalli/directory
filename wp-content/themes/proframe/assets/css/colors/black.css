@@ -1,0 +1,65 @@
+body {
+  --white-color: #111;
+  --primary-color: #fff;
+  --secondary-color: #202020;
+  --primary-text-color: #bebebe;
+  --border-color: var(--primary-text-color);
+}
+
+.site-header {
+  box-shadow: 0 0.3rem 0.7rem rgba(51, 51, 51, 0.35);
+}
+
+.site-bottom {
+  background-color: var(--white-color);
+}
+
+.site-bottom .sidebar-footer {
+  color: var(--primary-color);
+}
+
+.site-bottom .sidebar-footer .widget-title {
+  color: var(--primary-color);
+}
+
+.site-bottom .copyrights {
+  color: var(--primary-text-color);
+}
+
+.site-bottom .copyrights a {
+  color: var(--primary-text-color);
+}
+
+.site-bottom .copyrights a:hover {
+  color: var(--secondary-text-color);
+}
+
+.featured-categories.featured-categories-layout-grid .featured-category::after,
+.archive-header .container::after {
+  background-color: rgba(17, 17, 17, 0.5);
+}
+
+.mobile-navigation {
+  background-color: #afadad;
+}
+
+.mobile-navigation a {
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.mobile-navigation .menu-toggle {
+  background-color: var(--secondary-text-color);
+}
+
+.overlay-title {
+  color: var(--white-color);
+}
+
+.proframe-slides .owl-nav button.owl-prev:hover,
+.proframe-slides .owl-nav button.owl-next:hover {
+  color: var(--white-color);
+}
+
+.site-bottom .copyrights a:hover {
+  color: var(--primary-color);
+}

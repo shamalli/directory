@@ -1,0 +1,122 @@
+/************************   AJAX COMMENTS   ************************/
+.w2rr-comments-profile-pic {
+	float: left;
+	margin: 0 10px 10px 0;
+}
+.w2rr-comments-profile-pic-container {
+	margin: 0 10px 0 0;
+	display: block;
+	float: left;
+	height: 32px;
+	width: 32px;
+}
+.w2rr-comments-profile-pic:last-child {
+	margin: 0 0 10px 0;
+}
+#w2rr_comments_ajax_target {
+	overflow: auto;
+}
+.w2rr-comments-container > .w2rr-comments-container {
+	margin-left: 20px;
+}
+.w2rr-comments-container .callout-container {
+	width: 100%;
+}
+.w2rr-comments-container img {
+	border: 0;
+	max-width: 100%;
+}
+.w2rr-comments-container .w2rr-comments-p {
+	float: left;
+	font: normal 14px/1.5em helvetica, sans-serif;
+	padding: 10px;
+	margin: 10px 0;
+	width: 97%;
+}
+.w2rr-comments-container .w2rr-comments-content,
+.w2rr-comments-container .w2rr-comments-content-form {
+	border-top: 1px solid #ddd;
+	float: left;
+	width: 100%;
+}
+.w2rr-comments-container .w2rr-comments-content-form {
+	margin: 20px 0;
+}
+.w2rr-comments-container textarea {
+	height: 40px;
+	min-height: 40px;
+	width: 80%;
+	resize: none;
+	overflow: auto;
+	vertical-align: top;
+}
+.w2rr-comments-container time {
+	font: normal 11px/1 helvetica, sans-serif;
+	margin: 10px 0 0;
+	float: left;
+}
+.w2rr-comments-more-container {
+	display: none;
+	padding: 0 0 0 42px;
+}
+.w2rr-comments-more-container .w2rr-comments-field {
+	float: left;
+	padding: 0 5px 0 0;
+	width: 33%;
+}
+.w2rr-comments-more-container .w2rr-comments-field:last-child {
+	margin: 0;
+}
+.w2rr-comments-more-handle a {
+	font-weight: bold;
+	left: 5px;
+	position: relative;
+	text-transform: uppercase;
+}
+.w2rr-comments-content-form *:focus {
+	outline: none;
+}
+.w2rr-comments-content-form input[type="url"],
+.w2rr-comments-content-form input[type="email"],
+.w2rr-comments-content-form input[type="text"],
+.w2rr-comments-content-form textarea {
+	border: 1px solid #BBB;
+	font: normal 13px/1.3em Helvetica, sans-serif, arial;
+	padding: 6px;
+}
+.w2rr-comments-more-container .w2rr-comments-field input[type="text"],
+.w2rr-comments-more-container .w2rr-comments-field input[type="email"],
+.w2rr-comments-more-container .w2rr-comments-field input[type="url"] {
+	margin: 5px 0 0;
+	width: 100%;
+}
+.w2rr-comments-content-form input[type="text"]:hover,
+.w2rr-comments-content-form textarea:hover {
+	border: 1px solid #333;
+}
+.w2rr-comments-content-comment-fields {
+	background: rgba(0, 0, 0, 0.04);
+}
+.w2rr-comments-highlight {
+	background: #FFFFD7;
+}
+.w2rr-comments-annon {}
+.w2rr-comments-administrator {
+	border-left: 2px solid #F00;
+	margin-left: -2px;
+}
+.w2rr-comments-allowed-tags-container {
+	word-wrap: normal;
+	margin: 5px 50px 5px 0;
+	color: #C0C0C0;
+	font-weight: 300;
+	text-shadow: 1px 1px 0 #FFF;
+}
+.w2rr-comments-content blockquote {
+	font-style: italic;
+	border-left: 1px solid #DDD;
+	float: left;
+	padding: 3px 10px;
+	margin: 5px 0;
+	color: #888;
+}

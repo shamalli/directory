@@ -1,0 +1,4 @@
+{
+	"text-4": "(substr($_SERVER['REQUEST_URI'], 0, strlen('/listings')) === '/listings')",
+	"text-2": "(substr($_SERVER['REQUEST_URI'], 0, strlen('/listings')) === '/listings')"
+}

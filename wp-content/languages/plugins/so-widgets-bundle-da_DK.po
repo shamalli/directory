@@ -1,0 +1,3543 @@
+# Translation of Plugins - SiteOrigin Widgets Bundle - Stable (latest release) in Danish
+# This file is distributed under the same license as the Plugins - SiteOrigin Widgets Bundle - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2020-12-10 12:16:38+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/3.0.0-alpha.2\n"
+"Language: da_DK\n"
+"Project-Id-Version: Plugins - SiteOrigin Widgets Bundle - Stable (latest release)\n"
+
+#: widgets/post-carousel/post-carousel.php:159
+msgid "Set the number of posts preloaded in the background when clicking next. The default is 10."
+msgstr "Angiv antallet af indlæg, der er forudindlæst i baggrunden, når du klikker næste. Standardværdien er 10."
+
+#: widgets/google-map/google-map.php:887
+msgid "Get additional map consent design settings with %sSiteOrigin Premium%s"
+msgstr "Få yderligere kort design indstillinger med %sSiteOrigin Premium%s"
+
+#: widgets/accordion/accordion.php:50
+msgid "When opening the panel, scroll the user to the top of the panel."
+msgstr "Når en besøgende åbner panelet, skal vinduet rulles til toppen af panelet"
+
+#: widgets/button/button.php:64
+msgid "The button destination URL will be downloaded when a user clicks on the button."
+msgstr "Knappens destination-url vil blive downloadet, når en bruger klikker på knappen."
+
+#: widgets/button/button.php:63
+msgid "Download"
+msgstr "Download"
+
+#: widgets/post-carousel/post-carousel.php:269
+msgid " Set the number of slides to scroll per navigation click or swipe on mobile devices."
+msgstr "Angiv antallet af dias/slides, der skal rulle pr. navigation, eller swipe på mobile-enheder."
+
+#: widgets/post-carousel/post-carousel.php:258
+msgid "Mobile"
+msgstr "Mobilenheder"
+
+#: widgets/post-carousel/post-carousel.php:238
+msgid "Portrait"
+msgstr "Stående"
+
+#: widgets/post-carousel/post-carousel.php:231
+#: widgets/post-carousel/post-carousel.php:249
+msgid "Set the number of slides to scroll per navigation click or swipe on tablet devices."
+msgstr "Angiv antallet af dias/slides, der skal rulle pr. navigation, eller swipe på tablet-enheder."
+
+#: widgets/post-carousel/post-carousel.php:225
+#: widgets/post-carousel/post-carousel.php:243
+#: widgets/post-carousel/post-carousel.php:263
+msgid "Breakpoint"
+msgstr "Ombrydningspunkt"
+
+#: widgets/post-carousel/post-carousel.php:220
+msgid "Landscape"
+msgstr "Liggende"
+
+#: widgets/post-carousel/post-carousel.php:208
+msgid "Set the number of slides to scroll per navigation click or swipe on desktop."
+msgstr "Angiv antallet af dias/sliders som skal rulle pr. navigationsklik eller swipe på computer."
+
+#: widgets/post-carousel/post-carousel.php:207
+#: widgets/post-carousel/post-carousel.php:230
+#: widgets/post-carousel/post-carousel.php:248
+#: widgets/post-carousel/post-carousel.php:268
+msgid "Slides to scroll"
+msgstr "Dias/sliders, der skal rulle"
+
+#: widgets/post-carousel/post-carousel.php:202
+msgid "Desktop"
+msgstr "Computer"
+
+#: widgets/post-carousel/post-carousel.php:158
+msgid "Posts per load"
+msgstr "Indlæg pr. indlæsning"
+
+#: widgets/google-map/google-map.php:486
+msgid ""
+"By loading, you agree to Google's privacy policy.\n"
+"\n"
+"\t\t\t\t<a href='https://policies.google.com/privacy?hl=en&amp;gl=en' target='_blank' rel='noopener noreferrer'>Read more</a>"
+msgstr ""
+"Når du indlæser kortet, accepterer du Googles politik om beskyttelse af personlige oplysninger.\n"
+"\n"
+"\t\t\t\t<a href='https://policies.google.com/privacy?hl=en&amp;gl=en' target='_blank' rel='noopener noreferrer'>Læs mere</a>"
+
+#: widgets/google-map/google-map.php:485
+msgid "This is text is displayed when a user is prompted to consent to load the Google Maps API."
+msgstr "Dette er teksten der vises, når en bruger bliver bedt om at give samtykke til at indlæse Google Maps API."
+
+#: widgets/google-map/google-map.php:484
+msgid "Consent prompt text"
+msgstr "Meddelelse om samtykke"
+
+#: widgets/google-map/google-map.php:479
+msgid "Load map"
+msgstr "Indlæs kort"
+
+#: widgets/google-map/google-map.php:478
+msgid "Consent button text"
+msgstr "Samtykke tekst på knap"
+
+#: widgets/google-map/google-map.php:472
+msgid "Consent is required for the Google Maps widget to comply with regulations like DSGVO, or GDPR."
+msgstr "Samtykke er påkrævet, for at Google Maps-widgetten overholder regler som DSGVO eller GDPR."
+
+#: widgets/google-map/google-map.php:471
+msgid "Require consent before loading Maps API"
+msgstr "Kræv samtykke, før du indlæser Maps API"
+
+#: widgets/tabs/tabs.php:50
+msgid "When opening a tab, scroll the user to the top of the tab."
+msgstr "Når et faneblad åbnes, så rulles vinduet til top af fanebladet."
+
+#: widgets/tabs/tabs.php:48 widgets/accordion/accordion.php:48
+msgid "Scroll top"
+msgstr "Rul-til-top"
+
+#: widgets/post-carousel/post-carousel.php:190
+msgid "Navigation hover background"
+msgstr "Navigation hover-markering baggrund"
+
+#: widgets/post-carousel/post-carousel.php:185
+msgid "Navigation background"
+msgstr "Navigation baggrund"
+
+#: widgets/post-carousel/post-carousel.php:181
+msgid "Navigation arrow hover color"
+msgstr "Hover-markeringsfarve på navigationspile"
+
+#: widgets/post-carousel/post-carousel.php:176
+msgid "Navigation arrow color"
+msgstr "Farve på navigationspile"
+
+#: widgets/post-carousel/post-carousel.php:171
+msgid "Thumbnail overlay hover color"
+msgstr "Overlejrings farve på miniaturebilledets hover-markering"
+
+#: widgets/contact/contact.php:801
+msgid "This setting controls when the field max width will be disabled. The default value is 780px"
+msgstr "Indstillingen styrer hvornår et felts maks. bredde bliver deaktiveret. Standard værdien er 780 px"
+
+#: widgets/contact/contact.php:451
+msgid "Max width"
+msgstr "Maks. bredde"
+
+#: base/inc/widgets/base-slider.class.php:68
+msgid "Autoplay pause on hover"
+msgstr "Pause automatisk ved markering"
+
+#: base/inc/widgets/base-slider.class.php:55
+msgid "Change slides automatically without user interaction."
+msgstr "Afspil automatisk dias/slides uden bruger interaktion."
+
+#: widgets/social-media-buttons/data/networks.php:272
+msgid "TikTok"
+msgstr "TikTak"
+
+#: widgets/button/button.php:171
+msgid "Hover text color"
+msgstr "Tekstens hover farve"
+
+#: widgets/button/button.php:162
+msgid "Hover background color"
+msgstr "Baggrundens hover farve"
+
+#: widgets/post-carousel/post-carousel.php:142
+msgid "New window "
+msgstr "Nyt vindue "
+
+#: widgets/post-carousel/post-carousel.php:141
+msgid "Same window "
+msgstr "Samme vindue "
+
+#: widgets/post-carousel/post-carousel.php:139
+msgid "Choose where to open each carousel item."
+msgstr "Vælg hvor hver karrusel element skal åbnes."
+
+#: widgets/post-carousel/post-carousel.php:138
+msgid "Link target"
+msgstr "Link mål"
+
+#: widgets/simple-masonry/simple-masonry.php:212
+msgid "Controls the horizontal flow of the layout. Items can either start positioned on the left or right."
+msgstr "Kontroller det vandrette flow i layoutet. Elementerne kan enten ved start, placeres til venstre eller til højre."
+
+#: widgets/simple-masonry/simple-masonry.php:211
+msgid "Layout origin"
+msgstr "Layoutets oprindelse"
+
+#: widgets/icon/icon.php:69
+msgid " Tooltip text to be shown when hovering over the icon."
+msgstr " Værktøjstips der vises når musemarkøren føres hen over ikonet."
+
+#: widgets/testimonial/testimonial.php:275
+msgid "Equalize testimonial height"
+msgstr "Ens højde på anbefalinger"
+
+#: widgets/simple-masonry/simple-masonry.php:205
+msgid "The size of the preloader prior to the Masonry images showing."
+msgstr "Størrelsen på forhåndsindlæsningen i før visningen af murværks billede."
+
+#: widgets/simple-masonry/simple-masonry.php:203
+msgid "Preloader height"
+msgstr "Højde på forhåndsindlæsning"
+
+#: widgets/simple-masonry/simple-masonry.php:198
+msgid "Preloader icon color"
+msgstr "Ikon til forhåndsindlæsning"
+
+#: widgets/simple-masonry/simple-masonry.php:194
+msgid "Enable preloader"
+msgstr "Aktiver forhåndsindlæsning"
+
+#: widgets/simple-masonry/simple-masonry.php:189
+msgid "Preloader"
+msgstr "Forhåndsindlæsning"
+
+#: widgets/image-grid/image-grid.php:23
+msgid "Display a grid of images. Also useful for displaying client logos."
+msgstr "Viser billeder i et gitter. Også brugbart til visning af kunde logoer."
+
+#: widgets/taxonomy/taxonomy.php:19
+msgid "Displays the selected taxonomy for the current post."
+msgstr "Viser klassificeringen af det aktuelle indlæg."
+
+#: widgets/social-media-buttons/social-media-buttons.php:21
+msgid "Customizable buttons which link to all your social media profiles."
+msgstr "Knapper som kan tilpasses og linke til alle dine sociale netværksprofiler."
+
+#: widgets/headline/headline.php:19
+msgid "A headline to headline all headlines."
+msgstr "En overskrift til overskriften for alle overskrifter."
+
+#: widgets/button/button.php:17
+msgid "A powerful yet simple button widget for your sidebars or Page Builder pages."
+msgstr "En kraftfuld, men alligevel enkelt knap widget til dine sidebarer eller Page Builder sider."
+
+#: widgets/tabs/tabs.php:17
+msgid "A tabby widget to switch between tabbed content panels."
+msgstr "Et faneblad widget som skifter mellem fabebladene."
+
+#: widgets/simple-masonry/simple-masonry.php:17
+msgid "A masonry layout for images. Images can link to your posts."
+msgstr "Et murværk til billeder. Billeder kan linkes til dine indlæg."
+
+#: widgets/contact/contact.php:19
+msgid "A lightweight contact form builder."
+msgstr "En letvægt kontakt formular bygger."
+
+#: widgets/hero/hero.php:178 widgets/layout-slider/layout-slider.php:144
+msgid "For perfect centering, consider setting the Extra top padding setting to 0 when enabling this setting."
+msgstr "For perfekt centrering skal du overveje at stille den ekstra top polstring til 0 når du aktiverer denne indstilling."
+
+#: widgets/hero/hero.php:177 widgets/layout-slider/layout-slider.php:143
+msgid "Vertically center align slide contents"
+msgstr "Vandret center justering af dias indholdet"
+
+#: widgets/post-carousel/post-carousel.php:52
+msgid "Gives you a widget to display your posts as a carousel."
+msgstr "Giver dig en widget til at vise dine indlæg som en karrusel."
+
+#: widgets/icon/icon.php:19
+msgid "An iconic icon."
+msgstr "Et ikonisk ikon."
+
+#: widgets/accordion/accordion.php:17
+msgid "An accordion to squeeze a lot of content into a small space."
+msgstr "En blok hvor der kan være en masse på lidt plads."
+
+#: widgets/video/video.php:20
+msgid "Play all your self or externally hosted videos in a customizable video player."
+msgstr "Afspil alle dine egne hosted eller eksterne videoer i en video afspiller som kan tilpasses."
+
+#: widgets/google-map/google-map.php:19
+msgid "A highly customisable Google Maps widget. Help your site find its place and give it some direction."
+msgstr "En meget tilpasningsklar Google Maps widget. Hjælp dit websted med at finde sin placering og angive nogle retninger."
+
+#: widgets/features/features.php:16
+msgid "Displays a block of features with icons."
+msgstr "Viser en blok af funktioner med ikoner."
+
+#: widgets/cta/cta.php:18
+msgid "A simple call-to-action widget. You can do what ever you want with a call-to-action widget."
+msgstr "En simpel 'opfordring til en handling' widget. Du kan gøre hvad du vil med en opfordring-til-handling widget."
+
+#: widgets/editor/editor.php:19
+msgid "A widget which allows editing of content using the TinyMCE editor."
+msgstr "En widget som tillader at redigere indholdet med hjælp fra TinyMCE editoren."
+
+#: widgets/price-table/price-table.php:17
+msgid "A powerful yet simple price table widget for your sidebars or Page Builder pages."
+msgstr "En kraftfuld, men alligevel enkelt pristabel widget til dine sidebarer eller Page Builder sider."
+
+#: widgets/features/features.php:226
+msgid "Title text HTML tag"
+msgstr "HTML tag for overskrift tekst"
+
+#: widgets/post-carousel/post-carousel.php:148
+msgid "Automatically return to the first post after the last post."
+msgstr "Returnere automatisk til første indlæg når sidste indlæg er nået."
+
+#: widgets/post-carousel/post-carousel.php:147
+msgid "Loop posts"
+msgstr "Gentag indlæggene"
+
+#: widgets/contact/contact.php:1099
+msgid "Invalid phone number. It should contain at least three digits."
+msgstr "Ugyldig telefon nummer. Nummeret skal indeholde mindst tre cifre."
+
+#: compat/block-editor/widget-block.php:62
+msgid "%s by %s"
+msgstr "%s af %s"
+
+#: widgets/contact/contact.php:77
+msgid "Subject to use when there isn't one supplied by the user. If you make use of this option it won't be possible to set the Subject field as required because the default subject will be used as a fallback."
+msgstr "Emne tekst der skal anvendes hvis ikke brugeren angiver et emne. Hvis du gør brug af dette, er det ikke muligt, at angive emne feltet som påkrævet da standard emne teksten vil blive anvendt."
+
+#: widgets/hero/hero.php:241
+msgid "FitText compressor strength"
+msgstr "FitText kompressionsstyrke"
+
+#: widgets/social-media-buttons/data/networks.php:47
+msgid "Skype"
+msgstr "Skype"
+
+#: widgets/hero/hero.php:221
+msgid "Enter the h1 font size. h2 - h6 will be proportionally sized based on this value."
+msgstr "Indtast H1 skrifttype størrelsen. H2-H6 vil proportionelt skaleres baseret på denne størrelse."
+
+#: widgets/simple-masonry/simple-masonry.php:163
+msgid "Device width, in pixels, at which to collapse into a mobile view."
+msgstr "Enheds bredde i pixel, der sammenfoldes ved visning på mobil enheder."
+
+#: widgets/simple-masonry/simple-masonry.php:131
+msgid "Device width, in pixels, at which to collapse into a tablet view."
+msgstr "Enheds bredde i pixel, der sammenfoldes ved visning på tablet enheder."
+
+#: widgets/contact/contact.php:128
+msgid "List in contact emails, the IP address of the form sender."
+msgstr "Indtast kontakt e-mails, IP adressen på formularen."
+
+#: widgets/testimonial/testimonial.php:244
+msgid "Text background radius"
+msgstr "Radius af tekst baggrund"
+
+#: widgets/testimonial/testimonial.php:193
+msgid "Image shape"
+msgstr "Billede form"
+
+#: widgets/google-map/fields/location.class.php:61
+msgid "The Google Maps API key appears to be valid, but the required APIs are either disabled or restricted. Please %scheck the API key configuration%s."
+msgstr "Google Maps API-nøglen ser ud til at være gyldig, men de påkrævede API'er er enten deaktiverede eller begrænsede. Du skal %schecke API-nøgle konfigurationen %s."
+
+#: widgets/google-map/fields/location.class.php:59
+msgid "The Google Maps API key appears to be invalid. Please ensure you have set the correct key in Google Maps Widget settings."
+msgstr "Google Maps API-nøglen ser ud til at være ugyldig. Sørg for at du har indstillet den korrekte nøgle i Google Maps widget indstillinger."
+
+#: widgets/google-map/google-map.php:889
+msgid "Get a curated list of predefined map styles with %sSiteOrigin Premium%s"
+msgstr "Få en aktuel liste over foruddefinerede kort typografier med %sSiteOrigin Premium %s"
+
+#: widgets/google-map/google-map.php:77
+msgid "Please ensure you have enabled the %sJavaScript API%s for Interactive maps or %sStatic API%s for Static maps in the %sGoogle APIs Dashboard%s."
+msgstr "Sørg for, at du har aktiveret %sJavaScript API %s for interaktive kort eller %sStatic API %s for statiske kort i %sGoogle APIs kontrolpanelet %s."
+
+#: widgets/editor/editor.php:161
+msgid "Use Google Fonts right inside the Editor Widget using %sSiteOrigin Premium%s"
+msgstr "Brug Google Fonts direkte i editoren widget ved hjælp af %sSiteOrigin Premium %s"
+
+#: widgets/social-media-buttons/social-media-buttons.php:329
+msgid "Add custom social networks with %sSiteOrigin Premium%s"
+msgstr "Tilføj brugerdefinerede sociale netværk med %sSiteOrigin Premium %s"
+
+#: widgets/google-map/fields/location.class.php:65
+msgid "Go to Google Maps Widget settings"
+msgstr "Gå til indstillinger for Google Maps widget"
+
+#: widgets/google-map/fields/location.class.php:58
+msgid "This widget requires a Google Maps API key. Please ensure you have set yours in Google Maps Widget settings."
+msgstr "Denne widget kræver en Google Maps API-nøgle. Sørg for, at du har indstillet din i Google Maps widget-indstillinger."
+
+#: widgets/google-map/google-map.php:495
+msgid "This setting controls when the map will use the mobile zoom. This breakpoint will only be used if a mobile zoom is set in the SiteOrigin Google Maps settings. The default value is 780px"
+msgstr "Indstillingen kontrollere, hvornår kortet bruger mobil zoom. Dette punkt vil kun blive brugt, hvis en mobil zoom er indstillet i SiteOrigin Google Maps-indstillingerne. Standardværdien er 780px"
+
+#: widgets/google-map/google-map.php:493
+msgid "Responsive breakpoint"
+msgstr "Responsivt punkt"
+
+#: widgets/google-map/google-map.php:162
+msgid "For information on what these settings do, %sclick here%s."
+msgstr "For yderligere informationer om disse indstillinger, %sklik her%s."
+
+#: widgets/google-map/google-map.php:159
+msgid "Auto"
+msgstr "Auto"
+
+#: widgets/google-map/google-map.php:157
+msgid "Cooperative"
+msgstr "Kooperativ"
+
+#: widgets/google-map/google-map.php:156
+msgid "Greedy"
+msgstr "Grådige"
+
+#: widgets/google-map/google-map.php:149
+msgid "Gesture Handling"
+msgstr "Gestus handling"
+
+#: widgets/google-map/google-map.php:136
+msgid "A value from 0 (the world) to 21 (street level). This zoom is specific to mobile devices."
+msgstr "En værdi fr 0 (fra satellit visning) til 21 (gade visning). Zoom niveauet er specifikt for mobile enheder."
+
+#: widgets/google-map/google-map.php:135
+msgid "Mobile zoom level"
+msgstr "Mobilvisning zoom niveau"
+
+#: widgets/post-carousel/tpl/base.php:19 widgets/post-carousel/tpl/base.php:26
+msgid "Previous Posts"
+msgstr "Forrige indlæg"
+
+#: widgets/post-carousel/tpl/base.php:18 widgets/post-carousel/tpl/base.php:28
+msgid "Next Posts"
+msgstr "Næste indlæg"
+
+#: widgets/contact/contact.php:230
+msgid "Please make sure you register a new reCAPTCHA v2 key %shere%s."
+msgstr "Vær sikker på, at registrere en ny reCAPTURE v2 nøgle %sher%s."
+
+#: widgets/contact/contact.php:227
+msgid "Use reCAPTCHA v2"
+msgstr "Brug reCAPTCHA v2"
+
+#: widgets/contact/contact.php:223
+msgid "reCAPTCHA v2"
+msgstr "reCAPTCHA v2"
+
+#: base/inc/widgets/base-slider.class.php:182
+msgid "This setting controls when the Slider will switch to the responsive mode. This breakpoint will only be used if always show navigation on mobile is enabled. The default value is 780px."
+msgstr "Indstillingerne kontrollere om slideshow vil tilpasses til responsivt tilstand. Punktet vil kun anvendes, hvis mobilvisning allerede er aktiveret. Standard værdi er 780px."
+
+#: base/inc/widgets/base-slider.class.php:123
+msgid "Always show navigation on mobile"
+msgstr "Vis altid navigationen i mobilvisning"
+
+#: base/inc/actions.php:13
+msgid "Invalid widget."
+msgstr "Ugyldig widgets."
+
+#: widgets/social-media-buttons/data/networks.php:266
+msgid "Telegram"
+msgstr "Telegram"
+
+#: widgets/social-media-buttons/data/networks.php:254
+msgid "Strava"
+msgstr "Strava"
+
+#: widgets/social-media-buttons/data/networks.php:182
+msgid "Goodreads"
+msgstr "Goodreads"
+
+#: widgets/social-media-buttons/data/networks.php:128
+msgid "Blogger"
+msgstr "Blogger"
+
+#: widgets/social-media-buttons/data/networks.php:110
+msgid "Bandcamp"
+msgstr "Bandcamp"
+
+#: admin/tpl/admin.php:98
+msgid "Documentation"
+msgstr "Dokumentation"
+
+#: icons/fontawesome/filter.php:1460
+msgid "Regular"
+msgstr "Regulær"
+
+#: icons/fontawesome/filter.php:1462
+msgid "Brands"
+msgstr "Varemærker"
+
+#: widgets/social-media-buttons/social-media-buttons.php:35
+msgid "This setting controls when the Mobile Align setting will be used. The default value is 780px"
+msgstr "Denne indstilling kontroller når mobil justeringen vil blive anvendt. Standard værdien er 780px"
+
+#: widgets/headline/headline.php:262 widgets/hero/hero.php:242
+msgid "The higher the value, the more your headings will be scaled down. Values above 1 are allowed."
+msgstr "Jo højre værdi, jo mere vil din overskrivt blive skaleret ned. Værdier under 1 er tilladte."
+
+#: widgets/features/features.php:208
+msgid "Icon container size"
+msgstr "Ikon boks størrelse"
+
+#: widgets/features/features.php:201
+msgid "Icon container shape"
+msgstr "Ikon boks form"
+
+#: widgets/features/features.php:64
+msgid "Icon container position"
+msgstr "Ikon boks position"
+
+#: widgets/features/features.php:56
+msgid "Icon container color"
+msgstr "Ikon boks farve"
+
+#: compat/block-editor/widget-block.php:136
+msgid "Invalid widget class %s. Please make sure the widget has been activated in %sSiteOrigin Widgets%s."
+msgstr "Ugyldig widget class %s. Vær sikker på, at widget'en er blevet aktiveret i %sSiteOrigin Widgets%s."
+
+#: base/inc/widgets/base-slider.class.php:136
+msgid "Allow slide background videos to appear on mobile devices that support autoplay."
+msgstr "Tillad video slideshow baggrund at vises på mobile enheder som understøtter autoplay."
+
+#: base/inc/widgets/base-slider.class.php:135
+msgid "Show slide background videos on mobile"
+msgstr "Vis video dias baggrunde på mobile enheder"
+
+#: widgets/social-media-buttons/tpl/default.php:19
+msgid "%s %s"
+msgstr "%s %s"
+
+#: widgets/social-media-buttons/data/networks.php:104
+msgid "AngelList"
+msgstr "AngelList"
+
+#: widgets/social-media-buttons/data/networks.php:35
+msgid "Phone"
+msgstr "Telefon"
+
+#: compat/block-editor/widget-block.php:98
+msgid "You need to select a widget type before you'll see anything here. :)"
+msgstr "Du skal vælge en widget type før du kan se nogen her. :)"
+
+#: widgets/social-media-buttons/data/networks.php:302
+msgid "WhatsApp"
+msgstr "WhatsApp"
+
+#: widgets/cta/cta.php:86
+msgid "Use default background colors"
+msgstr "Brug standard baggrundsfarver"
+
+#: widgets/contact/contact.php:460
+msgid "Text area height"
+msgstr "Højde for tekstområde"
+
+#: base/inc/widgets/base-slider.class.php:161
+msgid "Currently only for YouTube videos."
+msgstr "Kun for YouTube videoer i øjeblikket."
+
+#: base/inc/fields/posts.class.php:52
+msgid "Taxonomies are groups such as categories, tags, posts and products."
+msgstr "Taxonomier er grupper som kategorier, tags, indlæg og produkter."
+
+#: widgets/image/image.php:56
+msgid "Title alignment"
+msgstr "Overskrift justering"
+
+#: widgets/hero/hero.php:171 widgets/layout-slider/layout-slider.php:138
+msgid "Responsive Height"
+msgstr "Responsive højde"
+
+#: widgets/contact/contact.php:1274
+msgctxt "The name of who sent this email"
+msgid "From"
+msgstr "Fra"
+
+#: widgets/contact/contact.php:151
+msgid "Phone Number"
+msgstr "Telefon nummer"
+
+#: widgets/contact/contact.php:127
+msgid "Log IP addresses"
+msgstr "Log IP adresser"
+
+#: base/inc/widgets/base-slider.class.php:240
+msgid "previous slide"
+msgstr "forrige diasbillede"
+
+#: base/inc/widgets/base-slider.class.php:234
+msgid "next slide"
+msgstr "næste diasbillede"
+
+#: base/inc/widgets/base-slider.class.php:229
+msgid "display slide %s"
+msgstr "vis diasbillede %s"
+
+#: base/inc/fields/date-range.class.php:31
+msgctxt "From this date"
+msgid "From"
+msgstr "Fra"
+
+#: widgets/testimonial/testimonial.php:375 widgets/cta/cta.php:157
+msgid "Get more font customization options with %sSiteOrigin Premium%s"
+msgstr "Få flere skrifttype tilpasningsmuligheder med %sSiteOrigin Premium%s"
+
+#: widgets/social-media-buttons/social-media-buttons.php:160
+msgid "Mobile Align"
+msgstr "Mobilvisning - justering"
+
+#: widgets/hero/hero.php:290
+msgid "Link hover color"
+msgstr "Hover link farve"
+
+#: widgets/hero/hero.php:285
+msgid "Link color"
+msgstr "Link farve"
+
+#: widgets/hero/hero.php:276
+msgid "Text shadow intensity"
+msgstr "Skyggetekst intensitet"
+
+#: widgets/hero/hero.php:271
+msgid "Text font"
+msgstr "Skrifttype"
+
+#: widgets/features/features.php:322
+msgid "This setting controls when the features widget will collapse for mobile devices. The default value is 520px"
+msgstr "Denne indstilling kontroller funktionen widget og vil kollapse ved mobilvisning. Standard er 520px"
+
+#: widgets/social-media-buttons/social-media-buttons.php:33
+#: widgets/features/features.php:320 widgets/contact/contact.php:799
+#: base/inc/widgets/base-slider.class.php:180
+msgid "Responsive Breakpoint"
+msgstr "Responsive linjebrydning"
+
+#: widgets/contact/contact.php:147
+msgid "Select Field Type"
+msgstr "Vælg felt type"
+
+#: widgets/contact/contact.php:103
+msgid "Run this JavaScript when the button is clicked. Ideal for tracking."
+msgstr "Kør dette JavaScript når knappen trykkes på. Ideal til sporing."
+
+#: widgets/contact/contact.php:98
+msgid "An ID attribute allows you to target this button in JavaScript."
+msgstr "Tilføj ID egenskab så du kan spore denne knap i JavaScript."
+
+#: widgets/button/button.php:89
+msgid "Icon Placement"
+msgstr "Ikon placering"
+
+#: widgets/tabs/tabs.php:276
+msgid "Get more customization options and the ability to use widgets and layouts as your tabs content with %sSiteOrigin Premium%s"
+msgstr "Få flere tilpasninger og muligheder til at bruge widgets og layout som faneblads indhold %sSiteOrigin Premium %s"
+
+#: widgets/tabs/tabs.php:163
+msgid "Border hover width"
+msgstr "Hover kantbredde"
+
+#: widgets/tabs/tabs.php:105
+msgid "Tabs container"
+msgstr "Boks til faneblade"
+
+#: widgets/tabs/tabs.php:96
+msgid "The position of the tab to be selected when the page first loads."
+msgstr "Faneblads valg når siden indlæses."
+
+#: widgets/tabs/tabs.php:94
+msgid "Initially selected tab"
+msgstr "Indledningsvis valgt faneblad"
+
+#: widgets/tabs/tabs.php:75 widgets/tabs/tabs.php:125
+msgid "Tabs"
+msgstr "Faneblade"
+
+#: widgets/tabs/tabs.php:15
+msgid "SiteOrigin Tabs"
+msgstr "SiteOrigin Faneblad"
+
+#: widgets/google-map/google-map.php:312
+msgid "Copy and paste predefined styles here from <a href=\"http://snazzymaps.com/\" target=\"_blank\" rel=\"noopener noreferrer\">Snazzy Maps</a>."
+msgstr "Kopiere og indsætte foruddefinerede typografier her fra <a href=\"http://snazzymaps.com/\" target=\"_blank\" rel=\"noopener noreferrer\">Snazzy Maps</a>."
+
+#: widgets/contact/contact.php:65
+msgid "Where contact emails will be delivered to. You can send to multiple emails by separating the emails with a comma (,)"
+msgstr "Hvor kontakt e-mails vil blive leveret til. Du kan sende flere e-mails ved at adskille e-mails med et komma (,)"
+
+#: base/inc/fields/presets.class.php:48
+msgid "Undo"
+msgstr "Fortryd"
+
+#: base/inc/fields/presets.class.php:18
+msgid "Warning! This will override some or all of the current form values."
+msgstr "Advarsel! Dette vil tilsidesætte alle eller nogle af de aktuelle formularværdier."
+
+#: widgets/video/video.php:117
+msgid "If the external host supports it."
+msgstr "Hvis den eksterne vært understøtter det."
+
+#: widgets/video/video.php:116
+msgid "Show related videos."
+msgstr "Vis relaterede videoer."
+
+#: widgets/accordion/accordion.php:267
+msgid "Get more customization options and the ability to use widgets and layouts as your accordion content with %sSiteOrigin Premium%s"
+msgstr "Få flere tilpasninger og muligheder til at bruge widgets og layout med %sSiteOrigin Premium %s"
+
+#: widgets/accordion/accordion.php:175
+msgid "Bottom margin"
+msgstr "Nederste margen"
+
+#: widgets/tabs/tabs.php:179 widgets/accordion/accordion.php:163
+msgid "Font color"
+msgstr "Skriftfarve"
+
+#: widgets/tabs/tabs.php:154 widgets/accordion/accordion.php:143
+msgid "Border hover color"
+msgstr "Hover kant farve"
+
+#: widgets/tabs/tabs.php:144 widgets/accordion/accordion.php:135
+msgid "Title hover color"
+msgstr "Website titel Hover farve"
+
+#: widgets/tabs/tabs.php:134 widgets/accordion/accordion.php:125
+msgid "Background hover color"
+msgstr "Baggrund hover farve"
+
+#: widgets/accordion/accordion.php:115
+msgid "Headings"
+msgstr "Overskrifter"
+
+#: widgets/accordion/accordion.php:102
+msgid "Closed"
+msgstr "Lukket"
+
+#: widgets/accordion/accordion.php:101
+msgid "Open"
+msgstr "Åben"
+
+#: widgets/accordion/accordion.php:99
+msgid "Whether this panel should be open or closed when the page first loads."
+msgstr "Hvorvidt dette panel skal være åben eller lukket når siden indlæser."
+
+#: widgets/accordion/accordion.php:98
+msgid "Initial state"
+msgstr "Oprindelig tilstand"
+
+#: widgets/tabs/tabs.php:169 widgets/accordion/accordion.php:75
+#: widgets/accordion/accordion.php:153
+msgid "Panels"
+msgstr "Paneler"
+
+#: widgets/accordion/accordion.php:15
+msgid "SiteOrigin Accordion"
+msgstr "SiteOrigin harmonika"
+
+#: widgets/slider/slider.php:287
+msgid "Add a Lightbox to your image slides with %sSiteOrigin Premium%s"
+msgstr "Tilføje en Lightbox til billede dias med %sSiteOrigin Premium %s"
+
+#: widgets/simple-masonry/simple-masonry.php:311
+msgid "Add a Lightbox to your masonry images with %sSiteOrigin Premium%s"
+msgstr "Tilføje en Lightbox til billederne murværk med %sSiteOrigin Premium %s"
+
+#: widgets/image-grid/image-grid.php:230 widgets/image/image.php:225
+msgid "Add a Lightbox to your images with %sSiteOrigin Premium%s"
+msgstr "Tilføje en Lightbox til dine billeder med %sSiteOrigin Premium %s"
+
+#: base/inc/routes/siteorigin-widgets-resource.class.php:55
+#: so-widgets-bundle.php:344 so-widgets-bundle.php:367
+#: so-widgets-bundle.php:410
+msgid "Insufficient permissions."
+msgstr "Utilstrækkelige tilladelser."
+
+#: base/inc/actions.php:23 so-widgets-bundle.php:347 so-widgets-bundle.php:490
+msgid "Invalid post."
+msgstr "Ugyldigt indlæg."
+
+#: base/base.php:51 base/base.php:55 base/inc/actions.php:11
+#: base/inc/actions.php:77 base/inc/actions.php:121 base/inc/actions.php:157
+#: base/inc/actions.php:170 base/inc/actions.php:174 base/inc/actions.php:265
+#: base/inc/actions.php:268 so-widgets-bundle.php:340 so-widgets-bundle.php:364
+#: so-widgets-bundle.php:377 so-widgets-bundle.php:407
+#: so-widgets-bundle.php:418 so-widgets-bundle.php:484
+#: so-widgets-bundle.php:495
+msgid "Invalid request."
+msgstr "Ugyldig anmodning."
+
+#: widgets/google-map/google-map.php:420
+msgid "This will prevent the map from centering and zooming around the directions. Use this when you have other markers or features on your map."
+msgstr "Dette vil forhindre kort fra centrering og zoome omkring retninger. Bruges, når du har andre markører eller funktioner på dit kort."
+
+#: widgets/google-map/google-map.php:419
+msgid "Preserve viewport"
+msgstr "Bevare visningsfelt"
+
+#: widgets/contact/contact.php:71
+msgid "It will appear as if emails are sent from this address. Ideally, this should be in the same domain as this server to avoid spam filters."
+msgstr "Det vil se ud, som om e-mails er sendt fra denne adresse. Ideelt set bør dette være det samme domæne som denne server for at undgå spam-filtre."
+
+#: widgets/contact/contact.php:70
+msgid "From email address"
+msgstr "Fra e-mail adresse"
+
+#: widgets/testimonial/testimonial.php:170
+msgid "The resolution to treat as a mobile resolution."
+msgstr "Skærmopløsning som anvendes ved mobiltelefon."
+
+#: widgets/google-map/google-map.php:634
+msgid "There were no results for the place you entered. Please try another."
+msgstr "Der var ingen resultater for det sted, du har angivet. Prøv en anden."
+
+#: widgets/google-map/google-map.php:383
+msgid "Display a route on your map, with waypoints between your starting point and destination. Please ensure you have enabled the %sDirections API%s in the %sGoogle APIs Dashboard%s."
+msgstr "Viser en rute på et kort fra dit udgangspunkt til din destination. Vær sikker på, at du har aktiveret %sDirections API%s i %sGoogle Kontrol panelet%s."
+
+#: widgets/google-map/google-map.php:49
+msgid "The name of a place, town, city, or even a country. Can be an exact address too. Please ensure you have enabled the %sPlaces API%s and the %sGeocoding API%s in the %sGoogle APIs Dashboard%s."
+msgstr "Navnet på et sted, by eller land. Kan være en eksakt adresse også. Vær sikker på, at du har aktiveret %sPlaces API%s og %sGeocoding API%s i %sGoogle Kontolpanelet%s."
+
+#: admin/tpl/admin.php:119
+msgid "Widget Settings"
+msgstr "Widget indstillinger"
+
+#: widgets/post-carousel/post-carousel.php:126
+msgid "Set Thumbnail"
+msgstr "Indstil miniaturebillede"
+
+#: widgets/post-carousel/post-carousel.php:125
+msgid "Choose Thumbnail"
+msgstr "Vælg miniature"
+
+#: widgets/post-carousel/post-carousel.php:124
+msgid "Default Thumbnail"
+msgstr "Standard miniature"
+
+#: widgets/price-table/price-table.php:165
+msgid "Equalize row heights"
+msgstr "Udligne rækkehøjder"
+
+#: widgets/headline/headline.php:261
+msgid "FitText Compressor Strength"
+msgstr "FitText kompressor styrke"
+
+#: widgets/google-map/google-map.php:253
+msgid "Replace the default map marker with your own image for each marker."
+msgstr "Erstat standard kortmarkør med dit eget billede for hver markør."
+
+#: widgets/google-map/google-map.php:252
+msgid "Custom Marker icon"
+msgstr "Brugerdefinerede markør ikon"
+
+#: widgets/google-map/google-map.php:195
+msgid "Fallback Image Size"
+msgstr "Tilbagefalde billed størrelse"
+
+#: widgets/google-map/google-map.php:190
+msgid "This image will be displayed if there are any problems with displaying the specified map."
+msgstr "Dette billede vises, hvis der er nogen problemer med at vise det angivne kort."
+
+#: widgets/google-map/google-map.php:189
+msgid "Fallback Image"
+msgstr "Tilbagefalde billede"
+
+#: widgets/features/features.php:220
+msgid "Use icon size for custom icon"
+msgstr "Brug ikonstørrelse for brugerdefinerede ikon"
+
+#: widgets/editor/editor.php:55
+msgid "Enable the \"Automatically add paragraphs\" setting by default."
+msgstr "Aktiverer den \"Automatisk tilføje afsnit\" indstilling som standard."
+
+#: compat/block-editor/widget-block.php:82
+#: compat/visual-composer/visual-composer.php:77
+msgid "Selecting a different widget will revert any changes. Continue?"
+msgstr "At vælge en anden widget vil gendannes eventuelle ændringer. Vil du fortsætte?"
+
+#: compat/visual-composer/visual-composer.php:42
+msgid "Allows you to add any active SiteOrigin Widgets Bundle widgets."
+msgstr "Tillader dig at tilføje nogen aktiv SiteOrigin Widgets bundt widgets."
+
+#: compat/builders.php:12
+msgid "Visual Composer"
+msgstr "Visual Composer"
+
+#: base/siteorigin-widget.class.php:617
+msgid "Clicking %s will replace the current widget contents. You can revert by refreshing the page before updating."
+msgstr "Hvis du klikker på %s vil det nuværende widget indhold blive erstattet. Du kan gendanne ved at opdatere siden før opdatering."
+
+#: base/siteorigin-widget.class.php:615
+msgid "Dismiss"
+msgstr "Afvis"
+
+#: base/siteorigin-widget.class.php:614 base/siteorigin-widget.class.php:618
+msgid "Restore"
+msgstr "Genskab"
+
+#: base/siteorigin-widget.class.php:613
+msgid "There is a newer version of this widget's content available."
+msgstr "Der findes en nyere version af denne widgets indhold."
+
+#: base/inc/fields/posts.class.php:116
+msgid "Descending"
+msgstr "Faldende"
+
+#: base/inc/fields/posts.class.php:115
+msgid "Ascending"
+msgstr "Stigende"
+
+#: base/inc/fields/posts.class.php:113
+msgid "Order direction"
+msgstr "Sorteringsretning"
+
+#: base/inc/fields/posts.class.php:72 base/inc/fields/posts.class.php:82
+msgid "Dates"
+msgstr "Datoer"
+
+#: base/inc/fields/posts.class.php:62
+msgid "Select a range between specific dates or relative to the current date."
+msgstr "Vælg et interval mellem bestemte datoer eller i forhold til den aktuelle dato."
+
+#: base/inc/fields/posts.class.php:60
+msgid "Relative"
+msgstr "Relative"
+
+#: base/inc/fields/posts.class.php:59
+msgid "Specific"
+msgstr "Specifik"
+
+#: base/inc/fields/posts.class.php:57
+msgid "Date selection type"
+msgstr "Dato Markeringstype"
+
+#: base/inc/fields/date-range.class.php:72
+msgid "years"
+msgstr "år"
+
+#: base/inc/fields/date-range.class.php:71
+msgid "months"
+msgstr "måneder"
+
+#: base/inc/fields/date-range.class.php:70
+msgid "weeks"
+msgstr "uger"
+
+#: base/inc/fields/date-range.class.php:69
+msgid "days"
+msgstr "dage"
+
+#: base/inc/fields/date-range.class.php:64
+msgid "ago"
+msgstr "siden"
+
+#: base/inc/fields/date-range.class.php:34
+#: base/inc/fields/date-range.class.php:48
+msgid "to"
+msgstr "til"
+
+#: base/inc/fields/autocomplete.class.php:46
+msgid "Search"
+msgstr "Søg"
+
+#: widgets/post-carousel/post-carousel.php:132
+msgid "Featured Image size"
+msgstr "Størrelse på fremhævede billede"
+
+#: widgets/google-map/google-map.php:463
+msgid "Enter your %sAPI key%s. Your map won't function correctly without one."
+msgstr "Indtast din %sAPI nøgle%s. Dit kort vil ikke fungere korrekt uden en."
+
+#: widgets/features/features.php:131
+msgid "Font Design"
+msgstr "Skrifttype Design"
+
+#: widgets/button/button.php:94 widgets/features/features.php:68
+msgid "Bottom"
+msgstr "Bund"
+
+#: widgets/button/button.php:92 widgets/features/features.php:66
+msgid "Top"
+msgstr "Top"
+
+#: widgets/contact/contact.php:478
+msgid " Border style"
+msgstr " Kant stil"
+
+#: widgets/contact/contact.php:119
+msgid "Fields marked with * are required"
+msgstr "Felter markeret med * er påkrævet"
+
+#: widgets/contact/contact.php:118
+msgid "Required field indicator message"
+msgstr "Obligatorisk felt indikator meddelelse"
+
+#: widgets/contact/contact.php:107
+msgid "Indicate required fields with asterisk (*)"
+msgstr "Angiv påkrævede felter med stjerne (*)"
+
+#: widgets/button/button.php:255
+msgid "Adds a rel attribute to the button link."
+msgstr "Tilføjer en rel attribut til linket knap."
+
+#: widgets/button/button.php:254
+msgid "Rel attribute"
+msgstr "Rel-attribut"
+
+#: widgets/layout-slider/layout-slider.php:223
+msgid "This widget requires: "
+msgstr "Denne widget kræver: "
+
+#: widgets/headline/headline.php:74 widgets/headline/headline.php:145
+msgid "Hover Color"
+msgstr "Hover Farve"
+
+#: widgets/social-media-buttons/social-media-buttons.php:78
+#: widgets/features/features.php:83
+msgid "Icon title"
+msgstr "Ikon titel"
+
+#: widgets/cta/cta.php:95
+msgid "Subtitle color"
+msgstr "Undertitel skriftfarve"
+
+#: widgets/tabs/tabs.php:139 widgets/cta/cta.php:91
+#: widgets/accordion/accordion.php:130
+msgid "Title color"
+msgstr "Titel farve"
+
+#: widgets/contact/contact.php:157
+msgid "Radio"
+msgstr "Radioknap"
+
+#: compat/builders.php:8
+msgid "Elementor"
+msgstr "Elementor"
+
+#: compat/builders.php:4
+msgid "Beaver Builder"
+msgstr "Beaver Builder"
+
+#: compat/beaver-builder/beaver-builder.php:70
+msgid "Current Color"
+msgstr "Aktuel farve"
+
+#: compat/beaver-builder/beaver-builder.php:69
+msgid "Select Color"
+msgstr "Vælg farve"
+
+#: compat/beaver-builder/beaver-builder.php:67
+msgid "Clear"
+msgstr "Ryd"
+
+#: widgets/social-media-buttons/data/networks.php:41
+msgid "Snapchat"
+msgstr "Snapchat"
+
+#: widgets/google-map/google-map.php:271
+msgid "This setting is ignored when Info Windows are set to always display."
+msgstr "Denne indstilling ignoreres, når Info Windows er indstillet til altid at vise."
+
+#: widgets/google-map/google-map.php:269
+msgid "Allow multiple simultaneous Info Windows?"
+msgstr "Tillade flere samtidige oplysningsvinduer?"
+
+#: widgets/contact/contact.php:252
+msgid "reCAPTCHA v2 Secret Key"
+msgstr "reCAPTCHA v2 Hemmelig Nøgle"
+
+#: widgets/contact/contact.php:244
+msgid "reCAPTCHA v2 Site Key"
+msgstr "reCAPTCHA v2 Site Nøgle"
+
+#: widgets/button/button.php:237
+msgid "Additional CSS classes added to the button link."
+msgstr "Yderligere CSS klasser tilføjet knappen link."
+
+#: widgets/button/button.php:236
+msgid "Button Classes"
+msgstr "Knap klasser"
+
+#: base/inc/fields/posts.class.php:133
+msgid "Only sticky"
+msgstr "Kun klæbeligt"
+
+#: widgets/contact/contact.php:710
+msgid "SiteOrigin Premium"
+msgstr "SiteOrigin Premium"
+
+#: widgets/contact/contact.php:709
+msgid "Get more form fields for the Contact Form Widget in %s"
+msgstr "Få flere formularfelter til Kontakt Form Widget i %s"
+
+#: base/inc/fields/media.class.php:194
+msgid "Powered by %s"
+msgstr "Drevet af %s"
+
+#: base/inc/fields/icon.class.php:70
+msgid "Search Icons"
+msgstr "Søg ikoner"
+
+#: admin/tpl/admin.php:130
+msgid "Save"
+msgstr "Gem"
+
+#: base/inc/fields/base.class.php:331
+msgid "Required"
+msgstr "Påkrævet"
+
+#: widgets/headline/headline.php:248 widgets/hero/hero.php:228
+msgid "Dynamically adjust your heading font size based on screen size."
+msgstr "Dynamisk jaustring af overskrift skrifttype baseret på skærmstørrelse."
+
+#: widgets/headline/headline.php:247 widgets/hero/hero.php:227
+msgid "Use FitText"
+msgstr "Brug FitText"
+
+#: widgets/headline/headline.php:240
+msgid "Sub Headline"
+msgstr "Sub-overskrift"
+
+#: widgets/headline/headline.php:236
+msgid "Element Order"
+msgstr "Element rækkefølge"
+
+#: widgets/headline/headline.php:223
+msgid "Divider Width"
+msgstr "Horizontal linje bredde"
+
+#: widgets/headline/headline.php:206
+msgid "Thickness"
+msgstr "Tykkelse"
+
+#: widgets/headline/headline.php:102 widgets/headline/headline.php:173
+#: widgets/headline/headline.php:228
+msgid "Top and Bottom Margin"
+msgstr "Top- og bundmargen"
+
+#: widgets/headline/headline.php:98 widgets/headline/headline.php:169
+msgid "Line Height"
+msgstr "Linje højde"
+
+#: widgets/headline/headline.php:83 widgets/headline/headline.php:154
+msgid "Font Size"
+msgstr "Skrift størrelse"
+
+#: widgets/headline/headline.php:65 widgets/headline/headline.php:136
+msgid "Paragraph"
+msgstr "Afsnit"
+
+#: widgets/headline/headline.php:56 widgets/headline/headline.php:127
+msgid "HTML Tag"
+msgstr "HTML- tag"
+
+#: base/inc/fields/media.class.php:228
+msgid "Sponsored"
+msgstr "Sponsoreret"
+
+#: base/inc/fields/media.class.php:209
+msgid "Load More"
+msgstr "Hent flere"
+
+#: base/inc/fields/media.class.php:206
+msgid "Downloading Image - Please Wait"
+msgstr "Download billede - vent venligst"
+
+#: base/inc/fields/media.class.php:205
+msgid "Loading Images"
+msgstr "Indlæser billeder"
+
+#: base/inc/fields/media.class.php:187
+msgid "Related Searches: "
+msgstr "Relaterede søgninger: "
+
+#: base/inc/fields/media.class.php:172 base/inc/fields/media.class.php:180
+msgid "Search For Images"
+msgstr "Søg efter billeder"
+
+#: base/inc/fields/media.class.php:168
+msgid "Would you like to import this image into your media library?"
+msgstr "Vil du gerne importere dette billede til dit mediebibliotek?"
+
+#: base/inc/fields/media.class.php:62
+msgid "Image Search"
+msgstr "Billedsøgning"
+
+#: base/inc/actions.php:249
+msgid "Attachment error"
+msgstr "Vedhæftet fil fejl"
+
+#: base/inc/actions.php:223
+msgid "Signature error"
+msgstr "Underskrift fejl"
+
+#: base/inc/actions.php:213
+msgid "Nonce error"
+msgstr "Nonce fejl"
+
+#: widgets/social-media-buttons/tpl/default.php:25
+msgid "%s on %s"
+msgstr "%s på %s"
+
+#: widgets/social-media-buttons/data/networks.php:98
+msgid "500px"
+msgstr "500px"
+
+#: widgets/video/video.php:57
+msgid "Sources"
+msgstr "Kilder"
+
+#: widgets/taxonomy/taxonomy.php:60
+msgid "Hover color"
+msgstr "Hover Farve"
+
+#: widgets/taxonomy/taxonomy.php:49
+msgid "Links"
+msgstr "Links"
+
+#: widgets/taxonomy/taxonomy.php:47
+msgid "Display as"
+msgstr "Vis som"
+
+#: widgets/taxonomy/taxonomy.php:17
+msgid "SiteOrigin Taxonomy"
+msgstr "SiteOrigin klassificering"
+
+#: widgets/layout-slider/layout-slider.php:289
+msgid "This widget requires Page Builder."
+msgstr "Denne widget kræver Page Builder."
+
+#: widgets/layout-slider/layout-slider.php:21
+msgid "A slider that allows you to create responsive columnized content for each slide."
+msgstr "En slider, der tillader dig at oprette responsivt kolonne indhold for hvert dias."
+
+#: widgets/layout-slider/layout-slider.php:19
+msgid "SiteOrigin Layout Slider"
+msgstr "SiteOrigin Layout skyderen"
+
+#: widgets/contact/contact.php:1138
+msgid "Contact Form"
+msgstr "Kontakt form"
+
+#: widgets/button/button.php:110
+msgid "Leave blank to let the button resize according to content."
+msgstr "Efterlad tomt for knap tilpasser sig efter indhold."
+
+#: base/inc/widgets/base-slider.class.php:129
+msgid "Allow users to swipe through frames on mobile devices."
+msgstr "Tillad brugere at swipe gennem rammer på mobile enheder."
+
+#: base/inc/widgets/base-slider.class.php:128
+msgid "Swipe control"
+msgstr "Swipe kontrol"
+
+#: base/inc/fields/image-size.class.php:15
+msgid "Thumbnail (Theme-defined)"
+msgstr "Miniature (tema-defineret)"
+
+#: widgets/layout-slider/layout-slider.php:224
+#: base/inc/fields/builder.class.php:43
+msgid "SiteOrigin Page Builder"
+msgstr "SiteOrigin Page Builder"
+
+#: base/inc/fields/builder.class.php:42
+msgid "This field requires: "
+msgstr "Dette felt kræver: "
+
+#: base/inc/fields/builder.class.php:26
+msgid "Open Builder"
+msgstr "Open Builder"
+
+#: widgets/icon/icon.php:46 widgets/headline/headline.php:87
+#: widgets/headline/headline.php:158 widgets/headline/headline.php:213
+msgid "Alignment"
+msgstr "Justering"
+
+#: widgets/icon/icon.php:17
+msgid "SiteOrigin Icon"
+msgstr "SiteOrigin ikon"
+
+#: widgets/hero/hero.php:214 widgets/layout-slider/layout-slider.php:174
+msgid "Heading color"
+msgstr "Overskrift farve"
+
+#: widgets/features/features.php:102
+msgid "Icon image size"
+msgstr "Ikonbillede"
+
+#: widgets/contact/contact.php:522
+msgid "Italic"
+msgstr "Italic"
+
+#: widgets/contact/contact.php:505
+msgid "Field descriptions"
+msgstr "Felt beskrivelser"
+
+#: widgets/contact/contact.php:173
+msgid "This text will appear small beneath the input field."
+msgstr "Denne tekst vil vises i lille størrelse under input feltet."
+
+#: widgets/contact/contact.php:172
+msgid "Description"
+msgstr "Forklaring"
+
+#: widgets/testimonial/testimonial.php:78
+msgid "Link image"
+msgstr "Billede link"
+
+#: widgets/testimonial/testimonial.php:61
+msgid "Link name"
+msgstr "Linknavn"
+
+#: widgets/price-table/price-table.php:80
+msgid "Image alt text"
+msgstr "Billedets Alt Tekst"
+
+#: widgets/image/image.php:73
+msgid "Title position"
+msgstr "Titel placering"
+
+#: widgets/image/image.php:44
+msgid "Image alignment"
+msgstr "Billedejustering"
+
+#: widgets/contact/contact.php:662
+msgid "Input focus"
+msgstr "Input fokus"
+
+#: widgets/contact/contact.php:402
+msgid "Inside"
+msgstr "Indeni"
+
+#: widgets/image/image.php:78 widgets/contact/contact.php:399
+msgid "Below"
+msgstr "Nedenfor"
+
+#: widgets/image/image.php:77 widgets/contact/contact.php:398
+msgid "Above"
+msgstr "Ovenfor"
+
+#: widgets/contact/contact.php:395
+msgid "Position"
+msgstr "Stilling"
+
+#: widgets/contact/contact.php:376
+msgid "Field labels"
+msgstr "Feltetiketter"
+
+#: widgets/contact/contact.php:290
+msgid "Compact"
+msgstr "Kompakt"
+
+#: widgets/contact/contact.php:277
+msgid "Audio"
+msgstr "Lydklip"
+
+#: widgets/contact/contact.php:273
+msgid "Challenge type"
+msgstr "Udfordring type"
+
+#: widgets/contact/contact.php:264
+msgid "Dark"
+msgstr "Mørk"
+
+#: widgets/contact/contact.php:263
+msgid "Light"
+msgstr "Lyst"
+
+#: widgets/contact/contact.php:260
+msgid "Theme"
+msgstr "Tema"
+
+#: icons/icons.php:12
+msgid "Ionicons"
+msgstr "Ionicons"
+
+#: base/inc/fields/date-range.class.php:45
+msgid "From"
+msgstr "Fra"
+
+#: widgets/features/features.php:178
+msgid "More Link"
+msgstr "Mere link"
+
+#: widgets/icon/icon.php:41 widgets/features/features.php:146
+#: widgets/features/features.php:167 widgets/features/features.php:188
+#: widgets/contact/contact.php:286 widgets/contact/contact.php:509
+msgid "Size"
+msgstr "Størrelse"
+
+#: widgets/contact/contact.php:540
+msgid "Error border color"
+msgstr "Fejl Kantfarve"
+
+#: widgets/video/video.php:18
+msgid "SiteOrigin Video Player"
+msgstr "SiteOrigin Video Player"
+
+#: widgets/testimonial/testimonial.php:268
+msgid "Text below user"
+msgstr "Tekst Under"
+
+#: widgets/testimonial/testimonial.php:267
+msgid "Text above user"
+msgstr "Tekst over"
+
+#: widgets/testimonial/testimonial.php:266
+msgid "Side by side"
+msgstr "Side-om-side"
+
+#: widgets/testimonial/testimonial.php:264
+msgid "Testimonial layout"
+msgstr "Testimonial layout"
+
+#: widgets/testimonial/testimonial.php:257
+msgid "Middle"
+msgstr "Midten"
+
+#: widgets/testimonial/testimonial.php:253
+msgid "User position"
+msgstr "Brugerens position"
+
+#: widgets/testimonial/testimonial.php:222
+msgid "Text background"
+msgstr "Tekst baggrund"
+
+#: widgets/testimonial/testimonial.php:218
+msgid "Widget background"
+msgstr "Widget baggrund"
+
+#: widgets/testimonial/testimonial.php:214
+msgid "Colors"
+msgstr "Farver"
+
+#: widgets/testimonial/testimonial.php:196
+msgid "Round"
+msgstr "Rund"
+
+#: widgets/testimonial/testimonial.php:195
+msgid "Square"
+msgstr "Firkant"
+
+#: widgets/testimonial/testimonial.php:149
+msgid "Mobile Phone"
+msgstr "Mobiltelefon"
+
+#: widgets/testimonial/testimonial.php:141
+msgid "The resolution to treat as a tablet resolution."
+msgstr "Skærmopløsning som anvendes ved tablets."
+
+#: widgets/testimonial/testimonial.php:140
+#: widgets/testimonial/testimonial.php:169
+msgid "Resolution"
+msgstr "Opløsning"
+
+#: widgets/post-carousel/post-carousel.php:215
+#: widgets/testimonial/testimonial.php:120
+msgid "Tablet"
+msgstr "Tablet"
+
+#: widgets/post-carousel/post-carousel.php:197
+#: widgets/testimonial/testimonial.php:115
+msgid "Responsive"
+msgstr "Responsivt"
+
+#: widgets/testimonial/testimonial.php:106
+#: widgets/testimonial/testimonial.php:124
+#: widgets/testimonial/testimonial.php:153
+msgid "Testimonials per row"
+msgstr "Udtalelser pr. række"
+
+#: widgets/testimonial/testimonial.php:84
+msgid "What your customer had to say"
+msgstr "Hvad din kunde havde at sige"
+
+#: widgets/testimonial/testimonial.php:67
+msgid "Their location or company name"
+msgstr "Deres placering eller firmanavn"
+
+#: widgets/testimonial/testimonial.php:56
+msgid "The author of the testimonial"
+msgstr "Forfatteren af udtalelsen"
+
+#: widgets/testimonial/testimonial.php:46
+msgid "Testimonial"
+msgstr "Udtalelser"
+
+#: widgets/testimonial/testimonial.php:45
+msgid "Testimonials"
+msgstr "Anbefalinger"
+
+#: widgets/testimonial/testimonial.php:17
+msgid "Share your product or service testimonials in a variety of different ways."
+msgstr "Del udtalelser af dine varer eller services på række forskellige måder."
+
+#: widgets/testimonial/testimonial.php:15
+msgid "SiteOrigin Testimonials"
+msgstr "SiteOrigin udtalelser"
+
+#: widgets/simple-masonry/simple-masonry.php:157
+msgid "Mobile Layout"
+msgstr "Mobilt Layout"
+
+#: widgets/simple-masonry/simple-masonry.php:130
+#: widgets/simple-masonry/simple-masonry.php:162
+msgid "Break point"
+msgstr "Ombrydningspunkt"
+
+#: widgets/simple-masonry/simple-masonry.php:125
+msgid "Tablet Layout"
+msgstr "Tabletlayout"
+
+#: widgets/simple-masonry/simple-masonry.php:118
+#: widgets/simple-masonry/simple-masonry.php:150
+#: widgets/simple-masonry/simple-masonry.php:182
+msgid "Space between masonry items."
+msgstr "Plads mellem billede elementer."
+
+#: widgets/simple-masonry/simple-masonry.php:117
+#: widgets/simple-masonry/simple-masonry.php:149
+#: widgets/simple-masonry/simple-masonry.php:181
+msgid "Gutter"
+msgstr "Gitter afstand"
+
+#: widgets/simple-masonry/simple-masonry.php:112
+#: widgets/simple-masonry/simple-masonry.php:144
+#: widgets/simple-masonry/simple-masonry.php:176
+msgid "Leave blank to match calculated column width."
+msgstr "Lad stå tomt for at matche beregnede kolonnebredde."
+
+#: widgets/simple-masonry/simple-masonry.php:111
+#: widgets/simple-masonry/simple-masonry.php:143
+#: widgets/simple-masonry/simple-masonry.php:175
+msgid "Row height"
+msgstr "Række Højde"
+
+#: widgets/simple-masonry/simple-masonry.php:104
+#: widgets/simple-masonry/simple-masonry.php:136
+#: widgets/simple-masonry/simple-masonry.php:168
+msgid "Number of columns"
+msgstr "﻿Antal kolonner"
+
+#: widgets/simple-masonry/simple-masonry.php:100
+msgid "Desktop Layout"
+msgstr "Skrivebords layout"
+
+#: widgets/simple-masonry/simple-masonry.php:78
+msgid "Number of rows this item should span. (Limited to number of columns selected in Layout section below.)"
+msgstr "Antallet af rækker dette element skal udfylde. (Begrænset til antallet af kolonner markeret i layout afsnittet nedenfor.)"
+
+#: widgets/simple-masonry/simple-masonry.php:77
+msgid "Row span"
+msgstr "Række span"
+
+#: widgets/simple-masonry/simple-masonry.php:70
+msgid "Number of columns this item should span. (Limited to number of columns selected in Layout section below.)"
+msgstr "Antallet af kolonner dette element skal udfylde. (Begrænset til antallet af kolonner markeret i layout afsnittet nedenfor.)"
+
+#: widgets/simple-masonry/simple-masonry.php:69
+msgid "Column span"
+msgstr "Kolonne span"
+
+#: widgets/simple-masonry/simple-masonry.php:15
+msgid "SiteOrigin Simple Masonry"
+msgstr "SiteOrigin enkel murværk"
+
+#: widgets/image-grid/image-grid.php:115
+msgid "Amount of spacing between images."
+msgstr "Mængden af afstand mellem billeder."
+
+#: widgets/image-grid/image-grid.php:114
+msgid "Spacing"
+msgstr "Afstandsjustering"
+
+#: widgets/image-grid/image-grid.php:109
+msgid "Maximum image width"
+msgstr "Maksimal bredde for billede"
+
+#: widgets/image-grid/image-grid.php:104
+msgid "Maximum image height"
+msgstr "Maksimal billede højde"
+
+#: widgets/image-grid/image-grid.php:95
+msgid "Display"
+msgstr "Vis"
+
+#: widgets/image-grid/image-grid.php:75 widgets/price-table/price-table.php:75
+msgid "Image title"
+msgstr "Billedtitel"
+
+#: widgets/simple-masonry/simple-masonry.php:48
+#: widgets/image-grid/image-grid.php:52
+msgid "Images"
+msgstr "Billeder"
+
+#: widgets/image-grid/image-grid.php:21
+msgid "SiteOrigin Image Grid"
+msgstr "SiteOrigin billede"
+
+#: widgets/hero/hero.php:190 widgets/layout-slider/layout-slider.php:156
+msgid "Additional padding added to the top of the slider"
+msgstr "Ekstra polstring føjet til toppen af skyderen"
+
+#: widgets/hero/hero.php:189 widgets/layout-slider/layout-slider.php:155
+msgid "Extra top padding"
+msgstr "Ekstra top polstring"
+
+#: widgets/hero/hero.php:133 widgets/layout-slider/layout-slider.php:101
+msgid "Open URL in a new window"
+msgstr "Åbner i nyt vindue"
+
+#: widgets/headline/headline.php:64 widgets/headline/headline.php:135
+#: widgets/features/features.php:234
+msgid "H6"
+msgstr "H6"
+
+#: widgets/headline/headline.php:63 widgets/headline/headline.php:134
+#: widgets/features/features.php:233
+msgid "H5"
+msgstr "H5"
+
+#: widgets/headline/headline.php:62 widgets/headline/headline.php:133
+#: widgets/features/features.php:232
+msgid "H4"
+msgstr "H4"
+
+#: widgets/headline/headline.php:61 widgets/headline/headline.php:132
+#: widgets/features/features.php:231
+msgid "H3"
+msgstr "H3"
+
+#: widgets/headline/headline.php:60 widgets/headline/headline.php:131
+#: widgets/features/features.php:230
+msgid "H2"
+msgstr "H2"
+
+#: widgets/headline/headline.php:59 widgets/headline/headline.php:130
+#: widgets/features/features.php:229
+msgid "H1"
+msgstr "H1"
+
+#: widgets/contact/contact.php:1266
+msgid "Unfortunately our system identified your message as spam."
+msgstr "Desværre identificerede vores system mailen som spam."
+
+#: widgets/contact/contact.php:1234
+msgid "Error validating your Captcha response."
+msgstr "Fejl under validering af Captcha respons."
+
+#: widgets/contact/contact.php:1200
+msgid "Missing subject"
+msgstr "Emne mangler"
+
+#: widgets/contact/contact.php:1196
+msgid "The email address is invalid"
+msgstr "E-mail adressen er ikke gyldig"
+
+#: widgets/contact/contact.php:1194
+msgid "A valid email is required"
+msgstr "En gyldig e-mail er påkrævet"
+
+#: widgets/contact/contact.php:1168
+msgid "Error sending email, please try again later."
+msgstr "Fejl afsendelse af e-mail, prøv igen senere."
+
+#: widgets/contact/contact.php:1074
+msgid "Invalid email address."
+msgstr "Ugyldig e-mailadresse."
+
+#: widgets/contact/contact.php:764
+msgid "Please write something"
+msgstr "Skriv venligst noget"
+
+#: widgets/contact/contact.php:761
+msgid "Message"
+msgstr "Besked"
+
+#: widgets/contact/contact.php:756
+msgid "Please enter a subject"
+msgstr "﻿Indtast venligst et emne"
+
+#: widgets/contact/contact.php:748
+msgid "Please enter a valid email address"
+msgstr "Indtast venligst en gyldig e-mailadresse"
+
+#: widgets/contact/contact.php:745
+msgid "Your Email"
+msgstr "Din e-mail"
+
+#: widgets/contact/contact.php:740
+msgid "Please enter your name"
+msgstr "Indtast venligst dit navn"
+
+#: widgets/contact/contact.php:737
+msgid "Your Name"
+msgstr "Dit navn"
+
+#: widgets/contact/contact.php:652
+msgid "The white highlight at the bottom of the button"
+msgstr "Hvid højdepunktet i bunden af knappen"
+
+#: widgets/contact/contact.php:651
+msgid "Inset highlight"
+msgstr "Inset højdepunkt"
+
+#: widgets/contact/contact.php:627
+msgid "Bold"
+msgstr "Fed"
+
+#: widgets/contact/contact.php:626
+msgid "Semi-bold"
+msgstr "Semi-Fed"
+
+#: widgets/contact/contact.php:622
+msgid "Font weight"
+msgstr "Skrifttype tykkelse"
+
+#: widgets/contact/contact.php:495 widgets/contact/contact.php:605
+msgid "Border rounding"
+msgstr "Kant afrunding"
+
+#: widgets/contact/contact.php:579
+msgid "Gradient intensity"
+msgstr "Gradient intensitet"
+
+#: widgets/contact/contact.php:568
+msgid "Style the button or leave it with default theme styling."
+msgstr "Stil knappen eller lade det med standard tema styling."
+
+#: widgets/contact/contact.php:567
+msgid "Style submit button"
+msgstr "Stil sendeknap"
+
+#: widgets/contact/contact.php:563
+msgid "Submit button"
+msgstr "Send knap"
+
+#: widgets/contact/contact.php:555
+msgid "Error margin"
+msgstr "Fejlmargin"
+
+#: widgets/contact/contact.php:550
+msgid "Error padding"
+msgstr "Fejl polstring"
+
+#: widgets/contact/contact.php:545
+msgid "Error text color"
+msgstr "Fejl tekstfarve"
+
+#: widgets/contact/contact.php:535
+msgid "Error background color"
+msgstr "Fejl baggrundsfarve"
+
+#: widgets/contact/contact.php:531
+msgid "Error messages"
+msgstr "Fejlmeddelelser"
+
+#: widgets/image/image.php:76 widgets/contact/contact.php:360
+#: widgets/contact/contact.php:482 widgets/contact/contact.php:678
+msgid "Hidden"
+msgstr "Skjul"
+
+#: widgets/contact/contact.php:356 widgets/contact/contact.php:589
+msgid "Border style"
+msgstr "Ramme stilen"
+
+#: widgets/tabs/tabs.php:119 widgets/tabs/tabs.php:159
+#: widgets/tabs/tabs.php:187 widgets/contact/contact.php:351
+#: widgets/contact/contact.php:473 widgets/contact/contact.php:600
+#: widgets/accordion/accordion.php:147 widgets/accordion/accordion.php:171
+msgid "Border width"
+msgstr "Kantbredde"
+
+#: widgets/contact/contact.php:332
+msgid "Container"
+msgstr "Container"
+
+#: widgets/contact/contact.php:316
+msgid "How to handle submissions that are identified as spam."
+msgstr "Hvordan til at håndtere afsendelser, der identificeres som spam."
+
+#: widgets/contact/contact.php:314
+msgid "Tag as spam in subject"
+msgstr "Tag som spam i emnet"
+
+#: widgets/contact/contact.php:313
+msgid "Show error message"
+msgstr "Vis fejl besked"
+
+#: widgets/contact/contact.php:311
+msgid "Spam action"
+msgstr "Spam handling"
+
+#: widgets/contact/contact.php:306
+msgid "Use Akismet filtering"
+msgstr "Brug Akismet filtrering"
+
+#: widgets/contact/contact.php:302
+msgid "Akismet"
+msgstr "Akismet"
+
+#: widgets/contact/contact.php:217
+msgid "Spam Protection"
+msgstr "Spam beskyttelse"
+
+#: widgets/contact/contact.php:202
+msgid "Value"
+msgstr "Værdi"
+
+#: widgets/contact/contact.php:197
+msgid "Option"
+msgstr "Mulighed"
+
+#: widgets/contact/contact.php:196
+msgid "Options"
+msgstr "Indstillinger"
+
+#: widgets/contact/contact.php:188
+msgid "Error message to display if this field is missing."
+msgstr "Fejlmeddelelse, der vises, hvis dette felt er mangler."
+
+#: widgets/contact/contact.php:187
+msgid "Missing message"
+msgstr "Manglende meddelelse"
+
+#: widgets/contact/contact.php:183
+msgid "Is this field required?"
+msgstr "Er dette felt obligatorisk?"
+
+#: widgets/contact/contact.php:182 widgets/contact/contact.php:1062
+msgid "Required field"
+msgstr "Obligatorisk felt"
+
+#: widgets/contact/contact.php:178
+msgid "Required Field"
+msgstr "Påkrævet felt"
+
+#: widgets/taxonomy/taxonomy.php:43 widgets/contact/contact.php:167
+msgid "Label"
+msgstr "Etiket"
+
+#: widgets/contact/contact.php:156
+msgid "Checkboxes"
+msgstr "Afkrydsningsfelter"
+
+#: widgets/contact/contact.php:155
+msgid "Dropdown Select"
+msgstr "Dropdown Vælg"
+
+#: widgets/contact/contact.php:154
+msgid "Text Area"
+msgstr "Tekstområde"
+
+#: widgets/contact/contact.php:152 widgets/contact/contact.php:753
+msgid "Subject"
+msgstr "Emne"
+
+#: widgets/testimonial/testimonial.php:55 widgets/contact/contact.php:149
+msgid "Name"
+msgstr "Navn"
+
+#: widgets/contact/contact.php:146
+msgid "Field Type"
+msgstr "Felt type"
+
+#: widgets/contact/contact.php:138
+msgid "Field"
+msgstr "Felt"
+
+#: widgets/contact/contact.php:137 widgets/contact/contact.php:426
+msgid "Fields"
+msgstr "Felter"
+
+#: widgets/contact/contact.php:92
+msgid "Submit button text"
+msgstr "Send knap tekst"
+
+#: widgets/contact/contact.php:88
+msgid "Thanks for contacting us. We'll get back to you shortly."
+msgstr "Tak til at kontakte os. Vi vil vende tilbage til dig snarest."
+
+#: widgets/contact/contact.php:87
+msgid "Message to display after message successfully sent."
+msgstr "Besked som vises når besked sendt."
+
+#: widgets/contact/contact.php:86
+msgid "Success message"
+msgstr "Meddelelse ved godt resultat"
+
+#: widgets/contact/contact.php:82
+msgid "Prefix added to all incoming email subjects."
+msgstr "Præfikset føjes til alle indgående e-mail-emner."
+
+#: widgets/contact/contact.php:81
+msgid "Subject prefix"
+msgstr "Emnepræfiks"
+
+#: widgets/contact/contact.php:76
+msgid "Default subject"
+msgstr "Standardemne"
+
+#: widgets/contact/contact.php:64
+msgid "To email address"
+msgstr "Modtager e-mail-adresse"
+
+#: widgets/contact/contact.php:54
+msgid "Display title"
+msgstr "Vis titel"
+
+#: widgets/contact/contact.php:49 widgets/contact/contact.php:93
+msgid "Contact Us"
+msgstr "Kontakt os"
+
+#: widgets/contact/contact.php:17
+msgid "SiteOrigin Contact Form"
+msgstr "SiteOrigin kontakt Form"
+
+#: admin/tpl/admin.php:71
+msgid "Deactivate"
+msgstr "Deaktiver"
+
+#: admin/tpl/admin.php:70
+msgid "Activate"
+msgstr "Aktivér"
+
+#: admin/tpl/admin.php:48
+msgid "Active"
+msgstr "Aktiv"
+
+#: admin/tpl/admin.php:12
+msgid "Filter Widgets"
+msgstr "Filter Widgets"
+
+#. Author URI of the plugin
+msgid "https://siteorigin.com"
+msgstr "https://siteorigin.com"
+
+#. Author of the plugin
+msgid "SiteOrigin"
+msgstr "SiteOrigin"
+
+#. Description of the plugin
+msgid "A collection of all widgets, neatly bundled into a single plugin. It's also a framework to code your own widgets on top of."
+msgstr "En samling af alle widgets, pænt samlet i en enkelt plugin. Det er også en ramme til at kode dine egne widgets på toppen af."
+
+#. Plugin URI of the plugin
+msgid "https://siteorigin.com/widgets-bundle/"
+msgstr "https://siteorigin.com/widgets-bundle/"
+
+#: widgets/video/video.php:107
+msgid "Always use the embedded video rather than the MediaElement player."
+msgstr "Brug altid den indlejrede video i stedet for MediaElement afspilleren."
+
+#: widgets/video/video.php:106
+msgid "Use oEmbed"
+msgstr "Brug oEmbed"
+
+#: widgets/video/video.php:101 base/inc/widgets/base-slider.class.php:54
+#: base/inc/widgets/base-slider.class.php:159
+msgid "Autoplay"
+msgstr "Afspil automatisk"
+
+#: widgets/video/video.php:96
+msgid "Video Playback"
+msgstr "Videoafspilning"
+
+#: widgets/video/video.php:74
+msgid "Select cover image"
+msgstr "Vælg coverbillede"
+
+#: widgets/video/video.php:62
+msgid "Select video"
+msgstr "Vælg video"
+
+#: widgets/video/video.php:53
+msgid "Video File"
+msgstr "Video fil"
+
+#: widgets/video/video.php:41
+msgid "Externally hosted"
+msgstr "Eksternt hostet"
+
+#: widgets/video/video.php:40
+msgid "Self hosted"
+msgstr "Selvstændig vært"
+
+#: widgets/video/video.php:37
+msgid "Video location"
+msgstr "Video placering"
+
+#: compat/visual-composer/visual-composer.php:38
+#: compat/visual-composer/visual-composer.php:54
+#: compat/block-editor/widget-block.js:15
+#: compat/block-editor/widget-block.js:187
+msgid "SiteOrigin Widget"
+msgstr "SiteOrigin Widget"
+
+#: widgets/social-media-buttons/social-media-buttons.php:171
+#: widgets/contact/contact.php:443
+msgid "Margin"
+msgstr "Margin"
+
+#: widgets/social-media-buttons/social-media-buttons.php:74
+#: widgets/image-grid/image-grid.php:83 widgets/testimonial/testimonial.php:89
+msgid "URL"
+msgstr "URL"
+
+#: widgets/social-media-buttons/social-media-buttons.php:69
+msgid "Select network"
+msgstr "Vælg netværk"
+
+#: widgets/social-media-buttons/social-media-buttons.php:59
+msgid "Network"
+msgstr "Netværk"
+
+#: widgets/social-media-buttons/social-media-buttons.php:58
+msgid "Networks"
+msgstr "Netværks"
+
+#: widgets/social-media-buttons/social-media-buttons.php:19
+msgid "SiteOrigin Social Media Buttons"
+msgstr "SiteOrigin sociale medier knapper"
+
+#: widgets/social-media-buttons/data/networks.php:332
+msgid "YouTube"
+msgstr "YouTube"
+
+#: widgets/social-media-buttons/data/networks.php:326
+msgid "Yelp"
+msgstr "Yelp"
+
+#: widgets/social-media-buttons/data/networks.php:320
+msgid "Yahoo"
+msgstr "Yahoo"
+
+#: widgets/social-media-buttons/data/networks.php:314
+msgid "Xing"
+msgstr "Xing"
+
+#: widgets/social-media-buttons/data/networks.php:308
+msgid "WordPress"
+msgstr "WordPress"
+
+#: widgets/social-media-buttons/data/networks.php:296
+msgid "Vimeo"
+msgstr "Vimeo"
+
+#: widgets/social-media-buttons/data/networks.php:290
+msgid "Twitch"
+msgstr "Twitch"
+
+#: widgets/social-media-buttons/data/networks.php:284
+msgid "TripAdvisor"
+msgstr "TripAdvisor"
+
+#: widgets/social-media-buttons/data/networks.php:278
+msgid "Trello"
+msgstr "Trello"
+
+#: widgets/social-media-buttons/data/networks.php:260
+msgid "StumbleUpon"
+msgstr "StumbleUpon"
+
+#: widgets/social-media-buttons/data/networks.php:248
+msgid "Steam"
+msgstr "Damp"
+
+#: widgets/social-media-buttons/data/networks.php:242
+msgid "Stack Overflow"
+msgstr "Stack Overflow"
+
+#: widgets/social-media-buttons/data/networks.php:236
+msgid "Stack Exchange"
+msgstr "Stak Exchange"
+
+#: widgets/social-media-buttons/data/networks.php:230
+msgid "Spotify"
+msgstr "Spotify"
+
+#: widgets/social-media-buttons/data/networks.php:224
+msgid "Soundcloud"
+msgstr "SoundCloud"
+
+#: widgets/social-media-buttons/data/networks.php:218
+msgid "Slideshare"
+msgstr "SlideShare"
+
+#: widgets/social-media-buttons/data/networks.php:212
+msgid "Slack"
+msgstr "Slack"
+
+#: widgets/social-media-buttons/data/networks.php:206
+msgid "Reddit"
+msgstr "Reddit"
+
+#: widgets/social-media-buttons/data/networks.php:200
+msgid "Last.fm"
+msgstr "Last.fm"
+
+#: widgets/social-media-buttons/data/networks.php:194
+msgid "JSFiddle"
+msgstr "JSFiddle"
+
+#: widgets/social-media-buttons/data/networks.php:188
+msgid "Hacker News"
+msgstr "Hacker News"
+
+#: widgets/social-media-buttons/data/networks.php:176
+msgid "Gratipay"
+msgstr "Gratipay"
+
+#: widgets/social-media-buttons/data/networks.php:170
+msgid "Github"
+msgstr "Github"
+
+#: widgets/social-media-buttons/data/networks.php:164
+msgid "Foursquare"
+msgstr "Foursquare"
+
+#: widgets/social-media-buttons/data/networks.php:158
+msgid "Dropbox"
+msgstr "DropBox"
+
+#: widgets/social-media-buttons/data/networks.php:152
+msgid "Dribbble"
+msgstr "Dribbble"
+
+#: widgets/social-media-buttons/data/networks.php:146
+msgid "deviantArt"
+msgstr "deviantArt"
+
+#: widgets/social-media-buttons/data/networks.php:140
+msgid "Delicious"
+msgstr "Lækkert"
+
+#: widgets/social-media-buttons/data/networks.php:134
+msgid "Codepen"
+msgstr "CodePen"
+
+#: widgets/social-media-buttons/data/networks.php:122
+msgid "Bitbucket"
+msgstr "Bitbucket"
+
+#: widgets/social-media-buttons/data/networks.php:116
+msgid "Behance"
+msgstr "Behance"
+
+#: widgets/social-media-buttons/data/networks.php:89
+msgid "Vine"
+msgstr "Vine"
+
+#: widgets/social-media-buttons/data/networks.php:83
+msgid "Flickr"
+msgstr "Flickr"
+
+#: widgets/social-media-buttons/data/networks.php:77
+msgid "VK"
+msgstr "VK"
+
+#: widgets/social-media-buttons/data/networks.php:71
+msgid "Instagram"
+msgstr "Instagram"
+
+#: widgets/social-media-buttons/data/networks.php:65
+msgid "Tumblr"
+msgstr "Tumblr"
+
+#: widgets/social-media-buttons/data/networks.php:59
+msgid "Pinterest"
+msgstr "Pinterest"
+
+#: widgets/social-media-buttons/data/networks.php:53
+msgid "LinkedIn"
+msgstr "LinkedIn"
+
+#: widgets/social-media-buttons/data/networks.php:29
+#: widgets/contact/contact.php:150
+msgid "Email"
+msgstr "E-mail"
+
+#: widgets/social-media-buttons/data/networks.php:23
+msgid "RSS"
+msgstr "RSS"
+
+#: widgets/social-media-buttons/data/networks.php:17
+msgid "Google+"
+msgstr "Google +"
+
+#: widgets/social-media-buttons/data/networks.php:11
+msgid "Twitter"
+msgstr "Twitter"
+
+#: widgets/social-media-buttons/data/networks.php:5
+msgid "Facebook"
+msgstr "Facebook"
+
+#: widgets/slider/slider.php:108
+msgid "Controls"
+msgstr "Kontroller"
+
+#: widgets/slider/slider.php:90
+msgid "Foreground image"
+msgstr "Forgrund billede"
+
+#: widgets/layout-slider/layout-slider.php:75 widgets/slider/slider.php:82
+msgid "Tile"
+msgstr "Flise"
+
+#: widgets/hero/hero.php:107 widgets/layout-slider/layout-slider.php:74
+#: widgets/slider/slider.php:81
+msgid "Cover"
+msgstr "Dækning"
+
+#: widgets/hero/hero.php:105 widgets/layout-slider/layout-slider.php:72
+#: widgets/slider/slider.php:79
+msgid "Background image type"
+msgstr "Baggrunds billede Type"
+
+#: widgets/slider/slider.php:74
+msgid "Background Color"
+msgstr "Baggrund farve"
+
+#: widgets/layout-slider/layout-slider.php:36 widgets/slider/slider.php:34
+msgid "Slider frames"
+msgstr "Skyderen rammer"
+
+#: widgets/slider/slider.php:18
+msgid "A responsive slider widget that supports images and video."
+msgstr "En responsiv slider widget, der understøtter billeder og video."
+
+#: widgets/slider/slider.php:16
+msgid "SiteOrigin Slider"
+msgstr "SiteOrigin Lysbilleder"
+
+#: widgets/price-table/price-table.php:160
+msgid "Open Button URL in a new window"
+msgstr "Åbn knappen URL-adresse i et nyt vindue"
+
+#: widgets/price-table/price-table.php:155
+msgid "Featured button color"
+msgstr "Fremhævede knap farve"
+
+#: widgets/price-table/price-table.php:145
+msgid "Featured header color"
+msgstr "Fremhævede overskrift farve"
+
+#: widgets/price-table/price-table.php:140
+msgid "Header color"
+msgstr "Overskrift farve"
+
+#: widgets/price-table/price-table.php:132
+msgid "Price table theme"
+msgstr "Pris tabel tema"
+
+#: widgets/price-table/price-table.php:115
+msgid "Hover text"
+msgstr "Hover tekst"
+
+#: widgets/price-table/price-table.php:97
+msgid "Button URL"
+msgstr "Knap URL"
+
+#: widgets/price-table/price-table.php:89
+msgid "Per"
+msgstr "Per"
+
+#: widgets/price-table/price-table.php:85
+msgid "Price"
+msgstr "Pris"
+
+#: widgets/simple-masonry/simple-masonry.php:64
+#: widgets/image-grid/image-grid.php:53 widgets/image-grid/image-grid.php:69
+#: widgets/price-table/price-table.php:70
+#: widgets/testimonial/testimonial.php:72
+#: widgets/testimonial/testimonial.php:189 widgets/contact/contact.php:276
+msgid "Image"
+msgstr "Billede"
+
+#: widgets/price-table/price-table.php:57
+msgid "Featured"
+msgstr "Udvalgte"
+
+#: widgets/price-table/price-table.php:48
+msgid "Column"
+msgstr "Kolonne"
+
+#: widgets/price-table/price-table.php:47
+msgid "Columns"
+msgstr "Kolonner"
+
+#: widgets/price-table/price-table.php:15
+msgid "SiteOrigin Price Table"
+msgstr "SiteOrigin pris tabel"
+
+#: widgets/post-carousel/tpl/base.php:19 widgets/post-carousel/tpl/base.php:26
+msgid "Previous"
+msgstr "Forrige"
+
+#: widgets/post-carousel/tpl/base.php:18 widgets/post-carousel/tpl/base.php:28
+msgid "Next"
+msgstr "Næste"
+
+#: widgets/post-carousel/post-carousel.php:154
+msgid "Posts query"
+msgstr "Indlæg forespørgsel"
+
+#: widgets/post-carousel/post-carousel.php:50
+msgid "SiteOrigin Post Carousel"
+msgstr "SiteOrigin indlægskarusel"
+
+#: widgets/image/image.php:107
+msgid "Resize image to fit its container."
+msgstr "Resize billede til at passe sin container."
+
+#: widgets/image/image.php:106
+msgid "Full Width"
+msgstr "Fuld bredde"
+
+#: widgets/image/image.php:101
+msgid "Make sure the image doesn't extend beyond its container."
+msgstr "Kontroller, at billedet ikke strække sig ud over dets beholder."
+
+#: widgets/image/image.php:100
+msgid "Bound"
+msgstr "Bundet til"
+
+#: widgets/image-grid/image-grid.php:88 widgets/image/image.php:94
+#: widgets/slider/slider.php:101
+msgid "Open in new window"
+msgstr "Åbn i nyt vindue"
+
+#: widgets/image-grid/image-grid.php:79 widgets/image/image.php:84
+msgid "Alt text"
+msgstr "Alt Tekst"
+
+#: base/inc/fields/image-size.class.php:14
+msgid "Full"
+msgstr "Fuld"
+
+#: widgets/image-grid/image-grid.php:98 widgets/image/image.php:39
+#: widgets/testimonial/testimonial.php:132
+#: widgets/testimonial/testimonial.php:161
+#: widgets/testimonial/testimonial.php:203 widgets/hero/hero.php:100
+msgid "Image size"
+msgstr "Billedstørrelse"
+
+#: widgets/image/image.php:32
+msgid "Image file"
+msgstr "Billedfil"
+
+#: widgets/image/image.php:16
+msgid "A simple image widget with massive power."
+msgstr "En simpel billede widget med massiv kraft."
+
+#: widgets/image/image.php:14
+msgid "SiteOrigin Image"
+msgstr "SiteOrigin billede"
+
+#: widgets/hero/hero.php:266 widgets/layout-slider/layout-slider.php:198
+msgid "Text size"
+msgstr "Tekst størrelse"
+
+#: widgets/hero/hero.php:253 widgets/layout-slider/layout-slider.php:188
+msgid "Heading shadow intensity"
+msgstr "Overskrift skygge intensitet"
+
+#: widgets/hero/hero.php:220
+msgid "Heading size"
+msgstr "Overskriftens tekststørrelse"
+
+#: widgets/hero/hero.php:208
+msgid "Heading font"
+msgstr "Sidehovedes skrifttype"
+
+#: widgets/hero/hero.php:202 widgets/layout-slider/layout-slider.php:168
+msgid "Maximum container width"
+msgstr "Maksimal bredde på beholder"
+
+#: widgets/hero/hero.php:196 widgets/layout-slider/layout-slider.php:162
+msgid "Side padding"
+msgstr "Ingen ekstra afstand"
+
+#: widgets/hero/hero.php:183 widgets/layout-slider/layout-slider.php:149
+msgid "Top and bottom padding"
+msgstr "Top og bund polstring"
+
+#: widgets/hero/hero.php:160 widgets/layout-slider/layout-slider.php:128
+msgid "Design and Layout"
+msgstr "Design og Layout"
+
+#: widgets/hero/hero.php:154 widgets/layout-slider/layout-slider.php:122
+msgid "Slider Controls"
+msgstr "Skyderen kontrol"
+
+#: widgets/hero/hero.php:139 widgets/layout-slider/layout-slider.php:107
+#: widgets/slider/slider.php:56
+msgid "Background videos"
+msgstr "Baggrund videoer"
+
+#: widgets/hero/hero.php:138 widgets/layout-slider/layout-slider.php:106
+#: widgets/slider/slider.php:55
+msgid "Video"
+msgstr "Video"
+
+#: widgets/hero/hero.php:113 widgets/layout-slider/layout-slider.php:81
+msgid "Background image opacity"
+msgstr "Baggrund billede opacitet"
+
+#: widgets/hero/hero.php:93 widgets/layout-slider/layout-slider.php:65
+#: widgets/slider/slider.php:68
+msgid "Background image"
+msgstr "Baggrunds billede"
+
+#: widgets/hero/hero.php:89 widgets/layout-slider/layout-slider.php:61
+#: widgets/contact/contact.php:464
+msgid "Background"
+msgstr "Baggrund"
+
+#: widgets/hero/hero.php:69
+msgid "Add [buttons] shortcode to the content to insert these buttons."
+msgstr "Tilføje [knapper] ufuldkommenhed til indhold til at indsætte disse knapper."
+
+#: widgets/taxonomy/taxonomy.php:50 widgets/hero/hero.php:67
+msgid "Buttons"
+msgstr "Knapper"
+
+#: widgets/tabs/tabs.php:88 widgets/hero/hero.php:62
+#: widgets/layout-slider/layout-slider.php:56
+#: widgets/accordion/accordion.php:88
+msgid "Content"
+msgstr "Indhold"
+
+#: widgets/hero/hero.php:51 widgets/layout-slider/layout-slider.php:37
+#: widgets/slider/slider.php:35
+msgid "Frame"
+msgstr "Ramme"
+
+#: widgets/hero/hero.php:50
+msgid "Hero frames"
+msgstr "Hero rammer"
+
+#: widgets/hero/hero.php:21
+msgid "A big hero image with a few settings to make it your own."
+msgstr "Et stort Hero billede med et par indstillinger at gøre det til dit eget."
+
+#: widgets/hero/hero.php:19
+msgid "SiteOrigin Hero"
+msgstr "SiteOrigin Hero"
+
+#: widgets/headline/headline.php:196 widgets/contact/contact.php:368
+#: widgets/contact/contact.php:490 widgets/contact/contact.php:676
+msgid "Outset"
+msgstr "Udsætning"
+
+#: widgets/headline/headline.php:195 widgets/contact/contact.php:367
+#: widgets/contact/contact.php:489 widgets/contact/contact.php:675
+msgid "Inset"
+msgstr "Indsat"
+
+#: widgets/headline/headline.php:194 widgets/contact/contact.php:366
+#: widgets/contact/contact.php:488 widgets/contact/contact.php:674
+msgid "Ridge"
+msgstr "Kant"
+
+#: widgets/headline/headline.php:193 widgets/contact/contact.php:365
+#: widgets/contact/contact.php:487 widgets/contact/contact.php:673
+msgid "Groove"
+msgstr "Udfræsning"
+
+#: widgets/headline/headline.php:192 widgets/contact/contact.php:364
+#: widgets/contact/contact.php:486 widgets/contact/contact.php:672
+msgid "Double"
+msgstr "Dobbelt"
+
+#: widgets/headline/headline.php:191 widgets/contact/contact.php:362
+#: widgets/contact/contact.php:484 widgets/contact/contact.php:595
+#: widgets/contact/contact.php:670
+msgid "Dashed"
+msgstr "Stiplet"
+
+#: widgets/headline/headline.php:190 widgets/contact/contact.php:361
+#: widgets/contact/contact.php:483 widgets/contact/contact.php:594
+#: widgets/contact/contact.php:669
+msgid "Dotted"
+msgstr "Prikket"
+
+#: icons/fontawesome/filter.php:1461 widgets/headline/headline.php:189
+#: widgets/contact/contact.php:363 widgets/contact/contact.php:485
+#: widgets/contact/contact.php:593 widgets/contact/contact.php:671
+msgid "Solid"
+msgstr "Solid"
+
+#: widgets/headline/headline.php:180 widgets/headline/headline.php:239
+msgid "Divider"
+msgstr "Opdeler"
+
+#: widgets/headline/headline.php:109
+msgid "Sub headline"
+msgstr "Sub-overskrift"
+
+#: widgets/headline/headline.php:78 widgets/headline/headline.php:149
+#: widgets/button/button.php:181 widgets/features/features.php:141
+#: widgets/features/features.php:162 widgets/features/features.php:183
+#: widgets/contact/contact.php:380 widgets/contact/contact.php:430
+msgid "Font"
+msgstr "Skrifttype"
+
+#: widgets/headline/headline.php:38 widgets/headline/headline.php:238
+msgid "Headline"
+msgstr "Overskrift"
+
+#: widgets/headline/headline.php:17
+msgid "SiteOrigin Headline"
+msgstr "SiteOrigin overskrift"
+
+#: widgets/google-map/google-map.php:655
+msgid "Custom Map"
+msgstr "Brugerdefinerede kort"
+
+#: widgets/google-map/google-map.php:460
+msgid "API key"
+msgstr "API-nøgle"
+
+#: widgets/google-map/google-map.php:449
+msgid "Allow the Google Maps service to reorder waypoints for the shortest travelling distance."
+msgstr "Tillade tjenesten Google Maps til at omrokere waypoints for den korteste omrejsende afstand."
+
+#: widgets/google-map/google-map.php:447
+msgid "Optimize waypoints"
+msgstr "Optimere waypoints"
+
+#: widgets/google-map/google-map.php:441
+msgid "Whether or not this is a stop on the route or just a route preference."
+msgstr "Hvorvidt dette er et stop på ruten eller bare en rute præference."
+
+#: widgets/google-map/google-map.php:440
+msgid "Stopover"
+msgstr "Mellemhandling"
+
+#: widgets/google-map/google-map.php:435 widgets/testimonial/testimonial.php:66
+msgid "Location"
+msgstr "Beliggenhed"
+
+#: widgets/google-map/google-map.php:425
+msgid "Waypoint"
+msgstr "Waypoint"
+
+#: widgets/google-map/google-map.php:424
+msgid "Waypoints"
+msgstr "Waypoints"
+
+#: widgets/google-map/google-map.php:415
+msgid "Avoid tolls"
+msgstr "Undgå vejafgifter"
+
+#: widgets/google-map/google-map.php:411
+msgid "Avoid highways"
+msgstr "Undgå motorveje"
+
+#: widgets/google-map/google-map.php:406
+msgid "Transit"
+msgstr "Gennemrejse"
+
+#: widgets/google-map/google-map.php:405
+msgid "Bicycling"
+msgstr "Cykle"
+
+#: widgets/google-map/google-map.php:404
+msgid "Walking"
+msgstr "Walking"
+
+#: widgets/google-map/google-map.php:403
+msgid "Driving"
+msgstr "Kører"
+
+#: widgets/google-map/google-map.php:400
+msgid "Travel mode"
+msgstr "Rejsetilstand"
+
+#: widgets/google-map/google-map.php:396
+msgid "Destination"
+msgstr "Destination"
+
+#: widgets/google-map/google-map.php:392
+msgid "Starting point"
+msgstr "Udgangspunkt"
+
+#: widgets/google-map/google-map.php:376
+msgid "Directions"
+msgstr "Retninger"
+
+#: widgets/icon/icon.php:36 widgets/google-map/google-map.php:368
+#: widgets/taxonomy/taxonomy.php:56 widgets/headline/headline.php:70
+#: widgets/headline/headline.php:141 widgets/headline/headline.php:201
+#: widgets/features/features.php:150 widgets/features/features.php:171
+#: widgets/features/features.php:192 widgets/contact/contact.php:390
+#: widgets/contact/contact.php:514 widgets/contact/contact.php:683
+msgid "Color"
+msgstr "Farve"
+
+#: widgets/google-map/google-map.php:364
+msgid "Visible"
+msgstr "Synlig"
+
+#: widgets/google-map/google-map.php:357
+msgid "Labels"
+msgstr "Etiketter"
+
+#: widgets/google-map/google-map.php:356
+msgid "Geometry"
+msgstr "Geometri"
+
+#: widgets/google-map/google-map.php:354
+msgid "Select element type to style"
+msgstr "Vælg elementtype stil"
+
+#: widgets/google-map/google-map.php:349
+msgid "Point of interest - Sports complexes"
+msgstr "Punkt af interesse - sportsanlæg"
+
+#: widgets/google-map/google-map.php:348
+msgid "Point of interest - Schools"
+msgstr "Punkt af interesse - skoler"
+
+#: widgets/google-map/google-map.php:347
+msgid "Point of interest - Places of worship"
+msgstr "Punkt af interesse - steder for tilbedelse"
+
+#: widgets/google-map/google-map.php:346
+msgid "Point of interest - Parks"
+msgstr "Punkt af interesse - parker"
+
+#: widgets/google-map/google-map.php:345
+msgid "Point of interest - Medical"
+msgstr "Punkt af interesse - medicinsk"
+
+#: widgets/google-map/google-map.php:344
+msgid "Point of interest - Government"
+msgstr "Punkt af interesse - regering"
+
+#: widgets/google-map/google-map.php:343
+msgid "Point of interest - Business"
+msgstr "Punkt af interesse - Business"
+
+#: widgets/google-map/google-map.php:342
+msgid "Point of interest - Attractions"
+msgstr "Punkt af interesse - attraktioner"
+
+#: widgets/google-map/google-map.php:341
+msgid "Natural landscape terrain"
+msgstr "Naturlige landskab terræn"
+
+#: widgets/google-map/google-map.php:340
+msgid "Natural landscape landcover"
+msgstr "Naturlige landskab landcover"
+
+#: widgets/google-map/google-map.php:339
+msgid "Man-made landscape"
+msgstr "Kultur landskab"
+
+#: widgets/google-map/google-map.php:338
+msgid "Transit stations"
+msgstr "Transit-stationer"
+
+#: widgets/google-map/google-map.php:337
+msgid "Transit lines"
+msgstr "Transit linjer"
+
+#: widgets/google-map/google-map.php:336
+msgid "Local roads"
+msgstr "Lokale veje"
+
+#: widgets/google-map/google-map.php:335
+msgid "Arterial roads"
+msgstr "Arteriel veje"
+
+#: widgets/google-map/google-map.php:334
+msgid "Highways"
+msgstr "Hovedveje"
+
+#: widgets/google-map/google-map.php:333
+msgid "Water"
+msgstr "Vand"
+
+#: widgets/google-map/google-map.php:331
+msgid "Select map feature to style"
+msgstr "Vælg kortfunktion til stil"
+
+#: widgets/google-map/google-map.php:321 widgets/headline/headline.php:185
+#: widgets/contact/contact.php:519 widgets/contact/contact.php:666
+msgid "Style"
+msgstr "Stil"
+
+#: widgets/google-map/google-map.php:320
+msgid "Custom map styles"
+msgstr "Brugerdefinerede kort stilarter"
+
+#: widgets/google-map/google-map.php:311
+msgid "Raw JSON styles"
+msgstr "Rå JSON stilarter"
+
+#: widgets/google-map/google-map.php:301
+msgid "Styled map name"
+msgstr "Stylet kort navn"
+
+#: widgets/google-map/google-map.php:292
+msgid "Predefined Styles"
+msgstr "Foruddefinerede typografier"
+
+#: widgets/google-map/google-map.php:291
+msgid "Custom"
+msgstr "Brugerdefineret"
+
+#: widgets/google-map/google-map.php:284
+msgid "Map styles"
+msgstr "Kort layout"
+
+#: widgets/google-map/google-map.php:279
+msgid "Apply custom colors to map features, or hide them completely."
+msgstr "Anvende brugerdefinerede farver for at kortlægge funktioner, eller skjule dem helt."
+
+#: widgets/google-map/google-map.php:277
+msgid "Styles"
+msgstr "Layout"
+
+#: widgets/google-map/google-map.php:264
+msgid "Always"
+msgstr "Altid"
+
+#: widgets/google-map/google-map.php:263
+msgid "Mouse over"
+msgstr "Ved berøring af mus"
+
+#: widgets/google-map/google-map.php:262
+msgid "Click"
+msgstr "Klik"
+
+#: widgets/google-map/google-map.php:259
+msgid "When should Info Windows be displayed?"
+msgstr "Hvornår skal oplysningsvinduer vises?"
+
+#: widgets/google-map/google-map.php:247
+msgid "Info Window max width"
+msgstr "Info vindue max bredde"
+
+#: widgets/google-map/google-map.php:243
+msgid "Info Window Content"
+msgstr "Info vindue indhold"
+
+#: widgets/google-map/google-map.php:238
+msgid "Place"
+msgstr "Placér"
+
+#: widgets/google-map/google-map.php:228
+msgid "Marker"
+msgstr "Markør"
+
+#: widgets/google-map/google-map.php:227
+msgid "Marker positions"
+msgstr "Markør positioner"
+
+#: widgets/google-map/google-map.php:223
+msgid "Draggable markers"
+msgstr "Kan trækkes rundt markører"
+
+#: widgets/google-map/google-map.php:214
+msgid "Replaces the default map marker with your own image."
+msgstr "Erstatter standard kortmarkør med dit eget billede."
+
+#: widgets/google-map/google-map.php:213
+msgid "Marker icon"
+msgstr "Markør ikon"
+
+#: widgets/google-map/google-map.php:208
+msgid "Show marker at map center"
+msgstr "Vis markør på kort center"
+
+#: widgets/google-map/google-map.php:203
+msgid "Use markers to identify points of interest on the map."
+msgstr "Brug markører til at identificere interessepunkter på kortet."
+
+#: widgets/google-map/google-map.php:201
+msgid "Markers"
+msgstr "Markører"
+
+#: widgets/google-map/google-map.php:185
+msgid "Keeps the map centered when it's container is resized."
+msgstr "Holder kortet centreret, når det er beholderen er skaleres."
+
+#: widgets/google-map/google-map.php:184
+msgid "Keep map centered"
+msgstr "Hold kort centreret"
+
+#: widgets/google-map/google-map.php:175
+msgid "Hides the default Google Maps controls."
+msgstr "Skjuler standard Google Maps kontrollen."
+
+#: widgets/google-map/google-map.php:174
+msgid "Disable default UI"
+msgstr "Deaktivere standard UI"
+
+#: widgets/google-map/google-map.php:125
+msgid "A value from 0 (the world) to 21 (street level)."
+msgstr "En værdi fra 0 (verden) til 21 (gadeniveau)."
+
+#: widgets/google-map/google-map.php:124
+msgid "Zoom level"
+msgstr "Zoom-niveau"
+
+#: widgets/google-map/google-map.php:98 widgets/hero/hero.php:165
+#: widgets/layout-slider/layout-slider.php:133 widgets/contact/contact.php:456
+msgid "Height"
+msgstr "Højde"
+
+#: widgets/google-map/google-map.php:94 widgets/button/button.php:109
+#: widgets/contact/contact.php:407 widgets/contact/contact.php:637
+#: widgets/contact/contact.php:688
+msgid "Width"
+msgstr "Bredde"
+
+#: widgets/google-map/google-map.php:74
+msgid "Static image"
+msgstr "Statisk billede"
+
+#: widgets/google-map/google-map.php:73
+msgid "Interactive"
+msgstr "Interaktiv"
+
+#: widgets/google-map/google-map.php:67
+msgid "Map type"
+msgstr "Kortets type"
+
+#: widgets/google-map/google-map.php:62
+msgid "Set map display options."
+msgstr "Angiv indstillinger for visning af kort."
+
+#: widgets/google-map/google-map.php:60 widgets/testimonial/testimonial.php:101
+#: widgets/contact/contact.php:59 admin/tpl/admin.php:90
+msgid "Settings"
+msgstr "Indstillinger"
+
+#: widgets/google-map/google-map.php:47
+msgid "Map center"
+msgstr "Kort center"
+
+#: widgets/google-map/google-map.php:17
+msgid "SiteOrigin Google Maps"
+msgstr "SiteOrigin Google Maps"
+
+#: widgets/features/features.php:264
+msgid "Open more URL in a new window"
+msgstr "Åbner i nyt vindue"
+
+#: widgets/features/features.php:258
+msgid "Link icon to more URL"
+msgstr "Link-ikonet til flere URL"
+
+#: widgets/features/features.php:252
+msgid "Link feature title to more URL"
+msgstr "Link funktionen titel til flere URL"
+
+#: widgets/features/features.php:246
+msgid "Responsive layout"
+msgstr "Responsivt design"
+
+#: widgets/features/features.php:240
+msgid "Features per row"
+msgstr "Fremhævelser pr. række"
+
+#: widgets/social-media-buttons/social-media-buttons.php:117
+#: widgets/features/features.php:214
+msgid "Icon size"
+msgstr "Ikonstørrelse"
+
+#: widgets/features/features.php:124
+msgid "More link URL"
+msgstr "Flere link URL"
+
+#: widgets/features/features.php:119
+msgid "More link text"
+msgstr "Læs mere link tekst"
+
+#: widgets/price-table/price-table.php:111 widgets/taxonomy/taxonomy.php:51
+#: widgets/headline/headline.php:43 widgets/headline/headline.php:114
+#: widgets/testimonial/testimonial.php:83 widgets/features/features.php:114
+#: widgets/features/features.php:157 widgets/contact/contact.php:153
+msgid "Text"
+msgstr "Tekst"
+
+#: widgets/image/image.php:68 widgets/features/features.php:109
+msgid "Title text"
+msgstr "Overskrift tekst"
+
+#: widgets/features/features.php:96
+msgid "Use your own icon image."
+msgstr "Brug dit eget ikonbilledet."
+
+#: widgets/features/features.php:95
+msgid "Icon image"
+msgstr "Ikonbillede"
+
+#: widgets/price-table/price-table.php:102 widgets/features/features.php:44
+msgid "Feature"
+msgstr "Funktion"
+
+#: widgets/price-table/price-table.php:101 widgets/features/features.php:43
+msgid "Features"
+msgstr "Funktioner"
+
+#: widgets/features/features.php:14
+msgid "SiteOrigin Features"
+msgstr "SiteOrigin muligheder"
+
+#: widgets/editor/editor.php:45 widgets/accordion/accordion.php:94
+msgid "Automatically add paragraphs"
+msgstr "Tilføj afsnit automatisk"
+
+#: widgets/editor/editor.php:17
+msgid "SiteOrigin Editor"
+msgstr "SiteOrigin Editor"
+
+#: widgets/hero/hero.php:68 widgets/hero/hero.php:80 widgets/cta/cta.php:112
+msgid "Button"
+msgstr "Knap"
+
+#: widgets/cta/cta.php:99
+msgid "Button align"
+msgstr "Knappen Juster"
+
+#: widgets/tabs/tabs.php:115 widgets/tabs/tabs.php:149
+#: widgets/tabs/tabs.php:183 widgets/cta/cta.php:82
+#: widgets/contact/contact.php:346 widgets/contact/contact.php:468
+#: widgets/contact/contact.php:584 widgets/accordion/accordion.php:139
+#: widgets/accordion/accordion.php:167
+msgid "Border color"
+msgstr "Kantfarve"
+
+#: widgets/social-media-buttons/social-media-buttons.php:86
+#: widgets/tabs/tabs.php:110 widgets/tabs/tabs.php:130
+#: widgets/tabs/tabs.php:174 widgets/hero/hero.php:122
+#: widgets/layout-slider/layout-slider.php:90 widgets/cta/cta.php:78
+#: widgets/contact/contact.php:336 widgets/contact/contact.php:574
+#: widgets/accordion/accordion.php:120 widgets/accordion/accordion.php:158
+msgid "Background color"
+msgstr "Baggrunds farve"
+
+#: widgets/tabs/tabs.php:100 widgets/post-carousel/post-carousel.php:166
+#: widgets/testimonial/testimonial.php:184 widgets/cta/cta.php:74
+#: widgets/contact/contact.php:326 widgets/accordion/accordion.php:110
+msgid "Design"
+msgstr "Design"
+
+#: widgets/price-table/price-table.php:65 widgets/cta/cta.php:69
+msgid "Subtitle"
+msgstr "Undertitel"
+
+#: widgets/cta/cta.php:16
+msgid "SiteOrigin Call-to-action"
+msgstr "SiteOrigin opfordring til handling"
+
+#: widgets/button/button.php:249
+msgid "Run this Javascript when the button is clicked. Ideal for tracking."
+msgstr "Kør denne Javascript, når der klikkes på knappen. Ideel til sporing."
+
+#: widgets/button/button.php:248 widgets/contact/contact.php:102
+msgid "Onclick"
+msgstr "Onclick"
+
+#: widgets/button/button.php:243
+msgid "Adds a title attribute to the button link."
+msgstr "Tilføjer en title attribut til linket knap."
+
+#: widgets/button/button.php:242
+msgid "Title attribute"
+msgstr "Titel-attribut"
+
+#: widgets/button/button.php:231
+msgid "An ID attribute allows you to target this button in Javascript."
+msgstr "En id-attribut du kan målrette til denne knap i Javascript."
+
+#: widgets/button/button.php:230 widgets/contact/contact.php:97
+msgid "Button ID"
+msgstr "Knap ID"
+
+#: widgets/button/button.php:225
+msgid "Other attributes and SEO"
+msgstr "Andre attributter og SEO"
+
+#: widgets/social-media-buttons/social-media-buttons.php:144
+#: widgets/social-media-buttons/social-media-buttons.php:177
+#: widgets/button/button.php:216
+msgid "Very high"
+msgstr "Meget høj"
+
+#: widgets/social-media-buttons/social-media-buttons.php:143
+#: widgets/social-media-buttons/social-media-buttons.php:176
+#: widgets/button/button.php:215
+msgid "High"
+msgstr "Høj"
+
+#: widgets/social-media-buttons/social-media-buttons.php:141
+#: widgets/social-media-buttons/social-media-buttons.php:174
+#: widgets/button/button.php:213
+msgid "Low"
+msgstr "Lav"
+
+#: widgets/social-media-buttons/social-media-buttons.php:138
+#: widgets/testimonial/testimonial.php:235 widgets/button/button.php:210
+#: widgets/contact/contact.php:341 widgets/contact/contact.php:447
+#: widgets/contact/contact.php:632
+msgid "Padding"
+msgstr "Indvendig afstand"
+
+#: widgets/social-media-buttons/social-media-buttons.php:133
+#: widgets/button/button.php:204
+msgid "Completely rounded"
+msgstr "Helt afrundet"
+
+#: widgets/social-media-buttons/social-media-buttons.php:132
+#: widgets/button/button.php:203
+msgid "Very rounded"
+msgstr "Meget afrundet"
+
+#: widgets/social-media-buttons/social-media-buttons.php:131
+#: widgets/button/button.php:202
+msgid "Slightly rounded"
+msgstr "Lidt afrundet"
+
+#: widgets/social-media-buttons/social-media-buttons.php:130
+#: widgets/google-map/google-map.php:158 widgets/headline/headline.php:188
+#: widgets/button/button.php:201 widgets/contact/contact.php:359
+#: widgets/contact/contact.php:481 widgets/contact/contact.php:592
+#: widgets/contact/contact.php:677
+msgid "None"
+msgstr "Ingen"
+
+#: widgets/social-media-buttons/social-media-buttons.php:127
+#: widgets/button/button.php:198
+msgid "Rounding"
+msgstr "Afrunding"
+
+#: widgets/social-media-buttons/social-media-buttons.php:122
+#: widgets/button/button.php:192
+msgid "Extra large"
+msgstr "Ekstra Stor"
+
+#: widgets/social-media-buttons/social-media-buttons.php:121
+#: widgets/button/button.php:191
+msgid "Large"
+msgstr "Stor"
+
+#: widgets/social-media-buttons/social-media-buttons.php:119
+#: widgets/button/button.php:189 widgets/contact/contact.php:289
+#: widgets/contact/contact.php:523 widgets/contact/contact.php:625
+msgid "Normal"
+msgstr "Normal"
+
+#: widgets/button/button.php:187 widgets/contact/contact.php:385
+#: widgets/contact/contact.php:435 widgets/contact/contact.php:617
+msgid "Font size"
+msgstr "Skriftsstørrelse"
+
+#: widgets/social-media-buttons/social-media-buttons.php:112
+#: widgets/button/button.php:150
+msgid "Use hover effects"
+msgstr "Brug hover effekter"
+
+#: widgets/testimonial/testimonial.php:227 widgets/hero/hero.php:261
+#: widgets/button/button.php:144 widgets/layout-slider/layout-slider.php:206
+#: widgets/contact/contact.php:439 widgets/contact/contact.php:612
+msgid "Text color"
+msgstr "Tekst farve"
+
+#: widgets/price-table/price-table.php:150 widgets/button/button.php:139
+msgid "Button color"
+msgstr "Knap farve"
+
+#: widgets/social-media-buttons/social-media-buttons.php:107
+#: widgets/button/button.php:132
+msgid "Wire"
+msgstr "Tråd"
+
+#: widgets/social-media-buttons/social-media-buttons.php:106
+#: widgets/button/button.php:131
+msgid "Flat"
+msgstr "Flad"
+
+#: widgets/social-media-buttons/social-media-buttons.php:105
+#: widgets/price-table/price-table.php:134 widgets/button/button.php:130
+msgid "Atom"
+msgstr "Atom"
+
+#: widgets/social-media-buttons/social-media-buttons.php:102
+#: widgets/button/button.php:127
+msgid "Button theme"
+msgstr "Knappen tema"
+
+#: widgets/social-media-buttons/social-media-buttons.php:155
+#: widgets/social-media-buttons/social-media-buttons.php:166
+#: widgets/headline/headline.php:93 widgets/headline/headline.php:164
+#: widgets/button/button.php:121 widgets/contact/contact.php:418
+msgid "Justify"
+msgstr "Lige marginer"
+
+#: widgets/social-media-buttons/social-media-buttons.php:154
+#: widgets/social-media-buttons/social-media-buttons.php:165
+#: widgets/icon/icon.php:48 widgets/image/image.php:50
+#: widgets/image/image.php:62 widgets/headline/headline.php:90
+#: widgets/headline/headline.php:161 widgets/headline/headline.php:216
+#: widgets/button/button.php:120 widgets/contact/contact.php:417
+#: widgets/contact/contact.php:646
+msgid "Center"
+msgstr "Center"
+
+#: widgets/social-media-buttons/social-media-buttons.php:153
+#: widgets/social-media-buttons/social-media-buttons.php:164
+#: widgets/simple-masonry/simple-masonry.php:216 widgets/icon/icon.php:50
+#: widgets/image/image.php:49 widgets/image/image.php:61
+#: widgets/headline/headline.php:92 widgets/headline/headline.php:163
+#: widgets/headline/headline.php:218 widgets/testimonial/testimonial.php:256
+#: widgets/button/button.php:93 widgets/button/button.php:119
+#: widgets/features/features.php:67 widgets/cta/cta.php:103
+#: widgets/contact/contact.php:401 widgets/contact/contact.php:416
+#: widgets/contact/contact.php:645
+msgid "Right"
+msgstr "Højre"
+
+#: widgets/social-media-buttons/social-media-buttons.php:152
+#: widgets/social-media-buttons/social-media-buttons.php:163
+#: widgets/simple-masonry/simple-masonry.php:215 widgets/icon/icon.php:49
+#: widgets/image/image.php:48 widgets/image/image.php:60
+#: widgets/headline/headline.php:91 widgets/headline/headline.php:162
+#: widgets/headline/headline.php:217 widgets/testimonial/testimonial.php:255
+#: widgets/button/button.php:95 widgets/button/button.php:118
+#: widgets/features/features.php:69 widgets/cta/cta.php:102
+#: widgets/contact/contact.php:400 widgets/contact/contact.php:415
+#: widgets/contact/contact.php:644
+msgid "Left"
+msgstr "Venstre"
+
+#: widgets/social-media-buttons/social-media-buttons.php:149
+#: widgets/button/button.php:115 widgets/contact/contact.php:412
+#: widgets/contact/contact.php:641
+msgid "Align"
+msgstr "Justering"
+
+#: widgets/social-media-buttons/social-media-buttons.php:92
+#: widgets/button/button.php:103
+msgid "Design and layout"
+msgstr "Design og Layout"
+
+#: widgets/button/button.php:84
+msgid "Replaces the icon with your own image icon."
+msgstr "Erstatter ikonet med dit eget billed ikon."
+
+#: widgets/button/button.php:83
+msgid "Image icon"
+msgstr "Billedikon"
+
+#: widgets/social-media-buttons/social-media-buttons.php:82
+#: widgets/price-table/price-table.php:123 widgets/button/button.php:78
+#: widgets/features/features.php:88
+msgid "Icon color"
+msgstr "Ikon farve"
+
+#: widgets/icon/icon.php:31 widgets/price-table/price-table.php:119
+#: widgets/button/button.php:69 widgets/button/button.php:73
+#: widgets/features/features.php:78
+msgid "Icon"
+msgstr "Ikon"
+
+#: widgets/social-media-buttons/social-media-buttons.php:97
+#: widgets/simple-masonry/simple-masonry.php:94 widgets/icon/icon.php:63
+#: widgets/google-map/google-map.php:114 widgets/taxonomy/taxonomy.php:65
+#: widgets/headline/headline.php:52 widgets/headline/headline.php:123
+#: widgets/testimonial/testimonial.php:94 widgets/button/button.php:57
+msgid "Open in a new window"
+msgstr "Åbner i nyt vindue"
+
+#: widgets/simple-masonry/simple-masonry.php:89 widgets/icon/icon.php:57
+#: widgets/google-map/google-map.php:103 widgets/image/image.php:89
+#: widgets/headline/headline.php:47 widgets/headline/headline.php:118
+#: widgets/hero/hero.php:128 widgets/button/button.php:51
+#: widgets/layout-slider/layout-slider.php:96 widgets/slider/slider.php:96
+msgid "Destination URL"
+msgstr "Destinations URL"
+
+#: widgets/price-table/price-table.php:93 widgets/button/button.php:46
+msgid "Button text"
+msgstr "Knappens tekst"
+
+#: widgets/button/button.php:15
+msgid "SiteOrigin Button"
+msgstr "SiteOrigin knap"
+
+#: so-widgets-bundle.php:726
+msgid "Support"
+msgstr "Support"
+
+#: so-widgets-bundle.php:725
+msgid "Manage Widgets"
+msgstr "Håndter widgets"
+
+#: so-widgets-bundle.php:462
+msgid "Deactivated"
+msgstr "Deaktiveret"
+
+#: so-widgets-bundle.php:462
+msgid "Activated"
+msgstr "Aktiveret"
+
+#: so-widgets-bundle.php:460
+msgid "%s was %s"
+msgstr "%s var %s"
+
+#: compat/visual-composer/visual-composer.php:40 so-widgets-bundle.php:434
+#: so-widgets-bundle.php:435
+msgid "SiteOrigin Widgets"
+msgstr "SiteOrigin Widgets Pakke"
+
+#: icons/icons.php:8
+msgid "Elegant Themes Line Icons"
+msgstr "Elegante temaer linje ikoner"
+
+#: icons/icons.php:11
+msgid "Typicons"
+msgstr "Typicons"
+
+#: icons/icons.php:9
+msgid "Genericons"
+msgstr "Genericons"
+
+#: icons/icons.php:10
+msgid "Icomoon Free"
+msgstr "Icomoon gratis"
+
+#: icons/icons.php:7
+msgid "Font Awesome"
+msgstr "Font Awesome"
+
+#: base/siteorigin-widget.class.php:611
+msgid "Are you sure?"
+msgstr "Er du sikker?"
+
+#: base/siteorigin-widget.class.php:517
+msgid "Help"
+msgstr "Hjælp"
+
+#: base/siteorigin-widget.class.php:512
+msgid "Preview"
+msgstr "Eksempel"
+
+#: base/siteorigin-widget.class.php:584
+msgid "You will only need to do this once."
+msgstr "Du skal kun gøre dette én gang."
+
+#: base/siteorigin-widget.class.php:583
+msgid "This widget has scripts and styles that need to be loaded before you can use it. Please save and reload your current page."
+msgstr "Denne widget har scripts og stilarter, der skal indlæses, før du kan bruge den. Du skal gemme og genindlæse den aktuelle side."
+
+#: base/inc/widgets/base-slider.class.php:166
+msgid "Video format"
+msgstr "Videoformat"
+
+#: base/inc/widgets/base-slider.class.php:154
+msgid "An external URL of the video. Overrides video file."
+msgstr "En ekstern URL i videoen. Tilsidesætter videofil."
+
+#: widgets/video/video.php:85 base/inc/widgets/base-slider.class.php:152
+msgid "Video URL"
+msgstr "Video URL"
+
+#: base/inc/widgets/base-slider.class.php:146
+msgid "Video file"
+msgstr "Video fil"
+
+#: base/inc/widgets/base-slider.class.php:117
+msgid "Navigation size"
+msgstr "Navigation størrelse"
+
+#: base/inc/widgets/base-slider.class.php:111
+msgid "Rounded thick"
+msgstr "Afrundede tyk"
+
+#: base/inc/widgets/base-slider.class.php:110
+msgid "Rounded medium"
+msgstr "Afrundede medium"
+
+#: base/inc/widgets/base-slider.class.php:109
+msgid "Rounded thin"
+msgstr "Afrundet tynd"
+
+#: base/inc/widgets/base-slider.class.php:108
+msgid "Rounded ultra thin"
+msgstr "Afrundet ultra tyndt"
+
+#: base/inc/widgets/base-slider.class.php:107
+msgid "Thick"
+msgstr "Tyk"
+
+#: widgets/social-media-buttons/social-media-buttons.php:120
+#: widgets/social-media-buttons/social-media-buttons.php:142
+#: widgets/social-media-buttons/social-media-buttons.php:175
+#: widgets/button/button.php:190 widgets/button/button.php:214
+#: base/inc/widgets/base-slider.class.php:106
+msgid "Medium"
+msgstr "Medium"
+
+#: base/inc/widgets/base-slider.class.php:105
+msgid "Thin"
+msgstr "Tynd"
+
+#: base/inc/widgets/base-slider.class.php:104
+msgid "Ultra thin"
+msgstr "Ultra tynd"
+
+#: base/inc/widgets/base-slider.class.php:101
+msgid "Navigation style"
+msgstr "Navigation stil"
+
+#: base/inc/widgets/base-slider.class.php:95
+msgid "Navigation color"
+msgstr "Navigation farve"
+
+#: base/inc/widgets/base-slider.class.php:85
+msgid "How long each frame is displayed for in milliseconds."
+msgstr "Hvor længe hvert billede der skal vises i millisekunder."
+
+#: base/inc/widgets/base-slider.class.php:84
+msgid "Timeout"
+msgstr "Tidsudløb"
+
+#: base/inc/widgets/base-slider.class.php:78
+msgid "Animation speed in milliseconds."
+msgstr "Animation hastighed i millisekunder."
+
+#: base/inc/widgets/base-slider.class.php:77
+msgid "Animation speed"
+msgstr "Animations hastighed"
+
+#: base/siteorigin-widget.class.php:668 base/inc/actions.php:53
+msgid "Widget Preview"
+msgstr "Widget Preview"
+
+#: base/inc/fields/posts.class.php:140
+msgid "Additional query arguments. See <a href=\"https://developer.wordpress.org/reference/functions/query_posts/\" target=\"_blank\" rel=\"noopener noreferrer\">query_posts</a>."
+msgstr "Yderligere forespørgsel argumenter. Se <a href=\"https://developer.wordpress.org/reference/functions/query_posts/\" target=\"_blank\" rel=\"noopener noreferrer\">query_posts</a>."
+
+#: base/inc/fields/posts.class.php:139
+msgid "Additional"
+msgstr "Yderligere"
+
+#: base/inc/fields/posts.class.php:132
+msgid "Exclude sticky"
+msgstr "Udelukke klæbrig"
+
+#: base/inc/fields/posts.class.php:131
+msgid "Ignore sticky"
+msgstr "Ignorer faste"
+
+#: widgets/google-map/google-map.php:290 widgets/image/image.php:47
+#: widgets/image/image.php:59 base/inc/fields/posts.class.php:130
+#: compat/beaver-builder/beaver-builder.php:68
+msgid "Default"
+msgstr "Standard"
+
+#: base/inc/fields/posts.class.php:128
+msgid "Sticky posts"
+msgstr "Klæbeligt indlæg"
+
+#: base/inc/fields/posts.class.php:123
+msgid "Posts per page"
+msgstr "Indlæg per side"
+
+#: base/inc/fields/posts.class.php:106
+msgid "By include order"
+msgstr "Ved omfatte rækkefølge"
+
+#: base/inc/fields/posts.class.php:105
+msgid "By numeric meta value"
+msgstr "Af meta talværdi"
+
+#: base/inc/fields/posts.class.php:104
+msgid "By meta value"
+msgstr "Af Meta værdi"
+
+#: base/inc/fields/posts.class.php:103
+msgid "Menu order"
+msgstr "Menu orden"
+
+#: base/inc/fields/posts.class.php:102
+msgid "Comment count"
+msgstr "Kommentartælling"
+
+#: base/inc/fields/posts.class.php:101
+msgid "Random order"
+msgstr "Tilfældig rækkefølge"
+
+#: base/inc/fields/posts.class.php:100
+msgid "By parent"
+msgstr "Af forældre"
+
+#: base/inc/fields/posts.class.php:99
+msgid "Modified date"
+msgstr "Ændret dato"
+
+#: base/inc/fields/posts.class.php:98
+msgid "Published date"
+msgstr "Udgivelsesdato"
+
+#: widgets/editor/editor.php:35
+#: widgets/social-media-buttons/social-media-buttons.php:54
+#: widgets/simple-masonry/simple-masonry.php:44
+#: widgets/simple-masonry/simple-masonry.php:85 widgets/icon/icon.php:68
+#: widgets/tabs/tabs.php:71 widgets/tabs/tabs.php:84
+#: widgets/price-table/price-table.php:42
+#: widgets/price-table/price-table.php:61 widgets/taxonomy/taxonomy.php:34
+#: widgets/post-carousel/post-carousel.php:118
+#: widgets/testimonial/testimonial.php:41 widgets/features/features.php:136
+#: widgets/cta/cta.php:64 widgets/contact/contact.php:48
+#: widgets/accordion/accordion.php:71 widgets/accordion/accordion.php:84
+#: widgets/video/video.php:33 base/inc/fields/posts.class.php:97
+msgid "Title"
+msgstr "Titel"
+
+#: base/inc/fields/posts.class.php:96
+msgid "Author"
+msgstr "Forfatter"
+
+#: base/inc/fields/posts.class.php:95
+msgid "Post ID"
+msgstr "Artikel ID"
+
+#: base/inc/fields/posts.class.php:94
+msgid "No order"
+msgstr "Ingen sortering"
+
+#: base/inc/fields/posts.class.php:92
+msgid "Order by"
+msgstr "Sorter efter"
+
+#: widgets/taxonomy/taxonomy.php:38 base/inc/fields/posts.class.php:50
+msgid "Taxonomies"
+msgstr "Taksonomi"
+
+#: base/inc/fields/posts.class.php:44
+msgid "Post in"
+msgstr "Slå op i"
+
+#: base/inc/fields/posts.class.php:36
+msgid "Post type"
+msgstr "Indlægstype"
+
+#: base/inc/meta-box-manager.php:77
+msgid "Widgets Bundle Post Meta Data"
+msgstr "Widgets bundt indlægs metadata"
+
+#: base/inc/meta-box-manager.php:35
+msgid "SiteOrigin Meta Box Manager"
+msgstr "SiteOrigin Meta boks Manager"
+
+#: base/inc/fields/widget.class.php:58
+msgid "%s is not a SiteOrigin Widget"
+msgstr "%s er ikke en SiteOrigin Widget"
+
+#: base/inc/fields/widget.class.php:48
+msgid "%s does not exist"
+msgstr "%s findes ikke"
+
+#: base/inc/fields/repeater.class.php:93
+msgid "Add"
+msgstr "Tilføj"
+
+#: base/inc/fields/repeater.class.php:54
+msgid "Item"
+msgstr "Produkt"
+
+#: base/inc/fields/media.class.php:123
+msgid "External URL"
+msgstr "Ekstern URL (webadresse)"
+
+#: base/inc/fields/media.class.php:111 base/inc/fields/icon.class.php:41
+msgid "Remove"
+msgstr "Fjern"
+
+#: base/inc/fields/media.class.php:69
+msgid "You need to <a href=\"%s\">upgrade</a> to WordPress 3.5 to use media fields"
+msgstr "Du skal <a href=\"%s\">opgradere</a> til WordPress 3.5 for at anvende media felter"
+
+#: base/inc/fields/media.class.php:61
+msgid "Set Media"
+msgstr "Sæt medier"
+
+#: base/inc/fields/media.class.php:60
+msgid "Choose Media"
+msgstr "Vælg Media"
+
+#: base/inc/fields/link.class.php:30 base/inc/fields/autocomplete.class.php:51
+msgid "Close"
+msgstr "Luk"
+
+#: base/inc/fields/link.class.php:25
+msgid "Search Content"
+msgstr "Søg efter indhold"
+
+#: base/inc/fields/link.class.php:20
+msgid "Select Content"
+msgstr "Vælg indholdstype"
+
+#: base/inc/fields/icon.class.php:38
+msgid "Choose Icon"
+msgstr "Vælg ikon"
+
+#: base/inc/fields/font.class.php:17
+msgid "Use theme font"
+msgstr "Brug temaets skrifttype"
+
+#: base/inc/fields/factory.class.php:22
+msgid "This field does not have a type. Please specify a type for it to be rendered correctly."
+msgstr "Dette felt har ikke en type. Angiv en type for det skal gengives korrekt."
+
+#: base/inc/fields/base.class.php:328
+msgid "Optional"
+msgstr "Valgfri"
+
+#: widgets/editor/editor.php:134 admin/tpl/admin.php:112
+msgid "Read More"
+msgstr "Læs mere"
+
+#: admin/tpl/admin.php:111
+msgid "Developers - create your own widgets for the Widgets Bundle."
+msgstr "Udviklere - Opret dine egne widgets for Widgets bundt."
+
+#: admin/tpl/admin.php:19
+msgid "Disabled"
+msgstr "Deaktiveret"
+
+#: admin/tpl/admin.php:18
+msgid "Enabled"
+msgstr "Aktiver"
+
+#: widgets/google-map/google-map.php:358 admin/tpl/admin.php:17
+#: base/inc/fields/posts.class.php:23
+msgid "All"
+msgstr "Alle"
+
+#. Plugin Name of the plugin
+#: admin/tpl/admin.php:9
+msgid "SiteOrigin Widgets Bundle"
+msgstr "SiteOrigin Widgets Pakke"

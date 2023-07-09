@@ -1,0 +1,140 @@
+div.w2rr-content a,
+div.w2rr-content a:visited,
+div.w2rr-content a:focus,
+div.w2rr-content.w2rr-widget a,
+div.w2rr-content.w2rr-widget a:visited,
+div.w2rr-content.w2rr-widget a:focus,
+div.w2rr-content .w2rr-btn-default, div.w2rr-content div.w2rr-btn-default:visited, div.w2rr-content .w2rr-btn-default:focus {
+	color: 20;
+}
+div.w2rr-content a:hover,
+div.w2rr-content .w2rr-pagination > li > a:hover {
+	color: #2a6496;
+}
+
+div.w2rr-content .w2rr-btn-primary,
+div.w2rr-content a.w2rr-btn-primary,
+div.w2rr-content input[type="submit"],
+div.w2rr-content input[type="button"],
+div.w2rr-content .w2rr-btn-primary:visited,
+div.w2rr-content a.w2rr-btn-primary:visited,
+div.w2rr-content input[type="submit"]:visited,
+div.w2rr-content input[type="button"]:visited,
+div.w2rr-content .w2rr-btn-primary:focus,
+div.w2rr-content a.w2rr-btn-primary:focus,
+div.w2rr-content input[type="submit"]:focus,
+div.w2rr-content input[type="button"]:focus,
+div.w2rr-content .w2rr-btn-primary:disabled,
+div.w2rr-content a.w2rr-btn-primary:disabled,
+div.w2rr-content .w2rr-btn-primary:disabled:focus,
+div.w2rr-content a.w2rr-btn-primary:disabled:focus,
+div.w2rr-content .w2rr-btn-primary:disabled:hover,
+div.w2rr-content a.w2rr-btn-primary:disabled:hover,
+form.w2rr-content .w2rr-btn-primary,
+form.w2rr-content a.w2rr-btn-primary,
+form.w2rr-content input[type="submit"],
+form.w2rr-content input[type="button"],
+form.w2rr-content .w2rr-btn-primary:visited,
+form.w2rr-content a.w2rr-btn-primary:visited,
+form.w2rr-content input[type="submit"]:visited,
+form.w2rr-content input[type="button"]:visited,
+form.w2rr-content .w2rr-btn-primary:focus,
+form.w2rr-content a.w2rr-btn-primary:focus,
+form.w2rr-content input[type="submit"]:focus,
+form.w2rr-content input[type="button"]:focus,
+form.w2rr-content .w2rr-btn-primary:disabled,
+form.w2rr-content a.w2rr-btn-primary:disabled,
+form.w2rr-content .w2rr-btn-primary:disabled:focus,
+form.w2rr-content a.w2rr-btn-primary:disabled:focus,
+form.w2rr-content .w2rr-btn-primary:disabled:hover,
+form.w2rr-content a.w2rr-btn-primary:disabled:hover,
+div.w2rr-content .wpcf7-form .wpcf7-submit,
+div.w2rr-content .wpcf7-form .wpcf7-submit:visited,
+div.w2rr-content .wpcf7-form .wpcf7-submit:focus {
+	color: #FFFFFF;
+	background-color: #2393ba;
+	background-image: none;
+	border-color: #0f7fa6;
+}
+div.w2rr-content .w2rr-btn-primary:hover,
+div.w2rr-content a.w2rr-btn-primary:hover,
+div.w2rr-content input[type="submit"]:hover,
+div.w2rr-content input[type="button"]:hover,
+form.w2rr-content .w2rr-btn-primary:hover,
+form.w2rr-content a.w2rr-btn-primary:hover,
+form.w2rr-content input[type="submit"]:hover,
+form.w2rr-content input[type="button"]:hover,
+div.w2rr-content .wpcf7-form .wpcf7-submit:hover {
+	color: #FFFFFF;
+	background-color: #1f82a5;
+	background-image: none;
+	border-color: #0b6e91;
+	text-decoration: none;
+}
+
+div.w2rr-content .w2rr-pagination > li.w2rr-active > a,
+div.w2rr-content .w2rr-pagination > li.w2rr-active > span,
+div.w2rr-content .w2rr-pagination > li.w2rr-active > a:hover,
+div.w2rr-content .w2rr-pagination > li.w2rr-active > span:hover,
+div.w2rr-content .w2rr-pagination > li.w2rr-active > a:focus,
+div.w2rr-content .w2rr-pagination > li.w2rr-active > span:focus {
+	background-color: #2393ba;
+	border-color: #2393ba;
+	color: #FFFFFF;
+}
+.w2rr-rating-avgvalue .w2rr-rating-avgvalue-digit {
+	background-color: #2393ba;
+}
+.w2rr-loader:before {
+	border-top-color: #2393ba;
+	border-bottom-color: #2393ba;
+}
+.w2rr-review-rating-criterias .w2rr-progress-bar {
+	background-color: #2393ba;
+}
+.w2rr-progress-circle span {
+	color: #2393ba;
+}
+.w2rr-progress-circle.w2rr-over50 .w2rr-first50-bar {
+	background-color: #2393ba;
+}
+.w2rr-progress-circle .w2rr-value-bar {
+	border-color: #2393ba;
+}
+.w2rr-ratings-overall .w2rr-progress-bar {
+	background-color: #2393ba;
+}
+input[type="range"].w2rr-range-slider-input,
+ul.w2rr-range-slider-labels .w2rr-range-slider-labels-selected::before {
+	background-color: #2393ba;
+}
+.w2rr-bx-pager a.active img {
+	border: 1px solid #2393ba;
+}
+.w2rr-review-dialog.ui-dialog .ui-widget-header {
+	background-color: #2393ba;
+}
+
+label.w2rr-rating-icon {
+	color: #FFB300;
+}
+
+.w2rr-content .w2rr-share-button img {
+	max-width: 41px;
+}
+.w2rr-content .w2rr-share-buttons {
+	height: 51px;
+}
+
+/* It works with devices width more than 768 pixels. */
+@media screen and (min-width: 768px) {
+	.w2rr-single-review-logo-wrap {
+		max-width: 270px;
+		float: left;
+		margin: 0 20px 20px 0;
+	}
+	.rtl .w2rr-single-review-logo-wrap {
+		float: right;
+		margin: 0 0 20px 20px;
+	}
+}

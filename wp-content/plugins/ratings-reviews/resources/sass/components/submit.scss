@@ -1,0 +1,289 @@
+.w2rr-dashboard-tabs-content h2 {
+	margin-top: 40px;
+	margin-bottom: 30px;
+}
+
+.w2rr-media-upload-wrapper {
+	margin-bottom: 50px;
+}
+.w2rr-media-upload-wrapper:last-child {
+	margin-bottom: 0;
+}
+
+.w2rr-editor-class {
+	background-color: white;
+	width: 100%;
+}
+.w2rr-form-control.w2rr-pros-description {
+	background-color: #f9fbf9;
+}
+.w2rr-form-control.w2rr-cons-description {
+	background-color: #fbf9f9;
+}
+
+.w2rr-submit-section {
+	margin-bottom: 50px;
+	background: $submit-section-background-color;
+	border: 1px solid $border-color;
+	border-radius: $border-radius;
+	padding: 0;
+}
+.w2rr-submit-section-adv {
+	margin-bottom: 30px;
+}
+.w2rr-submit-section h3.w2rr-submit-section-label {
+	border-bottom: 1px solid $border-color;
+	font-size: $submit-section-label-font-size;
+	margin: 0;
+	padding: 20px 10px;
+	border-top-left-radius: 2px;
+	border-top-right-radius: 2px;
+	color: #464646;
+	background: $submit-section-label-background-color;
+}
+.w2rr-submit-section-inside {
+	padding: 10px;
+}
+
+.w2rr-dashboard {
+	a:hover {
+		text-decoration: none;
+	}
+	.w2rr-td-review-options {
+		text-align: right;
+	}
+	.w2rr-td-review-options .w2rr-dashboard-btn-mobile {
+		display: none;
+	}
+	/* Maximum width of 768 pixels. */
+	@media screen and (max-width: $mobile-screen-width) {
+		td {
+			padding: 1px !important; 
+		}
+		th {
+			display: none;
+		}
+		.w2rr-rating {
+			width: auto;
+		}
+		.w2rr-rating-stars {
+			display: none;
+		}
+		.w2rr-td-review-id {
+			display: none;
+		}
+		.w2rr-td-review-options {
+			max-width: 100px !important;
+		}
+		.w2rr-td-review-options .w2rr-btn {
+			display: none;
+		}
+		.w2rr-td-review-options .w2rr-dashboard-btn-mobile {
+			display: block;
+		}
+	}
+}
+.w2rr-table.w2rr-dashboard-reviews {
+	table-layout: auto;
+}
+.w2rr-table.w2rr-dashboard-reviews td,
+.w2rr-table.w2rr-dashboard-reviews th {
+	border: 0;
+}
+
+p.w2rr-description {
+	margin: 10px 0;
+}
+
+#w2rr-upload-functions {
+	margin: 20px 0 40px;
+}
+.w2rr-upload-option {
+	margin: 10px 0;
+}
+.w2rr-attached-item,
+.w2rr-upload-item {
+	position: relative;
+	color: #FFFFFF;
+	float: left;
+	margin: 0 20px 20px 0;
+	background-color: #8d8d8d;
+	width: 255px;
+	height: 292px;
+}
+#w2rr-attached-videos-wrapper .w2rr-attached-item {
+	height: 240px;
+}
+.w2rr-drop-attached-item,
+.w2rr-attached-item-img {
+	background-color: #ababab;
+	border: 2px dashed #7e7e7e;
+	height: 180px;
+	margin: 10px;
+	padding: 40px 0;
+	text-align: center;
+}
+.w2rr-attached-item-img {
+	display: block;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.w2rr-btn.w2rr-upload-item-button {
+    display: block;
+    margin: 0 auto;
+	margin-top: 10px;
+}
+.w2rr-drop-attached-item input[type="file"] {
+    display: none;
+}
+.w2rr-attached-item-input,
+.w2rr-attached-item-logo {
+	margin: 10px;
+}
+.w2rr-attached-item-logo label {
+	white-space: nowrap;
+}
+.w2rr-attached-item-delete {
+	position: absolute;
+	bottom: 10px;
+	font-size: 23px;
+	right: 10px;
+	cursor: pointer;
+}
+.w2rr-attached-item-metadata {
+	position: absolute;
+	bottom: 10px;
+	left: 10px;
+	width: auto !important; /* sortable functions breaks layout without !important */
+}
+#w2rr-attached-images-wrapper .ui-sortable-placeholder {
+	background-color: #FFFBCC !important;
+	display: inline-block;
+	float: left;
+	margin: 0 20px 20px 0;
+}
+.w2rr-move-label {
+	cursor: move;
+}
+
+label.w2rr-fsubmit-contact {
+	display: block;
+	font-weight: bold;
+	margin: 15px 0 5px;
+}
+
+ul.w2rr-dashboard-tabs.w2rr-nav {
+	margin: 20px 0;
+}
+
+.dashicons,
+.dashicons-before::before {
+	line-height: inherit;
+}
+#pass-strength-result {
+	background-color: #eee;
+	border: 1px solid $border-color;
+	color: #23282d;
+	margin: -2px 5px 5px 1px;
+	padding: 3px 5px;
+	text-align: center;
+	width: 25em;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	opacity: 0;
+}
+#pass-strength-result.short {
+	background-color: #f1adad;
+	border-color: #e35b5b;
+	opacity: 1;
+}
+#pass-strength-result.bad {
+	background-color: #fbc5a9;
+	border-color: #f78b53;
+	opacity: 1;
+}
+#pass-strength-result.good {
+	background-color: #ffe399;
+	border-color: #ffc733;
+	opacity: 1;
+}
+#pass-strength-result.strong {
+	background-color: #c1e1b9;
+	border-color: #83c373;
+	opacity: 1;
+}
+#pass1.short,
+#pass1-text.short {
+	border-color: #e35b5b;
+}
+#pass1.bad,
+#pass1-text.bad {
+	border-color: #f78b53;
+}
+#pass1.good,
+#pass1-text.good {
+	border-color: #ffc733;
+}
+#pass1.strong,
+#pass1-text.strong {
+	border-color: #83c373;
+}
+.pw-weak {
+	display:none;
+}
+.indicator-hint {
+	padding-top: 8px;
+}
+#pass1-text,
+.show-password #pass1 {
+	display: none;
+}
+#pass1-text,
+#pass1 {
+	width: 25em;
+}
+.show-password #pass1-text
+{
+	display: inline-block;
+}
+
+.wp-switch-editor {
+	box-sizing: content-box;
+}
+
+/* close button on WP media window */
+.screen-reader-text {
+	border: 0 none;
+	clip: rect(0px, 0px, 0px, 0px);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+	word-wrap: normal !important;
+}
+
+/* Review Info metabox */
+.w2rr-edit-review-info-label {
+	margin: 10px 0;
+}
+
+.w2rr-upload-image-form input[type="file"] {
+	display: none;
+}
+.w2rr-upload-image {
+	width: 100px;
+	height: 100px;
+	background-color: #ababab;
+	/* border: 2px dashed #7e7e7e; */
+	text-align: center;
+	margin-bottom: 10px;
+	display: block;
+	background-size: contain;
+	background-position: center;
+	background-repeat: no-repeat;
+	border-radius: 10%;
+}

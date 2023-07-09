@@ -1,0 +1,18 @@
+2023-03-14T08:54:25+00:00 CRITICAL Out of memory (allocated 18874368) (tried to allocate 32768 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\members\inc\class-widget-login.php on line 250
+
+2023-03-14T09:28:25+00:00 CRITICAL Out of memory (allocated 14680064) (tried to allocate 32768 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\ratings-reviews\vafpress-framework\includes\wpalchemy\MetaBox.php on line 745
+
+2023-03-14T09:50:25+00:00 CRITICAL Out of memory (allocated 18874368) (tried to allocate 32768 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\ratings-reviews\vafpress-framework\includes\wpalchemy\MetaBox.php on line 745
+
+2023-03-14T16:02:29+00:00 CRITICAL Out of memory (allocated 23068672) (tried to allocate 32768 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\ratings-reviews\vafpress-framework\includes\wpalchemy\MetaBox.php on line 745
+
+2023-03-14T16:26:31+00:00 CRITICAL Out of memory (allocated 10485760) (tried to allocate 32768 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\woocommerce\packages\woocommerce-blocks\build\attribute-filter.asset.php on line 1
+
+2023-03-14T16:30:29+00:00 CRITICAL Out of memory (allocated 23068672) (tried to allocate 32768 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\ratings-reviews\vafpress-framework\includes\wpalchemy\MetaBox.php on line 745
+
+2023-03-14T16:42:31+00:00 CRITICAL Out of memory (allocated 10485760) (tried to allocate 32768 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\woocommerce\packages\woocommerce-blocks\src\BlockTypes\StockFilter.php on line 1
+
+2023-03-14T16:54:29+00:00 CRITICAL Out of memory (allocated 37748736) (tried to allocate 20480 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\js_composer\include\params\iconpicker\iconpicker.php on line 187
+
+2023-03-14T16:56:31+00:00 CRITICAL Out of memory (allocated 10485760) (tried to allocate 32768 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\woocommerce\packages\woocommerce-blocks\build\attribute-filter.asset.php on line 1
+

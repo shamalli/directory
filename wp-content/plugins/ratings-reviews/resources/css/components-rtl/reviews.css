@@ -1,0 +1,20 @@
+.w2rr-orderby-links-label {
+  margin-left: 10px;
+  margin-right: 0;
+}
+
+.w2rr-author-link,
+.w2rr-review-date,
+.w2rr-views-counter {
+  margin-left: 10px;
+  margin-right: 0;
+}
+
+/************************ Listing Dialog ************************/
+.w2rr-review-dialog.ui-dialog .ui-dialog-title {
+  float: right;
+}
+
+.w2rr-close-listing-dialog {
+  float: left;
+}

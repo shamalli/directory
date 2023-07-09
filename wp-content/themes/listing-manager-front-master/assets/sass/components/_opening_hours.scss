@@ -1,0 +1,32 @@
+.opening-hours-status {
+  background-color: $color-primary;
+  border-radius: 2px;
+  color: #fff;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 500;
+  margin: 0 0 30px 0;
+  padding: 6px 12px;
+
+  &.closed {
+    background-color: $color-black;
+  }
+}
+
+.main .content table.opening-hours {
+  margin: 0;
+  width: 100%;
+
+  th {
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  tr {
+    td, th {
+      &:first-child {
+        padding-left: 0;
+      }
+    }
+  }
+}

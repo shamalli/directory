@@ -1,0 +1,32 @@
+/*
+Theme Name: Listing Manager Front
+Author: Listing Manager
+Author URI: http://wplistingmanager.com
+Description: Directory plugin completely based on WooCommerce.
+Version: 1.0.3
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Tags: two-columns, right-sidebar, custom-menu, footer-widgets, full-width-template, theme-options, e-commerce
+Text Domain: listing-manager-front
+*/
+
+.center             { text-align: center; }
+.aligncenter        { margin: auto; text-align: center; margin-bottom: 22px; display: block !important;}
+.alignleft          { float: left; margin: 0px 30px 22px 0px;  }
+.alignright         { float: right; margin: 0px 0px 22px 30px; }
+
+.left               { float:left;  }
+.right              { float:right; }
+
+small               { font-size: 12px; line-height: 14px; }
+strong              { }
+b                   { font-weight: bold; }
+
+.normal             { font-weight: normal; }
+.hidden             { display: none; }
+.wp-caption         { }
+.wp-caption-text    { }
+.sticky             { }
+.gallery-caption    { }
+.bypostauthor       { }
+.screen-reader-text { display: none; }

@@ -1,0 +1,48 @@
+Hello, I am codecanyon author and I've got a coupon code for $250 for your services.
+	
+I'd like to redesign my item's page graphics: https://codecanyon.net/item/web-20-directory-plugin-for-wordpress/6463373
+	
+This is the directory plugin for wordpress.
+	
+I'd like to redesign thumbnail image (JPEG or PNG 80x80px), preview image (590x300 JPEG) and other images on the page (or pack them in some images files).
+	
+1. thumbnail image - something simple, but professional, like this icon https://www.iconfinder.com/icons/684657/agenda_catalog_checklist_index_list_listing_schedule_icon#size=128 but more professional and good looking. With or without words "Web 2.0 Directory". With or without small wordpress icon in the corner https://www.iconfinder.com/icons/345397/wordpress_icon#size=128
+	
+2. preview image - with the same texts as it is now, and make, please, special attention to following highlights: PayPal, Google Maps, WPML, WooCommerce, YouTube, SEO. Probably would be better to make these highlights as logos as it is now.
+	
+3. link image to "Web 2.0 Google Maps" plugin - something simple with the name of that plugin as text.
+	
+4. other images - highlight these special directory plugin's features:
+- responsive layout, text: Responsive Layout
+- customizations, text: Customizations and Predefined Color Schemas
+- woocommerce with its logo, text: Payments System Compatible + Listings Packages
+- search, text: Powerful and Customizable Search  <smaller>Search by categories, by locations, by zip, by keywords, by content fields + advanced search tab</smaller>
+- listings levels, text: Frontend Submission and Users Dashboard  <smaller>Restrict ads by listings levels. Each level has own set of options and price</smaller>
+- google maps, text: Google Maps and Markers Icons
+- categories, text: Categories and Locations structures + Custom Icons
+- paypal (probably just a logo) or with text: Compatible with PayPal
+- stripe (probably just a logo) or with text: Compatible with Stripe
+- wpml (probably just a logo) or with text: Compatible with WPML
+- visual composer, logo and text: Compatible with Visual Composer
+	
+5. also we need to highlight following features of the plugin:
+- Multiple Directories
+- Five Star Ratings
+- Compatible with Yoast SEO plugin
+- Integration with Contact Form 7 plugin
+- Claim Listings
+- Upgrade and Downgrade Listings
+- Raise Up Listings
+- Renew Expired Listings
+- Bulk CSV Import, Re-Import and Export
+- YouTube Videos
+- Bookmarks
+- Print Listings
+- Export Listings in PDF
+- Powerful System of Shortcodes and Widgets
+- Excellent Documentation and Support
+	
+I hope not so much items here. In your portfolio I saw you can group such items in one good looking image.
+	
+All images must have same styles, fonts, colors, e.t.c.
+Use brands and logos where it is possible. But I'm not sure to use or not to use screenshots from our demo: http://www.salephpscripts.com/wordpress_directory/demo/ how do you think?

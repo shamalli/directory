@@ -1,0 +1,50 @@
+.woocommerce .woocommerce-message,
+.woocommerce .woocommerce-error,
+.woocommerce .cart-empty,
+.woocommerce .woocommerce-info {
+    background-color: $color-green;
+    border: 0;
+    border-radius: 3px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 400;
+    padding: 20px 30px !important;
+
+    &:before {
+        color: #fff;
+        left: auto;
+        margin: 0 20px 0 0;
+        position: relative;
+        top: auto;
+        vertical-align: middle;
+    }
+
+    a {
+        border-bottom: 1px solid rgba(#fff, .4);
+        color: #fff;
+        padding-bottom: 3px;
+    }
+
+    li {
+        display: inline;
+    }
+
+    .button {
+        border: 0;
+        height: auto;
+        line-height: 1;
+        margin-top: -9px;
+        margin-bottom: -9px;
+        padding: 13px 25px;
+    }
+}
+
+.woocommerce .cart-empty,
+.woocommerce .woocommerce-error {
+    background-color: $color-red;
+}
+
+.woocommerce .woocommerce-info {
+    background-color: $color-blue;
+    color: #fff;
+}

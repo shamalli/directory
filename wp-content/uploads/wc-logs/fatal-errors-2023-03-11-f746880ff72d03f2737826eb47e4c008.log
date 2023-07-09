@@ -1,0 +1,6 @@
+2023-03-11T11:27:13+00:00 CRITICAL Out of memory (allocated 25165824) (tried to allocate 32768 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\js_composer\include\params\iconpicker\iconpicker.php on line 187
+
+2023-03-11T12:19:12+00:00 CRITICAL Out of memory (allocated 27262976) (tried to allocate 65536 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\woocommerce\packages\woocommerce-blocks\src\BlockTypes\AbstractProductGrid.php on line 570
+
+2023-03-11T12:33:12+00:00 CRITICAL Out of memory (allocated 29360128) (tried to allocate 65536 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\woocommerce\packages\woocommerce-blocks\src\BlockTypes\AbstractProductGrid.php on line 570
+

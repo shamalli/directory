@@ -1,0 +1,10 @@
+<h3><?php esc_html_e('Import instructions:', 'W2RR'); ?></h3>
+<?php esc_html_e("We place sample CSV file in \"documentation/\" folder in the plugin archive.", 'W2RR'); ?></p>
+<p><strong>1.</strong> <?php esc_html_e("On the second step of importing you'll collate CSV headers of columns with existing reviews fields, this means there isn't fixed format for CSV files.", 'W2RR'); ?></p>
+<p><strong>2.</strong> <?php esc_html_e('The only required columns in CSV file, those will define new reviews titles and post ID a review should be attached to. Also information about author must be provided - in any column of CSV file or by setting default author in settings.', 'W2RR'); ?></p>
+<p><strong>3.</strong> <?php esc_html_e('MultiValues fields - are images, multi-tatings and votes columns.', 'W2RR'); ?></p>
+<p><strong>4.</strong> <?php esc_html_e('Also you may upload ZIP archive with images files for new review. Specify names of images files in one CSV column and separate them with special delimiter. In order to import images titles - specify them after each image file name by ">" symbol, example: "goldengate_1024x768.jpg>Golden Gate". Note, that images files must be in the root inside ZIP archive, not inside folder.', 'W2RR'); ?></p>
+<p><strong>5.</strong> <?php esc_html_e('By default reviews authors will be specified in one of CSV columns, there must be existing user ID, user login or user email. Or you can switch to assign all new reviews with one specific existing user.', 'W2RR'); ?></p>
+<p><strong>6.</strong> <?php esc_html_e('All dates with or without time must be formatted in following way: "dd.mm.yyyy HH:MM" (time is optional)', 'W2RR'); ?></p>
+<p><strong>7.</strong> <?php esc_html_e('When the size of your CSV file is very large - this may slow down the server and break the process of import, you may try to split the file into smaller CSV files.', 'W2RR'); ?></p>
+<p><strong>8.</strong> <?php esc_html_e('Recommended to make whole backup of the database before import.', 'W2RR'); ?></p>

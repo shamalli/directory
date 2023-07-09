@@ -1,0 +1,316 @@
+/************************ Content ************************/
+.w2rr-content {
+  direction: rtl;
+}
+
+/************************ Bootstrap Custom Styles ************************/
+.w2rr-content .w2rr-col-md-1,
+.w2rr-content .w2rr-col-md-2,
+.w2rr-content .w2rr-col-md-3,
+.w2rr-content .w2rr-col-md-4,
+.w2rr-content .w2rr-col-md-5,
+.w2rr-content .w2rr-col-md-6,
+.w2rr-content .w2rr-col-md-7,
+.w2rr-content .w2rr-col-md-8,
+.w2rr-content .w2rr-col-md-9,
+.w2rr-content .w2rr-col-md-10,
+.w2rr-content .w2rr-col-md-11,
+.w2rr-content .w2rr-col-md-12 {
+  float: right;
+}
+.w2rr-content .w2rr-list-group {
+  margin-right: 0;
+}
+.w2rr-content .w2rr-form-horizontal .w2rr-control-label {
+  text-align: right;
+}
+.w2rr-content .w2rr-has-feedback .w2rr-form-control,
+.w2rr-content .w2rr-has-feedback .w2rr-form-control:focus {
+  padding-left: 42.5px;
+  padding-right: 12px;
+}
+.w2rr-content .w2rr-form-control-feedback {
+  left: 0;
+  right: inherit !important;
+}
+.w2rr-content .w2rr-radio input[type="radio"], .w2rr-content .w2rr-radio-inline input[type="radio"], .w2rr-content .w2rr-checkbox input[type="checkbox"], .w2rr-content .w2rr-checkbox-inline input[type="checkbox"] {
+  margin-right: -20px;
+}
+.w2rr-content .w2rr-radio label, .w2rr-content .w2rr-checkbox label {
+  padding-right: 20px;
+}
+.w2rr-content .w2rr-pull-left {
+  float: right !important;
+}
+.w2rr-content .w2rr-pull-right {
+  float: left !important;
+}
+.w2rr-content .w2rr-text-right {
+  text-align: left;
+}
+.w2rr-content .w2rr-text-left {
+  text-align: right;
+}
+.w2rr-content .w2rr-nav-tabs > li {
+  float: right;
+}
+.w2rr-content .w2rr-pagination > li > a,
+.w2rr-content .w2rr-pagination > li > span {
+  float: right;
+  margin-right: -1px;
+}
+.w2rr-content .w2rr-pagination > li:first-child > a,
+.w2rr-content .w2rr-pagination > li:first-child > span {
+  border-bottom-right-radius: 2px;
+  border-top-right-radius: 2px;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  margin-right: 0;
+}
+.w2rr-content .w2rr-pagination > li:last-child > a,
+.w2rr-content .w2rr-pagination > li:last-child > span {
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+}
+.w2rr-content .w2rr-btn-group > .w2rr-btn:first-child:not(:last-child):not(.w2rr-dropdown-toggle) {
+  border-bottom-right-radius: 2px;
+  border-top-right-radius: 2px;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  margin-left: -1px;
+}
+.w2rr-content .w2rr-btn-group > .w2rr-btn:last-child:not(:first-child),
+.w2rr-content .w2rr-btn-group > .w2rr-dropdown-toggle:not(:first-child) {
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+  margin-right: -1px;
+  margin-left: 0;
+}
+.w2rr-content .w2rr-btn-group > .w2rr-btn,
+.w2rr-content .w2rr-btn-group-vertical > .w2rr-btn {
+  float: right;
+}
+
+.w2rr-content select:not(.w2rr-week-day-input) {
+  background-position: 8px 50%, 13px 50%, 0 0 !important;
+}
+
+.w2rr-content .w2rr-checkbox,
+.w2rr-content .w2rr-radio {
+  text-align: right;
+}
+
+.w2rr-content .w2rr-checkbox label,
+.w2rr-content .w2rr-radio label {
+  position: relative;
+  padding-left: 20px;
+  padding-right: 30px;
+}
+
+.w2rr-checkbox input,
+.w2rr-radio input {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+}
+
+.w2rr-checkbox .w2rr-control-indicator,
+.w2rr-radio .w2rr-control-indicator {
+  right: 0;
+  left: auto;
+  margin-right: 0;
+  margin-left: 5px;
+}
+
+/* Checkbox tick */
+.w2rr-checkbox .w2rr-control-indicator:after {
+  font-size: 12px;
+  left: 0;
+  right: 5px;
+}
+
+/* Radio button inner circle */
+.w2rr-radio .w2rr-control-indicator:after {
+  right: 6px;
+}
+
+/************************ Misc ************************/
+a.w2rr-hint-icon {
+  left: 24px;
+  right: auto;
+}
+
+/************************ Frontpanel Buttons ************************/
+.w2rr-review-frontpanel a.w2rr-btn {
+  margin: 10px 0 10px 10px;
+}
+
+.woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link--ratings-reviews a::after {
+  margin-right: 5px;
+}
+
+.w2rr-orderby-links-label {
+  margin-left: 10px;
+  margin-right: 0;
+}
+
+.w2rr-author-link,
+.w2rr-review-date,
+.w2rr-views-counter {
+  margin-left: 10px;
+  margin-right: 0;
+}
+
+/************************ Listing Dialog ************************/
+.w2rr-review-dialog.ui-dialog .ui-dialog-title {
+  float: right;
+}
+
+.w2rr-close-listing-dialog {
+  float: left;
+}
+
+label.w2rr-rating-icon {
+  float: left;
+  padding-right: 2px;
+  padding-left: 0;
+}
+
+label.w2rr-rating-icon.w2rr-fa-star-half-o {
+  -moz-transform: scaleX(-1);
+  /* Gecko */
+  -o-transform: scaleX(-1);
+  /* Opera */
+  -webkit-transform: scaleX(-1);
+  /* Webkit */
+  transform: scaleX(-1);
+  /* Standard */
+  filter: FlipH;
+  /* IE 6/7/8 */
+}
+
+.w2rr-rating-icon:last-child {
+  padding-right: 0;
+}
+
+.w2rr-rating-avgvalue {
+  float: left !important;
+  margin: 0 5px 0 5px !important;
+}
+
+.w2rr-range-slider-value {
+  margin-left: 8px;
+  margin-right: 0;
+}
+
+.w2rr-range-slider-value:after {
+  right: auto;
+  left: -7px;
+  border-left: none;
+  border-right: 7px solid #2c3e50;
+}
+
+.w2rr-content ul.w2rr-range-slider-labels {
+  margin-right: -6.25%;
+  margin-left: 0;
+}
+
+.w2rr-content ul.w2rr-range-slider-labels li {
+  float: right;
+}
+
+/************************ Color Picker panel ************************/
+#w2rr-color-picker-panel {
+  right: -177px;
+  left: 0;
+}
+
+#w2rr-color-picker {
+  float: right;
+  border-radius: 0 0 0 6px;
+  box-shadow: -7px 6px 5px 0px rgba(50, 50, 50, 0.55);
+}
+
+#w2rr-color-picker-panel-tools {
+  float: right;
+  border-radius: 6px 0 0 6px;
+  box-shadow: -7px 6px 5px 0px rgba(50, 50, 50, 0.55);
+  text-align: left;
+  cursor: pointer;
+}
+
+.w2rr-bx-wrapper {
+  direction: ltr;
+}
+
+.w2rr-bx-wrapper a.w2rr-bx-prev {
+  left: 0;
+  border-radius: 0 5px 5px 0;
+}
+
+.w2rr-bx-wrapper a.w2rr-bx-next {
+  right: 0;
+  border-radius: 5px 0 0 5px;
+}
+
+ul.w2rr-categorychecklist li ul.children {
+  margin-right: 12px;
+  margin-left: 0;
+}
+
+ul.w2rr-categorychecklist li label {
+  padding-right: 5px;
+  padding-left: 0;
+}
+
+ul.w2rr-categorychecklist span.w2rr-category-has-checked {
+  left: -2px;
+  right: 0;
+}
+
+ul.w2rr-categorychecklist li ul {
+  border-right: 1px solid #CCCCCC;
+  border-left: 0;
+  padding: 0 25px 0 0;
+}
+
+ul.w2rr-categorychecklist li ul li:before {
+  right: -20px;
+  left: auto;
+}
+
+/* Content fields */
+.w2rr-delete-selection-item {
+  float: right;
+}
+
+.w2rr-icon,
+.w2rr-png-image,
+.w2rr-fa-icon {
+  float: right;
+}
+
+.w2rr-attached-item,
+.w2rr-upload-item {
+  float: right;
+  margin: 0 0 20px 20px;
+}
+
+.w2rr-fa.w2rr-attached-item-delete {
+  left: 10px;
+  right: auto;
+}
+
+.w2rr-attached-item-metadata {
+  right: 10px;
+  left: auto;
+}
+
+.w2rr-content-fields-metabox .w2rr-field-checkbox-input {
+  float: right;
+  text-align: right;
+}

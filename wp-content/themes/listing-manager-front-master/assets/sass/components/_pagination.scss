@@ -1,0 +1,41 @@
+.pagination {
+	margin: 40px 0 0 0;
+	text-align: center;
+
+	.nav-links {
+		span, a {
+			background-color: rgba(#000, .04);
+			border: 0;
+			cursor: pointer;
+			display: inline-block;
+			font-weight: 400;
+			height: 42px;
+			line-height: 42px;
+			margin: 0 12px;
+			transition: background-color .2s ease;
+			width: 42px;
+
+			&:hover {
+				background-color: rgba(#000, .06);
+			}
+		}
+
+		.current, a {
+			color: rgba($color-black, .7);
+		}
+
+		.current {
+			background-color: $color-primary;
+			color: #fff;
+
+			&:hover {
+				background-color: $color-primary;
+			}
+		}
+
+		.next, .prev {
+			padding: 0 14px;
+			width: auto;
+		}
+	}
+}
