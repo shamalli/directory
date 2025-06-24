@@ -9,14 +9,14 @@ The easiest way to build an online directory website on WordPress is to install 
 
 Moreover, it also features location based directory. Maps & map markers functionality gives users fast and easy ability to find nearby places by powerful search system.
 
-[youtube https://www.youtube.com/watch?v=8r41yn1BT5Q]
+https://www.youtube.com/watch?v=8r41yn1BT5Q
 
 = Easy setup =
 Just create 2 pages with following shortcodes:
 
 `[webdirectory]`
 
-[![[youtube ](https://img.youtube.com/vi/EyMQLcMmhUs/0.jpg)](https://www.youtube.com/watch?v=EyMQLcMmhUs)
+https://www.youtube.com/watch?v=EyMQLcMmhUs
 
 [Example](https://www.salephpscripts.com/wordpress_directory/demo/)
 [Example custom home page 1](https://www.salephpscripts.com/wordpress_directory/demo/shortcodes/custom-home-page-1/)
@@ -31,7 +31,7 @@ Just create 2 pages with following shortcodes:
 
 [Example custom home page 6](https://www.salephpscripts.com/wordpress_directory/demo/shortcodes/custom-home-page-6/)
 
-[![[youtube ](https://img.youtube.com/vi/Rcrf_XupmpY/0.jpg)](https://www.youtube.com/watch?v=Rcrf_XupmpY)
+https://www.youtube.com/watch?v=Rcrf_XupmpY
 
 and optional page:
 
@@ -59,7 +59,7 @@ This shortcode is used to build google maps with listings locations as map marke
 
 `[webdirectory-map]`
 
-[![[youtube ](https://img.youtube.com/vi/9HCFyoQ3QNg/0.jpg)](https://www.youtube.com/watch?v=9HCFyoQ3QNg)
+https://www.youtube.com/watch?v=9HCFyoQ3QNg
 
 [Search + AJAX Map + Listings](https://www.salephpscripts.com/wordpress_directory/demo/shortcodes/search-ajax-map-listings/)
 
@@ -93,7 +93,7 @@ This shortcode builds directory search form:
 
 `[webdirectory-search]`
 
-[![[youtube ](https://img.youtube.com/vi/0jjGN7F_piM/0.jpg)](https://www.youtube.com/watch?v=0jjGN7F_piM)
+https://www.youtube.com/watch?v=0jjGN7F_piM
 
 [Example](https://www.salephpscripts.com/wordpress_directory/demo/shortcodes/webdirectory-search/)
 

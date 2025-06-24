@@ -1,2 +1,5 @@
 .htaccess
 wp-config.php
+js
+.well-known
+styles
