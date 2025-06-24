@@ -1,17 +1,22 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <script>
 		<?php
 		foreach ($content_fields AS $content_field): 
 			if (!$content_field->isCategories() || $content_field->categories === array()) { ?>
-				w2dc_js_objects.fields_in_categories[<?php echo $content_field->id?>] = [];
+				w2dc_js_objects.fields_in_categories[<?php w2dc_esc_e($content_field->id); ?>] = [];
 			<?php } else { ?>
-				w2dc_js_objects.fields_in_categories[<?php echo $content_field->id?>] = [<?php echo implode(',', $content_field->categories); ?>];
+				w2dc_js_objects.fields_in_categories[<?php w2dc_esc_e($content_field->id); ?>] = [<?php echo implode(',', $content_field->categories); ?>];
 			<?php } ?>
 		<?php endforeach; ?>
 </script>
 
 <div class="w2dc-content w2dc-content-fields-metabox">
 	<div class="w2dc-form-horizontal">
-		<p class="w2dc-description"><?php _e('Content fields may be dependent on selected categories', 'W2DC'); ?></p>
+		<p class="w2dc-description"><?php esc_html_e('Content fields may be dependent on selected categories', 'w2dc'); ?></p>
 		<?php
 		foreach ($content_fields AS $content_field) {
 			if (

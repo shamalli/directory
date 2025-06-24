@@ -1,7 +1,12 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <?php w2dc_renderTemplate('admin_header.tpl.php'); ?>
 
 <h2>
-	<?php printf(__('Configure %s field', 'W2DC'), $w2dc_instance->content_fields->fields_types_names[$content_field->type]); ?>
+	<?php printf(esc_html__('Configure %s field', 'w2dc'), $w2dc_instance->content_fields->fields_types_names[$content_field->type]); ?>
 </h2>
 
 <form method="POST" action="">
@@ -10,7 +15,7 @@
 		<tbody>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Max length',  'W2DC'); ?><span class="w2dc-red-asterisk">*</span></label>
+					<label><?php esc_html_e('Max length',  'w2dc'); ?><span class="w2dc-red-asterisk">*</span></label>
 				</th>
 				<td>
 					<input
@@ -22,7 +27,7 @@
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('PHP RegEx template',  'W2DC'); ?></label>
+					<label><?php esc_html_e('PHP RegEx template',  'w2dc'); ?></label>
 				</th>
 				<td>
 					<input
@@ -34,8 +39,8 @@
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Phone mode',  'W2DC'); ?></label>
-					<p class="description"><?php _e("for mobile devices adds special tag to call directly from phone or open needed app", 'W2DC'); ?></p>
+					<label><?php esc_html_e('Phone mode',  'w2dc'); ?></label>
+					<p class="description"><?php esc_html_e("for mobile devices adds special tag to call directly from phone or open needed app", 'w2dc'); ?></p>
 				</th>
 				<td>
 					<input
@@ -43,34 +48,34 @@
 						name="phone_mode"
 						type="radio"
 						value="phone"
-						<?php checked('phone', $content_field->phone_mode); ?> /> <label for="phone_mode_phone"><?php _e('Phone call', 'W2DC'); ?></label>
+						<?php checked('phone', $content_field->phone_mode); ?> /> <label for="phone_mode_phone"><?php esc_html_e('Phone call', 'w2dc'); ?></label>
 					</br>
 					<input
 						id="phone_mode_viber"
 						name="phone_mode"
 						type="radio"
 						value="viber"
-						<?php checked('viber', $content_field->phone_mode); ?> /> <label for="phone_mode_viber"><?php _e('Viber chat', 'W2DC'); ?></label>
+						<?php checked('viber', $content_field->phone_mode); ?> /> <label for="phone_mode_viber"><?php esc_html_e('Viber chat', 'w2dc'); ?></label>
 					</br>
 					<input
 						id="phone_mode_whatsapp"
 						name="phone_mode"
 						type="radio"
 						value="whatsapp"
-						<?php checked('whatsapp', $content_field->phone_mode); ?> /> <label for="phone_mode_whatsapp"><?php _e('WhatsApp chat', 'W2DC'); ?></label>
+						<?php checked('whatsapp', $content_field->phone_mode); ?> /> <label for="phone_mode_whatsapp"><?php esc_html_e('WhatsApp chat', 'w2dc'); ?></label>
 					</br>
 					<input
 						id="phone_mode_telegram"
 						name="phone_mode"
 						type="radio"
 						value="telegram"
-						<?php checked('telegram', $content_field->phone_mode); ?> /> <label for="phone_mode_telegram"><?php _e('Telegram chat', 'W2DC'); ?></label>
+						<?php checked('telegram', $content_field->phone_mode); ?> /> <label for="phone_mode_telegram"><?php esc_html_e('Telegram chat', 'w2dc'); ?></label>
 				</td>
 			</tr>
 		</tbody>
 	</table>
 	
-	<?php submit_button(__('Save changes', 'W2DC')); ?>
+	<?php submit_button(esc_html__('Save changes', 'w2dc')); ?>
 </form>
 
 <?php w2dc_renderTemplate('admin_footer.tpl.php'); ?>

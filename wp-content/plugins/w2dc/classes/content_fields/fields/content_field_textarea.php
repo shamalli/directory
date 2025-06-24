@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+// @codingStandardsIgnoreFile
 
 class w2dc_content_field_textarea extends w2dc_content_field {
 	public $max_length = 500;
@@ -21,13 +23,13 @@ class w2dc_content_field_textarea extends w2dc_content_field {
 
 		if (w2dc_getValue($_POST, 'submit') && wp_verify_nonce($_POST['w2dc_configure_content_fields_nonce'], W2DC_PATH)) {
 			$validation = new w2dc_form_validation();
-			$validation->set_rules('max_length', __('Max length', 'W2DC'), 'required|is_natural_no_zero');
-			$validation->set_rules('html_editor', __('HTML editor enabled', 'W2DC'), 'is_checked');
-			$validation->set_rules('do_shortcodes', __('Shortcodes processing', 'W2DC'), 'is_checked');
+			$validation->set_rules('max_length', esc_html__('Max length', 'w2dc'), 'required|is_natural_no_zero');
+			$validation->set_rules('html_editor', esc_html__('HTML editor enabled', 'w2dc'), 'is_checked');
+			$validation->set_rules('do_shortcodes', esc_html__('Shortcodes processing', 'w2dc'), 'is_checked');
 			if ($validation->run()) {
 				$result = $validation->result_array();
 				if ($wpdb->update($wpdb->w2dc_content_fields, array('options' => serialize(array('max_length' => $result['max_length'], 'html_editor' => $result['html_editor'], 'do_shortcodes' => $result['do_shortcodes']))), array('id' => $this->id), null, array('%d')))
-					w2dc_addMessage(__('Field configuration was updated successfully!', 'W2DC'));
+					w2dc_addMessage(esc_html__('Field configuration was updated successfully!', 'w2dc'));
 				
 				$w2dc_instance->content_fields_manager->showContentFieldsTable();
 			} else {
@@ -102,7 +104,7 @@ class w2dc_content_field_textarea extends w2dc_content_field {
 	
 	public function validateCsvValues($value, &$errors) {
 		if (strlen($value) > $this->max_length)
-			$errors[] = sprintf(__('The %s field can not exceed %s characters in length.', 'W2DC'), $this->name, $this->max_length);
+			$errors[] = sprintf(esc_html__('The %s field can not exceed %s characters in length.', 'w2dc'), $this->name, $this->max_length);
 		else
 			return $value;
 	}

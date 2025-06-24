@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 class w2dc_frontpanel_buttons {
 	public $args = array();
 	public $hide_button_text = false;
@@ -18,18 +20,14 @@ class w2dc_frontpanel_buttons {
 		
 		if (!empty($this->args['directories'])) {
 			if (!is_array($this->args['directories'])) {
-				$directories_ids = array_filter(explode(',', $this->args['directories']), 'trim');
+				$directories_ids = wp_parse_id_list($this->args['directories']);
 			} else {
 				$directories_ids = $this->args['directories'];
 			}
 		}
 		
 		if ($this->args['buttons']) {
-			if (is_array($this->args['buttons'])) {
-				$this->buttons = $this->args['buttons'];
-			} else {
-				$this->buttons = array_filter(explode(',', $this->args['buttons']), 'trim');
-			}
+			$this->buttons = w2dc_parse_slugs_ids_list($this->args['buttons']);
 		}
 		
 		if (!$this->args['directories']) {

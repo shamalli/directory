@@ -11,7 +11,7 @@
 namespace RankMath\Replace_Variables;
 
 use RankMath\Paper\Paper;
-use MyThemeShop\Helpers\Str;
+use RankMath\Helpers\Str;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -67,6 +67,7 @@ class Advanced_Variables extends Author_Variables {
 				'description' => esc_html__( 'Custom field value.', 'rank-math' ),
 				'variable'    => 'customfield(field-name)',
 				'example'     => esc_html__( 'Custom field value', 'rank-math' ),
+				'nocache'     => true,
 			],
 			[ $this, 'get_customfield' ]
 		);
@@ -245,16 +246,19 @@ class Advanced_Variables extends Author_Variables {
 			return null;
 		}
 
-		global $post;
-		$object    = is_object( $post ) ? $post : $this->args;
-		$has_post  = is_object( $object ) && isset( $object->ID );
-		$on_screen = is_singular() || is_admin() || ! empty( get_query_var( 'sitemap' ) );
-		if ( ! $has_post || ! $on_screen ) {
+		if ( ! empty( get_query_var( 'sitemap' ) ) && 'locations' !== get_query_var( 'sitemap' ) ) {
 			return null;
 		}
 
-		$name = get_post_meta( $object->ID, $name, true );
-		return '' !== $name ? $name : null;
+		if ( is_author() ) {
+			return get_user_meta( $this->args->ID, $name, true );
+		}
+
+		if ( is_category() || is_tag() || is_tax() ) {
+			return get_term_meta( $this->args->term_id, $name, true );
+		}
+
+		return is_singular() || ! empty( $this->args->post_type ) ? get_post_meta( $this->args->ID, $name, true ) : null;
 	}
 
 	/**

@@ -63,7 +63,7 @@ class w2rr_reviews_manager {
 	public function addPostMetabox($post_type) {
 		if ($post_type == W2RR_REVIEW_TYPE) {
 			add_meta_box('w2rr_review_post',
-			esc_html__('Review for a post', 'W2RR'),
+			esc_html__('Review for a post', 'w2rr'),
 			array($this, 'postMetabox'),
 			W2RR_REVIEW_TYPE,
 			'side',
@@ -75,14 +75,14 @@ class w2rr_reviews_manager {
 		if ($post_type == W2RR_REVIEW_TYPE) {
 			if (w2rr_getMultiRatings()) {
 				add_meta_box('w2rr_ratings_criterias',
-				esc_html__('Review ratings', 'W2RR'),
+				esc_html__('Review ratings', 'w2rr'),
 				array($this, 'ratingsCriteriasMetabox'),
 				W2RR_REVIEW_TYPE,
 				'normal',
 				'high');
 			} else {
 				add_meta_box('w2rr_rating',
-				esc_html__('Review rating', 'W2RR'),
+				esc_html__('Review rating', 'w2rr'),
 				array($this, 'ratingMetabox'),
 				W2RR_REVIEW_TYPE,
 				'normal',
@@ -116,7 +116,7 @@ class w2rr_reviews_manager {
 				add_action('admin_enqueue_scripts', array($w2rr_instance->media_manager, 'admin_enqueue_scripts_styles'));
 					
 				add_meta_box('w2rr_media_metabox',
-				esc_html__('Review media', 'W2RR'),
+				esc_html__('Review media', 'w2rr'),
 				array($w2rr_instance->media_manager, 'mediaMetabox'),
 				W2RR_REVIEW_TYPE,
 				'normal',
@@ -129,7 +129,7 @@ class w2rr_reviews_manager {
 	public function addProsConsMetabox($post_type, $post) {
 		if ($post_type == W2RR_REVIEW_TYPE) {
 			add_meta_box('w2rr_pros_cons',
-			esc_html__('Pros and Cons', 'W2RR'),
+			esc_html__('Pros and Cons', 'w2rr'),
 			array($this, 'prosConsMetabox'),
 			W2RR_REVIEW_TYPE,
 			'normal',
@@ -199,8 +199,8 @@ class w2rr_reviews_manager {
 	public function add_reviews_table_columns($columns) {
 		global $w2rr_instance;
 	
-		$w2rr_columns['w2rr_rating'] = esc_html__('Rating', 'W2RR');
-		$w2rr_columns['w2rr_post'] = esc_html__('Post', 'W2RR');
+		$w2rr_columns['w2rr_rating'] = esc_html__('Rating', 'w2rr');
+		$w2rr_columns['w2rr_post'] = esc_html__('Post', 'w2rr');
 
 		return array_slice($columns, 0, 2, true) + $w2rr_columns + array_slice($columns, 2, count($columns)-2, true);
 	}
@@ -214,7 +214,6 @@ class w2rr_reviews_manager {
 				break;
 			case "w2rr_rating":
 				$review = w2rr_getReview($post_id);
-				//$review->renderStars();
 				$review->renderAvgRating(array('active' => false, 'show_counter' => false, 'show_avg' => true, 'stars_size' => 20));
 				break;
 		}
@@ -230,11 +229,11 @@ class w2rr_reviews_manager {
 			$errors = array();
 				
 			if (empty($postarr['w2rr_post_id'])) {
-				$errors[] = esc_html__('Select post for review!', 'W2RR');
+				$errors[] = esc_html__('Select post for review!', 'w2rr');
 			}
 			
 			if (empty($postarr['content']) && get_option('w2rr_enable_description')) {
-				$errors[] = esc_html__('Review description field required!', 'W2RR');
+				$errors[] = esc_html__('Review description field required!', 'w2rr');
 			}
 	
 			if (get_option("w2rr_reviews_images_number")) {
@@ -256,7 +255,7 @@ class w2rr_reviews_manager {
 					w2rr_addMessage($error, 'error');
 				}
 			} else {
-				w2rr_addMessage(esc_html__('Review was saved successfully!', 'W2RR'));
+				w2rr_addMessage(esc_html__('Review was saved successfully!', 'w2rr'));
 			}
 		}
 		return $data;
@@ -308,7 +307,6 @@ class w2rr_reviews_manager {
 			$total_rating = 0;
 			foreach ($ratings_criterias AS $key=>$criteria) {
 				$rating = w2rr_getValue($_POST, 'w2rr_review_rating_' . $key, 9);
-				//$review_ratings[$key] = $rating;
 				$total_rating += $rating;
 			}
 			$avg_rating = ($total_rating/count($ratings_criterias)+1)/2;
@@ -426,13 +424,13 @@ class w2rr_reviews_manager {
 	public function comments_label($label, $target_post) {
 		$reviews_counter = $this->get_reviews_counter($target_post);
 		
-		return _n('Review', 'Reviews', $reviews_counter, 'W2RR') . ' (' . $reviews_counter . ')';
+		return _n('Review', 'Reviews', $reviews_counter, 'w2rr') . ' (' . $reviews_counter . ')';
 	}
 	
 	public function comments_reply_label($label, $target_post) {
 		$reviews_counter = $this->get_reviews_counter($target_post);
 		
-		return $reviews_counter . ' ' . _n('review', 'reviews', $reviews_counter, 'W2RR');
+		return $reviews_counter . ' ' . _n('review', 'reviews', $reviews_counter, 'w2rr');
 	}
 	
 	public function login_registration_pages($pages) {
@@ -480,7 +478,7 @@ class w2rr_reviews_manager {
 			) {
 				update_post_meta($post->ID, '_review_approved', true);
 	
-				$subject = esc_html__('Approval of review', 'W2RR');
+				$subject = esc_html__('Approval of review', 'w2rr');
 	
 				$link = '';
 				if ($w2rr_instance->dashboard_page_id) {

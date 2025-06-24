@@ -1,4 +1,6 @@
 (function($){
+	"use strict";
+	
 	function create(sg)
 	{
 		tinymce.create('tinymce.plugins.' + sg.name, {
@@ -7,13 +9,13 @@
 					return function() {
 						$('#' + name + '_modal').reveal({ animation: 'none' });
 						$('#' + name + '_modal').css('top', parseInt($('#' + name + '_modal').css('top')) - window.scrollY);
-						$('#' + name + '_modal').unbind('reveal:close.vp_w2dc_sc');
-						$('#' + name + '_modal').bind('reveal:close.vp_w2dc_sc', function () {
-							$('.vp-sc-menu-item.active').find('.vp-sc-form').scReset().vp_w2dc_slideUp();
+						$('#' + name + '_modal').unbind('reveal:close.w2dc_vp_sc');
+						$('#' + name + '_modal').on('reveal:close.w2dc_vp_sc', function () {
+							$('.vp-sc-menu-item.active').find('.vp-sc-form').scReset().w2dc_vp_slideUp();
 							$('.vp-sc-menu-item.active').removeClass('active');
 						});
-						$('#' + name + '_modal').unbind('vp_w2dc_insert_shortcode.vp_w2dc_tinymce');
-						$('#' + name + '_modal').bind('vp_w2dc_insert_shortcode.vp_w2dc_tinymce', function(event, code) {
+						$('#' + name + '_modal').unbind('w2dc_vp_insert_shortcode.w2dc_vp_tinymce');
+						$('#' + name + '_modal').on('w2dc_vp_insert_shortcode.w2dc_vp_tinymce', function(event, code) {
 							ed.selection.setContent(code);
 							$(ed.getElement()).insertAtCaret(code);
 						});
@@ -31,12 +33,12 @@
 		});
 	}
 
-	for (var i = 0; i < vp_w2dc_sg.length; i++){
-		create(vp_w2dc_sg[i]);
+	for (var i = 0; i < w2dc_vp_sg.length; i++){
+		create(w2dc_vp_sg[i]);
 	}
 
 })(jQuery);
 
-for (var i = 0; i < vp_w2dc_sg.length; i++){
-	tinymce.PluginManager.add(vp_w2dc_sg[i].name, tinymce.plugins[vp_w2dc_sg[i].name]);
+for (var i = 0; i < w2dc_vp_sg.length; i++){
+	tinymce.PluginManager.add(w2dc_vp_sg[i].name, tinymce.plugins[w2dc_vp_sg[i].name]);
 }

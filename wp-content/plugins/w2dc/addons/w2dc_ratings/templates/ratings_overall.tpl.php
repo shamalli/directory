@@ -1,15 +1,20 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <!-- ratings_metabox.tpl.php -->
 <div class="w2dc-ratings-overall-wrapper">
 	<div class="w2dc-ratings-overall-avgvalue">
 		<span class="w2dc-ratings-overall-stars">
-				<?php echo _e('Average', 'W2DC'); ?>
+				<?php echo esc_html_e('Average', 'w2dc'); ?>
 		</span>
 		<?php w2dc_renderTemplate(array(W2DC_RATINGS_TEMPLATES_PATH, 'avg_rating.tpl.php'), array('avg_rating' => $listing->avg_rating, 'post_id' => $listing->post->ID, 'meta_tags' => false, 'active' => false, 'show_avg' => true)); ?>
 	</div>
 	<?php foreach ($total_counts AS $rating=>$counts): ?>
 	<div class="w2dc-ratings-overall">
 		<span class="w2dc-ratings-overall-stars">
-			<?php echo $rating; ?> <?php echo _n('Star ', 'Stars', $rating, 'W2DC'); ?>
+			<?php w2dc_esc_e($rating); ?> <?php echo _n('Star ', 'Stars', $rating, 'w2dc'); ?>
 		</span>
 		<div class="w2dc-rating">
 			<div class="w2dc-rating-stars">

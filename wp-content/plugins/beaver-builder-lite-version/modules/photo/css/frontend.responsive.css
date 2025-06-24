@@ -1,4 +1,5 @@
 /* Mobile Photo */
-.fl-photo-content {
-	width: 100%;
+.fl-photo-content,
+.fl-photo-img {
+	max-width: 100%;
 }

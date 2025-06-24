@@ -12,7 +12,7 @@ namespace RankMath\Replace_Variables;
 
 use RankMath\Post;
 use RankMath\Traits\Hooker;
-use MyThemeShop\Helpers\Str;
+use RankMath\Helpers\Str;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -22,6 +22,20 @@ defined( 'ABSPATH' ) || exit;
 class Base {
 
 	use Hooker;
+
+	/**
+	 * Current post.
+	 *
+	 * @var object
+	 */
+	public $post;
+
+	/**
+	 * Current args.
+	 *
+	 * @var object
+	 */
+	public $args;
 
 	/**
 	 * Get a comma separated list of the post's terms.

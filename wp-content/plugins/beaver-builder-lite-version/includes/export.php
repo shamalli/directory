@@ -28,7 +28,7 @@ function fl_export_wp( $post_ids = array() ) {
 	if ( ! empty( $sitename ) ) {
 		$sitename .= '.';
 	}
-	$date        = date( 'Y-m-d' );
+	$date        = gmdate( 'Y-m-d' );
 	$wp_filename = $sitename . 'WordPress.' . $date . '.xml';
 	/**
 	 * Filter the export filename.
@@ -211,7 +211,7 @@ function fl_export_wp( $post_ids = array() ) {
 	}
 
 	/**
-	 * Ouput all navigation menu terms
+	 * Output all navigation menu terms
 	 *
 	 * @since 3.1.0
 	 */
@@ -260,6 +260,9 @@ function fl_export_wp( $post_ids = array() ) {
 		if ( '_edit_lock' == $meta_key ) {
 			$return_me = true;
 		}
+		if ( false !== strpos( $meta_key, '_fl_builder_history' ) ) {
+			$return_me = true;
+		}
 		return $return_me;
 	}
 	add_filter( 'wxr_export_skip_postmeta', 'wxr_filter_postmeta', 10, 2 );
@@ -297,7 +300,7 @@ function fl_export_wp( $post_ids = array() ) {
 	<title><?php bloginfo_rss( 'name' ); ?></title>
 	<link><?php bloginfo_rss( 'url' ); ?></link>
 	<description><?php bloginfo_rss( 'description' ); ?></description>
-	<pubDate><?php echo date( 'D, d M Y H:i:s +0000' ); ?></pubDate>
+	<pubDate><?php echo gmdate( 'D, d M Y H:i:s +0000' ); ?></pubDate>
 	<language><?php bloginfo_rss( 'language' ); ?></language>
 	<wp:wxr_version><?php echo WXR_VERSION; ?></wp:wxr_version>
 	<wp:base_site_url><?php echo wxr_site_url(); ?></wp:base_site_url>

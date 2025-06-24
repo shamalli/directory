@@ -76,7 +76,7 @@ switch ( $source ) {
 
 		$img = wpb_getImageBySize( array(
 			'attach_id' => $img_id,
-			'thumb_size' => $img_size,
+			'thumb_size' => strtolower( $img_size ),
 			'class' => 'vc_single_image-img',
 		) );
 
@@ -177,7 +177,7 @@ switch ( $onclick ) {
 			}
 		}
 
-		$img['thumbnail'] = str_replace( '<img ', '<img data-vc-zoom="' . $large_img_src . '" ', $img['thumbnail'] );
+		$img['thumbnail'] = str_replace( '<img ', '<img data-vc-zoom="' . esc_url( $large_img_src ) . '" ', $img['thumbnail'] );
 
 		break;
 }
@@ -187,10 +187,10 @@ if ( vc_has_class( 'prettyphoto', $el_class ) ) {
 	$el_class = vc_remove_class( 'prettyphoto', $el_class );
 }
 
-$wrapperClass = 'vc_single_image-wrapper ' . $style . ' ' . $border_color;
+$wrapperClass = 'vc_single_image-wrapper ' . esc_attr( $style ) . ' ' . esc_attr( $border_color );
 
 if ( $link ) {
-	$a_attrs['href'] = $link;
+	$a_attrs['href'] = esc_url( $link );
 	$a_attrs['target'] = $img_link_target;
 	if ( ! empty( $a_attrs['class'] ) ) {
 		$wrapperClass .= ' ' . $a_attrs['class'];
@@ -201,12 +201,13 @@ if ( $link ) {
 	$html = '<div class="' . $wrapperClass . '">' . $img['thumbnail'] . '</div>';
 }
 
-$class_to_filter = 'wpb_single_image wpb_content_element vc_align_' . $alignment . ' ' . $this->getCSSAnimation( $css_animation );
+$element_class = empty( $this->settings['element_default_class'] ) ? '' : $this->settings['element_default_class'];
+$class_to_filter = 'wpb_single_image wpb_content_element vc_align_' . $alignment . ' ' . esc_attr( $element_class ) . $this->getCSSAnimation( $css_animation );
 $class_to_filter .= vc_shortcode_custom_css_class( $css, ' ' ) . $this->getExtraClass( $el_class );
 $css_class = apply_filters( VC_SHORTCODE_CUSTOM_CSS_FILTER_TAG, $class_to_filter, $this->settings['base'], $atts );
 
 if ( in_array( $source, array( 'media_library', 'featured_image' ), true ) && 'yes' === $add_caption ) {
-	$img_id = apply_filters( 'wpml_object_id', $img_id, 'attachment' );
+	$img_id = apply_filters( 'wpml_object_id', $img_id, 'attachment', true );
 	$post = get_post( $img_id );
 	$caption = $post->post_excerpt;
 } else {

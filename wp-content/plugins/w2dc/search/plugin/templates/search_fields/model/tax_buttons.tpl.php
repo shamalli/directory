@@ -1,3 +1,8 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <script>
 (function($) {
 	"use strict";
@@ -47,7 +52,7 @@ endif; ?>
 
 <div class="wcsearch-search-model-input wcsearch-search-model-input-<?php echo esc_attr($mode); ?>" <?php echo $search_model->getOptionsString(); ?>>
 	<label class="wcsearch-search-model-input-label"><?php echo esc_html($title); ?></label>
-	<div class="wcsearch-search-model-input-terms-columns" <?php if ($height_limit): ?>style="height: <?php echo $height_limit; ?>px;"<?php endif; ?>>
+	<div class="wcsearch-search-model-input-terms-columns" <?php if ($height_limit): ?>style="height: <?php wcsearch_esc_e($height_limit); ?>px;"<?php endif; ?>>
 	<?php
 	if ($selection_items):
 		$i = 1;
@@ -58,7 +63,7 @@ endif; ?>
 				<?php if ($i == $j): ?>
 				<div class="wcsearch-search-term-button <?php if (in_array($item->term_id, explode(",", $values))): ?>wcsearch-search-term-button-active<?php endif; ?>" data-term-id="<?php echo esc_attr($item->term_id); ?>">
 					<div class="wcsearch-btn wcsearch-btn-default wcsearch-term-id-<?php echo esc_attr($item->term_id); ?>"><?php echo esc_html($item->name); ?><?php if ($counter): echo ' ('.wcsearch_get_count(array('mode' => $mode, 'term' => $item, 'used_by' => $used_by)).')'; endif; ?></div>
-					<a class="wcsearch-model-options-link" data-term-id="<?php echo esc_attr($item->term_id); ?>" data-term-name="<?php echo esc_attr($item->name); ?>" title="<?php esc_attr_e("Edit color", "WCSEARCH"); ?>"><?php esc_html_e("options", "WCSEARCH"); ?></a>
+					<a class="wcsearch-model-options-link" data-term-id="<?php echo esc_attr($item->term_id); ?>" data-term-name="<?php echo esc_attr($item->name); ?>" title="<?php esc_attr_e("Edit color", "wcsearch"); ?>"><?php esc_html_e("options", "wcsearch"); ?></a>
 				</div>
 				<?php endif; ?>
 				<?php $j++; ?>
@@ -69,7 +74,7 @@ endif; ?>
 		<?php endwhile; ?>
 		<input type="hidden" name="<?php echo esc_attr($slug); ?>" class="wcsearch-search-terms-buttons-input" value="<?php echo esc_attr($values); ?>">
 	<?php else: ?>
-	<?php esc_html_e("No items in this taxonomy yet", "WCSEARCH"); ?>
+	<?php esc_html_e("No items in this taxonomy yet", "wcsearch"); ?>
 	<?php endif; ?>
 	</div>
 </div>

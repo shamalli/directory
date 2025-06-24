@@ -2,13 +2,13 @@
 Contributors: vaakash
 Author URI: https://www.aakashweb.com/
 Plugin URI: https://www.aakashweb.com/wordpress-plugins/shortcoder/
-Tags: shortcode, html, javascript, shortcodes, snippets, posts, pages, widgets, insert, adsense, ads, code, elementor, WPBakery
+Tags: shortcode, html, javascript, code, snippets
 Donate link: https://www.paypal.me/vaakash/
 License: GPLv2 or later
 Requires PHP: 5.3
 Requires at least: 4.9.0
-Tested up to: 6.2
-Stable tag: 6.2
+Tested up to: 6.8
+Stable tag: 6.5
 
 Create custom "Shortcodes" easily for HTML, JavaScript, CSS code snippets and use the shortcodes within posts, pages & widgets
 
@@ -35,7 +35,8 @@ Shortcoder plugin allows to create a custom shortcodes for HTML, JavaScript, CSS
 * Globally disable the shortcode when not needed.
 * Disable shortcode on desktop, mobile devices.
 * A button in post editor to pick the shortcodes to insert.
-* Supports Gutenberg.
+* Execute blocks HTML in shortcode content.
+* Insert shortcodes in Gutenberg/block editor.
 
 ### 🎲 An example usage
 
@@ -61,6 +62,7 @@ Though shortcodes can be used in **any** place manually, Shortcoder provides bel
 Shortcoder also provides a [PRO version](https://www.aakashweb.com/wordpress-plugins/shortcoder/) which has additional features to further enhance the experience. Below features are offered in the PRO version.
 
 * **Custom editor** - Edit Shortcode content using block editor or page builder plugins like Elementor and WPBakery.
+* **(New) Translation with WPML** - Translate Shortcode content with WPML.
 * **Revisions** - Revisions support for Shortcode content.
 * **Locate shortcode** - Search posts and pages where a shortcode is used.
 * **Extra code** - Include extra code to the footer when a shortcode is used in a page.
@@ -129,6 +131,28 @@ Yes, this feature is available in the PRO version. You can upgrade to the [PRO v
 
 
 ## Changelog
+
+### 6.5
+* Fix: Support for WordPress 6.8.
+
+### 6.4
+* New: Option to set shortcode display name next to shortcode name.
+* New: Option to execute WordPress block HTML in shortcode content.
+* Fix: Shortcoder roles are registered when plugin is activated.
+
+### 6.3.2
+* Fix: Verify permissions while closing Shortcoder changelog.
+
+### 6.3.1
+* Fix: Admin ajax vulnerability with nonce.
+
+### 6.3
+* New: Set default value for the custom field parameters.
+* New: Custom parameter default value is shown in the insert shortcode popup.
+* Fix: Restrict access to admin-ajax calls.
+* Fix: Some admin texts were missing translation.
+* Fix: Removed the note in the insert popup for fully closed shortcode.
+* Fix: Debug comment line now has the name of the shortcode.
 
 ### 6.2
 * New: Option to show shortcode content in "All shortcodes" page.

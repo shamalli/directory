@@ -208,7 +208,6 @@ select[multiple].w2dc-widget-select-multiple-control {
 
 .w2dc-columns-panel {
   width: 100%;
-  box-sizing: border-box;
 }
 
 .w2dc-columns-panel:after {
@@ -219,6 +218,7 @@ select[multiple].w2dc-widget-select-multiple-control {
 
 .w2dc-column {
   float: left;
+  box-sizing: border-box;
 }
 
 .w2dc-column-left {
@@ -655,8 +655,6 @@ img.w2dc-field-icon {
 }
 
 span.w2dc-field-icon {
-  /* padding-right: 5px;
-  width: 20px; */
   padding-right: 21px;
   width: 21px;
   line-height: 1.3;
@@ -775,7 +773,7 @@ span.w2dc-field-icon {
   }
 }
 .w2dc-field-checkbox-item {
-  font: normal normal normal 14px/1 FontAwesome;
+  font: normal normal normal 14px/1 FontAwesomeW2DC;
   font-size: inherit;
   text-rendering: auto;
   -webkit-font-smoothing: antialiased;
@@ -831,7 +829,6 @@ span.w2dc-field-icon {
   margin: 10px 0;
   padding: 0 0 10px;
   overflow: hidden;
-  /* temporarily */
 }
 
 .w2dc-fields-group .w2dc-field-output-block:last-child {
@@ -1042,7 +1039,7 @@ a.w2dc-hint-icon:before {
 }
 
 a.w2dc-hint-icon {
-  font-family: 'FontAwesome' !important;
+  font-family: 'FontAwesomeW2DC' !important;
   text-decoration: none !important;
   font-size: 24px;
 }
@@ -1065,18 +1062,65 @@ a.w2dc-hint-icon {
     display: none;
   }
 }
-/*
-print landscape
+.w2dc-display-none {
+  display: none;
+}
 
-.w2dc-print {
-	size: landscape;
-	-webkit-transform: rotate(-90deg); 
-	-moz-transform:rotate(-90deg);
-	filter:progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
-	page-break-before: avoid;
-	width:100%;
-	height:100%;
-} */
+.w2dc-width-auto {
+  width: auto;
+}
+
+.w2dc-width-100 {
+  width: 100%;
+}
+
+.w2dc-width-300 {
+  width: 300px;
+}
+
+.w2dc-height-300 {
+  height: 300px;
+}
+
+.w2dc-height-450 {
+  height: 450px;
+}
+
+.w2dc-height-auto {
+  height: auto;
+}
+
+.w2dc-text-align-center {
+  text-align: center;
+}
+
+.w2dc-vertical-align-middle {
+  vertical-align: middle;
+}
+
+.w2dc-source-shortcode {
+  padding: 20px 0;
+}
+
+.w2dc-margin-10 {
+  margin: 10px;
+}
+
+.w2dc-margin-left-10 {
+  margin-left: 10px;
+}
+
+.w2dc-debug-textarea {
+  width: 100%;
+  height: 700px;
+}
+
+.w2dc-contact-warning,
+.w2dc-report-warning {
+  display: none;
+  color: red;
+}
+
 /************************ Our plugin section in settings manager ************************/
 .w2dc-our-plugins {
   margin: 100px 0;
@@ -1429,8 +1473,6 @@ label.w2dc-rating-icon {
 .w2dc-choose-plan:hover,
 .w2dc-choose-plan.w2dc-featured-level {
   box-shadow: 5px 0px 40px rgba(0, 0, 0, 0.2);
-  /* transform: scale(1.15);
-  z-index: 1; */
 }
 
 .w2dc-choose-plan {
@@ -1501,7 +1543,7 @@ label.w2dc-rating-icon {
 }
 
 .w2dc-choose-plan-option-icon {
-  font: normal normal normal 14px/1 FontAwesome;
+  font: normal normal normal 14px/1 FontAwesomeW2DC;
   font-size: inherit;
   text-rendering: auto;
   -webkit-font-smoothing: antialiased;
@@ -1590,6 +1632,7 @@ ul.w2dc-categorychecklist li.parent > .w2dc-category-parent {
   height: 21px;
   width: 25px;
   cursor: pointer;
+  transition: none;
 }
 
 ul.w2dc-categorychecklist li > .w2dc-category-empty {
@@ -1634,6 +1677,7 @@ ul.w2dc-categorychecklist li ul li:before {
 
 .w2dc-dashboard {
   /* Maximum width of 768 pixels. */
+  /* Minimum width of 769 pixels. */
 }
 .w2dc-dashboard a:hover {
   text-decoration: none;
@@ -1668,6 +1712,11 @@ ul.w2dc-categorychecklist li ul li:before {
   }
   .w2dc-dashboard .w2dc-td-listing-options .w2dc-dashboard-btn-mobile {
     display: block;
+  }
+}
+@media screen and (min-width: 769px) {
+  .w2dc-dashboard .w2dc-btn-group {
+    display: flex;
   }
 }
 
@@ -2015,7 +2064,6 @@ ul.w2dc-dashboard-tabs.w2dc-nav {
 
 .w2dc-upload-image {
   background-color: #ababab;
-  /* border: 2px dashed #7e7e7e; */
   text-align: center;
   margin-bottom: 10px;
   display: block;

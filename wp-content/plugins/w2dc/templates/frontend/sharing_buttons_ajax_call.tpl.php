@@ -9,7 +9,7 @@
 				$.ajax({
 					type: "POST",
 					url: w2dc_js_objects.ajaxurl,
-					data: {'action': 'w2dc_get_sharing_buttons', 'post_id': <?php echo $post_id; ?>, 'post_url': "<?php echo $post_url; ?>"},
+					data: {'action': 'w2dc_get_sharing_buttons', 'post_id': <?php w2dc_esc_e($post_id); ?>, 'post_url': "<?php w2dc_esc_e($post_url); ?>"},
 					dataType: 'html',
 					success: function(response_from_the_action_function){
 						if (response_from_the_action_function != 0)

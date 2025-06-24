@@ -9,6 +9,12 @@ return array(
 		<strong>Since 2018 Google Maps is no longer free.</strong> You must enable billing with a credit card and have a valid API key for all of your projects <a href="https://developers.google.com/maps/billing/understanding-cost-of-use" rel="noopener noreferrer" target="_blank">https://developers.google.com/maps/billing/understanding-cost-of-use</a>. This allows to get free usage of near 28K maps services requests monthly. Otherwise you can enable <a href="[base_url]/documentation/settings/maps-addresses/">MapBox map engine</a>, it has limit 50.000 maps services requests of free usage without need to enable billing with a credit card.
 		
 		<strong>Google requires mandatory Maps API keys</strong> for maps created on new and existing websites/domains. Otherwise it may cause problems with Google Maps, Geocoding, addition/edition listings locations, autocomplete on addresses fields, search by radius.
+		
+		<iframe width="912" height="600" src="https://www.youtube.com/embed/9HCFyoQ3QNg?si=2UobEsJfPrYMbE2h" title="Google API keys" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+		
+		Troubleshooting Google API keys:
+		
+		<iframe width="912" height="600" src="https://www.youtube.com/embed/0G5Hmo8gG-w" title="Troubleshooting Google API keys" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 		<hr />
 		
@@ -20,7 +26,7 @@ return array(
 		<hr />
 		
 		<h4>Browser API key</h4>
-		<a href="https://console.developers.google.com/flows/enableapi?apiid=maps_backend,geocoding_backend,directions_backend,static_maps_backend&keyType=CLIENT_SIDE&reusekey=true" target="_blank" rel="noopener noreferrer">Create browser API key</a> in new project or in existing one.
+		<a href="https://console.developers.google.com/flows/enableapi?apiid=maps-backend.googleapis.com,geocoding-backend.googleapis.com,directions-backend.googleapis.com,static-maps-backend.googleapis.com,places-backend.googleapis.com&keyType=CLIENT_SIDE&reusekey=true" target="_blank" rel="noopener noreferrer">Create browser API key</a> in new project or in existing one.
 			
 		<img src="[base_url]/wp-content/uploads/2013/12/Create_project2.png" alt="create_project2" class="alignnone size-full wp-image-1946" />
 			
@@ -36,7 +42,7 @@ return array(
 		<hr />
 			
 		<h4>Server API key</h4>
-		<a href="https://console.developers.google.com/flows/enableapi?apiid=geocoding_backend,places_backend&keyType=SERVER_SIDE&reusekey=true" target="_blank" rel="noopener noreferrer">Create server API key</a> in new project or in existing one. Select the same project you used when you created the browser key and click \'Continue\'.
+		<a href="https://console.developers.google.com/flows/enableapi?apiid=geocoding-backend.googleapis.com,places-backend.googleapis.com&keyType=CLIENT_SIDE&reusekey=true" target="_blank" rel="noopener noreferrer">Create server API key</a> in new project or in existing one. Select the same project you used when you created the browser key and click \'Continue\'.
 			
 		<i class="fa fa-exclamation-triangle"></i>To test server API key you can visit debug page and check geolocation response. Debug page is placed on your site by similar URL <strong>http://www.yoursite.com/wp-admin/admin.php?page=w2dc_debug</strong>
 		

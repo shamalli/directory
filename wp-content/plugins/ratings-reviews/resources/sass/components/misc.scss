@@ -7,7 +7,7 @@ a.w2rr-hint-icon:before {
 	content: "\f059";
 }
 a.w2rr-hint-icon {
-	font-family: 'FontAwesome' !important;
+	font-family: 'FontAwesomeW2RR' !important;
 	text-decoration: none !important;
 	font-size: 24px;
 }
@@ -17,8 +17,52 @@ a.w2rr-hint-icon {
 
 .woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link--ratings-reviews a::after {
 	content: "\f005";
-	font-family: FontAwesome;
+	font-family: FontAwesomeW2RR;
 	margin-left: 5px;
+}
+
+.w2rr-display-none {
+	display: none;
+}
+.w2rr-width-auto {
+	width: auto;
+}
+.w2rr-width-100 {
+	width: 100%;
+}
+.w2rr-width-300 {
+	width: 300px;
+}
+.w2rr-height-300 {
+	height: 300px;
+}
+.w2rr-height-450 {
+	height: 450px;
+}
+.w2rr-height-auto {
+	height: auto;
+}
+.w2rr-text-align-left {
+	text-align: center;
+}
+.w2rr-text-align-center {
+	text-align: center;
+}
+.w2rr-vertical-align-middle {
+	vertical-align: middle;
+}
+.w2rr-source-shortcode {
+	padding: 20px 0;
+}
+.w2rr-margin-10 {
+	margin: 10px;
+}
+.w2rr-margin-left-10 {
+	margin-left: 10px;
+}
+.w2rr-debug-textarea {
+	width: 100%;
+	height: 700px
 }
 
 /************************ Our plugin section in settings manager ************************/

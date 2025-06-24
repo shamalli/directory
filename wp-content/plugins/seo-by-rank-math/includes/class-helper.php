@@ -11,7 +11,6 @@
 namespace RankMath;
 
 use RankMath\Helpers\Api;
-use RankMath\Helpers\Attachment;
 use RankMath\Helpers\Conditional;
 use RankMath\Helpers\Choices;
 use RankMath\Helpers\Post_Type;
@@ -20,8 +19,10 @@ use RankMath\Helpers\Taxonomy;
 use RankMath\Helpers\WordPress;
 use RankMath\Helpers\Schema;
 use RankMath\Helpers\Analytics;
-use RankMath\Helpers\DB;
+use RankMath\Helpers\Content_AI;
+use RankMath\Helpers\HTML;
 use RankMath\Replace_Variables\Replacer;
+use RankMath\Helpers\Param;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -30,7 +31,7 @@ defined( 'ABSPATH' ) || exit;
  */
 class Helper {
 
-	use Api, Attachment, Conditional, Choices, Post_Type, Options, Taxonomy, WordPress, Schema, DB, Analytics;
+	use Api, Conditional, Choices, Post_Type, Options, Taxonomy, WordPress, Schema, Analytics, Content_AI;
 
 	/**
 	 * Replace `%variables%` with context-dependent value.
@@ -141,8 +142,7 @@ class Helper {
 	 * @return string
 	 */
 	public static function get_current_page_url( $ignore_qs = false ) {
-		$link = '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-		$link = ( is_ssl() ? 'https' : 'http' ) . $link;
+		$link = ( is_ssl() ? 'https' : 'http' ) . '://' . Param::server( 'HTTP_HOST' ) . Param::server( 'REQUEST_URI' );
 
 		if ( $ignore_qs ) {
 			$link = explode( '?', $link );
@@ -266,6 +266,11 @@ class Helper {
 	 * Credit @davidbarratt: https://github.com/davidbarratt/varnish-http-purge
 	 */
 	private static function clear_varnish_cache() {
+		// Early bail if Varnish cache is not enabled on the site.
+		if ( ! isset( $_SERVER['HTTP_X_VARNISH'] ) ) {
+			return;
+		}
+
 		// Parse the URL for proxy proxies.
 		$parsed_url = wp_parse_url( home_url() );
 
@@ -278,7 +283,7 @@ class Helper {
 		// If we made varniship, let it sail.
 		$purgeme = ( isset( $varniship ) && null !== $varniship ) ? $varniship : $parsed_url['host'];
 		wp_remote_request(
-			'http://' . $purgeme,
+			$parsed_url['scheme'] . '://' . $purgeme,
 			[
 				'method'   => 'PURGE',
 				'blocking' => false,
@@ -301,9 +306,28 @@ class Helper {
 			'::1', // IPv6 address.
 		];
 
+		return in_array( self::get_remote_addr(), $whitelist, true );
+	}
+
+	/**
+	 * Get IP address from which the user is viewing the current page.
+	 *
+	 * @return string
+	 */
+	public static function get_remote_addr() {
 		$ip = filter_input( INPUT_SERVER, 'REMOTE_ADDR', FILTER_VALIDATE_IP );
 
-		return in_array( $ip, $whitelist, true );
+		// INPUT_SERVER is not available on some hosts, let's try INPUT_ENV.
+		if ( ! $ip ) {
+			$ip = filter_input( INPUT_ENV, 'REMOTE_ADDR', FILTER_VALIDATE_IP );
+		}
+
+		// If we still don't have it, try to get it from the $_SERVER global.
+		if ( ! $ip && isset( $_SERVER['REMOTE_ADDR'] ) ) {
+			$ip = filter_var( $_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP );
+		}
+
+		return $ip ? $ip : '';
 	}
 
 	/**
@@ -320,5 +344,57 @@ class Helper {
 			return date( $format, $timestamp_with_offset ); // phpcs:ignore
 		}
 		return date_i18n( $format, $timestamp_with_offset, $gmt );
+	}
+
+	/**
+	 * Check for valid image url.
+	 *
+	 * @param string $image_url The image url.
+	 * @return boolean
+	 */
+	public static function is_image_url( $image_url ) {
+		return filter_var( $image_url, FILTER_VALIDATE_URL ) && preg_match( '/\.(jpg|jpeg|png|gif|webp)$/i', $image_url );
+	}
+
+	/**
+	 * Check if plugin auto update is disabled.
+	 *
+	 * @return bool
+	 */
+	public static function is_plugin_update_disabled() {
+		return ! apply_filters_ref_array( 'auto_update_plugin', [ true, (object) [] ] )
+			|| apply_filters_ref_array( 'automatic_updater_disabled', [ false ] )
+			|| ( defined( 'DISALLOW_FILE_MODS' ) && DISALLOW_FILE_MODS )
+			|| ( defined( 'AUTOMATIC_UPDATER_DISABLED' ) && AUTOMATIC_UPDATER_DISABLED );
+	}
+
+	/**
+	 * Enable big selects.
+	 */
+	public static function enable_big_selects_for_queries() {
+		static $rank_math_enable_big_select;
+
+		if ( $rank_math_enable_big_select || ! apply_filters( 'rank_math/enable_big_selects', true ) ) {
+			return;
+		}
+
+		global $wpdb;
+		$rank_math_enable_big_select = $wpdb->query( 'SET SESSION SQL_BIG_SELECTS=1' );
+	}
+
+	/**
+	 * Used for Backward compatibility to prevent site from showing undefined method error. (PRO  v3.0.49-beta)
+	 *
+	 * @param string $name     Method name.
+	 * @param array  $argument Parameters passed to the function.
+	 *
+	 * @return string
+	 */
+	public static function __callStatic( $name, $argument ) {
+		if ( 'extract_attributes' === $name ) {
+			return HTML::extract_attributes( current( $argument ) );
+		}
+
+		return '';
 	}
 }

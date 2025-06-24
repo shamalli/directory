@@ -6,6 +6,10 @@ final class FL_Debug {
 
 	public static function init() {
 		if ( isset( $_GET['fldebug'] ) && get_transient( 'fl_debug_mode', false ) === $_GET['fldebug'] ) {
+			if ( isset( $_GET['info'] ) ) {
+				phpinfo();
+				exit;
+			}
 			add_action( 'init', array( 'FL_Debug', 'display_tests' ) );
 		}
 
@@ -17,9 +21,11 @@ final class FL_Debug {
 
 
 	public static function enable_logging() {
-		@ini_set( 'display_errors', 1 ); // @codingStandardsIgnoreLine
-		@ini_set( 'display_startup_errors', 1 ); // @codingStandardsIgnoreLine
-		@error_reporting( E_ALL ); // @codingStandardsIgnoreLine
+		if ( isset( $_GET['showerrors'] ) ) {
+			@ini_set( 'display_errors', 1 ); // @codingStandardsIgnoreLine
+			@ini_set( 'display_startup_errors', 1 ); // @codingStandardsIgnoreLine
+			@error_reporting( E_ALL ); // @codingStandardsIgnoreLine
+		}
 	}
 
 	public static function display_tests() {
@@ -39,18 +45,11 @@ final class FL_Debug {
 		if ( is_array( $test['data'] ) ) {
 			$test['data'] = implode( "\n", $test['data'] );
 		}
-		return sprintf( "%s\n%s\n\n", $test['name'], $test['data'] );
+		return isset( $test['name'] ) ? sprintf( "%s\n%s\n\n", $test['name'], $test['data'] ) : sprintf( "%s\n\n", $test['data'] );
 	}
 
 	private static function register( $slug, $args ) {
 		self::$tests[ $slug ] = $args;
-	}
-
-	private static function formatbytes( $size, $precision = 2 ) {
-		$base     = log( $size, 1024 );
-		$suffixes = array( '', 'K', 'M', 'G', 'T' );
-
-		return round( pow( 1024, $base - floor( $base ) ), $precision ) . $suffixes[ floor( $base ) ];
 	}
 
 	private static function get_plugins() {
@@ -113,6 +112,12 @@ final class FL_Debug {
 		self::register( 'site_url', $args );
 
 		$args = array(
+			'name' => 'IP',
+			'data' => $_SERVER['SERVER_ADDR'],
+		);
+		self::register( 'wp_ip', $args );
+
+		$args = array(
 			'name' => 'WP Version',
 			'data' => $wp_version,
 		);
@@ -132,7 +137,7 @@ final class FL_Debug {
 
 		$args = array(
 			'name' => 'FL Modsec Fix',
-			'data' => defined( 'FL_BUILDER_MODSEC_FIX' ) && FL_BUILDER_MODSEC_FIX ? 'Yes' : 'No',
+			'data' => FLBuilderUtils::is_modsec_fix_enabled() ? 'Yes' : 'No',
 		);
 		self::register( 'fl_modsec', $args );
 
@@ -159,6 +164,22 @@ final class FL_Debug {
 			'data' => WP_MAX_MEMORY_LIMIT,
 		);
 		self::register( 'wp_max_mem', $args );
+
+		if ( get_option( 'upload_path' ) != 'wp-content/uploads' && get_option( 'upload_path' ) ) {
+			$args = array(
+				'name' => 'Possible Issue: upload_path is set, can lead to cache dir issues and css not loading. Check Settings -> Media for custom path.',
+				'data' => get_option( 'upload_path' ),
+			);
+			self::register( 'wp_media_upload_path', $args );
+		}
+
+		if ( defined( 'DISALLOW_UNFILTERED_HTML' ) && DISALLOW_UNFILTERED_HTML ) {
+			$args = array(
+				'name' => 'Unfiltered HTML is globally disabled! ( DISALLOW_UNFILTERED_HTML )',
+				'data' => 'Yes',
+			);
+			self::register( 'is_multi', $args );
+		}
 
 		$args = array(
 			'name' => 'Post Counts',
@@ -200,6 +221,39 @@ final class FL_Debug {
 			),
 		);
 		self::register( 'active_theme', $args );
+
+		if ( 'bb-theme' === $theme->get( 'Template' ) ) {
+			if ( is_dir( trailingslashit( get_stylesheet_directory() ) . 'includes' ) ) {
+				$args = array(
+					'name' => 'Child Theme includes folder detected.',
+					'data' => trailingslashit( get_stylesheet_directory() ) . 'includes/',
+				);
+				self::register( 'child_includes', $args );
+			}
+
+			if ( is_dir( trailingslashit( get_stylesheet_directory() ) . 'fl-builder/modules' ) ) {
+				$modules = glob( trailingslashit( get_stylesheet_directory() ) . 'fl-builder/modules/*' );
+				if ( ! empty( $modules ) ) {
+					$args = array(
+						'name' => 'Child Theme builder modules folder detected.',
+						'data' => implode( "\n", $modules ),
+					);
+					self::register( 'child_bb_modules', $args );
+				}
+			}
+		}
+
+		// child theme functions
+		if ( $theme->get( 'Template' ) ) {
+			$functions_file = trailingslashit( get_stylesheet_directory() ) . 'functions.php';
+			$contents       = file_exists( $functions_file ) ? file_get_contents( $functions_file ) : 'No functions.php found.';
+
+			$args = array(
+				'name' => 'Child Theme Functions',
+				'data' => $contents,
+			);
+			self::register( 'child_funcs', $args );
+		}
 
 		$args = array(
 			'name' => 'Plugins',
@@ -287,7 +341,7 @@ final class FL_Debug {
 
 		$args = array(
 			'name' => 'Max Upload Size',
-			'data' => self::formatbytes( wp_max_upload_size() ),
+			'data' => FLBuilderUtils::formatbytes( wp_max_upload_size() ),
 		);
 		self::register( 'post_max_upload', $args );
 
@@ -413,7 +467,7 @@ final class FL_Debug {
 			$subscription = FLUpdater::get_subscription_info();
 			$args         = array(
 				'name' => 'Beaver Builder License',
-				'data' => ( isset( $subscription->active ) ) ? 'Active' : 'Not Active',
+				'data' => ( isset( $subscription->active ) && ! isset( $subscription->error ) ) ? 'Active' : 'Not Active',
 			);
 			self::register( 'bb_sub', $args );
 
@@ -432,7 +486,30 @@ final class FL_Debug {
 				);
 				self::register( 'bb_sub_domain', $args );
 			}
+			if ( isset( $subscription->downloads ) && is_array( $subscription->downloads ) && ! empty( $subscription->downloads ) ) {
+				$args = array(
+					'name' => 'Available Downloads',
+					'data' => implode( "\n", $subscription->downloads ),
+				);
+				self::register( 'av_downloads', $args );
+			}
 		}
+
+		self::register( 'adv', array(
+			'name' => 'Advanced Options',
+			'data' => self::divider(),
+		) );
+
+		$adv_opts = FLBuilderAdminAdvanced::get_settings();
+		$opts     = array();
+		foreach ( $adv_opts as $key => $opt ) {
+			$option = get_option( "_fl_builder_{$key}", $opt['default'] ) ? 'Enabled' : 'Disabled';
+			$opts[] = sprintf( '%s: %s', $opt['label'], $option );
+		}
+		$args = array(
+			'data' => $opts,
+		);
+		self::register( 'adv_settings', $args );
 
 		$args = array(
 			'name' => 'Server',
@@ -472,6 +549,25 @@ final class FL_Debug {
 			);
 			self::register( 'mysql_size', $args );
 		}
+
+		$collation = $wpdb->get_var( "SELECT TABLE_COLLATION FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '{$wpdb->postmeta}';" );
+		$args      = array(
+			'name' => 'PostMeta DB Collation',
+			'data' => $collation,
+		);
+		self::register( 'collationdb', $args );
+
+		$args = array(
+			'name' => 'DB_CHARSET',
+			'data' => DB_CHARSET,
+		);
+		self::register( 'charset', $args );
+
+		$args = array(
+			'name' => 'DB_COLLATE',
+			'data' => DB_COLLATE,
+		);
+		self::register( 'collation', $args );
 
 		$args = array(
 			'name' => 'Server Info',

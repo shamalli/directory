@@ -1,4 +1,7 @@
 <?php
+
+// @codingStandardsIgnoreFile
+
 if (!empty($terms_options)) :
 foreach ($selection_items AS $key=>$item):
 	if ($color = wcsearch_get_term_option($terms_options, $item->term_id, 'color')): ?>
@@ -14,7 +17,7 @@ endif; ?>
 
 <div class="wcsearch-search-input wcsearch-search-input-<?php echo esc_attr($mode); ?>" <?php echo $search_model->getOptionsString(); ?>>
 	<label class="wcsearch-search-input-label"><?php echo esc_html($title); ?></label>
-	<div class="wcsearch-search-input-terms-columns" <?php if ($height_limit): ?>style="height: <?php echo $height_limit; ?>px;"<?php endif; ?>>
+	<div class="wcsearch-search-input-terms-columns" <?php if ($height_limit): ?>style="height: <?php wcsearch_esc_e($height_limit); ?>px;"<?php endif; ?>>
 	<?php
 	if ($selection_items):
 		$i = 1;
@@ -35,7 +38,7 @@ endif; ?>
 		<?php endwhile; ?>
 		<input type="hidden" name="<?php echo esc_attr($slug); ?>" class="wcsearch-search-terms-buttons-input" value="<?php echo esc_attr($values); ?>">
 	<?php else: ?>
-	<?php esc_html_e("No items in this taxonomy yet", "WCSEARCH"); ?>
+	<?php esc_htmlesc_html_e("No items in this taxonomy yet", "wcsearch"); ?>
 	<?php endif; ?>
 	</div>
 </div>

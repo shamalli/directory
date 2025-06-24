@@ -103,6 +103,20 @@ a.w2dc-docs-link {
 	font-size: 18px;
 	color: #428bca;
 }
+.w2dc-docs h2,
+.w2dc-docs h3,
+.w2dc-docs h4,
+.w2dc-docs h5,
+.w2dc-docs h6 {
+	scroll-margin-top: 68px;
+}
+body.admin-bar .w2dc-docs h2,
+body.admin-bar .w2dc-docs h3,
+body.admin-bar .w2dc-docs h4,
+body.admin-bar .w2dc-docs h5,
+body.admin-bar .w2dc-docs h6 {
+	scroll-margin-top: 100px;
+}
 
 .w2dc-updated,
 .w2dc-error,

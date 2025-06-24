@@ -1,14 +1,18 @@
 <?php
 
-global $w2dc_listing_videos_widget_params;
-$w2dc_listing_videos_widget_params = array(
-		array(
-				'type' => 'textfield',
-				'param_name' => 'listing',
-				'heading' => __('Listing ID', 'W2DC'),
-				'description' => __('Leave empty if you place it on single listing page', 'W2DC'),
-		),
-);
+// @codingStandardsIgnoreFile
+
+add_action('init', function() {
+	global $w2dc_listing_videos_widget_params;
+	$w2dc_listing_videos_widget_params = array(
+			array(
+					'type' => 'textfield',
+					'param_name' => 'listing',
+					'heading' => esc_html__('Listing ID', 'w2dc'),
+					'description' => esc_html__('Leave empty if you place it on single listing page', 'w2dc'),
+			),
+	);
+}, 0);
 
 class w2dc_listing_videos_widget extends w2dc_widget {
 
@@ -17,7 +21,7 @@ class w2dc_listing_videos_widget extends w2dc_widget {
 
 		parent::__construct(
 				'w2dc_listing_videos_shortcode_widget',
-				__('Directory - Listing videos', 'W2DC')
+				esc_html__('Directory widget - Listing videos', 'w2dc')
 		);
 
 		$this->convertParams($w2dc_listing_videos_widget_params);

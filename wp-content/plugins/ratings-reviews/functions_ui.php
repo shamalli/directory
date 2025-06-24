@@ -83,10 +83,10 @@ if (!function_exists('w2rr_renderPaginator')) {
 				echo '<div class="w2rr-pagination-wrapper">';
 				echo '<ul class="w2rr-pagination">';
 				if ($total_pages > 10 && $current_page > 10)
-					echo '<li class="w2rr-inactive previous_line"><a href="' . get_pagenum_link($previous_line_page) . '" title="' . esc_attr__('Previous Line', 'W2RR') . '" data-page=' . $previous_line_page . ' data-controller-hash=' . $hash . '><<</a></li>' ;
+					echo '<li class="w2rr-inactive previous_line"><a href="' . get_pagenum_link($previous_line_page) . '" title="' . esc_attr__('Previous Line', 'w2rr') . '" data-page=' . $previous_line_page . ' data-controller-hash=' . $hash . '><<</a></li>' ;
 			
 				if ($total_pages > 3 && $current_page > 1)
-					echo '<li class="w2rr-inactive previous"><a href="' . get_pagenum_link($previous_page) . '" title="' . esc_attr__('Previous Page', 'W2RR') . '" data-page=' . $previous_page . ' data-controller-hash=' . $hash . '><</i></a></li>' ;
+					echo '<li class="w2rr-inactive previous"><a href="' . get_pagenum_link($previous_page) . '" title="' . esc_attr__('Previous Page', 'w2rr') . '" data-page=' . $previous_page . ' data-controller-hash=' . $hash . '><</i></a></li>' ;
 			
 				$count = ($current_line-1)*10;
 				$end = ($total_pages < $current_line*10) ? $total_pages : $current_line*10;
@@ -99,10 +99,10 @@ if (!function_exists('w2rr_renderPaginator')) {
 				}
 			
 				if ($total_pages > 3 && $current_page < $total_pages)
-					echo '<li class="w2rr-inactive next"><a href="' . get_pagenum_link($next_page) . '" title="' . esc_attr__('Next Page', 'W2RR') . '" data-page=' . $next_page . ' data-controller-hash=' . $hash . '>></i></a></li>' ;
+					echo '<li class="w2rr-inactive next"><a href="' . get_pagenum_link($next_page) . '" title="' . esc_attr__('Next Page', 'w2rr') . '" data-page=' . $next_page . ' data-controller-hash=' . $hash . '>></i></a></li>' ;
 			
 				if ($total_pages > 10 && $current_line < $total_lines)
-					echo '<li class="w2rr-inactive next_line"><a href="' . get_pagenum_link($next_line_page) . '" title="' . esc_attr__('Next Line', 'W2RR') . '" data-page=' . $next_line_page . ' data-controller-hash=' . $hash . '>>></a></li>' ;
+					echo '<li class="w2rr-inactive next_line"><a href="' . get_pagenum_link($next_line_page) . '" title="' . esc_attr__('Next Line', 'w2rr') . '" data-page=' . $next_line_page . ' data-controller-hash=' . $hash . '>>></a></li>' ;
 			
 				echo '</ul>';
 				echo '</div>';
@@ -235,7 +235,6 @@ function w2rr_renderSharingButton($post_id, $post_url, $button) {
 				}
 			break;
 			case 'whatsapp':
-				//$share_url = 'https://wa.me/?text=' . $post_url;
 				$share_url = 'whatsapp://send?text=' . $post_url;
 			break;
 			case 'telegram':
@@ -250,7 +249,7 @@ function w2rr_renderSharingButton($post_id, $post_url, $button) {
 		}
 
 		if ($share_url !== false) {
-			echo '<a href="'.$share_url.'" data-toggle="w2rr-tooltip" data-placement="top" title="'.sprintf(esc_html__('Share on %s', 'W2RR'),  $w2rr_social_services[$button]['label']).'" target="_blank"><img src="'.W2RR_RESOURCES_URL.'images/social/'.get_option('w2rr_share_buttons_style').'/'.$button.'.png" /></a>';
+			echo '<a href="'.$share_url.'" data-toggle="w2rr-tooltip" data-placement="top" title="'.sprintf(esc_html__('Share on %s', 'w2rr'),  $w2rr_social_services[$button]['label']).'" target="_blank"><img src="'.W2RR_RESOURCES_URL.'images/social/'.get_option('w2rr_share_buttons_style').'/'.$button.'.png" /></a>';
 			if (get_option('w2rr_share_counter') && $share_counter !== false)
 				echo '<span class="w2rr-share-count">'.number_format($share_counter).'</span>';
 		}

@@ -20,6 +20,8 @@ return array(
 		</ul>
 	
 		<i class="fa fa-star"></i> Detailed explanation of all shortcodes you can find <a href="[base_url]/documentation/shortcodes/">here</a>.
+		
+		<iframe width="912" height="600" src="https://www.youtube.com/embed/Rcrf_XupmpY" title="Custom Home page" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 	</div>
 		
 '

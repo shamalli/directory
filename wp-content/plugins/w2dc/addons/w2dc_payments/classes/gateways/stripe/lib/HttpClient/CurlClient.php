@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 namespace Stripe\HttpClient;
 
 use Stripe\Stripe;
@@ -8,7 +10,7 @@ use Stripe\Util;
 
 // cURL constants are not defined in PHP < 5.5
 
-// @codingStandardsIgnoreStart
+// @codingStandardsIgnoreFile
 // PSR2 requires all constants be upper case. Sadly, the CURL_SSLVERSION
 // constants do not abide by those rules.
 

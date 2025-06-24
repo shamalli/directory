@@ -1,13 +1,13 @@
 <?php
 
-class VP_W2DC_Util_Reflection
+class W2DC_VP_Util_Reflection
 {
 
 	public static function is_multiselectable($object)
 	{
 		if(is_object($object))
 		{
-			if($object instanceof VP_W2DC_MultiSelectable)
+			if($object instanceof W2DC_VP_MultiSelectable)
 				return true;
 		}
 		elseif(is_string($object))
@@ -18,7 +18,7 @@ class VP_W2DC_Util_Reflection
 				if(class_exists($class))
 				{
 					$interfaces = class_implements($class);
-					if(isset($interfaces['VP_W2DC_MultiSelectable']))
+					if(isset($interfaces['W2DC_VP_MultiSelectable']))
 						return true;	
 				}
 				else
@@ -29,7 +29,7 @@ class VP_W2DC_Util_Reflection
 			else
 			{
 				$dummy = new $class;
-				if($dummy instanceof VP_W2DC_MultiSelectable)
+				if($dummy instanceof W2DC_VP_MultiSelectable)
 					return true;
 				unset($dummy);
 			}
@@ -40,20 +40,20 @@ class VP_W2DC_Util_Reflection
 
 	public static function field_type_from_class($class)
 	{
-		$prefix = apply_filters('vp_w2dc_field_type_from_class_prefix', array('VP_W2DC_Control_Field_', 'VP_W2DC_Option_Control_Field_'));
+		$prefix = apply_filters('w2dc_vp_field_type_from_class_prefix', array('W2DC_VP_Control_Field_', 'W2DC_VP_Option_Control_Field_'));
 		return strtolower(str_replace($prefix, '', $class));
 	}
 
 	public static function field_class_from_type($type)
 	{
 		// default prefix
-		$prefix = 'VP_W2DC_Control_Field_';
+		$prefix = 'W2DC_VP_Control_Field_';
 
 		// special case
 		if($type === 'impexp')
-			$prefix = 'VP_W2DC_Option_Control_Field_';
+			$prefix = 'W2DC_VP_Option_Control_Field_';
 
-		$prefix = apply_filters( 'vp_w2dc_field_class_from_type_prefix', $prefix, $type );
+		$prefix = apply_filters( 'w2dc_vp_field_class_from_type_prefix', $prefix, $type );
 			
 		$class = $prefix . $type;
 		return $class;

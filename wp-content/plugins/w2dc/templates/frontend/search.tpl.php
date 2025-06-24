@@ -7,7 +7,7 @@
 			<?php $frontpanel_buttons->display(); ?>
 
 			<?php
-			if (get_option('w2dc_main_search'))
+			if (get_option('w2dc_main_search') && $frontend_controller->search_form)
 				$frontend_controller->search_form->display();
 			?>
 

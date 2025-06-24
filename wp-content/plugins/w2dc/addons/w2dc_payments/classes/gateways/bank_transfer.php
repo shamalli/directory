@@ -10,11 +10,11 @@ class w2dc_bank_transfer extends w2dc_payment_gateway
 	}
 
     public function name() {
-    	return __('Bank transfer', 'W2DC');
+    	return esc_html__('Bank transfer', 'w2dc');
     }
 
     public function description() {
-    	return __('Print invoice and transfer the payment (bank transfer information included)', 'W2DC');
+    	return esc_html__('Print invoice and transfer the payment (bank transfer information included)', 'w2dc');
     }
     
     public function buy_button()
@@ -23,6 +23,6 @@ class w2dc_bank_transfer extends w2dc_payment_gateway
     }
     
     public function submitPayment($invoice) {
-    	w2dc_addMessage(__('You chose bank transfer payment gateway, now print invoice and transfer the payment', 'W2DC'));
+    	w2dc_addMessage(esc_html__('You chose bank transfer payment gateway, now print invoice and transfer the payment', 'w2dc'));
     }
 }

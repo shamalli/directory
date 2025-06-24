@@ -1,14 +1,15 @@
-﻿=== WooCommerce Search & Filter ===
+﻿=== Search Forms ===
 Contributors: Mihail Chepovskiy
 Company link: https://www.salephpscripts.com/
-Tags: search, filter, search form, woocommerce, business, directory, products, categories, price, ecommerce, shop, builder, widgets
-Tested up to: 6.2
-Stable tag: 1.2.9
-License: Commercial
+Short Description: build search forms and filter WooCommerce products
+Tags: search, filter, search form, woocommerce, products
+Tested up to: 6.8
+Stable tag: 1.2.14
+License: GPL
 
 == Description ==
 
-WooCommerce Search & Filter plugin - powerful, flexible and easy to build your custom search forms for WooCommerce. The plugin provides additional functionality to WooCommerce plugin to allow your site visitors make searching of products by categories, products attributes, tags and price.
+Search Forms plugin - powerful, flexible and easy to build your custom search forms for WooCommerce. The plugin provides additional functionality to WooCommerce plugin to allow your site visitors make searching of products by categories, products attributes, tags and price.
 
 - Price search: range slider, checkboxes, radio buttons, select dropdowns, inputs.
 
@@ -18,7 +19,7 @@ WooCommerce Search & Filter plugin - powerful, flexible and easy to build your c
 
 - Search by ratings: show counter, select stars color.
 
-- Reset button and search button.
+- Reset button and submit button.
 
 - Dynamic recount of categories, tags, attributes, prices and ratings.
 
@@ -41,6 +42,24 @@ Shortcodes:
 `[wcsearch-products]`
 
 == Changelog ==
+
+= Version 1.2.14 =
+* improvement: added hidden field post_type=product on shop pages including categories and tags WC pages
+* improvement: better compatibility with WooCommerce 9.x
+
+= Version 1.2.13 =
+* improvement: dependency terms and exact terms lists in the search system fields were rebuilt
+* improvement: "Search button" name in the search system now "Submit button"
+
+= Version 1.2.12 =
+* improvement: function wcsearch_insert_param_in_uri() and wcsearch_remove_param_from_uri() can get multiple params one time
+
+= Version 1.2.11 =
+* bug fix: fatal error "Call to undefined function is_shop()" on some occasion
+* improvement: search reset sets single slider to the default value instead of 0
+
+= Version 1.2.10 =
+* improvement: better compatibility with WooCommerce
 
 = Version 1.2.9 =
 * bug fix: disable blinking of dropdown menu in Multi dropdown search mode

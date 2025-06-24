@@ -1,10 +1,14 @@
-<?php 
+<?php
+
+// @codingStandardsIgnoreFile
 
 class w2dc_directories_manager {
+	
 	public function __construct() {
 		w2dc_directories_manager_init($this);
 		
 		add_filter('admin_init', array($this, 'init'));
+		add_filter('w2dc_build_settings', array($this, 'add_slugs_warning_in_settings'), 100);
 	}
 	
 	public function init() {
@@ -19,12 +23,33 @@ class w2dc_directories_manager {
 
 	public function menu() {
 		add_submenu_page('w2dc_settings',
-			__('Listings directories', 'W2DC'),
-			__('Listings directories', 'W2DC'),
+			esc_html__('Listings directories', 'w2dc'),
+			esc_html__('Listings directories', 'w2dc'),
 			'manage_options',
 			'w2dc_directories',
 			array($this, 'w2dc_manage_directories_page')
 		);
+	}
+	
+	public function add_slugs_warning_in_settings($options) {
+		
+		foreach ($options['template']['menus']['general']['controls']['title_slugs']['fields'] AS $key=>$title_slugs_fields) {
+			if ($title_slugs_fields['name'] == 'w2dc_permalinks_structure') {
+				break;
+			}
+		}
+		
+		array_splice($options['template']['menus']['general']['controls']['title_slugs']['fields'], $key, 0, array(
+			array(
+					'type' => 'notebox',
+					'name' => 'slugs_warning',
+					'label' => esc_html__('Notice about slugs:', 'w2dc'),
+					'description' => sprintf(esc_html__('You can manage listings, categories, locations and tags slugs in <a href="%s">directories settings</a>', 'w2dc'), admin_url('admin.php?page=w2dc_directories')),
+					'status' => 'warning',
+			)
+		));
+		
+		return $options;
 	}
 
 	public function w2dc_manage_directories_page() {
@@ -61,26 +86,26 @@ class w2dc_directories_manager {
 
 		if (w2dc_getValue($_POST, 'submit') && wp_verify_nonce(w2dc_getValue($_POST, 'w2dc_directories_nonce'), W2DC_PATH)) {
 			$validation = new w2dc_form_validation();
-			$validation->set_rules('name', __('Directory name', 'W2DC'), 'required');
-			$validation->set_rules('single', __('Single form', 'W2DC'), 'required');
-			$validation->set_rules('plural', __('Plural form', 'W2DC'), 'required');
-			$validation->set_rules('listing_slug', __('Listing slug', 'W2DC'), 'alpha_dash');
-			$validation->set_rules('category_slug', __('Category slug', 'W2DC'), 'alpha_dash');
-			$validation->set_rules('location_slug', __('Location slug', 'W2DC'), 'alpha_dash');
-			$validation->set_rules('tag_slug', __('Tag slug', 'W2DC'), 'alpha_dash');
-			$validation->set_rules('categories', __('Assigned categories', 'W2DC'));
-			$validation->set_rules('locations', __('Assigned locations', 'W2DC'));
-			$validation->set_rules('levels', __('Levels', 'W2DC'));
+			$validation->set_rules('name', esc_html__('Directory name', 'w2dc'), 'required');
+			$validation->set_rules('single', esc_html__('Single form', 'w2dc'), 'required');
+			$validation->set_rules('plural', esc_html__('Plural form', 'w2dc'), 'required');
+			$validation->set_rules('listing_slug', esc_html__('Listing slug', 'w2dc'), 'alpha_dash');
+			$validation->set_rules('category_slug', esc_html__('Category slug', 'w2dc'), 'alpha_dash');
+			$validation->set_rules('location_slug', esc_html__('Location slug', 'w2dc'), 'alpha_dash');
+			$validation->set_rules('tag_slug', esc_html__('Tag slug', 'w2dc'), 'alpha_dash');
+			$validation->set_rules('categories', esc_html__('Assigned categories', 'w2dc'));
+			$validation->set_rules('locations', esc_html__('Assigned locations', 'w2dc'));
+			$validation->set_rules('levels', esc_html__('Levels', 'w2dc'));
 			apply_filters('w2dc_directory_validation', $validation);
 		
 			if ($validation->run() && $this->checkSlugs($validation->result_array())) {
 				if ($directory->id) {
 					if ($directories->saveDirectoryFromArray($directory_id, $validation->result_array())) {
-						w2dc_addMessage(__('Directory was updated successfully!', 'W2DC'));
+						w2dc_addMessage(esc_html__('Directory was updated successfully!', 'w2dc'));
 					}
 				} else {
 					if ($directories->createDirectoryFromArray($validation->result_array())) {
-						w2dc_addMessage(__('Directory was created succcessfully!', 'W2DC'));
+						w2dc_addMessage(esc_html__('Directory was created succcessfully!', 'w2dc'));
 					}
 				}
 				wp_redirect(admin_url('admin.php?page=w2dc_directories'));
@@ -118,7 +143,7 @@ class w2dc_directories_manager {
 		if ($directory = $directories->getDirectoryById($directory_id)) {
 			if (w2dc_getValue($_POST, 'submit') && ($new_directory_id = w2dc_getValue($_POST, 'new_directory')) && is_numeric($new_directory_id)) {
 				if ($directories->deleteDirectory($directory_id, $new_directory_id)) {
-					w2dc_addMessage(__('Directory was deleted successfully!', 'W2DC'));
+					w2dc_addMessage(esc_html__('Directory was deleted successfully!', 'w2dc'));
 				}
 
 				wp_redirect(admin_url('admin.php?page=w2dc_directories'));
@@ -132,15 +157,15 @@ class w2dc_directories_manager {
 
 		$directories = $w2dc_instance->directories;
 		if ($directory = $directories->getDirectoryById($directory_id)) {
-			$question = sprintf(__('Are you sure you want delete "%s" directory?', 'W2DC'), $directory->name);
-			$question .= '<br /><br />' . __('Existing listings will be moved to directory:', 'W2DC');
+			$question = sprintf(esc_html__('Are you sure you want delete "%s" directory?', 'w2dc'), $directory->name);
+			$question .= '<br /><br />' . esc_html__('Existing listings will be moved to directory:', 'w2dc');
 			foreach ($w2dc_instance->directories->directories_array AS $directory) {
 				if ($directory->id != $directory_id) {
 					$question .= '<br />' . '<label><input type="radio" name="new_directory" value="' . $directory->id . '" ' . checked($directory->id, $w2dc_instance->directories->getDefaultDirectory()->id, false) . ' />' . $directory->name . '</label>';
 				}
 			}
 				
-			w2dc_renderTemplate('delete_question.tpl.php', array('heading' => __('Delete directory', 'W2DC'), 'question' => $question, 'item_name' => $directory->name));
+			w2dc_renderTemplate('delete_question.tpl.php', array('heading' => esc_html__('Delete directory', 'w2dc'), 'question' => $question, 'item_name' => $directory->name));
 		} else {
 			$this->showDirectoriesTable();
 		}
@@ -157,13 +182,13 @@ class w2dc_directories_manager {
 		);
 		
 		if (count($slugs_to_check) !== count(array_unique($slugs_to_check))) {
-			w2dc_addMessage(__('All slugs must be unique and different!', 'W2DC'), 'error');
+			w2dc_addMessage(esc_html__('All slugs must be unique and different!', 'w2dc'), 'error');
 			return false;
 		}
 		
 		foreach ($w2dc_instance->index_pages_all AS $page) {
 			if (in_array($page['slug'], $slugs_to_check)) {
-				w2dc_addMessage(__('One or several slugs equal to the slug of directory page! This may cause problems.', 'W2DC'), 'error');
+				w2dc_addMessage(esc_html__('One or several slugs equal to the slug of directory page! This may cause problems.', 'w2dc'), 'error');
 				return false;
 			}
 		}
@@ -178,20 +203,20 @@ class w2dc_manage_directories_table extends WP_List_Table {
 
 	public function __construct() {
 		parent::__construct(array(
-				'singular' => __('directory', 'W2DC'),
-				'plural' => __('directories', 'W2DC'),
+				'singular' => esc_html__('directory', 'w2dc'),
+				'plural' => esc_html__('directories', 'w2dc'),
 				'ajax' => false
 		));
 	}
 
 	public function get_columns($directories = array()) {
 		$columns = array(
-				'id' => __('ID', 'W2DC'),
-				'directory_name' => __('Name', 'W2DC'),
-				'shortcode' => __('Shortcode', 'W2DC'),
-				'page' => __('Page', 'W2DC'),
-				'slugs' => __('Slugs', 'W2DC'),
-				'visibility' => __('Visibility', 'W2DC'),
+				'id' => esc_html__('ID', 'w2dc'),
+				'directory_name' => esc_html__('Name', 'w2dc'),
+				'shortcode' => esc_html__('Shortcode', 'w2dc'),
+				'page' => esc_html__('Page', 'w2dc'),
+				'slugs' => esc_html__('Slugs', 'w2dc'),
+				'visibility' => esc_html__('Visibility', 'w2dc'),
 		);
 		$columns = apply_filters('w2dc_directory_table_header', $columns, $directories);
 
@@ -211,7 +236,7 @@ class w2dc_manage_directories_table extends WP_List_Table {
 			if ($directory->url) {
 				$directory_url = sprintf('<a href="%s" target="_blank">%s</a>', $directory->url, $directory->url);
 			} else {
-				$directory_url = '<strong>' . __('Required page is missing!', 'W2DC') . '</strong>';
+				$directory_url = '<strong>' . esc_html__('Required page is missing!', 'w2dc') . '</strong>';
 			}
 			
 			$items_array[$id] = array(
@@ -249,8 +274,8 @@ class w2dc_manage_directories_table extends WP_List_Table {
 		global $w2dc_instance;
 
 		$actions = array(
-				'edit' => sprintf('<a href="?page=%s&action=%s&directory_id=%d">' . __('Edit', 'W2DC') . '</a>', $_GET['page'], 'edit', $item['id']),
-				'delete' => sprintf('<a href="?page=%s&action=%s&directory_id=%d">' . __('Delete', 'W2DC') . '</a>', $_GET['page'], 'delete', $item['id']),
+				'edit' => sprintf('<a href="?page=%s&action=%s&directory_id=%d">' . esc_html__('Edit', 'w2dc') . '</a>', $_GET['page'], 'edit', $item['id']),
+				'delete' => sprintf('<a href="?page=%s&action=%s&directory_id=%d">' . esc_html__('Delete', 'w2dc') . '</a>', $_GET['page'], 'delete', $item['id']),
 		);
 		
 		if ($item['id'] == $w2dc_instance->directories->getDefaultDirectory()->id) {
@@ -263,19 +288,19 @@ class w2dc_manage_directories_table extends WP_List_Table {
 	public function column_visibility($item) {
 		$html = array();
 		if (empty($item['categories'])) {
-			$html[] = '<img src="' . W2DC_RESOURCES_URL . 'images/accept.png" /> ' . __('All Categories', 'W2DC');
+			$html[] = '<img src="' . W2DC_RESOURCES_URL . 'images/accept.png" /> ' . esc_html__('All Categories', 'w2dc');
 		} else {
-			$html[] = '<img src="' . W2DC_RESOURCES_URL . 'images/delete.png" /> ' . __('Partial Categories', 'W2DC');
+			$html[] = '<img src="' . W2DC_RESOURCES_URL . 'images/delete.png" /> ' . esc_html__('Partial Categories', 'w2dc');
 		}
 		if (empty($item['locations'])) {
-			$html[] = '<hr /><img src="' . W2DC_RESOURCES_URL . 'images/accept.png" /> ' . __('All Locations', 'W2DC');
+			$html[] = '<hr /><img src="' . W2DC_RESOURCES_URL . 'images/accept.png" /> ' . esc_html__('All Locations', 'w2dc');
 		} else {
-			$html[] = '<hr /><img src="' . W2DC_RESOURCES_URL . 'images/delete.png" /> ' . __('Partial Locations', 'W2DC');
+			$html[] = '<hr /><img src="' . W2DC_RESOURCES_URL . 'images/delete.png" /> ' . esc_html__('Partial Locations', 'w2dc');
 		}	
 		if (empty($item['levels'])) {
-			$html[] = '<hr /><img src="' . W2DC_RESOURCES_URL . 'images/accept.png" /> ' . __('All Levels', 'W2DC');
+			$html[] = '<hr /><img src="' . W2DC_RESOURCES_URL . 'images/accept.png" /> ' . esc_html__('All Levels', 'w2dc');
 		} else {
-			$html[] = '<hr /><img src="' . W2DC_RESOURCES_URL . 'images/delete.png" /> ' . __('Partial Levels', 'W2DC');
+			$html[] = '<hr /><img src="' . W2DC_RESOURCES_URL . 'images/delete.png" /> ' . esc_html__('Partial Levels', 'w2dc');
 		}
 		
 		$html = apply_filters('w2dc_directories_in_pages_options', $html, $item);
@@ -294,7 +319,7 @@ class w2dc_manage_directories_table extends WP_List_Table {
 	}
 	
 	function no_items() {
-		__('No directories found.', 'W2DC');
+		esc_html__('No directories found.', 'w2dc');
 	}
 }
 

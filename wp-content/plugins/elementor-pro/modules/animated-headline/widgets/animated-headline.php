@@ -9,6 +9,7 @@ use Elementor\Group_Control_Text_Stroke;
 use Elementor\Modules\DynamicTags\Module as TagsModule;
 use Elementor\Utils;
 use ElementorPro\Base\Base_Widget;
+use ElementorPro\Plugin;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
@@ -30,6 +31,28 @@ class Animated_Headline extends Base_Widget {
 
 	public function get_keywords() {
 		return [ 'headline', 'heading', 'animation', 'title', 'text' ];
+	}
+
+	protected function is_dynamic_content(): bool {
+		return false;
+	}
+
+	public function has_widget_inner_wrapper(): bool {
+		return ! Plugin::elementor()->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
+	/**
+	 * Get style dependencies.
+	 *
+	 * Retrieve the list of style dependencies the widget requires.
+	 *
+	 * @since 3.24.0
+	 * @access public
+	 *
+	 * @return array Widget style dependencies.
+	 */
+	public function get_style_depends(): array {
+		return [ 'widget-animated-headline' ];
 	}
 
 	protected function register_controls() {
@@ -139,7 +162,6 @@ class Animated_Headline extends Base_Widget {
 				'condition' => [
 					'headline_style' => 'highlight',
 				],
-				'separator' => 'none',
 				'frontend_available' => true,
 			]
 		);
@@ -150,7 +172,6 @@ class Animated_Headline extends Base_Widget {
 				'label' => esc_html__( 'Rotating Text', 'elementor-pro' ),
 				'type' => Controls_Manager::TEXTAREA,
 				'placeholder' => esc_html__( 'Enter each word in a separate line', 'elementor-pro' ),
-				'separator' => 'none',
 				'default' => "Better\nBigger\nFaster",
 				'dynamic' => [
 					'active' => true,
@@ -178,7 +199,6 @@ class Animated_Headline extends Base_Widget {
 				],
 				'placeholder' => esc_html__( 'Enter your headline', 'elementor-pro' ),
 				'label_block' => true,
-				'separator' => 'none',
 			]
 		);
 
@@ -333,10 +353,17 @@ class Animated_Headline extends Base_Widget {
 			[
 				'label' => esc_html__( 'Width', 'elementor-pro' ),
 				'type' => Controls_Manager::SLIDER,
+				'size_units' => [ 'px', 'em', 'rem', 'custom' ],
 				'range' => [
 					'px' => [
 						'min' => 1,
 						'max' => 20,
+					],
+					'em' => [
+						'max' => 2,
+					],
+					'rem' => [
+						'max' => 2,
 					],
 				],
 				'selectors' => [

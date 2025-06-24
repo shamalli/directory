@@ -208,7 +208,9 @@ class Disqus_Public {
 	 * @since    3.0
 	 */
 	public function enqueue_comment_count() {
-		if ( $this->dsq_can_load( 'count' ) ) {
+		global $post;
+
+		if ( $this->dsq_comment_count_can_load_for_post( $post ) ) {
 
 			$count_vars = array(
 				'disqusShortname' => $this->shortname,
@@ -236,6 +238,22 @@ class Disqus_Public {
 		}
 	}
 
+    /**
+	 * Hides the comment section block for WP block themes.
+     * This prevents the WP block comment section from appearing briefly before being replaced by Disqus.
+	 *
+	 * @since    3.0
+	 */
+	public function hide_block_theme_comment_section() {
+		?>
+            <style>
+                .wp-block-comments {
+                    display: none;
+                }
+            </style>
+        <?php
+	}
+
 	/**
 	 * Determines if Disqus is configured and can load on a given page.
 	 *
@@ -258,6 +276,34 @@ class Disqus_Public {
         $site_allows_load = apply_filters( 'dsq_can_load', $script_name );
 		if ( is_bool( $site_allows_load ) ) {
 			return $site_allows_load;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Determines if Disqus is configured and should load the comment count script on a given page.
+	 *
+	 * @since     3.0.18
+	 * @access    private
+	 * @param     WP_Post $post    The WordPress post used to determine if Disqus can be loaded.
+	 * @return    boolean          Whether Disqus is configured properly and should load the comment count on the current page.
+	 */
+	private function dsq_comment_count_can_load_for_post( $post ) {
+		// Checks if the plugin is configured properly
+		// and is a valid page.
+		if ( ! $this->dsq_can_load( 'count' ) ) {
+			return false;
+		}
+
+		// Make sure we have a $post object.
+		if ( ! isset( $post ) ) {
+			return false;
+		}
+
+		// Make sure comments are open if it's a single post page.
+		if ( is_singular() && ! comments_open() ) {
+			return false;
 		}
 
 		return true;

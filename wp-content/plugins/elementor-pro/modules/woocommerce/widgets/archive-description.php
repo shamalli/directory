@@ -3,6 +3,7 @@ namespace ElementorPro\Modules\Woocommerce\Widgets;
 
 use Elementor\Controls_Manager;
 use Elementor\Group_Control_Typography;
+use ElementorPro\Plugin;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
@@ -32,6 +33,10 @@ class Archive_Description extends Base_Widget {
 		];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! Plugin::elementor()->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
 	protected function register_controls() {
 
 		$this->start_controls_section(
@@ -45,9 +50,9 @@ class Archive_Description extends Base_Widget {
 		$this->add_control(
 			'wc_style_warning',
 			[
-				'type' => Controls_Manager::RAW_HTML,
-				'raw' => esc_html__( 'The style of this widget is often affected by your theme and plugins. If you experience any such issue, try to switch to a basic theme and deactivate related plugins.', 'elementor-pro' ),
-				'content_classes' => 'elementor-panel-alert elementor-panel-alert-info',
+				'type' => Controls_Manager::ALERT,
+				'alert_type' => 'info',
+				'content' => esc_html__( 'The style of this widget is often affected by your theme and plugins. If you experience any such issue, try to switch to a basic theme and deactivate related plugins.', 'elementor-pro' ),
 			]
 		);
 
@@ -95,7 +100,6 @@ class Archive_Description extends Base_Widget {
 			Group_Control_Typography::get_type(),
 			[
 				'name' => 'text_typography',
-				'label' => esc_html__( 'Typography', 'elementor-pro' ),
 				'selector' => '.woocommerce {{WRAPPER}} .term-description',
 			]
 		);

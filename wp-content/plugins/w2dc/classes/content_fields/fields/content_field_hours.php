@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+// @codingStandardsIgnoreFile
 
 class w2dc_content_field_hours extends w2dc_content_field {
 	public $hours_clock = 12;
@@ -15,7 +17,8 @@ class w2dc_content_field_hours extends w2dc_content_field {
 	}
 	
 	public function isNotEmpty($listing) {
-		if (array_filter($this->value)) {
+		
+		if ($this->value && array_filter($this->value)) {
 			
 			foreach ($this->week_days AS $day) {
 				if (!empty($this->value[$day.'_closed'])) {
@@ -45,11 +48,11 @@ class w2dc_content_field_hours extends w2dc_content_field {
 	
 		if (w2dc_getValue($_POST, 'submit') && wp_verify_nonce($_POST['w2dc_configure_content_fields_nonce'], W2DC_PATH)) {
 			$validation = new w2dc_form_validation();
-			$validation->set_rules('hours_clock', __('Time convention', 'W2DC'), 'required');
+			$validation->set_rules('hours_clock', esc_html__('Time convention', 'w2dc'), 'required');
 			if ($validation->run()) {
 				$result = $validation->result_array();
 				if ($wpdb->update($wpdb->w2dc_content_fields, array('options' => serialize(array('hours_clock' => $result['hours_clock']))), array('id' => $this->id), null, array('%d')))
-					w2dc_addMessage(__('Field configuration was updated successfully!', 'W2DC'));
+					w2dc_addMessage(esc_html__('Field configuration was updated successfully!', 'w2dc'));
 	
 				$w2dc_instance->content_fields_manager->showContentFieldsTable();
 			} else {
@@ -76,7 +79,7 @@ class w2dc_content_field_hours extends w2dc_content_field {
 		foreach ($week AS $day_num)
 			$week_days[$day_num] = $this->week_days[$day_num];
 		
-		$this->week_days_names = array(__('Sunday', 'W2DC'), __('Monday', 'W2DC'), __('Tuesday', 'W2DC'), __('Wednesday', 'W2DC'), __('Thursday', 'W2DC'), __('Friday', 'W2DC'), __('Saturday', 'W2DC'));
+		$this->week_days_names = array(esc_html__('Sunday', 'w2dc'), esc_html__('Monday', 'w2dc'), esc_html__('Tuesday', 'w2dc'), esc_html__('Wednesday', 'w2dc'), esc_html__('Thursday', 'w2dc'), esc_html__('Friday', 'w2dc'), esc_html__('Saturday', 'w2dc'));
 		
 		return $week_days;
 	}
@@ -119,13 +122,9 @@ class w2dc_content_field_hours extends w2dc_content_field {
 				$to_hour = $validation->result_array($day.'_to_hour_'.$this->id);
 				$from_am_pm = $validation->result_array($day.'_from_am_pm_'.$this->id);
 				$to_am_pm = $validation->result_array($day.'_to_am_pm_'.$this->id);
-				if (
-					($this->hours_clock == 12 && ($from_hour != '12:00' || $to_hour != '12:00' || $from_am_pm != 'AM' || $to_am_pm != 'AM')) ||
-					($this->hours_clock == 24 && ($from_hour != '00:00' || $to_hour != '00:00'))
-				) {
-					$value[$day.'_from'] = $from_hour.(($this->hours_clock == 12) ? ' '.$from_am_pm : '');
-					$value[$day.'_to'] = $to_hour.(($this->hours_clock == 12) ? ' '.$to_am_pm : '');
-				}
+				
+				$value[$day.'_from'] = $from_hour.(($this->hours_clock == 12) ? ' '.$from_am_pm : '');
+				$value[$day.'_to'] = $to_hour.(($this->hours_clock == 12) ? ' '.$to_am_pm : '');
 			} else {
 				$value[$day.'_closed'] = $validation->result_array($day.'_closed_'.$this->id);
 			}
@@ -182,11 +181,19 @@ class w2dc_content_field_hours extends w2dc_content_field {
 	public function processStrings() {
 		$week_days = $this->orderWeekDays();
 		
-		$this->week_days_names = array(__('Sun.', 'W2DC'), __('Mon.', 'W2DC'), __('Tue.', 'W2DC'), __('Wed.', 'W2DC'), __('Thu.', 'W2DC'), __('Fri.', 'W2DC'), __('Sat.', 'W2DC'));
+		$this->week_days_names = array(esc_html__('Sun.', 'w2dc'), esc_html__('Mon.', 'w2dc'), esc_html__('Tue.', 'w2dc'), esc_html__('Wed.', 'w2dc'), esc_html__('Thu.', 'w2dc'), esc_html__('Fri.', 'w2dc'), esc_html__('Sat.', 'w2dc'));
 		$strings = array();
 		foreach ($week_days AS $key=>$day) {
-			if ($this->value[$day.'_from'] || $this->value[$day.'_to'] || $this->value[$day.'_closed'])
-				$strings[] = '<strong>' . $this->week_days_names[$key] . '</strong> ' . (($this->value[$day.'_closed']) ? __('Closed', 'W2DC') : $this->value[$day.'_from'] . ' - ' . $this->value[$day.'_to']);
+			if ($this->value) {
+				if (
+					($this->hours_clock == 12 && ($this->value[$day.'_from'] == '12:00 AM' && $this->value[$day.'_to'] == '12:00 AM')) ||
+					($this->hours_clock == 24 && ($this->value[$day.'_from'] == '00:00' && $this->value[$day.'_to'] == '00:00'))
+				) {
+					$strings[] = '<strong>' . $this->week_days_names[$key] . '</strong> ' . esc_html__('All day long', 'w2dc');
+				} elseif ($this->value[$day.'_from'] || $this->value[$day.'_to'] || $this->value[$day.'_closed']) {
+					$strings[] = '<strong>' . $this->week_days_names[$key] . '</strong> ' . (($this->value[$day.'_closed']) ? esc_html__('Closed', 'w2dc') : $this->value[$day.'_from'] . ' - ' . $this->value[$day.'_to']);
+				}
+			}
 		}
 		
 		$strings = apply_filters('w2dc_content_field_hours_strings', $strings);
@@ -445,8 +452,8 @@ class w2dc_content_field_hours extends w2dc_content_field {
 			$am_pm = '';
 		}
 		$result = '';
-		$result .= '<option ' . selected(__('AM', 'W2DC'), $am_pm, false) . '>' . __('AM', 'W2DC') . '</option>';
-		$result .= '<option ' . selected(__('PM', 'W2DC'), $am_pm, false) . '>' . __('PM', 'W2DC') . '</option>';
+		$result .= '<option ' . selected(esc_html__('AM', 'w2dc'), $am_pm, false) . '>' . esc_html__('AM', 'w2dc') . '</option>';
+		$result .= '<option ' . selected(esc_html__('PM', 'w2dc'), $am_pm, false) . '>' . esc_html__('PM', 'w2dc') . '</option>';
 		return $result;
 	}
 	
@@ -476,7 +483,7 @@ class w2dc_content_field_hours extends w2dc_content_field {
 					$value[$day.'_to'] = $matches[4].':'.$matches[5];
 				}
 			} else 
-				$errors[] = __("Opening hours field value does not match required format", 'W2DC');
+				$errors[] = esc_html__("Opening hours field value does not match required format", 'w2dc');
 		}
 		foreach ($this->week_days AS $day) {
 			if (in_array($day, $processed_days))

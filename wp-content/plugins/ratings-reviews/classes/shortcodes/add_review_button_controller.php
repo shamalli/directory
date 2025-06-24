@@ -15,7 +15,7 @@ class w2rr_add_review_button_controller extends w2rr_frontend_controller {
 		
 		$this->args = array_merge(array(
 				'post' => '',
-				'text' => esc_html__('Add Review', 'W2RR')
+				'text' => esc_html__('Add Review', 'w2rr')
 		), $args);
 	
 		$target_post = w2rr_getTargetPost($this->args['post']);

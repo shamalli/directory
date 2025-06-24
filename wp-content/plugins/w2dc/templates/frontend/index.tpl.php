@@ -1,3 +1,8 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 		<div class="w2dc-content w2dc-index-page">
 			<?php do_action('w2dc_index_page_header'); ?>
 		
@@ -6,7 +11,7 @@
 			<?php $frontpanel_buttons = new w2dc_frontpanel_buttons(); ?>
 			<?php $frontpanel_buttons->display(); ?>
 
-			<?php if (get_option('w2dc_main_search')): ?>
+			<?php if (get_option('w2dc_main_search') && $frontend_controller->search_form): ?>
 			<?php $frontend_controller->search_form->display(); ?>
 			<?php endif; ?>
 
@@ -43,12 +48,12 @@
 					); ?>
 			<?php endif; ?>
 
-			<?php if (get_option('w2dc_listings_on_index')): ?>
+			<?php  if (get_option('w2dc_listings_on_index')): ?>
 			<?php w2dc_renderTemplate('frontend/listings_block.tpl.php', array('frontend_controller' => $frontend_controller)); ?>
 			<?php else: ?>
-			<div class="w2dc-content w2dc-controller" id="w2dc-controller-<?php echo $frontend_controller->hash; ?>" data-controller-hash="<?php echo $frontend_controller->hash; ?>">
+			<div class="w2dc-content w2dc-controller" id="w2dc-controller-<?php w2dc_esc_e($frontend_controller->hash); ?>" data-controller-hash="<?php w2dc_esc_e($frontend_controller->hash); ?>">
 				<script>
-				w2dc_controller_args_array['<?php echo $frontend_controller->hash; ?>'] = <?php echo json_encode(array_merge(array('base_url' => $frontend_controller->base_url, 'page_url' => $frontend_controller->page_url), $frontend_controller->args)); ?>;
+				w2dc_controller_args_array['<?php w2dc_esc_e($frontend_controller->hash); ?>'] = <?php echo json_encode(array_merge(array('base_url' => $frontend_controller->base_url, 'page_url' => $frontend_controller->page_url), $frontend_controller->args)); ?>;
 				</script>
 			</div>
 			<?php endif; ?>

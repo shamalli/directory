@@ -209,7 +209,6 @@ body.post-type-wcsearch_form #post-body.columns-2 #postbox-container-1 {
 }
 .wcsearch-search-model-placeholder-hover,
 .wcsearch-search-model-placeholder-highlight {
-	/* background-color: rgba(255, 255, 196, 0.2); */
 	box-shadow: 13px 17px 23px;
 	
 }
@@ -223,7 +222,7 @@ body.post-type-wcsearch_form #post-body.columns-2 #postbox-container-1 {
 }
 .wcsearch-search-model-grid-borders .wcsearch-search-model-input-range,
 .wcsearch-search-model-grid-borders .wcsearch-search-model-input-radios {
-	/* background-color: rgba(255, 255, 210, 0.2); */
+	
 }
 .wcsearch-search-model-input[data-align="left"] {
 	text-align: left;
@@ -258,7 +257,6 @@ body.post-type-wcsearch_form #post-body.columns-2 #postbox-container-1 {
 	display: block;
 	height: 48px;
 	color: #444444;
-	/* background-color: rgba(255, 255, 210, 0.2); */
 	text-align: center;
 	font-weight: bold;
 }
@@ -267,7 +265,7 @@ body.post-type-wcsearch_form #post-body.columns-2 #postbox-container-1 {
 	width: 100%;
 	height: 48px;
 	display: inline-block;
-	background-color: #2393ba;
+	background-color: #3071a9;
 	border-color: #275379;
 }
 .wcsearch-content .wcsearch-search-model-input-reset-button,
@@ -315,7 +313,6 @@ body.post-type-wcsearch_form #post-body.columns-2 #postbox-container-1 {
 .wcsearch-range-slider-scale label > span,
 .wcsearch-single-slider-scale label > span {
 	display: block;
-	/* font-size: 75%; */
 	white-space: nowrap;
 }
 @media screen and (max-width: $mobile-screen-width) {
@@ -369,7 +366,7 @@ body.post-type-wcsearch_form #post-body.columns-2 #postbox-container-1 {
 	left: -25px;
 	width: 30px;
 	height: 30px;
-	font-family: 'FontAwesome' !important;
+	font-family: 'FontAwesomeWCSEARCH' !important;
 	font-size: 25px;
 	cursor: move;
 	transform: rotate(45deg);
@@ -386,7 +383,7 @@ body.post-type-wcsearch_form #post-body.columns-2 #postbox-container-1 {
 .wcsearch-search-model-delete-button {
 	width: 27px;
 	height: 27px;
-	font-family: 'FontAwesome' !important;
+	font-family: 'FontAwesomeWCSEARCH' !important;
 	font-size: 25px;
 	display: block;
 	cursor: pointer;
@@ -415,7 +412,7 @@ body.post-type-wcsearch_form #post-body.columns-2 #postbox-container-1 {
 .wcsearch-search-model-up-button {
 	width: 27px;
 	height: 27px;
-	font-family: 'FontAwesome' !important;
+	font-family: 'FontAwesomeWCSEARCH' !important;
 	font-size: 25px;
 	display: inline-block;
 	cursor: pointer;
@@ -442,7 +439,7 @@ body.post-type-wcsearch_form #post-body.columns-2 #postbox-container-1 {
 .wcsearch-search-model-add-button {
 	width: 27px;
 	height: 27px;
-	font-family: 'FontAwesome' !important;
+	font-family: 'FontAwesomeWCSEARCH' !important;
 	font-size: 25px;
 	display: inline-block;
 	cursor: pointer;
@@ -487,14 +484,16 @@ body.post-type-wcsearch_form #post-body.columns-2 #postbox-container-1 {
 .wcsearch-search-model-input-terms-column .wcsearch-checkbox {
 	margin: 15px 10px 15px 0 !important;
 }
+/* first element in columns without top margin */
 .wcsearch-search-model-input-terms-column .wcsearch-radio:first-child,
 .wcsearch-search-model-input-terms-column .wcsearch-checkbox:first-child {
 	margin-top: 0 !important;
 }
-.wcsearch-search-model-input-terms-column .wcsearch-term-button {
+.wcsearch-search-model-input-terms-column .wcsearch-search-term-button {
 	margin: 5px 10px 5px 0 !important;
 }
-.wcsearch-search-model-input-terms-column .wcsearch-term-button:first-child {
+/* first element in columns without top margin */
+.wcsearch-search-model-input-terms-column .wcsearch-search-term-button:first-child {
 	margin-top: 0 !important;
 }
 .wcsearch-search-separator-link {

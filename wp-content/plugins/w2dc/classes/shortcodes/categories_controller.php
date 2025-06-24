@@ -47,7 +47,7 @@ class w2dc_categories_controller extends w2dc_frontend_controller {
 		}
 
 		if (isset($this->args['categories']) && !is_array($this->args['categories'])) {
-			if ($categories = array_filter(explode(',', $this->args['categories']), 'trim')) {
+			if ($categories = w2dc_parse_slugs_ids_list($this->args['categories'])) {
 				$this->args['categories'] = $categories;
 			}
 		}

@@ -6,6 +6,7 @@
 
 
 ;(function ( $, window, document, undefined ) {
+	"use strict";
 
     $.fn.extend({
       scrollspy: function ( options ) {
@@ -34,7 +35,7 @@
               var inside = false;
                             
               /* add listener to container */
-              $container.bind('scroll', function(e){
+              $container.on('scroll', function(e){
                   var position = {top: $(this).scrollTop(), left: $(this).scrollLeft()};
                   var xy = (mode == 'vertical') ? position.top + buffer : position.left + buffer;
                   var max = o.max;

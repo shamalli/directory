@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 class w2dc_breadcrumbs_elementor_widget extends w2dc_elementor_widget {
 
 	public function get_name() {
@@ -7,7 +9,7 @@ class w2dc_breadcrumbs_elementor_widget extends w2dc_elementor_widget {
 	}
 
 	public function get_title() {
-		return __('Breadcrumbs', 'W2DC');
+		return esc_html__('Breadcrumbs', 'w2dc');
 	}
 
 	public function get_icon() {
@@ -23,7 +25,7 @@ class w2dc_breadcrumbs_elementor_widget extends w2dc_elementor_widget {
 		$this->start_controls_section(
 				'content_section',
 				array(
-						'label' => esc_html__('Breadcrumbs', 'W2DC'),
+						'label' => esc_html__('Breadcrumbs', 'w2dc'),
 						'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
 				)
 		);
@@ -45,6 +47,7 @@ class w2dc_breadcrumbs_elementor_widget extends w2dc_elementor_widget {
 		
 		$controller = new w2dc_breadcrumbs_controller();
 		$controller->init($settings);
+		
 		echo $controller->display();
 	}
 }

@@ -78,12 +78,6 @@ class w2dc_location {
 			
 			$result_chain = apply_filters("w2dc_get_selected_location_array", $result_chain);
 			
-			// re-order example
-			/* $order = array_flip(array(1, 2, 0));
-			uksort($result_chain, function($key1, $key2) use ($order) {
-				return $order[$key1] > $order[$key2];
-			}); */
-			
 			return implode($glue, $result_chain);
 		}
 	}

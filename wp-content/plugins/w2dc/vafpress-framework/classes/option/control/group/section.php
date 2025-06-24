@@ -1,11 +1,11 @@
 <?php
 
-class VP_W2DC_Option_Control_Group_Section extends VP_W2DC_Option_Control_Group
+class W2DC_VP_Option_Control_Group_Section extends W2DC_VP_Option_Control_Group
 {
 
 	/**
 	 * Collection of fields
-	 * @var VP_W2DC_Control_Field
+	 * @var W2DC_VP_Control_Field
 	 */	
 	private $_fields;
 
@@ -43,7 +43,7 @@ class VP_W2DC_Option_Control_Group_Section extends VP_W2DC_Option_Control_Group
 		{
 			$this->add_data($key, $value);
 		}
-		return VP_W2DC_View::instance()->load('option/section', $this->get_data());
+		return W2DC_VP_View::instance()->load('option/section', $this->get_data());
 	}
 
 	public function add_field($field)

@@ -12,10 +12,21 @@ final class FLBuilderColor {
 	 *
 	 * @since 1.0
 	 * @since 2.2 Added support for rgba values.
-	 * @param string $hex A hex color value without the # sign.
+	 * @since 2.3 Added php7.4 fixes
+	 * @param string $hex A hex color value with or without the # sign.
 	 * @return array An array of RGB values.
 	 */
 	static public function hex_to_rgb( $hex ) {
+
+		// if $hex is empty or false return basic rgb data.
+		if ( ! $hex ) {
+			return array(
+				'r' => 0,
+				'g' => 0,
+				'b' => 0,
+			);
+		}
+
 		if ( strstr( $hex, 'rgb' ) ) {
 			$rgb = explode( ',', preg_replace( '/[a-z\(\)]/', '', $hex ) );
 			return array(
@@ -24,10 +35,14 @@ final class FLBuilderColor {
 				'b' => $rgb[2],
 			);
 		}
+
+		list($r, $g, $b) = array_map( function( $hex ) {
+			return hexdec( str_pad( $hex, 2, $hex ) );
+		}, str_split( ltrim( $hex, '#' ), strlen( $hex ) > 4 ? 2 : 1 ) );
 		return array(
-			'r' => hexdec( substr( $hex, 0, 2 ) ),
-			'g' => hexdec( substr( $hex, 2, 2 ) ),
-			'b' => hexdec( substr( $hex, 4, 2 ) ),
+			'r' => $r,
+			'g' => $g,
+			'b' => $b,
 		);
 	}
 
@@ -108,7 +123,7 @@ final class FLBuilderColor {
 	 * @param array $setting
 	 * @return string
 	 */
-	static public function gradient( $setting ) {
+	static public function gradient( $setting, $test = false ) {
 		$gradient = '';
 		$values   = array();
 
@@ -116,10 +131,31 @@ final class FLBuilderColor {
 			return $gradient;
 		}
 
+		$is_gradient_field_ok = isset( $setting['type'] )
+			&& isset( $setting['angle'] )
+			&& isset( $setting['position'] )
+			&& isset( $setting['colors'] )
+			&& isset( $setting['stops'] );
+
+		if ( ! $is_gradient_field_ok ) {
+			return $gradient;
+		}
+
+		/**
+		 * There should be 2 colours here even if one is blank
+		 * SD mode strips the blank one, we need to add it back
+		 */
+		if ( count( $setting['colors'] ) < 2 ) {
+			$setting['colors'][] = '';
+		}
+
 		foreach ( $setting['colors'] as $i => $color ) {
 			$stop = $setting['stops'][ $i ];
 
 			if ( empty( $color ) ) {
+				if ( $test ) {
+					return false;
+				}
 				$color = 'rgba(255,255,255,0)';
 			}
 			if ( ! strstr( $color, 'rgb' ) ) {
@@ -159,13 +195,13 @@ final class FLBuilderColor {
 
 		if ( isset( $setting['color'] ) && '' !== $setting['color'] ) {
 
-			if ( '' === $setting['horizontal'] ) {
+			if ( ! isset( $setting['horizontal'] ) || '' === $setting['horizontal'] ) {
 				$setting['horizontal'] = 0;
 			}
-			if ( '' === $setting['vertical'] ) {
+			if ( ! isset( $setting['vertical'] ) || '' === $setting['vertical'] ) {
 				$setting['vertical'] = 0;
 			}
-			if ( '' === $setting['blur'] ) {
+			if ( ! isset( $setting['blur'] ) || '' === $setting['blur'] ) {
 				$setting['blur'] = 0;
 			}
 			if ( isset( $setting['spread'] ) && '' === $setting['spread'] ) {

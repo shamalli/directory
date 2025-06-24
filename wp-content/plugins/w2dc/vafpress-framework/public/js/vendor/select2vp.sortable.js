@@ -8,6 +8,8 @@
  */
 
 (function($){
+	"use strict";
+	
 	$.fn.extend({
 		select2vpSortableOrder: function(){
 			var $this = this.filter('[multiple]');
@@ -45,8 +47,8 @@
 		},
 		select2vpSortable: function(){
 			var args         = Array.prototype.slice.call(arguments, 0);
-			    $this        = this.filter('[multiple]'),
-			    validMethods = ['destroy'];
+			var $this        = this.filter('[multiple]');
+			var validMethods = ['destroy'];
 
 			if(args.length === 0 || typeof(args[0]) === 'object')
 			{

@@ -107,21 +107,21 @@ return array(
 		
 		The WordPress Excerpt is an optional summary or description of a listing; in short, a listing summary. Can\'t be ordered by its value, can\'t be searched by its value. By default this field is shown on index and excerpt pages and hidden only on listings pages. It is possible to set up max length of output, also possible to use cropped content as excerpt, when excerpt field is empty - cropped main content will be used (look at the <a href="[base_url]/documentation/settings/listings/#description_excerpt">Listings settings tab</a>).
 		
-		<h3>Listings addresses (<em>core field type</em>)</h3>
+		<h3 id="addresses_field_settings">Listings addresses (<em>core field type</em>)</h3>
 		
 		This is a block of listing locations and addresses. Can\'t be ordered by its value, can\'t be required, has special search block. This block of fields is controlled by <a href="[base_url]/documentation/directory-locations">locations manager</a> and <a href="[base_url]/documentation/listings-levels">listings levels settings</a>.
 		
-		<h3>Listings categories (<em>core field type</em>)</h3>
+		<h3 id="categories_field_settings">Listings categories (<em>core field type</em>)</h3>
 		
 		This is a block of categories, those were assigned to listing. Can\'t be ordered by its value, can\'t be required, has special search block. This block of fields is controlled by <a href="[base_url]/documentation/directory-categories">categories manager</a> and <a href="[base_url]/documentation/listings-levels">listings levels settings</a>.
 		
-		<h3>Listings tags (<em>core field type</em>)</h3>
+		<h3 id="tags_field_settings">Listings tags (<em>core field type</em>)</h3>
 		
 		This is a block of tags, those were assigned to listing. Can\'t be ordered by its value, can\'t be required.
 		
 		<h3 id="text_field_settings">Text string</h3>
 		
-		Uses to insert short text/string data, for instance, <span style="text-decoration: underline;">phone number</span>. Can be ordered by its value, can be required, can take part in search.
+		Uses to insert short text/string data. Can be ordered by its value, can be required, can take part in search.
 		
 		<strong>Max length</strong> - max number of characters allowed in this field.
 		
@@ -130,7 +130,7 @@ return array(
 		<img src="[base_url]/wp-content/uploads/content_field_conf_string.png" alt="" class="alignnone size-medium" />
 	
 		<h3 id="phone_field_settings">Phone number</h3>
-		Uses to insert short text/string data, for instance, <span style="text-decoration: underline;">phone number</span>. Can be ordered by its value, can be required, can take part in search.
+		Uses to insert <span style="text-decoration: underline;">phone/fax number</span>. Or make WhatsApp/Viber/Telegram chat. Can be ordered by its value, can be required, can take part in search.
 		
 		<strong>Max length</strong> - max number of characters allowed in this field.
 		
@@ -208,7 +208,7 @@ return array(
 	
 		<img src="[base_url]/wp-content/uploads/content_field_conf_website.png" alt="" class="alignnone size-medium" />
 		
-		<h3 id="cemail_field_settings">Email</h3>
+		<h3 id="email_field_settings">Email</h3>
 		
 		At the backend displays as pure HTML input element. Can\'t be ordered by its value, can\'t take part in search. At the frontend looks like <em>mailto</em> link.
 		
@@ -221,6 +221,10 @@ return array(
 		At the backend this field inherits the behaviour of jQuery UI datepicker widget. Has special configuration setting to include time-selection feature.
 		
 		Can be ordered by its value. Also in the search block this field renders as 2 separate inputs to search by date range.
+		
+		<strong>Enable time in field</strong> - whether to work with time, hours and minutes. Date and time format depends on WordPress General settings.
+		
+		<strong>Hide listings with passed dates</strong> - after selected date has passed it can exclude a listing from directory lists, but it still will have active status and working listing page.
 	
 		<img src="[base_url]/wp-content/uploads/content_field_conf_datetime.png" alt="" class="alignnone size-medium" />
 		

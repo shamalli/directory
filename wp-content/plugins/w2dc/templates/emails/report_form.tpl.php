@@ -1,12 +1,12 @@
-<?php _e('Listing title:', 'W2DC'); ?> <?php echo $listing_title; ?>
+<?php esc_html_e('Listing title:', 'w2dc'); ?> <?php w2dc_esc_e($listing_title); ?>
 
-<?php _e('Listing URL:', 'W2DC'); ?> <?php echo $listing_url; ?>
+<?php esc_html_e('Listing URL:', 'w2dc'); ?> <?php w2dc_esc_e($listing_url); ?>
 
-<?php _e('Name:', 'W2DC'); ?> <?php echo $name; ?>
+<?php esc_html_e('Name:', 'w2dc'); ?> <?php w2dc_esc_e($name); ?>
 
-<?php _e('Email:', 'W2DC'); ?> <?php echo $email; ?>
+<?php esc_html_e('Email:', 'w2dc'); ?> <?php w2dc_esc_e($email); ?>
 
-<?php _e('Message:', 'W2DC'); ?>
+<?php esc_html_e('Message:', 'w2dc'); ?>
 
 
-<?php echo $message; ?>
+<?php w2dc_esc_e($message); ?>

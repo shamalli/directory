@@ -1,6 +1,6 @@
 <?php
 
-class VP_W2DC_WP_Admin
+class W2DC_VP_WP_Admin
 {
 
 	/**
@@ -43,7 +43,7 @@ class VP_W2DC_WP_Admin
 		
 		if(!class_exists('WPAlchemy_MetaBox'))
 		{
-			require_once VP_W2DC_FileSystem::instance()->resolve_path('includes', 'wpalchemy/MetaBox');
+			require_once W2DC_VP_FileSystem::instance()->resolve_path('includes', 'wpalchemy/MetaBox');
 		}
 
 		$uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : NULL ;

@@ -1,5 +1,7 @@
 <?php 
 
+// @codingStandardsIgnoreFile
+
 class w2dc_comments_manager {
 	
 	public function __construct() {
@@ -49,13 +51,13 @@ class w2dc_comments_manager {
 			$class = 'annon';
 		}
 		?>
-		<div class="w2dc-comments-content w2dc-comments-<?php echo $class; ?>" id="comment-<?php echo $comment->comment_ID; ?>">
+		<div class="w2dc-comments-content w2dc-comments-<?php w2dc_esc_e($class); ?>" id="comment-<?php w2dc_esc_e($comment->comment_ID); ?>">
 			<div class="w2dc-comments-p">
 				<?php w2dc_comments_profile_pic($comment->comment_author_email); ?>
 				<?php print $comment->comment_content; ?><br />
 				<time class="meta">
 					<strong><?php $user = get_user_by('login', $comment->comment_author); if (!empty($user->user_url)) : ?><a href="<?php print $user->user_url; ?>" target="_blank"><?php print $comment->comment_author; ?></a><?php else : ?><?php print $comment->comment_author; ?><?php endif; ?></strong>
-					<?php print human_time_diff(strtotime($comment->comment_date), current_time('timestamp')); ?> ago. <a class="w2dc-comment-reply" data-comment-id="<?php echo $comment->comment_ID; ?>" data-comment-author="<?php echo esc_attr($comment->comment_author); ?>" href="javascript: void(0);"><?php _e('Reply ↓', 'W2DC'); ?></a>
+					<?php print human_time_diff(strtotime($comment->comment_date), current_time('timestamp')); ?> ago. <a class="w2dc-comment-reply" data-comment-id="<?php w2dc_esc_e($comment->comment_ID); ?>" data-comment-author="<?php echo esc_attr($comment->comment_author); ?>" href="javascript: void(0);"><?php esc_html_e('Reply ↓', 'w2dc'); ?></a>
 				</time>
 			</div>
 		</div>

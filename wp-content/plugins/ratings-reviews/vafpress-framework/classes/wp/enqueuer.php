@@ -1,9 +1,9 @@
 <?php
 
 /**
- * For singleton accessor, use VP_W2RR_WP_MassEnqueuer class instead.
+ * For singleton accessor, use W2RR_VP_WP_MassEnqueuer class instead.
  */
-class VP_W2RR_WP_Enqueuer
+class W2RR_VP_WP_Enqueuer
 {
 
 	private $_loaders = array();
@@ -13,8 +13,8 @@ class VP_W2RR_WP_Enqueuer
 	public function __construct()
 	{
 		$this->_id = spl_object_hash($this);
-		$loader    = new VP_W2RR_WP_Loader();
-		add_action('vp_w2rr_loader_register_' . $this->_id, array($loader, 'register'), 10, 2);
+		$loader    = new W2RR_VP_WP_Loader();
+		add_action('w2rr_vp_loader_register_' . $this->_id, array($loader, 'register'), 10, 2);
 	}
 
 	public function add_loader($loader)
@@ -29,7 +29,7 @@ class VP_W2RR_WP_Enqueuer
 
 	public function register_caller($hook_suffix)
 	{
-		do_action('vp_w2rr_loader_register_' . $this->_id, $this->_loaders, $hook_suffix);
+		do_action('w2rr_vp_loader_register_' . $this->_id, $this->_loaders, $hook_suffix);
 	}
 
 }

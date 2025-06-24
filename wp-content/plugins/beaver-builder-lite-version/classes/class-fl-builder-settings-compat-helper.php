@@ -137,7 +137,7 @@ class FLBuilderSettingsCompatHelper {
 			return;
 		}
 
-		foreach ( array( '', '_medium', '_responsive' ) as $breakpoint ) {
+		foreach ( array( '', '_large', '_medium', '_responsive' ) as $breakpoint ) {
 
 			if ( isset( $settings->{ "border_top$breakpoint" } ) ) {
 
@@ -160,5 +160,61 @@ class FLBuilderSettingsCompatHelper {
 				unset( $settings->{ "border_left$breakpoint" } );
 			}
 		}
+	}
+
+	/**
+	 * Handle old visibility settings for responsive breakpoints
+	 *
+	 * @since 2.6
+	 * @param object $settings
+	 * @return void
+	 */
+	public function filter_responsive_display_settings( &$settings ) {
+		if ( ! isset( $settings->responsive_display ) ) {
+			return;
+		}
+
+		if ( isset( $settings->responsive_display_filtered ) && true === $settings->responsive_display_filtered ) {
+			return;
+		}
+
+		if ( '' == $settings->responsive_display ) {
+			$settings->responsive_display = 'desktop,large,medium,mobile';
+		} elseif ( 'xl' === $settings->responsive_display ) {
+			$settings->responsive_display = 'desktop';
+		} elseif ( 'desktop' === $settings->responsive_display ) {
+			$settings->responsive_display = 'desktop,large';
+		} elseif ( 'desktop-medium' === $settings->responsive_display ) {
+			$settings->responsive_display = 'desktop,large,medium';
+		} elseif ( 'large-medium' === $settings->responsive_display ) {
+			$settings->responsive_display = 'large,medium';
+		} elseif ( 'medium-mobile' === $settings->responsive_display ) {
+			$settings->responsive_display = 'medium,mobile';
+		}
+
+		$settings->responsive_display_filtered = true;
+
+		return;
+	}
+
+	/**
+	 * Handle old visibility settings for responsive breakpoints
+	 *
+	 * @since 2.7
+	 * @param object $settings
+	 * @return void
+	 */
+	public function filter_responsive_order_settings( &$settings ) {
+		if ( ! isset( $settings->responsive_order ) ) {
+			return;
+		}
+
+		if ( 'default' === $settings->responsive_order ) {
+			$settings->responsive_order = '';
+		} elseif ( 'reversed' === $settings->responsive_order ) {
+			$settings->responsive_order = 'mobile';
+		}
+
+		return $settings;
 	}
 }

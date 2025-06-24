@@ -7,12 +7,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return array
  */
 function vc_settings_tabs_vc_roles( $tabs ) {
-	// inster after vc-general tab
-	if ( array_key_exists( 'vc-general', $tabs ) ) {
+	// insert after vc-modules tab
+	if ( array_key_exists( 'vc-modules', $tabs ) ) {
 		$new = array();
 		foreach ( $tabs as $key => $value ) {
 			$new[ $key ] = $value;
-			if ( 'vc-general' === $key ) {
+			if ( 'vc-modules' === $key ) {
 				$new['vc-roles'] = esc_html__( 'Role Manager', 'js_composer' );
 			}
 		}
@@ -50,7 +50,7 @@ function vc_roles_settings_save() {
 add_action( 'wp_ajax_vc_roles_settings_save', 'vc_roles_settings_save' );
 if ( 'vc-roles' === vc_get_param( 'page' ) ) {
 	function vc_settings_render_tab_vc_roles_scripts() {
-		wp_register_script( 'vc_accordion_script', vc_asset_url( 'lib/vc_accordion/vc-accordion.min.js' ), array( 'jquery-core' ), WPB_VC_VERSION, true );
+		wp_register_script( 'vc_accordion_script', vc_asset_url( 'lib/vc/vc_accordion/vc-accordion.min.js' ), array( 'jquery-core' ), WPB_VC_VERSION, true );
 	}
 
 	add_action( 'admin_init', 'vc_settings_render_tab_vc_roles_scripts' );

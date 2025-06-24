@@ -1,32 +1,36 @@
 <?php
 
-global $w2dc_content_fields_group_widget_params;
-$w2dc_content_fields_group_widget_params = array(
-		array(
-				'type' => 'contentfieldsgroup',
-				'param_name' => 'id',
-				'heading' => __('Content fields group', 'W2DC'),
-		),
-		array(
-				'type' => 'textfield',
-				'param_name' => 'listing',
-				'heading' => __('Listing ID', 'W2DC'),
-				'description' => __('Leave empty if you place it on single listing page', 'W2DC'),
-		),
-		array(
-				'type' => 'textfield',
-				'param_name' => 'classes',
-				'heading' => __('CSS classes', 'W2DC'),
-				'description' => __('CSS classes to add to content fields group wrapper', 'W2DC'),
-		),
-		array(
-				'type' => 'checkbox',
-				'param_name' => 'visibility',
-				'heading' => __("Show only on directory pages", "W2DC"),
-				'value' => 0,
-				'description' => __("Otherwise it will load plugin's files on all pages", "W2DC"),
-		),
-);
+// @codingStandardsIgnoreFile
+
+add_action('init', function() {
+	global $w2dc_content_fields_group_widget_params;
+	$w2dc_content_fields_group_widget_params = array(
+			array(
+					'type' => 'contentfieldsgroup',
+					'param_name' => 'content_fields_group_id',
+					'heading' => esc_html__('Content fields group', 'w2dc'),
+			),
+			array(
+					'type' => 'textfield',
+					'param_name' => 'listing',
+					'heading' => esc_html__('Listing ID', 'w2dc'),
+					'description' => esc_html__('Leave empty if you place it on single listing page', 'w2dc'),
+			),
+			array(
+					'type' => 'textfield',
+					'param_name' => 'classes',
+					'heading' => esc_html__('CSS classes', 'w2dc'),
+					'description' => esc_html__('CSS classes to add to content fields group wrapper', 'w2dc'),
+			),
+			array(
+					'type' => 'checkbox',
+					'param_name' => 'visibility',
+					'heading' => esc_html__("Show only on directory pages", "w2dc"),
+					'value' => 0,
+					'description' => esc_html__("Otherwise it will load plugin's files on all pages", "w2dc"),
+			),
+	);
+}, 0);
 
 class w2dc_content_fields_group_widget extends w2dc_widget {
 
@@ -35,7 +39,7 @@ class w2dc_content_fields_group_widget extends w2dc_widget {
 
 		parent::__construct(
 				'w2dc_content_fields_group_shortcode_widget',
-				__('Directory - Content fields group', 'W2DC')
+				esc_html__('Directory widget - Content fields group', 'w2dc')
 		);
 
 		$this->convertParams($w2dc_content_fields_group_widget_params);

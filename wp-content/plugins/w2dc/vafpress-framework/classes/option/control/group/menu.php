@@ -1,17 +1,17 @@
 <?php
 
-class VP_W2DC_Option_Control_Group_Menu extends VP_W2DC_Option_Control_Group
+class W2DC_VP_Option_Control_Group_Menu extends W2DC_VP_Option_Control_Group
 {
 
 	/**
 	 * Collection of $_menu
-	 * @var VP_W2DC_Option_Control_Group
+	 * @var W2DC_VP_Option_Control_Group
 	 */	
 	private $_menus;
 
 	/**
 	 * Collection of controls
-	 * @var VP_W2DC_Control_Field
+	 * @var W2DC_VP_Control_Field
 	 */	
 	private $_controls;
 
@@ -33,7 +33,7 @@ class VP_W2DC_Option_Control_Group_Menu extends VP_W2DC_Option_Control_Group
 		{
 			$this->add_data($key, $value);
 		}
-		return VP_W2DC_View::instance()->load('option/menu', $this->get_data());
+		return W2DC_VP_View::instance()->load('option/menu', $this->get_data());
 	}
 
 	public function add_menu($menu)

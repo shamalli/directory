@@ -167,6 +167,7 @@
         */
         initScroller: function() {
             this.$el.nanoScroller({
+				documentContext: window.parent.document,
 				alwaysVisible: true,
 				preventPageScrolling: true,
 				paneClass: 'fl-nanoscroller-pane',
@@ -185,7 +186,6 @@
             this.renderGroupSelector();
             this.isShowing = true;
             this.$el.addClass('is-showing');
-
             this.$el.find('.fl-nanoscroller-content').scrollTop(0);
         },
 
@@ -413,7 +413,7 @@
 
             this.$items.on('click', this.onTemplateClick.bind(this));
 
-            this.$userTemplateSections = $('.fl-user-templates');
+            this.$userTemplateSections = $('.fl-user-templates', window.parent.document);
 
             this.$userTemplates = this.$el.find('.fl-user-template, .fl-builder--save-new-user-template');
 
@@ -497,8 +497,14 @@
         onTemplateClick: function(e) {
             var $item = $(e.currentTarget),
                 id = $item.data('id'),
-                type = $item.data('type');
-            FLBuilder._requestTemplateInsert(id, type);
+                type = $item.data('type'),
+                premium = $item.data('premium');
+
+			if ( FLBuilderConfig.lite && premium ) {
+				FLBuilder._showProMessage( $item.find( '.fl-builder--template-name' ).text() );
+			} else {
+				FLBuilder._requestTemplateInsert(id, type);
+			}
         },
     });
 
@@ -510,7 +516,12 @@
         /**
         * The wp.template reference
         */
-        templateName: 'fl-content-panel-saved-view',
+        templateName: 'fl-content-panel-saved-view',        
+        
+        bindEvents: function() {
+            this.$savedSearchInput = $(this.$el[0]).find('input[name="saved-search-term"]');
+            this.$savedSearchInput.on('keyup', this.onSavedSearchTermChanged.bind(this) );
+        },
 
         /**
         * Filter the data before it's given to the template function
@@ -523,11 +534,47 @@
             data.queryResults = FLBuilder.Search.byQuery({
                 kind: "template",
                 type: "user",
-                content: ["module", "column", "row"]
+                content: ["module", "column", "row"],
             });
 
             return data;
         },
+
+        onSavedSearchTermChanged: function(e) {
+            var value = this.$savedSearchInput.val();
+            
+            this.showSearchResults( value );
+        },
+
+        showSearchResults: function( term ){
+            var html = '',
+                tempContent = '',
+                buttonContent = '',
+                noButtonContent = '',
+                qry = {
+                    kind: "template",
+                    type: "user",
+                    content: ["module", "column", "row"],
+                    searchTerm: '',
+                };
+
+            if ( term && term.length >= 2 ) {
+                qry.searchTerm = term;
+            } else {
+                qry.searchTerm = '';
+            }
+
+            this.queryResults = FLBuilder.Search.byQuery( qry );
+            html = this.template( this  );
+
+            tempContent = '<div class="temp-content">' + html + '</div>';
+            buttonContent = $(tempContent).find('.fl-builder-panel-saved-search').wrap('</p>').parent().html();
+            noButtonContent = $(tempContent.replace(buttonContent, '')).html();
+            
+            $(this.$el).parent().find('.fl-content-panel-saved-view-content').html( noButtonContent );
+            FLBuilder._initSortables();
+        },
+
     });
 
     /**
@@ -662,7 +709,7 @@
             var viewName = item.data( 'view' );
 
 			if ( item.hasClass( 'fl-has-children' ) ) {
-				var children = $( '[data-parent="' + viewName + '"]' );
+				var children = $( '[data-parent="' + viewName + '"]', window.parent.document );
 
 				if ( ! children.is( ':visible' ) ) {
 					this.items[ viewName ].hasChildrenOpen = true;
@@ -759,8 +806,8 @@
         * @return void
         */
         render: function() {
-            $('body').prepend(this.template(this));
-            this.$el = $(".fl-builder--content-library-panel");
+            $('body', window.parent.document).prepend(this.template(this));
+            this.$el = $(".fl-builder--content-library-panel", window.parent.document);
             this.bindEvents();
             this.$groupSelect = this.$el.find('.fl-builder-content-group-select');
 			$(this).trigger('afterRender');
@@ -776,7 +823,6 @@
             this.$tabs = this.$el.find('.fl-builder--tabs [data-tab]');
             this.$tabs.on('mouseup', this.onTabItemMouseUp.bind( this ));
             this.$tabs.on('click', this.onTabItemClick.bind( this ));
-
             this.$search = this.$el.find('.fl-builder-panel-search');
             this.$searchBtn = this.$search.find('.fl-builder-toggle-panel-search');
             this.$searchInput = this.$search.find('input[name="search-term"]');
@@ -814,7 +860,7 @@
             var $panel = this.$el,
                 panelOffset = null,
                 $arrow = this.$el.find('.fl-builder--panel-arrow'),
-                $button = $('.fl-builder-content-panel-button'),
+                $button = $('.fl-builder-content-panel-button', window.parent.document),
                 arrowOffset,
                 arrowX,
                 animationDuration = this.$el.css('animation-duration');
@@ -870,10 +916,16 @@
 				return;
 			}
 
-            $('body').addClass('fl-builder-content-panel-is-showing');
+            $('body', window.parent.document).addClass('fl-builder-content-panel-is-showing');
             this.isShowing = true;
             $(this).trigger('onShow');
             FLBuilder.triggerHook('didShowContentPanel');
+
+            // Clear any visible registered panels
+            if ( 'Builder' in FL && 'data' in FL.Builder ) {
+                const actions = FL.Builder.data.getSystemActions()
+                actions.hideCurrentPanel()
+            }
         },
 
         /**
@@ -888,7 +940,7 @@
 	            return;
             }
 
-            $('body').removeClass('fl-builder-content-panel-is-showing');
+            $('body', window.parent.document).removeClass('fl-builder-content-panel-is-showing');
             this.isShowing = false;
             $(this).trigger('onHide');
             FLBuilder.triggerHook('didHideContentPanel');
@@ -965,7 +1017,7 @@
             this.$search.addClass('is-showing-input');
             this.$search.find('input[name="search-term"]').focus();
 
-            $('.fl-builder--selector-display-label').attr('tabindex', -1 );
+            $('.fl-builder--selector-display-label', window.parent.document).attr('tabindex', -1 );
             this.$searchBtn.attr('tabindex', -1 );
 
             $(this).trigger('didShowSearchControls');
@@ -975,7 +1027,7 @@
             this.$search.removeClass('is-showing-input');
             this.clearSearchInput();
             this.hideSearchResults();
-            $('.fl-builder--selector-display-label').attr('tabindex', null );
+            $('.fl-builder--selector-display-label', window.parent.document).attr('tabindex', null );
             this.$searchBtn.attr('tabindex', null );
         },
 
@@ -1014,7 +1066,7 @@
                 var $html = $(this.renderNoResults(data));
     			this.$searchPanel.html($html);
             }
-			$('body').addClass('fl-builder-search-results-panel-is-showing');
+			$('body', window.parent.document).addClass('fl-builder-search-results-panel-is-showing');
         },
 
         /**
@@ -1022,7 +1074,7 @@
         * @return void
         */
         hideSearchResults: function() {
-        	$('body').removeClass('fl-builder-search-results-panel-is-showing');
+        	$('body', window.parent.document).removeClass('fl-builder-search-results-panel-is-showing');
         },
 
     });

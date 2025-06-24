@@ -167,6 +167,7 @@
 #wpadminbar .qm-alert {
   background-color: #f60;
 }
+#wpadminbar #wp-admin-bar-query-monitor-doing_it_wrong a,
 #wpadminbar #wp-admin-bar-query-monitor-stricts a,
 #wpadminbar #wp-admin-bar-query-monitor-deprecateds a,
 #wpadminbar #wp-admin-bar-query-monitor-notices a,
@@ -175,7 +176,9 @@
 #wpadminbar .qm-notice {
   background-color: #740;
 }
-#wpadminbar #wp-admin-bar-query-monitor-stricts a:focus, #wpadminbar #wp-admin-bar-query-monitor-stricts a:hover,
+#wpadminbar #wp-admin-bar-query-monitor-doing_it_wrong a:focus, #wpadminbar #wp-admin-bar-query-monitor-doing_it_wrong a:hover,
+#wpadminbar #wp-admin-bar-query-monitor-stricts a:focus,
+#wpadminbar #wp-admin-bar-query-monitor-stricts a:hover,
 #wpadminbar #wp-admin-bar-query-monitor-deprecateds a:focus,
 #wpadminbar #wp-admin-bar-query-monitor-deprecateds a:hover,
 #wpadminbar #wp-admin-bar-query-monitor-notices a:focus,
@@ -241,6 +244,7 @@ body.admin-color-light #wp-admin-bar-query-monitor:not(.qm-all-clear):not(:hover
 #wp-admin-bar-query-monitor-default .qm-alert a,
 #wp-admin-bar-query-monitor-default .qm-error a,
 #wp-admin-bar-query-monitor-default .qm-warning a,
+#wp-admin-bar-query-monitor-doing_it_wrong a,
 #wp-admin-bar-query-monitor-deprecateds a,
 #wp-admin-bar-query-monitor-stricts a,
 #wp-admin-bar-query-monitor-notices a,
@@ -1224,6 +1228,7 @@ body.admin-color-light #wp-admin-bar-query-monitor:not(.qm-all-clear):not(:hover
   display: none !important;
 }
 #query-monitor-main .qm-title-heading select,
+#query-monitor-main .qm select.qm-select,
 #query-monitor-main .qm select.qm-filter {
   -webkit-appearance: menulist !important;
   -moz-appearance: menulist !important;
@@ -1245,8 +1250,15 @@ body.admin-color-light #wp-admin-bar-query-monitor:not(.qm-all-clear):not(:hover
 #query-monitor-main .qm-title-heading select {
   max-width: unset !important;
 }
+#query-monitor-main .qm select.qm-select:hover,
 #query-monitor-main .qm select.qm-filter:hover {
   background: var(--qm-cell-bg-hover) !important;
+}
+#query-monitor-main .qm select.qm-select {
+  margin: 0 !important;
+  padding: 4px 10px 4px 4px !important;
+  border-radius: 2px !important;
+  max-width: none !important;
 }
 #query-monitor-main .qm-hide,
 #query-monitor-main .qm-hide-scripts-dependencies,
@@ -1260,7 +1272,8 @@ body.admin-color-light #wp-admin-bar-query-monitor:not(.qm-all-clear):not(:hover
 #query-monitor-main .qm-hide-name,
 #query-monitor-main .qm-hide-type,
 #query-monitor-main .qm-hide-caller,
-#query-monitor-main .qm-hide-component {
+#query-monitor-main .qm-hide-component,
+#query-monitor-main .qm-hide-host {
   display: none !important;
 }
 #query-monitor-main .qm thead th.qm-sortable-column {
@@ -1467,15 +1480,21 @@ body.admin-color-light #wp-admin-bar-query-monitor:not(.qm-all-clear):not(:hover
   padding: 0 0 1em 1em !important;
 }
 #qm-fatal li {
-  margin: 0 0 0.7em !important;
-  list-style: none !important;
+  margin: 0 0 0.7em 1em !important;
 }
 #qm-fatal .qm-info {
   /* @TODO */
   color: #666 !important;
 }
+#qm-fatal a.qm-edit-link svg {
+  display: none;
+}
 
 body#error-page #qm-fatal {
   margin: 0 !important;
   border: none !important;
+}
+
+#qm-logger tr pre {
+  user-select: all;
 }

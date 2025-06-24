@@ -93,6 +93,7 @@ final class FLBuilderAJAX {
 		self::add_action( 'reset_col_widths', 'FLBuilderModel::reset_col_widths', array( 'group_id' ) );
 		self::add_action( 'resize_row_content', 'FLBuilderModel::resize_row_content', array( 'node', 'width' ) );
 		self::add_action( 'save_settings', 'FLBuilderModel::save_settings', array( 'node_id', 'settings' ) );
+		self::add_action( 'verify_settings', 'FLBuilderModel::verify_settings', array( 'settings' ) );
 		self::add_action( 'save_layout_settings', 'FLBuilderModel::save_layout_settings', array( 'settings' ) );
 		self::add_action( 'save_global_settings', 'FLBuilderModel::save_global_settings', array( 'settings' ) );
 		self::add_action( 'save_color_presets', 'FLBuilderModel::save_color_presets', array( 'presets' ) );
@@ -100,13 +101,14 @@ final class FLBuilderAJAX {
 		self::add_action( 'duplicate_wpml_layout', 'FLBuilderModel::duplicate_wpml_layout', array( 'original_post_id', 'post_id' ) );
 		self::add_action( 'apply_user_template', 'FLBuilderModel::apply_user_template', array( 'template_id', 'append' ) );
 		self::add_action( 'apply_template', 'FLBuilderModel::apply_template', array( 'template_id', 'append' ) );
-		self::add_action( 'save_layout', 'FLBuilderModel::save_layout' );
+		self::add_action( 'save_layout', 'FLBuilderModel::save_layout', array( 'publish', 'exit' ) );
 		self::add_action( 'save_draft', 'FLBuilderModel::save_draft' );
 		self::add_action( 'clear_draft_layout', 'FLBuilderModel::clear_draft_layout' );
 		self::add_action( 'disable_builder', 'FLBuilderModel::disable' );
 		self::add_action( 'clear_cache', 'FLBuilderModel::delete_all_asset_cache' );
 
 		// FLBuilderAJAXLayout
+		self::add_action( 'get_layout', 'FLBuilderAJAXLayout::get_layout' );
 		self::add_action( 'render_layout', 'FLBuilderAJAXLayout::render' );
 		self::add_action( 'render_node', 'FLBuilderAJAXLayout::render', array( 'node_id' ) );
 		self::add_action( 'render_new_row', 'FLBuilderAJAXLayout::render_new_row', array( 'cols', 'position', 'module' ) );
@@ -129,6 +131,11 @@ final class FLBuilderAJAX {
 		self::add_action( 'restore_revision', 'FLBuilderRevisions::restore', array( 'revision_id' ) );
 		self::add_action( 'refresh_revision_items', 'FLBuilderRevisions::get_config', array( 'post_id' ) );
 
+		// FLBuilderHistoryManager
+		self::add_action( 'save_history_state', 'FLBuilderHistoryManager::save_current_state', array( 'label', 'module_type' ) );
+		self::add_action( 'render_history_state', 'FLBuilderHistoryManager::render_state', array( 'position' ) );
+		self::add_action( 'clear_history_states', 'FLBuilderHistoryManager::delete_states', array( 'post_id' ) );
+
 		// FLBuilderServices
 		self::add_action( 'render_service_settings', 'FLBuilderServices::render_settings' );
 		self::add_action( 'render_service_fields', 'FLBuilderServices::render_fields' );
@@ -141,6 +148,7 @@ final class FLBuilderAJAX {
 		self::add_action( 'get_autosuggest_values', 'FLBuilderAutoSuggest::get_values', array( 'fields' ) );
 
 		self::add_action( 'save_browser_stats', 'FLBuilderUsage::browser_stats', array( 'browser_data' ) );
+		//	self::add_action( 'clear_cache_for_layout', 'FLBuilderAJAXLayout::refresh_layout_cache' );
 	}
 
 	/**
@@ -216,7 +224,7 @@ final class FLBuilderAJAX {
 		/**
 		 * Allow developers to hook before the action runs.
 		 * @see fl_ajax_before_
-		 * @link https://kb.wpbeaverbuilder.com/article/116-plugin-action-reference
+		 * @link https://docs.wpbeaverbuilder.com/beaver-builder/developer/tutorials-guides/common-beaver-builder-filter-examples
 		 */
 		do_action( 'fl_ajax_before_' . $action['action'], $keys_args );
 
@@ -229,7 +237,7 @@ final class FLBuilderAJAX {
 		/**
 		 * Allow developers to hook after the action runs.
 		 * @see fl_ajax_after_
-		 * @link https://kb.wpbeaverbuilder.com/article/116-plugin-action-reference
+		 * @link https://docs.wpbeaverbuilder.com/beaver-builder/developer/tutorials-guides/common-beaver-builder-filter-examples
 		 */
 		do_action( 'fl_ajax_after_' . $action['action'], $keys_args );
 

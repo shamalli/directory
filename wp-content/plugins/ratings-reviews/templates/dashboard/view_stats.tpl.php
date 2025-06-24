@@ -1,22 +1,22 @@
 <div class="w2rr-content">
-	<h3><?php echo sprintf(esc_html__('Clicks statistics of the page "%s"', 'W2RR'), $object->title()); ?></h3>
+	<h3><?php echo sprintf(esc_html__('Clicks statistics of the page "%s"', 'w2rr'), $object->title()); ?></h3>
 	
-	<h4><?php echo sprintf(esc_html__('Click stats: %d', 'W2RR'), (get_post_meta($object->post->ID, '_total_clicks', true) ? get_post_meta($object->post->ID, '_total_clicks', true) : 0)); ?></h4>
+	<h4><?php echo sprintf(esc_html__('Click stats: %d', 'w2rr'), (get_post_meta($object->post->ID, '_total_clicks', true) ? get_post_meta($object->post->ID, '_total_clicks', true) : 0)); ?></h4>
 	
 	<?php 
 	$months_names = array(
-		1 => esc_html__('January', 'W2RR'),	
-		2 => esc_html__('February', 'W2RR'),	
-		3 => esc_html__('March', 'W2RR'),	
-		4 => esc_html__('April', 'W2RR'),	
-		5 => esc_html__('May', 'W2RR'),	
-		6 => esc_html__('June', 'W2RR'),	
-		7 => esc_html__('July', 'W2RR'),	
-		8 => esc_html__('August', 'W2RR'),	
-		9 => esc_html__('September', 'W2RR'),	
-		10 => esc_html__('October', 'W2RR'),	
-		11 => esc_html__('November', 'W2RR'),	
-		12 => esc_html__('December', 'W2RR'),	
+		1 => esc_html__('January', 'w2rr'),	
+		2 => esc_html__('February', 'w2rr'),	
+		3 => esc_html__('March', 'w2rr'),	
+		4 => esc_html__('April', 'w2rr'),	
+		5 => esc_html__('May', 'w2rr'),	
+		6 => esc_html__('June', 'w2rr'),	
+		7 => esc_html__('July', 'w2rr'),	
+		8 => esc_html__('August', 'w2rr'),	
+		9 => esc_html__('September', 'w2rr'),	
+		10 => esc_html__('October', 'w2rr'),	
+		11 => esc_html__('November', 'w2rr'),	
+		12 => esc_html__('December', 'w2rr'),	
 	);
 	if ($clicks_data = get_post_meta($object->post->ID, '_clicks_data', true)) {
 		$clicks_data = array_filter($clicks_data);
@@ -39,7 +39,7 @@
 			<h4><?php echo esc_html($year); ?></h4>
 		
 			<div>
-				<canvas id="canvas-<?php echo esc_attr($year); ?>" style="height: 450px;"></canvas>
+				<canvas id="canvas-<?php echo esc_attr($year); ?>" class="w2rr-height-450"></canvas>
 				<script>
 					var chartData_<?php echo esc_attr($year); ?> = {
 						labels : ["<?php echo implode('","', $months_names); ?>"],
@@ -75,5 +75,5 @@
 		</div>
 	</div>
 	
-	<a href="<?php echo $frontend_controller->referer; ?>" class="w2rr-btn w2rr-btn-primary"><?php esc_html_e('Go back ', 'W2RR'); ?></a>
+	<a href="<?php w2rr_esc_e($frontend_controller->referer); ?>" class="w2rr-btn w2rr-btn-primary"><?php esc_html_e('Go back ', 'w2rr'); ?></a>
 </div>

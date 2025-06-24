@@ -1,5 +1,37 @@
 [unreleased]
 
+#### 3.6.3 / 2025-03-25
+* update workflow
+* add extra setting to remove auto-installed plugin(s)
+
+#### 3.6.2 / 2024-12-02
+* Plugin Check and i18n updates
+
+#### 3.6.1 / 2024-10-23
+* fix if `get_preferred_from_update_core()` continues to return less than a complete response
+
+#### 3.6.0 / 2024-10-09
+* remove Report a Bug in favor of using the standalone Test Reports plugin
+
+#### 3.5.6 / 2024-07-06
+* string update
+* no need to skip debug email
+
+#### 3.5.5 / 2023-10-19
+* add `Settings` to action links, thanks @0aveRyan
+
+#### 3.5.4 / 2023-09-09
+* use `automatic_updates_send_debug_email` filter to turn off sending debug email
+* `mysql_get_client_info()` no longer in PHP 7.0, switch to `mysqli_get_client_info()`
+* make anonymous functions static
+
+#### 3.5.3 / 2023-08-10
+* update for changed standalone afragen/test-reports plugin
+* set actual next beta/RC in messaging
+
+#### 3.5.2 / 2023-07-12
+* fix dev-notes URL
+
 #### 3.5.1 / 2023-07-06
 * add setting in `Extra Settings` to hide `Report a Bug`
 * add filter `wpbt_hide_report_a_bug`

@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 add_filter("wcsearch_get_count_num_args", "wc_get_count_num_args");
 function wc_get_count_num_args($args) {
 
@@ -52,8 +54,8 @@ add_filter("wcsearch_get_taxonomies_names", "wc_get_taxonomies_names");
 function wc_get_taxonomies_names($taxonomies_names = array()) {
 	
 	if (wcsearch_is_woo_active()) {
-		$taxonomies_names['product_cat'] = esc_html__("Product categories", "WCSEARCH");
-		$taxonomies_names['product_tag'] = esc_html__("Product tags", "WCSEARCH");
+		$taxonomies_names['product_cat'] = esc_html__("Product categories", "wcsearch");
+		$taxonomies_names['product_tag'] = esc_html__("Product tags", "wcsearch");
 	
 		$wc_attribute_taxonomies = wc_get_attribute_taxonomies();
 		foreach ($wc_attribute_taxonomies AS $taxonomy) {
@@ -175,7 +177,7 @@ function wc_get_model_fields($model_fields, $used_by) {
 						'values' => '',
 				),
 				array(
-						'name' => 'Search button',
+						'name' => 'Submit button',
 						'type' => 'button',
 						'slug' => 'submit',
 						'icon' => 'wcsearch-fa-sign-in',

@@ -6,7 +6,36 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class WPBakeryShortCode
  */
-abstract class WPBakeryShortCode extends WPBakeryVisualComposerAbstract {
+abstract class WPBakeryShortCode {
+	/**
+	 * @var
+	 */
+	public static $config;
+	/**
+	 * @var string
+	 */
+	protected $controls_css_settings = 'cc';
+
+	/**
+	 * Backend section controls.
+	 *
+	 * @note for a frontend editor section controls please see
+	 * include/templates/editors/partials/frontend_controls.tpl.php
+	 *
+	 * @var array
+	 */
+	protected $controls_list = array(
+		'edit',
+		'clone',
+		'copy',
+		'delete',
+	);
+
+	/**
+	 * @var string
+	 */
+	protected $shortcode_content = '';
+
 	/**
 	 * @var string - shortcode tag
 	 */
@@ -50,7 +79,6 @@ abstract class WPBakeryShortCode extends WPBakeryVisualComposerAbstract {
 	protected $controls_template_file = 'editors/partials/backend_controls.tpl.php';
 
 	public $nonDraggableClass = 'vc-non-draggable';
-	/** @noinspection PhpMissingParentConstructorInspection */
 
 	/**
 	 * @param $settings
@@ -58,6 +86,164 @@ abstract class WPBakeryShortCode extends WPBakeryVisualComposerAbstract {
 	public function __construct( $settings ) {
 		$this->settings = $settings;
 		$this->shortcode = $this->settings['base'];
+	}
+
+	/**
+	 * @param $settings
+	 * @deprecated not used
+	 */
+	public function init( $settings ) {
+		self::$config = (array) $settings;
+	}
+
+	/**
+	 * @param $action
+	 * @param $method
+	 * @param int $priority
+	 * @return true|void
+	 * @deprecated 6.0 use native WordPress actions
+	 */
+	public function addAction( $action, $method, $priority = 10 ) {
+		return add_action( $action, array(
+			$this,
+			$method,
+		), $priority );
+	}
+
+	/**
+	 * @param $action
+	 * @param $method
+	 * @param int $priority
+	 *
+	 * @return bool
+	 * @deprecated 6.0 use native WordPress actions
+	 *
+	 */
+	public function removeAction( $action, $method, $priority = 10 ) {
+		return remove_action( $action, array(
+			$this,
+			$method,
+		), $priority );
+	}
+
+	/**
+	 * @param $filter
+	 * @param $method
+	 * @param int $priority
+	 *
+	 * @return bool|void
+	 * @deprecated 6.0 use native WordPress actions
+	 *
+	 */
+	public function addFilter( $filter, $method, $priority = 10 ) {
+		return add_filter( $filter, array(
+			$this,
+			$method,
+		), $priority );
+	}
+
+	/**
+	 * @param $filter
+	 * @param $method
+	 * @param int $priority
+	 * @return bool
+	 * @deprecated 6.0 use native WordPress
+	 *
+	 */
+	public function removeFilter( $filter, $method, $priority = 10 ) {
+		return remove_filter( $filter, array(
+			$this,
+			$method,
+		), $priority );
+	}
+
+	/**
+	 * @param $tag
+	 * @param $func
+	 * @deprecated 6.0 not used
+	 *
+	 */
+	public function addShortCode( $tag, $func ) {
+		// this function is deprecated since 6.0
+	}
+
+	/**
+	 * @param $content
+	 * @deprecated 6.0 not used
+	 *
+	 */
+	public function doShortCode( $content ) {
+		// this function is deprecated since 6.0
+	}
+
+	/**
+	 * @param $tag
+	 * @deprecated 6.0 not used
+	 *
+	 */
+	public function removeShortCode( $tag ) {
+		// this function is deprecated since 6.0
+	}
+
+	/**
+	 * @param $param
+	 *
+	 * @return null
+	 * @deprecated 6.0 not used, use vc_post_param
+	 *
+	 */
+	public function post( $param ) {
+		// this function is deprecated since 6.0
+
+		return vc_post_param( $param );
+	}
+
+	/**
+	 * @param $param
+	 *
+	 * @return null
+	 * @deprecated 6.0 not used, use vc_get_param
+	 *
+	 */
+	public function get( $param ) {
+		// this function is deprecated since 6.0
+
+		return vc_get_param( $param );
+	}
+
+	/**
+	 * @param $asset
+	 *
+	 * @return string
+	 * @deprecated 4.5 use vc_asset_url
+	 *
+	 */
+	public function assetURL( $asset ) {
+		// this function is deprecated since 4.5
+
+		return vc_asset_url( $asset );
+	}
+
+	/**
+	 * @param $asset
+	 *
+	 * @return string
+	 * @deprecated 6.0 not used
+	 */
+	public function assetPath( $asset ) {
+		// this function is deprecated since 6.0
+
+		return self::$config['APP_ROOT'] . self::$config['ASSETS_DIR'] . $asset;
+	}
+
+	/**
+	 * @param $name
+	 *
+	 * @return null
+	 * @deprecated 6.0 not used
+	 */
+	public static function config( $name ) {
+		return isset( self::$config[ $name ] ) ? self::$config[ $name ] : null;
 	}
 
 	/**
@@ -69,9 +255,6 @@ abstract class WPBakeryShortCode extends WPBakeryVisualComposerAbstract {
 		return ( $this->isInline() || $this->isEditor() && true === $this->settings( 'is_container' ) ? '<span class="vc_container-anchor"></span>' : '' ) . $content;
 	}
 
-	/**
-	 *
-	 */
 	public function enqueueAssets() {
 		if ( ! empty( $this->settings['admin_enqueue_js'] ) ) {
 			$this->registerJs( $this->settings['admin_enqueue_js'] );
@@ -148,9 +331,6 @@ abstract class WPBakeryShortCode extends WPBakeryVisualComposerAbstract {
 		}
 	}
 
-	/**
-	 *
-	 */
 	public static function enqueueCss() {
 		if ( ! empty( self::$css_scripts ) ) {
 			foreach ( self::$css_scripts as $stylesheet ) {
@@ -159,9 +339,6 @@ abstract class WPBakeryShortCode extends WPBakeryVisualComposerAbstract {
 		}
 	}
 
-	/**
-	 *
-	 */
 	public static function enqueueJs() {
 		if ( ! empty( self::$js_scripts ) ) {
 			foreach ( self::$js_scripts as $script ) {
@@ -258,7 +435,7 @@ abstract class WPBakeryShortCode extends WPBakeryVisualComposerAbstract {
 		$output = '';
 		if ( ! is_null( $content ) ) {
 			/** @var string $content */
-			$content = apply_filters( 'vc_shortcode_content_filter', $content, $this->shortcode );
+			$content = apply_filters( 'vc_shortcode_content_filter', $content, $this->shortcode, $atts );
 		}
 		$this->findShortcodeTemplate();
 		if ( $this->html_template && file_exists( $this->html_template ) ) {
@@ -715,7 +892,7 @@ abstract class WPBakeryShortCode extends WPBakeryVisualComposerAbstract {
 			$title = 'title="' . esc_attr( $params['title'] ) . '" ';
 		}
 
-		return '<i ' . $title . 'class="vc_general vc_element-icon' . ( ! empty( $params['icon'] ) ? ' ' . sanitize_text_field( $params['icon'] ) : '' ) . '"' . $data . '></i> ';
+		return '<i ' . $title . ' class="vc_general vc_element-icon' . ( ! empty( $params['icon'] ) ? ' ' . sanitize_text_field( $params['icon'] ) : '' ) . '"' . $data . '></i> ';
 	}
 
 	/**
@@ -781,7 +958,6 @@ abstract class WPBakeryShortCode extends WPBakeryVisualComposerAbstract {
 	}
 
 	/**
-	 * Since 4.5
 	 * Possible placeholders:
 	 *      {{ content }}
 	 *      {{ title }}

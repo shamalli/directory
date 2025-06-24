@@ -30,6 +30,7 @@ class SC_Admin_Edit{
 
         echo '<div id="sc_name">';
         echo '<input type="text" class="widefat" title="' . esc_attr__( 'Name of the shortcode. Allowed characters are alphabets, numbers, hyphens and underscore.', 'shortcoder' ) . '" value="' . esc_attr( $post->post_name ) . '" name="post_name" id="post_name" pattern="[a-zA-z0-9\-_]+" required placeholder="' . esc_attr__( 'Enter shortcode name', 'shortcoder' ) . '" />';
+        echo '<input type="text" class="sc_title_shortcut" title="' . esc_attr__( 'Display name', 'shortcoder' ) . '" placeholder="' . esc_attr__( 'Enter display name', 'shortcoder' ) . '"/>';
         echo '</div>';
 
         echo '<div id="edit-slug-box">';
@@ -89,8 +90,8 @@ class SC_Admin_Edit{
                 'value' => $settings[ '_sc_disable_sc' ],
                 'name' => '_sc_disable_sc',
                 'list' => array(
-                    'yes' => 'Yes',
-                    'no' => 'No'
+                    'yes' => __( 'Yes', 'shortcoder' ),
+                    'no' => __( 'No', 'shortcoder' )
                 ),
                 'helper' => __( 'Select to disable the shortcode from executing in all the places where it is used.', 'shortcoder' )
             ))),
@@ -99,8 +100,8 @@ class SC_Admin_Edit{
                 'value' => $settings[ '_sc_disable_admin' ],
                 'name' => '_sc_disable_admin',
                 'list' => array(
-                    'yes' => 'Yes',
-                    'no' => 'No'
+                    'yes' => __( 'Yes', 'shortcoder' ),
+                    'no' => __( 'No', 'shortcoder' )
                 ),
                 'helper' => __( 'Select to disable the shortcode from executing for administrators.', 'shortcoder' )
             ))),
@@ -109,11 +110,21 @@ class SC_Admin_Edit{
                 'value' => $settings[ '_sc_allowed_devices' ],
                 'name' => '_sc_allowed_devices',
                 'list' => array(
-                    'all' => 'All devices',
-                    'desktop_only' => 'Desktop only',
-                    'mobile_only' => 'Mobile only'
+                    'all' => __( 'All devices', 'shortcoder' ),
+                    'desktop_only' => __( 'Desktop only', 'shortcoder' ),
+                    'mobile_only' => __( 'Mobile only', 'shortcoder' )
                 ),
                 'helper' => __( 'Select the devices where the shortcode should be executed. Note: If any caching plugin is used, a separate caching for desktop and mobile might be required.', 'shortcoder' )
+            ))),
+
+            array( __( 'Execute blocks', 'shortcoder' ), SC_Admin_Form::field( 'select', array(
+                'value' => $settings[ '_sc_execute_blocks' ],
+                'name' => '_sc_execute_blocks',
+                'list' => array(
+                    'yes' => __( 'Yes', 'shortcoder' ),
+                    'no' => __( 'No', 'shortcoder' )
+                ),
+                'helper' => __( 'If the shortcode content contains WordPress blocks HTML, select yes to execute it. Note: The CSS/JS required for the blocks should be included on the page manually as required.', 'shortcoder' )
             ))),
 
         );
@@ -246,7 +257,7 @@ class SC_Admin_Edit{
 
         global $post;
 
-        if( !SC_Admin::is_sc_admin_page() || $hook == 'edit.php' || $hook == 'edit-tags.php' || $hook == 'term.php' || $hook == 'shortcoder_page_settings' ){
+        if( !SC_Admin::is_sc_admin_page() || $hook == 'edit.php' || $hook == 'edit-tags.php' || $hook == 'term.php' || $hook == 'shortcoder_page_settings' || is_null( $post ) ){
             return false;
         }
 
@@ -302,6 +313,8 @@ class SC_Admin_Edit{
             echo '<p>' . esc_html__( 'Pull a custom field value of the current post and display it inside the shortcode content.', 'shortcoder' ) . '<a href="https://www.aakashweb.com/docs/shortcoder/shortcode-parameters/#custom-fields" target="_blank" title="' . esc_attr__( 'More information', 'shortcoder' ) . '"><span class="dashicons dashicons-info"></span></a></p>';
             echo '<h4>' . esc_html__( 'Enter custom field name', 'shortcoder' ) . '</h4>';
             echo '<input type="text" class="sc_cf_box widefat" pattern="[a-zA-Z0-9_-]+"/>';
+            echo '<h4>' . esc_html__( 'Default value', 'shortcoder' ) . '</h4>';
+            echo '<input type="text" class="sc_cf_default widefat"/>';
             echo '<button class="button sc_cf_btn">' . esc_html__( 'Insert custom field', 'shortcoder' ) . '</button>';
             echo '<p class="sc_cf_info"><small>' . esc_html__( 'Only alphabets, numbers, underscore and hyphens are allowed. Cannot be empty.', 'shortcoder' ) . '</small></p></li>';
         echo '</ul></li>';
@@ -321,9 +334,8 @@ class SC_Admin_Edit{
 
         echo '<p>Get updates on the WordPress plugins, tips and tricks to enhance your WordPress experience. No spam.</p>';
 
-        echo '<div class="subscribe_form" data-action="https://aakashweb.us19.list-manage.com/subscribe/post-json?u=b7023581458d048107298247e&id=ef5ab3c5c4&c=">
+        echo '<div class="subscribe_form">
         <input type="text" value="' . esc_attr( get_option( 'admin_email' ) ) . '" class="subscribe_email_box" placeholder="Your email address">
-        <p class="subscribe_confirm">Thanks for subscribing !</p>
         <button class="button subscribe_btn"><span class="dashicons dashicons-email"></span> Subscribe</button>
         </div>';
 

@@ -1,3 +1,8 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <div class="wcsearch-search-input wcsearch-search-onsale" <?php echo $search_model->getOptionsString(); ?>>
 	<div class="wcsearch-checkbox">
 		<label class="wcsearch-search-input-label">

@@ -5,7 +5,7 @@
  * datasource to field with multiple options.
  */
 
-function vp_w2dc_get_categories()
+function w2dc_vp_get_categories()
 {
 	$wp_cat = get_categories(array('hide_empty' => 0 ));
 
@@ -17,9 +17,9 @@ function vp_w2dc_get_categories()
 	return $result;
 }
 
-function vp_w2dc_get_users()
+function w2dc_vp_get_users()
 {
-	$wp_users = VP_W2DC_WP_User::get_users();
+	$wp_users = W2DC_VP_WP_User::get_users();
 
 	$result = array();
 	foreach ($wp_users as $user)
@@ -29,7 +29,7 @@ function vp_w2dc_get_users()
 	return $result;
 }
 
-function vp_w2dc_get_posts()
+function w2dc_vp_get_posts()
 {
 	$wp_posts = get_posts(array(
 		'posts_per_page' => -1,
@@ -43,7 +43,7 @@ function vp_w2dc_get_posts()
 	return $result;
 }
 
-function vp_w2dc_get_pages()
+function w2dc_vp_get_pages()
 {
 	$wp_pages = get_pages();
 
@@ -55,7 +55,7 @@ function vp_w2dc_get_pages()
 	return $result;
 }
 
-function vp_w2dc_get_tags()
+function w2dc_vp_get_tags()
 {
 	$wp_tags = get_tags(array('hide_empty' => 0));
 	$result = array();
@@ -66,10 +66,10 @@ function vp_w2dc_get_tags()
 	return $result;
 }
 
-function vp_w2dc_get_roles()
+function w2dc_vp_get_roles()
 {
 	$result         = array();
-	$editable_roles = VP_W2DC_WP_User::get_editable_roles();
+	$editable_roles = W2DC_VP_WP_User::get_editable_roles();
 
 	foreach ($editable_roles as $key => $role)
 	{
@@ -79,7 +79,7 @@ function vp_w2dc_get_roles()
 	return $result;
 }
 
-function vp_w2dc_get_gwf_family()
+function w2dc_vp_get_gwf_family()
 {
 	$fonts = file_get_contents(dirname(__FILE__) . '/gwf.json');
 	$fonts = json_decode($fonts);
@@ -94,9 +94,9 @@ function vp_w2dc_get_gwf_family()
 	return $result;
 }
 
-VP_W2DC_Security::instance()->whitelist_function('vp_w2dc_get_gwf_weight');
+W2DC_VP_Security::instance()->whitelist_function('w2dc_vp_get_gwf_weight');
 
-function vp_w2dc_get_gwf_weight($face)
+function w2dc_vp_get_gwf_weight($face)
 {
 	if(empty($face))
 		return array();
@@ -115,9 +115,9 @@ function vp_w2dc_get_gwf_weight($face)
 	return $result;
 }
 
-VP_W2DC_Security::instance()->whitelist_function('vp_w2dc_get_gwf_style');
+W2DC_VP_Security::instance()->whitelist_function('w2dc_vp_get_gwf_style');
 
-function vp_w2dc_get_gwf_style($face)
+function w2dc_vp_get_gwf_style($face)
 {
 	if(empty($face))
 		return array();
@@ -136,9 +136,9 @@ function vp_w2dc_get_gwf_style($face)
 	return $result;
 }
 
-VP_W2DC_Security::instance()->whitelist_function('vp_w2dc_get_gwf_subset');
+W2DC_VP_Security::instance()->whitelist_function('w2dc_vp_get_gwf_subset');
 
-function vp_w2dc_get_gwf_subset($face)
+function w2dc_vp_get_gwf_subset($face)
 {
 	if(empty($face))
 		return array();
@@ -157,7 +157,7 @@ function vp_w2dc_get_gwf_subset($face)
 	return $result;
 }
 
-function vp_w2dc_get_social_medias() {
+function w2dc_vp_get_social_medias() {
 	$socmeds = array(
 		array('value' => 'blogger', 'label' => 'Blogger'),
 		array('value' => 'delicious', 'label' => 'Delicious'),
@@ -191,13 +191,13 @@ function vp_w2dc_get_social_medias() {
 	return $socmeds;
 }
 
-function vp_w2dc_get_fontawesome_icons()
+function w2dc_vp_get_fontawesome_icons()
 {
 	// scrape list of icons from fontawesome css
-	if( false == ( $icons  = get_transient( 'vp_w2dc_fontawesome_icons' ) ) )
+	if( false == ( $icons  = get_transient( 'w2dc_vp_fontawesome_icons' ) ) )
 	{
 		$pattern = '/\.(w2dc-fa-(?:\w+(?:-)?)+):before\s*{\s*content/';
-		$subject = file_get_contents(VP_W2DC_DIR . '/public/css/vendor/font-awesome.min.css');
+		$subject = file_get_contents(W2DC_VP_DIR . '/public/css/vendor/font-awesome.min.css');
 
 		preg_match_all($pattern, $subject, $matches, PREG_SET_ORDER);
 
@@ -207,15 +207,15 @@ function vp_w2dc_get_fontawesome_icons()
 		{
 		    $icons[] = array('value' => $match[1], 'label' => $match[1]);
 		}
-		set_transient( 'vp_w2dc_fontawesome_icons', $icons, 60 * 60 * 24 );
+		set_transient( 'w2dc_vp_fontawesome_icons', $icons, 60 * 60 * 24 );
 	}
 
 	return $icons;
 }
 
-VP_W2DC_Security::instance()->whitelist_function('vp_w2dc_dep_boolean');
+W2DC_VP_Security::instance()->whitelist_function('w2dc_vp_dep_boolean');
 
-function vp_w2dc_dep_boolean($value)
+function w2dc_vp_dep_boolean($value)
 {
 	$args   = func_get_args();
 	$result = true;

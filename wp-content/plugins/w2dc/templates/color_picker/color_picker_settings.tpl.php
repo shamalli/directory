@@ -39,10 +39,10 @@
 				})(jQuery);
 			</script>
 
-			<input type="hidden" id="w2dc_color_scheme" name="w2dc_color_scheme" value="<?php echo $selected_scheme; ?>" />
+			<input type="hidden" id="w2dc_color_scheme" name="w2dc_color_scheme" value="<?php w2dc_esc_e($selected_scheme); ?>" />
 			<div class="w2dc-color-option color-option <?php if ($selected_scheme == 'default') echo 'selected'; ?>">
-				<input type="hidden" class="css_name" value="default" />
-				<div class="w2dc-color-scheme-name"><?php _e('Default', 'W2DC'); ?></div>
+				<input type="hidden" class="css_name" value="default" tabindex="-1" />
+				<div class="w2dc-color-scheme-name"><?php esc_html_e('Default', 'w2dc'); ?></div>
 				<table class="color-palette">
 					<tr>
 						<td style="background-color: #a5d5ff">&nbsp;</td>
@@ -53,8 +53,8 @@
 				</table>
 			</div>
 			<div class="w2dc-color-option color-option <?php if ($selected_scheme == 'orange') echo 'selected'; ?>">
-				<input type="hidden" class="css_name" value="orange" />
-				<div class="w2dc-color-scheme-name"><?php _e('Orange', 'W2DC'); ?></div>
+				<input type="hidden" class="css_name" value="orange" tabindex="-1" />
+				<div class="w2dc-color-scheme-name"><?php esc_html_e('Orange', 'w2dc'); ?></div>
 				<table class="color-palette">
 					<tr>
 						<td style="background-color: #ff8000">&nbsp;</td>
@@ -65,8 +65,8 @@
 				</table>
 			</div>
 			<div class="w2dc-color-option color-option <?php if ($selected_scheme == 'red') echo 'selected'; ?>">
-				<input type="hidden" class="css_name" value="red" />
-				<div class="w2dc-color-scheme-name"><?php _e('Red-Blue', 'W2DC'); ?></div>
+				<input type="hidden" class="css_name" value="red" tabindex="-1" />
+				<div class="w2dc-color-scheme-name"><?php esc_html_e('Red-Blue', 'w2dc'); ?></div>
 				<table class="color-palette">
 					<tr>
 						<td style="background-color: #ed4e6e">&nbsp;</td>
@@ -77,8 +77,8 @@
 				</table>
 			</div>
 			<div class="w2dc-color-option color-option <?php if ($selected_scheme == 'yellow') echo 'selected'; ?>">
-				<input type="hidden" class="css_name" value="yellow" />
-				<div class="w2dc-color-scheme-name"><?php _e('Yellow', 'W2DC'); ?></div>
+				<input type="hidden" class="css_name" value="yellow" tabindex="-1" />
+				<div class="w2dc-color-scheme-name"><?php esc_html_e('Yellow', 'w2dc'); ?></div>
 				<table class="color-palette">
 					<tr>
 						<td style="background-color: #ffff00">&nbsp;</td>
@@ -89,8 +89,8 @@
 				</table>
 			</div>
 			<div class="w2dc-color-option color-option <?php if ($selected_scheme == 'green') echo 'selected'; ?>">
-				<input type="hidden" class="css_name" value="green" />
-				<div class="w2dc-color-scheme-name"><?php _e('Green', 'W2DC'); ?></div>
+				<input type="hidden" class="css_name" value="green" tabindex="-1" />
+				<div class="w2dc-color-scheme-name"><?php esc_html_e('Green', 'w2dc'); ?></div>
 				<table class="color-palette">
 					<tr>
 						<td style="background-color: #7fff00">&nbsp;</td>
@@ -101,8 +101,8 @@
 				</table>
 			</div>
 			<div class="w2dc-color-option color-option <?php if ($selected_scheme == 'gray') echo 'selected'; ?>">
-				<input type="hidden" class="css_name" value="gray" />
-				<div class="w2dc-color-scheme-name"><?php _e('Gray', 'W2DC'); ?></div>
+				<input type="hidden" class="css_name" value="gray" tabindex="-1" />
+				<div class="w2dc-color-scheme-name"><?php esc_html_e('Gray', 'w2dc'); ?></div>
 				<table class="color-palette">
 					<tr>
 						<td style="background-color: #cfdbc5">&nbsp;</td>
@@ -113,8 +113,8 @@
 				</table>
 			</div>
 			<div class="w2dc-color-option color-option <?php if ($selected_scheme == 'blue') echo 'selected'; ?>">
-				<input type="hidden" class="css_name" value="blue" />
-				<div class="w2dc-color-scheme-name"><?php _e('Blue', 'W2DC'); ?></div>
+				<input type="hidden" class="css_name" value="blue" tabindex="-1" />
+				<div class="w2dc-color-scheme-name"><?php esc_html_e('Blue', 'w2dc'); ?></div>
 				<table class="color-palette">
 					<tr>
 						<td style="background-color: #499df5">&nbsp;</td>

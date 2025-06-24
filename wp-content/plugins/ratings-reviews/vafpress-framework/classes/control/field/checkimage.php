@@ -1,6 +1,6 @@
 <?php
 
-class VP_W2RR_Control_Field_CheckImage extends VP_W2RR_Control_FieldMultiImage implements VP_W2RR_MultiSelectable
+class W2RR_VP_Control_Field_CheckImage extends W2RR_VP_Control_FieldMultiImage implements W2RR_VP_MultiSelectable
 {
 
 	public function __construct()
@@ -24,7 +24,7 @@ class VP_W2RR_Control_Field_CheckImage extends VP_W2RR_Control_FieldMultiImage i
 	{
 		$this->_setup_data();
 		$this->add_data('is_compact', $is_compact);
-		return VP_W2RR_View::instance()->load('control/checkimage', $this->get_data());
+		return W2RR_VP_View::instance()->load('control/checkimage', $this->get_data());
 	}
 
 }

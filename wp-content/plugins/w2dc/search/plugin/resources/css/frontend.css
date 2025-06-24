@@ -836,7 +836,7 @@
   width: 26px;
   height: 26px;
   background: #FFFFFF;
-  font-family: "FontAwesome";
+  font-family: "FontAwesomeWCSEARCH";
   margin-right: 5px;
   border-width: 1px;
   border-style: solid;
@@ -936,6 +936,11 @@
 .wcsearch-search-term-button {
   margin: 15px 10px 15px 0 !important;
   position: relative;
+}
+
+/* first element in columns without top margin */
+.wcsearch-search-input-terms-column .wcsearch-search-term-button:first-child {
+  margin-top: 0 !important;
 }
 
 .wcsearch-search-term-button .wcsearch-model-options-link {
@@ -1242,6 +1247,8 @@ body > .wcsearch-dropdowns-menu {
   border: 1px solid #969696;
   border-top: 0;
   position: absolute;
+  padding: 0;
+  margin: 0;
 }
 
 .wcsearch-sticky-scroll-background {
@@ -1250,12 +1257,14 @@ body > .wcsearch-dropdowns-menu {
 
 .wcsearch-content .ui-selectmenu-menu .ui-icon,
 .wcsearch-dropdowns-menu.ui-autocomplete .ui-icon {
+  position: absolute;
   width: 32px;
   height: 32px;
   left: 9px;
 }
 
 .wcsearch-dropdowns-menu.ui-autocomplete .wcsearch-dropdowns-menu-search-listing .ui-icon {
+  position: absolute;
   width: 42px;
   height: 42px;
   left: 4px;
@@ -1263,6 +1272,7 @@ body > .wcsearch-dropdowns-menu {
 
 .wcsearch-dropdowns-menu.ui-menu .ui-menu-item {
   padding: 0;
+  margin: 0;
 }
 
 .wcsearch-dropdowns-menu.ui-menu .ui-menu-item-wrapper {
@@ -1491,7 +1501,6 @@ body > .wcsearch-dropdowns-menu {
   font-weight: bold;
   position: absolute;
   right: -120px;
-  /* left: -120px; */
   z-index: 102;
 }
 
@@ -1500,7 +1509,6 @@ body > .wcsearch-dropdowns-menu {
   content: '';
   position: absolute;
   left: -5px;
-  /* right: -5px; */
   top: 10px;
   width: 45px;
   height: 45px;
@@ -1581,12 +1589,10 @@ body > .wcsearch-dropdowns-menu {
 
 .wcsearch-jquery-ui-slider {
   overflow: visible !important;
-  /* margin-top: 5px; */
   padding-right: 11px;
 }
 
 .wcsearch-submit-button-hidden {
-  /* display: none !important; */
   position: absolute !important;
   left: -9999px !important;
 }
@@ -1605,9 +1611,6 @@ body > .wcsearch-dropdowns-menu {
   position: relative;
 }
 
-/* .wcsearch-single-slider-scale {
-	height: 100% !important
-} */
 .wcsearch-range-slider-scale label,
 .wcsearch-single-slider-scale label {
   position: absolute;
@@ -1623,7 +1626,6 @@ body > .wcsearch-dropdowns-menu {
 .wcsearch-range-slider-scale label > span,
 .wcsearch-single-slider-scale label > span {
   display: block;
-  /* font-size: 85%; */
   white-space: nowrap;
 }
 
@@ -1741,7 +1743,6 @@ body > .wcsearch-dropdowns-menu {
 }
 .wcsearch-search-column-1 .wcsearch-search-placeholder {
   margin: 40px 0;
-  /* min-height: 52px; */
 }
 
 .wcsearch-search-column-1 .wcsearch-search-placeholder:first-child {
@@ -1876,7 +1877,6 @@ body > .wcsearch-dropdowns-menu {
   display: block;
   color: #444444;
   position: relative;
-  /* min-height: 52px; */
 }
 
 .wcsearch-search-grid-borders .wcsearch-search-placeholder {
@@ -1919,7 +1919,7 @@ label.wcsearch-search-input-label {
 
 .wcsearch-search-input-closed .wcsearch-search-input-label:after,
 .wcsearch-search-input-opened .wcsearch-search-input-label:after {
-  font: normal normal normal 14px/1 FontAwesome;
+  font: normal normal normal 14px/1 FontAwesomeWCSEARCH;
   color: #777;
   font-weight: bold;
   float: right;
@@ -1945,9 +1945,7 @@ label.wcsearch-search-input-label {
 .wcsearch-search-onsale,
 .wcsearch-search-hours {
   display: block;
-  /* height: 48px; */
   color: #444444;
-  /* background-color: rgba(255, 255, 210, 0.2); */
   text-align: center;
   font-weight: bold;
 }
@@ -1962,17 +1960,12 @@ label.wcsearch-search-input-label {
   padding: 5px 0;
 }
 
-.wcsearch-search-input-more-filters {
-  /* position: absolute;
-  bottom: 0; */
-}
-
 .wcsearch-content .wcsearch-search-input-button,
 .wcsearch-content .wcsearch-search-input-button:hover {
   width: 100%;
   height: 48px;
   display: inline-block;
-  background-color: #2393ba;
+  background-color: #3071a9;
   border-color: #275379;
 }
 
@@ -2011,16 +2004,12 @@ label.wcsearch-search-input-label {
   display: none;
 }
 
-/* .wcsearch-search-placeholder-advanced-view {
-	display: none;
-} */
 .wcsearch-search-placeholder-advanced-view-closed {
   display: none;
 }
 
 .wcsearch-search-placeholder-dependency-view-closed {
   display: none;
-  /* visibility: hidden; */
 }
 
 .wcsearch-search-placeholder-dependency-view-closed.wcsearch-search-placeholder-dependency-view-shaded {

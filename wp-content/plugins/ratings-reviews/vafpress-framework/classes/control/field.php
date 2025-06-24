@@ -3,7 +3,7 @@
 /**
  * The smallest unit of an option, the field it self.
  */
-abstract class VP_W2RR_Control_Field implements iFactory
+abstract class W2RR_VP_Control_Field implements iFactory
 {
 
 	/**
@@ -118,14 +118,14 @@ abstract class VP_W2RR_Control_Field implements iFactory
 			'dependency'              => $this->get_dependency(),
 			'binding'                 => $this->get_binding(),
 			'label'                   => $this->get_label(),
-			'description'             => VP_W2RR_Util_Text::parse_md($this->get_description())
+			'description'             => W2RR_VP_Util_Text::parse_md($this->get_description())
 		));
 	}
 
 	/**
 	 * Basic self setup of the object
 	 * @param  Array $arr Array representation of the field
-	 * @return VP_W2RR_Control_Field Field object
+	 * @return W2RR_VP_Control_Field Field object
 	 */
 	protected function _basic_make($arr)
 	{

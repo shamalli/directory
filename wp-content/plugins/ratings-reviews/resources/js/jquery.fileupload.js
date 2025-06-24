@@ -215,7 +215,7 @@
                 if (data.autoUpload || (data.autoUpload !== false &&
                         $(this).fileupload('option', 'autoUpload'))) {
                     data.process().done(function () {
-                        data.submit();
+                        data.trigger('submit');
                     });
                 }
             },
@@ -420,7 +420,7 @@
             // Accesss to the native XHR object is required to add event listeners
             // for the upload progress event:
             if (xhr.upload) {
-                $(xhr.upload).bind('progress', function (e) {
+                $(xhr.upload).on('progress', function (e) {
                     var oe = e.originalEvent;
                     // Make sure the progress event properties get copied over:
                     e.lengthComputable = oe.lengthComputable;

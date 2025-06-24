@@ -1,15 +1,20 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <?php extract($head_info); ?>
 
-<div class="vp-field <?php echo $type; ?><?php echo !empty($container_extra_classes) ? (' ' . $container_extra_classes) : ''; ?>"
-	data-vp-type="<?php echo $type; ?>"
-	<?php echo VP_W2DC_Util_Text::print_if_exists(isset($binding) ? $binding : '', 'data-vp-bind="%s"'); ?>
-	<?php echo VP_W2DC_Util_Text::print_if_exists(isset($dependency) ? $dependency : '', 'data-vp-dependency="%s"'); ?>
-	id="<?php echo $name; ?>">
-	<div class="field" style="height: <?php echo $height; ?>;">
-		<div class="input" id="<?php echo $name . '_dom'; ?>">
-			<?php echo VP_W2DC_WP_Util::kses_html($value); ?>
+<div class="vp-field <?php w2dc_esc_e($type); ?><?php echo !empty($container_extra_classes) ? (' ' . $container_extra_classes) : ''; ?>"
+	data-vp-type="<?php w2dc_esc_e($type); ?>"
+	<?php echo W2DC_VP_Util_Text::print_if_exists(isset($binding) ? $binding : '', 'data-vp-bind="%s"'); ?>
+	<?php echo W2DC_VP_Util_Text::print_if_exists(isset($dependency) ? $dependency : '', 'data-vp-dependency="%s"'); ?>
+	id="<?php w2dc_esc_e($name); ?>">
+	<div class="field" style="height: <?php w2dc_esc_e($height); ?>;">
+		<div class="input" id="<?php w2dc_esc_e($name . '_dom'); ?>">
+			<?php echo W2DC_VP_WP_Util::kses_html($value); ?>
 		</div>
-		<textarea name="<?php echo $name; ?>" class="vp-hide"><?php echo VP_W2DC_WP_Util::kses_html($value); ?></textarea>
-		<div class="vp-js-bind-loader vp-field-loader vp-hide"><img src="<?php VP_W2DC_Util_Res::img_out('ajax-loader.gif', ''); ?>" /></div>
+		<textarea name="<?php w2dc_esc_e($name); ?>" class="vp-hide"><?php echo W2DC_VP_WP_Util::kses_html($value); ?></textarea>
+		<div class="vp-js-bind-loader vp-field-loader vp-hide"><img src="<?php W2DC_VP_Util_Res::img_out('ajax-loader.gif', ''); ?>" /></div>
 	</div>
 </div>

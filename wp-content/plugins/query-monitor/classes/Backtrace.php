@@ -26,6 +26,7 @@ class QM_Backtrace {
 		'Altis\Cloud\DB' => true,
 		'Yoast\WP\Lib\ORM' => true,
 		'Perflab_SQLite_DB' => true,
+		'WP_SQLite_DB' => true,
 	);
 
 	/**
@@ -46,9 +47,12 @@ class QM_Backtrace {
 		'trigger_error' => true,
 		'_doing_it_wrong' => true,
 		'_deprecated_argument' => true,
+		'_deprecated_constructor' => true,
 		'_deprecated_file' => true,
 		'_deprecated_function' => true,
+		'_deprecated_hook' => true,
 		'dbDelta' => true,
+		'maybe_create_table' => true,
 	);
 
 	/**
@@ -129,7 +133,7 @@ class QM_Backtrace {
 	 * @param array<string, mixed[]> $args
 	 * @param mixed[] $trace
 	 */
-	public function __construct( array $args = array(), array $trace = null ) {
+	public function __construct( array $args = array(), ?array $trace = null ) {
 		$this->trace = $trace ?? debug_backtrace( 0 );
 
 		$this->args = array_merge( array(
@@ -221,7 +225,10 @@ class QM_Backtrace {
 			}
 		}
 
-		foreach ( QM_Util::get_file_dirs() as $type => $dir ) {
+		$file_dirs = QM_Util::get_file_dirs();
+		$file_dirs['dropin'] = WP_CONTENT_DIR;
+
+		foreach ( $file_dirs as $type => $dir ) {
 			if ( isset( $components[ $type ] ) ) {
 				$this->component = $components[ $type ];
 				return $this->component;

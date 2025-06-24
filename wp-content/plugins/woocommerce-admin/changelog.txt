@@ -1,39 +1,220 @@
+== 3.3.2 04/05/2022 == 
+
+- Fix: Fix PHP warning when default param is missing in payments spec. #8519
+- Update: Update country support list for WooCommerce Payments Task. #8517
+
+== 3.3.1 03/31/2022 == 
+
+- Fix: WCPayments task is not visible after installing the plugin #8514
+
+== 3.3.0 03/29/2022 == 
+
+- Fix: Fix handling of paid themes in purchase task. #8493
+- Fix: Added random IDs to SVG checkmarks in stepper component #8222
+- Fix: Fix Google Listings plugin is always shown in free features despite already activated. #8330
+- Fix: Fix hidden notes in `admin/notes` endpoint when the user is not in the tasklist experiment. #8328
+- Fix: Fix missing product name in variation analytic page for the deleted products. #8255
+- Fix: Fix payments extensions displayed below the offline payments options. #8232
+- Fix: Fix setup wizard title and flash of content #8201
+- Fix: Fix too many pending run_remote_notifications actions. #8285
+- Fix: Fix view logic for Setup additional payment providers task. #8391
+- Fix: OBW: fix copy on Business Details when "WooCommerce Shipping" is not listed #8324
+- Fix: Only add product data on REST requests and task list #8235
+- Fix: Stop showing actioned inbox items #8394
+- Add: Add asynchronous plugin install and activation endpoints #8079
+- Update: Adjust time range and add an image for the Jetpack Backup note. #8293
+- Update: Implement MailChimp API request threshold for MailchimpScheduler. #8342
+- Update: Reintroduce CES on product add, product update, and order update. #8238
+- Update: Replace mysql image with mariadb #8220
+- Dev: Added a test for tracks event recording for PaymentGatewaySuggestions #8306
+- Dev: Add README to hook reference generation script #8004
+- Dev: Add reset WooCommerce functionality to E2E tests, so tests have a fresh state. #8219
+- Dev: Enabled optional typescript checking on ./client subfolder #8372
+- Dev: Fix formatting and add filter param for changelog types for the testing instructions script. #8256
+- Dev: Refactor MerchantEmailNotifications #8304
+- Dev: Remove preloaded countries from data endpoints and use data store instead. #8380
+- Dev: Remove unused pre loaded setting data displaying all the routes. #8379
+- Dev: Remove unused task styling classes #8234
+- Dev: Update dependencies to support react 17 and drop support for IE11. #8305
+- Dev: Update task list data structure to better handle new designs. #8332
+- Tweak: OBW: Override Country/Region label line-height style to avoid truncated descenders. #8186
+- Tweak: Show single success message for theme install and activation #8236
+- Tweak: Use WC_VERSION as cache buster for assets #8308
+- Performance: Avoid expensive get_notes() queries in CouponPageMoved admin_init actions by using new Notes::get_note_by_name() helper method. #8202
+- Enhancement: Add chart color filter for overriding default chart colors. #8258
+- Enhancement: Added Typescript type declarations to build for @woocommerce/components #8282
+- Enhancement: Increase color selection limit to ten and add additional colors. #8258
+- Enhancement: Made @woocommerce/components/Stepper a Typescript file #8286
+- Enhancement: Prompts a modal to save any unsaved changes when the users try to move to a different step #8278
+- Fix: Make sure the paid extension task is also shown for themes. #8412
+- Fix: Reintroduce emphasis on inbox note action button. #8411
+- Fix: Remove class ExtendedPayments. #8461
+
+== 3.2.0 02/22/2022 == 
+
+- Fix: Adjusted task list logic to fix conflict between current and experimental task list. #8321
+- Fix: changed email validation in Store Details onboarding task to more closely match PHP backend validation. #8197
+- Fix: Disallow whitespace as the platform name input. #8090
+- Fix: Ensure setup-wizard redirection on homescreen is stable. #8114
+- Fix: Fix category report query returns invalid net sales. #8153
+- Fix: Fix clicking the error message opens the dropdown. #8094
+- Fix: Fix country/region selection not preserved in store details task. #8228
+- Fix: Fixed email address not being optional in OBW #8263
+- Fix: Fix get_automated_tax_supported_countries doesn't include UK. #8180
+- Fix: Fix incorrect date options when the "Default Date Range" is set from Analytics settings. #8189
+- Fix: Fix incorrectly displayed note created date. #8179
+- Fix: Fix incorrect screen reader text generated for data points on charts table. #8181
+- Fix: Fix incorrect total count of downloads on the analytics download report. #8182
+- Fix: Fix misaligned status column on order report. #8121
+- Fix: Fix shipping rate error message overlaps with the 'Proceed' button. #8165
+- Fix: Fix Shipping task sometimes skipping the set shipping costs step. #8260
+- Fix: Fix Uncaught TypeError count(NULL) for php8+ in Marketing.php. #8213
+- Fix: Fix undefined derived_currency value for the track 'wcadmin_storeprofiler_store_details_continue'. #8193
+- Fix: Fix variations table product filter query. #8120
+- Fix: Make sure free subscriptions does not show when cbd industry is selected. #8323
+- Fix: Make sure WooCommerce Payments tasklist_payment_setup is triggered again. #8146
+- Fix: Preserve HTML markup in server-side error messages received from sample product import request. #8173
+- Fix: Remove border between email input and newsletter checkbox in OBW store details. #8148
+- Fix: Reset "install_timestamp" if it's not numeric to avoid TypeError. #8100
+- Fix: Truncate the long site title with an ellipses on the second line. #8112
+- Add: Add additional store profiler track for the business details tab. #8265
+- Add: Add countries data store #8119
+- Add: Add extra tracking for plugin installation performance during onboarding. #8042
+- Add: Adding tooltip to describe the lack of refund deductions from revenue summaries. #8187
+- Add: Add localized validation to store address #8123
+- Add: Add Magento migration note #8145
+- Add: Add REST endpoint to retrieve address locales #8116
+- Add: Add Spain to Square country suggestion list. #8210
+- Add: Add wc_version property to the store profile onboarding tracks for view and complete steps. #8290
+- Add: Change the reviews empty state panels logic #8147
+- Update: Add custom error for store details email and allow continue #8110
+- Update: Adding "allow-plugins" property for composer configuration. #8139
+- Dev: Remove wc-admin-settings package and rename getSetting to getAdminSetting. #8057
+- Tweak: Fix WCPay in core texts and promo slug #8296
+- Tweak: Grow and center buttons in all WooCommerce ellipsis menu popover containers. #8168
+- Tweak: Hide store address fields in regions that specify hidden #8172
+- Tweak: Make activity panel badges margin consistent. #8152
+- Tweak: Padding tweak for marketing tools plugin list headings. #8171
+- Performance: Speed up customer syncing action. #8021
+- Enhancement: Enhance report chart i18n support. #8129
+- Enhancement: Make ExPlat request URL args filterable. Added woocommerce_explat_request_args filter. #8231
+- Enhancement: Show MailPoet in Installed marketing extensions. #8091
+- Enhancement: Update headercard to use filter to add ExPlat parameter #8233
+
+== 3.1.0 01/25/2022 == 
+
+- Fix: Fix Onboarding flow where extensions might not be selected and installed. #7979
+- Fix: Fix pagination issue with Analytics Coupons page. #8001
+- Fix: Fix select-control component label/value alignment. #8045
+- Fix: Fix unexpected analytics report table filter results. #8072
+- Fix: Prevent coupon move notice for new installs. #7995
+- Fix: Remove calls to read_meta_data in the Note DataStore. #7988
+- Fix: Fix free extensions list isn't updated after store location or industry is changed. #8099
+- Fix: Fix misaligned "Rows per page" dropdown. #8113
+- Fix: Hide the extensions header when no available plugins in the category. #8089
+- Fix: Replace all docs.woocommerce.com links with woocommerce.com/document. #8105
+- Fix: Fixing marketing task not displaying on Atomic sites #8150
+- Fix: Fix setup wizard free features checkbox re-check itself. #8169
+- Add: Add featured pill for MailPoet and Google Listings in marketing task #8009
+- Add: Add inbox_action_click track when a note gets clicked #8086
+- Add: Activate promo note after WC Pay is activated. #8104
+- Add: Add payment remind me later note. #8085
+- Add: Add WC Pay welcome page #8083
+- Update: Allow content data note props to be passed from remote sources #8047
+- Update: Update @woocommerce/e2e-environment package to latest. #8000
+- Dev: Add payment gateway suggestion docs and example extensions #7966
+- Dev: Remove low performing inbox notes. #8054
+- Dev: Remove navigation feedback note. #8055
+- Dev: Fix task ID class check and add tests around tracking #8185
+- Tweak: OBW Update WC Pay label on recommended extensions list #8038
+- Enhancement: Add SlotFill areas to header #7805
+
+== 3.0.3 01/06/2022 == 
+
+- Fix: Fix blank payment gateway method in table when WooCommerce Payments is not supported. #8122
+- Add: Add woocommerce_allow_marketplace_suggestions filter to WooCommerce Payments payment method promotion. #8117
+
+== 3.0.2 01/05/2022 ==
+
+- Render the activity panel when the experimental tasklist is hidden. #8111
+
+== 3.0.1 12/30/2021 ==
+
+- Do not initialize WC Pay promotion if spec is empty. #8087
+
+== 3.0.0 12/28/2021 == 
+
+- Fix: Fix an issue with the code that makes use of an invalid parameter with a PHP function. The use of this invalid parameter causes PHP 8 to throw a Fatal Error. #7855
+- Fix: Fix TaskList UI experiment enablement logic. #7930
+- Fix: Navigation nudge note and navigation feedback notes will delete themselves if the navigation feature is not available. #7914
+- Fix: Replace old task list option calls with data store selectors. #7820
+- Fix: Self-delete NavigationFeedbackFollowUp note when navigation feature is not present. #7939
+- Fix: Fix PHP Warning on 'Add new product' page. #7989
+- Fix: Fix usage of Wordpress DatePicker component. #7982
+- Fix: Fix shipping task completion status. #8031
+- Add: Add option to dismiss promotional payment gateway. #7965
+- Add: OBW - Add number of employees field. #7963
+- Update: Ending wcpay promotion experiment and always displaying in payment methods table.
+- Update: Hide InboxPanel header when it is rendered in the sidebar. #7952
+- Update: Introduce a 320 character limit for inbox note contents. #7958
+- Update: Move payments task to extended task list when WC Pay task is shown. #7980
+- Update: Rename Inbox to Activity from the activity header. #7879
+- Update: Load both actioned and unactioned notes. #7983
+- Dev: Explicitly sets the Node version to 14 in .nvmrc to prevent incompatible versions of Node from being used with nvm. #7932
+- Dev: Remove unused npm package @woocommerce/settings. #7949
+- Dev: Update payment method recommendation to new woocommerce.com endpoint. #7913
+- Dev: Use abstraction to add and retrieve task data. #7918
+- Tweak: Added dismiss all button for inbox notes.
+- Tweak: Implement note read state. #7896
+- Tweak: Add inbox_panel_view tracks event. #8002
+- Enhancement: Add tests to Subscriptions inclusion. #7804
+
+== 2.9.3 12/15/2021 == 
+
+- Fix: Correctly match payment gateways by id #7994
+
+== 2.9.2 12/13/2021 == 
+
+- Fix: Fix shipping task completion status #8031
+
 == 2.9.1 12/07/2021 == 
+
 - Fix: Fix shipping task not offering step 3. #7985
 
 == 2.9.0 11/30/2021 == 
 
-- Dev: Remove task status endpoint #7841
-- Fix: Fix ordering and styling issue with WooCommerce Payments payment method promotion. #7943
-- Fix: Fix ExPlat PHP client #7926
-- Fix: Fix marketing extensions tracks #7908
-- Update: Increased number of possible items in Recommended Extensions list from 6 to 9 #7887
-- Update: Reverts addition of Marketplace and My Subscriptions pages to the Marketplace menu. #7902
-- Update: Add marketing extensions back to onboarding wizard #7831
-- Update: Add profile notes. #7861
-- Update: Change CTA text for personalize store task after completion #7852
-- Update: Refactor data source poller for re-usability. #7671
-- Update: Update WC Pay card to include in-person information #7830
-- Update: Updating navigation link colors #7833
-- Tweak: Use page title Extensions for Marketplace and My Subscriptions pages. #7901
-- Tweak: Remove the Spinner component to prevent undesired page flickering. #7886
-- Tweak: Add route and layout for unmatched path #7503
-- Tweak: Avoid caching extended info #7819
-- Tweak: Minor design update for Marketing task. #7732
 - Fix: Do not clear `current` class from the entire page when updating wp-admin's menu. #7773
 - Fix: Fix calendar not being dismissed when clicking outside. #7714
 - Fix: fixed warnings when using AdvancedFilters component. #7704
 - Fix: Fix Tasklist UI illustrations styling #7858
 - Fix: Revert experiment task titles back to original #7853
+- Fix: Fix ordering and styling issue with WooCommerce Payments payment method promotion. #7943
+- Fix: Fix ExPlat PHP client #7926
+- Fix: Fix marketing extensions tracks #7908
 - Fix: Ensure homescreen defaults to single column layout. #7969
-- Add: Add Avalara to tax task #7874
 - Add: Add 2col expirement. #7872
+- Add: Add Avalara to tax task #7874
 - Add: Added two column experimental task list #7669
 - Add: Add header cards for all tasks in Tasklist UI experiment #7838
 - Add: Add onboarding task docs #7762
+- Update: Add marketing extensions back to onboarding wizard #7831
+- Update: Add profile notes. #7861
+- Update: Change CTA text for personalize store task after completion #7852
+- Update: Increased number of possible items in Recommended Extensions list from 6 to 9 #7887
+- Update: Refactor data source poller for re-usability. #7671
+- Update: Reverts addition of Marketplace and My Subscriptions pages to the Marketplace menu. #7902
+- Update: Update the inbox panel with the new design #7864
+- Update: Update WC Pay card to include in-person information #7830
+- Update: Updating navigation link colors #7833
 - Dev: Add method to check for install status #7808
 - Dev: Refactor tax task into separate components
 - Dev: Update the task list to use the new task list REST API #7736
+- Dev: Remove task status endpoint #7841
+- Tweak: Add route and layout for unmatched path #7503
+- Tweak: Avoid caching extended info #7819
+- Tweak: Minor design update for Marketing task. #7732
+- Tweak: Remove the Spinner component to prevent undesired page flickering. #7886
+- Tweak: Use page title Extensions for Marketplace and My Subscriptions pages. #7901
 - Performance: Only load default tasks during REST requests #7904
 
 == 2.8.0 11/02/2021 == 
@@ -85,7 +266,7 @@
 - Update: Create task list REST API endpoint #7512
 - Update: Deleted OnboardingEmailMarketing note class #7595
 - Update: Removes the use of the depreciated woocommerce_shared_settings hook. #7480
-- Update: Removes non WooCommerce Admin specific settings from the `wc_admin` namespace in the `wc/data` settings store (ex
+- Update: Removes non WooCommerce Admin specific settings from the `wc_admin` namespace in the `wc/data` settings store (ex countries). #7480
 - Update: Updating eway logo in payment suggestions defaults #7562
 - Update: Update marketing task completion logic. #7586
 - Dev: Add email address field to OBW #7552
@@ -104,14 +285,9 @@
 
 - Fix: Use installable extensions for local state versus free extensions. #7585
 
-== 2.6.3 09/21/2021 == 
+== 2.6.3 09/21/2021 ==
 
-- Fix: Unsecured reports
-- Fix: Fatal error and unrelated results in analytics. #7682
-
-== 2.6.2 09/14/2021 == 
-
-- Fix: Update task-item logic to only display content when expanded is true. #7611
+== 2.6.2 09/14/2021 ==
 
 == 2.6.1 09/01/2021 == 
 

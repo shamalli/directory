@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+// @codingStandardsIgnoreFile
 
 class w2dc_directories {
 	public $directories_array = array();
@@ -26,9 +28,9 @@ class w2dc_directories {
 			$default_directory = new w2dc_directory;
 			$default_directory->buildDirectoryFromArray(array(
 					'id'		=> 1,
-					'name' 		=> __('Listings', 'W2DC'),
-					'single' 	=> __('listing', 'W2DC'),
-					'plural' 	=> __('listings', 'W2DC')
+					'name' 		=> esc_html__('Listings', 'w2dc'),
+					'single' 	=> esc_html__('listing', 'w2dc'),
+					'plural' 	=> esc_html__('listings', 'w2dc')
 			));
 					
 			$this->directories_array[1] = $default_directory;
@@ -292,7 +294,10 @@ class w2dc_directory {
 		$pattern = get_shortcode_regex(array(W2DC_MAIN_SHORTCODE));
 	
 		foreach ($w2dc_instance->index_pages_all AS $index_page) {
+			
 			$page_obj = get_post($index_page['id']);
+			$directory_of_page = $w2dc_instance->directories->getDirectoryOfPage($page_obj->ID);
+			
 			if (preg_match_all('/'.$pattern.'/s', $page_obj->post_content, $matches) && array_key_exists(2, $matches)) {
 				foreach ($matches[2] AS $key=>$shortcode) {
 					if ($shortcode == W2DC_MAIN_SHORTCODE) {
@@ -300,7 +305,7 @@ class w2dc_directory {
 							$w2dc_instance->current_directory &&
 							$this->id == $w2dc_instance->current_directory->id &&
 							$page_obj->ID == $w2dc_instance->index_page_id &&
-							($directory_of_page = $w2dc_instance->directories->getDirectoryOfPage($page_obj->ID)) && 
+							$directory_of_page && 
 							$this->id == $directory_of_page->id
 						) {
 							$current_page_url = get_permalink($page_obj);
@@ -318,6 +323,8 @@ class w2dc_directory {
 						}
 					}
 				}
+			} else {
+				$current_page_url = apply_filters("w2dc_get_directory_url_of_page", $current_page_url, $index_page['id'], $this->id);
 			}
 		}
 

@@ -155,6 +155,7 @@ class SC_Admin{
             'sc_version' => SC_VERSION,
             'ajax_url' => get_admin_url() . 'admin-ajax.php',
             'screen' => get_current_screen(),
+            'nonce' => wp_create_nonce( 'shortcoder_nonce' ),
             'text_editor_switch_notice' => __( 'Switching editor will refresh the page. Please save your changes before refreshing. Do you want to refresh the page now ?', 'shortcoder' )
         );
 
@@ -179,6 +180,12 @@ class SC_Admin{
 
     public static function admin_ajax(){
 
+        check_admin_referer( 'shortcoder_nonce' );
+
+        if( !current_user_can( 'edit_shortcoders' ) ){
+            wp_die();
+        }
+
         $g = self::clean_get();
         $do = $g[ 'do' ];
 
@@ -187,7 +194,7 @@ class SC_Admin{
             echo 'done';
         }
 
-        die( 0 );
+        wp_die();
 
     }
 

@@ -1,8 +1,3 @@
-.fl-builder-row-settings .fl-field-responsive-setting input[name="bg_position_custom_right"],
-.fl-builder-row-settings .fl-field-responsive-setting input[name="bg_position_custom_left"] {
-	display: none !important;
-}
-
 <?php if ( ! empty( $settings->text_color ) ) : // Text Color ?>
 .fl-node-<?php echo $id; ?> {
 	color: <?php echo FLBuilderColor::hex_or_rgb( $settings->text_color ); ?>;
@@ -64,7 +59,7 @@
 }
 <?php endif; ?>
 
-<?php if ( $row->settings->bg_video_audio ) : ?>
+<?php if ( 'yes' === $row->settings->bg_video_audio ) : ?>
 .fl-node-<?php echo $row->node; ?> .fl-bg-video-audio {
 	display: none;
 	cursor: pointer;
@@ -102,8 +97,27 @@ FLBuilderCSS::rule( array(
 FLBuilderCSS::rule( array(
 	'selector' => ".fl-node-$id > .fl-row-content-wrap",
 	'enabled'  => 'gradient' === $settings->bg_type,
+	'media'    => 'default',
 	'props'    => array(
 		'background-image' => FLBuilderColor::gradient( $settings->bg_gradient ),
+	),
+) );
+
+FLBuilderCSS::rule( array(
+	'selector' => ".fl-node-$id > .fl-row-content-wrap",
+	'enabled'  => 'gradient' === $settings->bg_type && ! empty( $settings->bg_gradient_medium ) && ! empty( array_filter( $settings->bg_gradient_medium['colors'] ) ),
+	'media'    => 'medium',
+	'props'    => array(
+		'background-image' => FLBuilderColor::gradient( $settings->bg_gradient_medium ),
+	),
+) );
+
+FLBuilderCSS::rule( array(
+	'selector' => ".fl-node-$id > .fl-row-content-wrap",
+	'enabled'  => 'gradient' === $settings->bg_type && ! empty( $settings->bg_gradient_responsive ) && ! empty( array_filter( $settings->bg_gradient_responsive['colors'] ) ),
+	'media'    => 'responsive',
+	'props'    => array(
+		'background-image' => FLBuilderColor::gradient( $settings->bg_gradient_responsive ),
 	),
 ) );
 
@@ -119,15 +133,15 @@ FLBuilderCSS::rule( array(
 
 // Background Photo - Desktop
 if ( 'photo' == $row->settings->bg_type ) :
-	$row_bg_image_lg = '';
+	$row_bg_image_xl = '';
 
 	if ( 'library' == $row->settings->bg_image_source ) {
-		$row_bg_image_lg = $row->settings->bg_image_src;
+		$row_bg_image_xl = $row->settings->bg_image_src;
 	} elseif ( 'url' == $row->settings->bg_image_source && ! empty( $row->settings->bg_image_url ) ) {
 		if ( 'array' == gettype( $row->settings->bg_image_url ) ) {
-			$row_bg_image_lg = $row->settings->bg_image_url['url'];
+			$row_bg_image_xl = do_shortcode( $row->settings->bg_image_url['url'] );
 		} else {
-			$row_bg_image_lg = (string) $row->settings->bg_image_url;
+			$row_bg_image_xl = (string) do_shortcode( $row->settings->bg_image_url );
 		}
 	}
 	if ( 'custom_pos' == $row->settings->bg_position ) {
@@ -145,11 +159,44 @@ if ( 'photo' == $row->settings->bg_type ) :
 		'selector' => ".fl-node-$id > .fl-row-content-wrap",
 		'enabled'  => 'photo' === $settings->bg_type,
 		'props'    => array(
-			'background-image'      => $row_bg_image_lg,
+			'background-image'      => $row_bg_image_xl,
 			'background-repeat'     => $settings->bg_repeat,
 			'background-position'   => $row_bg_position_lg,
 			'background-attachment' => $settings->bg_attachment,
 			'background-size'       => $settings->bg_size,
+		),
+	) );
+endif;
+
+// Background Photo - Large
+if ( 'photo' == $row->settings->bg_type ) :
+	$row_bg_image_lg = '';
+
+	if ( 'library' == $row->settings->bg_image_source ) {
+		$row_bg_image_lg = $row->settings->bg_image_large_src;
+	} elseif ( 'url' == $row->settings->bg_image_source && ! empty( $row->settings->bg_image_url ) ) {
+		$row_bg_image_lg = $row_bg_image_xl;
+	}
+	if ( 'custom_pos' == $row->settings->bg_position_large ) {
+		$row_bg_position_lg  = empty( $row->settings->bg_x_position_large ) ? '0' : $row->settings->bg_x_position_large;
+		$row_bg_position_lg .= $row->settings->bg_x_position_large_unit;
+		$row_bg_position_lg .= ' ';
+		$row_bg_position_lg .= empty( $row->settings->bg_y_position_large ) ? '0' : $row->settings->bg_y_position_large;
+		$row_bg_position_lg .= $row->settings->bg_y_position_large_unit;
+	} else {
+		$row_bg_position_lg = $row->settings->bg_position_large;
+	}
+
+	FLBuilderCSS::rule( array(
+		'media'    => 'large',
+		'selector' => ".fl-node-$id > .fl-row-content-wrap",
+		'enabled'  => 'photo' === $settings->bg_type,
+		'props'    => array(
+			'background-image'      => $row_bg_image_lg,
+			'background-repeat'     => $settings->bg_repeat_large,
+			'background-position'   => $row_bg_position_lg,
+			'background-attachment' => $settings->bg_attachment_large,
+			'background-size'       => $settings->bg_size_large,
 		),
 	) );
 endif;
@@ -161,7 +208,7 @@ if ( 'photo' == $row->settings->bg_type ) :
 	if ( 'library' == $row->settings->bg_image_source ) {
 		$row_bg_image_md = $row->settings->bg_image_medium_src;
 	} elseif ( 'url' == $row->settings->bg_image_source && ! empty( $row->settings->bg_image_url ) ) {
-		$row_bg_image_md = $row_bg_image_lg;
+		$row_bg_image_md = $row_bg_image_xl;
 	}
 	if ( 'custom_pos' == $row->settings->bg_position_medium ) {
 		$row_bg_position_md  = empty( $row->settings->bg_x_position_medium ) ? '0' : $row->settings->bg_x_position_medium;
@@ -195,7 +242,7 @@ if ( 'photo' == $row->settings->bg_type ) :
 	if ( 'library' == $row->settings->bg_image_source ) {
 		$row_bg_image_sm = $row->settings->bg_image_responsive_src;
 	} elseif ( 'url' == $row->settings->bg_image_source && ! empty( $row->settings->bg_image_url ) ) {
-		$row_bg_image_sm = $row_bg_image_lg;
+		$row_bg_image_sm = $row_bg_image_xl;
 	}
 
 	if ( 'custom_pos' == $row->settings->bg_position_responsive ) {
@@ -237,11 +284,50 @@ FLBuilderCSS::rule( array(
 
 FLBuilderCSS::rule( array(
 	'selector' => ".fl-builder-mobile .fl-node-$id > .fl-row-content-wrap",
-	'enabled'  => 'parallax' === $settings->bg_type,
+	'enabled'  => 'parallax' === $settings->bg_type && ! empty( $settings->bg_parallax_image_src ),
 	'props'    => array(
 		'background-image'      => $settings->bg_parallax_image_src,
 		'background-position'   => 'center center',
 		'background-attachment' => 'scroll',
+	),
+) );
+
+// Parallax BG Medium
+FLBuilderCSS::rule( array(
+	'media'    => 'medium',
+	'selector' => ".fl-builder-mobile .fl-node-$id > .fl-row-content-wrap",
+	'enabled'  => 'parallax' === $settings->bg_type && ! empty( $settings->bg_parallax_image_medium_src ),
+	'props'    => array(
+		'background-image'      => $settings->bg_parallax_image_medium_src,
+		'background-position'   => 'center center',
+		'background-attachment' => 'scroll',
+	),
+) );
+
+// Parallax BG Small
+FLBuilderCSS::rule( array(
+	'media'    => 'responsive',
+	'selector' => ".fl-builder-mobile .fl-node-$id > .fl-row-content-wrap",
+	'enabled'  => 'parallax' === $settings->bg_type && ! empty( $settings->bg_parallax_image_responsive_src ),
+	'props'    => array(
+		'background-image'      => $settings->bg_parallax_image_responsive_src,
+		'background-position'   => 'center center',
+		'background-attachment' => 'scroll',
+	),
+) );
+
+// Background Video Fallback
+$video_data = FLBuilderUtils::get_video_data( do_shortcode( $settings->bg_video_service_url ) );
+
+FLBuilderCSS::rule( array(
+	'selector' => ".fl-node-$id .fl-bg-video",
+	'enabled'  => 'video_service' === $settings->bg_video_source && isset( $video_data['type'] ) && 'vimeo' == $video_data['type'] && ! empty( $settings->bg_video_fallback_src ),
+	'props'    => array(
+		'background-image'      => $settings->bg_video_fallback_src,
+		'background-repeat'     => 'no-repeat',
+		'background-position'   => 'center center',
+		'background-attachment' => 'fixed',
+		'background-size'       => 'cover',
 	),
 ) );
 
@@ -256,9 +342,17 @@ FLBuilderCSS::border_field_rule( array(
 FLBuilderCSS::responsive_rule( array(
 	'settings'     => $settings,
 	'setting_name' => 'min_height',
-	'selector'     => ".fl-node-$id > .fl-row-content-wrap",
+	'selector'     => ".fl-node-$id.fl-row-custom-height > .fl-row-content-wrap",
 	'prop'         => 'min-height',
 	'enabled'      => 'custom' === $settings->full_height,
+) );
+
+// Aspect Ratio
+FLBuilderCSS::responsive_rule( array(
+	'settings'     => $settings,
+	'setting_name' => 'aspect_ratio',
+	'selector'     => ".fl-node-$id > .fl-row-content-wrap",
+	'prop'         => 'aspect-ratio',
 ) );
 
 // Row Resize - Max Width
@@ -288,3 +382,45 @@ if ( isset( $settings->max_content_width ) ) {
 }
 
 FLBuilderArt::render_shape_layers_css( $row );
+
+?>
+
+<?php if ( ! empty( $settings->full_height ) && ( 'full' == $settings->full_height || 'custom' == $row->settings->full_height ) ) : ?>
+/* Full Height Rows */
+.fl-node-<?php echo $id; ?>.fl-row-full-height > .fl-row-content-wrap,
+.fl-node-<?php echo $id; ?>.fl-row-custom-height > .fl-row-content-wrap {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+}
+.fl-node-<?php echo $id; ?>.fl-row-full-height > .fl-row-content-wrap {
+	min-height: 100vh;
+}
+.fl-node-<?php echo $id; ?>.fl-row-custom-height > .fl-row-content-wrap {
+	min-height: 0;
+}
+
+.fl-builder-edit .fl-node-<?php echo $id; ?>.fl-row-full-height > .fl-row-content-wrap {
+	min-height: calc( 100vh - 48px );
+}
+
+/* Full height iPad with portrait orientation. */
+@media all and (device-width: 768px) and (device-height: 1024px) and (orientation:portrait){
+	.fl-node-<?php echo $id; ?>.fl-row-full-height > .fl-row-content-wrap {
+		min-height: 1024px;
+	}
+}
+/* Full height iPad with landscape orientation. */
+@media all and (device-width: 1024px) and (device-height: 768px) and (orientation:landscape){
+	.fl-node-<?php echo $id; ?>.fl-row-full-height > .fl-row-content-wrap {
+		min-height: 768px;
+	}
+}
+/* Full height iPhone 5. You can also target devices with aspect ratio. */
+@media screen and (device-aspect-ratio: 40/71) {
+	.fl-node-<?php echo $id; ?>.fl-row-full-height > .fl-row-content-wrap {
+		min-height: 500px;
+	}
+}
+<?php endif; ?>

@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 add_filter("wcsearch_query_args_validate", "wcsearch_query_args_validate_onsale");
 function wcsearch_query_args_validate_onsale($args) {
 	if (!empty($args['onsale'])) {
@@ -23,7 +25,7 @@ function wcsearch_query_args_onsale($q_args, $args) {
 add_filter("wcsearch_visible_params", "wcsearch_visible_params_onsale", 10, 2);
 function wcsearch_visible_params_onsale($params, $query_array) {
 	if (!empty($query_array['onsale'])) {
-		$label = esc_html__("On sale", "WCSEARCH");
+		$label = esc_html__("On sale", "wcsearch");
 		
 		unset($query_array['onsale']);
 		$query_string = http_build_query($query_array);

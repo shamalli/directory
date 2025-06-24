@@ -1,6 +1,8 @@
 <?php
 
-class VP_W2RR_WP_User
+// @codingStandardsIgnoreFile
+
+class W2RR_VP_WP_User
 {
 
 	public static function get_users()

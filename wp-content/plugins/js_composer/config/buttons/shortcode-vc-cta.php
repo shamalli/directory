@@ -227,7 +227,7 @@ $params = array_merge( array(
 		'type' => 'el_id',
 		'heading' => esc_html__( 'Element ID', 'js_composer' ),
 		'param_name' => 'el_id',
-		'description' => sprintf( esc_html__( 'Enter element ID (Note: make sure it is unique and valid according to %sw3c specification%s).', 'js_composer' ), '<a href="https://www.w3schools.com/tags/att_global_id.asp" target="_blank">', '</a>' ),
+		'description' => sprintf( esc_html__( 'Enter element ID (Note: make sure it is unique and valid according to %1$sw3c specification%2$s).', 'js_composer' ), '<a href="https://www.w3schools.com/tags/att_global_id.asp" target="_blank">', '</a>' ),
 	),
 	array(
 		'type' => 'textfield',
@@ -240,6 +240,13 @@ $params = array_merge( array(
 		'heading' => esc_html__( 'CSS box', 'js_composer' ),
 		'param_name' => 'css',
 		'group' => esc_html__( 'Design Options', 'js_composer' ),
+		'value' => array(
+			'padding-top' => '28px',
+			'padding-right' => '28px',
+			'padding-bottom' => '28px',
+			'padding-left' => '28px',
+			'margin-bottom' => '35px',
+		),
 	),
 ) );
 
@@ -247,6 +254,7 @@ return array(
 	'name' => esc_html__( 'Call to Action', 'js_composer' ),
 	'base' => 'vc_cta',
 	'icon' => 'icon-wpb-call-to-action',
+	'element_default_class' => 'vc_do_cta3',
 	'category' => array( esc_html__( 'Content', 'js_composer' ) ),
 	'description' => esc_html__( 'Catch visitors attention with CTA block', 'js_composer' ),
 	'since' => '4.5',

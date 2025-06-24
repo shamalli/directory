@@ -1,124 +1,132 @@
 <?php
 
-global $w2dc_listings_sidebar_widget_params;
-$w2dc_listings_sidebar_widget_params = array(
-		array(
-				'type' => 'directories',
-				'param_name' => 'directories',
-				'heading' => __("Listings of these directories", "W2DC"),
-		),
-		array(
-				'type' => 'textfield',
-				'param_name' => 'perpage',
-				'value' => 10,
-				'heading' => __('Number of listing per page', 'W2DC'),
-				'description' => __('Number of listings to display per page. Set -1 to display all listings without paginator', 'W2DC'),
-				'dependency' => array('element' => 'onepage', 'value' => '0'),
-		),
-		array(
-				'type' => 'dropdown',
-				'param_name' => 'sticky_featured',
-				'value' => array(__('No', 'W2DC') => '0', __('Yes', 'W2DC') => '1'),
-				'heading' => __('Show only sticky or/and featured listings', 'W2DC'),
-				'description' => __('Whether to show only sticky or/and featured listings', 'W2DC'),
-		),
-		array(
-				'type' => 'ordering',
-				'param_name' => 'order_by',
-				'heading' => __('Order by', 'W2DC'),
-				'description' => __('Order listings by any of these parameter', 'W2DC'),
-		),
-		array(
-				'type' => 'dropdown',
-				'param_name' => 'order',
-				'value' => array(__('Ascending', 'W2DC') => 'ASC', __('Descending', 'W2DC') => 'DESC'),
-				'description' => __('Direction of sorting.', 'W2DC'),
-		),
-		array(
-				'type' => 'dropdown',
-				'param_name' => 'hide_content',
-				'value' => array(__('No', 'W2DC') => '0', __('Yes', 'W2DC') => '1'),
-				'heading' => __('Hide content fields data', 'W2DC'),
-				'std' => '1',
-		),
-		array(
-				'type' => 'textfield',
-				'param_name' => 'address',
-				'heading' => __('Address', 'W2DC'),
-				'description' => __('Display listings near this address, recommended to set default radius', 'W2DC'),
-		),
-		array(
-				'type' => 'textfield',
-				'param_name' => 'radius',
-				'heading' => __('Radius', 'W2DC'),
-				'description' => __('Display listings near provided address within this radius in miles or kilometers', 'W2DC'),
-		),
-		array(
-				'type' => 'textfield',
-				'param_name' => 'author',
-				'heading' => __('Author', 'W2DC'),
-				'description' => __('Enter exact ID of author or word "related" to get assigned listings of current author (works only on listing page or author page)', 'W2DC'),
-		),
-		array(
-				'type' => 'dropdown',
-				'param_name' => 'related_categories',
-				'value' => array(__('No', 'W2DC') => '0', __('Yes', 'W2DC') => '1'),
-				'heading' => __('Use related categories', 'W2DC'),
-				'description' => __('Parameter works only on listings and categories pages', 'W2DC'),
-		),
-		array(
-				'type' => 'categoriesfield',
-				'param_name' => 'categories',
-				//'value' => 0,
-				'heading' => __('Select certain categories', 'W2DC'),
-		),
-		array(
-				'type' => 'dropdown',
-				'param_name' => 'related_locations',
-				'value' => array(__('No', 'W2DC') => '0', __('Yes', 'W2DC') => '1'),
-				'heading' => __('Use related locations', 'W2DC'),
-				'description' => __('Parameter works only on listings and locations pages', 'W2DC'),
-		),
-		array(
-				'type' => 'locationsfield',
-				'param_name' => 'locations',
-				//'value' => 0,
-				'heading' => __('Select certain locations', 'W2DC'),
-		),
-		array(
-				'type' => 'dropdown',
-				'param_name' => 'related_tags',
-				'value' => array(__('No', 'W2DC') => '0', __('Yes', 'W2DC') => '1'),
-				'heading' => __('Use related tags', 'W2DC'),
-				'description' => __('Parameter works only on listings and tags pages', 'W2DC'),
-		),
-		array(
-				'type' => 'dropdown',
-				'param_name' => 'include_categories_children',
-				'value' => array(__('No', 'W2DC') => '0', __('Yes', 'W2DC') => '1'),
-				'heading' => __('Include children of selected categories and locations', 'W2DC'),
-				'description' => __('When enabled - any subcategories or sublocations will be included as well. Related categories and locations also affected.', 'W2DC'),
-		),
-		array(
-				'type' => 'levels',
-				'param_name' => 'levels',
-				'heading' => __('Listings levels', 'W2DC'),
-				'description' => __('Categories may be dependent from listings levels', 'W2DC'),
-		),
-		array(
-				'type' => 'textfield',
-				'param_name' => 'post__in',
-				'heading' => __('Exact listings', 'W2DC'),
-				'description' => __('Comma separated string of listings IDs. Possible to display exact listings.', 'W2DC'),
-		),
-		array(
-				'type' => 'checkbox',
-				'param_name' => 'visibility',
-				'heading' => __("Show only on directory pages", "W2DC"),
-				'value' => 0,
-				'description' => __("Otherwise it will load plugin's files on all pages", "W2DC"),
-		),
-);
+// @codingStandardsIgnoreFile
+
+add_action('init', function() {
+	global $w2dc_listings_sidebar_widget_params;
+	$w2dc_listings_sidebar_widget_params = array(
+			array(
+					'type' => 'directories',
+					'param_name' => 'directories',
+					'heading' => esc_html__("Listings of these directories", "w2dc"),
+			),
+			array(
+					'type' => 'textfield',
+					'param_name' => 'perpage',
+					'value' => 10,
+					'heading' => esc_html__('Number of listing per page', 'w2dc'),
+					'description' => esc_html__('Number of listings to display per page. Set -1 to display all listings without paginator', 'w2dc'),
+					'dependency' => array('element' => 'onepage', 'value' => '0'),
+			),
+			array(
+					'type' => 'dropdown',
+					'param_name' => 'sticky_featured',
+					'value' => array(esc_html__('No', 'w2dc') => '0', esc_html__('Yes', 'w2dc') => '1'),
+					'heading' => esc_html__('Show only sticky or/and featured listings', 'w2dc'),
+					'description' => esc_html__('Whether to show only sticky or/and featured listings', 'w2dc'),
+			),
+			array(
+					'type' => 'ordering',
+					'param_name' => 'order_by',
+					'heading' => esc_html__('Order by', 'w2dc'),
+					'description' => esc_html__('Order listings by any of these parameter', 'w2dc'),
+			),
+			array(
+					'type' => 'dropdown',
+					'param_name' => 'order',
+					'value' => array(esc_html__('Ascending', 'w2dc') => 'ASC', esc_html__('Descending', 'w2dc') => 'DESC'),
+					'description' => esc_html__('Direction of sorting.', 'w2dc'),
+			),
+			array(
+					'type' => 'dropdown',
+					'param_name' => 'hide_content',
+					'value' => array(esc_html__('No', 'w2dc') => '0', esc_html__('Yes', 'w2dc') => '1'),
+					'heading' => esc_html__('Hide content fields data', 'w2dc'),
+					'std' => '1',
+			),
+			array(
+					'type' => 'textfield',
+					'param_name' => 'address',
+					'heading' => esc_html__('Address', 'w2dc'),
+					'description' => esc_html__('Display listings near this address, recommended to set default radius', 'w2dc'),
+			),
+			array(
+					'type' => 'textfield',
+					'param_name' => 'radius',
+					'heading' => esc_html__('Radius', 'w2dc'),
+					'description' => esc_html__('Display listings near provided address within this radius in miles or kilometers', 'w2dc'),
+			),
+			array(
+					'type' => 'textfield',
+					'param_name' => 'author',
+					'heading' => esc_html__('Author', 'w2dc'),
+					'description' => esc_html__('Enter exact ID of author or word "related" to get assigned listings of current author (works only on listing page or author page)', 'w2dc'),
+			),
+			array(
+					'type' => 'dropdown',
+					'param_name' => 'related_categories',
+					'value' => array(esc_html__('No', 'w2dc') => '0', esc_html__('Yes', 'w2dc') => '1'),
+					'heading' => esc_html__('Use related categories', 'w2dc'),
+					'description' => esc_html__('Parameter works only on listings and categories pages', 'w2dc'),
+			),
+			array(
+					'type' => 'categoriesfield',
+					'param_name' => 'categories',
+					'heading' => esc_html__('Select certain categories', 'w2dc'),
+			),
+			array(
+					'type' => 'dropdown',
+					'param_name' => 'related_locations',
+					'value' => array(esc_html__('No', 'w2dc') => '0', esc_html__('Yes', 'w2dc') => '1'),
+					'heading' => esc_html__('Use related locations', 'w2dc'),
+					'description' => esc_html__('Parameter works only on listings and locations pages', 'w2dc'),
+			),
+			array(
+					'type' => 'locationsfield',
+					'param_name' => 'locations',
+					'heading' => esc_html__('Select certain locations', 'w2dc'),
+			),
+			array(
+					'type' => 'dropdown',
+					'param_name' => 'related_tags',
+					'value' => array(esc_html__('No', 'w2dc') => '0', esc_html__('Yes', 'w2dc') => '1'),
+					'heading' => esc_html__('Use related tags', 'w2dc'),
+					'description' => esc_html__('Parameter works only on listings and tags pages', 'w2dc'),
+			),
+			array(
+					'type' => 'dropdown',
+					'param_name' => 'include_categories_children',
+					'value' => array(esc_html__('No', 'w2dc') => '0', esc_html__('Yes', 'w2dc') => '1'),
+					'heading' => esc_html__('Include children of selected categories and locations', 'w2dc'),
+					'description' => esc_html__('When enabled - any subcategories or sublocations will be included as well. Related categories and locations also affected.', 'w2dc'),
+			),
+			array(
+					'type' => 'levels',
+					'param_name' => 'levels',
+					'heading' => esc_html__('Listings levels', 'w2dc'),
+					'description' => esc_html__('Categories may be dependent from listings levels', 'w2dc'),
+			),
+			array(
+					'type' => 'textfield',
+					'param_name' => 'post__in',
+					'heading' => esc_html__('Exact listings', 'w2dc'),
+					'description' => esc_html__('Comma separated string of listings IDs. Possible to display exact listings.', 'w2dc'),
+			),
+			array(
+					'type' => 'textfield',
+					'param_name' => 'start_listings',
+					'heading' => esc_html__('Start listings', 'w2dc'),
+					'description' => esc_html__('Comma separated string of listings IDs. Display these listings by default, then directory searches as usual.', 'w2dc'),
+			),
+			array(
+					'type' => 'checkbox',
+					'param_name' => 'visibility',
+					'heading' => esc_html__("Show only on directory pages", "w2dc"),
+					'value' => 0,
+					'description' => esc_html__("Otherwise it will load plugin's files on all pages", "w2dc"),
+			),
+	);
+}, 0);
 
 class w2dc_listings_sidebar_widget extends w2dc_widget {
 
@@ -127,7 +135,7 @@ class w2dc_listings_sidebar_widget extends w2dc_widget {
 
 		parent::__construct(
 				'w2dc_listings_widget', // name for backward compatibility
-				__('Directory - Sidebar listings', 'W2DC')
+				esc_html__('Directory widget - Sidebar listings', 'w2dc')
 		);
 
 		foreach ($w2dc_instance->content_fields->content_fields_array AS $filter_field) {

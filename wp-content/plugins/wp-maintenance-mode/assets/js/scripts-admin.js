@@ -387,7 +387,7 @@ jQuery( function( $ ) {
 		$( this ).addClass( 'is-busy' );
 		$( this ).trigger( 'blur' );
 
-		handleOptimole().then( function() {
+		handlePlugins().then( function() {
 			$.post( wpmmVars.ajaxURL, {
 				action: 'wpmm_skip_wizard',
 				_wpnonce: wpmmVars.wizardNonce,
@@ -519,7 +519,7 @@ jQuery( function( $ ) {
 	 */
 	function importTemplate( data, callback ) {
 		handleOtter()
-			.then( () => handleOptimole() )
+			.then( () => handlePlugins() )
 			.then( () => addToPage( data, callback ) )
 			.catch( ( error ) => {
 				// eslint-disable-next-line no-console
@@ -575,23 +575,28 @@ jQuery( function( $ ) {
 	}
 
 	/**
-	 * Install and activate Optimole if the checkbox is checked.
+	 * Install and activate recommended plugins if the checkboxes is checked.
 	 */
-	function handleOptimole() {
+	function handlePlugins() {
 		const optimoleCheckbox = $( '#wizard-optimole-checkbox' );
+		let promiseChain = Promise.resolve();
 
 		if ( optimoleCheckbox.length && optimoleCheckbox.is( ':checked' ) ) {
-			if ( ! wpmmVars.isOptimoleInstalled ) {
-				return installPlugin( 'optimole-wp' )
-					.then( () => {
+			promiseChain = promiseChain
+				.then(() => {
+					if ( ! wpmmVars.isOptimoleInstalled ) {
+						return installPlugin( 'optimole-wp' ).then( () => activatePlugin( 'optimole-wp' ) );
+					}
+
+					if ( ! wpmmVars.isOptimoleActive ) {
 						return activatePlugin( 'optimole-wp' );
-					} );
-			} else if ( ! wpmmVars.isOptimoleActive ) {
-				return activatePlugin( 'optimole-wp' );
-			}
+					}
+				});
 		}
 
-		return Promise.resolve();
+		return promiseChain.catch( ( error ) => {
+			console.error( 'Error in plugin installation or activation:', error );
+		});
 	}
 
 	/**

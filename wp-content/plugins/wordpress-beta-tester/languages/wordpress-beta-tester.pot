@@ -1,95 +1,46 @@
-# Copyright (C) 2023 WordPress Upgrade/Install Team
+# Copyright (C) 2025 WordPress Upgrade/Install Team
 # This file is distributed under the GPL v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: WordPress Beta Tester 3.5.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wordpress-beta-tester\n"
+"Project-Id-Version: WordPress Beta Tester 3.6.3\n"
+"Report-Msgid-Bugs-To: https://github.com/afragen/wordpress-beta-tester/issues\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-06-30T15:04:37+00:00\n"
+"POT-Creation-Date: 2025-03-25T18:19:14+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.8.1\n"
+"X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: wordpress-beta-tester\n"
 
 #. Plugin Name of the plugin
+#: wp-beta-tester.php
 msgid "WordPress Beta Tester"
 msgstr ""
 
 #. Plugin URI of the plugin
+#: wp-beta-tester.php
 msgid "https://wordpress.org/plugins/wordpress-beta-tester/"
 msgstr ""
 
 #. Description of the plugin
+#: wp-beta-tester.php
 msgid "Allows you to easily upgrade to Beta releases."
 msgstr ""
 
 #. Author of the plugin
+#: wp-beta-tester.php
 msgid "WordPress Upgrade/Install Team"
 msgstr ""
 
 #. Author URI of the plugin
+#: wp-beta-tester.php
 msgid "https://make.wordpress.org/core/components/upgrade-install/"
 msgstr ""
 
 #: src/WPBT/WPBT_Bootstrap.php:103
 msgid "Cannot run WordPress Beta Tester plugin in `wordpress-develop`"
-msgstr ""
-
-#: src/WPBT/WPBT_Bug_Report.php:122
-msgid "Could not determine"
-msgstr ""
-
-#: src/WPBT/WPBT_Bug_Report.php:123
-msgid "None activated"
-msgstr ""
-
-#: src/WPBT/WPBT_Bug_Report.php:364
-msgid "Mobile"
-msgstr ""
-
-#: src/WPBT/WPBT_Bug_Report.php:455
-#: src/WPBT/WPBT_Bug_Report.php:483
-#: src/WPBT/WPBT_Bug_Report.php:516
-msgid "Report a Bug"
-msgstr ""
-
-#: src/WPBT/WPBT_Bug_Report.php:463
-msgid "Discovered a bug? Report it now!"
-msgstr ""
-
-#: src/WPBT/WPBT_Bug_Report.php:489
-msgid "Trac"
-msgstr ""
-
-#: src/WPBT/WPBT_Bug_Report.php:496
-msgid "GitHub (Gutenberg)"
-msgstr ""
-
-#: src/WPBT/WPBT_Bug_Report.php:525
-msgid "This area provides bug report templates for pasting into Trac or GitHub."
-msgstr ""
-
-#: src/WPBT/WPBT_Bug_Report.php:526
-msgid "After pasting a template into Trac or GitHub, complete the <strong>Description</strong>, <strong>Steps to Reproduce</strong>, <strong>Expected Results</strong> and <strong>Actual Results</strong> sections."
-msgstr ""
-
-#: src/WPBT/WPBT_Bug_Report.php:545
-msgid "Search for an existing report"
-msgstr ""
-
-#: src/WPBT/WPBT_Bug_Report.php:546
-msgid "File a new report"
-msgstr ""
-
-#: src/WPBT/WPBT_Bug_Report.php:549
-msgid "Copy to clipboard"
-msgstr ""
-
-#: src/WPBT/WPBT_Bug_Report.php:551
-msgid "Copied!"
 msgstr ""
 
 #: src/WPBT/WPBT_Core.php:76
@@ -207,49 +158,56 @@ msgid "This is for the Release Candidate releases only of the selected channel."
 msgstr ""
 
 #. translators: %s: version number
-#: src/WPBT/WPBT_Core.php:378
+#: src/WPBT/WPBT_Core.php:387
 msgid "version %s"
 msgstr ""
 
-#: src/WPBT/WPBT_Core.php:384
+#: src/WPBT/WPBT_Core.php:393
 msgid "next development version"
 msgstr ""
 
 #. translators: %l: next version numbers
-#: src/WPBT/WPBT_Core.php:389
-msgid "version %l"
-msgstr ""
-
-#. translators: %l: next version numbers
-#: src/WPBT/WPBT_Core.php:389
-msgid "whichever is released first"
+#: src/WPBT/WPBT_Core.php:398
+msgid "version %l, whichever is released first"
 msgstr ""
 
 #. translators: Used to join items in a list with more than 2 items.
-#: src/WPBT/WPBT_Core.php:480
+#: src/WPBT/WPBT_Core.php:492
 msgid "%1$s, %2$s"
 msgstr ""
 
 #. translators: Used to join last two items in a list with more than 2 times.
-#: src/WPBT/WPBT_Core.php:482
+#: src/WPBT/WPBT_Core.php:494
 msgid "%1$s, or %2$s"
 msgstr ""
 
 #. translators: Used to join items in a list with only 2 items.
-#: src/WPBT/WPBT_Core.php:484
+#: src/WPBT/WPBT_Core.php:496
 msgid "%1$s or %2$s"
 msgstr ""
 
-#: src/WPBT/WPBT_Extras.php:74
+#: src/WPBT/WPBT_Extras.php:71
 msgid "Extra Settings"
 msgstr ""
 
-#: src/WPBT/WPBT_Extras.php:104
+#: src/WPBT/WPBT_Extras.php:101
 msgid "Skip successful autoupdate emails."
 msgstr ""
 
-#: src/WPBT/WPBT_Extras.php:105
+#: src/WPBT/WPBT_Extras.php:102
 msgid "Disable sending emails to the admin user for successful autoupdates. Only emails indicating failures of the autoupdate process are sent."
+msgstr ""
+
+#: src/WPBT/WPBT_Extras.php:114
+msgid "Delete auto-installed plugins."
+msgstr ""
+
+#: src/WPBT/WPBT_Extras.php:115
+msgid "Akismet is automatically installed with beta testing offers."
+msgstr ""
+
+#: src/WPBT/WPBT_Help.php:36
+msgid "For more information:"
 msgstr ""
 
 #: src/WPBT/WPBT_Help.php:37
@@ -285,68 +243,67 @@ msgstr ""
 msgid "A dashboard widget is displayed when the plugin is active. It will contain links to milestone commits and filing a bug report. It may contain links to Dev Notes, the Field Guide, and beta/RC release posts."
 msgstr ""
 
-#: src/WPBT/WPBT_Settings.php:82
-#: src/WPBT/WPBT_Settings.php:260
+#: src/WPBT/WPBT_Settings.php:89
+#: src/WPBT/WPBT_Settings.php:285
 msgid "Beta Testing WordPress"
 msgstr ""
 
-#: src/WPBT/WPBT_Settings.php:83
+#: src/WPBT/WPBT_Settings.php:90
 msgctxt "Menu item"
 msgid "Beta Testing"
 msgstr ""
 
-#: src/WPBT/WPBT_Settings.php:228
+#: src/WPBT/WPBT_Settings.php:109
+msgid "Settings"
+msgstr ""
+
+#: src/WPBT/WPBT_Settings.php:253
 msgid "Saved."
 msgstr ""
 
-#: src/WPBT/WPBT_Settings.php:229
+#: src/WPBT/WPBT_Settings.php:254
 msgid "Perhaps you should head on over and <a href=\"update-core.php\">upgrade now</a>."
 msgstr ""
 
-#: src/WPBT/WPBT_Settings.php:263
+#: src/WPBT/WPBT_Settings.php:288
 msgid "<strong>Please note:</strong> Once you have switched your website to one of these beta versions of software, it will not always be possible to downgrade as the database structure may be updated during the development of a major release."
 msgstr ""
 
 #. translators: %s: WordPress Beta Tester Settings page URL
-#: src/WPBT/WP_Beta_Tester.php:127
+#: src/WPBT/WP_Beta_Tester.php:126
 msgid "<strong>Warning:</strong> Your current <a href=\"%s\">WordPress Beta Tester plugin configuration</a> will downgrade your installation to a previous version - please reconfigure it."
 msgstr ""
 
-#: src/WPBT/WP_Beta_Tester.php:346
+#: src/WPBT/WP_Beta_Tester.php:298
 msgid "WordPress Beta Testing"
 msgstr ""
 
 #. translators: %s: WordPress version
-#: src/WPBT/WP_Beta_Tester.php:374
+#: src/WPBT/WP_Beta_Tester.php:318
 msgid "Please help test <strong>WordPress %s</strong>."
 msgstr ""
 
 #. translators: %1: link to closed and reopened trac tickets on current milestone
-#: src/WPBT/WP_Beta_Tester.php:380
+#: src/WPBT/WP_Beta_Tester.php:324
 msgid "Here are the <a href=\"%s\" target=\"_blank\">commits for the milestone</a>."
 msgstr ""
 
-#. translators: %s: link to Report a Bug tab
-#: src/WPBT/WP_Beta_Tester.php:383
-msgid "Found a bug? <a href=\"%s\">Report it</a>!"
-msgstr ""
-
 #. translators: %s: update version
-#: src/WPBT/WP_Beta_Tester.php:392
+#: src/WPBT/WP_Beta_Tester.php:333
 msgid "Currently your site is set to update to <strong>%s</strong>."
 msgstr ""
 
 #. translators: %s: WP Beta Tester settings URL
-#: src/WPBT/WP_Beta_Tester.php:398
+#: src/WPBT/WP_Beta_Tester.php:339
 msgid "Head over to your <a href=\"%s\">WordPress Beta Tester Settings</a> and make sure the <strong>beta/RC</strong> stream is selected."
 msgstr ""
 
 #. translators: %s: Milestone version
-#: src/WPBT/WP_Beta_Tester.php:454
+#: src/WPBT/WP_Beta_Tester.php:398
 msgid "WordPress %s Dev Notes"
 msgstr ""
 
 #. translators: %s: Milestone version
-#: src/WPBT/WP_Beta_Tester.php:464
+#: src/WPBT/WP_Beta_Tester.php:408
 msgid "WordPress %s Field Guide"
 msgstr ""

@@ -1,3 +1,8 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <div class="w2dc-content">
 <?php if (!$static_image): ?>
 	<script>
@@ -24,7 +29,7 @@
 		} ?>
 	</div>
 	<?php if (!empty($args['search_on_map_listings']) && $args['search_on_map_listings'] == 'bottom'): ?>
-	<div class="w2dc-map-listings-panel" id="w2dc-map-listings-panel-<?php echo $map_id; ?>">
+	<div class="w2dc-map-listings-panel" id="w2dc-map-listings-panel-<?php w2dc_esc_e($map_id); ?>">
 		<?php echo $listings_content; ?>
 	</div>
 	<?php endif; ?>

@@ -7,6 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
 use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
+
 /**
  * Elementor accordion widget.
  *
@@ -73,6 +74,24 @@ class Widget_Accordion extends Widget_Base {
 		return [ 'accordion', 'tabs', 'toggle' ];
 	}
 
+	protected function is_dynamic_content(): bool {
+		return false;
+	}
+
+	/**
+	 * Get style dependencies.
+	 *
+	 * Retrieve the list of style dependencies the widget requires.
+	 *
+	 * @since 3.24.0
+	 * @access public
+	 *
+	 * @return array Widget style dependencies.
+	 */
+	public function get_style_depends(): array {
+		return [ 'widget-accordion' ];
+	}
+
 	/**
 	 * Hide widget from panel.
 	 *
@@ -82,7 +101,11 @@ class Widget_Accordion extends Widget_Base {
 	 * @return bool
 	 */
 	public function show_in_panel(): bool {
-		return ! Plugin::$instance->experiments->is_feature_active( 'nested-accordion' );
+		return ! Plugin::$instance->experiments->is_feature_active( 'nested-elements', true );
+	}
+
+	public function has_widget_inner_wrapper(): bool {
+		return ! Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
 	}
 
 	/**
@@ -153,15 +176,6 @@ class Widget_Accordion extends Widget_Base {
 					],
 				],
 				'title_field' => '{{{ tab_title }}}',
-			]
-		);
-
-		$this->add_control(
-			'view',
-			[
-				'label' => esc_html__( 'View', 'elementor' ),
-				'type' => Controls_Manager::HIDDEN,
-				'default' => 'traditional',
 			]
 		);
 
@@ -448,10 +462,16 @@ class Widget_Accordion extends Widget_Base {
 			[
 				'label' => esc_html__( 'Spacing', 'elementor' ),
 				'type' => Controls_Manager::SLIDER,
+				'size_units' => [ 'px', 'em', 'rem', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 1,
+					],
+					'rem' => [
+						'max' => 1,
 					],
 				],
 				'selectors' => [

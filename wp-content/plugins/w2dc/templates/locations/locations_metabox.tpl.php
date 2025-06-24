@@ -5,8 +5,8 @@
 			'locations_number' => $listing->level->locations_number,
 			'is_map_markers' => ($listing->level->map && $listing->level->map_markers) ? 1 : 0,
 			'is_map' => ($listing->level->map) ? 1 : 0,
-			'images_dialog_title' => esc_js(__('Select map marker icon', 'W2DC')),
-			'icons_dialog_title' => esc_js(__('Select map marker icon', 'W2DC') . ((get_option('w2dc_map_markers_type') == 'icons') ? __(' (icon and color may depend on selected categories)', 'W2DC') : '')),
+			'images_dialog_title' => esc_js(esc_html__('Select map marker icon', 'w2dc')),
+			'icons_dialog_title' => esc_js(esc_html__('Select map marker icon', 'w2dc') . ((get_option('w2dc_map_markers_type') == 'icons') ? esc_html__(' (icon and color may depend on selected categories)', 'w2dc') : '')),
 		)
 	); ?>;
 </script>
@@ -25,9 +25,9 @@
 	<?php if ($listing->level->locations_number > 1): ?>
 	<div class="w2dc-row w2dc-form-group w2dc-location-input">
 		<div class="w2dc-col-md-12">	
-			<a class="add_address" style="display: none;" href="javascript: void(0);">
+			<a class="add_address w2dc-display-none" href="javascript: void(0);">
 				<span class="w2dc-fa w2dc-fa-plus"></span>
-				<?php _e('Add address', 'W2DC'); ?>
+				<?php esc_html_e('Add address', 'w2dc'); ?>
 			</a>
 		</div>
 	</div>
@@ -36,10 +36,10 @@
 	<?php if (get_option("w2dc_map_type") != "none" && $listing->level->map): ?>
 	<div class="w2dc-row w2dc-form-group w2dc-location-input">
 		<div class="w2dc-col-md-12">
-			<input type="hidden" name="map_zoom" class="w2dc-map-zoom" value="<?php echo $listing->map_zoom; ?>" />
-			<input type="button" class="w2dc-btn w2dc-btn-primary" onClick="w2dc_generateMap_backend(); return false;" value="<?php esc_attr_e('Generate on the map', 'W2DC'); ?>" />
+			<input type="hidden" name="map_zoom" class="w2dc-map-zoom" value="<?php w2dc_esc_e($listing->map_zoom); ?>" />
+			<input type="button" class="w2dc-btn w2dc-btn-primary" onClick="w2dc_generateMap_backend(); return false;" value="<?php esc_attr_e('Generate on the map', 'w2dc'); ?>" />
 		</div>
 	</div>
-	<div class="w2dc-map-canvas" id="w2dc-map-canvas" style="width: auto; height: 450px;"></div>
+	<div class="w2dc-map-canvas w2dc-width-auto w2dc-height-450" id="w2dc-map-canvas"></div>
 	<?php endif;?>
 </div>

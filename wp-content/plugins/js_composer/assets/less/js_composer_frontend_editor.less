@@ -12,12 +12,19 @@
 @import "popups/modal_add_element.less";
 // Edit form for shortcode
 @import "popups/panel_edit_form.less";
+// Seo popup
+@import "popups/panel_seo.less";
 // Template library
 @import "popups/panel_template_library";
 // For param group and other controls
 @import "lib/controls.less";
 @import "lib/backend_controls.less";
 @import "backend_shortcodes/empty_containers.less";
+
+@import "popups/panel_seo_social";
+
+// AI icon
+@import "modules/ui/vc_ui-icon-ai.less";
 // Templates
 @import "modules/ui/vc_ui-panel-templates.less";
 //Presets
@@ -29,13 +36,17 @@
 @import "shortcodes/vc_button3_editform.less";
 
 @import (reference)"shortcodes/vc_icon_element.less";
+@import "modules/vc_welcome.less";
 
 @import (reference)"shortcodes/vc_call_to_action3.less";
 @import "shortcodes/vc_cta3_editform.less";
 // Used in deprecated logic in edit form and add element windows
 @import "shortcodes/vc_message_box/vc_message_box_front.less";
 @import "backend_shortcodes/vc_charts.less";
+// Used to arrange our custom post layout logic
+@import "modules/vc_post_custom_layout.less";
 // edit form for vc_line_chart
+@import "modules/vc_info_tooltip.less";
 
 .vc_editor {
   // Fix admin page
@@ -72,7 +83,7 @@
     display: block;
     position: initial !important;
   }
-  #wpb_csseditor {
+  .custom_code {
     border: 1px solid #BABABA;
   }
 }

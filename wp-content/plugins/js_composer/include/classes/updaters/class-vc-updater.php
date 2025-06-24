@@ -17,14 +17,14 @@ class Vc_Updater {
 	/**
 	 * @var string
 	 */
-	protected $version_url = 'http://updates.wpbakery.com/';
+	protected $version_url = 'https://updates.wpbakery.com/';
 
 	/**
 	 * Proxy URL that returns real download link
 	 *
 	 * @var string
 	 */
-	protected $download_link_url = 'http://support.wpbakery.com/updates/download-link';
+	protected $download_link_url = 'https://support.wpbakery.com/updates/download-link';
 
 	/**
 	 * @var bool
@@ -142,7 +142,7 @@ class Vc_Updater {
 			}
 			$url = self::getUpdaterUrl();
 
-			return new WP_Error( 'no_credentials', sprintf( esc_html__( 'To receive automatic updates license activation is required. Please visit %sSettings%s to activate your WPBakery Page Builder.', 'js_composer' ), '<a href="' . esc_url( $url ) . '" target="_blank">', '</a>' ) . ' ' . sprintf( ' <a href="https://go.wpbakery.com/faq-update-in-theme" target="_blank">%s</a>', esc_html__( 'Got WPBakery Page Builder in theme?', 'js_composer' ) ) );
+			return new WP_Error( 'no_credentials', sprintf( esc_html__( 'To receive automatic updates license activation is required. Please visit %1$sSettings%2$s to activate your WPBakery Page Builder.', 'js_composer' ), '<a href="' . esc_url( $url ) . '" target="_blank">', '</a>' ) . ' ' . sprintf( ' <a href="https://go.wpbakery.com/faq-update-in-theme" target="_blank">%s</a>', esc_html__( 'Got WPBakery Page Builder in theme?', 'js_composer' ) ) );
 		}
 
 		$updater->strings['downloading_package_url'] = esc_html__( 'Getting download link...', 'js_composer' );
@@ -171,6 +171,7 @@ class Vc_Updater {
 		// WP will use same name for plugin directory as archive name, so we have to rename it
 		if ( basename( $downloaded_archive, '.zip' ) !== $plugin_directory_name ) {
 			$new_archive_name = dirname( $downloaded_archive ) . '/' . $plugin_directory_name . time() . '.zip';
+			// phpcs:ignore
 			if ( rename( $downloaded_archive, $new_archive_name ) ) {
 				$downloaded_archive = $new_archive_name;
 			}

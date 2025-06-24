@@ -70,7 +70,7 @@ function w2rr_add_elementor_widget_categories($elements_manager) {
 	$elements_manager->add_category(
 			'reviews-category',
 			array(
-				'title' => esc_html__('Reviews elements', 'W2RR'),
+				'title' => esc_html__('Reviews elements', 'w2rr'),
 				'icon' => 'eicon-code',
 			)
 	);
@@ -78,7 +78,7 @@ function w2rr_add_elementor_widget_categories($elements_manager) {
 	$elements_manager->add_category(
 			'post-reviews-category',
 			array(
-				'title' => esc_html__('Post reviews elements', 'W2RR'),
+				'title' => esc_html__('Post reviews elements', 'w2rr'),
 				'icon' => 'eicon-code',
 			)
 	);
@@ -86,7 +86,7 @@ function w2rr_add_elementor_widget_categories($elements_manager) {
 	$elements_manager->add_category(
 			'reviews-single-category',
 			array(
-				'title' => esc_html__('Review single page', 'W2RR'),
+				'title' => esc_html__('Review single page', 'w2rr'),
 				'icon' => 'eicon-code',
 			)
 	);
@@ -187,7 +187,7 @@ function w2rr_elementor_convert_params($params) {
 
 function w2rr_elementor_get_ordering() {
 	
-	$ordering = array(0 => esc_html__("- Default -", "W2RR"));
+	$ordering = array(0 => esc_html__("- Default -", "w2rr"));
 	
 	$_ordering = w2rr_reviewsOrderingItems();
 	
@@ -200,7 +200,7 @@ function w2rr_elementor_get_ordering() {
 
 function w2rr_elementor_get_taxes() {
 	
-	$taxes = array(0 => esc_html__("- No tax -", "W2RR"));
+	$taxes = array(0 => esc_html__("- No tax -", "w2rr"));
 	
 	$_taxes = get_taxonomies(array(), 'objects');
 	
@@ -213,7 +213,7 @@ function w2rr_elementor_get_taxes() {
 
 function w2rr_elementor_get_post_types() {
 	
-	$post_types = array(0 => esc_html__("- All -", "W2RR"));
+	$post_types = array(0 => esc_html__("- All -", "w2rr"));
 	
 	$_post_types = w2rr_getWorkingPostTypes();
 	

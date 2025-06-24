@@ -1,35 +1,37 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 // This library was taken from codeigniter framework v2.1.4
 add_action('init', 'w2dc_register_error_messages');
 function w2dc_register_error_messages() {
 	global $wp_error_messages;
 
 	$wp_error_messages = array(
-			'required'	=> __('The %s field is required.', 'W2DC'),
-			'isset' => __('The %s field must have a value.', 'W2DC'),
-			'valid_date' => __('The %s field must contain a valid date.', 'W2DC'),
-			'valid_email' => __('The %s field must contain a valid email address.', 'W2DC'),
-			'valid_emails' => __('The %s field must contain all valid email addresses.', 'W2DC'),
-			'valid_url' => __('The %s field must contain a valid URL.', 'W2DC'),
-			'valid_ip' => __('The %s field must contain a valid IP.', 'W2DC'),
-			'min_length' => __('The %s field must be at least %s characters in length.', 'W2DC'),
-			'max_length' => __('The %s field can not exceed %s characters in length.', 'W2DC'),
-			'exact_length' => __('The %s field must be exactly %s characters in length.', 'W2DC'),
-			'alpha' => __('The %s field may only contain alphabetical characters.', 'W2DC'),
-			'alpha_numeric' => __('The %s field may only contain alpha-numeric characters.', 'W2DC'),
-			'alpha_dash' => __('The %s field may only contain alpha-numeric characters, underscores, and dashes.', 'W2DC'),
-			'numeric' => __('The %s field must contain only numbers.', 'W2DC'),
-			'is_numeric' => __('The %s field must contain only numeric characters.', 'W2DC'),
-			'integer' => __('The %s field must contain an integer.', 'W2DC'),
-			'regex_match' => __('The %s field is not in the correct format.', 'W2DC'),
-			'matches' => __('The %s field does not match the %s field.', 'W2DC'),
-			'is_unique' => __('The %s field must contain a unique value.', 'W2DC'),
-			'is_natural' => __('The %s field must contain only positive numbers.', 'W2DC'),
-			'is_natural_no_zero' => __('The %s field must contain a number greater than zero.', 'W2DC'),
-			'decimal' => __('The %s field must contain a decimal number.', 'W2DC'),
-			'less_than' => __('The %s field must contain a number less than %s.', 'W2DC'),
-			'greater_than' => __('The %s field must contain a number greater than %s.', 'W2DC'),
+			'required'	=> esc_html__('The %s field is required.', 'w2dc'),
+			'isset' => esc_html__('The %s field must have a value.', 'w2dc'),
+			'valid_date' => esc_html__('The %s field must contain a valid date.', 'w2dc'),
+			'valid_email' => esc_html__('The %s field must contain a valid email address.', 'w2dc'),
+			'valid_emails' => esc_html__('The %s field must contain all valid email addresses.', 'w2dc'),
+			'valid_url' => esc_html__('The %s field must contain a valid URL.', 'w2dc'),
+			'valid_ip' => esc_html__('The %s field must contain a valid IP.', 'w2dc'),
+			'min_length' => esc_html__('The %s field must be at least %s characters in length.', 'w2dc'),
+			'max_length' => esc_html__('The %s field can not exceed %s characters in length.', 'w2dc'),
+			'exact_length' => esc_html__('The %s field must be exactly %s characters in length.', 'w2dc'),
+			'alpha' => esc_html__('The %s field may only contain alphabetical characters.', 'w2dc'),
+			'alpha_numeric' => esc_html__('The %s field may only contain alpha-numeric characters.', 'w2dc'),
+			'alpha_dash' => esc_html__('The %s field may only contain alpha-numeric characters, underscores, and dashes.', 'w2dc'),
+			'numeric' => esc_html__('The %s field must contain only numbers.', 'w2dc'),
+			'is_numeric' => esc_html__('The %s field must contain only numeric characters.', 'w2dc'),
+			'integer' => esc_html__('The %s field must contain an integer.', 'w2dc'),
+			'regex_match' => esc_html__('The %s field is not in the correct format.', 'w2dc'),
+			'matches' => esc_html__('The %s field does not match the %s field.', 'w2dc'),
+			'is_unique' => esc_html__('The %s field must contain a unique value.', 'w2dc'),
+			'is_natural' => esc_html__('The %s field must contain only positive numbers.', 'w2dc'),
+			'is_natural_no_zero' => esc_html__('The %s field must contain a number greater than zero.', 'w2dc'),
+			'decimal' => esc_html__('The %s field must contain a decimal number.', 'w2dc'),
+			'less_than' => esc_html__('The %s field must contain a number less than %s.', 'w2dc'),
+			'greater_than' => esc_html__('The %s field must contain a number greater than %s.', 'w2dc'),
 	);
 }
 
@@ -61,7 +63,6 @@ function w2dc_register_error_messages() {
 class w2dc_form_validation {
 
 	protected $_field_data			= array();
-	//protected $_config_rules		= array();
 	protected $_error_array			= array();
 	protected $_error_messages		= array();
 	protected $_error_prefix		= '<p>';
@@ -362,34 +363,14 @@ class w2dc_form_validation {
 		// If not, we look to see if they were assigned via a config file
 		if (count($this->_field_data) == 0)
 		{
-			// No validation rules?  We're done...
-			/* if (count($this->_config_rules) == 0)
-			{
-				return FALSE;
-			} */
-
-			// Is there a validation rule for the particular URI being accessed?
-			/* $uri = ($group == '') ? trim($this->CI->uri->ruri_string(), '/') : $group;
-
-			if ($uri != '' AND isset($this->_config_rules[$uri]))
-			{
-				$this->set_rules($this->_config_rules[$uri]);
-			}
-			else
-			{
-				$this->set_rules($this->_config_rules);
-			} */
 
 			// We're we able to set the rules correctly?
 			if (count($this->_field_data) == 0)
 			{
-				//log_message('debug', "Unable to find validation rules");
 				return FALSE;
 			}
 		}
 
-		// Load the language file containing error messages
-		//$this->CI->lang->load('w2dc_form_validation');
 
 		// Cycle through the rules for each field, match the
 		// corresponding $_POST item and test for errors
@@ -404,7 +385,7 @@ class w2dc_form_validation {
 			}
 			else
 			{
-				if (isset($_POST[$field])/*  AND $_POST[$field] != "" */)
+				if (isset($_POST[$field]))
 				{
 					$this->_field_data[$field]['postdata'] = $_POST[$field];
 				}
@@ -548,9 +529,6 @@ class w2dc_form_validation {
 			{
 				// we may insert ANY value in input keys - so we have to pass $key instead of $cycles
 				$this->_execute($row, $rules, $val, $key);
-				
-				//$this->_execute($row, $rules, $val, $cycles);
-				//$cycles++;
 			}
 
 			return;
@@ -586,10 +564,6 @@ class w2dc_form_validation {
 
 				if ( ! isset($this->_error_messages[$type]))
 				{
-					/* if (FALSE === ($line = $this->CI->lang->line($type)))
-					{
-						$line = 'The field was not set';
-					} */
 				}
 				else
 				{
@@ -661,35 +635,6 @@ class w2dc_form_validation {
 				$param	= $match[2];
 			}
 
-			// Call the function that corresponds to the rule
-			/* if ($callback === TRUE)
-			{
-				if ( ! method_exists($this->CI, $rule))
-				{
-					continue;
-				}
-
-				// Run the function and grab the result
-				$result = $this->CI->$rule($postdata, $param);
-
-				// Re-assign the result to the master data array
-				if ($_in_array == TRUE)
-				{
-					$this->_field_data[$row['field']]['postdata'][$cycles] = (is_bool($result)) ? $postdata : $result;
-				}
-				else
-				{
-					$this->_field_data[$row['field']]['postdata'] = (is_bool($result)) ? $postdata : $result;
-				}
-
-				// If the field isn't required and we just processed a callback we'll move on...
-				if ( ! in_array('required', $rules, TRUE) AND $result !== FALSE)
-				{
-					continue;
-				}
-			}
-			else
-			{ */
 				if ( ! method_exists($this, $rule))
 				{
 					// If our own wrapper function doesn't exist we see if a native PHP function does.
@@ -709,7 +654,6 @@ class w2dc_form_validation {
 					}
 					else
 					{
-						//log_message('debug', "Unable to find validation rule: ".$rule);
 					}
 
 					continue;
@@ -737,17 +681,13 @@ class w2dc_form_validation {
 						$this->_field_data[$row['field']]['postdata'] = (is_bool($result)) ? $postdata : $result;
 					}
 				}
-			//}
 
 			// Did the rule test negatively?  If so, grab the error.
 			if ($result === FALSE)
 			{
 				if ( ! isset($this->_error_messages[$rule]))
 				{
-					/* if (FALSE === ($line = $this->CI->lang->line($rule)))
-					{
-						$line = 'Unable to access an error message corresponding to your field name.';
-					} */
+
 				}
 				else
 				{
@@ -794,12 +734,6 @@ class w2dc_form_validation {
 		{
 			// Grab the variable
 			$line = substr($fieldname, 5);
-
-			// Were we able to translate the field name?  If not we use $line
-			/* if (FALSE === ($fieldname = $this->CI->lang->line($line)))
-			{
-				return $line;
-			} */
 		}
 
 		return $fieldname;
@@ -1058,24 +992,6 @@ class w2dc_form_validation {
 
 		return ($str !== $field) ? FALSE : TRUE;
 	}
-	
-	// --------------------------------------------------------------------
-
-	/**
-	 * Match one field to another
-	 *
-	 * @access	public
-	 * @param	string
-	 * @param	field
-	 * @return	bool
-	 */
-	/* public function is_unique($str, $field)
-	{
-		list($table, $field)=explode('.', $field);
-		$query = $this->CI->db->limit(1)->get_where($table, array($field => $str));
-		
-		return $query->num_rows() === 0;
-    } */
 
 	// --------------------------------------------------------------------
 
@@ -1175,11 +1091,6 @@ class w2dc_form_validation {
 	 */
 	public function valid_email($str)
 	{
-		/* if ($str != '') {
-			return ( ! preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $str)) ? FALSE : TRUE;
-		} else {
-			return true;
-		} */
 		return ($str == '' || (filter_var($str, FILTER_VALIDATE_EMAIL) !== FALSE));
 	}
 
@@ -1227,15 +1138,17 @@ class w2dc_form_validation {
 
 		if ($prepare_url) {
 			if (!preg_match("~^(?:f|ht)tps?://~i", $str)) {
-				$str = "http://" . $str;
+				$str = "https://" . $str;
 			}
 		}
 		
 		// encode non ascii chars before filter
 		// https://stackoverflow.com/a/43746090/1760050
 		$path = parse_url($str, PHP_URL_PATH);
-		$encoded_path = array_map('urlencode', explode('/', $path));
-		$str = str_replace($path, implode('/', $encoded_path), $str);
+		if ($path) {
+			$encoded_path = array_map('urlencode', explode('/', $path));
+			$str = str_replace($path, implode('/', $encoded_path), $str);
+		}
 		
 		return (filter_var($str, FILTER_VALIDATE_URL) !== FALSE);
 	}
@@ -1252,9 +1165,6 @@ class w2dc_form_validation {
 	 */
 	public function valid_ip($ip, $which = '')
 	{
-		//return $this->CI->input->valid_ip($ip, $which);
-		
-		
 		$which = strtolower($which);
 		
 		// First check if filter_var is available
@@ -1729,5 +1639,3 @@ class w2dc_form_validation {
 }
 // END Form Validation Class
 
-/* End of file w2dc_form_validation.php */
-/* Location: ./system/libraries/w2dc_form_validation.php */

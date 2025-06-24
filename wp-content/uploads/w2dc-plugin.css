@@ -122,7 +122,7 @@ div.w2dc-content .wpcf7-form .wpcf7-submit:hover {
 .w2dc-content .w2dc-map-info-window-title {
 	background-color: #428bca;
 }
-.w2dc-content .mapboxgl-popup-content {
+.w2dc-mapboxgl-popup-container {
 	width: 350px;
 }
 .w2dc-content .w2dc-category-label,
@@ -140,7 +140,7 @@ div.w2dc-content .w2dc-pagination > li.w2dc-active > span:focus {
 	border-color: #428bca;
 	color: #FFFFFF;
 }
-figure.w2dc-listing-logo figcaption {
+.w2dc-listing-logo-caption {
 	background-color: #428bca;
 }
 .w2dc-found-listings .w2dc-badge {
@@ -200,7 +200,7 @@ figure.w2dc-listing-logo figcaption {
 		margin-left: 20px;
 		margin-right: 0;
 	}
-	.w2dc-listings-block figure.w2dc-listing-logo .w2dc-listing-logo-img img {
+	.w2dc-listings-block .w2dc-listing-logo .w2dc-listing-logo-img img {
 		width: 290px;
 	}
 	.w2dc-listings-list-view .w2dc-listing-text-content-wrap {
@@ -213,7 +213,7 @@ figure.w2dc-listing-logo figcaption {
 			}
 }
 
-.w2dc-listings-grid figure.w2dc-listing-logo .w2dc-listing-logo-img-wrap:before {
+.w2dc-listings-grid .w2dc-listing-logo .w2dc-listing-logo-img-wrap:before {
 	padding-top: 56.25%;
 }
 
@@ -226,7 +226,7 @@ figure.w2dc-listing-logo figcaption {
 
 
 
-figure.w2dc-listing-logo .w2dc-listing-logo-img {
+.w2dc-listing-logo .w2dc-listing-logo-img {
 	background-size: cover;
 }
 

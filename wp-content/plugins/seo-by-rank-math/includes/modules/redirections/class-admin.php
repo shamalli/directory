@@ -12,16 +12,13 @@ namespace RankMath\Redirections;
 
 use RankMath\KB;
 use RankMath\Helper;
+use RankMath\Helpers\Arr;
+use RankMath\Helpers\Param;
 use RankMath\Module\Base;
 use RankMath\Traits\Ajax;
 use RankMath\Traits\Hooker;
 use RankMath\Admin\Admin_Helper;
-use MyThemeShop\Admin\Page;
-use MyThemeShop\Helpers\Arr;
-use MyThemeShop\Helpers\Str;
-use MyThemeShop\Helpers\Param;
-use MyThemeShop\Helpers\WordPress;
-use MyThemeShop\Helpers\Conditional;
+use RankMath\Admin\Page;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -31,6 +28,62 @@ defined( 'ABSPATH' ) || exit;
 class Admin extends Base {
 
 	use Ajax, Hooker;
+
+	/**
+	 * Module ID.
+	 *
+	 * @var string
+	 */
+	public $id = '';
+
+	/**
+	 * Module directory.
+	 *
+	 * @var string
+	 */
+	public $directory = '';
+
+	/**
+	 * List table object.
+	 *
+	 * @var object
+	 */
+	public $table;
+
+	/**
+	 * Screen options.
+	 *
+	 * @var array
+	 */
+	public $screen_options = [];
+
+	/**
+	 * Module page.
+	 *
+	 * @var object
+	 */
+	public $page;
+
+	/**
+	 * Admin object.
+	 *
+	 * @var Admin
+	 */
+	public $admin;
+
+	/**
+	 * Form object.
+	 *
+	 * @var Form
+	 */
+	public $form;
+
+	/**
+	 * Import/Export object.
+	 *
+	 * @var Import_Export
+	 */
+	public $import_export;
 
 	/**
 	 * The Constructor.
@@ -89,7 +142,7 @@ class Admin extends Base {
 	 * Hooks for ajax.
 	 */
 	private function ajax_hooks() {
-		if ( ! Conditional::is_ajax() ) {
+		if ( ! Helper::is_ajax() ) {
 			return;
 		}
 
@@ -171,7 +224,7 @@ class Admin extends Base {
 					'icon'  => 'rm-icon rm-icon-redirection',
 					'title' => esc_html__( 'Redirections', 'rank-math' ),
 					/* translators: Link to kb article */
-					'desc'  => sprintf( esc_html__( 'Easily create redirects without fiddling with tedious code. %s.', 'rank-math' ), '<a href="' . \RankMath\KB::get( 'redirections-settings' ) . '" target="_blank">' . esc_html__( 'Learn more', 'rank-math' ) . '</a>' ),
+					'desc'  => sprintf( esc_html__( 'Easily create redirects without fiddling with tedious code. %s.', 'rank-math' ), '<a href="' . KB::get( 'redirections-settings', 'Options Panel Redirections Tab' ) . '" target="_blank">' . esc_html__( 'Learn more', 'rank-math' ) . '</a>' ),
 					'file'  => $this->directory . '/views/options.php',
 				],
 			],
@@ -191,7 +244,7 @@ class Admin extends Base {
 			return;
 		}
 
-		$action = WordPress::get_request_action();
+		$action = Helper::get_request_action();
 		if ( false === $action || empty( $_REQUEST['redirection'] ) || 'edit' === $action ) {
 			return;
 		}
@@ -215,7 +268,7 @@ class Admin extends Base {
 	 * Handle AJAX request.
 	 */
 	public function handle_ajax() {
-		$action = WordPress::get_request_action();
+		$action = Helper::get_request_action();
 		if ( false === $action ) {
 			return;
 		}
@@ -283,7 +336,7 @@ class Admin extends Base {
 	 */
 	public function page_title_actions( $is_editing ) {
 		$actions = [
-			'add' => [
+			'add'           => [
 				'class' => 'page-title-action rank-math-add-new-redirection' . ( $is_editing ? '-refresh' : '' ),
 				'href'  => Helper::get_admin_url( 'redirections', 'new=1' ),
 				'label' => __( 'Add New', 'rank-math' ),
@@ -293,12 +346,12 @@ class Admin extends Base {
 				'href'  => Helper::get_admin_url( 'redirections', 'importexport=1' ),
 				'label' => __( 'Export Options', 'rank-math' ),
 			],
-			'learn_more' => [
+			'learn_more'    => [
 				'class' => 'page-title-action',
-				'href'  => KB::get( 'redirections' ),
+				'href'  => KB::get( 'redirections', 'SW Redirection Step' ),
 				'label' => __( 'Learn More', 'rank-math' ),
 			],
-			'settings' => [
+			'settings'      => [
 				'class' => 'page-title-action',
 				'href'  => Helper::get_admin_url( 'options-general#setting-panel-redirections' ),
 				'label' => __( 'Settings', 'rank-math' ),

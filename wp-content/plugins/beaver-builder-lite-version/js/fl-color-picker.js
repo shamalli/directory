@@ -80,7 +80,7 @@ var FLBuilderColorPicker;
 	 */
 	function createGradient( origin, stops ) {
 		origin 	= ( origin === 'top' ) ? 'top' : 'left';
-		stops 	= $.isArray( stops ) ? stops : Array.prototype.slice.call( arguments, 1 );
+		stops 	= Array.isArray( stops ) ? stops : Array.prototype.slice.call( arguments, 1 );
 
 		if ( gradientType === 'webkit' ) {
 			return legacyWebkitGradient( origin, stops );
@@ -102,7 +102,7 @@ var FLBuilderColorPicker;
 		var type, self, lastIndex, filter, startPosProp, endPosProp, dimensionProp, template, html;
 
 		origin = ( origin === 'top' ) ? 'top' : 'left';
-		stops  = $.isArray( stops ) ? stops : Array.prototype.slice.call( arguments, 1 );
+		stops  = Array.isArray( stops ) ? stops : Array.prototype.slice.call( arguments, 1 );
 		// 8 hex: AARRGGBB
 		// GradientType: 0 vertical, 1 horizontal
 		type 		  = ( origin === 'top' ) ? 0 : 1;
@@ -268,8 +268,8 @@ var FLBuilderColorPicker;
 	 */
 	flBuilderParseColorValue = function( val ) {
 		var value = val.replace(/\s+/g, ''),
-		    alpha = ( value.indexOf('rgba') !== -1 ) ? parseFloat( value.replace(/^.*,(.+)\)/, '$1') * 100 ) : 100,
-			rgba  = ( alpha < 100 ) ? true : false;
+			rgba  = ( value.indexOf('rgba') !== -1 ) ? true : false,
+		    alpha = rgba ? parseFloat( value.replace(/^.*,(.+)\)/, '$1') * 100 ) : 100;
 
 		return { value: value, alpha: alpha, rgba: rgba };
 	}
@@ -450,11 +450,11 @@ var FLBuilderColorPicker;
 		_init: function(){
 
 			var self  = this,
-				el    = $( self.options.elements );
+				el    = $( self.options.elements, window.parent.document );
 
 			// Just prep the color inputs and bail early if the color picker
 			// markup has already been initialized in the DOM.
-			if( $('html').hasClass( 'fl-color-picker-init' ) ){
+			if( $( 'html', window.parent.document ).hasClass( 'fl-color-picker-init' ) ){
 				this._prepareColorFields();
 				return;
 			}
@@ -470,7 +470,7 @@ var FLBuilderColorPicker;
 
 			// appends color picker markup to the body
 			// check if there's already a color picker instance
-			self.picker = $( this._html ).appendTo( 'body' );
+			self.picker = $( this._html ).appendTo( $( 'body', window.parent.document ) );
 
 			// Browsers / Versions
 			// Feature detection doesn't work for these, and $.browser is deprecated
@@ -509,9 +509,9 @@ var FLBuilderColorPicker;
 			// COLOR PRESETS UI -------------------------------------//
 
 			// cache reference to the picker wrapper
-			this._ui 	  = $( '.fl-color-picker-ui' );
-			this._iris 	  = $( '.iris-picker' );
-			this._wrapper = $( 'body' );
+			this._ui 	  = $( '.fl-color-picker-ui', window.parent.document );
+			this._iris 	  = $( '.iris-picker', window.parent.document );
+			this._wrapper = $( 'body', window.parent.document );
 
 			this._ui
 				.prepend( this._hexHtml )
@@ -542,7 +542,7 @@ var FLBuilderColorPicker;
 			this._buildAlphaUI();
 
 			// now we know that the picker is already added to the body
-			$('html').addClass( 'fl-color-picker-init' );
+			$( 'html', window.parent.document ).addClass( 'fl-color-picker-init' );
 
 		},
 
@@ -555,7 +555,7 @@ var FLBuilderColorPicker;
 			var self = this;
 
 			// append presets initial html and trigger that toggles the picker
-			$('.fl-color-picker-value').each( function(){
+			$( '.fl-color-picker-value', window.parent.document ).each( function(){
 
 				var $this 			= $( this ),
 					$colorValue 	= $this.val(),
@@ -726,6 +726,7 @@ var FLBuilderColorPicker;
 						at: 'left bottom',
 						of: $this,
 						collision: 'flip',
+						within: window.parent,
 						using: function( position, feedback ){
 							self._togglePicker( position );
 						}
@@ -749,10 +750,25 @@ var FLBuilderColorPicker;
 				} );
 
 			// logic to hide picker when the user clicks outside it
-			$( document ).on( 'mousedown', function( event ) {
+			$( window.parent.document ).add( document ).on( 'mousedown', function( event ) {
 				if ( 0 === $( event.target ).closest( '.fl-color-picker-ui' ).length ) {
-                    $( '.fl-color-picker-ui.fl-color-picker-active' ).removeClass( 'fl-color-picker-active' );
-                }
+					presets = self._ui.find( '.fl-color-picker-presets' );
+					presetsCloseLabel = presets.find( '.fl-color-picker-presets-close-label' );
+					presetsList = presets.find( '.fl-color-picker-presets-list' );
+
+					if ( presetsCloseLabel.hasClass( 'fl-color-picker-active' ) ) {
+						list = presetsList.find('li').find('span.fl-color-picker-preset-label');
+						if ( list.length > 0 ) {
+							presets = [];
+							$.each(list,function(i,v){
+								presets.push( $(v).text() );
+							})
+							$(FLBuilder.colorPicker).trigger( 'presetSorted', { presets: presets } );
+						}
+					}
+					$( '.fl-color-picker-ui.fl-color-picker-active', window.parent.document )
+						.removeClass( 'fl-color-picker-active' );
+				}
 			});
 
 		},
@@ -773,6 +789,7 @@ var FLBuilderColorPicker;
 				presetsCloseLabel = presets.find( '.fl-color-picker-presets-close-label' ),
 				presetsList 	  = presets.find( '.fl-color-picker-presets-list' );
 
+
 			// add preset
 			addPreset
 				.off( 'click' )
@@ -785,9 +802,22 @@ var FLBuilderColorPicker;
 				.css({ height: ( self.element.innerHeight() + self._iris.innerHeight() + 14 ) + 'px' })
 				.hide();
 
+			presetsList.sortable();
+
 			presets
 				.off( 'click' )
 				.on( 'click', '.fl-color-picker-presets-toggle', function(){
+
+					if ( presetsCloseLabel.hasClass( 'fl-color-picker-active' ) ) {
+						list = presetsList.find('li').find('span.fl-color-picker-preset-label');
+						if ( list.length > 0 ) {
+							presets = [];
+							$.each(list,function(i,v){
+								presets.push( $(v).text() );
+							})
+							$(FLBuilder.colorPicker).trigger( 'presetSorted', { presets: presets } );
+						}
+					}
 					presetsOpenLabel.toggleClass('fl-color-picker-active');
 					presetsCloseLabel.toggleClass('fl-color-picker-active');
 					presetsList.slideToggle( 500 );
@@ -835,7 +865,6 @@ var FLBuilderColorPicker;
 						.slideUp( function(){
 							$( this ).remove();
 						});
-
 				}
 
 				if( FLBuilderColorPresets.length < 1 ){
@@ -897,9 +926,9 @@ var FLBuilderColorPicker;
 				return false;
 			}
 
-			var e = document.getElementById( 'divValidColor' );
+			var e = window.parent.document.getElementById( 'divValidColor' );
 			if ( !e ) {
-				e = document.createElement( 'div' );
+				e = window.parent.document.createElement( 'div' );
 				e.id = 'divValidColor';
 			}
 			e.style.borderColor = '';
@@ -1071,7 +1100,7 @@ var FLBuilderColorPicker;
 				totalPadding = 20,
 				innerWidth = opts.border ? opts.width - totalPadding : opts.width,
 				controlsHeight;
-				//paletteCount = $.isArray( opts.palettes ) ? opts.palettes.length : self._palettes.length,
+				//paletteCount = Array.isArray( opts.palettes ) ? opts.palettes.length : self._palettes.length,
 				//paletteMargin, paletteWidth, paletteContainerWidth;
 
 			if ( reset ) {
@@ -1223,7 +1252,7 @@ var FLBuilderColorPicker;
 			}).on( 'mousedown mouseup', function( event ) {
 				var focusClass = 'ui-state-focus';
 				event.preventDefault();
-				if (event.type === 'mousedown' ) {
+				if ( event.type === 'mousedown' ) {
 					self.picker.find( '.' + focusClass ).removeClass( focusClass ).blur();
 					$(this).addClass( focusClass ).focus();
 				} else {

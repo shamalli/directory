@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 define('W2DC_FSUBMIT_PATH', plugin_dir_path(__FILE__));
 
 function w2dc_fsubmit_loadPaths() {
@@ -105,34 +107,34 @@ class w2dc_fsubmit_plugin {
 		global $sitepress; // adapted for WPML
 
 		$pages = get_pages();
-		$all_pages[] = array('value' => 0, 'label' => __('- Select page -', 'W2DC'));
+		$all_pages[] = array('value' => 0, 'label' => esc_html__('- Select page -', 'w2dc'));
 		foreach ($pages AS $page)
 			$all_pages[] = array('value' => $page->ID, 'label' => $page->post_title);
 		
 		$options['template']['menus']['general']['controls']['fsubmit'] = array(
 			'type' => 'section',
-			'title' => __('Frontend submission and dashboard', 'W2DC'),
+			'title' => esc_html__('Frontend submission and dashboard', 'w2dc'),
 			'fields' => array(
 				array(
 					'type' => 'radiobutton',
 					'name' => 'w2dc_fsubmit_login_mode',
-					'label' => __('Frontend submission login mode', 'W2DC'),
+					'label' => esc_html__('Frontend submission login mode', 'w2dc'),
 					'items' => array(
 						array(
 							'value' => 1,
-							'label' => __('login required', 'W2DC'),
+							'label' => esc_html__('login required', 'w2dc'),
 						),
 						array(
 							'value' => 2,
-							'label' => __('necessary to fill in user info form', 'W2DC'),
+							'label' => esc_html__('necessary to fill in user info form', 'w2dc'),
 						),
 						array(
 							'value' => 3,
-							'label' => __('not necessary to fill in user info form', 'W2DC'),
+							'label' => esc_html__('not necessary to fill in user info form', 'w2dc'),
 						),
 						array(
 							'value' => 4,
-							'label' => __('do not show show user info form', 'W2DC'),
+							'label' => esc_html__('do not show show user info form', 'w2dc'),
 						),
 					),
 					'default' => array(
@@ -142,54 +144,54 @@ class w2dc_fsubmit_plugin {
 				array(
 					'type' => 'toggle',
 					'name' => 'w2dc_fsubmit_moderation',
-					'label' => __('Enable pre-moderation of listings', 'W2DC'),
+					'label' => esc_html__('Enable pre-moderation of listings', 'w2dc'),
 					'default' => get_option('w2dc_fsubmit_moderation'),
-					'description' => __('Moderation will be required for all listings even after payment', 'W2DC'),
+					'description' => esc_html__('Moderation will be required for all listings even after payment', 'w2dc'),
 				),
 				array(
 					'type' => 'toggle',
 					'name' => 'w2dc_fsubmit_edit_moderation',
-					'label' => __('Enable moderation after a listing was modified', 'W2DC'),
+					'label' => esc_html__('Enable moderation after a listing was modified', 'w2dc'),
 					'default' => get_option('w2dc_fsubmit_edit_moderation'),
 				),
 				array(
 					'type' => 'toggle',
 					'name' => 'w2dc_hide_choose_level_page',
-					'label' => __('Hide choose level page', 'W2DC'),
+					'label' => esc_html__('Hide choose level page', 'w2dc'),
 					'default' => get_option('w2dc_hide_choose_level_page'),
-					'description' => __('When all levels are similar and all has packages of listings, user do not need to choose level to submit when he already has a package.', 'W2DC'),
+					'description' => esc_html__('When all levels are similar and all has packages of listings, user do not need to choose level to submit when he already has a package.', 'w2dc'),
 				),
 				array(
 					'type' => 'toggle',
 					'name' => 'w2dc_fsubmit_button',
-					'label' => __('Enable submit listing button', 'W2DC'),
+					'label' => esc_html__('Enable submit listing button', 'w2dc'),
 					'default' => get_option('w2dc_fsubmit_button'),
 				),
 				array(
 					'type' => 'toggle',
 					'name' => 'w2dc_hide_admin_bar',
-					'label' => __('Hide top admin bar at the frontend for regular users', 'W2DC'),
+					'label' => esc_html__('Hide top admin bar at the frontend for regular users', 'w2dc'),
 					'default' => get_option('w2dc_hide_admin_bar'),
 				),
 				array(
 					'type' => 'toggle',
 					'name' => 'w2dc_allow_edit_profile',
-					'label' => __('Allow users to manage own profile at the frontend dashboard', 'W2DC'),
+					'label' => esc_html__('Allow users to manage own profile at the frontend dashboard', 'w2dc'),
 					'default' => get_option('w2dc_allow_edit_profile'),
 				),
 				array(
 					'type' => 'select',
 					'name' => w2dc_get_wpml_dependent_option_name('w2dc_tospage'), // adapted for WPML
-					'label' => __('Require Terms of Services on submission page?', 'W2DC'),
-					'description' => __('If yes, create a WordPress page containing your TOS agreement and assign it using the dropdown above.', 'W2DC') . w2dc_get_wpml_dependent_option_description(),
+					'label' => esc_html__('Require Terms of Services on submission page?', 'w2dc'),
+					'description' => esc_html__('If yes, create a WordPress page containing your TOS agreement and assign it using the dropdown above.', 'w2dc') . w2dc_get_wpml_dependent_option_description(),
 					'items' => $all_pages,
 					'default' => (w2dc_get_wpml_dependent_option('w2dc_tospage') ? array(w2dc_get_wpml_dependent_option('w2dc_tospage')) : array(0)), // adapted for WPML
 				),
 				array(
 					'type' => 'select',
 					'name' => w2dc_get_wpml_dependent_option_name('w2dc_submit_login_page'), // adapted for WPML
-					'label' => __('Use custom login page for listings submission process', 'W2DC'),
-					'description' => __('You may use any 3rd party plugin to make custom login page and assign it with submission process using the dropdown above.', 'W2DC') . w2dc_get_wpml_dependent_option_description(),
+					'label' => esc_html__('Use custom login page for listings submission process', 'w2dc'),
+					'description' => esc_html__('You may use any 3rd party plugin to make custom login page and assign it with submission process using the dropdown above.', 'w2dc') . w2dc_get_wpml_dependent_option_description(),
 					'items' => $all_pages,
 					'default' => (w2dc_get_wpml_dependent_option('w2dc_submit_login_page') ? array(w2dc_get_wpml_dependent_option('w2dc_submit_login_page')) : array(0)), // adapted for WPML
 				),
@@ -197,35 +199,35 @@ class w2dc_fsubmit_plugin {
 		);
 		$options['template']['menus']['general']['controls']['claim'] = array(
 			'type' => 'section',
-			'title' => __('Claim functionality', 'W2DC'),
+			'title' => esc_html__('Claim functionality', 'w2dc'),
 			'fields' => array(
 				array(
 					'type' => 'toggle',
 					'name' => 'w2dc_claim_functionality',
-					'label' => __('Enable claim functionality', 'W2DC'),
+					'label' => esc_html__('Enable claim functionality', 'w2dc'),
 					'default' => get_option('w2dc_claim_functionality'),
-					'description' => __('Each listing will get new option "allow claim". Claim button appears on single listings pages only when user is not logged in as current listing owner and a page [webdirectory-dashboard] shortcode exists.', 'W2DC'),
+					'description' => esc_html__('Each listing will get new option "allow claim". Claim button appears on single listings pages only when user is not logged in as current listing owner and a page [webdirectory-dashboard] shortcode exists.', 'w2dc'),
 				),
 				array(
 					'type' => 'toggle',
 					'name' => 'w2dc_claim_approval',
-					'label' => __('Approval of claim required', 'W2DC'),
-					'description' => __('In other case claim will be processed immediately without any notifications', 'W2DC'),
+					'label' => esc_html__('Approval of claim required', 'w2dc'),
+					'description' => esc_html__('In other case claim will be processed immediately without any notifications', 'w2dc'),
 					'default' => get_option('w2dc_claim_approval'),
 				),
 				array(
 					'type' => 'radiobutton',
 					'name' => 'w2dc_after_claim',
-					'label' => __('What will be with listing status after successful approval?', 'W2DC'),
-					'description' => __('When set to expired - renewal may be payment option', 'W2DC'),
+					'label' => esc_html__('What will be with listing status after successful approval?', 'w2dc'),
+					'description' => esc_html__('When set to expired - renewal may be payment option', 'w2dc'),
 					'items' => array(
 						array(
 							'value' => 'active',
-							'label' =>__('just approval', 'W2DC'),
+							'label' =>esc_html__('just approval', 'w2dc'),
 						),
 						array(
 							'value' => 'expired',
-							'label' =>__('expired status', 'W2DC'),
+							'label' =>esc_html__('expired status', 'w2dc'),
 						),
 					),
 					'default' => array(
@@ -235,13 +237,13 @@ class w2dc_fsubmit_plugin {
 				array(
 					'type' => 'toggle',
 					'name' => 'w2dc_hide_claim_contact_form',
-					'label' => __('Hide contact form on claimable listings', 'W2DC'),
+					'label' => esc_html__('Hide contact form on claimable listings', 'w2dc'),
 					'default' => get_option('w2dc_hide_claim_contact_form'),
 				),
 				array(
 					'type' => 'toggle',
 					'name' => 'w2dc_hide_claim_metabox',
-					'label' => __('Hide claim metabox at the frontend dashboard', 'W2DC'),
+					'label' => esc_html__('Hide claim metabox at the frontend dashboard', 'w2dc'),
 					'default' => get_option('w2dc_hide_claim_metabox'),
 				),
 			),
@@ -253,7 +255,7 @@ class w2dc_fsubmit_plugin {
 			$options['template']['menus']['advanced']['controls']['wpml']['fields'][] = array(
 				'type' => 'toggle',
 				'name' => 'w2dc_enable_frontend_translations',
-				'label' => __('Enable frontend translations management', 'W2DC'),
+				'label' => esc_html__('Enable frontend translations management', 'w2dc'),
 				'default' => get_option('w2dc_enable_frontend_translations'),
 			);
 		}
@@ -261,55 +263,55 @@ class w2dc_fsubmit_plugin {
 		$options['template']['menus']['notifications']['controls']['notifications']['fields'][] = array(
 			'type' => 'textarea',
 			'name' => 'w2dc_newuser_notification',
-			'label' => __('Registration of new user notification', 'W2DC'),
+			'label' => esc_html__('Registration of new user notification', 'w2dc'),
 			'default' => get_option('w2dc_newuser_notification'),
-			'description' => __('Tags allowed: ', 'W2DC') . '[author], [listing], [login], [password]',
+			'description' => esc_html__('Tags allowed: ', 'w2dc') . '[author], [listing], [login], [password]',
 		);
 
 		$options['template']['menus']['notifications']['controls']['notifications']['fields'][] = array(
 			'type' => 'textarea',
 			'name' => 'w2dc_newlisting_admin_notification',
-			'label' => __('Notification to admin about new listing creation', 'W2DC'),
+			'label' => esc_html__('Notification to admin about new listing creation', 'w2dc'),
 			'default' => get_option('w2dc_newlisting_admin_notification'),
-			'description' => __('Tags allowed: ', 'W2DC') . '[user], [listing], [link]',
+			'description' => esc_html__('Tags allowed: ', 'w2dc') . '[user], [listing], [link]',
 		);
 
 		$options['template']['menus']['notifications']['controls']['notifications']['fields'][] = array(
 			'type' => 'textarea',
 			'name' => 'w2dc_editlisting_admin_notification',
-			'label' => __('Notification to admin about listing modification and pending status', 'W2DC'),
+			'label' => esc_html__('Notification to admin about listing modification and pending status', 'w2dc'),
 			'default' => get_option('w2dc_editlisting_admin_notification'),
-			'description' => __('Tags allowed: ', 'W2DC') . '[user], [listing], [link]',
+			'description' => esc_html__('Tags allowed: ', 'w2dc') . '[user], [listing], [link]',
 		);
 
 		$options['template']['menus']['notifications']['controls']['notifications']['fields'][] = array(
 			'type' => 'textarea',
 			'name' => 'w2dc_approval_notification',
-			'label' => __('Notification to author about successful listing approval', 'W2DC'),
+			'label' => esc_html__('Notification to author about successful listing approval', 'w2dc'),
 			'default' => get_option('w2dc_approval_notification'),
-			'description' => __('Tags allowed: ', 'W2DC') . '[author], [listing], [link]',
+			'description' => esc_html__('Tags allowed: ', 'w2dc') . '[author], [listing], [link]',
 		);
 
 		$options['template']['menus']['notifications']['controls']['notifications']['fields'][] = array(
 			'type' => 'textarea',
 			'name' => 'w2dc_claim_notification',
-			'label' => __('Notification of claim to current listing owner', 'W2DC'),
+			'label' => esc_html__('Notification of claim to current listing owner', 'w2dc'),
 			'default' => get_option('w2dc_claim_notification'),
-			'description' => __('Tags allowed: ', 'W2DC') . '[author], [listing], [claimer], [link], [message]',
+			'description' => esc_html__('Tags allowed: ', 'w2dc') . '[author], [listing], [claimer], [link], [message]',
 		);
 		$options['template']['menus']['notifications']['controls']['notifications']['fields'][] = array(
 			'type' => 'textarea',
 			'name' => 'w2dc_claim_approval_notification',
-			'label' => __('Notification of successful approval of claim', 'W2DC'),
+			'label' => esc_html__('Notification of successful approval of claim', 'w2dc'),
 			'default' => get_option('w2dc_claim_approval_notification'),
-			'description' => __('Tags allowed: ', 'W2DC') . '[claimer], [listing], [link]',
+			'description' => esc_html__('Tags allowed: ', 'w2dc') . '[claimer], [listing], [link]',
 		);
 		$options['template']['menus']['notifications']['controls']['notifications']['fields'][] = array(
 			'type' => 'textarea',
 			'name' => 'w2dc_claim_decline_notification',
-			'label' => __('Notification of claim decline', 'W2DC'),
+			'label' => esc_html__('Notification of claim decline', 'w2dc'),
 			'default' => get_option('w2dc_claim_decline_notification'),
-			'description' => __('Tags allowed: ', 'W2DC') . '[claimer], [listing]',
+			'description' => esc_html__('Tags allowed: ', 'w2dc') . '[claimer], [listing]',
 		);
 		
 		return $options;
@@ -374,7 +376,7 @@ class w2dc_fsubmit_plugin {
 
 		if (get_option('w2dc_fsubmit_button') && empty($w2dc_instance->submit_pages_all) && is_admin()) {
 			
-			$title = esc_html__("Submit new listing", "W2DC");
+			$title = esc_html__("Submit new listing", "w2dc");
 			$content = '['.W2DC_FSUBMIT_SHORTCODE.']';
 			$post_id = wp_insert_post(array(
 					'post_type' => 'page',
@@ -431,7 +433,7 @@ class w2dc_fsubmit_plugin {
 					
 				$href = apply_filters('w2dc_submit_button_href', $href, $directory, $frontpanel_buttons);
 					
-				echo '<a class="w2dc-submit-listing-link w2dc-btn w2dc-btn-primary" href="' . $href . '" rel="nofollow" ' . $frontpanel_buttons->tooltipMeta(sprintf(__('Submit new %s', 'W2DC'), $directory->single), true) . '><span class="w2dc-glyphicon w2dc-glyphicon-plus"></span> ' . ((!$frontpanel_buttons->hide_button_text) ? sprintf(__('Submit new %s', 'W2DC'), $directory->single) : "") . '</a> ';
+				echo '<a class="w2dc-submit-listing-link w2dc-btn w2dc-btn-primary" href="' . $href . '" rel="nofollow" ' . $frontpanel_buttons->tooltipMeta(sprintf(esc_html__('Submit new %s', 'w2dc'), $directory->single), true) . '><span class="w2dc-glyphicon w2dc-glyphicon-plus"></span> ' . ((!$frontpanel_buttons->hide_button_text) ? sprintf(esc_html__('Submit new %s', 'w2dc'), $directory->single) : "") . '</a> ';
 			}
 		}
 	}
@@ -446,7 +448,7 @@ class w2dc_fsubmit_plugin {
 					
 					$href = apply_filters('w2dc_claim_button_href', $href, $frontpanel_buttons);
 					
-					echo '<a class="w2dc-claim-listing-link w2dc-btn w2dc-btn-primary" href="' . $href . '" rel="nofollow" ' . $frontpanel_buttons->tooltipMeta(__('Is this your ad?', 'W2DC'), true) . '><span class="w2dc-glyphicon w2dc-glyphicon-flag"></span> ' . ((!$frontpanel_buttons->hide_button_text) ? __('Is this your ad?', 'W2DC') : "") . '</a> ';
+					echo '<a class="w2dc-claim-listing-link w2dc-btn w2dc-btn-primary" href="' . $href . '" rel="nofollow" ' . $frontpanel_buttons->tooltipMeta(esc_html__('Is this your ad?', 'w2dc'), true) . '><span class="w2dc-glyphicon w2dc-glyphicon-flag"></span> ' . ((!$frontpanel_buttons->hide_button_text) ? esc_html__('Is this your ad?', 'w2dc') : "") . '</a> ';
 				}
 			}
 		}
@@ -454,7 +456,7 @@ class w2dc_fsubmit_plugin {
 
 	public function add_logout_button($frontpanel_buttons) {
 		if ($frontpanel_buttons->isButton('logout')) {
-			echo '<a class="w2dc-logout-link w2dc-btn w2dc-btn-primary" href="' . wp_logout_url(w2dc_directoryUrl()) . '" rel="nofollow" ' . $frontpanel_buttons->tooltipMeta(__('Log out', 'W2DC'), true) . '><span class="w2dc-glyphicon w2dc-glyphicon-log-out"></span> ' . ((!$frontpanel_buttons->hide_button_text) ? __('Log out', 'W2DC') : "") . '</a>';
+			echo '<a class="w2dc-logout-link w2dc-btn w2dc-btn-primary" href="' . wp_logout_url(w2dc_directoryUrl()) . '" rel="nofollow" ' . $frontpanel_buttons->tooltipMeta(esc_html__('Log out', 'w2dc'), true) . '><span class="w2dc-glyphicon w2dc-glyphicon-log-out"></span> ' . ((!$frontpanel_buttons->hide_button_text) ? esc_html__('Log out', 'w2dc') : "") . '</a>';
 		}
 	}
 	
@@ -475,17 +477,17 @@ class w2dc_fsubmit_plugin {
 	}
 
 	public function add_user_profile_fields($user) { ?>
-		<h3><?php _e('Directory billing information', 'W2DC'); ?></h3>
+		<h3><?php esc_html_e('Directory billing information', 'w2dc'); ?></h3>
 	
 		<table class="form-table">
 			<tr>
-				<th><label for="w2dc_billing_name"><?php _e('Full name', 'W2DC'); ?></label></th>
+				<th><label for="w2dc_billing_name"><?php esc_html_e('Full name', 'w2dc'); ?></label></th>
 				<td>
 					<input type="text" name="w2dc_billing_name" id="w2dc_billing_name" value="<?php echo esc_attr(get_the_author_meta('w2dc_billing_name', $user->ID)); ?>" class="regular-text" /><br />
 				</td>
 			</tr>
 			<tr>
-				<th><label for="w2dc_billing_address"><?php _e('Full address', 'W2DC'); ?></label></th>
+				<th><label for="w2dc_billing_address"><?php esc_html_e('Full address', 'w2dc'); ?></label></th>
 				<td>
 					<textarea name="w2dc_billing_address" id="w2dc_billing_address" cols="30" rows="3"><?php echo esc_textarea(get_the_author_meta('w2dc_billing_address', $user->ID)); ?></textarea>
 				</td>
@@ -512,7 +514,7 @@ class w2dc_fsubmit_plugin {
 			) {
 				update_post_meta($post->ID, '_listing_approved', true);
 
-				$subject = __('Approval of listing', 'W2DC');
+				$subject = esc_html__('Approval of listing', 'w2dc');
 					
 				$body = str_replace('[author]', $author->display_name,
 						str_replace('[listing]', $listing->post->post_title,

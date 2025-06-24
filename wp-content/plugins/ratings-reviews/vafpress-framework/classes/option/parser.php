@@ -1,12 +1,12 @@
 <?php
 
-class VP_W2RR_Option_Parser
+class W2RR_VP_Option_Parser
 {
 
 	public function parse_array_options($arr, $auto_group_naming)
 	{
 
-		$set = new VP_W2RR_Option_Control_Set();
+		$set = new W2RR_VP_Option_Control_Set();
 
 		if(empty($arr['title']))
 			$arr['title'] = 'Vafpress';
@@ -23,48 +23,48 @@ class VP_W2RR_Option_Parser
 		if (!empty($arr['menus'])) foreach ($arr['menus'] as $menu)
 		{
 			// Create menu object and add to set
-			$vp_w2rr_menu = new VP_W2RR_Option_Control_Group_Menu();
+			$w2rr_vp_menu = new W2RR_VP_Option_Control_Group_Menu();
 
 			if($auto_group_naming)
 			{
 				if(isset($menu['name']) and !empty($menu['name']))
 				{
-					$vp_w2rr_menu->set_name($menu['name']);
+					$w2rr_vp_menu->set_name($menu['name']);
 				}
 				else
 				{
-					$vp_w2rr_menu->set_name($auto_menu . $auto_menu_index);
+					$w2rr_vp_menu->set_name($auto_menu . $auto_menu_index);
 					$auto_menu_index++;
 				}
 			}
 
-			$vp_w2rr_menu->set_title(isset($menu['title']) ? $menu['title'] : '')
+			$w2rr_vp_menu->set_title(isset($menu['title']) ? $menu['title'] : '')
 			        ->set_icon(isset($menu['icon']) ? $menu['icon'] : '');
 
-			$set->add_menu($vp_w2rr_menu);
+			$set->add_menu($w2rr_vp_menu);
 
 			// Loops through every submenu in each menu
 			if (!empty($menu['menus']) and is_array($menu['menus'])) foreach ($menu['menus'] as $submenu)
 			{
-				$vp_w2rr_submenu = new VP_W2RR_Option_Control_Group_Menu();
+				$w2rr_vp_submenu = new W2RR_VP_Option_Control_Group_Menu();
 
 				if($auto_group_naming)
 				{
 					if(isset($submenu['name']) and !empty($submenu['name']))
 					{
-						$vp_w2rr_submenu->set_name($submenu['name']);
+						$w2rr_vp_submenu->set_name($submenu['name']);
 					}
 					else
 					{
-						$vp_w2rr_submenu->set_name($auto_menu . $auto_menu_index);
+						$w2rr_vp_submenu->set_name($auto_menu . $auto_menu_index);
 						$auto_menu_index++;
 					}
 				}
 
-				$vp_w2rr_submenu->set_title(isset($submenu['title']) ? $submenu['title'] : '')
+				$w2rr_vp_submenu->set_title(isset($submenu['title']) ? $submenu['title'] : '')
 				           ->set_icon(isset($submenu['icon']) ? $submenu['icon'] : '');
 
-				$vp_w2rr_menu->add_menu($vp_w2rr_submenu);
+				$w2rr_vp_menu->add_menu($w2rr_vp_submenu);
 				
 				// Loops through every control in each submenu
 				if (!empty($submenu['controls'])) foreach ($submenu['controls'] as $control)
@@ -73,7 +73,7 @@ class VP_W2RR_Option_Parser
 						$control = $this->parse_section($control);
 					else
 						$control = $this->parse_field($control);
-					$vp_w2rr_submenu->add_control($control);
+					$w2rr_vp_submenu->add_control($control);
 				}
 			}
 			else
@@ -85,7 +85,7 @@ class VP_W2RR_Option_Parser
 						$control = $this->parse_section($control);
 					else
 						$control = $this->parse_field($control);
-					$vp_w2rr_menu->add_control($control);
+					$w2rr_vp_menu->add_control($control);
 				}
 			}
 		}
@@ -95,8 +95,8 @@ class VP_W2RR_Option_Parser
 
 	private function parse_section($section)
 	{
-		$vp_w2rr_sec = new VP_W2RR_Option_Control_Group_Section();
-		$vp_w2rr_sec->set_name(isset($section['name']) ? $section['name'] : '')
+		$w2rr_vp_sec = new W2RR_VP_Option_Control_Group_Section();
+		$w2rr_vp_sec->set_name(isset($section['name']) ? $section['name'] : '')
 		       ->set_title(isset($section['title']) ? $section['title'] : '')
 		       ->set_description(isset($section['description']) ? $section['description'] : '');
 
@@ -104,23 +104,23 @@ class VP_W2RR_Option_Parser
 		{
 			$func  = $section['dependency']['function'];
 			$field = $section['dependency']['field'];
-			$vp_w2rr_sec->set_dependency($func . '|' . $field);
+			$w2rr_vp_sec->set_dependency($func . '|' . $field);
 		}
 
 		// Loops through every field in each submenu
 		if (!empty($section['fields'])) foreach ($section['fields'] as $field)
 		{
-			$vp_w2rr_field = $this->parse_field($field);
-			$vp_w2rr_sec->add_field($vp_w2rr_field);
+			$w2rr_vp_field = $this->parse_field($field);
+			$w2rr_vp_sec->add_field($w2rr_vp_field);
 		}
-		return $vp_w2rr_sec;
+		return $w2rr_vp_sec;
 	}
 
 	private function parse_field($field)
 	{
-		$class    = VP_W2RR_Util_Reflection::field_class_from_type($field['type']);
-		$vp_w2rr_field = call_user_func("$class::withArray", $field);
-		return $vp_w2rr_field;
+		$class    = W2RR_VP_Util_Reflection::field_class_from_type($field['type']);
+		$w2rr_vp_field = call_user_func("$class::withArray", $field);
+		return $w2rr_vp_field;
 	}
 
 }

@@ -39,6 +39,10 @@
 					width = FLBuilderConfig.global.medium_breakpoint >= 769 ? 769 : FLBuilderConfig.global.medium_breakpoint;
 					FLBuilderSimulateMediaQuery.update( width, callback );
 				}
+				else if ( 'large' == this._mode ) {
+					width = FLBuilderConfig.global.large_breakpoint >= 1200 ? 1200 : FLBuilderConfig.global.large_breakpoint;
+					FLBuilderSimulateMediaQuery.update( width, callback );
+				}
 
 				FLBuilder._resizeLayout();
 
@@ -57,7 +61,10 @@
 		_init: function()
 		{
 			this._bind();
-			this._initMediaQueries();
+
+			if ( ! FLBuilder.UIIFrame.isEnabled() ) {
+				this._initMediaQueries();
+			}
 		},
 
 		/**
@@ -73,9 +80,10 @@
 			FLBuilder.addHook( 'didEnterRevisionPreview', this._clearPreview );
 			FLBuilder.addHook( 'responsiveEditing', this._menuToggleClicked );
 			FLBuilder.addHook( 'preview-init', this._switchAllSettingsToCurrentMode );
+			FLBuilder.addHook( 'responsive-editing-switched', this._updateSizeText );
 
-			$( 'body' ).delegate( '.fl-field-responsive-toggle', 'click', this._settingToggleClicked );
-			$( 'body' ).delegate( '.fl-responsive-preview-message button', 'click', this._previewToggleClicked );
+			$( 'body', window.parent.document ).on( 'click', '.fl-field-responsive-toggle', this._settingToggleClicked );
+			$( 'body', window.parent.document ).on( 'click', '.fl-responsive-preview-message button', this._previewToggleClicked );
 		},
 
 		/**
@@ -88,17 +96,18 @@
 		_initMediaQueries: function()
 		{
 			// Don't simulate media queries for stylesheets that match these paths.
-			FLBuilderSimulateMediaQuery.ignore( [
-				FLBuilderConfig.pluginUrl,
-				FLBuilderConfig.relativePluginUrl,
-				'fl-builder-preview',
-				'fl-theme-builder',
-				'/wp-includes/',
-				'/wp-admin/',
-				'admin-bar-inline-css',
-				'ace-tm',
-				'ace_editor.css'
-			] );
+			FLBuilderSimulateMediaQuery.ignore(
+				[
+					FLBuilderConfig.pluginUrl,
+					FLBuilderConfig.relativePluginUrl
+				]
+			);
+
+			var ignorelist = $.map( FLBuilderConfig.responsiveIgnore, function( value, index ) {
+				return [ value ];
+			} );
+
+			FLBuilderSimulateMediaQuery.ignore( ignorelist );
 
 			// Reparse stylesheets that match these paths on each update.
 			FLBuilderSimulateMediaQuery.reparse( [
@@ -106,9 +115,31 @@
 				FLBuilderConfig.postId + '-layout-draft-partial.css',
 				FLBuilderConfig.postId + '-layout-preview.css',
 				FLBuilderConfig.postId + '-layout-preview-partial.css',
+				FLBuilderConfig.postId + '-inline-css',
 				'fl-builder-global-css',
 				'fl-builder-layout-css'
 			] );
+		},
+
+		/**
+		 * Updates the size text in the preview UI.
+		 */
+		_updateSizeText: function() {
+			var show_size = $('.fl-responsive-preview-message .size' ),
+				large = ( '1' === FLBuilderConfig.global.responsive_preview ) ? FLBuilderConfig.global.large_breakpoint : 1200,
+				medium = ( '1' === FLBuilderConfig.global.responsive_preview ) ? FLBuilderConfig.global.medium_breakpoint : 769,
+				responsive = ( '1' === FLBuilderConfig.global.responsive_preview ) ? FLBuilderConfig.global.responsive_breakpoint : 360,
+				size_text = '';
+
+			if ( $('.fl-responsive-preview').hasClass('fl-preview-responsive') ) {
+				size_text = FLBuilderStrings.mobile + ' ' + responsive + 'px';
+			} else if ( $('.fl-responsive-preview').hasClass('fl-preview-medium') ) {
+				size_text = FLBuilderStrings.medium + ' ' + medium + 'px';
+			} else if ( $('.fl-responsive-preview').hasClass('fl-preview-large') ) {
+				size_text = FLBuilderStrings.large + ' ' + large + 'px';
+			}
+
+			show_size.html('').html(size_text)
 		},
 
 		/**
@@ -120,7 +151,7 @@
 		 */
 		_switchTo: function( mode, callback )
 		{
-			var html		= $( 'html' ),
+			var html		= $( 'html' ).add( 'html', window.parent.document ),
 				body        = $( 'body' ),
 				content     = $( FLBuilder._contentClass ),
 				preview     = $( '.fl-responsive-preview' ),
@@ -131,54 +162,70 @@
 			// Save the new mode.
 			FLBuilderResponsiveEditing._mode = mode;
 
-			// Setup the preview.
-			if ( 'default' == mode ) {
+			// Run the legacy UI, otherwise, use the iframe UI.
+			if ( ! FLBuilder.UIIFrame.isEnabled() ) {
 
-				if ( 0 === placeholder.length ) {
-					return;
+				// Setup the preview.
+				if ( 'default' == mode ) {
+
+					if ( 0 === placeholder.length ) {
+						return;
+					}
+
+					html.removeClass( 'fl-responsive-preview-enabled' );
+					placeholder.after( content );
+					placeholder.remove();
+					preview.remove();
+					mask.remove();
+				}
+				else if ( 0 === preview.length ) {
+					html.addClass( 'fl-responsive-preview-enabled' );
+					content.after( '<div class="fl-content-placeholder"></div>' );
+					body.prepend( wp.template( 'fl-responsive-preview' )() );
+					$( '.fl-responsive-preview' ).addClass( 'fl-preview-' + mode );
+					$( '.fl-responsive-preview-content' ).append( content );
+				}
+				else {
+					preview.removeClass( 'fl-preview-responsive fl-preview-medium' );
+					preview.addClass( 'fl-preview-' + mode  );
 				}
 
-				html.removeClass( 'fl-responsive-preview-enabled' );
-				placeholder.after( content );
-				placeholder.remove();
-				preview.remove();
-				mask.remove();
-			}
-			else if ( 0 === preview.length ) {
-				html.addClass( 'fl-responsive-preview-enabled' );
-				content.after( '<div class="fl-content-placeholder"></div>' );
-				body.prepend( wp.template( 'fl-responsive-preview' )() );
-				$( '.fl-responsive-preview' ).addClass( 'fl-preview-' + mode );
-				$( '.fl-responsive-preview-content' ).append( content );
-			}
-			else {
-				preview.removeClass( 'fl-preview-responsive fl-preview-medium' );
-				preview.addClass( 'fl-preview-' + mode  );
-			}
+				// Set the content width and apply media queries.
+				if ( 'responsive' == mode ) {
+					width = ( '1' !== FLBuilderConfig.global.responsive_preview && FLBuilderConfig.global.responsive_breakpoint >= 360 ) ? 360 : FLBuilderConfig.global.responsive_breakpoint;
+					content.width( width );
+					FLBuilderSimulateMediaQuery.update( width, callback );
+					FLBuilderResponsiveEditing._setMarginPaddingPlaceholders();
+				}
+				else if ( 'medium' == mode ) {
+					width = ( '1' !== FLBuilderConfig.global.responsive_preview && FLBuilderConfig.global.medium_breakpoint >= 769 ) ? 769 : FLBuilderConfig.global.medium_breakpoint;
+					content.width( width );
+					FLBuilderSimulateMediaQuery.update( width, callback );
+					FLBuilderResponsiveEditing._setMarginPaddingPlaceholders();
+				}
+				else if ( 'large' == mode ) {
+					width = ( '1' !== FLBuilderConfig.global.responsive_preview && FLBuilderConfig.global.large_breakpoint >= 1200 ) ? 1200 : FLBuilderConfig.global.large_breakpoint;
+					content.width( width );
+					FLBuilderSimulateMediaQuery.update( width, callback );
+					FLBuilderResponsiveEditing._setMarginPaddingPlaceholders();
+				}
+				else {
+					content.width( '' );
+					FLBuilderSimulateMediaQuery.update( null, callback );
+				}
 
-			// Set the content width and apply media queries.
-			if ( 'responsive' == mode ) {
-				width = FLBuilderConfig.global.responsive_breakpoint >= 360 ? 360 : FLBuilderConfig.global.responsive_breakpoint;
-				content.width( width );
-				FLBuilderSimulateMediaQuery.update( width, callback );
-			}
-			else if ( 'medium' == mode ) {
-				width = FLBuilderConfig.global.medium_breakpoint >= 769 ? 769 : FLBuilderConfig.global.medium_breakpoint;
-				content.width( width );
-				FLBuilderSimulateMediaQuery.update( width, callback );
-			}
-			else {
-				content.width( '' );
-				FLBuilderSimulateMediaQuery.update( null, callback );
-			}
+				// Set the content background color.
+				this._setContentBackgroundColor();
 
-			// Set the content background color.
-			this._setContentBackgroundColor();
+			} else if ( callback ) {
+				callback();
+			}
 
 			// Resize the layout.
 			FLBuilder._resizeLayout();
 
 			// Preview all responsive settings.
+			this._setMarginPaddingPlaceholders();
 			this._previewFields();
 
 			// Broadcast the switch.
@@ -231,7 +278,7 @@
 		 */
 		_switchToAndScroll: function( mode )
 		{
-			var nodeId  = $( '.fl-builder-settings' ).data( 'node' ),
+			var nodeId  = $( '.fl-builder-settings', window.parent.document ).data( 'node' ),
 				element = undefined === nodeId ? undefined : $( '.fl-node-' + nodeId );
 
 			FLBuilderResponsiveEditing._switchTo( mode, function() {
@@ -248,6 +295,22 @@
 							$( 'html, body' ).scrollTop( element.offset().top - 100 );
 						}
 				}
+
+				$('.fl-row-bg-parallax').each(function(){
+					var row = $(this),
+						content = row.find('> .fl-row-content-wrap'),
+						rowImages = {
+							'default': row.data('parallax-image'),
+							'medium': row.data('parallax-image-medium'),
+							'responsive': row.data('parallax-image-responsive'),
+						};
+
+					if ( undefined !== rowImages[mode] ) {
+						content.css('background-image', 'url(' + rowImages[mode] + ')');
+					}
+
+				});
+
 			} );
 		},
 
@@ -262,13 +325,16 @@
 		 */
 		_switchAllSettingsTo: function( mode )
 		{
-			var className = 'dashicons-desktop dashicons-tablet dashicons-smartphone';
+			var className = 'dashicons-desktop dashicons-laptop dashicons-tablet dashicons-smartphone';
 
 			$( '.fl-field-responsive-toggle' ).removeClass( className );
 			$( '.fl-field-responsive-setting' ).hide();
 
 			if ( 'default' == mode ) {
 				className = 'dashicons-desktop';
+			}
+			else if ( 'large' == mode ) {
+				className = 'dashicons-laptop';
 			}
 			else if ( 'medium' == mode ) {
 				className = 'dashicons-tablet';
@@ -294,8 +360,112 @@
 			var self = FLBuilderResponsiveEditing;
 
 			self._switchAllSettingsTo( self._mode );
-
+			if( 'default' != self._mode ) {
+				self._setMarginPaddingPlaceholders();
+			}
 			FLBuilder.triggerHook( 'responsive-editing-switched', self._mode );
+		},
+
+		/**
+		 * Set Placeholders for Padding and Margin
+		 *
+		 * @since 2.4
+		 * @access private
+		 * @method _setMarginPaddingPlaceholders
+		 */
+		_setMarginPaddingPlaceholders: function()
+		{
+			var self = FLBuilderResponsiveEditing;
+			var sizes = [ 'default', 'large', 'medium', 'responsive' ];
+			var sides = ['top', 'left', 'bottom', 'right'];
+			var inputs = {
+				padding: {},
+				margin: {}
+			};
+
+			sizes.forEach( function ( size ) {
+				inputs.padding[ size ] = {};
+				inputs.margin[ size ] = {};
+
+				sides.forEach( function ( side ) {
+					var name = 'default' === size ? side : side + '_' + size;
+					inputs.padding[ size ][ side ] = $( '#fl-field-padding .fl-field-responsive-setting-' + size + ' input[name="padding_' + name + '"]' );
+					inputs.margin[ size ][ side ] = $( '#fl-field-margin .fl-field-responsive-setting-' + size + ' input[name="margin_' + name + '"]' );
+				} );
+			} );
+
+			sides.forEach( function( side ) {
+				self._setSpacingInputPlaceholder( inputs, 'padding', 'large', 'default', side )
+				self._setSpacingInputPlaceholder( inputs, 'padding', 'medium', 'large', side )
+				self._setSpacingInputPlaceholder( inputs, 'padding', 'responsive', 'medium', side )
+				self._setSpacingInputPlaceholder( inputs, 'margin', 'large', 'default', side )
+				self._setSpacingInputPlaceholder( inputs, 'margin', 'medium', 'large', side )
+				self._setSpacingInputPlaceholder( inputs, 'margin', 'responsive', 'medium', side )
+			} );
+
+			self._setAutoSpacingPlaceholders( inputs );
+		},
+
+		/**
+		 * Sets the placeholder for a single spacing input.
+		 *
+		 * @since 2.6
+		 * @access private
+		 * @method _setSpacingInputPlaceholder
+		 */
+		_setSpacingInputPlaceholder: function( inputs, property, size, fallbackSize, side )
+		{
+			var input = inputs[ property ][ size ][ side ];
+			var fallback = inputs[ property ][ fallbackSize ][ side ];
+
+			if ( ! input.attr( 'placeholder' ) || input.data( 'has-custom-placeholder' ) ) {
+				input.data( 'has-custom-placeholder', true );
+
+				if ( '' !== fallback.val() ) {
+					input.attr( 'placeholder', fallback.val() );
+				} else if ( fallback.attr( 'placeholder' ) ) {
+					input.attr( 'placeholder', fallback.attr( 'placeholder' ) );
+				}
+			}
+		},
+
+		/**
+		 * @since 2.7
+		 * @access private
+		 * @method _setAutoSpacingPlaceholders
+		 */
+		_setAutoSpacingPlaceholders: function( inputs )
+		{
+			var settings = FLBuilderConfig.global;
+			var isAuto = '1' === settings.auto_spacing;
+			var isRow = !! $( '.fl-builder-row-settings' ).length;
+			var isCol = !! $( '.fl-builder-col-settings' ).length;
+			var isModule = !! $( '.fl-builder-module-settings' ).length;
+
+			if ( ! isAuto || isModule ) {
+				return;
+			}
+
+			var type = isRow ? 'row' : 'column';
+
+			if ( '' === settings[ type + '_padding_right_responsive' ] ) {
+				inputs.padding.responsive.right.attr( 'placeholder', '0' );
+			}
+			if ( '' === settings[ type + '_padding_left_responsive' ] ) {
+				inputs.padding.responsive.left.attr( 'placeholder', '0' );
+			}
+			if ( '' === settings[ type + '_margins_top_responsive' ] ) {
+				inputs.margin.responsive.top.attr( 'placeholder', '0' );
+			}
+			if ( '' === settings[ type + '_margins_right_responsive' ] ) {
+				inputs.margin.responsive.right.attr( 'placeholder', '0' );
+			}
+			if ( '' === settings[ type + '_margins_bottom_responsive' ] ) {
+				inputs.margin.responsive.bottom.attr( 'placeholder', '0' );
+			}
+			if ( '' === settings[ type + '_margins_left_responsive' ] ) {
+				inputs.margin.responsive.left.attr( 'placeholder', '0' );
+			}
 		},
 
 		/**
@@ -312,6 +482,9 @@
 				mode    = toggle.data( 'mode' );
 
 			if ( 'default' == mode ) {
+				mode  = 'large';
+			}
+			else if ( 'large' == mode ) {
 				mode  = 'medium';
 			}
 			else if ( 'medium' == mode ) {
@@ -339,6 +512,8 @@
 			var mode = FLBuilderResponsiveEditing._mode;
 
 			if ( 'default' == mode ) {
+				mode = 'large';
+			} else if ( 'large' == mode ) {
 				mode = 'medium';
 			} else if ( 'medium' == mode ) {
 				mode = 'responsive';

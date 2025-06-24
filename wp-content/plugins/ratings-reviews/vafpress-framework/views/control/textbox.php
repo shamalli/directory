@@ -1,5 +1,10 @@
-<?php if(!$is_compact) echo VP_W2RR_View::instance()->load('control/template_control_head', $head_info); ?>
+<?php
 
-<input type="text" name="<?php echo $name ?>" class="vp-input input-large" value="<?php echo esc_attr($value); ?>" />
+// @codingStandardsIgnoreFile
 
-<?php if(!$is_compact) echo VP_W2RR_View::instance()->load('control/template_control_foot'); ?>
+?>
+<?php if(!$is_compact) echo W2RR_VP_View::instance()->load('control/template_control_head', $head_info); ?>
+
+<input type="text" name="<?php w2rr_esc_e($name); ?>" class="vp-input input-large" value="<?php echo esc_attr($value); ?>" />
+
+<?php if(!$is_compact) echo W2RR_VP_View::instance()->load('control/template_control_foot'); ?>

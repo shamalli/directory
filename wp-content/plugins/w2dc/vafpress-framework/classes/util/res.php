@@ -1,6 +1,8 @@
 <?php
 
-class VP_W2DC_Util_Res
+// @codingStandardsIgnoreFile
+
+class W2DC_VP_Util_Res
 {
 
 	public static function is_font_awesome($icon)
@@ -74,9 +76,9 @@ class VP_W2DC_Util_Res
 			// check if got beginning slash
 			if ($url[0] == '/' or $url[0] == '\\')
 			{
-				return VP_W2DC_IMAGE_URL . $url;
+				return W2DC_VP_IMAGE_URL . $url;
 			}
-			return VP_W2DC_IMAGE_URL . '/' . $url;
+			return W2DC_VP_IMAGE_URL . '/' . $url;
 		}
 	}
 

@@ -1,7 +1,12 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <table class="app-message-log widefat">
 	<tr>
-		<th><?php _e('Logged Date', 'W2DC'); ?></th>
-		<th><?php _e('Message', 'W2DC'); ?></th>
+		<th><?php esc_html_e('Logged Date', 'w2dc'); ?></th>
+		<th><?php esc_html_e('Message', 'w2dc'); ?></th>
 	</tr>
 	<?php $logs = $invoice->log; ?>
 	<?php krsort($logs, SORT_NUMERIC); ?>
@@ -9,11 +14,11 @@
 	<tr class="major">
 		<td>
 			<span class="timestamp">
-				<?php echo date_i18n(get_option('date_format') . ' ' . get_option('time_format'), intval($date)); ?>
+				<?php echo w2dc_formatDateTime($date); ?>
 			</span>
 		</td>
 		<td>
-			<span class="message"><?php echo $message; ?></span>
+			<span class="message"><?php w2dc_esc_e($message); ?></span>
 		</td>
 	</tr>
 	<?php endforeach; ?>

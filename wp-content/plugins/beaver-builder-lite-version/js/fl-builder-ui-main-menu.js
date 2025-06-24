@@ -49,6 +49,7 @@
         */
         show: function() {
             this.$el.addClass('is-showing');
+			this.isShowing = true;
         },
 
         /**
@@ -58,6 +59,7 @@
         */
         hide: function() {
             this.$el.removeClass('is-showing');
+			this.isShowing = false;
         },
 
         /**
@@ -107,28 +109,23 @@
 
             // Render Panel
             this.template = wp.template(this.templateName);
-            $('body').prepend( this.template(this) );
-            this.$el = $('.fl-builder--main-menu-panel');
+            $( 'body', window.parent.document ).prepend( this.template(this) );
+            this.$el = $('.fl-builder--main-menu-panel', window.parent.document);
             this.$el.find('.fl-builder--main-menu-panel-views').html('');
 
             // Render Views
             for (var key in FLBuilderConfig.mainMenu) {
                 this.renderPanel( key );
-                var hook = 'render' + key.charAt(0).toUpperCase() + key.slice(1) + 'Panel';
-
-                FLBuilder.addHook( hook, $.proxy( function(){
-		            this.renderPanel( key );
-	            }, this ) );
             }
 
             // Event Listeners
-            $('body').on('click', '.fl-builder--main-menu-panel .pop-view', this.goToPreviousView.bind(this));
+            $('body', window.parent.document).on('click', '.fl-builder--main-menu-panel .pop-view', this.goToPreviousView.bind(this));
 
             this.$tabs = this.$el.find('.fl-builder--tabs > span'); /* on purpose */
             this.$tabs.on('click', this.onItemClick.bind(this));
 
-            this.$barTitle = $('.fl-builder-bar-title'); /* on purpose */
-            $('body').on('click', '.fl-builder-bar-title', this.toggle.bind(this));
+            this.$barTitle = $('.fl-builder-bar-title', window.parent.document); /* on purpose */
+            $('body', window.parent.document).on('click', '.fl-builder-bar-title', this.toggle.bind(this));
 
             var hide = this.hide.bind(this);
             FLBuilder.addHook('didShowPublishActions', hide);
@@ -141,7 +138,7 @@
             FLBuilder.addHook('didFailSettingsSave', hide);
             FLBuilder.addHook('showKeyboardShortcuts', hide);
 
-            this.$mask = $('.fl-builder--main-menu-panel-mask');
+            this.$mask = $('.fl-builder--main-menu-panel-mask', window.parent.document);
             this.$mask.on('click', hide);
 
             Tools.init();
@@ -156,17 +153,25 @@
         */
         renderPanel: function( key ) {
 	        var data, view, $html;
+			var current = this.views[ key ];
 
-	        $( 'fl-builder--main-menu-panel-view[data-name="' + key + '"]' ).remove();
             data = FLBuilderConfig.mainMenu[ key ];
             data.handle = key;
             view = PanelView.create( data );
             view.init();
             $html = $( view.render() );
             view.$el = $html;
-            $( '.fl-builder--main-menu-panel-views' ).append( $html );
+            $( '.fl-builder--main-menu-panel-views', window.parent.document ).append( $html );
             view.bindEvents();
             view.$el.find( '.fl-builder--menu-item' ).on( 'click', this.onItemClick.bind( this ) );
+
+			if ( 'undefined' !== typeof current ) {
+				current.$el.remove();
+				if ( current.isShowing ) {
+					this.currentView = view
+					view.show();
+				}
+			}
 
             if ( view.isRootView ) {
 	            this.rootView = view;
@@ -225,7 +230,7 @@
         * @return void
         */
         onItemClick: function(e) {
-            var $item = $(e.currentTarget),
+            var $item = $(e.currentTarget, window.parent.document),
                 type = $item.data('type');
 
             switch (type) {
@@ -271,8 +276,7 @@
             currentView.transitionOut(true);
             newView.transitionIn(true);
             this.currentView = newView;
-            //var item = newView.$el.find('.fl-builder--menu-item:first-child').eq(0).trigger('focus');
-            $('.fl-builder-bar-title-caret').focus();
+            $('.fl-builder-bar-title-caret', window.parent.document).focus();
         },
 
         /**
@@ -309,6 +313,17 @@
             FLBuilder.addHook('showGlobalSettings', this.showGlobalSettings.bind(this));
             FLBuilder.addHook('toggleUISkin', this.toggleUISkin.bind(this));
             FLBuilder.addHook('clearLayoutCache', this.clearLayoutCache.bind(this));
+            FLBuilder.addHook('launchThemerLayouts', this.launchThemerLayouts.bind(this));
+            FLBuilder.addHook('toggleOutlinePanel', this.toggleOutlinePanel.bind(this));
+
+            // Show Keyboard Shortcuts
+            if ( 'FL' in window && 'Builder' in FL ) {
+                var actions = FL.Builder.data.getSystemActions();
+
+                FLBuilder.addHook( 'showKeyboardShortcuts', function() {
+                    actions.setShouldShowShortcuts( true );
+                });
+            }
         },
 
         /**
@@ -375,24 +390,42 @@
         * @var Event
         * @return void
         */
-        toggleUISkin: function(e) {
-            var $item = $('a[data-event="toggleUISkin"]');
-            if ($('body').hasClass('fl-builder-ui-skin--light')) {
-                var fromSkin = 'light';
-                var toSkin = 'dark';
-            }
-            if ($('body').hasClass('fl-builder-ui-skin--dark')) {
-                var fromSkin = 'dark';
-                var toSkin = 'light';
-            }
-            $('body').removeClass('fl-builder-ui-skin--' + fromSkin ).addClass('fl-builder-ui-skin--' + toSkin);
-            // ajax save
-            FLBuilder.ajax({
-                action: 'save_ui_skin',
-                skin_name: toSkin,
-            });
-        },
-    }
+		toggleUISkin: function(e) {
+			const colorScheme = FL.Builder.data.getSystemState().colorScheme;
+			let newColorScheme = ''
+
+			// cycle modes...
+			if ( 'light' === colorScheme ) {
+				newColorScheme = 'dark';
+			} else if ( 'dark' === colorScheme ) {
+				newColorScheme = 'auto';
+			} else {
+				newColorScheme = 'light';
+			}
+
+			FL.Builder.data.getSystemActions().setColorScheme( newColorScheme );
+			$('.current-mode').html( '(' + newColorScheme + ')' );
+		},
+
+        /**
+        * @return void
+        */
+        launchThemerLayouts: function() {
+			if ( FLBuilderConfig.lite ) {
+				FLBuilder._showProMessage( 'Themer Layouts' );
+			} else {
+				window.open( FLBuilderConfig.themerLayoutsUrl );
+			}
+			MainMenuPanel.hide();
+		},
+
+		/**
+		 * @return void
+		 */
+		toggleOutlinePanel: function() {
+			FL.Builder.togglePanel('outline');
+		},
+	}
 
     var Help = {
 

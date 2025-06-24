@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 class w2dc_csv_manager {
 	public $menu_page_hook;
 	
@@ -21,6 +23,7 @@ class w2dc_csv_manager {
 	public $selected_user;
 	public $do_geocode;
 	public $is_claimable;
+	public $users = array();
 	public $users_logins = array();
 	public $users_emails = array();
 	public $users_ids = array();
@@ -50,8 +53,8 @@ class w2dc_csv_manager {
 		}
 
 		$this->menu_page_hook = add_submenu_page('w2dc_settings',
-			__('CSV Import/Export', 'W2DC'),
-			__('CSV Import/Export', 'W2DC'),
+			esc_html__('CSV Import/Export', 'w2dc'),
+			esc_html__('CSV Import/Export', 'w2dc'),
 			$capability,
 			'w2dc_csv_import',
 			array($this, 'w2dc_csv_import')
@@ -122,10 +125,10 @@ class w2dc_csv_manager {
 		
 		// test geolocation
 		$w2dc_locationGeoname = new w2dc_locationGeoname();
-		$geolocation_response = $w2dc_locationGeoname->geocodeRequest('1600 Amphitheatre Parkway Mountain View, CA 94043', 'test');
+		$geolocation_response = $w2dc_locationGeoname->geocodeRequest('Amphitheatre Parkway Mountain View, CA 94043', 'test');
 		if (is_wp_error($geolocation_response)) {
-			$debug_page = '<a href="'.admin_url('admin.php?page=w2dc_debug').'">' . esc_html__('More info at the debug page.', 'W2DC') . '</a>';
-			w2dc_addMessage(esc_html__('Geolocation service does not work. If you are going to import addresses in CSV file, they should have geo coordinates. Otherwise map markers will not be created and the search will not work!', 'W2DC') . ' ' . $debug_page, 'error');
+			$debug_page = '<a href="'.admin_url('admin.php?page=w2dc_debug').'">' . esc_html__('More info at the debug page.', 'w2dc') . '</a>';
+			w2dc_addMessage(esc_html__('Geolocation service does not work. If you are going to import addresses in CSV file, they should have geo coordinates. Otherwise map markers will not be created and the search will not work!', 'w2dc') . ' ' . $debug_page, 'error');
 		}
 		
 		$users = get_users(array('orderby' => 'ID', 'fields' => array('ID', 'user_login')));
@@ -134,14 +137,14 @@ class w2dc_csv_manager {
 			$errors = false;
 
 			$validation = new w2dc_form_validation();
-			$validation->set_rules('columns_separator', __('Columns separator', 'W2DC'), 'required');
-			$validation->set_rules('values_separator', __('Categories separator', 'W2DC'), 'required');
+			$validation->set_rules('columns_separator', esc_html__('Columns separator', 'w2dc'), 'required');
+			$validation->set_rules('values_separator', esc_html__('Categories separator', 'w2dc'), 'required');
 
 			// GoBack button places on import results page
 			if (w2dc_getValue($_POST, 'goback')) {
-				$validation->set_rules('csv_file_name', __('CSV file name', 'W2DC'), 'required');
-				$validation->set_rules('images_dir', __('Images directory', 'W2DC'));
-				$validation->set_rules('fields[]', __('Import fields', 'W2DC'));
+				$validation->set_rules('csv_file_name', esc_html__('CSV file name', 'w2dc'), 'required');
+				$validation->set_rules('images_dir', esc_html__('Images directory', 'w2dc'));
+				$validation->set_rules('fields[]', esc_html__('Import fields', 'w2dc'));
 				$this->import_export_helper->validateSettings($validation);
 			}
 
@@ -162,29 +165,29 @@ class w2dc_csv_manager {
 					$csv_file_name = $this->csv_file_name;
 
 					if (!is_file($csv_file_name)) {
-						w2dc_addMessage(esc_attr__("CSV temp file doesn't exist", 'W2DC'));
+						w2dc_addMessage(esc_html__("CSV temp file doesn't exist", 'w2dc'));
 						return $this->csvImportSettings($validation->result_array());
 					}
 
 					if ($this->images_dir && !is_dir($this->images_dir)) {
-						w2dc_addMessage(esc_attr__("Images temp directory doesn't exist", 'W2DC'));
+						w2dc_addMessage(esc_html__("Images temp directory doesn't exist", 'w2dc'));
 						return $this->csvImportSettings($validation->result_array());
 					}
 				} else {
 					$csv_file = $_FILES['csv_file'];
 
 					if ($csv_file['error'] || !is_uploaded_file($csv_file['tmp_name'])) {
-						w2dc_addMessage(__('There was a problem trying to upload CSV file', 'W2DC'), 'error');
+						w2dc_addMessage(esc_html__('There was a problem trying to upload CSV file', 'w2dc'), 'error');
 						return $this->csvImportSettings($validation->result_array());
 					}
 	
 					if (strtolower(pathinfo($csv_file['name'], PATHINFO_EXTENSION)) != 'csv' && $csv_file['type'] != 'text/csv') {
-						w2dc_addMessage(__('This is not CSV file', 'W2DC'), 'error');
+						w2dc_addMessage(esc_html__('This is not CSV file', 'w2dc'), 'error');
 						return $this->csvImportSettings($validation->result_array());
 					}
 					
 					if (function_exists('mb_detect_encoding') && !mb_detect_encoding(file_get_contents($csv_file['tmp_name']), 'UTF-8', true)) {
-						w2dc_addMessage(__("CSV file must be in UTF-8", 'W2DC'), 'error');
+						w2dc_addMessage(esc_html__("CSV file must be in UTF-8", 'w2dc'), 'error');
 						return $this->csvImportSettings($validation->result_array());
 					}
 					
@@ -196,12 +199,12 @@ class w2dc_csv_manager {
 						$images_file = $_FILES['images_file'];
 						
 						if ($images_file['error'] || !is_uploaded_file($images_file['tmp_name'])) {
-							w2dc_addMessage(__('There was a problem trying to upload ZIP images file', 'W2DC'), 'error');
+							w2dc_addMessage(esc_html__('There was a problem trying to upload ZIP images file', 'w2dc'), 'error');
 							return $this->csvImportSettings($validation->result_array());
 						}
 	
 						if (!$this->extractImages($images_file['tmp_name'])) {
-							w2dc_addMessage(__('There was a problem trying to unpack ZIP images file', 'W2DC'), 'error');
+							w2dc_addMessage(esc_html__('There was a problem trying to unpack ZIP images file', 'w2dc'), 'error');
 							return $this->csvImportSettings($validation->result_array());
 						}
 					}
@@ -250,12 +253,12 @@ class w2dc_csv_manager {
 			$errors = false;
 
 			$validation = new w2dc_form_validation();
-			$validation->set_rules('import_type', __('Import type', 'W2DC'), 'required');
-			$validation->set_rules('csv_file_name', __('CSV file name', 'W2DC'), 'required');
-			$validation->set_rules('images_dir', __('Images directory', 'W2DC'));
-			$validation->set_rules('columns_separator', __('Columns separator', 'W2DC'), 'required');
-			$validation->set_rules('values_separator', __('Categories separator', 'W2DC'), 'required');
-			$validation->set_rules('fields[]', __('Import fields', 'W2DC'));
+			$validation->set_rules('import_type', esc_html__('Import type', 'w2dc'), 'required');
+			$validation->set_rules('csv_file_name', esc_html__('CSV file name', 'w2dc'), 'required');
+			$validation->set_rules('images_dir', esc_html__('Images directory', 'w2dc'));
+			$validation->set_rules('columns_separator', esc_html__('Columns separator', 'w2dc'), 'required');
+			$validation->set_rules('values_separator', esc_html__('Categories separator', 'w2dc'), 'required');
+			$validation->set_rules('fields[]', esc_html__('Import fields', 'w2dc'));
 			$this->import_export_helper->validateSettings($validation);
 				
 			if ($validation->run()) {
@@ -272,23 +275,23 @@ class w2dc_csv_manager {
 				$this->collated_fields = $validation->result_array('fields[]');
 				
 				if (!is_file($this->csv_file_name)) {
-					$this->log['errors'][] = esc_attr__("CSV temp file doesn't exist", 'W2DC');
+					$this->log['errors'][] = esc_html__("CSV temp file doesn't exist", 'w2dc');
 				}
 
 				if ($this->images_dir && !is_dir($this->images_dir)) {
-					$this->log['errors'][] = esc_attr__("Images temp directory doesn't exist", 'W2DC');
+					$this->log['errors'][] = esc_html__("Images temp directory doesn't exist", 'w2dc');
 				}
 				
 				$this->import_export_helper->checkFields();
 				
-				echo "<h2>" . __('CSV Import', 'W2DC') . "</h2>";
+				echo "<h2>" . esc_html__('CSV Import', 'w2dc') . "</h2>";
 				if (!$this->log['errors']) {
 					$this->extractCsv($this->csv_file_name);
 					
 					ob_implicit_flush(true);
 					w2dc_renderTemplate('admin_header.tpl.php');
 					
-					echo "<h3>" . __('Import results', 'W2DC') . "</h3>";
+					echo "<h3>" . esc_html__('Import results', 'w2dc') . "</h3>";
 
 					$this->processCSV();
 	
@@ -298,7 +301,7 @@ class w2dc_csv_manager {
 							$this->removeImagesDir($this->images_dir);
 					}
 				} else {
-					echo "<h3>" . esc_html__('Error messages', 'W2DC') . "</h3>";
+					echo "<h3>" . esc_html__('Error messages', 'w2dc') . "</h3>";
 					
 					foreach ($this->log['errors'] AS $error) {
 						echo '<p>'.$error.'</p>';
@@ -328,8 +331,7 @@ class w2dc_csv_manager {
 	}
 	
 	public function extractCsv($csv_file) {
-		ini_set('auto_detect_line_endings', true);
-
+		
 		if ($fp = fopen($csv_file, 'r')) {
 			$n = 0;
 			
@@ -337,7 +339,7 @@ class w2dc_csv_manager {
 			$this->header_columns = array();
 			$this->rows = array();
 			
-			while (($line_columns = @fgetcsv($fp, 0, $this->columns_separator)) !== FALSE) {
+			while (($line_columns = fgetcsv($fp, 0, $this->columns_separator)) !== FALSE) {
 				if ($line_columns) {
 					if (!$this->header_columns) {
 						$this->header_columns = $line_columns;
@@ -345,18 +347,18 @@ class w2dc_csv_manager {
 							$column = trim($column);
 					} else {
 						if (count($line_columns) > count($this->header_columns))
-							$this->log['errors'][] = sprintf(__('Line %d has too many columns', 'W2DC'), $n+1);
+							$this->log['errors'][] = sprintf(esc_html__('Line %d has too many columns', 'w2dc'), $n+1);
 						elseif (count($line_columns) < count($this->header_columns))
-							$this->log['errors'][] = sprintf(__('Line %d has less columns than header line', 'W2DC'), $n+1);
+							$this->log['errors'][] = sprintf(esc_html__('Line %d has less columns than header line', 'w2dc'), $n+1);
 						else
 							$this->rows[] = $line_columns;
 					}
 				}
 				$n++;
 			}
-			@fclose($fp);
+			fclose($fp);
 		} else {
-			$this->log['errors'][] = esc_attr__("Can't open CSV file", 'W2DC');
+			$this->log['errors'][] = esc_html__("Can't open CSV file", 'w2dc');
 			return false;
 		}
 	}
@@ -392,16 +394,16 @@ class w2dc_csv_manager {
 			$this->users_ids[] = $user->ID;
 		}
 		
-		printf(__('Import started, number of available rows in file: %d', 'W2DC'), count($this->rows));
+		printf(esc_html__('Import started, number of available rows in file: %d', 'w2dc'), count($this->rows));
 		echo "<br />";
 		if ($this->test_mode) {
-			_e('Test mode enabled', 'W2DC');
+			esc_html_e('Test mode enabled', 'w2dc');
 			echo "<br />";
 		}
 		
 		$this->import_export_helper->processCSVImport();
 		
-		printf(__('Import finished, number of errors: %d, total rejected lines: %d', 'W2DC'), count($this->log['errors']), $this->import_export_helper->total_rejected_lines);
+		printf(esc_html__('Import finished, number of errors: %d, total rejected lines: %d', 'w2dc'), count($this->log['errors']), $this->import_export_helper->total_rejected_lines);
 		echo "<br />";
 		echo "<br />";
 	}
@@ -479,7 +481,7 @@ class w2dc_csv_manager {
 						
 						$this->insertAttachment($post_id, $image_file_name, $image, $image_title, $filepath, $_thumbnail_id_inserted);
 					} else {
-						$error = sprintf(__("There isn't specified image file \"%s\" inside ZIP file. Or temp folder wasn't created: \"%s\"", 'W2DC'), $image_file_name, $this->images_dir);
+						$error = sprintf(esc_html__("There isn't specified image file \"%s\" inside ZIP file. Or temp folder wasn't created: \"%s\"", 'w2dc'), $image_file_name, $this->images_dir);
 						$error_on_line = $this->setErrorOnLine($error);
 					}
 				}
@@ -492,9 +494,9 @@ class w2dc_csv_manager {
 				$uploadfile = $uploaddir['path'] . '/' . $image_file_name;
 				
 				$contents = file_get_contents($image_url);
-				$savefile = @fopen($uploadfile, 'w');
-				@fwrite($savefile, $contents);
-				@fclose($savefile);
+				$savefile = fopen($uploadfile, 'w');
+				fwrite($savefile, $contents);
+				fclose($savefile);
 				
 				$file = array('name' => $image_file_name,
 						'tmp_name' => $uploadfile,
@@ -530,11 +532,11 @@ class w2dc_csv_manager {
 					$_thumbnail_id_inserted = true;
 				}
 			} else {
-				$error = sprintf(__('Image file "%s" could not be inserted.', 'W2DC'), $image_file_name);
+				$error = sprintf(esc_html__('Image file "%s" could not be inserted.', 'w2dc'), $image_file_name);
 				$error_on_line = $this->setErrorOnLine($error);
 			}
 		} else {
-			$error = sprintf(__("Image file \"%s\" wasn't attached. Full path: \"%s\". Error: %s", 'W2DC'), $image_file_name, $filepath, $image['error']);
+			$error = sprintf(esc_html__("Image file \"%s\" wasn't attached. Full path: \"%s\". Error: %s", 'w2dc'), $image_file_name, $filepath, $image['error']);
 			$error_on_line = $this->setErrorOnLine($error);
 		}
 	}
@@ -544,8 +546,8 @@ class w2dc_csv_manager {
 		$offset = 0;
 		
 		$validation = new w2dc_form_validation();
-		$validation->set_rules('number', __('Listings number', 'W2DC'), 'integer');
-		$validation->set_rules('offset', __('Listings offset', 'W2DC'), 'integer');
+		$validation->set_rules('number', esc_html__('Listings number', 'w2dc'), 'integer');
+		$validation->set_rules('offset', esc_html__('Listings offset', 'w2dc'), 'integer');
 		if ($validation->run()) {
 			if ($validation->result_array('number')) {
 				$number = $validation->result_array('number');

@@ -33,20 +33,20 @@ class wcsearch_admin {
 				add_action('admin_head', array($this, 'enqueue_global_vars'));
 			}
 			
-			wp_register_style('wcsearch_admin', WCSEARCH_RESOURCES_URL . 'css/admin.css', array(), WCSEARCH_VERSION);
+			wp_register_style('wcsearch-admin', WCSEARCH_RESOURCES_URL . 'css/admin.css', array(), WCSEARCH_VERSION);
 			if (function_exists('is_rtl') && is_rtl()) {
-				wp_register_style('wcsearch_admin_rtl', WCSEARCH_RESOURCES_URL . 'css/admin-rtl.css', array(), WCSEARCH_VERSION);
+				wp_register_style('wcsearch-admin-rtl', WCSEARCH_RESOURCES_URL . 'css/admin-rtl.css', array(), WCSEARCH_VERSION);
 			}
 			
 			if ($admin_custom = wcsearch_isResource('css/admin-custom.css')) {
-				wp_register_style('wcsearch_admin-custom', $admin_custom, array(), WCSEARCH_VERSION);
+				wp_register_style('wcsearch-admin-custom', $admin_custom, array(), WCSEARCH_VERSION);
 			}
 		}
 		
 		if (wcsearch_isPluginPageInAdmin()) {
 			
-			wp_register_style('wcsearch_font_awesome', WCSEARCH_RESOURCES_URL . 'css/font-awesome.css', array(), WCSEARCH_VERSION);
-			wp_register_script('wcsearch_js_functions', WCSEARCH_RESOURCES_URL . 'js/js_functions.js', array('jquery'), false, true);
+			wp_register_style('wcsearch-font-awesome', WCSEARCH_RESOURCES_URL . 'css/font-awesome.css', array(), WCSEARCH_VERSION);
+			wp_register_script('wcsearch-js-functions', WCSEARCH_RESOURCES_URL . 'js/js_functions.js', array('jquery'), false, true);
 			
 			wp_enqueue_script('jquery-ui-selectmenu');
 			wp_enqueue_script('jquery-ui-autocomplete');
@@ -55,11 +55,11 @@ class wcsearch_admin {
 			wp_dequeue_script('autosave');
 		}
 		
-		wp_enqueue_style('wcsearch_font_awesome');
-		wp_enqueue_style('wcsearch_admin');
-		wp_enqueue_style('wcsearch_admin_rtl');
-		wp_enqueue_script('wcsearch_js_functions');
-		wp_enqueue_style('wcsearch_admin-custom');
+		wp_enqueue_style('wcsearch-font-awesome');
+		wp_enqueue_style('wcsearch-admin');
+		wp_enqueue_style('wcsearch-admin-rtl');
+		wp_enqueue_script('wcsearch-js-functions');
+		wp_enqueue_style('wcsearch-admin-custom');
 	}
 
 	public function enqueue_global_vars() {

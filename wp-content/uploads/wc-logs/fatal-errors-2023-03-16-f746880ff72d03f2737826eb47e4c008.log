@@ -1,2 +1,0 @@
-2023-03-16T17:12:31+00:00 CRITICAL Out of memory (allocated 27262976) (tried to allocate 32768 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\js_composer\include\classes\core\class-vc-base.php on line 737
-

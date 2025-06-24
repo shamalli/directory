@@ -15,7 +15,7 @@ class w2dc_content_field_controller extends w2dc_frontend_controller {
 		
 		$shortcode_atts = array_merge(array(
 				'listing' => '',
-				'id' => '',
+				'content_field_id' => '',
 				'classes' => '',
 		), $args);
 
@@ -37,7 +37,7 @@ class w2dc_content_field_controller extends w2dc_frontend_controller {
 	}
 	
 	public function display() {
-		$field_id = $this->args['id'];
+		$field_id = $this->args['content_field_id'];
 		
 		if ($this->listing && $field_id) {
 			ob_start();
@@ -45,7 +45,7 @@ class w2dc_content_field_controller extends w2dc_frontend_controller {
 			$content_field = $this->listing->getContentField($field_id);
 			if ($content_field && $content_field->isNotEmpty($this->listing)) {
 				echo '<div class="w2dc-content">';
-				$this->listing->renderContentField($this->args['id'], $this->args['classes']);
+				$this->listing->renderContentField($this->args['content_field_id'], $this->args['classes']);
 				echo '</div>';
 			}
 			

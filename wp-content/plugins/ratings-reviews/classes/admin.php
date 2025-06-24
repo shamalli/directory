@@ -18,8 +18,6 @@ class w2rr_admin {
 		add_action('admin_head-post-new.php', array($this, 'hidePreviewButton'));
 		add_action('admin_head-post.php', array($this, 'hidePreviewButton'));
 		
-		//add_filter('post_row_actions', array($this, 'removeQuickEdit'), 10, 2);
-		
 		add_action('show_user_profile', array( $this, 'create_avatar_field'));
 		add_action('edit_user_profile', array( $this, 'create_avatar_field'));
 		add_action('personal_options_update', array( $this, 'save_avatar'));
@@ -31,7 +29,7 @@ class w2rr_admin {
 
 		add_action('wp_ajax_w2rr_generate_color_palette', array($this, 'generate_color_palette'));
 		add_action('wp_ajax_nopriv_w2rr_generate_color_palette', array($this, 'generate_color_palette'));
-		add_action('vp_w2rr_option_before_ajax_save', array($this, 'remove_colorpicker_cookie'));
+		add_action('w2rr_vp_option_before_ajax_save', array($this, 'remove_colorpicker_cookie'));
 		add_action('wp_footer', array($this, 'render_palette_picker'));
 		
 		add_image_size('user-picture-size', 100, 100, true);
@@ -60,10 +58,10 @@ class w2rr_admin {
 			$upload_avatar = new w2rr_upload_image('user-avatar', get_user_meta($user->ID, '_w2rr_user_picture_id', true), 'user-picture-size');
 			?>
 			<script>
-				w2rr_js_objects.media_dialog_title = '<?php esc_js(esc_html_e('Upload user picture', 'W2RR')); ?>';
-				w2rr_js_objects.media_dialog_button_text = '<?php esc_js(esc_html_e('Insert', 'W2RR')); ?>';
+				w2rr_js_objects.media_dialog_title = '<?php esc_js(esc_html_e('Upload user picture', 'w2rr')); ?>';
+				w2rr_js_objects.media_dialog_button_text = '<?php esc_js(esc_html_e('Insert', 'w2rr')); ?>';
 			</script>
-			<h2><?php esc_html_e('User picture upload', 'W2RR'); ?></h2>
+			<h2><?php esc_html_e('User picture upload', 'w2rr'); ?></h2>
 			<table class="form-table">
 				<tr>
 					<th></th>
@@ -95,8 +93,8 @@ class w2rr_admin {
 		}
 
 		add_menu_page(
-			esc_html__("Ratings & Reviews settings", "W2RR"),
-			esc_html__('Ratings Admin', 'W2RR'),
+			esc_html__("Ratings & Reviews settings", "w2rr"),
+			esc_html__('Ratings Admin', 'w2rr'),
 			$capability,
 			'w2rr_settings',
 			'',
@@ -104,24 +102,24 @@ class w2rr_admin {
 		);
 		add_submenu_page(
 			'w2rr_settings',
-			esc_html__("Ratings & Reviews settings", "W2RR"),
-			esc_html__("Ratings & Reviews settings", "W2RR"),
+			esc_html__("Ratings & Reviews settings", "w2rr"),
+			esc_html__("Ratings & Reviews settings", "w2rr"),
 			$capability,
 			'w2rr_settings'
 		);
 
 		add_submenu_page(
-			'',
-			esc_html__("Ratings & Reviews Debug", "W2RR"),
-			esc_html__("Ratings & Reviews Debug", "W2RR"),
+			'w2rr_debug',
+			esc_html__("Ratings & Reviews Debug", "w2rr"),
+			esc_html__("Ratings & Reviews Debug", "w2rr"),
 			$capability,
 			'w2rr_debug',
 			array($this, 'debug')
 		);
 		add_submenu_page(
-			'',
-			esc_html__("Ratings & Reviews Reset", "W2RR"),
-			esc_html__("Ratings & Reviews Reset", "W2RR"),
+			'w2rr_reset',
+			esc_html__("Ratings & Reviews Reset", "w2rr"),
+			esc_html__("Ratings & Reviews Reset", "w2rr"),
 			'manage_options',
 			'w2rr_reset',
 			array($this, 'reset')
@@ -131,7 +129,7 @@ class w2rr_admin {
 	public function debug() {
 		global $w2rr_instance, $wpdb;
 		
-		$settings = $wpdb->get_results("SELECT option_name, option_value FROM {$wpdb->options} WHERE option_name LIKE 'w2rr_%'", ARRAY_A);
+		$settings = $wpdb->get_results($wpdb->prepare("SELECT option_name, option_value FROM {$wpdb->options} WHERE option_name LIKE %s", $wpdb->esc_like('w2rr_') . '%'), ARRAY_A);
 
 		w2rr_renderTemplate('debug.tpl.php', array(
 			'rewrite_rules' => get_option('rewrite_rules'),
@@ -143,7 +141,7 @@ class w2rr_admin {
 		global $w2rr_instance, $wpdb;
 		
 		if (isset($_GET['reset']) && ($_GET['reset'] == 'settings' || $_GET['reset'] == 'settings_tables')) {
-			if ($wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE 'w2rr_%'") !== false) {
+			if ($wpdb->query($wpdb->prepare("DELETE FROM $wpdb->options WHERE option_name LIKE %s", $wpdb->esc_like('w2rr_') . '%')) !== false) {
 				delete_option('vpt_option');
 				w2rr_save_dynamic_css();
 				w2rr_addMessage('All Ratings & Reviews settings were deleted!');
@@ -216,14 +214,14 @@ class w2rr_admin {
 			else
 				add_action('admin_head', array($this, 'enqueue_global_vars'));
 			
-			wp_register_style('w2rr_bootstrap', W2RR_RESOURCES_URL . 'css/bootstrap.css', array(), W2RR_VERSION);
-			wp_register_style('w2rr_admin', W2RR_RESOURCES_URL . 'css/admin.css', array(), W2RR_VERSION);
+			wp_register_style('w2rr-bootstrap', W2RR_RESOURCES_URL . 'css/bootstrap.css', array(), W2RR_VERSION);
+			wp_register_style('w2rr-admin', W2RR_RESOURCES_URL . 'css/admin.css', array(), W2RR_VERSION);
 			if (function_exists('is_rtl') && is_rtl()) {
-				wp_register_style('w2rr_admin_rtl', W2RR_RESOURCES_URL . 'css/admin-rtl.css', array(), W2RR_VERSION);
+				wp_register_style('w2rr-admin-rtl', W2RR_RESOURCES_URL . 'css/admin-rtl.css', array(), W2RR_VERSION);
 			}
 			
 			if ($admin_custom = w2rr_isResource('css/admin-custom.css')) {
-				wp_register_style('w2rr_admin-custom', $admin_custom, array(), W2RR_VERSION);
+				wp_register_style('w2rr-admin-custom', $admin_custom, array(), W2RR_VERSION);
 			}
 		}
 		
@@ -231,19 +229,19 @@ class w2rr_admin {
 			// some plugins decide to disable this thing
 			wp_enqueue_script('jquery-migrate');
 
-			wp_register_style('w2rr_font_awesome', W2RR_RESOURCES_URL . 'css/font-awesome.css', array(), W2RR_VERSION);
-			wp_register_script('w2rr_js_functions', W2RR_RESOURCES_URL . 'js/js_functions.js', array('jquery'), false, true);
+			wp_register_style('w2rr-font-awesome', W2RR_RESOURCES_URL . 'css/font-awesome.css', array(), W2RR_VERSION);
+			wp_register_script('w2rr-js-functions', W2RR_RESOURCES_URL . 'js/js_functions.js', array('jquery'), false, true);
 			
-			wp_register_style('w2rr_media_styles', W2RR_RESOURCES_URL . 'lightbox/css/lightbox.min.css', array(), W2RR_VERSION);
-			wp_register_script('w2rr_media_scripts_lightbox', W2RR_RESOURCES_URL . 'lightbox/js/lightbox.js', array('jquery'));
+			wp_register_style('w2rr-media-styles', W2RR_RESOURCES_URL . 'lightbox/css/lightbox.min.css', array(), W2RR_VERSION);
+			wp_register_script('w2rr-media-scripts-lightbox', W2RR_RESOURCES_URL . 'lightbox/js/lightbox.js', array('jquery'));
 		}
 		
-		wp_enqueue_style('w2rr_bootstrap');
-		wp_enqueue_style('w2rr_font_awesome');
-		wp_enqueue_style('w2rr_admin');
-		wp_enqueue_style('w2rr_admin_rtl');
-		wp_enqueue_script('w2rr_js_functions');
-		wp_enqueue_style('w2rr_admin-custom');
+		wp_enqueue_style('w2rr-bootstrap');
+		wp_enqueue_style('w2rr-font-awesome');
+		wp_enqueue_style('w2rr-admin');
+		wp_enqueue_style('w2rr-admin-rtl');
+		wp_enqueue_script('w2rr-js-functions');
+		wp_enqueue_style('w2rr-admin-custom');
 	}
 
 	public function enqueue_global_vars() {

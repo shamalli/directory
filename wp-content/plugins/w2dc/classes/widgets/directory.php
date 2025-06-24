@@ -1,7 +1,11 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 add_action('init', function() {
+	
 	global $w2dc_directory_widget_params, $w2dc_listings_widget_params;
+	
 	$w2dc_directory_widget_params = $w2dc_listings_widget_params;
 	
 	foreach ($w2dc_directory_widget_params AS $key=>$param) {
@@ -18,17 +22,16 @@ add_action('init', function() {
 		array(
 				'type' => 'directory',
 				'param_name' => 'directories',
-				'heading' => __("Directory", "W2DC"),
+				'heading' => esc_html__("Directory", "w2dc"),
 		)
 	);
 	array_unshift($w2dc_directory_widget_params,
 		array(
 				'type' => 'dropdown',
 				'param_name' => 'custom_home',
-				'value' => array(__('Yes', 'W2DC') => '1', __('No', 'W2DC') => '0'),
-				'heading' => __('Is it on custom home page?', 'W2DC'),
-				'description' => __('When set to Yes - the widget displays only listings', 'W2DC'),
-				'std' => 1,
+				'value' => array(esc_html__('No', 'w2dc') => '0', esc_html__('Yes', 'w2dc') => '1'),
+				'heading' => esc_html__('Is it on custom home page?', 'w2dc'),
+				'description' => esc_html__('When set to Yes - the widget displays only listings', 'w2dc'),
 		)
 	);
 }, 0);
@@ -40,7 +43,7 @@ class w2dc_directory_widget extends w2dc_widget {
 
 		parent::__construct(
 				'w2dc_directory_shortcode_widget',
-				__('Directory', 'W2DC')
+				esc_html__('Directory', 'w2dc')
 		);
 
 		foreach ($w2dc_instance->content_fields->content_fields_array AS $filter_field) {

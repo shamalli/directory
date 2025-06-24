@@ -1,15 +1,13 @@
-<?php 
+<?php
+
+// @codingStandardsIgnoreFile
 
 class w2dc_content_field_datetime extends w2dc_content_field {
 	public $is_time = true;
+	public $hide_past_dates = false;
 	
 	protected $is_configuration_page = true;
 	protected $can_be_searched = true;
-	
-	public function __construct() {
-		// adapted for WPML
-		//add_filter('wpml_config_array', array($this, 'wpml_config_array'));
-	}
 	
 	public function isNotEmpty($listing) {
 		if ((isset($this->value['date_start']) && $this->value['date_start']) || (isset($this->value['date_end']) && $this->value['date_end'])) {
@@ -28,15 +26,21 @@ class w2dc_content_field_datetime extends w2dc_content_field {
 
 		if (w2dc_getValue($_POST, 'submit') && wp_verify_nonce($_POST['w2dc_configure_content_fields_nonce'], W2DC_PATH)) {
 			$validation = new w2dc_form_validation();
-			$validation->set_rules('is_time', __('Enable time in field', 'W2DC'), 'is_checked');
+			$validation->set_rules('is_time', esc_html__('Enable time in field', 'w2dc'), 'is_checked');
+			$validation->set_rules('hide_past_dates', esc_html__('Hide listings with passed dates', 'w2dc'), 'is_checked');
 			if ($validation->run()) {
 				$result = $validation->result_array();
-				if ($wpdb->update($wpdb->w2dc_content_fields, array('options' => serialize(array('is_time' => $result['is_time']))), array('id' => $this->id), null, array('%d')))
-					w2dc_addMessage(__('Field configuration was updated successfully!', 'W2DC'));
+				$serialized_options = serialize(array(
+						'is_time' 			=> $result['is_time'],
+						'hide_past_dates' 	=> $result['hide_past_dates']
+				));
+				if ($wpdb->update($wpdb->w2dc_content_fields, array('options' => $serialized_options), array('id' => $this->id), null, array('%d')))
+					w2dc_addMessage(esc_html__('Field configuration was updated successfully!', 'w2dc'));
 				
 				$w2dc_instance->content_fields_manager->showContentFieldsTable();
 			} else {
 				$this->is_time = $validation->result_array('is_time');
+				$this->hide_past_dates = $validation->result_array('hide_past_dates');
 				w2dc_addMessage($validation->error_array(), 'error');
 
 				w2dc_renderTemplate('content_fields/fields/datetime_configuration.tpl.php', array('content_field' => $this));
@@ -46,8 +50,12 @@ class w2dc_content_field_datetime extends w2dc_content_field {
 	}
 	
 	public function buildOptions() {
-		if (isset($this->options['is_time']))
+		if (isset($this->options['is_time'])) {
 			$this->is_time = $this->options['is_time'];
+		}
+		if (isset($this->options['hide_past_dates'])) {
+			$this->hide_past_dates = $this->options['hide_past_dates'];
+		}
 	}
 	
 	public function delete() {
@@ -81,8 +89,7 @@ class w2dc_content_field_datetime extends w2dc_content_field {
 
 		$validation = new w2dc_form_validation();
 		$rules = 'valid_date';
-		/* if ($this->canBeRequired() && $this->is_required)
-			$rules .= 'required|is_natural_no_zero'; */
+
 		$validation->set_rules($field_index_date_start, $this->name, $rules);
 		$validation->set_rules($field_index_date_end, $this->name, $rules);
 		$validation->set_rules($field_index_hour, $this->name);
@@ -149,8 +156,8 @@ class w2dc_content_field_datetime extends w2dc_content_field {
 	
 	public function renderOutput($listing, $group = null, $css_classes = '') {
 		if ($this->value['date_start'] || $this->value['date_end']) {
-			$formatted_date_start = ($this->value['date_start']) ? mysql2date(get_option('date_format'), date('Y-m-d H:i:s', $this->value['date_start'])) : false;
-			$formatted_date_end = ($this->value['date_end']) ? mysql2date(get_option('date_format'), date('Y-m-d H:i:s', $this->value['date_end'])) : false;
+			$formatted_date_start = ($this->value['date_start']) ? mysql2date(w2dc_getDateFormat(), date('Y-m-d H:i:s', $this->value['date_start'])) : false;
+			$formatted_date_end = ($this->value['date_end']) ? mysql2date(w2dc_getDateFormat(), date('Y-m-d H:i:s', $this->value['date_end'])) : false;
 
 			if (!($template = w2dc_isTemplate('content_fields/fields/datetime_output_'.$this->id.'.tpl.php'))) {
 				$template = 'content_fields/fields/datetime_output.tpl.php';
@@ -162,17 +169,19 @@ class w2dc_content_field_datetime extends w2dc_content_field {
 		}
 	}
 	
-	public function orderParams() {
-		$order_params = array('orderby' => 'meta_value_num', 'meta_key' => '_content_field_' . $this->id . '_date_start');
+	public function orderParams($order_args) {
+		$order_args['orderby'] = 'meta_value_num';
+		$order_args['meta_key'] = '_content_field_' . $this->id .'_date_start';
+		
 		if (get_option('w2dc_orderby_exclude_null'))
-			$order_params['meta_query'] = array(
+			$order_args['meta_query'][] = array(
 				array(
 					'key' => '_content_field_' . $this->id . '_date_start',
 					'value'   => array(''),
 					'compare' => 'NOT IN'
 				)
 			);
-		return $order_params;
+		return $order_args;
 	}
 	
 	/*
@@ -199,13 +208,13 @@ class w2dc_content_field_datetime extends w2dc_content_field {
 					if ($tmstmp = strtotime($end_value)) {
 						$output['date_end'] = $tmstmp - 3600*$output['hour'] - 60*$output['minute'];
 					} else {
-						$errors[] = __("End Date-Time field is invalid", "W2DC");
+						$errors[] = esc_html__("End Date-Time field is invalid", "w2dc");
 					}
 				} else {
 					$output['date_end'] = $output['date_start'];
 				}
 			} else {
-				$errors[] = __("Start Date-Time field is invalid", "W2DC");
+				$errors[] = esc_html__("Start Date-Time field is invalid", "w2dc");
 			}
 		}
 
@@ -219,11 +228,13 @@ class w2dc_content_field_datetime extends w2dc_content_field {
 	}
 	
 	public function renderOutputForMap($location, $listing) {
-		if ($this->value['date_start'] || $this->value['date_end']) {
-			$formatted_date_start = mysql2date(get_option('date_format'), date('Y-m-d H:i:s', $this->value['date_start']));
-			$formatted_date_end = mysql2date(get_option('date_format'), date('Y-m-d H:i:s', $this->value['date_end']));
-	
-			return w2dc_renderTemplate('content_fields/fields/datetime_output_map.tpl.php', array('content_field' => $this, 'formatted_date_start' => $formatted_date_start, 'formatted_date_end' => $formatted_date_end, 'listing' => $listing), true);
+		if ($this->value) {
+			if ($this->value['date_start'] || $this->value['date_end']) {
+				$formatted_date_start = mysql2date(w2dc_getDateFormat(), date('Y-m-d H:i:s', $this->value['date_start']));
+				$formatted_date_end = mysql2date(w2dc_getDateFormat(), date('Y-m-d H:i:s', $this->value['date_end']));
+		
+				return w2dc_renderTemplate('content_fields/fields/datetime_output_map.tpl.php', array('content_field' => $this, 'formatted_date_start' => $formatted_date_start, 'formatted_date_end' => $formatted_date_end, 'listing' => $listing), true);
+			}
 		}
 	}
 	
@@ -232,34 +243,17 @@ class w2dc_content_field_datetime extends w2dc_content_field {
 				array(
 						'type' => 'datefieldmin',
 						'param_name' => $this->slug . '_min',
-						'heading' => __('From ', 'W2DC') . $this->name,
+						'heading' => esc_html__('From ', 'w2dc') . $this->name,
 						'field_id' => $this->id,
 				),
 				array(
 						'type' => 'datefieldmax',
 						'param_name' => $this->slug . '_max',
-						'heading' => __('To ', 'W2DC') . $this->name,
+						'heading' => esc_html__('To ', 'w2dc') . $this->name,
 						'field_id' => $this->id,
 				)
 		);
 	}
-	
-	// adapted for WPML
-	/* public function wpml_config_array($config_all) {
-		$config_all['wpml-config']['custom-fields']['custom-field'][] = array(
-				'value' => '_content_field_' . $this->id . '_date',
-				'attr' => array('action' => 'copy')
-		);
-		$config_all['wpml-config']['custom-fields']['custom-field'][] = array(
-				'value' => '_content_field_' . $this->id . '_hour',
-				'attr' => array('action' => 'copy')
-		);
-		$config_all['wpml-config']['custom-fields']['custom-field'][] = array(
-				'value' => '_content_field_' . $this->id . '_minute',
-				'attr' => array('action' => 'copy')
-		);
 
-		return $config_all;
-	} */
 }
 ?>

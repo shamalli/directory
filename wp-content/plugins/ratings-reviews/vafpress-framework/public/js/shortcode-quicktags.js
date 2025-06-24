@@ -1,4 +1,5 @@
 (function($){
+	"use strict";
 
 	if( typeof QTags !== 'undefined' )
 	{
@@ -7,8 +8,8 @@
 				tinyMCE.execCommand(name + '_cmd');
 			}
 		}
-		for (var i = 0; i < vp_w2rr_sg.length; i++) {
-			QTags.addButton( vp_w2rr_sg[i].name, 'Vafpress', qt_cb(vp_w2rr_sg[i].name), '', '', vp_w2rr_sg[i].button_title, 999999 );
+		for (var i = 0; i < w2rr_vp_sg.length; i++) {
+			QTags.addButton( w2rr_vp_sg[i].name, 'Vafpress', qt_cb(w2rr_vp_sg[i].name), '', '', w2rr_vp_sg[i].button_title, 999999 );
 		}
 	}
 

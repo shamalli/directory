@@ -9,7 +9,7 @@ if (interface_exists('\JsonSerializable', false)) {
     }
 } else {
     // PSR2 wants each interface to have its own file.
-    // @codingStandardsIgnoreStart
+    // @codingStandardsIgnoreFile
     interface JsonSerializable
     {
         // @codingStandardsIgnoreEnd

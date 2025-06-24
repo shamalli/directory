@@ -1,22 +1,27 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <div class="w2dc-content">
-	<h3><?php echo sprintf(__('Clicks statistics of the page "%s"', 'W2DC'), $object->title()); ?></h3>
+	<h3><?php echo sprintf(esc_html__('Clicks statistics of the page "%s"', 'w2dc'), $object->title()); ?></h3>
 	
-	<h4><?php echo sprintf(__('Click stats: %d', 'W2DC'), (get_post_meta($object->post->ID, '_total_clicks', true) ? get_post_meta($object->post->ID, '_total_clicks', true) : 0)); ?></h4>
+	<h4><?php echo sprintf(esc_html__('Click stats: %d', 'w2dc'), (get_post_meta($object->post->ID, '_total_clicks', true) ? get_post_meta($object->post->ID, '_total_clicks', true) : 0)); ?></h4>
 	
 	<?php 
 	$months_names = array(
-		1 => __('January', 'W2DC'),	
-		2 => __('February', 'W2DC'),	
-		3 => __('March', 'W2DC'),	
-		4 => __('April', 'W2DC'),	
-		5 => __('May', 'W2DC'),	
-		6 => __('June', 'W2DC'),	
-		7 => __('July', 'W2DC'),	
-		8 => __('August', 'W2DC'),	
-		9 => __('September', 'W2DC'),	
-		10 => __('October', 'W2DC'),	
-		11 => __('November', 'W2DC'),	
-		12 => __('December', 'W2DC'),	
+		1 => esc_html__('January', 'w2dc'),	
+		2 => esc_html__('February', 'w2dc'),	
+		3 => esc_html__('March', 'w2dc'),	
+		4 => esc_html__('April', 'w2dc'),	
+		5 => esc_html__('May', 'w2dc'),	
+		6 => esc_html__('June', 'w2dc'),	
+		7 => esc_html__('July', 'w2dc'),	
+		8 => esc_html__('August', 'w2dc'),	
+		9 => esc_html__('September', 'w2dc'),	
+		10 => esc_html__('October', 'w2dc'),	
+		11 => esc_html__('November', 'w2dc'),	
+		12 => esc_html__('December', 'w2dc'),	
 	);
 	if ($clicks_data = get_post_meta($object->post->ID, '_clicks_data', true)) {
 		$clicks_data = array_filter($clicks_data);
@@ -26,6 +31,8 @@
 		}
 		ksort($data);
 	}
+	
+	$canvas_height = 450;
 	?>
 	
 	<div class="w2dc-edit-listing-wrapper w2dc-row">
@@ -36,10 +43,10 @@
 
 		<?php if (isset($data)): ?>
 			<?php foreach ($data AS $year=>$months_counts): ?>
-			<h4><?php echo $year; ?></h4>
+			<h4><?php w2dc_esc_e($year); ?></h4>
 		
 			<div>
-				<canvas id="canvas-<?php echo esc_attr($year); ?>" style="height: 450px;"></canvas>
+				<canvas id="canvas-<?php echo esc_attr($year); ?>" style="height: {$canvas_height}px;"></canvas>
 				<script>
 					var chartData_<?php echo esc_attr($year); ?> = {
 						labels : ["<?php echo implode('","', $months_names); ?>"],
@@ -60,11 +67,9 @@
 					(function($) {
 						"use strict";
 		
-						$(function() {
-							var ctx_<?php echo esc_attr($year); ?> = document.getElementById("canvas-<?php echo esc_attr($year); ?>").getContext("2d");
-							window.myLine_<?php echo esc_attr($year); ?> = new Chart(ctx_<?php echo esc_attr($year); ?>).Bar(chartData_<?php echo esc_attr($year); ?>, {
-								responsive: true
-							});
+						var ctx_<?php echo esc_attr($year); ?> = document.getElementById("canvas-<?php echo esc_attr($year); ?>").getContext("2d");
+						window.myLine_<?php echo esc_attr($year); ?> = new Chart(ctx_<?php echo esc_attr($year); ?>).Bar(chartData_<?php echo esc_attr($year); ?>, {
+							responsive: true
 						});
 					})(jQuery);
 				</script>
@@ -75,5 +80,5 @@
 		</div>
 	</div>
 	
-	<a href="<?php echo $frontend_controller->referer; ?>" class="w2dc-btn w2dc-btn-primary"><?php _e('Go back ', 'W2DC'); ?></a>
+	<a href="<?php echo esc_attr($frontend_controller->referer); ?>" class="w2dc-btn w2dc-btn-primary"><?php esc_html_e('Go back ', 'w2dc'); ?></a>
 </div>

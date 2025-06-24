@@ -48,23 +48,28 @@ body > .wcsearch-dropdowns-menu {
 	border: 1px solid #969696;
 	border-top: 0;
 	position: absolute;
+	padding: 0;
+	margin: 0;
 }
 .wcsearch-sticky-scroll-background {
 	z-index: -1;
 }
 .wcsearch-content .ui-selectmenu-menu .ui-icon,
 .wcsearch-dropdowns-menu.ui-autocomplete .ui-icon {
+	position: absolute;
 	width: 32px;
 	height: 32px;
 	left: 9px;
 }
 .wcsearch-dropdowns-menu.ui-autocomplete .wcsearch-dropdowns-menu-search-listing .ui-icon {
+	position: absolute;
 	width: 42px;
 	height: 42px;
 	left: 4px;
 }
 .wcsearch-dropdowns-menu.ui-menu .ui-menu-item {
 	padding: 0;
+	margin: 0;
 }
 .wcsearch-dropdowns-menu.ui-menu .ui-menu-item-wrapper {
 	width: 100%;

@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 /**
  *
 wcsearch-tax-autocomplete		// tax autocomplete
@@ -52,7 +54,7 @@ function wcsearch_tax_dropdowns_menu_init($params) {
 		}
 		
 		if (!is_array($term_id)) {
-			$term_id = array_filter(explode(',', $term_id));
+			$term_id = array_filter(wcsearch_parse_slugs_ids_list($term_id));
 		}
 		
 		if (is_array($term_id)) {
@@ -114,7 +116,7 @@ function wcsearch_tax_dropdowns_menu_init($params) {
 				$autocomplete_data .= ' data-ajax-search=1';
 			}
 			if ($place_id) {
-				$autocomplete_data .= ' data-place-id="' . $place_id . '"';
+				$autocomplete_data .= ' data-place-id="' . esc_attr($place_id) . '"';
 			}
 		} else {
 			$autocomplete_data = '';
@@ -195,15 +197,6 @@ function _wcsearch_tax_dropdowns_menu($tax, $parent = 0, $depth = 2, $current_le
 		$categories_options['order'] = $order;
 	}
 	
-	/* if ($count) {
-		// there is a wp bug with pad_counts in get_terms function - so we use this construction
-		$terms = wp_list_filter(
-				wcsearch_wrapper_get_categories($categories_options),
-				array('parent' => $parent)
-		);
-	} else {
-		$terms = wcsearch_wrapper_get_categories($categories_options);
-	} */
 	$terms = wcsearch_wrapper_get_categories($categories_options);
 	
 	$html = '';
@@ -447,10 +440,10 @@ function wcsearch_tax_dropdowns_updateterms() {
 	$hide_empty = wcsearch_getValue($_POST, 'hide_empty');
 	
 	$exact_terms = wcsearch_getValue($_POST, 'exact_terms');
-	$exact_terms = array_filter(explode(",", $exact_terms));
+	$exact_terms = wcsearch_parse_slugs_ids_list($exact_terms);
 	
 	if (!$title = wcsearch_getValue($_POST, 'title')) {
-		$title = esc_html__('Select term', 'WCSEARCH');
+		$title = esc_html__('Select term', 'wcsearch');
 	}
 	$uID = wcsearch_getValue($_POST, 'uID');
 
@@ -515,7 +508,7 @@ function wcsearch_getEditFormIcon($id) {
 		}
 	}
 	?>
-	<a class="wcsearch-click-to-edit-search-button" href="<?php echo esc_url($link); ?>" title="<?php esc_attr_e('Click to edit search form', 'WCSEARCH'); ?>">
+	<a class="wcsearch-click-to-edit-search-button" href="<?php echo esc_url($link); ?>" title="<?php esc_attr_e('Click to edit search form', 'wcsearch'); ?>">
 		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
 			<path d="M13.89 3.39l2.71 2.72c.46.46.42 1.24.03 1.64l-8.01 8.02-5.56 1.16 1.16-5.58s7.6-7.63 7.99-8.03c.39-.39 1.22-.39 1.68.07zm-2.73 2.79l-5.59 5.61 1.11 1.11 5.54-5.65zm-2.97 8.23l5.58-5.6-1.07-1.08-5.59 5.6z"></path>
 		</svg>
@@ -580,7 +573,7 @@ if (!function_exists('wcsearch_renderMessages')) {
 		$messages = wcsearch_superUnique($messages);
 	
 		foreach ($messages AS $type=>$messages) {
-			$message_class = (is_admin()) ? $type : "wcsearch-" . $type;
+			$message_class = (is_admin()) ? $type : "wcsearch-" . esc_attr($type);
 
 			echo '<div class="' . esc_attr($message_class) . '">';
 			foreach ($messages AS $message) {
@@ -638,20 +631,24 @@ function wcsearch_getCustomResourceDirURL($dir) {
  * 
  */
 function wcsearch_isTemplate($template) {
-	$custom_template = str_replace('.tpl.php', '', $template) . '-custom.tpl.php';
-	$templates = array(
-			$custom_template,
-			$template
-	);
 
-	foreach ($templates AS $template_to_check) {
-		// check if it is exact path in $template
-		if (is_file($template_to_check)) {
-			return $template_to_check;
-		} elseif (is_file(get_stylesheet_directory() . '/wcsearch-plugin/templates/' . $template_to_check)) { // theme or child theme templates folder
-			return get_stylesheet_directory() . '/wcsearch-plugin/templates/' . $template_to_check;
-		} elseif (is_file(WCSEARCH_TEMPLATES_PATH . $template_to_check)) { // native plugin's templates folder
-			return WCSEARCH_TEMPLATES_PATH . $template_to_check;
+	// check if it is real template file
+	if ($template && (strlen($template) != strlen(str_replace('.tpl.php', '', $template)))) {
+		$custom_template = str_replace('.tpl.php', '', $template) . '-custom.tpl.php';
+		$templates = array(
+				$custom_template,
+				$template
+		);
+	
+		foreach ($templates AS $template_to_check) {
+			// check if it is exact path in $template
+			if (is_file($template_to_check)) {
+				return $template_to_check;
+			} elseif (is_file(get_stylesheet_directory() . '/wcsearch-plugin/templates/' . $template_to_check)) { // theme or child theme templates folder
+				return get_stylesheet_directory() . '/wcsearch-plugin/templates/' . $template_to_check;
+			} elseif (is_file(WCSEARCH_TEMPLATES_PATH . $template_to_check)) { // native plugin's templates folder
+				return WCSEARCH_TEMPLATES_PATH . $template_to_check;
+			}
 		}
 	}
 
@@ -716,7 +713,7 @@ function wcsearch_do_enqueue_scripts_styles($load_scripts_styles) {
 		return true;
 	}
 	
-	if ($wcsearch_instance->form_on_shop_page && is_shop()) {
+	if ($wcsearch_instance->form_on_shop_page && (wcsearch_is_shop() || wcsearch_is_product_category() || wcsearch_is_product_tag())) {
 		return true;
 	}
 }
@@ -781,19 +778,19 @@ if (
  * 
  */
 function wcsearch_is_standalone_plugin() {
-	if (in_array('woocommerce-search/search.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+	if (in_array(WCSEARCH_PLUGIN_SLUG . '/search.php', apply_filters('active_plugins', get_option('active_plugins')))) {
 		$other_plugins = array();
 		if (wcsearch_is_woo_active()) {
-			$other_plugins['wc'] = esc_html__("WooCommerce search", "WCSEARCH");
+			$other_plugins['wc'] = esc_html__("WooCommerce search", "wcsearch");
 		}
-		if (defined('W2DC_VERSION') || defined('W2DCF_VERSION')) {
-			$other_plugins['w2dc'] = esc_html__("Web 2.0 Directory search", "WCSEARCH");
+		if (wcsearch_is_our_plugin_installed('w2dc.php') || wcsearch_is_our_plugin_installed('w2dc_free.php')) {
+			$other_plugins['w2dc'] = esc_html__("Web 2.0 Directory search", "wcsearch");
 		}
-		if (defined('W2GM_VERSION')) {
-			$other_plugins['w2dc'] = esc_html__("Google Maps Locator search", "WCSEARCH");
+		if (wcsearch_is_our_plugin_installed('w2gm.php')) {
+			$other_plugins['w2gm'] = esc_html__("Google Maps Locator search", "wcsearch");
 		}
-		if (defined('W2MB_VERSION')) {
-			$other_plugins['w2dc'] = esc_html__("MapBox Locator search", "WCSEARCH");
+		if (wcsearch_is_our_plugin_installed('w2mb.php')) {
+			$other_plugins['w2mb'] = esc_html__("MapBox Locator search", "wcsearch");
 		}
 		
 		if ($other_plugins) {
@@ -811,30 +808,135 @@ function wcsearch_get_default_used_by() {
 		return $existing_used_by;
 	}
 
-	if (in_array('woocommerce-search/search.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+	if (in_array(WCSEARCH_PLUGIN_SLUG . '/search.php', apply_filters('active_plugins', get_option('active_plugins')))) {
 		return 'wc';
 	} else {
-		if (defined('W2DC_VERSION') || defined('W2DCF_VERSION')) {
+		if (wcsearch_is_our_plugin_installed('w2dc.php') || wcsearch_is_our_plugin_installed('w2dc_free.php')) {
 			return 'w2dc';
 		}
-		if (defined('W2GM_VERSION')) {
+		if (wcsearch_is_our_plugin_installed('w2gm.php')) {
 			return 'w2gm';
 		}
-		if (defined('W2MB_VERSION')) {
+		if (wcsearch_is_our_plugin_installed('w2mb.php')) {
 			return 'w2mb';
 		}
 	}
 }
 
 function wcsearch_is_w2dc_active() {
+
 	if (defined('W2DC_VERSION') || defined('W2DCF_VERSION') || defined('W2GM_VERSION') || defined('W2MB_VERSION')) {
 		return true;
 	}
 }
 
 function wcsearch_is_woo_active() {
+
 	if (class_exists('woocommerce')) {
 		return true;
+	}
+}
+
+/**
+ * Returns true when viewing the product type archive (shop).
+ * ( is_post_type_archive( 'product' ) || is_page( wc_get_page_id( 'shop' ) ) );
+ * 
+ * @return boolean
+ */
+function wcsearch_is_shop() {
+
+	if (!wcsearch_is_woo_active()) {
+		return false;
+	}
+	
+	if (is_shop()) {
+		return true;
+	} else {
+		return false;
+	}
+}
+function wcsearch_is_cart() {
+
+	if (!wcsearch_is_woo_active()) {
+		return false;
+	}
+	
+	if (is_cart()) {
+		return true;
+	} else {
+		return false;
+	}
+}
+function wcsearch_is_checkout() {
+
+	if (!wcsearch_is_woo_active()) {
+		return false;
+	}
+	
+	if (is_checkout()) {
+		return true;
+	} else {
+		return false;
+	}
+}
+function wcsearch_is_account_page() {
+
+	if (!wcsearch_is_woo_active()) {
+		return false;
+	}
+	
+	if (is_account_page()) {
+		return true;
+	} else {
+		return false;
+	}
+}
+function wcsearch_is_view_order_page() {
+
+	if (!wcsearch_is_woo_active()) {
+		return false;
+	}
+	
+	if (is_view_order_page()) {
+		return true;
+	} else {
+		return false;
+	}
+}
+/**
+ * Returns true when viewing a product category.
+ * is_tax( 'product_cat', $term );
+ * 
+ * @return boolean
+ */
+function wcsearch_is_product_category() {
+
+	if (!wcsearch_is_woo_active()) {
+		return false;
+	}
+	
+	if (is_product_category()) {
+		return true;
+	} else {
+		return false;
+	}
+}
+/**
+ * Returns true when viewing a product tag.
+ * is_tax( 'product_tag', $term );
+ *
+ * @return boolean
+ */
+function wcsearch_is_product_tag() {
+
+	if (!wcsearch_is_woo_active()) {
+		return false;
+	}
+	
+	if (is_product_tag()) {
+		return true;
+	} else {
+		return false;
 	}
 }
 
@@ -844,16 +946,16 @@ function wcsearch_isWooPage() {
 		return false;
 	}
 	
-	if (is_shop()) {
+	if (wcsearch_is_shop()) {
 		return wc_get_page_id('shop');
 	}
-	if (is_cart()) {
+	if (wcsearch_is_cart()) {
 		return wc_get_page_id('cart');
 	}
-	if (is_checkout()) {
+	if (wcsearch_is_checkout()) {
 		return wc_get_page_id('checkout');
 	}
-	if (is_account_page() || is_view_order_page()) {
+	if (wcsearch_is_account_page() || wcsearch_is_view_order_page()) {
 		return wc_get_page_id('myaccount');
 	}
 }
@@ -889,6 +991,33 @@ function wcsearch_number_format($value, $used_by, $slug) {
 	return apply_filters("wcsearch_number_format", $value, $used_by, $slug);
 }
 
+function wcsearch_min_max_options_to_range($min_max_options) {
+
+	$results_array = array();
+
+	if (!is_array($min_max_options)) {
+		$min_max_options = explode(',', $min_max_options);
+	}
+	$min_max_options = array_filter(array_map('trim', $min_max_options), 'strlen');
+
+	foreach ($min_max_options AS $key=>$option) {
+		$min_max_options_range = array_filter(array_map('trim', explode('-', $option)), 'strlen');
+		if (count($min_max_options_range) == 2) {
+			$results_array = array_merge($results_array, range($min_max_options_range[0], $min_max_options_range[1]));
+		} elseif (isset($min_max_options_range[0]) && is_numeric($min_max_options_range[0])) {
+			$results_array[] = $min_max_options_range[0];
+		} elseif (isset($min_max_options_range[1]) && is_numeric($min_max_options_range[1])) {
+			$results_array[] = $min_max_options_range[1];
+		} else {
+			$results_array[] = $option;
+		}
+	}
+
+	$results_array = array_values(array_filter($results_array, 'wcsearch_number_filter'));
+
+	return $results_array;
+}
+
 function wcsearch_print_range_slider_code($params) {
 	extract($params);
 	
@@ -897,16 +1026,18 @@ function wcsearch_print_range_slider_code($params) {
 	// min-max
 	// min, 1, 10, 100, max
 	// 1-100
-	
-	if ($min_max_options) {
-		if (!is_array($min_max_options)) {
-			$min_max_options = explode(',', $min_max_options);
-		}
-	} else {
-		$min_max_options = array();
-	}
-	
+
 	if (isset($tax)) {
+		//taxonomy
+		
+		if ($min_max_options) {
+			if (!is_array($min_max_options)) {
+				$min_max_options = explode(',', $min_max_options);
+			}
+		} else {
+			$min_max_options = array();
+		}
+		
 		if (empty($min_max_options)) {
 			return false;
 		}
@@ -916,16 +1047,12 @@ function wcsearch_print_range_slider_code($params) {
 		}
 		$min_max_options = array_keys($min_max_options);
 	} elseif ($is_number) {
-		if (count($min_max_options) == 1) {
-			$min_max_options_range = explode('-', $min_max_options[0]);
-			if (count($min_max_options_range) == 2) {
-				$min_max_options = range($min_max_options_range[0], $min_max_options_range[1]);
-			}
-		}
-		
-		$min_max_options = array_values(array_filter($min_max_options, 'wcsearch_number_filter'));
+		// digits
+
+		$min_max_options = wcsearch_min_max_options_to_range($min_max_options);
 		
 		if (!$min_max_options) {
+		// get min-max values of this field
 			$min_max_options = wcsearch_get_min_max_numbers($used_by, $slug);
 		}
 		
@@ -938,15 +1065,12 @@ function wcsearch_print_range_slider_code($params) {
 			}
 		}
 	} elseif (!$is_number) {
-		if (count($min_max_options) == 1) {
-			$min_max_options_range = explode('-', $min_max_options[0]);
-			if (count($min_max_options_range) == 2) {
-				$min_max_options = range($min_max_options_range[0], $min_max_options_range[1]);
-			}
-		}
-		
-		$min_max_options = array_values(array_filter($min_max_options, 'wcsearch_number_filter'));
+		// price
+
+		$min_max_options = wcsearch_min_max_options_to_range($min_max_options);
+
 		if (!$min_max_options) {
+			// get min-max values of this field
 			$min_max_options = wcsearch_get_min_max_numbers($used_by, $slug);
 		}
 		
@@ -997,12 +1121,12 @@ function wcsearch_print_range_slider_code($params) {
 	}
 	
 	if (($key = array_search('min', $min_max_options, true)) !== false) {
-		$min_max_options[$key] = esc_html__('min', 'WCSEARCH');
-		$min_max_options_formatted[$key] = esc_html__('min', 'WCSEARCH');
+		$min_max_options[$key] = esc_html__('min', 'wcsearch');
+		$min_max_options_formatted[$key] = esc_html__('min', 'wcsearch');
 	}
 	if (($key = array_search('max', $min_max_options, true)) !== false) {
-		$min_max_options[$key] = esc_html__('max', 'WCSEARCH');
-		$min_max_options_formatted[$key] = esc_html__('max', 'WCSEARCH');
+		$min_max_options[$key] = esc_html__('max', 'wcsearch');
+		$min_max_options_formatted[$key] = esc_html__('max', 'wcsearch');
 	}
 	?>
 	<?php if (count($min_max_options)): ?>
@@ -1029,22 +1153,18 @@ function wcsearch_print_range_slider_code($params) {
 					input.trigger("change");
 				},
 				slide: function(event, ui) {
-					if (slider_params_<?php echo esc_attr($index); ?>[ui.values[0]] == '<?php esc_html_e('min', 'WCSEARCH'); ?>') {
+					if (slider_params_<?php echo esc_attr($index); ?>[ui.values[0]] == '<?php esc_html_e('min', 'wcsearch'); ?>') {
 						var min = '';
 					} else {
 						var min = slider_params_<?php echo esc_attr($index); ?>[ui.values[0]];
 					}
-					if (slider_params_<?php echo esc_attr($index); ?>[ui.values[1]] == '<?php esc_html_e('max', 'WCSEARCH'); ?>') {
+					if (slider_params_<?php echo esc_attr($index); ?>[ui.values[1]] == '<?php esc_html_e('max', 'wcsearch'); ?>') {
 						var max = '';
 					} else {
 						var max = slider_params_<?php echo esc_attr($index); ?>[ui.values[1]];
 					}
 
 					format_input_<?php echo esc_attr($index); ?>(min, max);
-					
-					/* if ((ui.values[1] - ui.values[0] < 1) || ui.values[1] == ui.values[0]) {
-		                return false;
-		            } */
 
 					<?php if ($show_scale == "string"): ?>
 					var values = $(this).slider("option", "values");
@@ -1137,11 +1257,13 @@ function wcsearch_print_single_slider_code($params) {
 	
 	$index = wcsearch_generateRandomVal();
 	
-	if (!is_array($min_max_options)) {
-		$min_max_options = explode(',', $min_max_options);
-	}
-	
 	if (isset($tax)) {
+		// taxonomy
+
+		if (!is_array($min_max_options)) {
+			$min_max_options = explode(',', $min_max_options);
+		}
+
 		if (empty($min_max_options)) {
 			return false;
 		}
@@ -1150,22 +1272,13 @@ function wcsearch_print_single_slider_code($params) {
 			$min_max_options_formatted[$term_id] = esc_attr($term_name);
 		}
 		$min_max_options = array_keys($min_max_options);
-		
-		// this is empty value in options, needed to reset input
-		array_unshift($min_max_options, 0);
-		array_unshift($min_max_options_formatted, "&nbsp;");
-		
-		$value = array_search($values, $min_max_options);
 	} elseif (isset($is_number)) {
-		if (count($min_max_options) == 1) {
-			$min_max_options_range = explode('-', $min_max_options[0]);
-			if (count($min_max_options_range) == 2) {
-				$min_max_options = range($min_max_options_range[0], $min_max_options_range[1]);
-			} 
-		}
+		// digits
 
-		$min_max_options = array_values(array_filter($min_max_options, 'wcsearch_number_filter'));
+		$min_max_options = wcsearch_min_max_options_to_range($min_max_options);
+		
 		if (!$min_max_options) {
+			// get min-max values of this field
 			$min_max_options = wcsearch_get_min_max_numbers($used_by, $slug);
 		}
 	
@@ -1179,18 +1292,15 @@ function wcsearch_print_single_slider_code($params) {
 		}
 		
 		foreach ($min_max_options AS $key=>$_value) {
-			$min_max_options[$key] = '-' . $_value;
+			$min_max_options[$key] = $_value;
 		}
 	} elseif (!isset($is_number)) {
-		if (count($min_max_options) == 1) {
-			$min_max_options_range = explode('-', $min_max_options[0]);
-			if (count($min_max_options_range) == 2) {
-				$min_max_options = range($min_max_options_range[0], $min_max_options_range[1]);
-			} 
-		}
+		// price
 
-		$min_max_options = array_values(array_filter($min_max_options, 'wcsearch_number_filter'));
+		$min_max_options = wcsearch_min_max_options_to_range($min_max_options);
+		
 		if (!$min_max_options) {
+		// get min-max values of this field
 			$min_max_options = wcsearch_get_min_max_numbers($used_by, $slug);
 		}
 	
@@ -1204,9 +1314,13 @@ function wcsearch_print_single_slider_code($params) {
 		}
 		
 		foreach ($min_max_options AS $key=>$_value) {
-			$min_max_options[$key] = '-' . $_value;
+			$min_max_options[$key] = $_value;
 		}
 	}
+	
+	// this is empty value in options, needed to reset input
+	array_unshift($min_max_options, 0);
+	array_unshift($min_max_options_formatted, "&nbsp;");
 	
 	$js_val = array_search($values, $min_max_options);
 	
@@ -1224,11 +1338,7 @@ function wcsearch_print_single_slider_code($params) {
 				<?php if (function_exists('is_rtl') && is_rtl()): ?>
 				isRTL: true,
 				<?php endif; ?>
-				<?php if (isset($tax)): ?>
 				range: false,
-				<?php else: ?>
-				range: "min",
-				<?php endif; ?>
 				value: <?php echo esc_js($js_val); ?>,
 				max: slider_params_<?php echo esc_attr($index); ?>.length-1,
 				stop: function(event, ui) {
@@ -1295,25 +1405,52 @@ function wcsearch_print_single_slider_code($params) {
 	</div>
 	<?php
 }
+
+function wcsearch_print_radius_selectbox_code($params) {
+	extract($params);
+	
+	// 1, 10, 100
+	// 1-100
+	// 1-20, 30, 50
+	
+	$index = wcsearch_generateRandomVal();
+
+	$min_max_options = wcsearch_min_max_options_to_range($min_max_options);
+	
+	$dimension_unit = 'kilometers';
+	if ($geocode_functions = wcsearch_geocode_functions()) {
+		if (isset($geocode_functions['dimension_unit'])) {
+			$dimension_unit = $geocode_functions['dimension_unit'];
+		}
+	}
+
+	$min_max_options_formatted = $min_max_options;
+	foreach ($min_max_options_formatted AS $key=>$_value) {
+		$min_max_options_formatted[$key] = $_value . ' ' . esc_html(($dimension_unit == 'miles' ? _n("mile", "miles", $_value, "wcsearch") : _n("kilometer", "kilometers", $_value, "wcsearch")));
+	}
+		
+	$value = trim($values, '-');
+	
+	$value = ($value ? $value : 0);
+?>
+<select class="wcsearch-selectbox-input wcsearch-form-control" id="<?php echo esc_attr($slug).'_'.esc_attr($index); ?>" name="<?php echo esc_attr($slug); ?>">
+<?php foreach ($min_max_options_formatted AS $key=>$_value) :?>
+	<option value="<?php echo esc_attr($min_max_options[$key])?>" <?php if ($value == $min_max_options[$key]) echo 'selected';?>><?php wcsearch_esc_e($_value); ?></option>
+<?php endforeach; ?>
+</select>
+<?php
+}
+
 function wcsearch_print_radius_slider_code($params) {
 	extract($params);
 	
 	// 1, 10, 100
 	// 1-100
+	// 1-20, 30, 50
 	
 	$index = wcsearch_generateRandomVal();
-	
-	if (!is_array($min_max_options)) {
-		$min_max_options = explode(',', $min_max_options);
-	}
-	$min_max_options = array_filter($min_max_options, 'trim');
-	
-	if (count($min_max_options) == 1) {
-		$min_max_options_range = explode('-', $min_max_options[0]);
-		if (count($min_max_options_range) == 2) {
-			$min_max_options = range($min_max_options_range[0], $min_max_options_range[1]);
-		} 
-	}
+
+	$min_max_options = wcsearch_min_max_options_to_range($min_max_options);
 	
 	$dimension_unit = 'kilometers';
 	if ($geocode_functions = wcsearch_geocode_functions()) {
@@ -1325,7 +1462,7 @@ function wcsearch_print_radius_slider_code($params) {
 	$min_max_options_formatted = $min_max_options;
 	foreach ($min_max_options_formatted AS $key=>$_value) {
 		if (is_numeric($_value)) {
-			$min_max_options_formatted[$key] = '<strong>' . $_value . '</strong>' . ' ' . esc_html( ($dimension_unit == 'miles' ? _n("mile", "miles", $_value, "WCSEARCH") : _n("kilometer", "kilometers", $_value, "WCSEARCH")) );
+			$min_max_options_formatted[$key] = '<strong>' . $_value . '</strong>' . ' ' . esc_html(($dimension_unit == 'miles' ? _n("mile", "miles", $_value, "wcsearch") : _n("kilometer", "kilometers", $_value, "wcsearch")));
 		} else {
 			$min_max_options_formatted[$key] = esc_attr($_value);
 		}
@@ -1335,7 +1472,6 @@ function wcsearch_print_radius_slider_code($params) {
 	$value = array_search($values, $min_max_options);
 	
 	$value = ($value ? $value : 0);
-
 ?>
 <script>
 (function($) {
@@ -1617,7 +1753,7 @@ function wcsearch_get_search_forms_posts() {
 	foreach ($posts AS $post) {
 		$title = $post->post_title;
 		if (!$title) {
-			$title = esc_html__("(no title)", "WCSEARCH");
+			$title = esc_html__("(no title)", "wcsearch");
 		}
 		
 		$search_forms[$post->ID] = $title;
@@ -1797,6 +1933,8 @@ function wcsearch_get_count_num($item, $nolimit = false, $empty_query = false) {
 		}
 	}
 	
+	$taxonomies = array();
+	
 	if (!$empty_query) {
 		$_taxonomies = wcsearch_get_all_taxonomies();
 		foreach ($_taxonomies AS $tax_name=>$tax_slug) {
@@ -1922,8 +2060,6 @@ function wcsearch_get_count_num($item, $nolimit = false, $empty_query = false) {
 		
 		$val = $wpdb->get_var("SELECT val FROM {$wpdb->wcsearch_cache} WHERE hash='{$hash}'");
 		
-		//var_dump($args);
-		
 		if ($val !== null) {
 			return $val;
 		} else {
@@ -1945,10 +2081,8 @@ function wcsearch_get_count_num($item, $nolimit = false, $empty_query = false) {
 
 		$class_name = apply_filters("wcsearch_query_class_name", "wcsearch_query", $used_by);
 		$wcsearch_query = new $class_name($args, true);
-		//var_dump($args);
 		
 		$q_products = $wcsearch_query->get_query();
-		//var_dump($q_products->request);
 		
 		$get_count_num_flag = false;
 		
@@ -1972,11 +2106,15 @@ function wcsearch_render_avg_rating($value, $stars_color) {
 	return wcsearch_renderTemplate('avg_rating.tpl.php', array('value' => $value, 'stars_color' => $stars_color));
 }
 
+function wcsearch_is_our_plugin_installed($file) {
+	return file_exists(plugin_dir_path(dirname(__FILE__, 2)) . $file);
+}
+
 function wcsearch_geocode_functions() {
 
 	$options = array();
 
-	if (defined('W2DC_VERSION') || defined('W2DCF_VERSION')) {
+	if (wcsearch_is_our_plugin_installed('w2dc.php') || wcsearch_is_our_plugin_installed('w2dc_free.php')) {
 		if (get_option("w2dc_map_type") == 'none') {
 			return false;
 		}
@@ -1988,7 +2126,7 @@ function wcsearch_geocode_functions() {
 				'dimension_unit' => get_option('w2dc_miles_kilometers_in_search'),
 		);
 	}
-	if (defined('W2GM_VERSION')) {
+	if (wcsearch_is_our_plugin_installed('w2gm.php')) {
 		$options = array(
 				'autocomplete_service' => 'w2gm_autocompleteService',
 				'address_autocomplete_code' => get_option('w2gm_address_autocomplete_code'),
@@ -1996,7 +2134,7 @@ function wcsearch_geocode_functions() {
 				'dimension_unit' => get_option('w2gm_miles_kilometers_in_search'),
 		);
 	}
-	if (defined('W2MB_VERSION')) {
+	if (wcsearch_is_our_plugin_installed('w2mb.php')) {
 		$options = array(
 				'autocomplete_service' => 'w2mb_autocompleteService',
 				'address_autocomplete_code' => get_option('w2mb_address_autocomplete_code'),
@@ -2009,8 +2147,8 @@ function wcsearch_geocode_functions() {
 		return false;
 	}
 	
-	$options['my_location_button'] = esc_html__('My Location', 'WCSEARCH');
-	$options['my_location_button_error'] = esc_html__('GeoLocation service does not work on your device!', 'WCSEARCH');
+	$options['my_location_button'] = esc_html__('My Location', 'wcsearch');
+	$options['my_location_button_error'] = esc_html__('GeoLocation service does not work on your device!', 'wcsearch');
 	
 	return $options;
 }
@@ -2128,7 +2266,7 @@ function wcsearch_wrapper_get_categories($categories_options) {
 					$selection_item_obj = new stdClass();
 					$selection_item_obj->term_id = $key;
 					$selection_item_obj->slug = $selection_item;
-					$selection_item_obj->name = $selection_item;
+					$selection_item_obj->name = strip_tags($selection_item); // strip tags from checkboxes/radios/select items
 					$selection_item_obj->taxonomy = $tax_name;
 					$selection_item_obj->is_select = true;
 					
@@ -2319,12 +2457,23 @@ function wcsearch_wrapper_get_term_by_slug($term_slug, $tax_name = '') {
 	}
 }
 
-function wcsearch_getDatePickerFormat() {
+function wcsearch_getDateFormat() {
 	$wp_date_format = get_option('date_format');
+
+	if (!$wp_date_format) {
+		$wp_date_format = "d/m/Y";
+	}
+
+	return $wp_date_format;
+}
+
+function wcsearch_getDatePickerFormat() {
+	$wp_date_format = wcsearch_getDateFormat();
+	
 	return str_replace(
 			array('S',  'd', 'j',  'l',  'm', 'n',  'F',  'Y'),
 			array('',  'dd', 'd', 'DD', 'mm', 'm', 'MM', 'yy'),
-			$wp_date_format);
+		$wp_date_format);
 }
 
 function wcsearch_getDatePickerLangCode($locale) {
@@ -2354,84 +2503,84 @@ function wcsearch_print_datepickers_code($params) {
 	
 		$(function() {
 
-			$('body').on("reset", "input[name=<?php echo $slug; ?>]", function() {
+			$('body').on("reset", "input[name=<?php wcsearch_esc_e($slug); ?>]", function() {
 				$("#reset-date-max").trigger("click");
 				$("#reset-date-min").trigger("click");
 			});
 			
-			$("#wcsearch-field-input-<?php echo $index; ?>-min").datepicker({
+			$("#wcsearch-field-input-<?php wcsearch_esc_e($index); ?>-min").datepicker({
 				changeMonth: true,
 				changeYear: true,
 				<?php if (function_exists('is_rtl') && is_rtl()): ?>isRTL: true,<?php endif; ?>
 					showButtonPanel: true,
-					dateFormat: '<?php echo $dateformat; ?>',
+					dateFormat: '<?php wcsearch_esc_e($dateformat); ?>',
 					firstDay: <?php echo intval(get_option('start_of_week')); ?>,
 					onSelect: function(dateText) {
 						var tmstmp_str;
-						var sDate = $("#wcsearch-field-input-<?php echo $index; ?>-min").datepicker("getDate");
-						var set_min_date = $("#wcsearch-field-input-<?php echo $index; ?>-min").datepicker("getDate");
+						var sDate = $("#wcsearch-field-input-<?php wcsearch_esc_e($index); ?>-min").datepicker("getDate");
+						var set_min_date = $("#wcsearch-field-input-<?php wcsearch_esc_e($index); ?>-min").datepicker("getDate");
 						if (sDate) {
 							sDate.setMinutes(sDate.getMinutes() - sDate.getTimezoneOffset());
 							tmstmp_str = $.datepicker.formatDate('@', sDate)/1000;
 						} else {
 							tmstmp_str = "";
 						}
-						$("#wcsearch-field-input-<?php echo $index; ?>-max").datepicker('option', 'minDate', set_min_date);
+						$("#wcsearch-field-input-<?php wcsearch_esc_e($index); ?>-max").datepicker('option', 'minDate', set_min_date);
 
-						var rDate = $("input[name=<?php echo $slug; ?>]").val().split("-");
-						$("input[name=<?php echo $slug; ?>]").val(tmstmp_str+"-"+rDate[1]);
+						var rDate = $("input[name=<?php wcsearch_esc_e($slug); ?>]").val().split("-");
+						$("input[name=<?php wcsearch_esc_e($slug); ?>]").val(tmstmp_str+"-"+rDate[1]);
 
-						$("input[name=<?php echo $slug; ?>]").trigger("change");
+						$("input[name=<?php wcsearch_esc_e($slug); ?>]").trigger("change");
 					}
 			});
 			<?php
 			if ($lang_code = wcsearch_getDatePickerLangCode(get_locale())): ?>
-			$("#wcsearch-field-input-<?php echo $index; ?>-min").datepicker($.datepicker.regional[ "<?php echo $lang_code; ?>" ]);
+			$("#wcsearch-field-input-<?php wcsearch_esc_e($index); ?>-min").datepicker($.datepicker.regional[ "<?php wcsearch_esc_e($lang_code); ?>" ]);
 			<?php endif; ?>
 		
-			$("#wcsearch-field-input-<?php echo $index; ?>-max").datepicker({
+			$("#wcsearch-field-input-<?php wcsearch_esc_e($index); ?>-max").datepicker({
 					changeMonth: true,
 					changeYear: true,
 					showButtonPanel: true,
-					dateFormat: '<?php echo $dateformat; ?>',
+					dateFormat: '<?php wcsearch_esc_e($dateformat); ?>',
 					firstDay: <?php echo intval(get_option('start_of_week')); ?>,
 					onSelect: function(dateText) {
 						var tmstmp_str;
-						var sDate = $("#wcsearch-field-input-<?php echo $index; ?>-max").datepicker("getDate");
-						var set_max_date = $("#wcsearch-field-input-<?php echo $index; ?>-max").datepicker("getDate");
+						var sDate = $("#wcsearch-field-input-<?php wcsearch_esc_e($index); ?>-max").datepicker("getDate");
+						var set_max_date = $("#wcsearch-field-input-<?php wcsearch_esc_e($index); ?>-max").datepicker("getDate");
 						if (sDate) {
 							sDate.setMinutes(sDate.getMinutes() - sDate.getTimezoneOffset());
 							tmstmp_str = $.datepicker.formatDate('@', sDate)/1000;
 						} else {
 							tmstmp_str = "";
 						}
-						$("#wcsearch-field-input-<?php echo $index; ?>-min").datepicker('option', 'maxDate', set_max_date);
+						$("#wcsearch-field-input-<?php wcsearch_esc_e($index); ?>-min").datepicker('option', 'maxDate', set_max_date);
 
-						var rDate = $("input[name=<?php echo $slug; ?>]").val().split("-");
-						$("input[name=<?php echo $slug; ?>]").val(rDate[0]+"-"+tmstmp_str);
+						var rDate = $("input[name=<?php wcsearch_esc_e($slug); ?>]").val().split("-");
+						$("input[name=<?php wcsearch_esc_e($slug); ?>]").val(rDate[0]+"-"+tmstmp_str);
 
-						$("input[name=<?php echo $slug; ?>]").trigger("change");
+						$("input[name=<?php wcsearch_esc_e($slug); ?>]").trigger("change");
 					}
 			});
 			<?php
 			if ($lang_code = wcsearch_getDatePickerLangCode(get_locale())): ?>
-			$("#wcsearch-field-input-<?php echo $index; ?>-max").datepicker($.datepicker.regional[ "<?php echo $lang_code; ?>" ]);
+			$("#wcsearch-field-input-<?php wcsearch_esc_e($index); ?>-max").datepicker($.datepicker.regional[ "<?php wcsearch_esc_e($lang_code); ?>" ]);
 			<?php endif; ?>
 		
 			<?php if ($end_value): ?>
-			$("#wcsearch-field-input-<?php echo $index; ?>-max").datepicker('setDate', $.datepicker.parseDate('dd/mm/yy', '<?php echo date('d/m/Y', $end_value); ?>'));
-			$("#wcsearch-field-input-<?php echo $index; ?>-min").datepicker('option', 'maxDate', $("#wcsearch-field-input-<?php echo $index; ?>-max").datepicker('getDate'));
+			$("#wcsearch-field-input-<?php wcsearch_esc_e($index); ?>-max").datepicker('setDate', $.datepicker.parseDate('dd/mm/yy', '<?php echo date('d/m/Y', $end_value); ?>'));
+			$("#wcsearch-field-input-<?php wcsearch_esc_e($index); ?>-min").datepicker('option', 'maxDate', $("#wcsearch-field-input-<?php wcsearch_esc_e($index); ?>-max").datepicker('getDate'));
 			<?php endif; ?>
 			$("body").on("click", "#reset-date-max", function() {
-				$.datepicker._clearDate('#wcsearch-field-input-<?php echo $index; ?>-max');
+				$.datepicker._clearDate('#wcsearch-field-input-<?php wcsearch_esc_e($index); ?>-max');
 			})
 		
 			<?php if ($start_value): ?>
-			$("#wcsearch-field-input-<?php echo $index; ?>-min").datepicker('setDate', $.datepicker.parseDate('dd/mm/yy', '<?php echo date('d/m/Y', $start_value); ?>'));
-			$("#wcsearch-field-input-<?php echo $index; ?>-max").datepicker('option', 'minDate', $("#wcsearch-field-input-<?php echo $index; ?>-min").datepicker('getDate'));
+			$("#wcsearch-field-input-<?php wcsearch_esc_e($index); ?>-min").datepicker('setDate', $.datepicker.parseDate('dd/mm/yy', '<?php echo date('d/m/Y', $start_value); ?>'));
+			$("#wcsearch-field-input-<?php wcsearch_esc_e($index); ?>-max").datepicker('option', 'minDate', $("#wcsearch-field-input-<?php wcsearch_esc_e($index); ?>-min").datepicker('getDate'));
 			<?php endif; ?>
 			$("body").on("click", "#reset-date-min", function() {
-				$.datepicker._clearDate('#wcsearch-field-input-<?php echo $index; ?>-min');
+				$.datepicker._clearDate('#wcsearch-field-input-<?php wcsearch_esc_e($index); ?>-min');
 			})
 		});
 	})(jQuery);
@@ -2440,14 +2589,14 @@ function wcsearch_print_datepickers_code($params) {
 	<div class="wcsearch-date-input-wrapper wcsearch-date-input-wrapper-<?php echo esc_attr($view); ?>">
 		<div class="wcsearch-date-input-field">
 			<div class="wcsearch-has-feedback">
-				<input type="text" class="wcsearch-form-control" id="wcsearch-field-input-<?php echo $index; ?>-min" placeholder="<?php echo esc_attr($placeholder_start); ?>" />
+				<input type="text" class="wcsearch-form-control" id="wcsearch-field-input-<?php wcsearch_esc_e($index); ?>-min" placeholder="<?php echo esc_attr($placeholder_start); ?>" />
 				<span class="wcsearch-form-control-feedback wcsearch-fa wcsearch-fa-calendar"></span>
 			</div>
 			<input type="button" class="wcsearch-date-reset-button wcsearch-btn wcsearch-btn-primary" id="reset-date-min" value="<?php echo esc_attr($reset_label_text)?>" />
 		</div>
 		<div class="wcsearch-date-input-field">
 			<div class="wcsearch-has-feedback">
-				<input type="text" class="wcsearch-form-control" id="wcsearch-field-input-<?php echo $index; ?>-max" placeholder="<?php echo esc_attr($placeholder_end); ?>" />
+				<input type="text" class="wcsearch-form-control" id="wcsearch-field-input-<?php wcsearch_esc_e($index); ?>-max" placeholder="<?php echo esc_attr($placeholder_end); ?>" />
 				<span class="wcsearch-form-control-feedback wcsearch-fa wcsearch-fa-calendar"></span>
 			</div>
 			<input type="button" class="wcsearch-date-reset-button wcsearch-btn wcsearch-btn-primary" id="reset-date-max" value="<?php echo esc_attr($reset_label_text)?>" />
@@ -2465,6 +2614,7 @@ function wcsearch_wrap_keywords_examples($example) {
 }
 
 function wcsearch_print_suggestions_code($try_to_search_text, $suggestions) {
+
 	if ($suggestions) {
 		$examples = explode(',', $suggestions);
 		$wrapped = array_map(
@@ -2474,7 +2624,7 @@ function wcsearch_print_suggestions_code($try_to_search_text, $suggestions) {
 		$suggestions = implode(', ', $wrapped);
 	?>
 	<p class="wcsearch-search-suggestions">
-		<?php echo (esc_html__("Try to search", "WCSEARCH") != 'Try to search') ? esc_html__("Try to search", "WCSEARCH") : $try_to_search_text; ?>
+		<?php echo (esc_html__("Try to search", "wcsearch") != 'Try to search') ? esc_html__("Try to search", "wcsearch") : esc_js($try_to_search_text); ?>
 		<?php $suggestions = explode(',', $suggestions); ?>
 		<?php foreach ($suggestions AS $label): ?>
 		<label><?php echo wp_kses($label, array('a' => array('href' => array())), array('javascript')); ?></label>
@@ -2503,6 +2653,31 @@ function wcsearch_get_luma_color($color) {
 	$luma = 0.2126 * $r + 0.7152 * $g + 0.0722 * $b; // per ITU-R BT.709
 
 	return $luma;
+}
+
+function wcsearch_parse_slugs_ids_list($items) {
+
+	if (!is_array($items)) {
+		$items = explode(',', $items);
+	}
+
+	return array_filter($items, 'trim');
+}
+
+function wcsearch_esc_($content, $domain = false) {
+
+	$allowed_html = 'post';
+
+	if ($domain) {
+		echo wp_kses(__($content, $domain), $allowed_html);
+	} else {
+		echo wp_kses($content, $allowed_html);
+	}
+}
+
+function wcsearch_esc_e($content, $domain = false) {
+
+	echo wcsearch_esc_($content, $domain);
 }
 
 ?>

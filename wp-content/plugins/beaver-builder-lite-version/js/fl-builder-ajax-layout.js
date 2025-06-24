@@ -412,9 +412,6 @@
 						siblings = this._data.nodeParent.find( ' > .fl-col-group, > .fl-module' );
 					}
 
-					// Filter out any clones created by duplicating.
-					siblings = siblings.filter( ':not(.fl-builder-node-clone)' );
-
 					// Add the new node.
 					if ( 0 === siblings.length || this._data.nodePosition >= siblings.length ) {
 						this._data.nodeParent.append( this._data.html );

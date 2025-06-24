@@ -1,9 +1,9 @@
 <?php
 
 /**
- * For singleton accessor, use VP_W2DC_WP_MassEnqueuer class instead.
+ * For singleton accessor, use W2DC_VP_WP_MassEnqueuer class instead.
  */
-class VP_W2DC_WP_MassEnqueuer
+class W2DC_VP_WP_MassEnqueuer
 {
 	private static $_instance = null;
 
@@ -11,7 +11,7 @@ class VP_W2DC_WP_MassEnqueuer
 	{
 		if(self::$_instance == null)
 		{
-			self::$_instance = new VP_W2DC_WP_Enqueuer();
+			self::$_instance = new W2DC_VP_WP_Enqueuer();
 		}
 		return self::$_instance;
 	}

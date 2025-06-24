@@ -14,7 +14,6 @@ class w2dc_buttons_controller extends w2dc_frontend_controller {
 		global $w2dc_instance;
 
 		$shortcode_atts = array_merge(array(
-				//'directories' => null,
 				'hide_button_text' => false,
 				'buttons' => 'submit,claim,favourites,edit,print,bookmark,pdf', // also 'logout' possible
 		), $args);

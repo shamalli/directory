@@ -47,6 +47,8 @@ class wcsearch_demo_links_controller {
 	public function next_page_slug($offset = 0) {
 		$pages = $this->pages;
 		$keys = array_keys($pages);
+		
+		$next_page_slug = $keys[0];
 			
 		global $post;
 		if ($post && ($post_slug = $post->post_name) && array_key_exists($post_slug, $pages)) {
@@ -61,8 +63,6 @@ class wcsearch_demo_links_controller {
 					}
 				}
 			}
-		} else {
-			$next_page_slug = array_shift($keys);
 		}
 		
 		return $next_page_slug;
@@ -72,6 +72,7 @@ class wcsearch_demo_links_controller {
 		$pages = $this->pages;
 		$keys = array_keys($pages);
 		
+		$prev_page_slug = $keys[count($keys)-1];
 
 		global $post;
 		if ($post && ($post_slug = $post->post_name) && array_key_exists($post_slug, $pages)) {
@@ -86,8 +87,6 @@ class wcsearch_demo_links_controller {
 					}
 				}
 			}
-		} else {
-			$prev_page_slug = array_pop($keys);
 		}
 		
 		return $prev_page_slug;

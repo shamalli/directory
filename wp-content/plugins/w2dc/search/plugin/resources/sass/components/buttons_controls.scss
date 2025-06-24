@@ -42,7 +42,7 @@
 	width: 26px;
 	height: 26px;
 	background: #FFFFFF;
-	font-family: "FontAwesome"; 
+	font-family: "FontAwesomeWCSEARCH"; 
 	margin-right: 5px;
 	border-width: 1px;
 	border-style: solid;
@@ -131,6 +131,10 @@
 .wcsearch-search-term-button {
 	margin: 15px 10px 15px 0 !important;
 	position: relative;
+}
+/* first element in columns without top margin */
+.wcsearch-search-input-terms-column .wcsearch-search-term-button:first-child {
+	margin-top: 0 !important;
 }
 .wcsearch-search-term-button .wcsearch-model-options-link {
 	position: absolute;

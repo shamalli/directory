@@ -75,6 +75,7 @@ final class FLBuilderLoop {
 		add_action( 'registered_post_type', __CLASS__ . '::post_type_rewrite_rules', 10, 2 );
 		add_action( 'registered_taxonomy', __CLASS__ . '::taxonomy_rewrite_rules', 10, 3 );
 		add_action( 'wp_loaded', __CLASS__ . '::flush_rewrite_rules', 1 );
+		add_action( 'parse_query', __CLASS__ . '::parse_query' );
 
 		// Filters
 		add_filter( 'found_posts', __CLASS__ . '::found_posts', 1, 2 );
@@ -190,11 +191,7 @@ final class FLBuilderLoop {
 		$paged = self::get_paged();
 
 		// Get the offset.
-		if ( ! isset( $settings->offset ) || ! is_int( (int) $settings->offset ) ) {
-			$offset = 0;
-		} else {
-			$offset = $settings->offset;
-		}
+		$offset = isset( $settings->offset ) ? intval( $settings->offset ) : 0;
 
 		// Get the paged offset.
 		if ( $paged < 2 ) {
@@ -221,6 +218,16 @@ final class FLBuilderLoop {
 			'settings'            => $settings,
 		);
 
+		// Set query keywords if specified in the settings.
+		if ( isset( $settings->keyword ) && ! empty( $settings->keyword ) ) {
+			$args['s'] = $settings->keyword;
+		}
+
+		// Set post_status if specified in the settings.
+		if ( isset( $settings->post_status ) && ! empty( $settings->post_status ) ) {
+			$args['post_status'] = $settings->post_status;
+		}
+
 		// Order by meta value arg.
 		if ( strstr( $order_by, 'meta_value' ) ) {
 			$args['meta_key'] = $settings->order_by_meta_key;
@@ -239,6 +246,39 @@ final class FLBuilderLoop {
 			);
 		}
 
+		// Filter by meta key
+		if ( ( isset( $settings->custom_field ) && is_array( $settings->custom_field ) && count( $settings->custom_field ) > 0 ) && ( isset( $settings->data_source ) && 'custom_query' == $settings->data_source ) ) {
+			if ( count( $settings->custom_field ) == 1 ) {
+
+				if ( isset( $settings->custom_field[0]->filter_meta_key ) && ! empty( $settings->custom_field[0]->filter_meta_key ) ) {
+					$filter_arr        = array();
+					$filter_arr['key'] = untrailingslashit( $settings->custom_field[0]->filter_meta_key );
+					if ( 'EXISTS' != $settings->custom_field[0]->filter_meta_compare && 'NOT EXISTS' != $settings->custom_field[0]->filter_meta_compare ) {
+						$filter_arr['value'] = do_shortcode( untrailingslashit( $settings->custom_field[0]->filter_meta_value ) );
+					}
+					$filter_arr['type']    = $settings->custom_field[0]->filter_meta_type;
+					$filter_arr['compare'] = $settings->custom_field[0]->filter_meta_compare;
+					$args['meta_query'][]  = $filter_arr;
+				}
+			} else {
+				if ( isset( $settings->custom_field_relation ) ) {
+					$args['meta_query']['relation'] = $settings->custom_field_relation;
+					foreach ( $settings->custom_field as $fields ) {
+						if ( ! empty( $fields ) ) {
+							$filter_arr        = array();
+							$filter_arr['key'] = untrailingslashit( $fields->filter_meta_key );
+							if ( 'EXISTS' != $fields->filter_meta_compare && 'NOT EXISTS' != $fields->filter_meta_compare ) {
+								$filter_arr['value'] = do_shortcode( untrailingslashit( $fields->filter_meta_value ) );
+							}
+							$filter_arr['type']    = $fields->filter_meta_type;
+							$filter_arr['compare'] = $fields->filter_meta_compare;
+							$args['meta_query'][]  = $filter_arr;
+						}
+					}
+				}
+			}
+		}
+
 		// Build the author query.
 		if ( ! empty( $users ) ) {
 
@@ -255,96 +295,102 @@ final class FLBuilderLoop {
 
 			$args[ $arg ] = $users;
 		}
+		foreach ( (array) $post_type as $type ) {
+			// Build the taxonomy query.
+			$taxonomies = self::taxonomies( $type );
 
-		// Build the taxonomy query.
-		$taxonomies = self::taxonomies( $post_type );
+			foreach ( $taxonomies as $tax_slug => $tax ) {
 
-		foreach ( $taxonomies as $tax_slug => $tax ) {
+				$tax_value = '';
+				$term_ids  = array();
+				$operator  = 'IN';
 
-			$tax_value = '';
-			$term_ids  = array();
-			$operator  = 'IN';
+				// Get the value of the suggest field.
+				if ( isset( $settings->{'tax_' . $type . '_' . $tax_slug} ) ) {
+					// New style slug.
+					$tax_value = $settings->{'tax_' . $type . '_' . $tax_slug};
+				} elseif ( isset( $settings->{'tax_' . $tax_slug} ) ) {
+					// Old style slug for backwards compat.
+					$tax_value = $settings->{'tax_' . $tax_slug};
+				}
 
-			// Get the value of the suggest field.
-			if ( isset( $settings->{'tax_' . $post_type . '_' . $tax_slug} ) ) {
-				// New style slug.
-				$tax_value = $settings->{'tax_' . $post_type . '_' . $tax_slug};
-			} elseif ( isset( $settings->{'tax_' . $tax_slug} ) ) {
-				// Old style slug for backwards compat.
-				$tax_value = $settings->{'tax_' . $tax_slug};
-			}
+				// Get the term IDs array.
+				if ( ! empty( $tax_value ) ) {
+					$term_ids = explode( ',', $tax_value );
+				}
 
-			// Get the term IDs array.
-			if ( ! empty( $tax_value ) ) {
-				$term_ids = explode( ',', $tax_value );
-			}
+				// Handle matching settings.
+				if ( isset( $settings->{'tax_' . $type . '_' . $tax_slug . '_matching'} ) ) {
 
-			// Handle matching settings.
-			if ( isset( $settings->{'tax_' . $post_type . '_' . $tax_slug . '_matching'} ) ) {
+					$tax_matching = $settings->{'tax_' . $type . '_' . $tax_slug . '_matching'};
 
-				$tax_matching = $settings->{'tax_' . $post_type . '_' . $tax_slug . '_matching'};
+					if ( ! $tax_matching ) {
+						// Do not match these terms.
+						$operator = 'NOT IN';
+					} elseif ( 'related' === $tax_matching ) {
+						// Match posts by related terms from the global post.
+						global $post;
+						$terms   = wp_get_post_terms( $post->ID, $tax_slug );
+						$related = array();
 
-				if ( ! $tax_matching ) {
-					// Do not match these terms.
-					$operator = 'NOT IN';
-				} elseif ( 'related' === $tax_matching ) {
-					// Match posts by related terms from the global post.
-					global $post;
-					$terms   = wp_get_post_terms( $post->ID, $tax_slug );
-					$related = array();
+						foreach ( $terms as $term ) {
+							if ( ! in_array( $term->term_id, $term_ids ) ) {
+								$related[] = $term->term_id;
+							}
+						}
 
-					foreach ( $terms as $term ) {
-						if ( ! in_array( $term->term_id, $term_ids ) ) {
-							$related[] = $term->term_id;
+						if ( empty( $related ) ) {
+							// If no related terms, match all except those in the suggest field.
+							$operator = 'NOT IN';
+						} else {
+
+							// Don't include posts with terms selected in the suggest field.
+							$args['tax_query'][] = array(
+								'taxonomy' => $tax_slug,
+								'field'    => 'id',
+								'terms'    => $term_ids,
+								'operator' => 'NOT IN',
+							);
+
+							// Set the term IDs to the related terms.
+							$term_ids = $related;
 						}
 					}
-
-					if ( empty( $related ) ) {
-						// If no related terms, match all except those in the suggest field.
-						$operator = 'NOT IN';
-					} else {
-
-						// Don't include posts with terms selected in the suggest field.
-						$args['tax_query'][] = array(
-							'taxonomy' => $tax_slug,
-							'field'    => 'id',
-							'terms'    => $term_ids,
-							'operator' => 'NOT IN',
-						);
-
-						// Set the term IDs to the related terms.
-						$term_ids = $related;
-					}
 				}
-			}
 
-			if ( ! empty( $term_ids ) ) {
+				if ( ! empty( $term_ids ) ) {
 
-				$args['tax_query'][] = array(
-					'taxonomy' => $tax_slug,
-					'field'    => 'id',
-					'terms'    => $term_ids,
-					'operator' => $operator,
-				);
+					$args['tax_query'][] = array(
+						'taxonomy' => $tax_slug,
+						'field'    => 'id',
+						'terms'    => $term_ids,
+						'operator' => $operator,
+					);
+				}
 			}
 		}
 
-		// Post in/not in query.
-		if ( isset( $settings->{'posts_' . $post_type} ) ) {
+		foreach ( (array) $post_type as $type ) {
+			// Post in/not in query.
+			if ( isset( $settings->{'posts_' . $type} ) ) {
 
-			$ids = $settings->{'posts_' . $post_type};
-			$arg = 'post__in';
+				$ids = $settings->{'posts_' . $type};
+				$arg = 'post__in';
 
-			// Set to NOT IN if matching is present and set to 0.
-			if ( isset( $settings->{'posts_' . $post_type . '_matching'} ) ) {
-				if ( ! $settings->{'posts_' . $post_type . '_matching'} ) {
-					$arg = 'post__not_in';
+				// Set to NOT IN if matching is present and set to 0.
+				if ( isset( $settings->{'posts_' . $type . '_matching'} ) ) {
+					if ( ! $settings->{'posts_' . $type . '_matching'} ) {
+						$arg = 'post__not_in';
+					}
 				}
-			}
 
-			// Add the args if we have IDs.
-			if ( ! empty( $ids ) ) {
-				$args[ $arg ] = explode( ',', $settings->{'posts_' . $post_type} );
+				// Add the args if we have IDs.
+				if ( ! empty( $ids ) ) {
+					$ids = explode( ',', $settings->{'posts_' . $type} );
+					foreach ( $ids as $id ) {
+						$args[ $arg ][] = $id;
+					}
+				}
 			}
 		}
 
@@ -355,7 +401,7 @@ final class FLBuilderLoop {
 		/**
 		 * Filter all the args passed to WP_Query.
 		 * @see fl_builder_loop_query_args
-		 * @link https://kb.wpbeaverbuilder.com/article/591-create-a-filter-to-customize-the-display-of-post-data
+		 * @link https://docs.wpbeaverbuilder.com/beaver-builder/developer/tutorials-guides/create-a-filter-to-customize-the-display-of-post-data
 		 */
 		$args = apply_filters( 'fl_builder_loop_query_args', $args );
 
@@ -433,6 +479,8 @@ final class FLBuilderLoop {
 		// Generic Rule for Homepage / Search
 		$flpaged_rules[ $paged_regex . '/?([0-9]{1,})/?$' ] = 'index.php?&flpaged=$matches[1]';
 
+		$flpaged_rules = apply_filters( 'fl_builder_loop_rewrite_rules', $flpaged_rules );
+
 		foreach ( $flpaged_rules as $regex => $redirect ) {
 			add_rewrite_rule( $regex, $redirect, 'top' );
 		}
@@ -503,10 +551,11 @@ final class FLBuilderLoop {
 			return;
 		}
 
-		$is_single = false;
+		$has_archive = is_string( $args->has_archive ) ? $args->has_archive : false;
+		$is_single   = false;
 
 		// Check if it's a CPT archive or CPT single.
-		if ( $custom_paged['current_page'] != $post_type ) {
+		if ( $custom_paged['current_page'] != $post_type && $has_archive != $custom_paged['current_page'] ) {
 
 			// Is a child post of the current post type?
 			$post_object = get_page_by_path( $custom_paged['current_page'], OBJECT, $post_type );
@@ -652,6 +701,37 @@ final class FLBuilderLoop {
 	}
 
 	/**
+	 * Sets query flags to prevent 404 or canonical redirection for custom pagination.
+	 *
+	 * @param object $query
+	 * @since 2.6.1
+	 * @return void
+	 */
+	static public function parse_query( $query ) {
+		if ( is_admin() ) {
+			return;
+		}
+
+		$is_search = $query->is_search;
+
+		// Search layout pagination
+		if ( isset( $query->query['flpaged'] ) && isset( $query->query['s'] ) && isset( $query->query['page_id'] ) && get_option( 'page_on_front' ) == $query->query['page_id'] ) {
+			$query->is_search = true;
+
+			// Make sure we have layouts for search.
+			$layouts = fl_theme_builder_archive_layouts( $query );
+			if ( $layouts && $layouts['query']->post_count > 0 ) {
+				$query->is_page     = false;
+				$query->is_singular = false;
+				unset( $query->query['page_id'] );
+				unset( $query->query_vars['page_id'] );
+			} else {
+				$query->is_search = $is_search;
+			}
+		}
+	}
+
+	/**
 	 * Disable canonical redirection on the frontpage when query var 'flpaged' is found.
 	 *
 	 * Disable canonical on supported CPT single.
@@ -667,17 +747,32 @@ final class FLBuilderLoop {
 		if ( is_array( $wp_the_query->query ) ) {
 			foreach ( $wp_the_query->query as $key => $value ) {
 				if ( strpos( $key, 'flpaged' ) === 0 && is_page() && get_option( 'page_on_front' ) ) {
-					$redirect_url = false;
-					break;
+					return false;
 				}
 			}
 
-			// Disable canonical on single post pagination for all post types.
-			if ( true === $wp_the_query->is_singular
-				&& - 1 == $wp_the_query->current_post
-				&& true === $wp_the_query->is_paged
+			// Checks for paginated singular posts.
+			if ( false === $wp_the_query->is_singular
+				|| - 1 != $wp_the_query->current_post
+				|| false === $wp_the_query->is_paged
 			) {
-				$redirect_url = false;
+				return $redirect_url;
+			}
+
+			// Checks for posts module in the current layout.
+			$modules = FLBuilderModel::get_all_modules();
+
+			if ( FLBuilderModel::is_builder_enabled() && ! empty( $modules ) ) {
+				foreach ( $modules as $module ) {
+					if ( 'post-grid' == $module->slug ) {
+						return false;
+					}
+				}
+			}
+
+			// Checks for posts module in themer layouts.
+			if ( fl_theme_builder_has_post_grid() ) {
+				return false;
 			}
 		}
 
@@ -694,30 +789,42 @@ final class FLBuilderLoop {
 	 * @return bool
 	 */
 	static public function pre_404_pagination( $prevent_404, $query ) {
-		global $wp_actions;
+		global $wp_actions, $wp_the_query, $wp_query;
 
 		if ( ! class_exists( 'FLThemeBuilder' ) ) {
 			return $prevent_404;
 		}
 
-		if ( ! $query->is_paged ) {
+		if ( ! $query->is_paged && ! is_numeric( $wp_the_query->get( 'flpaged' ) ) ) {
 			return false;
 		}
 
-		if ( ! $query->is_archive && ! $query->is_home ) {
+		if ( ! $query->is_archive && ! $query->is_home && ! $query->is_search ) {
 			return false;
 		}
 
-		if ( $query->is_archive && $query->is_category && $query->post_count < 1 ) {
+		$layouts = fl_theme_builder_archive_layouts( $query );
+		if ( ! $layouts || $layouts['query']->post_count <= 0 ) {
+			return false;
+		}
 
-			$post_grid_posts = fl_theme_builder_cat_archive_post_grid( $query );
-			if ( ! $post_grid_posts || $post_grid_posts->post_count < 1 ) {
+		if ( $query->is_paged || is_numeric( $wp_the_query->get( 'flpaged' ) ) ) {
+			$post_grid_posts = fl_theme_builder_archive_post_grid( $layouts );
+
+			if ( ! $post_grid_posts ) {
+				return false;
+			}
+
+			if ( $post_grid_posts && false === $post_grid_posts['page_exists'] ) {
+				// Set 404 for our custom paginations.
+				$wp_query->set_404();
+				status_header( 404 );
+				nocache_headers();
 				return false;
 			}
 		}
 
 		$is_global_hack = false;
-		$layout_type    = '';
 
 		// Manually set globals since filter `pre_handle_404`
 		// doesn't reach `$wp_query->register_globals()`.
@@ -778,14 +885,20 @@ final class FLBuilderLoop {
 				$add_args['fl_rand_seed'] = self::$rand_seed;
 			}
 
-			echo paginate_links(array(
+			/**
+			 * @since 2.4
+			 * @see fl_loop_paginate_links_args
+			 */
+			$args = apply_filters( 'fl_loop_paginate_links_args', array(
 				'base'     => $base . '%_%',
 				'format'   => $format,
 				'current'  => $current_page,
 				'total'    => $total_pages,
 				'type'     => 'list',
 				'add_args' => $add_args,
-			));
+			), $query );
+
+			echo paginate_links( $args );
 		}
 	}
 
@@ -1054,7 +1167,9 @@ final class FLBuilderLoop {
 
 			$data[ $tax_slug ] = $tax;
 		}
-
+		/**
+		 * @see fl_builder_loop_taxonomies
+		 */
 		return apply_filters( 'fl_builder_loop_taxonomies', $data, $taxonomies, $post_type );
 	}
 
@@ -1096,6 +1211,34 @@ final class FLBuilderLoop {
 		}
 
 		include FL_BUILDER_DIR . 'includes/loop-settings-matching.php';
+	}
+
+	/**
+	 * Helper function to get the_excerpt
+	 */
+	static public function the_excerpt( $post_id = false ) {
+		echo self::get_the_excerpt( $post_id );
+	}
+
+	/**
+	 * Helper function for get_the_excerpt
+	 */
+	static public function get_the_excerpt( $post_id = false ) {
+		global $post;
+		if ( ! $post_id && isset( $post->ID ) ) {
+			$post_id = $post->ID;
+		}
+		if ( ! $post_id || ! is_object( $post ) ) {
+			return '';
+		}
+
+		ob_start();
+		the_excerpt();
+		/**
+		 * Filters the output of FLBuilderLoop::get_the_excerpt
+		 * @see fl_builder_loop_get_the_excerpt
+		 */
+		return apply_filters( 'fl_builder_loop_get_the_excerpt', ob_get_clean() );
 	}
 }
 

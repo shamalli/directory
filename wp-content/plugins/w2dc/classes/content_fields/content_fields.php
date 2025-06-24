@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 include_once W2DC_PATH . 'classes/content_fields/fields/content_field_content.php';
 include_once W2DC_PATH . 'classes/content_fields/fields/content_field_excerpt.php';
 include_once W2DC_PATH . 'classes/content_fields/fields/content_field_address.php';
@@ -26,26 +28,29 @@ class w2dc_content_fields {
 	private $map_content_fields = array();
 	
 	public function __construct() {
-		$this->fields_types_names = array(
-				'excerpt' => __('Excerpt', 'W2DC'),
-				'content' => __('Content', 'W2DC'),
-				'categories' => __('Listing categories', 'W2DC'),
-				'tags' => __('Listing tags', 'W2DC'),
-				'address' => __('Listing addresses', 'W2DC'),
-				'phone' => __('Phone number', 'W2DC'),
-				'string' => __('Text string', 'W2DC'),
-				'textarea' => __('Textarea', 'W2DC'),
-				'number' => __('Digital value', 'W2DC'),
-				'select' => __('Select list', 'W2DC'),
-				'radio' => __('Radio buttons', 'W2DC'),
-				'checkbox' => __('Checkboxes', 'W2DC'),
-				'website' => __('Website URL', 'W2DC'),
-				'email' => __('Email', 'W2DC'),
-				'datetime' => __('Date-Time', 'W2DC'),
-				'price' => __('Price', 'W2DC'),
-				'hours' => __('Opening hours', 'W2DC'),
-				'fileupload' => __('File upload', 'W2DC'),
-		);
+		
+		add_action('init', function() {
+			$this->fields_types_names = array(
+					'excerpt' => esc_html__('Excerpt', 'w2dc'),
+					'content' => esc_html__('Content', 'w2dc'),
+					'categories' => esc_html__('Listing categories', 'w2dc'),
+					'tags' => esc_html__('Listing tags', 'w2dc'),
+					'address' => esc_html__('Listing addresses', 'w2dc'),
+					'phone' => esc_html__('Phone number', 'w2dc'),
+					'string' => esc_html__('Text string', 'w2dc'),
+					'textarea' => esc_html__('Textarea', 'w2dc'),
+					'number' => esc_html__('Digital value', 'w2dc'),
+					'select' => esc_html__('Select list', 'w2dc'),
+					'radio' => esc_html__('Radio buttons', 'w2dc'),
+					'checkbox' => esc_html__('Checkboxes', 'w2dc'),
+					'website' => esc_html__('Website URL', 'w2dc'),
+					'email' => esc_html__('Email', 'w2dc'),
+					'datetime' => esc_html__('Date-Time', 'w2dc'),
+					'price' => esc_html__('Price', 'w2dc'),
+					'hours' => esc_html__('Opening hours', 'w2dc'),
+					'fileupload' => esc_html__('File upload', 'w2dc'),
+			);
+		}, 0);
 
 		$this->getContentFieldsFromDB();
 	}
@@ -326,17 +331,19 @@ class w2dc_content_fields {
 		return $result_content_fields;
 	}
 	
-	public function getOrderParams($defaults = array()) {
+	public function getOrderParams($order_args, $defaults = array()) {
 		$order_by = w2dc_getValue($_GET, 'order_by', w2dc_getValue($defaults, 'order_by'));
 
-		if ($order_by)
+		if ($order_by) {
 			foreach ($this->content_fields_array AS $content_field) {
 				if ($content_field->canBeOrdered() && $content_field->is_ordered && $content_field->slug == $order_by) {
-					return $content_field->orderParams();
+					return $content_field->orderParams($order_args);
 					break;
 				}
 			}
-		return array();
+		}
+		
+		return $order_args;
 	}
 	
 	public function getMapContentFields() {
@@ -448,7 +455,7 @@ class w2dc_content_fields {
 
 class w2dc_content_fields_group {
 	public $id;
-	public $name;
+	public $name = '';
 	public $on_tab;
 	public $hide_anonymous;
 	public $content_fields_array = array();
@@ -475,9 +482,9 @@ class w2dc_content_fields_group {
 	
 	public function validation() {
 		$validation = new w2dc_form_validation();
-		$validation->set_rules('name', __('Content field name', 'W2DC'), 'required');
-		$validation->set_rules('on_tab', __('On tab', 'W2DC'), 'is_checked');
-		$validation->set_rules('hide_anonymous', __('Hide from anonymous', 'W2DC'), 'is_checked');
+		$validation->set_rules('name', esc_html__('Content field name', 'w2dc'), 'required');
+		$validation->set_rules('on_tab', esc_html__('On tab', 'w2dc'), 'is_checked');
+		$validation->set_rules('hide_anonymous', esc_html__('Hide from anonymous', 'w2dc'), 'is_checked');
 		return $validation;
 	}
 	
@@ -554,9 +561,9 @@ class w2dc_content_field {
 	public $id;
 	public $is_core_field = 0;
 	public $order_num;
-	public $name;
-	public $slug;
-	public $description;
+	public $name ='';
+	public $slug = '';
+	public $description = '';
 	public $type;
 	public $icon_image;
 	public $is_required = 0;
@@ -616,31 +623,31 @@ class w2dc_content_field {
 			$process_content_field = $this;
 		
 		$validation = new w2dc_form_validation();
-		$validation->set_rules('name', __('Content field name', 'W2DC'), 'required');
+		$validation->set_rules('name', esc_html__('Content field name', 'w2dc'), 'required');
 		if ($process_content_field->isSlug())
-			$validation->set_rules('slug', __('Content field slug', 'W2DC'), 'required|alpha_dash');
-		$validation->set_rules('description', __('Content field description', 'W2DC'));
-		$validation->set_rules('icon_image', __('Icon image', 'W2DC'));
+			$validation->set_rules('slug', esc_html__('Content field slug', 'w2dc'), 'required|alpha_dash');
+		$validation->set_rules('description', esc_html__('Content field description', 'w2dc'));
+		$validation->set_rules('icon_image', esc_html__('Icon image', 'w2dc'));
 		if ($process_content_field->canBeRequired())
-			$validation->set_rules('is_required', __('Content field required', 'W2DC'), 'is_checked');
+			$validation->set_rules('is_required', esc_html__('Content field required', 'w2dc'), 'is_checked');
 		if ($process_content_field->canBeOrdered())
-			$validation->set_rules('is_ordered', __('Order by field', 'W2DC'), 'is_checked');
-		$validation->set_rules('is_hide_name', __('Hide name', 'W2DC'), 'is_checked');
-		$validation->set_rules('for_admin_only', __('For admin only', 'W2DC'), 'is_checked');
-		$validation->set_rules('on_exerpt_page', __('On excerpt page', 'W2DC'), 'is_checked');
-		$validation->set_rules('on_listing_page', __('On listing page', 'W2DC'), 'is_checked');
-		$validation->set_rules('on_map', __('In map marker InfoWindow', 'W2DC'), 'is_checked');
+			$validation->set_rules('is_ordered', esc_html__('Order by field', 'w2dc'), 'is_checked');
+		$validation->set_rules('is_hide_name', esc_html__('Hide name', 'w2dc'), 'is_checked');
+		$validation->set_rules('for_admin_only', esc_html__('For admin only', 'w2dc'), 'is_checked');
+		$validation->set_rules('on_exerpt_page', esc_html__('On excerpt page', 'w2dc'), 'is_checked');
+		$validation->set_rules('on_listing_page', esc_html__('On listing page', 'w2dc'), 'is_checked');
+		$validation->set_rules('on_map', esc_html__('In map marker InfoWindow', 'w2dc'), 'is_checked');
 		// core fields can't change type
 		if (!$this->is_core_field) {
-			$validation->set_rules('type', __('Content field type', 'W2DC'), 'required');
+			$validation->set_rules('type', esc_html__('Content field type', 'w2dc'), 'required');
 		}
 		if ($process_content_field->isCategories()) {
-			$validation->set_rules('categories', __('Assigned categories', 'W2DC'));
+			$validation->set_rules('categories', esc_html__('Assigned categories', 'w2dc'));
 		}
 		if ($process_content_field->canBeSearched()) {
-			$validation->set_rules('on_search_form', __('Search by field', 'W2DC'), 'is_checked');
+			$validation->set_rules('on_search_form', esc_html__('Search by field', 'w2dc'), 'is_checked');
 		}
-		$validation->set_rules('levels', __('Levels', 'W2DC'));
+		$validation->set_rules('levels', esc_html__('Levels', 'w2dc'));
 
 		$validation = apply_filters('w2dc_content_field_validation', $validation, $process_content_field);
 
@@ -648,6 +655,7 @@ class w2dc_content_field {
 			global $wpdb;
 
 			if ($wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->w2dc_content_fields} WHERE slug=%s AND id!=%d", $_POST['slug'], $this->id), ARRAY_A)
+				|| $_POST['slug'] == 'id'
 				|| $_POST['slug'] == 'post_title'
 				|| $_POST['slug'] == 'post_name'
 				|| $_POST['slug'] == 'post_date'
@@ -667,8 +675,18 @@ class w2dc_content_field {
 				|| $_POST['slug'] == 'zip_or_postal_index'
 				|| $_POST['slug'] == 'place_id'
 				|| $_POST['slug'] == 'keywords'
+				|| $_POST['slug'] == 'order'
+				|| $_POST['slug'] == 'orderby'
+				|| $_POST['slug'] == 'order_by'
+				|| $_POST['slug'] == 'page'
+				|| $_POST['slug'] == 'paged'
+				|| $_POST['slug'] == 'posts_per_page'
+				|| $_POST['slug'] == 'taxonomies'
+				|| $_POST['slug'] == 'perpage'
+				|| $_POST['slug'] == 'include_get_params'
+				|| $_POST['slug'] == 'search_form_id'
 			)
-				$validation->setError('slug', esc_attr__("Can't use this slug", 'W2DC'));
+				$validation->setError('slug', esc_html__("Can't use this slug, choose another.", 'w2dc'));
 		}
 
 		return $validation;
@@ -910,7 +928,6 @@ class w2dc_content_field {
 	public function exportCSV() {
 		if ($this->value) {
 			return $this->value;
-			//return addslashes($this->value);
 		}
 	}
 

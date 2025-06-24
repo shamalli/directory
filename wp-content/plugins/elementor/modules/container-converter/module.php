@@ -7,7 +7,7 @@ use Elementor\Controls_Stack;
 use Elementor\Plugin;
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit; // Exit if accessed directly.
 }
 
 class Module extends \Elementor\Core\Base\Module {
@@ -102,7 +102,7 @@ class Module extends \Elementor\Core\Base\Module {
 	 * @return void
 	 */
 	protected function add_page_convert_button( Controls_Stack $controls_stack ) {
-		if ( ! Plugin::$instance->editor->is_edit_mode() || ! $this->page_contains_sections( $controls_stack ) ) {
+		if ( ! Plugin::$instance->editor->is_edit_mode() || ! $this->page_contains_sections( $controls_stack ) || ! Plugin::$instance->role_manager->user_can( 'design' ) ) {
 			return;
 		}
 

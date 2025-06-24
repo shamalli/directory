@@ -28,7 +28,7 @@
 			<?php endforeach; ?>
 		</div>
 		<div class="w2rr-col-md-3">
-			<h4 class="w2rr-review-rating-criteria-avg-label"><?php esc_html_e("Average rating:", "W2RR"); ?></h4>
+			<h4 class="w2rr-review-rating-criteria-avg-label"><?php esc_html_e("Average rating:", "w2rr"); ?></h4>
 			<div class="w2rr-progress-circle p0">
 				<span>0.0</span>
 				<div class="w2rr-left-half-clipper">

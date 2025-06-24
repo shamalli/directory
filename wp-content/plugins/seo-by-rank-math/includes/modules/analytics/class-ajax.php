@@ -12,9 +12,11 @@ namespace RankMath\Analytics;
 
 use RankMath\Helper;
 use RankMath\Google\Api;
-use MyThemeShop\Helpers\Str;
-use MyThemeShop\Helpers\Param;
+use RankMath\Helpers\Str;
+use RankMath\Helpers\Param;
+use RankMath\Google\Analytics;
 use RankMath\Google\Authentication;
+use RankMath\Sitemap\Sitemap;
 use RankMath\Google\Console as Google_Analytics;
 
 defined( 'ABSPATH' ) || exit;
@@ -42,6 +44,8 @@ class AJAX {
 		$this->ajax( 'analytic_cancel_fetching', 'analytic_cancel_fetching' );
 
 		// Save Linked Google Account info Services.
+		$this->ajax( 'check_console_request', 'check_console_request' );
+		$this->ajax( 'check_analytics_request', 'check_analytics_request' );
 		$this->ajax( 'save_analytic_profile', 'save_analytic_profile' );
 		$this->ajax( 'save_analytic_options', 'save_analytic_options' );
 
@@ -65,9 +69,9 @@ class AJAX {
 			$offset_st = $offset > 0 ? "-$offset" : '+' . absint( $offset );
 			$timezone  = 'Etc/GMT' . $offset_st;
 		}
-		
+
 		$args = [
-			'displayName' => get_bloginfo( 'sitename' ) . ' - ' . 'GA4',
+			'displayName' => get_bloginfo( 'sitename' ) . ' - GA4',
 			'parent'      => "accounts/{$account_id}",
 			'timeZone'    => empty( $timezone ) ? 'UTC' : $timezone,
 		];
@@ -86,7 +90,7 @@ class AJAX {
 		$all_accounts  = get_option( 'rank_math_analytics_all_services' );
 		if ( isset( $all_accounts['accounts'][ $account_id ] ) ) {
 			$all_accounts['accounts'][ $account_id ]['properties'][ $property_id ] = [
-				'name' 	     => $property_name,
+				'name'       => $property_name,
 				'id'         => $property_id,
 				'account_id' => $account_id,
 				'type'       => 'GA4',
@@ -141,6 +145,38 @@ class AJAX {
 	}
 
 	/**
+	 * Check the Google Search Console request.
+	 */
+	public function check_console_request() {
+		check_ajax_referer( 'rank-math-ajax-nonce', 'security' );
+		$this->has_cap_ajax( 'analytics' );
+
+		$success = Api::get()->get_search_analytics();
+
+		if ( is_wp_error( $success ) ) {
+			$this->error( esc_html__( 'Data import will not work for this service as sufficient permissions are not given.', 'rank-math' ) );
+		}
+
+		$this->success();
+	}
+
+	/**
+	 * Check the Google Analytics request.
+	 */
+	public function check_analytics_request() {
+		check_ajax_referer( 'rank-math-ajax-nonce', 'security' );
+		$this->has_cap_ajax( 'analytics' );
+
+		$success = Analytics::get_analytics( [], true );
+
+		if ( is_wp_error( $success ) ) {
+			$this->error( esc_html__( 'Data import will not work for this service as sufficient permissions are not given.', 'rank-math' ) );
+		}
+
+		$this->success();
+	}
+
+	/**
 	 * Save analytic profile.
 	 */
 	public function save_analytic_profile() {
@@ -151,6 +187,17 @@ class AJAX {
 		$country             = Param::post( 'country', 'all' );
 		$days                = Param::get( 'days', 90, FILTER_VALIDATE_INT );
 		$enable_index_status = Param::post( 'enableIndexStatus', false, FILTER_VALIDATE_BOOLEAN );
+
+		$success = Api::get()->get_search_analytics(
+			[
+				'country' => $country,
+				'profile' => $profile,
+			]
+		);
+
+		if ( is_wp_error( $success ) ) {
+			$this->error( esc_html__( 'Data import will not work for this service as sufficient permissions are not given.', 'rank-math' ) );
+		}
 
 		$prev  = get_option( 'rank_math_google_analytic_profile', [] );
 		$value = [
@@ -163,6 +210,7 @@ class AJAX {
 		// Remove other stored sites from option for privacy.
 		$all_accounts          = get_option( 'rank_math_analytics_all_services', [] );
 		$all_accounts['sites'] = [ $profile => $profile ];
+
 		update_option( 'rank_math_analytics_all_services', $all_accounts );
 
 		// Purge Cache.
@@ -201,9 +249,25 @@ class AJAX {
 			'exclude_loggedin' => Param::post( 'excludeLoggedin', false, FILTER_VALIDATE_BOOLEAN ),
 		];
 
-		$prev = get_option( 'rank_math_google_analytic_options' );
+		// Test Google Analytics (GA) connection request.
+		if ( ! empty( $value['view_id'] ) || ! empty( $value['country'] ) || ! empty( $value['property_id'] ) ) {
+			$request = Analytics::get_analytics(
+				[
+					'view_id'     => $value['view_id'],
+					'country'     => $value['country'],
+					'property_id' => $value['property_id'],
+				],
+				true
+			);
+
+			if ( is_wp_error( $request ) ) {
+				$this->error( esc_html__( 'Data import will not work for this service as sufficient permissions are not given.', 'rank-math' ) );
+			}
+		}
+
 		$days = Param::get( 'days', 90, FILTER_VALIDATE_INT );
 
+		$prev = get_option( 'rank_math_google_analytic_options' );
 		// Preserve adsense info.
 		if ( isset( $prev['adsense_id'] ) ) {
 			$value['adsense_id'] = $prev['adsense_id'];
@@ -278,7 +342,7 @@ class AJAX {
 		if ( empty( $rows ) ) {
 			delete_option( 'rank_math_analytics_installed' );
 		}
-
+		delete_option( 'rank_math_analytics_last_single_action_schedule_time' );
 		// Start fetching data.
 		foreach ( [ 'console', 'analytics', 'adsense' ] as $action ) {
 			Workflow\Workflow::do_workflow(
@@ -361,6 +425,7 @@ class AJAX {
 		}
 
 		$result['accounts'] = Api::get()->get_analytics_accounts();
+
 		if ( ! empty( $result['accounts'] ) ) {
 			$result['hasAnalytics']         = true;
 			$result['hasAnalyticsProperty'] = $this->is_site_in_analytics( $result['accounts'] );
@@ -468,7 +533,7 @@ class AJAX {
 		}
 
 		foreach ( $sitemaps as $sitemap ) {
-			if ( $sitemap['path'] === $home_url . 'sitemap_index.xml' ) {
+			if ( $sitemap['path'] === $home_url . Sitemap::get_sitemap_index_slug() . '.xml' ) {
 				return true;
 			}
 		}
@@ -482,11 +547,11 @@ class AJAX {
 	 * @param string $property_id GA4 property ID.
 	 */
 	private function create_ga4_data_stream( $property_id ) {
-		$args          = [
+		$args = [
 			'type'          => 'WEB_DATA_STREAM',
 			'displayName'   => 'Website',
 			'webStreamData' => [
-				'defaultUri' => home_url()
+				'defaultUri' => home_url(),
 			],
 		];
 
@@ -499,7 +564,6 @@ class AJAX {
 			return $stream['error']['message'];
 		}
 
-		
 		return [
 			'id'            => str_replace( "properties/{$property_id}/dataStreams/", '', $stream['name'] ),
 			'name'          => $stream['displayName'],

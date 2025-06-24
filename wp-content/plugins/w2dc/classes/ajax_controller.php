@@ -1,5 +1,7 @@
 <?php 
 
+// @codingStandardsIgnoreFile
+
 class w2dc_ajax_controller {
 
 	public function __construct() {
@@ -37,7 +39,6 @@ class w2dc_ajax_controller {
 
 		$shortcode_atts = array_merge(array(
 				'custom_home' => 0,
-				'perpage' => (!empty($post_args['is_home'])) ? get_option('w2dc_listings_number_index') : get_option('w2dc_listings_number_excerpt'),
 				'onepage' => 0,
 				'map_markers_is_limit' => get_option('w2dc_map_markers_is_limit'),
 				'sticky_featured' => 0,
@@ -55,15 +56,20 @@ class w2dc_ajax_controller {
 				'hide_content' => 0,
 				'rating_stars' => 1,
 				'summary_on_logo_hover' => 0,
-				'author' => 0,
 				'paged' => 1,
 				'include_categories_children' => 1,
 				'template' => 'frontend/listings_block.tpl.php',
-				'ajax_loading' => 0,
+				'ajax_map_loading' => 0,
 				'geo_poly' => 0,
 				'show_summary_button' => 1,
 				'show_readmore_button' => 1,
+				'ajax_action' => '', // 'search', 'geo_poly', 'order', 'paginator', 'show_more', 'ajax_initial_load', 'ajax_markers'
 		), $post_args);
+		
+		// set 'perpage' on custom home when no exact parameter was entered
+		if (!empty($post_args['is_home']) && empty($shortcode_atts['perpage'])) {
+			$shortcode_atts['perpage'] = get_option('w2dc_listings_number_index');
+		}
 					
 		// disable initial load
 		$shortcode_atts['ajax_initial_load'] = 0;
@@ -75,12 +81,20 @@ class w2dc_ajax_controller {
 		}
 		
 		$listings_controller = false;
-		if (!empty($shortcode_atts['ajax_loading']) || !empty($shortcode_atts['geo_poly'])) {
-			$map_args = $shortcode_atts;
-			$map_args['ajax_loading'] = 0;
+		$map_controller = false;
+		$query_request = '';
+		if (!empty($shortcode_atts['ajax_map_loading']) || !empty($shortcode_atts['geo_poly'])) {
 			
-			// this limits map markers
-			//$map_args['onepage'] = 1;
+			$map_args = $shortcode_atts;
+			
+			// now its time to load all AJAX markers
+			$map_args['ajax_map_loading'] = 0;
+			$map_args['perpage'] = -1;
+			
+			// no need map markers in these actions
+			if (in_array($shortcode_atts['ajax_action'], array('show_more', 'paginator'))) {
+				$map_args['do_not_load_markers'] = 1;
+			}
 			
 			$map_controller = new w2dc_map_controller();
 			$map_controller->init($map_args);
@@ -89,7 +103,9 @@ class w2dc_ajax_controller {
 			if (!empty($map_controller->args['post__in'])) {
 				$listings_args['post__in'] = $map_controller->args['post__in'];
 			}
-			if (empty($listings_args['is_paginator'])) {
+			
+			// reset pages to 1 when no pagination
+			if (!in_array($shortcode_atts['ajax_action'], array('show_more', 'paginator'))) {
 				$listings_args['paged'] = 1;
 			}
 			
@@ -100,41 +116,65 @@ class w2dc_ajax_controller {
 			$listings_controller->init($listings_args);
 			$listings_controller->args = $shortcode_atts;
 			
-			unset($listings_controller->args['geo_poly']);
+			$query_request = $listings_controller->query->request;
 		} else {
 			// Strongly required for paginator
 			set_query_var('page', $shortcode_atts['paged']);
 			
-			$listings_controller = new w2dc_listings_controller();
-			$listings_controller->init($shortcode_atts);
-			$listings_controller->custom_home = (isset($shortcode_atts['custom_home']) && $shortcode_atts['custom_home']);
+			$listings_args = $shortcode_atts;
+			
+			if (empty($post_args['without_listings'])) {
+				$listings_controller = new w2dc_listings_controller();
+				$listings_controller->init($listings_args);
+				$listings_controller->custom_home = (isset($shortcode_atts['custom_home']) && $shortcode_atts['custom_home']);
+				
+				$query_request = $listings_controller->query->request;
+			}
 			
 			if (!empty($shortcode_atts['with_map'])) {
 				$map_args = $shortcode_atts;
+				
+				// no limit
 				if (empty($map_args['map_markers_is_limit'])) {
-					$map_controller = new w2dc_map_controller();
-					$map_controller->init($map_args);
-					$map_controller->collectLocationsInMap();
+					if (in_array($shortcode_atts['ajax_action'], array('search', 'ajax_initial_load'))) {
+						$map_controller = new w2dc_map_controller();
+						$map_controller->init($map_args);
+						
+						$query_request = $map_controller->listings_controller->query->request;
+					}
 				} else {
-					$map_args['ajax_loading'] = 1;
-				
+					if ($listings_controller) {
+						$map_args['do_not_load_markers'] = 1;
+					}
+					
 					$map_controller = new w2dc_map_controller();
 					$map_controller->init($map_args);
-				
-					foreach ($listings_controller->listings AS $listing) {
-						if (!empty($shortcode_atts['ajax_markers_loading'])) {
-							$map_controller->map->collectLocationsForAjax($listing);
-						} else {
-							$map_controller->map->collectLocations($listing, $shortcode_atts['show_summary_button'], $shortcode_atts['show_readmore_button']);
+					
+					if ($listings_controller && $map_controller) {
+						
+						$map_controller->listings_controller = $listings_controller;
+						
+						foreach ($listings_controller->listings AS $listing) {
+							if (!empty($shortcode_atts['ajax_markers_loading'])) {
+								$map_controller->map->collectLocationsForAjax($listing);
+							} else {
+								$map_controller->map->collectLocations($listing, $shortcode_atts['show_summary_button'], $shortcode_atts['show_readmore_button']);
+							}
 						}
+					}
+					
+					if ($listings_controller) {
+						$query_request = $listings_controller->query->request;
+					} elseif (!empty($map_controller->listings_controller)) {
+						$query_request = $map_controller->listings_controller->query->request;
 					}
 				}
 			}
 		}
 
 		$listings_html = '';
-		if (!isset($post_args['without_listings']) || !$post_args['without_listings']) {
-			if (isset($post_args['do_append']) && $post_args['do_append']) {
+		if (empty($post_args['without_listings'])) {
+			if (!empty($post_args['do_append'])) {
 				if ($listings_controller->listings)
 					while ($listings_controller->query->have_posts()) {
 						$listings_controller->query->the_post(); 
@@ -148,14 +188,22 @@ class w2dc_ajax_controller {
 			}
 		}
 		wp_reset_postdata();
+		
+		$hash = ($listings_controller) ? $listings_controller->hash : (($map_controller) ? $map_controller->hash : '');
+		$map_markers = ((!empty($post_args['with_map']) && !empty($map_controller->map)) ? $map_controller->map->locations_option_array : '');
+		$map_listings = ((!empty($post_args['map_listings']) && !empty($map_controller->map)) ? $map_controller->map->buildListingsContent() : '');
+		$hide_show_more_listings_button = ($listings_controller && $shortcode_atts['paged'] >= $listings_controller->query->max_num_pages) ? 1 : 0;
+		$sql = (defined('WP_DEBUG') && true === WP_DEBUG) ? $query_request : '';
+		$params = ((defined('WP_DEBUG') && true === WP_DEBUG) ? $shortcode_atts : '');
 
 		$out = array(
 				'html' => $listings_html,
-				'hash' => $listings_controller->hash,
-				'map_markers' => ((!empty($post_args['with_map']) && !empty($map_controller->map)) ? $map_controller->map->locations_option_array : ''),
-				'map_listings' => ((!empty($post_args['map_listings']) && !empty($map_controller->map)) ? $map_controller->map->buildListingsContent() : ''),
-				'hide_show_more_listings_button' => ($shortcode_atts['paged'] >= $listings_controller->query->max_num_pages) ? 1 : 0,
-				'sql' => ((defined('WP_DEBUG') && true === WP_DEBUG) ? $listings_controller->query->request : ''),
+				'hash' => $hash,
+				'map_markers' => $map_markers,
+				'map_listings' => $map_listings,
+				'hide_show_more_listings_button' => $hide_show_more_listings_button,
+				'sql' => $sql,
+				'params' => $params,
 				'base_url' => $w2dc_global_base_url,
 		);
 		
@@ -191,7 +239,7 @@ class w2dc_ajax_controller {
 				$show_summary_button = w2dc_getValue($_POST, 'show_summary_button');
 				$show_readmore_button = w2dc_getValue($_POST, 'show_readmore_button');
 	
-				$row = $wpdb->get_row("SELECT * FROM {$wpdb->w2dc_locations_relationships} WHERE id=".$location_id, ARRAY_A);
+				$row = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$wpdb->w2dc_locations_relationships} WHERE id=%d", $location_id), ARRAY_A);
 	
 				if ($row && $row['location_id'] || $row['map_coords_1'] != '0.000000' || $row['map_coords_2'] != '0.000000' || $row['address_line_1'] || $row['zip_or_postal_index']) {
 					$listing = new w2dc_listing;
@@ -266,17 +314,17 @@ class w2dc_ajax_controller {
 		$success = '';
 		$error = '';
 		if (!($type = $_REQUEST['type'])) {
-			$error = __('The type of message required!', 'W2DC');
+			$error = esc_html__('The type of message required!', 'w2dc');
 		} else {
 			check_ajax_referer('w2dc_' . $type . '_nonce', 'security');
 	
 			$validation = new w2dc_form_validation;
 			if (!is_user_logged_in()) {
-				$validation->set_rules('name', __('Contact name', 'W2DC'), 'required');
-				$validation->set_rules('email', __('Contact email', 'W2DC'), 'required|valid_email');
+				$validation->set_rules('name', esc_html__('Contact name', 'w2dc'), 'required');
+				$validation->set_rules('email', esc_html__('Contact email', 'w2dc'), 'required|valid_email');
 			}
-			$validation->set_rules('listing_id', __('Listing ID', 'W2DC'), 'required');
-			$validation->set_rules('message', __('Your message', 'W2DC'), 'required|max_length[1500]');
+			$validation->set_rules('listing_id', esc_html__('Listing ID', 'w2dc'), 'required');
+			$validation->set_rules('message', esc_html__('Your message', 'w2dc'), 'required|max_length[1500]');
 			if ($validation->run()) {
 				$listing = new w2dc_listing();
 				if ($listing->loadListingFromPost($validation->result_array('listing_id'))) {
@@ -306,7 +354,7 @@ class w2dc_ajax_controller {
 						$headers[] = "Reply-To: $email";
 						$headers[] = "Content-Type: text/html";
 	
-						$subject = sprintf(__('%s contacted you about listing "%s"', 'W2DC'), $name, $listing->title());
+						$subject = sprintf(esc_html__('%s contacted you about listing "%s"', 'w2dc'), $name, $listing->title());
 		
 						$body = w2dc_renderTemplate('emails/' . $type . '_form.tpl.php',
 								array(
@@ -323,12 +371,12 @@ class w2dc_ajax_controller {
 							unset($_POST['name']);
 							unset($_POST['email']);
 							unset($_POST['message']);
-							$success = __('Your message was sent successfully!', 'W2DC');
+							$success = esc_html__('Your message was sent successfully!', 'w2dc');
 						} else {
-							$error = esc_attr__("An error occurred and your message wasn't sent!", 'W2DC');
+							$error = esc_html__("An error occurred and your message wasn't sent!", 'w2dc');
 						}
 					} else {
-						$error = esc_attr__("Anti-bot test wasn't passed!", 'W2DC');
+						$error = esc_html__("Anti-bot test wasn't passed!", 'w2dc');
 					}
 				}
 			} else {
@@ -343,10 +391,10 @@ class w2dc_ajax_controller {
 	
 	public function keywords_search() {
 		$validation = new w2dc_form_validation;
-		$validation->set_rules('term', __('Search term', 'W2DC'));
-		$validation->set_rules('directories', __('Directories IDs', 'W2DC'));
-		$validation->set_rules('do_links', __('Links to products in autocomplete suggestion', 'W2DC'));
-		$validation->set_rules('do_links_blank', __('How to open links', 'W2DC'));
+		$validation->set_rules('term', esc_html__('Search term', 'w2dc'));
+		$validation->set_rules('directories', esc_html__('Directories IDs', 'w2dc'));
+		$validation->set_rules('do_links', esc_html__('Links to products in autocomplete suggestion', 'w2dc'));
+		$validation->set_rules('do_links_blank', esc_html__('How to open links', 'w2dc'));
 		if ($validation->run()) {
 			$term = $validation->result_array('term');
 			$directories = $validation->result_array('directories');
@@ -360,14 +408,12 @@ class w2dc_ajax_controller {
 					'post_type' => W2DC_POST_TYPE,
 					'post_status' => 'publish',
 					'posts_per_page' => apply_filters('w2dc_ajax_search_listings_number', 10),
-					//'orderby'   => 'post_title',
-					//'order'   => 'ASC',
 					's' => $term
 			);
 			$args = array_merge($args, $order_args);
 			
 			if ($directories) {
-				$directories = explode(',', $directories);
+				$directories = wp_parse_id_list($directories);
 				$args = w2dc_set_directory_args($args, $directories);
 			}
 
@@ -402,7 +448,7 @@ class w2dc_ajax_controller {
 						} elseif ($do_links_blank == 'self') {
 							$target = apply_filters('w2dc_listing_title_search_target', '');
 						}
-						$link_begin = '<a href="' . get_the_permalink($listing->post) . '" ' . $target . ' title="' . esc_attr__("open listing", "W2DC") . '" ' . (($listing->level->nofollow) ? 'rel="nofollow"' : '') . '>';
+						$link_begin = '<a href="' . get_the_permalink($listing->post) . '" ' . $target . ' title="' . esc_html__("open listing", "w2dc") . '" ' . (($listing->level->nofollow) ? 'rel="nofollow"' : '') . '>';
 						$link_end = '</a>';
 						
 						$title = '<strong>' . $link_begin . $listing->title() . $link_end . '</strong>';
@@ -420,7 +466,7 @@ class w2dc_ajax_controller {
 
 				$listing_json_field = array();
 				$listing_json_field['title'] = apply_filters('w2dc_listing_title_search_html', $title, $listing);
-				$listing_json_field['name'] = $listing->title();
+				$listing_json_field['name'] = htmlspecialchars_decode($listing->title()); // htmlspecialchars_decode() needed due to &amp; symbols
 				$listing_json_field['url'] = get_the_permalink($listing->post);
 				$listing_json_field['icon'] = $listing_logo;
 				$listing_json_field['sublabel'] = $content;
@@ -469,7 +515,7 @@ class w2dc_ajax_controller {
 		$selected_term = w2dc_getValue($_POST, 'selected_term');
 		$uID = w2dc_getValue($_POST, 'uid');
 		if (w2dc_getValue($_POST, 'exact_terms')) {
-			$exact_terms = explode(',', w2dc_getValue($_POST, 'exact_terms'));
+			$exact_terms = w2dc_parse_slugs_ids_list(w2dc_getValue($_POST, 'exact_terms'));
 		} else {
 			$exact_terms = array();
 		}

@@ -1,6 +1,6 @@
 			<tr>
 				<th scope="row">
-					<label><?php _e('Ratings', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Ratings', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<input

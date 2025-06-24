@@ -1,3 +1,8 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <?php if (extension_loaded('openssl')): ?>
 <script src="https://checkout.stripe.com/checkout.js"></script>
 <script>
@@ -12,7 +17,7 @@
 					$('<form action="<?php echo w2dc_get_edit_invoice_link($invoice->post->ID); ?>&w2dc_gateway=stripe" method="POST">' + 
 						'<input type="hidden" name="stripe_email" value="' + token.email + '">' +
 						'<input type="hidden" name="stripe_token" value="' + token.id + '">' +
-						'</form>').appendTo($(document.body)).submit();
+						'</form>').appendTo($(document.body)).trigger('submit');
 				}
 			});
 			
@@ -43,6 +48,6 @@
 		<?php echo $stripe->buy_button(); ?>
 	</div>
 	<div><?php echo $stripe->name(); ?></div>
-	<p class="description"><?php _e('Payment by Stripe requires installed OpenSSL extension!', 'W2DC'); ?></p>
+	<p class="description"><?php esc_html_e('Payment by Stripe requires installed OpenSSL extension!', 'w2dc'); ?></p>
 </div>
 <?php endif; ?>

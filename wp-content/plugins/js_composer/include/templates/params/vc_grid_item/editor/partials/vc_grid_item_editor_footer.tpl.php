@@ -6,7 +6,7 @@ require_once vc_path_dir( 'PARAMS_DIR', 'vc_grid_item/editor/popups/class-vc-add
 $add_element_box = new Vc_Add_Element_Box_Grid_Item();
 $add_element_box->render();
 // Edit form for mapped shortcode.
-visual_composer()->editForm()->render();
+wpbakery()->editForm()->render();
 require_once vc_path_dir( 'PARAMS_DIR', 'vc_grid_item/editor/popups/class-vc-templates-editor-grid-item.php' );
 $templates_editor = new Vc_Templates_Editor_Grid_Item();
 $templates_editor->renderUITemplate();
@@ -32,6 +32,7 @@ $custom_tag = 'script';
 		window.vc_frontend_enabled = false;
 		window.vc_mode = '<?php echo esc_js( vc_mode() ); ?>';
 		window.vcAdminNonce = '<?php echo esc_js( vc_generate_nonce( 'vc-admin-nonce' ) ); ?>';
+		window.vc_auto_save = <?php echo wp_json_encode( get_option( 'wpb_js_auto_save' ) ) ?>;
 	</<?php echo esc_attr( $custom_tag ); ?>>
 
 	<<?php echo esc_attr( $custom_tag ); ?> type="text/html" id="vc_settings-image-block">
@@ -46,7 +47,7 @@ $custom_tag = 'script';
 	<<?php echo esc_attr( $custom_tag ); ?> type="text/html" id="vc_shortcode-template-<?php echo esc_attr( $sc_base ); ?>">
 		<?php
 		// @codingStandardsIgnoreLine
-		print visual_composer()->getShortCode( $sc_base )->template();
+		print wpbakery()->getShortCode( $sc_base )->template();
 		?>
 	</<?php echo esc_attr( $custom_tag ); ?>>
 <?php endforeach ?>

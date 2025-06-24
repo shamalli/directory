@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.7.7 - 20-09-2022 */
+/*! elementor-pro - v3.26.0 - 17-12-2024 */
 /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
@@ -72,7 +72,6 @@
 /******/ 	}
 /******/ 	
 /************************************************************************/
-var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 /*!******************************!*\
@@ -81,7 +80,6 @@ var __webpack_exports__ = {};
 
 
 var _editor = __webpack_require__(/*! ./editor/editor */ "../tests/qunit/editor/editor.js");
-
 new _editor.EditorBootstrapPro();
 })();
 

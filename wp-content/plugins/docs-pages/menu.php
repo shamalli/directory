@@ -81,6 +81,10 @@ if (isset($_GET['search'])) {
 	if ($search_term = sanitize_text_field($_GET['search'])) {
 		$search_term = stripslashes($search_term);
 	}
+} elseif (isset($_GET['highlight'])) {
+	if ($search_term = sanitize_text_field($_GET['highlight'])) {
+		$search_term = stripslashes($search_term);
+	}
 }
 		
 $search_form = '<div class="wcsearch-content w2dc-docs-search-input">

@@ -7,7 +7,6 @@
  */
 class w2dc_listing_map_controller extends w2dc_frontend_controller {
 	public $listing;
-	public $hash;
 
 	public function init($args = array()) {
 		global $w2dc_instance;

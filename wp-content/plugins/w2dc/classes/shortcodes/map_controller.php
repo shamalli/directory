@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+// @codingStandardsIgnoreFile
 
 /**
  *  [webdirectory-map] shortcode
@@ -17,7 +19,6 @@ class w2dc_map_controller extends w2dc_frontend_controller {
 		$shortcode_atts = array_merge(array(
 				'custom_home' => 0,
 				'how_to_load' => 'for_map', // full, for_map, for_ajax_map
-				//'directories' => '',
 				'num' => (!empty($args['custom_home']) && get_option('w2dc_map_markers_is_limit')) ? (int)get_option('w2dc_listings_number_index') : -1,
 				'map_markers_is_limit' => (!empty($args['custom_home'])) ? (int)get_option('w2dc_map_markers_is_limit') : 1, // How many map markers to display on the map (when listings shortcode is connected with map by unique string)
 				'width' => '',
@@ -29,7 +30,7 @@ class w2dc_map_controller extends w2dc_frontend_controller {
 				'show_summary_button' => 0,
 				'show_readmore_button' => 1,
 				'sticky_featured' => 0,
-				'ajax_loading' => 0,
+				'ajax_map_loading' => 0,
 				'ajax_markers_loading' => 0,
 				'geolocation' => (!empty($args['custom_home'])) ? (int)get_option('w2dc_enable_geolocation') : 0,
 				'start_address' => '',
@@ -49,7 +50,6 @@ class w2dc_map_controller extends w2dc_frontend_controller {
 				'search_on_map_listings' => 'sidebar', // 'sidebar', 'bottom', 'none'
 				'radius' => 0,
 				'draw_panel' => (!empty($args['custom_home'])) ? (int)get_option('w2dc_enable_draw_panel') : 0,
-				'author' => 0,
 				'enable_full_screen' => (!empty($args['custom_home'])) ? (int)get_option('w2dc_enable_full_screen') : 1,
 				'enable_wheel_zoom' => (!empty($args['custom_home'])) ? (int)get_option('w2dc_enable_wheel_zoom') : 1,
 				'enable_dragging_touchscreens' => (!empty($args['custom_home'])) ? (int)get_option('w2dc_enable_dragging_touchscreens') : 1,
@@ -64,9 +64,16 @@ class w2dc_map_controller extends w2dc_frontend_controller {
 				'related_listing' => 0,
 				'ratings' => '',
 				'uid' => null,
+				'start_listings' => array(),
 				'include_get_params' => 1,
+				'do_not_load_markers' => 0,
 		), $args);
 		$this->args = apply_filters('w2dc_related_shortcode_args', $shortcode_atts, $args);
+		
+		// back compatibility
+		if (isset($args['ajax_loading']) && !isset($args['ajax_map_loading'])) {
+			$this->args['ajax_map_loading'] = $args['ajax_loading'];
+		}
 		
 		// take params from the search string
 		if (!empty($this->args['start_address']) && ($address = wcsearch_get_query_string("address"))) {
@@ -94,8 +101,8 @@ class w2dc_map_controller extends w2dc_frontend_controller {
 				"SELECT DISTINCT
 					post_id FROM {$wpdb->w2dc_locations_relationships} AS w2dc_lr
 				WHERE MBRContains(
-				GeomFromText('Polygon((%f %f,%f %f,%f %f,%f %f,%f %f))'),
-				GeomFromText(CONCAT('POINT(',w2dc_lr.map_coords_1,' ',w2dc_lr.map_coords_2,')')))", $y2, $x2, $y2, $x1, $y1, $x1, $y1, $x2, $y2, $x2), ARRAY_A);
+				ST_GeomFromText('Polygon((%f %f,%f %f,%f %f,%f %f,%f %f))'),
+				ST_GeomFromText(CONCAT('POINT(',w2dc_lr.map_coords_1,' ',w2dc_lr.map_coords_2,')')))", $y2, $x2, $y2, $x1, $y1, $x1, $y1, $x2, $y2, $x2), ARRAY_A);
 
 			$post_ids = array();
 			foreach ($results AS $row) {
@@ -126,81 +133,15 @@ class w2dc_map_controller extends w2dc_frontend_controller {
 				$sql_polygon[] = $vertex['lat'] . ' ' . $vertex['lng'];
 			$sql_polygon[] = $sql_polygon[0];
 
+			global $wpdb;
+			
 			// this global array collects locations IDs to display on a map,
-			// so radius search will not display markers ourside entered radius
-			global $wpdb, $w2dc_address_locations;
-			if (function_exists('mysqli_get_server_info') && $wpdb->dbh && version_compare(preg_replace('#[^0-9\.]#', '', mysqli_get_server_info($wpdb->dbh)), '5.6.1', '<')) {
-				// below 5.6.1 version
-				$thread_stack = @$wpdb->get_row("SELECT @@global.thread_stack", ARRAY_A);
-				if ($thread_stack && $thread_stack['@@global.thread_stack'] <= 131072)
-					@$wpdb->query("SET @@global.thread_stack = " . 256*1024);
-
-				if (!$wpdb->get_row("SHOW FUNCTION STATUS WHERE name='GISWithin' AND Db='".DB_NAME."'", ARRAY_A))
-					$o = $wpdb->query("CREATE FUNCTION GISWithin(pt POINT, mp POLYGON) RETURNS INT(1) DETERMINISTIC
-BEGIN
+			// so radius search will not display markers outside entered radius
+			global $w2dc_address_locations;
 			
-DECLARE str, xy TEXT;
-DECLARE x, y, p1x, p1y, p2x, p2y, m, xinters DECIMAL(16, 13) DEFAULT 0;
-DECLARE counter INT DEFAULT 0;
-DECLARE p, pb, pe INT DEFAULT 0;
-			
-SELECT MBRWithin(pt, mp) INTO p;
-IF p != 1 OR ISNULL(p) THEN
-RETURN p;
-END IF;
-			
-SELECT X(pt), Y(pt), ASTEXT(mp) INTO x, y, str;
-SET str = REPLACE(str, 'POLYGON((','');
-SET str = REPLACE(str, '))', '');
-SET str = CONCAT(str, ',');
-			
-SET pb = 1;
-SET pe = LOCATE(',', str);
-SET xy = SUBSTRING(str, pb, pe - pb);
-SET p = INSTR(xy, ' ');
-SET p1x = SUBSTRING(xy, 1, p - 1);
-SET p1y = SUBSTRING(xy, p + 1);
-SET str = CONCAT(str, xy, ',');
-			
-WHILE pe > 0 DO
-SET xy = SUBSTRING(str, pb, pe - pb);
-SET p = INSTR(xy, ' ');
-SET p2x = SUBSTRING(xy, 1, p - 1);
-SET p2y = SUBSTRING(xy, p + 1);
-IF p1y < p2y THEN SET m = p1y; ELSE SET m = p2y; END IF;
-IF y > m THEN
-IF p1y > p2y THEN SET m = p1y; ELSE SET m = p2y; END IF;
-IF y <= m THEN
-IF p1x > p2x THEN SET m = p1x; ELSE SET m = p2x; END IF;
-IF x <= m THEN
-IF p1y != p2y THEN
-SET xinters = (y - p1y) * (p2x - p1x) / (p2y - p1y) + p1x;
-END IF;
-IF p1x = p2x OR x <= xinters THEN
-SET counter = counter + 1;
-END IF;
-END IF;
-END IF;
-END IF;
-SET p1x = p2x;
-SET p1y = p2y;
-SET pb = pe + 1;
-SET pe = LOCATE(',', str, pb);
-END WHILE;
-			
-RETURN counter % 2;
-			
-END;
-");
-				$results = $wpdb->get_results("SELECT id, post_id FROM {$wpdb->w2dc_locations_relationships} AS w2dc_lr
-				WHERE GISWithin(
-				GeomFromText(CONCAT('POINT(',w2dc_lr.map_coords_1,' ',w2dc_lr.map_coords_2,')')), PolygonFromText('POLYGON((" . implode(', ', $sql_polygon) . "))'))", ARRAY_A);
-			} else {
-				// 5.6.1 version or higher
-				$results = $wpdb->get_results("SELECT id, post_id FROM {$wpdb->w2dc_locations_relationships} AS w2dc_lr
+			$results = $wpdb->get_results("SELECT id, post_id FROM {$wpdb->w2dc_locations_relationships} AS w2dc_lr
 				WHERE ST_Contains(
-				PolygonFromText('POLYGON((" . implode(', ', $sql_polygon) . "))'), GeomFromText(CONCAT('POINT(',w2dc_lr.map_coords_1,' ',w2dc_lr.map_coords_2,')')))", ARRAY_A);
-			}
+				ST_PolygonFromText('POLYGON((" . implode(', ', $sql_polygon) . "))'), ST_GeomFromText(CONCAT('POINT(',w2dc_lr.map_coords_1,' ',w2dc_lr.map_coords_2,')')))", ARRAY_A);
 
 			$post_ids = array();
 			$w2dc_address_locations = array();
@@ -229,23 +170,44 @@ END;
 		$this->map = new w2dc_maps($this->args);
 		$this->map->setUniqueId($this->hash);
 
-		if (empty($this->args['ajax_loading'])) {
-			// the map shortcode on custom home,
-			// all listings locations already collected in directory frontend controller by processQuery() method or in AJAX controller
-			if (!$this->args['custom_home'] && !($this->args['uid'] && $listings_controller = $w2dc_instance->getListingsShortcodeByuID($this->args['uid']))) {
-				$this->collectLocationsInMap();
-			}
+		// do not collect map markers directly in the init(),
+		// this needs when 'ajax_map_loading' enabled, so it does not load initially on the page
+		// or when all needed markers already loaded on the map,
+		// also check if the map individual and does not connected with listings shortcodes
+		if (
+			(empty($this->args['do_not_load_markers']) && empty($this->args['ajax_map_loading'])) &&
+			!$this->isMapConnected()
+		) {
+			$this->collectLocationsInMap();
 		}
 		
 		apply_filters('w2dc_map_controller_construct', $this);
+	}
+	
+	public function isMapConnected() {
+		global $w2dc_instance;
+		
+		if (
+			$this->args['custom_home'] ||
+			($this->args['uid'] && $w2dc_instance->getListingsShortcodeByuID($this->args['uid'])) ||
+			!empty($this->args['start_listings'])
+		) {
+			return true;
+		}
+		
+		return false;
 	}
 
 	public function collectLocationsInMap() {
 		
 		$listings_args = $this->args;
 		
-		if (!$this->args['map_markers_is_limit']) {
-			$listings_args['onepage'] = 1;
+		if (
+			!empty($this->args['ajax_map_loading']) ||   // AJAX map loading    or
+			!empty($this->args['geo_poly']) ||           // geo-polygon   or
+			empty($this->args['map_markers_is_limit'])   // no markers limit
+		) {
+			$listings_args['perpage'] = -1;
 		}
 		
 		$this->listings_controller = new w2dc_listings_controller();
@@ -306,8 +268,18 @@ END;
 		$map_display_args = apply_filters("w2dc_default_map_display_args", $map_display_args);
 
 		ob_start();
-		if ($this->args['custom_home'] || ($this->args['uid'] && $listings_controller = $w2dc_instance->getListingsShortcodeByuID($this->args['uid']))) {
-			if ($shortcode_controller = $w2dc_instance->getShortcodeProperty(W2DC_MAIN_SHORTCODE)) {
+		if (
+			$this->isMapConnected()
+		) {
+			// display these listings by default, then directory searches as usual
+			if (!empty($this->args['start_listings'])) {
+				
+				$this->args['post__in'] = $this->args['start_listings'];
+				
+				$this->collectLocationsInMap();
+				
+				$this->map->display($map_display_args);
+			} elseif ($shortcode_controller = $w2dc_instance->getShortcodeProperty(W2DC_MAIN_SHORTCODE)) {
 				// the map shortcode on custom home,
 				// all listings locations already collected in directory frontend controller by processQuery() method
 
@@ -322,9 +294,8 @@ END;
 					
 					$shortcode_controller->map->display($map_display_args);
 				}
-			} elseif (isset($listings_controller) && $listings_controller) {
+			} elseif ($listings_controller = $w2dc_instance->getListingsShortcodeByuID($this->args['uid'])) {
 				// the map shortcode connected with listings shortcode
-
 				
 				if (!$listings_controller->map) {
 					$listings_controller->map = new w2dc_maps($this->args);

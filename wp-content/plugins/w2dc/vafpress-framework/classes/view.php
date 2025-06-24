@@ -3,7 +3,7 @@
 /**
  * A Singleton class for loading view template
  */
-class VP_W2DC_View
+class W2DC_VP_View
 {
 
 	/**
@@ -41,7 +41,7 @@ class VP_W2DC_View
 			throw new Exception("Sorry 'field_view_file' variable name can't be used.");
 		}
 
-		$view_file = VP_W2DC_FileSystem::instance()->resolve_path('views', $field_view_file);
+		$view_file = W2DC_VP_FileSystem::instance()->resolve_path('views', $field_view_file);
 
 		if($view_file === false)
 		{

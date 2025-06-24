@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 class w2dc_stripe extends w2dc_payment_gateway
 {
 	public $secret_key;
@@ -33,11 +35,11 @@ class w2dc_stripe extends w2dc_payment_gateway
     }
     
     public function name() {
-    	return __('Stripe', 'W2DC');
+    	return esc_html__('Stripe', 'w2dc');
     }
 
     public function description() {
-    	return __('One time payment by Stripe. After successful transaction listing will become active and raised up.', 'W2DC');
+    	return esc_html__('One time payment by Stripe. After successful transaction listing will become active and raised up.', 'w2dc');
     }
     
     public function buy_button() {
@@ -102,7 +104,7 @@ class w2dc_stripe extends w2dc_payment_gateway
 				foreach ($keys AS $k)
 					if (is_string($charge->offsetGet($k)))
 						$transaction_data[] = $k . ' = ' . esc_attr($charge->offsetGet($k));
-				$invoice->logMessage(sprintf(__('Payment successfully completed. Transaction data: %s', 'W2DC'), implode('; ', $transaction_data)));
+				$invoice->logMessage(sprintf(esc_html__('Payment successfully completed. Transaction data: %s', 'w2dc'), implode('; ', $transaction_data)));
 			}
 		}
 	}

@@ -8,6 +8,7 @@
 
 
 (function($) {
+	"use strict";
 
 /*---------------------------
  Defaults for Reveal
@@ -63,7 +64,7 @@
  Open & Close Animations
 ----------------------------*/
 			//Entrance Animations
-			modal.bind('reveal:open', function () {
+			modal.on('reveal:open', function () {
 			  modalBG.unbind('click.modalEvent');
 				$('.' + options.dismissmodalclass).unbind('click.modalEvent');
 				if(!locked) {
@@ -93,7 +94,7 @@
 			}); 	
 
 			//Closing Animation
-			modal.bind('reveal:close', function () {
+			modal.on('reveal:close', function () {
 			  if(!locked) {
 					lockModal();
 					if(options.animation == "fadeAndPop") {
@@ -130,13 +131,13 @@
     	modal.trigger('reveal:open')
 			
 			//Close Modal Listeners
-			var closeButton = $('.' + options.dismissmodalclass).bind('click.modalEvent', function () {
+			var closeButton = $('.' + options.dismissmodalclass).on('click.modalEvent', function () {
 			  modal.trigger('reveal:close')
 			});
 			
 			if(options.closeonbackgroundclick) {
 				modalBG.css({"cursor":"pointer"})
-				modalBG.bind('click.modalEvent', function () {
+				modalBG.on('click.modalEvent', function () {
 				  modal.trigger('reveal:close')
 				});
 			}

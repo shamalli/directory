@@ -32,7 +32,7 @@ class SubscriptionTest extends TestCase
 
         $sub = $customer->subscriptions->retrieve($sub->id);
         $this->assertSame($sub->status, 'active');
-        // @codingStandardsIgnoreStart
+        // @codingStandardsIgnoreFile
         $this->assertTrue($sub->cancel_at_period_end);
         // @codingStandardsIgnoreEnd
     }

@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 add_filter("w2dc_query_args", "w2dc_query_args_hours", 10, 2);
 function w2dc_query_args_hours($q_args, $args) {
 	
@@ -33,7 +35,7 @@ function w2dc_query_args_hours($q_args, $args) {
 					}
 					$line_not_in = "'" . serialize(array($this_week_day."_closed"=>"1")) . "'";
 					
-					$query = "SELECT DISTINCT pm1.post_id FROM {$wpdb->postmeta} AS pm1 LEFT JOIN {$wpdb->postmeta} AS pm2 ON pm1.post_id=pm2.post_id LEFT JOIN {$wpdb->postmeta} AS pm3 ON pm2.post_id=pm3.post_id WHERE pm1.meta_key='_content_field_{$search_field->content_field->id}'";
+					$query = $wpdb->prepare("SELECT DISTINCT pm1.post_id FROM {$wpdb->postmeta} AS pm1 LEFT JOIN {$wpdb->postmeta} AS pm2 ON pm1.post_id=pm2.post_id LEFT JOIN {$wpdb->postmeta} AS pm3 ON pm2.post_id=pm3.post_id WHERE pm1.meta_key='_content_field_%d'", $search_field->content_field->id);
 					if ($like_from) {
 						$query .= " AND pm1.meta_value IN (" . implode(",", $like_from) . ")";
 					}

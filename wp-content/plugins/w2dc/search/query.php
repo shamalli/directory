@@ -17,10 +17,9 @@ class w2dc_search_query extends wcsearch_query {
 		if (!$no_order) {
 			$this->q_args = apply_filters("w2dc_order_args", $this->q_args, $this->args);
 		}
-		
-		//var_dump($this->q_args);
 	
 		$this->query = new WP_Query($this->q_args);
+		
 		//var_dump($this->query->request);
 	}
 }

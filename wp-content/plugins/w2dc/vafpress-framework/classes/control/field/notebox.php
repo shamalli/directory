@@ -1,6 +1,6 @@
 <?php
 
-class VP_W2DC_Control_Field_NoteBox extends VP_W2DC_Control_Field
+class W2DC_VP_Control_Field_NoteBox extends W2DC_VP_Control_Field
 {
 
 	/**
@@ -67,7 +67,7 @@ class VP_W2DC_Control_Field_NoteBox extends VP_W2DC_Control_Field
 		// Setup Data
 		$this->_setup_data();
 		$this->add_data('is_compact', $is_compact);
-		return VP_W2DC_View::instance()->load('control/notebox', $this->get_data());
+		return W2DC_VP_View::instance()->load('control/notebox', $this->get_data());
 	}
 
 	/**

@@ -1,3 +1,8 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <div class="wcsearch-search-model-input wcsearch-search-model-input-tax-select" <?php echo $search_model->getOptionsString(); ?>>
 	<label class="wcsearch-search-model-input-label"><?php echo esc_html($title); ?></label>
 	
@@ -9,7 +14,7 @@
 		if (is_numeric($values)) {
 			$term_id = $values;
 		} else {
-			$term_id = explode(',', $values);
+			$term_id = wcsearch_parse_slugs_ids_list($values);
 		}
 		$functionality_class = 'wcsearch-multiselect-dropdown';
 		
@@ -44,22 +49,6 @@
 				$placeholders = $placeholder;
 			}
 		}
-
-		/* $params = array(
-			'tax' => $tax_name,
-			'field_name' => $slug,
-			'depth' => $depth,
-			'term_id' => $values,
-			'count' => $counter,
-			'hide_empty' => $hide_empty,
-			'exact_terms' => $exact_terms,
-			'orderby' => $orderby,
-			'order' => $order,
-			'placeholders' => $placeholders,
-			'functionality' => 'wcsearch-heirarhical-dropdown',
-		);
-		wcsearch_heirarhical_dropdowns_menu_init($params); */
-	
 	
 	?>
 	<select name="field_<?php echo esc_attr($slug); ?>" name="field_<?php echo esc_attr($slug); ?>" class="wcsearch-form-control">

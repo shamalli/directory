@@ -17,10 +17,10 @@
 	};
 
 	// custom checkbox and radiobutton event binding
-	vp_w2dc.custom_check_radio_event(".vp-wrap", ".vp-field.vp-checked-field .field .input label");
+	w2dc_vp.custom_check_radio_event(".vp-wrap", ".vp-field.vp-checked-field .field .input label");
 
 	$(function() {
-		vp_w2dc.init_controls($('.vp-wrap'));
+		w2dc_vp.init_controls($('.vp-wrap'));
 	});
 
 	/* BEGIN FETCHING ALL FIELDS' VALIDATION and BINDING RULES */
@@ -81,7 +81,7 @@
 	/* END FETCHING ALL FIELDS' VALIDATION and BINDING RULES */
 
 	// get and click current hash
-	$('.vp-js-menu-goto').click(function(e) {
+	$('.vp-js-menu-goto').on('click', function(e) {
 		e.preventDefault();
 		// add `_` prefix
 		history.pushState(null, null, '#_' + $(this).attr('href').substr(1));
@@ -111,10 +111,10 @@
 	}
 	else
 	{
-		$('.vp-current > .vp-js-menu-goto').click();
+		$('.vp-current > .vp-js-menu-goto').trigger('click');
 	}
 
-	$('.vp-js-menu-dropdown').click(function(e) {
+	$('.vp-js-menu-dropdown').on('click', function(e) {
 		e.preventDefault();
 		var $this = $(this),
 		    $parent = $this.parent('li'),
@@ -124,9 +124,9 @@
 		$li.removeClass('vp-current');
 		$parent.addClass('vp-current');
 		if($sub.children('li.vp-current').exists())
-			$sub.children('li.vp-current').children('a').click();
+			$sub.children('li.vp-current').children('a').trigger('click');
 		else
-			$sub.children('li').first().children('a').click();
+			$sub.children('li').first().children('a').trigger('click');
 	});
 
 	// Bindings
@@ -147,7 +147,7 @@
 
 		for (var j = 0; j < ids.length; j++)
 		{
-			vp_w2dc.binding_event(ids, j, field, func, '.vp-wrap', 'option');
+			w2dc_vp.binding_event(ids, j, field, func, '.vp-wrap', 'option');
 		}
 	}
 	/* ============================================================ */
@@ -170,7 +170,7 @@
 
 		for (var j = 0; j < ids.length; j++)
 		{
-			vp_w2dc.items_binding_event(ids, j, field, func, '.vp-wrap', 'option');
+			w2dc_vp.items_binding_event(ids, j, field, func, '.vp-wrap', 'option');
 		}
 	}
 	/* ============================================================ */
@@ -193,16 +193,16 @@
 
 		for (var j = 0; j < ids.length; j++)
 		{
-			vp_w2dc.dependency_event(ids, j, field, func, '.vp-wrap');
+			w2dc_vp.dependency_event(ids, j, field, func, '.vp-wrap');
 		}
 	}
 
 	// Ajax Saving
-	$('.vp-js-option-form').bind('submit', function(e) {
+	$('.vp-js-option-form').on('submit', function(e) {
 		e.preventDefault();
 		
 		// update tinyMCE textarea content
-		vp_w2dc.tinyMCE_save();
+		w2dc_vp.tinyMCE_save();
 
 		$('.vp-js-option-form .vp-field').removeClass('vp-error');
 		$('.validation-notif.vp-error').remove();
@@ -216,7 +216,7 @@
 			var panel = validation[i];
 
 			panel.nError = 0;
-			panel.nError = vp_w2dc.fields_validation_loop(panel.fields);
+			panel.nError = w2dc_vp.fields_validation_loop(panel.fields);
 
 			if (panel.nError > 0)
 			{
@@ -246,9 +246,9 @@
 			$form = $('#vp-option-form'),
 			option = $form.serializeArray(),
 			data = {
-				action: 'vp_w2dc_ajax_' + vp_w2dc_opt.name + '_save',
+				action: 'w2dc_vp_ajax_' + w2dc_vp_opt.name + '_save',
 				option: option,
-				nonce : vp_w2dc_opt.nonce
+				nonce : w2dc_vp_opt.nonce
 			};
 
 		$button.attr('disabled', 'disabled');
@@ -278,7 +278,7 @@
 
 	});
 
-	$('.vp-js-restore').bind('click', function(e) {
+	$('.vp-js-restore').on('click', function(e) {
 		e.preventDefault();
 
 		if (!confirm('The current options will be deleted, do you want to proceed?'))
@@ -288,7 +288,7 @@
 		    $parent = $button.parent(),
 		    $status = $parent.find('.vp-js-status'),
 		    $loader = $parent.find('.vp-js-loader'),
-		    data    = {action: 'vp_w2dc_ajax_' + vp_w2dc_opt.name + '_restore', nonce : vp_w2dc_opt.nonce};
+		    data    = {action: 'w2dc_vp_ajax_' + w2dc_vp_opt.name + '_restore', nonce : w2dc_vp_opt.nonce};
 
 		$button.attr('disabled', 'disabled');
 		$loader.fadeIn(100);
@@ -297,14 +297,14 @@
 			$loader.fadeOut(0);
 			switch(response.code)
 			{
-				case parseInt(vp_w2dc_opt.SAVE_SUCCESS):
-					$status.html(vp_w2dc_opt.util_msg.restore_success);
+				case parseInt(w2dc_vp_opt.SAVE_SUCCESS):
+					$status.html(w2dc_vp_opt.util_msg.restore_success);
 					break;
-				case parseInt(vp_w2dc_opt.SAVE_NOCHANGES):
-					$status.html(vp_w2dc_opt.util_msg.restore_nochanges);	
+				case parseInt(w2dc_vp_opt.SAVE_NOCHANGES):
+					$status.html(w2dc_vp_opt.util_msg.restore_nochanges);	
 					break;
-				case parseInt(vp_w2dc_opt.SAVE_FAILED):
-					$status.html(vp_w2dc_opt.util_msg.restore_failed + ': ' + response.message);
+				case parseInt(w2dc_vp_opt.SAVE_FAILED):
+					$status.html(w2dc_vp_opt.util_msg.restore_failed + ': ' + response.message);
 					break;
 			}
 			$status.fadeIn(100);
@@ -312,21 +312,21 @@
 				$status.fadeOut(1000, function() {
 					$button.removeAttr('disabled');
 					$status.fadeOut(500);
-					if (response.code == parseInt(vp_w2dc_opt.SAVE_SUCCESS))
+					if (response.code == parseInt(w2dc_vp_opt.SAVE_SUCCESS))
 						location.reload();
 				});
 			}, 2000);
 		}, 'JSON');
 	});
 
-	$('#vp-js-import').bind('click', function(e) {
+	$('#vp-js-import').on('click', function(e) {
 		e.preventDefault();
 
 		var $textarea      = $('#vp-js-import_text'),
 		    $import_status = $('#vp-js-import-status'),
 		    $import_loader = $('#vp-js-import-loader'),
 		    $button        = $(this),
-		    data           = {action: 'vp_w2dc_ajax_' + vp_w2dc_opt.name + '_import_option', option: $textarea.val(), nonce : vp_w2dc_opt.nonce};
+		    data           = {action: 'w2dc_vp_ajax_' + w2dc_vp_opt.name + '_import_option', option: $textarea.val(), nonce : w2dc_vp_opt.nonce};
 
 		$button.attr('disabled', 'disabled');
 		$import_loader.fadeIn(100);
@@ -335,11 +335,11 @@
 			$import_loader.fadeOut(0);
 			if (response.status)
 			{
-				$import_status.html(vp_w2dc_opt.util_msg.import_success);
+				$import_status.html(w2dc_vp_opt.util_msg.import_success);
 			}
 			else
 			{
-				$import_status.html(vp_w2dc_opt.util_msg.import_failed + ': ' + response.message);
+				$import_status.html(w2dc_vp_opt.util_msg.import_failed + ': ' + response.message);
 			}
 			$import_status.fadeIn(100);
 			setTimeout(function() {
@@ -353,13 +353,13 @@
 		}, 'JSON');
 	});
 
-	$('#vp-js-export').bind('click', function(e) {
+	$('#vp-js-export').on('click', function(e) {
 		e.preventDefault();
 
 		var $export_status = $('#vp-js-export-status'),
 		    $export_loader = $('#vp-js-export-loader'),
 		    $button        = $(this),
-		    data           = {action: 'vp_w2dc_ajax_' + vp_w2dc_opt.name + '_export_option', nonce : vp_w2dc_opt.nonce};
+		    data           = {action: 'w2dc_vp_ajax_' + w2dc_vp_opt.name + '_export_option', nonce : w2dc_vp_opt.nonce};
 
 		$button.attr('disabled', 'disabled');
 		$export_loader.fadeIn(100);
@@ -368,11 +368,11 @@
 			if (!$.isEmptyObject(response.option) && response.status)
 			{
 				$('#vp-js-export_text').val(response.option);
-				$export_status.html(vp_w2dc_opt.util_msg.export_success);
+				$export_status.html(w2dc_vp_opt.util_msg.export_success);
 			}
 			else
 			{
-				$export_status.html(vp_w2dc_opt.util_msg.export_failed + ': ' + response.message);
+				$export_status.html(w2dc_vp_opt.util_msg.export_failed + ': ' + response.message);
 			}
 			$export_status.fadeIn(100);
 			setTimeout(function() {

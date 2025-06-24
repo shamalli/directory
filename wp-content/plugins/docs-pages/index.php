@@ -136,15 +136,17 @@ function docs_pages_the_document_title($title) {
 	
 	global $wp;
 	
+	$plugin_title = 'Web 2.0 Directory plugin';
+	
 	if (strpos($wp->request, 'documentation') === 0 && empty($_GET['search'])) {
 		
 		if (docs_pages_get_the_title($title) != 'Documentation') {
-			$title = docs_pages_get_the_title($title) . ' - Documentation';
+			$title = docs_pages_get_the_title($title) . ' - Documentation - ' . $plugin_title;
 		} else {
-			$title = docs_pages_get_the_title($title) . ' - Web 2.0 Directory plugin';
+			$title = docs_pages_get_the_title($title) . ' - ' . $plugin_title;
 		}
 	} elseif (!empty($_GET['search'])) {
-		$title = 'Search results - Documentation';
+		$title = 'Search results - Documentation - ' . $plugin_title;
 	}
 	
 	return $title;
@@ -226,7 +228,7 @@ function docs_pages_get_articles_by_score($path, $original_search_term, &$articl
 			$score = 0;
 			foreach ($keywords AS $word) {
 				if (stripos($title, $word) !== false) {
-					$score += 10;
+					$score += 50;
 				}
 	
 				if (stripos($description, $word) !== false) {

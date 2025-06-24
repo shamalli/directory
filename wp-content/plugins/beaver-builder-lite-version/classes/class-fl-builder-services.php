@@ -70,6 +70,12 @@ final class FLBuilderServices {
 			'name'  => 'GoDaddy Email Marketing',
 			'class' => 'FLBuilderServiceGoDaddyEmailMarketing',
 		),
+
+		'groundhogg'              => array(
+			'type'  => 'autoresponder',
+			'name'  => 'Groundhogg',
+			'class' => 'FLBuilderServiceGroundhogg',
+		),
 		'hatchbuck'               => array(
 			'type'  => 'autoresponder',
 			'name'  => 'Hatchbuck',
@@ -105,6 +111,11 @@ final class FLBuilderServices {
 			'name'  => 'MailerLite',
 			'class' => 'FLBuilderServiceMailerLite',
 		),
+		'mailjet'                 => array(
+			'type'  => 'autoresponder',
+			'name'  => 'Mailjet',
+			'class' => 'FLBuilderServiceMailjet',
+		),
 		'mailpoet'                => array(
 			'type'  => 'autoresponder',
 			'name'  => 'MailPoet',
@@ -128,7 +139,7 @@ final class FLBuilderServices {
 		),
 		'sendinblue'              => array(
 			'type'  => 'autoresponder',
-			'name'  => 'SendinBlue',
+			'name'  => 'Brevo ( Formerly SendinBlue )',
 			'class' => 'FLBuilderServiceSendinBlue',
 		),
 		'sendy'                   => array(
@@ -148,14 +159,15 @@ final class FLBuilderServices {
 	 * @return array An array of services and related data.
 	 */
 	static public function get_services_data( $type = null ) {
-		$services = array();
+		$services      = array();
+		$services_data = apply_filters( 'fl_builder_subscribe_form_services', self::$services_data );
 
 		// Return all services.
 		if ( ! $type ) {
-			$services = self::$services_data;
+			$services = $services_data;
 		} else {
 
-			foreach ( self::$services_data as $key => $service ) {
+			foreach ( $services_data as $key => $service ) {
 				if ( $service['type'] == $type ) {
 					$services[ $key ] = $service;
 				}
@@ -198,7 +210,11 @@ final class FLBuilderServices {
 
 		// Make sure the service class is loaded.
 		if ( ! class_exists( $data['class'] ) ) {
-			require_once FL_BUILDER_DIR . 'classes/class-fl-builder-service-' . $service . '.php';
+			if ( isset( $data['file'] ) && file_exists( $data['file'] ) ) {
+				require_once $data['file'];
+			} else {
+				require_once FL_BUILDER_DIR . 'classes/class-fl-builder-service-' . basename( $service ) . '.php';
+			}
 		}
 
 		return new $data['class']();

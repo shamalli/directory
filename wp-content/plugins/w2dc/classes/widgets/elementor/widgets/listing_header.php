@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 class w2dc_listing_header_elementor_widget extends w2dc_elementor_widget {
 
 	public function get_name() {
@@ -7,7 +9,7 @@ class w2dc_listing_header_elementor_widget extends w2dc_elementor_widget {
 	}
 
 	public function get_title() {
-		return __('Listing Header', 'W2DC');
+		return esc_html__('Listing Header', 'w2dc');
 	}
 
 	public function get_icon() {
@@ -23,7 +25,7 @@ class w2dc_listing_header_elementor_widget extends w2dc_elementor_widget {
 		$this->start_controls_section(
 				'content_section',
 				array(
-						'label' => esc_html__('Listing header', 'W2DC'),
+						'label' => esc_html__('Listing header', 'w2dc'),
 						'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
 				)
 		);

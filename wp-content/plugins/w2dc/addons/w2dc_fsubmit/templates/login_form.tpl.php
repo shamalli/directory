@@ -1,9 +1,14 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <div class="w2dc-content">
 	<?php w2dc_renderMessages(); ?>
 
 	<?php if (isset($_GET['level']) && ($level = $w2dc_instance->levels->getLevelById($_GET['level']))): ?>
 	<?php if (count($w2dc_instance->levels->levels_array) > 1): ?>
-	<h2><?php echo sprintf(__('Create new %s in level "%s"', 'W2DC'), $w2dc_instance->current_directory->single, $level->name); ?></h2>
+	<h2><?php echo sprintf(esc_html__('Create new %s in level "%s"', 'w2dc'), $w2dc_instance->current_directory->single, $level->name); ?></h2>
 	<?php endif; ?>
 	<?php endif; ?>
 

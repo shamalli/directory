@@ -7,7 +7,7 @@ return array(
 	<div class="w2dc-docs w2dc-docs-side">
 		<h2 id="search">Search system</h2>
 		
-		Search system has flexible tools to build any search form for your directory. Look at the <em>"Search Forms"</em> page at the admin backend, following elements available by default: Keywords, Search button, Reset button, More filters, Categories, Locations, Tags, Ratings checkboxes. Address and Radius available when maps service enabled and configured properly (Google Maps or MapBox).
+		Search system has flexible tools to build any search form for your directory. Look at the <em>"Search Forms"</em> page at the admin backend, following elements available by default: Keywords, Submit button, Reset button, More filters, Categories, Locations, Tags, Ratings checkboxes. Address and Radius available when maps service enabled and configured properly (Google Maps or MapBox).
 		
 		<img src="[base_url]/wp-content/uploads/search_form_home.png" alt="" class="alignnone size-full" />
 		
@@ -20,7 +20,7 @@ return array(
 		Search filters types:
 		<ul>
 			<li>Keywords - search by keywords in listings title and description body.</li>
-			<li>String - search by keywords in <a href="[base_url]/documentation/content-fields/">content fields</a> of text string and textare types.</li>
+			<li>Text - search by keywords in <a href="[base_url]/documentation/content-fields/">content fields</a> of text string and textare types.</li>
 			<li>Address - enter address and search nearby, use radius element to get search in radius. Autocomplete helps in this field.</li>
 			<li>Radius - use with address element.</li>
 			<li>Taxonomies - they include directory categories, locations and tags, also this type of search filters can be applied to <a href="[base_url]/documentation/content-fields/">content fields</a>: checkboxes, selectboxes, radio buttons</li>
@@ -29,7 +29,7 @@ return array(
 			<li>Price - content fields of price type.</li>
 			<li>Opening hours - content fields of opening hours type.</li></li>
 			<li>Ratings checkboxes - search by listings ratings, works when <a href="[base_url]/documentation/ratings-reviews-comments/"><em>"Ratings & Comments addon"</em></a> enabled.</li>
-			<li>Search button</li>
+			<li>Submit button</li>
 			<li>Reset button</li>
 			<li>More filters - place this link on a search form and "hide" elements to be visible when link was clicked.</li>
 		</ul>
@@ -48,7 +48,7 @@ return array(
 		
 		<hr />
 		
-		<h4 id="string">String</h4>
+		<h4 id="text">Text</h4>
 		
 		<div style="float: left; margin-right: 50px;">
 			<img src="[base_url]/wp-content/uploads/search_filter_string_options.png" alt="" class="alignnone size-full" />
@@ -56,7 +56,7 @@ return array(
 		
 		<img src="[base_url]/wp-content/uploads/search_filter_string.png" alt="" class="alignnone size-full" />
 		
-		String search field has the same functionality as Keywords input except autocomplete functionality.
+		Text search field has the same functionality as Keywords input except autocomplete functionality.
 		
 		<div style="clear: both;"></div>
 		
@@ -267,7 +267,7 @@ return array(
 		
 		<hr />
 		
-		<h4 id="search_button">Search button</h4>
+		<h4 id="submit_button">Submit button</h4>
 		
 		<div style="float: left; margin-right: 50px;">
 			<img src="[base_url]/wp-content/uploads/search_filter_button_options.png" alt="" class="alignnone size-full" />
@@ -345,7 +345,7 @@ return array(
 		
 		<p></p>
 		
-		<strong>Auto submit</strong> - each time a user makes any changes in search field - it sends search request automatically, no need to click search button.
+		<strong>Auto submit</strong> - each time a user makes any changes in search field - it sends search request automatically, no need to click submit button.
 		
 		<strong>Use AJAX</strong> - use AJAX search form or search request will redirect to another page.
 		

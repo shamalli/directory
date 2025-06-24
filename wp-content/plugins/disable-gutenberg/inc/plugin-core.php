@@ -406,6 +406,8 @@ function disable_gutenberg_whitelist_title($post_id = false) {
 
 function disable_gutenberg_explode($string) {
 	
+	if (!$string) $string = '';
+	
 	$explode = array_map('trim', explode(',', $string));
 	
 	$array = array();
@@ -448,6 +450,33 @@ function disable_gutenberg_restore_widgets() {
 		
 		add_filter('gutenberg_use_widgets_block_editor', '__return_false');
 		add_filter('use_widgets_block_editor', '__return_false');
+		
+	}
+	
+}
+
+/*
+	Thanks to Classic Editor plugin (v1.6.5) for this fix:
+	Temporary fix for Safari 18 negative horizontal margin on floats.
+	See: https://core.trac.wordpress.org/ticket/62082 and
+	https://bugs.webkit.org/show_bug.cgi?id=280063.
+	TODO: Remove when Safari is fixed.
+ */
+function disable_gutenberg_safari_18_temp_fix() {
+	
+	global $current_screen;
+	
+	if (isset($current_screen->base) && 'post' === $current_screen->base) {
+		
+		$clear = is_rtl() ? 'right' : 'left';
+		
+		?>
+		
+		<style id="classic-editor-safari-18-temp-fix">
+			_::-webkit-full-page-media, _:future, :root #post-body #postbox-container-2 { clear: <?php echo $clear; ?>; }
+		</style>
+		
+		<?php
 		
 	}
 	

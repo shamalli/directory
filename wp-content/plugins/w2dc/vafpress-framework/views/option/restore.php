@@ -1,20 +1,20 @@
 <div class="vp-field">
 	<div class="label">
 		<label>
-			<?php _e('Restore Default Options', 'vp_w2dc_textdomain') ?>
+			<?php esc_html_e('Restore Default Options', 'w2dc') ?>
 		</label>
 		<div class="description">
-			<p><?php _e('Restore options to initial default values.', 'vp_w2dc_textdomain') ?></p>
+			<p><?php esc_html_e('Restore options to initial default values.', 'w2dc') ?></p>
 		</div>
 	</div>
 	<div class="field">
 		<div class="input">
 			<div class="buttons">
-				<input class="vp-js-restore vp-button button button-primary" type="button" value="<?php esc_attr_e('Restore Default', 'vp_w2dc_textdomain') ?>" />
-				<p><?php _e('** Please make sure you have already make a backup data of your current settings. Once you click this button, your current settings will be gone.', 'vp_w2dc_textdomain'); ?></p>
-				<span style="margin-left: 10px;">
-					<span class="vp-field-loader vp-js-loader" style="display: none;"><img src="<?php VP_W2DC_Util_Res::img_out('ajax-loader.gif', ''); ?>" style="vertical-align: middle;"></span>
-					<span class="vp-js-status" style="display: none;"></span>
+				<input class="vp-js-restore vp-button button button-primary" type="button" value="<?php w2dc_esc_e('Restore Default', 'w2dc') ?>" />
+				<p><?php esc_html_e('** Please make sure you have already make a backup data of your current settings. Once you click this button, your current settings will be gone.', 'w2dc'); ?></p>
+				<span class="w2dc-margin-left-10">
+					<span class="vp-field-loader vp-js-loader w2dc-display-none"><img src="<?php W2DC_VP_Util_Res::img_out('ajax-loader.gif', ''); ?>"  class="w2dc-vertical-align-middle"></span>
+					<span class="vp-js-status w2dc-display-none"></span>
 				</span>
 			</div>
 		</div>

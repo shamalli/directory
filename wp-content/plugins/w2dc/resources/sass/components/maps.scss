@@ -5,7 +5,6 @@
 	background-color: #FFF;
 	position: relative;
 	margin-bottom: $margin-between-elements;
-	/* overflow: auto; */
 	overflow: hidden;
 }
 .w2dc-map-wrapper-full-screen {
@@ -91,7 +90,7 @@ body.w2dc-body-fullscreen-map > .wcsearch-dropdowns-menu {
 .w2dc-map-info-window-title a.w2dc-map-info-window-title-link:hover,
 .w2dc-map-info-window-title a.w2dc-map-info-window-title-link:visited,
 .w2dc-map-info-window-title a.w2dc-map-info-window-title-link:focus {
-  color: #ffffff;
+	color: #ffffff;
 }
 .w2dc-map-info-window-title {
 	padding: 5px;
@@ -142,7 +141,7 @@ body.w2dc-body-fullscreen-map > .wcsearch-dropdowns-menu {
 }
 .w2dc-map-info-window-field strong {
 	display: inline-block;
-	width: 80px;
+	width: 50px;
 }
 .w2dc-map-info-window-buttons,
 .w2dc-map-info-window-buttons-single {
@@ -315,7 +314,6 @@ span.w2dc-show-on-map {
 	float: right;
 }
 .w2dc-map-sidebar-open .w2dc-map-sidebar {
-	/* display: block; */
 	margin-left: 0;
 }
 .w2dc-map-sidebar-right.w2dc-map-sidebar-open .w2dc-map-sidebar {
@@ -434,7 +432,6 @@ span.w2dc-show-on-map {
 		margin-left: 0;
 		margin-right: 0;
 		display: none;
-		/* overflow: hidden; */
 	}
 	.w2dc-map-sidebar-open .w2dc-map-sidebar {
 		display: block;
@@ -518,7 +515,6 @@ header.w2dc-map-listing-header h2 {
 .w2dc-map-listing-field {
 	font-size: 13px !important;
 	line-height: 1.7em;
-	/* white-space: nowrap; */
 }
 .w2dc-map-listing-field-icon {
 	margin-right: 5px;

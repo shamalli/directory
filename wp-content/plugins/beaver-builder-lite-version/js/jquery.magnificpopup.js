@@ -83,7 +83,7 @@ var _mfpOn = function(name, f) {
 			// converts "mfpEventName" to "eventName" callback and triggers it if it's present
 			e = e.charAt(0).toLowerCase() + e.slice(1);
 			if(mfp.st.callbacks[e]) {
-				mfp.st.callbacks[e].apply(mfp, $.isArray(data) ? data : [data]);
+				mfp.st.callbacks[e].apply(mfp, Array.isArray(data) ? data : [data]);
 			}
 		}
 	},
@@ -175,7 +175,7 @@ MagnificPopup.prototype = {
 				}
 			}
 		} else {
-			mfp.items = $.isArray(data.items) ? data.items : [data.items];
+			mfp.items = Array.isArray(data.items) ? data.items : [data.items];
 			mfp.index = data.index || 0;
 		}
 
@@ -641,7 +641,7 @@ MagnificPopup.prototype = {
 		var disableOn = options.disableOn !== undefined ? options.disableOn : $.magnificPopup.defaults.disableOn;
 
 		if(disableOn) {
-			if($.isFunction(disableOn)) {
+			if(typeof disableOn === 'function') {
 				if( !disableOn.call(mfp) ) {
 					return true;
 				}
@@ -1117,7 +1117,7 @@ var _imgInterval,
 		var src = mfp.st.image.titleSrc;
 
 		if(src) {
-			if($.isFunction(src)) {
+			if(typeof src === 'function') {
 				return src.call(mfp, item);
 			} else if(item.el) {
 				return item.el.attr(src) || '';
@@ -1579,7 +1579,7 @@ $.magnificPopup.registerModule(IFRAME_NS, {
 		// we don't care and support only one default type of URL by default
 		patterns: {
 			youtube: {
-				index: 'youtube.com',
+				index: 'youtube.com/',
 				id: 'v=',
 				src: '//www.youtube.com/embed/%id%?autoplay=1'
 			},
@@ -1587,6 +1587,11 @@ $.magnificPopup.registerModule(IFRAME_NS, {
 				index: 'youtu.be',
 				id: '/',
 				src: '//www.youtube.com/embed/%id%?autoplay=1',
+			},
+			youtube_nocookie: {
+				index: 'youtube-nocookie.com',
+				id: '/',
+				src: '//www.youtube-nocookie.com/embed/%id%?autoplay=1',
 			},
 			vimeo: {
 				index: 'vimeo.com/',
@@ -1624,7 +1629,6 @@ $.magnificPopup.registerModule(IFRAME_NS, {
 		getIframe: function(item, template) {
 			var embedSrc = item.src;
 			var iframeSt = mfp.st.iframe;
-
 			$.each(iframeSt.patterns, function() {
 				if(embedSrc.indexOf( this.index ) > -1) {
 					if(this.id) {

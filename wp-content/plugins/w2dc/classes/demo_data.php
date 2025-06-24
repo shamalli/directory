@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 define('W2DC_DEMO_DATA_PATH', W2DC_PATH . 'demo-data/');
 
 class w2dc_demo_data_manager {
@@ -103,8 +105,8 @@ class w2dc_demo_data_manager {
 		}
 		
 		add_submenu_page('w2dc_settings',
-		__('Demo data Import', 'W2DC'),
-		__('Demo data Import', 'W2DC'),
+		esc_html__('Demo data Import', 'w2dc'),
+		esc_html__('Demo data Import', 'w2dc'),
 		$capability,
 		'w2dc_demo_data',
 		array($this, 'w2dc_demo_data_import_page')
@@ -190,7 +192,7 @@ class w2dc_demo_data_manager {
 				}
 			}
 			
-			w2dc_addMessage(sprintf(__("Import of the demo data was successfully completed. Look at your <a href='%s'>listings</a>, <a href='%s'>search forms</a> and <a href='%s'>custom pages</a>.", "W2DC"), admin_url('edit.php?post_type=w2dc_listing'), admin_url('edit.php?post_type=wcsearch_form'), admin_url('edit.php?post_type=page')));
+			w2dc_addMessage(sprintf(wp_kses(__("Import of the demo data was successfully completed. Look at your <a href='%s'>listings</a>, <a href='%s'>search forms</a> and <a href='%s'>custom pages</a>.", "w2dc"), 'post'), admin_url('edit.php?post_type=w2dc_listing'), admin_url('edit.php?post_type=wcsearch_form'), admin_url('edit.php?post_type=page')));
 			
 			w2dc_renderTemplate('demo_data_import.tpl.php');
 		} else {

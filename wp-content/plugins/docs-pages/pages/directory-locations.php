@@ -6,6 +6,9 @@ return array(
 	
 	<div class="w2dc-docs w2dc-docs-side">
 		<h2 id="directory_locations">Directory locations</h2>
+		
+		<iframe width="912" height="600" src="https://www.youtube.com/embed/0jjGN7F_piM" title="Address & Locations search" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+		
 		There are 3 ways to provide locations functionality on directory site:
 		<ol>
 		<li>

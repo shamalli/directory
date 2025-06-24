@@ -1,7 +1,12 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <?php w2dc_renderTemplate('admin_header.tpl.php'); ?>
 
 <h2>
-	<?php _e('Configure price field', 'W2DC'); ?>
+	<?php esc_html_e('Configure price field', 'w2dc'); ?>
 </h2>
 
 <form method="POST" action="">
@@ -10,7 +15,7 @@
 		<tbody>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Currency symbol', 'W2DC'); ?><span class="w2dc-red-asterisk">*</span></label>
+					<label><?php esc_html_e('Currency symbol', 'w2dc'); ?><span class="w2dc-red-asterisk">*</span></label>
 				</th>
 				<td>
 					<input
@@ -22,7 +27,7 @@
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Currency symbol position', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Currency symbol position', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<select name="symbol_position">
@@ -35,43 +40,43 @@
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Decimal separator', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Decimal separator', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<select name="decimal_separator">
-						<option value="." <?php if($content_field->decimal_separator == '.') echo 'selected'; ?>><?php _e('dot', 'W2DC')?></option>
-						<option value="," <?php if($content_field->decimal_separator == ',') echo 'selected'; ?>><?php _e('comma', 'W2DC')?></option>
+						<option value="." <?php if($content_field->decimal_separator == '.') echo 'selected'; ?>><?php esc_html_e('dot', 'w2dc')?></option>
+						<option value="," <?php if($content_field->decimal_separator == ',') echo 'selected'; ?>><?php esc_html_e('comma', 'w2dc')?></option>
 					</select>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Hide decimals', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Hide decimals', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<select name="hide_decimals">
-						<option value="0" <?php if($content_field->hide_decimals == '0') echo 'selected'; ?>><?php _e('no', 'W2DC')?></option>
-						<option value="1" <?php if($content_field->hide_decimals == '1') echo 'selected'; ?>><?php _e('yes', 'W2DC')?></option>
+						<option value="0" <?php if($content_field->hide_decimals == '0') echo 'selected'; ?>><?php esc_html_e('no', 'w2dc')?></option>
+						<option value="1" <?php if($content_field->hide_decimals == '1') echo 'selected'; ?>><?php esc_html_e('yes', 'w2dc')?></option>
 					</select>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Thousands separator', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Thousands separator', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<select name="thousands_separator">
-						<option value="" <?php if($content_field->thousands_separator == '') echo 'selected'; ?>><?php _e('no separator', 'W2DC')?></option>
-						<option value="." <?php if($content_field->thousands_separator == '.') echo 'selected'; ?>><?php _e('dot', 'W2DC')?></option>
-						<option value="," <?php if($content_field->thousands_separator == ',') echo 'selected'; ?>><?php _e('comma', 'W2DC')?></option>
-						<option value=" " <?php if($content_field->thousands_separator == ' ') echo 'selected'; ?>><?php _e('space', 'W2DC')?></option>
+						<option value="" <?php if($content_field->thousands_separator == '') echo 'selected'; ?>><?php esc_html_e('no separator', 'w2dc')?></option>
+						<option value="." <?php if($content_field->thousands_separator == '.') echo 'selected'; ?>><?php esc_html_e('dot', 'w2dc')?></option>
+						<option value="," <?php if($content_field->thousands_separator == ',') echo 'selected'; ?>><?php esc_html_e('comma', 'w2dc')?></option>
+						<option value=" " <?php if($content_field->thousands_separator == ' ') echo 'selected'; ?>><?php esc_html_e('space', 'w2dc')?></option>
 					</select>
 				</td>
 			</tr>
 		</tbody>
 	</table>
 	
-	<?php submit_button(__('Save changes', 'W2DC')); ?>
+	<?php submit_button(esc_html__('Save changes', 'w2dc')); ?>
 </form>
 
 <?php w2dc_renderTemplate('admin_footer.tpl.php'); ?>

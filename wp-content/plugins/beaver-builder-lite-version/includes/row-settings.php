@@ -3,13 +3,13 @@
 $global_settings = FLBuilderModel::get_global_settings();
 
 $row_settings = array(
-	'title' => __( 'Row Settings', 'fl-builder' ),
+	'title' => __( 'Row', 'fl-builder' ),
 	'tabs'  => array(
 
 		'style'    => array(
 			'title'    => __( 'Style', 'fl-builder' ),
 			'sections' => array(
-				'general'      => array(
+				'general'          => array(
 					'title'  => '',
 					'fields' => array(
 						'width'             => array(
@@ -27,7 +27,7 @@ $row_settings = array(
 							),
 							'help'    => __( 'Full width rows span the width of the page from edge to edge. Fixed rows are no wider than the Row Max Width set in the Global Settings.', 'fl-builder' ),
 							'preview' => array(
-								'type' => 'none',
+								'type' => 'refresh',
 							),
 						),
 						'content_width'     => array(
@@ -40,7 +40,7 @@ $row_settings = array(
 							),
 							'help'    => __( 'Full width content spans the width of the page from edge to edge. Fixed content is no wider than the Row Max Width set in the Global Settings.', 'fl-builder' ),
 							'preview' => array(
-								'type' => 'none',
+								'type' => 'refresh',
 							),
 						),
 						'max_content_width' => array(
@@ -61,7 +61,7 @@ $row_settings = array(
 								),
 							),
 							'preview'      => array(
-								'type' => 'none',
+								'type' => 'refresh',
 							),
 						),
 						'full_height'       => array(
@@ -75,15 +75,12 @@ $row_settings = array(
 							),
 							'help'    => __( 'Full height rows fill the height of the browser window. Minimum height rows are at least as tall as the value entered.', 'fl-builder' ),
 							'toggle'  => array(
-								'full'   => array(
-									'fields' => array( 'content_alignment' ),
-								),
 								'custom' => array(
-									'fields' => array( 'content_alignment', 'min_height' ),
+									'fields' => array( 'min_height' ),
 								),
 							),
 							'preview' => array(
-								'type' => 'none',
+								'type' => 'refresh',
 							),
 						),
 						'min_height'        => array(
@@ -121,9 +118,22 @@ $row_settings = array(
 								'type' => 'none',
 							),
 						),
+						'aspect_ratio'      => array(
+							'type'       => 'text',
+							'label'      => __( 'Aspect Ratio', 'fl-builder' ),
+							'default'    => '',
+							'help'       => 'Use the forward slash notation: width/height.',
+							'responsive' => true,
+							'sanitize'   => 'FLBuilderUtils::sanitize_aspect_css',
+							'preview'    => array(
+								'type'     => 'css',
+								'selector' => '.fl-row-content-wrap',
+								'property' => 'aspect-ratio',
+							),
+						),
 					),
 				),
-				'colors'       => array(
+				'colors'           => array(
 					'title'  => __( 'Colors', 'fl-builder' ),
 					'fields' => array(
 						'text_color'    => array(
@@ -168,7 +178,7 @@ $row_settings = array(
 						),
 					),
 				),
-				'background'   => array(
+				'background'       => array(
 					'title'  => __( 'Background', 'fl-builder' ),
 					'fields' => array(
 						'bg_type' => array(
@@ -181,6 +191,7 @@ $row_settings = array(
 								'gradient'  => _x( 'Gradient', 'Background type.', 'fl-builder' ),
 								'photo'     => _x( 'Photo', 'Background type.', 'fl-builder' ),
 								'video'     => _x( 'Video', 'Background type.', 'fl-builder' ),
+								'embed'     => _x( 'Embedded Code', 'Background type.', 'fl-builder' ),
 								'slideshow' => array(
 									'label'   => _x( 'Slideshow', 'Background type.', 'fl-builder' ),
 									'premium' => true,
@@ -199,7 +210,6 @@ $row_settings = array(
 								),
 								'photo'     => array(
 									'sections' => array( 'bg_color', 'bg_photo', 'bg_overlay' ),
-									'fields'   => array( 'bg_x_position', 'bg_y_position' ),
 								),
 								'video'     => array(
 									'sections' => array( 'bg_color', 'bg_video', 'bg_overlay' ),
@@ -213,14 +223,17 @@ $row_settings = array(
 								'pattern'   => array(
 									'sections' => array( 'bg_pattern', 'bg_color', 'bg_overlay' ),
 								),
+								'embed'     => array(
+									'sections' => array( 'bg_embed_section' ),
+								),
 							),
 							'preview' => array(
-								'type' => 'none',
+								'type' => 'refresh',
 							),
 						),
 					),
 				),
-				'bg_photo'     => array(
+				'bg_photo'         => array(
 					'title'  => __( 'Background Photo', 'fl-builder' ),
 					'fields' => array(
 						'bg_image_source' => array(
@@ -261,9 +274,7 @@ $row_settings = array(
 							'responsive'  => true,
 							'connections' => array( 'photo' ),
 							'preview'     => array(
-								'type'     => 'css',
-								'selector' => '> .fl-row-content-wrap',
-								'property' => 'background-image',
+								'type' => 'refresh',
 							),
 						),
 						'bg_repeat'       => array(
@@ -302,7 +313,10 @@ $row_settings = array(
 							),
 							'toggle'     => array(
 								'custom_pos' => array(
-									'fields' => array( 'bg_x_position', 'bg_y_position' ),
+									'fields' => array(
+										'bg_x_position',
+										'bg_y_position',
+									),
 								),
 							),
 							'preview'    => array(
@@ -378,7 +392,7 @@ $row_settings = array(
 						),
 					),
 				),
-				'bg_video'     => array(
+				'bg_video'         => array(
 					'title'  => __( 'Background Video', 'fl-builder' ),
 					'fields' => array(
 						'bg_video_source'      => array(
@@ -402,7 +416,7 @@ $row_settings = array(
 								),
 							),
 							'preview' => array(
-								'type' => 'none',
+								'type' => 'refresh',
 							),
 						),
 						'bg_video'             => array(
@@ -443,8 +457,8 @@ $row_settings = array(
 						),
 						'bg_video_service_url' => array(
 							'type'        => 'text',
-							'label'       => __( 'Youtube Or Vimeo URL', 'fl-builder' ),
-							'help'        => __( 'A video from Youtube or Vimeo to use as the background of this row. Most modern browsers support this format.', 'fl-builder' ),
+							'label'       => __( 'YouTube Or Vimeo URL', 'fl-builder' ),
+							'help'        => __( 'A video from YouTube or Vimeo to use as the background of this row. Most modern browsers support this format.', 'fl-builder' ),
 							'preview'     => array(
 								'type' => 'refresh',
 							),
@@ -487,7 +501,7 @@ $row_settings = array(
 						),
 					),
 				),
-				'bg_slideshow' => array(
+				'bg_slideshow'     => array(
 					'title'  => __( 'Background Slideshow', 'fl-builder' ),
 					'fields' => array(
 						'ss_source'             => array(
@@ -532,6 +546,8 @@ $row_settings = array(
 							'label'       => __( 'Speed', 'fl-builder' ),
 							'default'     => '3',
 							'size'        => '5',
+							'sanitize'    => 'FLBuilderUtils::sanitize_non_negative_number',
+							'slider'      => true,
 							'description' => _x( 'seconds', 'Value unit for form field of time in seconds. Such as: "5 seconds"', 'fl-builder' ),
 							'preview'     => array(
 								'type' => 'none',
@@ -563,6 +579,8 @@ $row_settings = array(
 							'label'       => __( 'Transition Speed', 'fl-builder' ),
 							'default'     => '1',
 							'size'        => '5',
+							'sanitize'    => 'FLBuilderUtils::sanitize_non_negative_number',
+							'slider'      => true,
 							'description' => _x( 'seconds', 'Value unit for form field of time in seconds. Such as: "5 seconds"', 'fl-builder' ),
 							'preview'     => array(
 								'type' => 'none',
@@ -582,19 +600,20 @@ $row_settings = array(
 						),
 					),
 				),
-				'bg_parallax'  => array(
+				'bg_parallax'      => array(
 					'title'  => __( 'Background Parallax', 'fl-builder' ),
 					'fields' => array(
-						'bg_parallax_image' => array(
+						'bg_parallax_image'  => array(
 							'type'        => 'photo',
 							'show_remove' => true,
 							'label'       => __( 'Photo', 'fl-builder' ),
+							'responsive'  => true,
 							'preview'     => array(
-								'type' => 'none',
+								'type' => 'refresh',
 							),
 							'connections' => array( 'photo' ),
 						),
-						'bg_parallax_speed' => array(
+						'bg_parallax_speed'  => array(
 							'type'    => 'select',
 							'label'   => __( 'Speed', 'fl-builder' ),
 							'default' => 'fast',
@@ -607,9 +626,24 @@ $row_settings = array(
 								'type' => 'none',
 							),
 						),
+						'bg_parallax_offset' => array(
+							'type'        => 'unit',
+							'label'       => __( 'Image Offset', 'fl-builder' ),
+							'responsive'  => true,
+							'placeholder' => '0',
+							'default'     => 0,
+							'slider'      => array(
+								'min'  => 0,
+								'max'  => 1000,
+								'step' => 10,
+							),
+							'preview'     => array(
+								'type' => 'refresh',
+							),
+						),
 					),
 				),
-				'bg_overlay'   => array(
+				'bg_overlay'       => array(
 					'title'  => __( 'Background Overlay', 'fl-builder' ),
 					'fields' => array(
 						'bg_overlay_type'     => array(
@@ -623,10 +657,10 @@ $row_settings = array(
 							),
 							'toggle'  => array(
 								'color'    => array(
-									'fields' => array( 'bg_overlay_color', 'bg_x_position', 'bg_y_position' ),
+									'fields' => array( 'bg_overlay_color' ),
 								),
 								'gradient' => array(
-									'fields' => array( 'bg_overlay_gradient', 'bg_x_position', 'bg_y_position' ),
+									'fields' => array( 'bg_overlay_gradient' ),
 								),
 							),
 							'preview' => array(
@@ -654,7 +688,7 @@ $row_settings = array(
 						),
 					),
 				),
-				'bg_color'     => array(
+				'bg_color'         => array(
 					'title'  => __( 'Background Color', 'fl-builder' ),
 					'fields' => array(
 						'bg_color' => array(
@@ -663,27 +697,40 @@ $row_settings = array(
 							'show_reset'  => true,
 							'show_alpha'  => true,
 							'preview'     => array(
-								'type' => 'none',
+								'type' => 'refresh',
 							),
 							'connections' => array( 'color' ),
 						),
 					),
 				),
-				'bg_gradient'  => array(
+				'bg_gradient'      => array(
 					'title'  => __( 'Background Gradient', 'fl-builder' ),
 					'fields' => array(
 						'bg_gradient' => array(
-							'type'    => 'gradient',
-							'label'   => __( 'Gradient', 'fl-builder' ),
-							'preview' => array(
-								'type'     => 'css',
-								'selector' => '> .fl-row-content-wrap',
-								'property' => 'background-image',
+							'type'       => 'gradient',
+							'label'      => __( 'Gradient', 'fl-builder' ),
+							'responsive' => true,
+							'preview'    => array(
+								'type' => 'refresh',
 							),
 						),
 					),
 				),
-				'border'       => array(
+				'bg_embed_section' => array(
+					'title'  => __( 'Background Embedded Code', 'fl-builder' ),
+					'fields' => array(
+						'bg_embed_code' => array(
+							'type'        => 'code',
+							'editor'      => 'html',
+							'rows'        => '8',
+							'preview'     => array(
+								'type' => 'refresh',
+							),
+							'connections' => array( 'string' ),
+						),
+					),
+				),
+				'border'           => array(
 					'title'  => __( 'Border', 'fl-builder' ),
 					'fields' => array(
 						'border' => array(
@@ -723,13 +770,20 @@ $row_settings = array(
 							'responsive' => array(
 								'default_unit' => array(
 									'default'    => $global_settings->row_margins_unit,
+									'large'      => $global_settings->row_margins_large_unit,
 									'medium'     => $global_settings->row_margins_medium_unit,
 									'responsive' => $global_settings->row_margins_responsive_unit,
 								),
 								'placeholder'  => array(
-									'default'    => empty( $global_settings->row_margins ) ? '0' : $global_settings->row_margins,
-									'medium'     => empty( $global_settings->row_margins_medium ) ? '0' : $global_settings->row_margins_medium,
-									'responsive' => empty( $global_settings->row_margins_responsive ) ? '0' : $global_settings->row_margins_responsive,
+									'default'    => array(
+										'top'    => empty( $global_settings->row_margins_top ) ? '0' : $global_settings->row_margins_top,
+										'right'  => empty( $global_settings->row_margins_right ) ? '0' : $global_settings->row_margins_right,
+										'bottom' => empty( $global_settings->row_margins_bottom ) ? '0' : $global_settings->row_margins_bottom,
+										'left'   => empty( $global_settings->row_margins_left ) ? '0' : $global_settings->row_margins_left,
+									),
+									'large'      => FLBuilderModel::get_node_spacing_breakpoint_placeholders( 'row', 'margins', 'large' ),
+									'medium'     => FLBuilderModel::get_node_spacing_breakpoint_placeholders( 'row', 'margins', 'medium' ),
+									'responsive' => FLBuilderModel::get_node_spacing_breakpoint_placeholders( 'row', 'margins', 'responsive' ),
 								),
 							),
 						),
@@ -752,13 +806,20 @@ $row_settings = array(
 							'responsive' => array(
 								'default_unit' => array(
 									'default'    => $global_settings->row_padding_unit,
+									'large'      => $global_settings->row_padding_large_unit,
 									'medium'     => $global_settings->row_padding_medium_unit,
 									'responsive' => $global_settings->row_padding_responsive_unit,
 								),
 								'placeholder'  => array(
-									'default'    => empty( $global_settings->row_padding ) ? '0' : $global_settings->row_padding,
-									'medium'     => empty( $global_settings->row_padding_medium ) ? '0' : $global_settings->row_padding_medium,
-									'responsive' => empty( $global_settings->row_padding_responsive ) ? '0' : $global_settings->row_padding_responsive,
+									'default'    => array(
+										'top'    => empty( $global_settings->row_padding_top ) ? '0' : $global_settings->row_padding_top,
+										'right'  => empty( $global_settings->row_padding_right ) ? '0' : $global_settings->row_padding_right,
+										'bottom' => empty( $global_settings->row_padding_bottom ) ? '0' : $global_settings->row_padding_bottom,
+										'left'   => empty( $global_settings->row_padding_left ) ? '0' : $global_settings->row_padding_left,
+									),
+									'large'      => FLBuilderModel::get_node_spacing_breakpoint_placeholders( 'row', 'padding', 'large' ),
+									'medium'     => FLBuilderModel::get_node_spacing_breakpoint_placeholders( 'row', 'padding', 'medium' ),
+									'responsive' => FLBuilderModel::get_node_spacing_breakpoint_placeholders( 'row', 'padding', 'responsive' ),
 								),
 							),
 						),
@@ -768,17 +829,25 @@ $row_settings = array(
 					'title'  => __( 'Visibility', 'fl-builder' ),
 					'fields' => array(
 						'responsive_display'         => array(
-							'type'    => 'select',
-							'label'   => __( 'Breakpoint', 'fl-builder' ),
-							'options' => array(
-								''               => __( 'All', 'fl-builder' ),
-								'desktop'        => __( 'Large Devices Only', 'fl-builder' ),
-								'desktop-medium' => __( 'Large &amp; Medium Devices Only', 'fl-builder' ),
-								'medium'         => __( 'Medium Devices Only', 'fl-builder' ),
-								'medium-mobile'  => __( 'Medium &amp; Small Devices Only', 'fl-builder' ),
-								'mobile'         => __( 'Small Devices Only', 'fl-builder' ),
+							'type'         => 'button-group',
+							'label'        => __( 'Breakpoint', 'fl-builder' ),
+							'options'      => array(
+								'desktop' => '<i class="dashicons dashicons-desktop"></i>',
+								'large'   => '<i class="dashicons dashicons-laptop"></i>',
+								'medium'  => '<i class="dashicons dashicons-tablet"></i>',
+								'mobile'  => '<i class="dashicons dashicons-smartphone"></i>',
 							),
-							'preview' => array(
+							'tooltip'      => array(
+								'desktop' => __( 'Extra Large', 'fl-builder' ),
+								'large'   => __( 'Large', 'fl-builder' ),
+								'medium'  => __( 'Medium', 'fl-builder' ),
+								'mobile'  => __( 'Mobile', 'fl-builder' ),
+							),
+							'default'      => 'desktop,large,medium,mobile',
+							'multi-select' => array(
+								'min' => 1,
+							),
+							'preview'      => array(
 								'type' => 'none',
 							),
 						),
@@ -840,9 +909,10 @@ $row_settings = array(
 								'section' => '&lt;section&gt;',
 								'article' => '&lt;article&gt;',
 								'aside'   => '&lt;aside&gt;',
+								'main'    => '&lt;main&gt;',
 								'header'  => '&lt;header&gt;',
 								'footer'  => '&lt;footer&gt;',
-							) ),
+							)),
 							'help'    => __( 'Optional. Choose an appropriate HTML5 content sectioning element to use for this row to improve accessibility and machine-readability.', 'fl-builder' ),
 							'preview' => array(
 								'type' => 'none',
@@ -863,6 +933,33 @@ $row_settings = array(
 							'preview' => array(
 								'type' => 'none',
 							),
+						),
+						'node_label'        => array(
+							'type'     => 'text',
+							'label'    => __( 'Label', 'fl-builder' ),
+							'help'     => __( 'A label that will applied and used in the UI for easy identification.', 'fl-builder' ),
+							'sanitize' => 'strip_tags',
+							'preview'  => array(
+								'type' => 'none',
+							),
+						),
+					),
+				),
+				'export_import' => array(
+					'title'     => __( 'Export/Import', 'fl-builder' ),
+					'collapsed' => true,
+					'fields'    => array(
+						'export' => array(
+							'type'    => 'raw',
+							'label'   => __( 'Export', 'fl-builder' ),
+							'preview' => 'none',
+							'content' => '<button style="margin-right:10px" class="fl-builder-button fl-builder-button-small row-export-all" title="Copy Settings">Copy Settings</button><button class="fl-builder-button fl-builder-button-small row-export-style" title="Copy Styles">Copy Styles</button>',
+						),
+						'import' => array(
+							'type'    => 'raw',
+							'label'   => __( 'Import', 'fl-builder' ),
+							'preview' => 'none',
+							'content' => '<div class="row-import-wrap"><input type="text" class="row-import-input" placeholder="Paste settings or styles here..." /><button class="fl-builder-button fl-builder-button-small row-import-apply">Import</button></div><div class="row-import-error"></div>',
 						),
 					),
 				),

@@ -1,3 +1,8 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <div class="wcsearch-search-model-input wcsearch-search-model-two-inputs" <?php echo $search_model->getOptionsString(); ?>>
 	<?php
 	$min_value = '';

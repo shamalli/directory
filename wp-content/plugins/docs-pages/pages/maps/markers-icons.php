@@ -14,10 +14,12 @@ return array(
 		<strong>Type of Map Markers</strong> - 2 possible types:
 		<ul>
 			<li>Font Awesome icons (recommended) - icons from the Font Awesome set will be used.</li>
-			<li>PNG images - images files from <em>"resources/images/map_icons/icons/"</em> folder of the plugin. Site administrator can upload custom icons into "<em>w2dc-plugin/resources/images/map_icons/icons/</em>" folder of your child theme via the Files manager of hosting control panel or via FTP.</li>
+			<li>PNG images - images files from <em>"resources/images/map_icons/"</em> folder of the plugin. Site administrator can upload custom icons subfolders into "<em>w2dc-plugin/resources/images/map_icons/</em>" folder of your child theme via the Files manager of hosting control panel or via FTP.
+				Default map marker <em>(blank.png)</em> should be placed directly in "<em>map_icons/</em>" folder. See original <em>"resources/images/map_icons/"</em> folder of the plugin to know its structure.
+			</li>
 		</ul>
 	
-		<i class="fa fa-exclamation-triangle"></i> The plugin uses only one folder for PNG icons: native folder or custom folder in your child theme when exists.
+		<i class="fa fa-exclamation-triangle"></i> The plugin uses only one folder for PNG icons: original folder or custom folder in your child theme when exists.
 		
 		Using Font Awesome icons it is possible to select default icon and color of map marker. When "Custom markers on the map" option enabled in listings levels settings - users will be able to select specific icon for each marker. On <em>"Directory listings -&gt; Directory categories"</em> page it is allowed to select specific marker icon and color for each category.
 		

@@ -44,8 +44,8 @@ class w2rr_single_review_controller extends w2rr_frontend_controller {
 				$w2rr_instance->reviews_manager->setup_breadcrumbs($this);
 				$this->addBreadCrumbs($review->title());
 				
-				add_action('wp_head', array($this, 'change_global_post'), -1000);
-				add_action('wp_head', array($this, 'back_global_post'), 1000);
+				add_filter('language_attributes', array($this, 'add_opengraph_doctype'));
+				
 				add_action('wp_head', array($this, 'insert_fb_in_head'), -10);
 				if (function_exists('rel_canonical')) {
 					remove_action('wp_head', 'rel_canonical');
@@ -95,32 +95,34 @@ class w2rr_single_review_controller extends w2rr_frontend_controller {
 ';
 	}
 	
-	// Temporarily change global $post variable in head
-	public function change_global_post() {
-		global $post;
-		$this->head_post = $post;
-		$post = $this->object_single->post;
-	}
-	public function back_global_post() {
-		global $post;
-		$post = $this->head_post;
+	// Adding the Open Graph in the Language Attributes
+	public function add_opengraph_doctype($output) {
+		
+		if (!is_plugin_active('wordpress-seo/wp-seo.php') && !is_plugin_active('wordpress-seo-premium/wp-seo-premium.php')) {
+			return $output . ' xmlns:og="http://opengraphprotocol.org/schema/" xmlns:fb="http://www.facebook.com/2008/fbml"';
+		}
+		
+		return $output;
 	}
 	
 	// Lets add Open Graph Meta Info
 	public function insert_fb_in_head() {
-		echo '<meta property="og:type" content="article" data-w2rr-og-meta="true" />
+		
+		if (!is_plugin_active('wordpress-seo/wp-seo.php') && !is_plugin_active('wordpress-seo-premium/wp-seo-premium.php')) {
+			echo '<meta property="og:type" content="article" data-w2rr-og-meta="true" />
 ';
-		echo '<meta property="og:title" content="' . $this->og_title() . '" />
+			echo '<meta property="og:title" content="' . $this->og_title() . '" />
 ';
-		echo '<meta property="og:description" content="' . $this->og_description() . '" />
+			echo '<meta property="og:description" content="' . $this->og_description() . '" />
 ';
-		echo '<meta property="og:url" content="' . $this->og_url() . '" />
+			echo '<meta property="og:url" content="' . $this->og_url() . '" />
 ';
-		echo '<meta property="og:site_name" content="' . $this->og_site_name() . '" />
+			echo '<meta property="og:site_name" content="' . $this->og_site_name() . '" />
 ';
-		if ($thumbnail_src = $this->og_image()) {
-			echo '<meta property="og:image" content="' . esc_attr($thumbnail_src) . '" />
+			if ($thumbnail_src = $this->og_image()) {
+				echo '<meta property="og:image" content="' . esc_attr($thumbnail_src) . '" />
 ';
+			}
 		}
 	
 		add_filter('wpseo_opengraph_title', array($this, 'og_title'), 10, 2);

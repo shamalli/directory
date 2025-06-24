@@ -9,15 +9,15 @@
 | inside app will be loaded first and will override class with the same
 | name with core classes.
 */
-VP_W2RR_AutoLoader::add_namespaces(VP_W2RR_NAMESPACE);
-VP_W2RR_AutoLoader::add_directories(VP_W2RR_CLASSES_DIR, VP_W2RR_NAMESPACE);
-VP_W2RR_AutoLoader::register();
+W2RR_VP_AutoLoader::add_namespaces(W2RR_VP_NAMESPACE);
+W2RR_VP_AutoLoader::add_directories(W2RR_VP_CLASSES_DIR, W2RR_VP_NAMESPACE);
+W2RR_VP_AutoLoader::register();
 
-class VP_W2RR_AutoLoader
+class W2RR_VP_AutoLoader
 {
 
 	/**
-	 * Indicates if VP_W2RR_AutoLoader has been registered.
+	 * Indicates if W2RR_VP_AutoLoader has been registered.
 	 * 
 	 * @var boolean
 	 */
@@ -58,19 +58,10 @@ class VP_W2RR_AutoLoader
 		{
 			$file = $dir . DIRECTORY_SEPARATOR . $class;
 
-			// if( $dir === end(self::$directories) )
-			// {
-			// 	require $file;
-			// 	return true;
-			// }
-
 			if (is_link($file))
 			{
 				$file = readlink($file);
 			}
-
-			// $real = realpath($file);
-			// if($real) $file = $real;
 
 			if(is_file($file))
 			{
@@ -109,7 +100,7 @@ class VP_W2RR_AutoLoader
 	{
 		if(self::$registered !== TRUE)
 		{
-			spl_autoload_register(array('VP_W2RR_AutoLoader', 'load'));
+			spl_autoload_register(array('W2RR_VP_AutoLoader', 'load'));
 		}
 		self::$registered = TRUE;
 	}

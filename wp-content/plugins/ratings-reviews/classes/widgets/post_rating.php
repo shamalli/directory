@@ -1,15 +1,17 @@
 <?php
 
-global $w2rr_post_rating_widget_params;
-$w2rr_post_rating_widget_params = array(
-		array(
-				'type' => 'textfield',
-				'param_name' => 'post',
-				'value' => '',
-				'heading' => esc_html__('Rating stars of specific post', 'W2RR'),
-				'description' => esc_html__('Leave empty to show stars of target post', 'W2RR'),
-		),
-);
+add_action('init', function() {
+	global $w2rr_post_rating_widget_params;
+	$w2rr_post_rating_widget_params = array(
+			array(
+					'type' => 'textfield',
+					'param_name' => 'post',
+					'value' => '',
+					'heading' => esc_html__('Rating stars of specific post', 'w2rr'),
+					'description' => esc_html__('Leave empty to show stars of target post', 'w2rr'),
+			),
+	);
+}, 0);
 
 class w2rr_post_rating_widget extends w2rr_widget {
 
@@ -18,7 +20,7 @@ class w2rr_post_rating_widget extends w2rr_widget {
 
 		parent::__construct(
 				'w2rr_post_rating_shortcode_widget',
-				esc_html__('Post rating', 'W2RR')
+				esc_html__('Post rating', 'w2rr')
 		);
 
 		$this->convertParams($w2rr_post_rating_widget_params);

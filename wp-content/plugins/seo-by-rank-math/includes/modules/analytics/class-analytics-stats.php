@@ -11,6 +11,7 @@
 namespace RankMath\Analytics;
 
 use RankMath\Helper;
+use RankMath\KB;
 use RankMath\Traits\Hooker;
 
 defined( 'ABSPATH' ) || exit;
@@ -43,9 +44,12 @@ class Analytics_Stats {
 
 		$uri = untrailingslashit( plugin_dir_url( __FILE__ ) );
 		wp_enqueue_style( 'rank-math-analytics-stats', $uri . '/assets/css/admin-bar.css', null, rank_math()->version );
-		wp_enqueue_script( 'rank-math-analytics-stats', $uri . '/assets/js/admin-bar.js', [ 'jquery', 'wp-api-fetch', 'wp-element', 'wp-components' ], rank_math()->version, true );
+		wp_enqueue_script( 'rank-math-analytics-stats', $uri . '/assets/js/admin-bar.js', [ 'jquery', 'wp-api-fetch', 'wp-element', 'wp-components', 'lodash' ], rank_math()->version, true );
 
+		Helper::add_json( 'isConsoleConnected', \RankMath\Google\Console::is_console_connected() );
 		Helper::add_json( 'isAnalyticsConnected', \RankMath\Google\Analytics::is_analytics_connected() );
 		Helper::add_json( 'hideFrontendStats', get_user_meta( get_current_user_id(), 'rank_math_hide_frontend_stats', true ) );
+
+		Helper::add_json( 'links', KB::get_links() );
 	}
 }

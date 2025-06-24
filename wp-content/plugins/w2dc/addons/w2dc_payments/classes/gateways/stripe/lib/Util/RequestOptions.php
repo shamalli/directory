@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 namespace Stripe\Util;
 
 use Stripe\Error;

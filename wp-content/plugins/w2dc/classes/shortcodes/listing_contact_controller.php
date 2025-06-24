@@ -1,5 +1,7 @@
 <?php 
 
+// @codingStandardsIgnoreFile
+
 /**
  *  [webdirectory-listing-contact] shortcode
  *
@@ -48,7 +50,7 @@ class w2dc_listing_contact_controller extends w2dc_frontend_controller {
 					w2dc_renderTemplate('frontend/single_parts/contact_form.tpl.php', array('listing' => $listing));
 				}
 			} else {
-				printf(__('You must be <a href="%s">logged in</a> to submit contact form', 'W2DC'), wp_login_url(get_permalink($listing->post->ID)));
+				printf(wp_kses(__('You must be <a href="%s">logged in</a> to submit contact form', 'w2dc'), 'post'), wp_login_url(get_permalink($listing->post->ID)));
 			}
 			
 			return ob_get_clean();

@@ -160,6 +160,11 @@
   float: left;
 }
 
+.w2dc-subcategories .w2dc-category-count,
+.w2dc-subcategories .w2dc-location-count {
+  float: left;
+}
+
 img.w2dc-field-icon {
   margin: 0 0 0 5px;
 }

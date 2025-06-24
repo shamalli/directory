@@ -10,12 +10,15 @@
 
 namespace RankMath\ContentAI;
 
+use RankMath\KB;
 use RankMath\Helper;
+use RankMath\Helpers\Sitepress;
+use RankMath\Helpers\Url;
+use RankMath\Helpers\Arr;
+use RankMath\Admin\Admin_Helper as AdminHelper;
 use RankMath\CMB2;
 use RankMath\Traits\Hooker;
 use RankMath\Traits\Ajax;
-use MyThemeShop\Helpers\Arr;
-use MyThemeShop\Helpers\WordPress;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -29,25 +32,42 @@ class Content_AI {
 	 * Class constructor.
 	 */
 	public function __construct() {
+		$this->action( 'rest_api_init', 'init_rest_api' );
+
+		new Content_AI_Page();
+		new Bulk_Actions();
 		if ( ! Helper::has_cap( 'content_ai' ) ) {
 			return;
 		}
 
 		$this->filter( 'rank_math/analytics/post_data', 'add_contentai_data', 10, 2 );
 		$this->filter( 'rank_math/settings/general', 'add_settings' );
-		$this->action( 'rest_api_init', 'init_rest_api' );
 		$this->action( 'rank_math/admin/editor_scripts', 'editor_scripts', 20 );
 		$this->filter( 'rank_math/metabox/post/values', 'add_metadata', 10, 2 );
 		$this->action( 'cmb2_admin_init', 'add_content_ai_metabox', 11 );
 		$this->action( 'rank_math/deregister_site', 'remove_credits_data' );
-		$this->ajax( 'get_content_ai_credits', 'update_content_ai_credits' );
+		$this->filter( 'rank_math/elementor/dark_styles', 'add_dark_style' );
+		$this->filter( 'rank_math/status/rank_math_info', 'content_ai_info' );
+		$this->action( 'rank_math/connect/account_connected', 'refresh_content_ai_credits' );
+	}
+
+	/**
+	 * Add dark style
+	 *
+	 * @param array $styles The dark mode styles.
+	 */
+	public function add_dark_style( $styles = [] ) {
+
+		$styles['rank-math-content-ai-dark'] = rank_math()->plugin_url() . 'includes/modules/content-ai/assets/css/content-ai-dark.css';
+
+		return $styles;
 	}
 
 	/**
 	 * Add Content AI score in Single Page Site Analytics.
 	 *
-	 * @param  array           $data array.
-	 * @param  WP_REST_Request $request post object.
+	 * @param  array            $data array.
+	 * @param  \WP_REST_Request $request post object.
 	 * @return array $data sorted array.
 	 */
 	public function add_contentai_data( $data, \WP_REST_Request $request ) {
@@ -85,9 +105,10 @@ class Content_AI {
 			$tabs,
 			[
 				'content-ai' => [
-					'icon'  => 'rm-icon rm-icon-target',
+					'icon'  => 'rm-icon rm-icon-content-ai',
 					'title' => esc_html__( 'Content AI', 'rank-math' ),
-					'desc'  => esc_html__( 'Get sophisticated AI suggestions for related Keywords, Questions & Links to include in the SEO meta & Content Area. Supports 80+ Countries.', 'rank-math' ),
+					/* translators: Link to kb article */
+					'desc'  => sprintf( esc_html__( 'Get sophisticated AI suggestions for related Keywords, Questions & Links to include in the SEO meta & Content Area. %s.', 'rank-math' ), '<a href="' . KB::get( 'content-ai-settings', 'Options Panel Content AI Tab' ) . '" target="_blank">' . esc_html__( 'Learn more', 'rank-math' ) . '</a>' ),
 					'file'  => dirname( __FILE__ ) . '/views/options.php',
 				],
 			],
@@ -101,7 +122,7 @@ class Content_AI {
 	 * Add link suggestion metabox.
 	 */
 	public function add_content_ai_metabox() {
-		if ( ! $this->can_add_tab() || 'classic' !== Helper::get_current_editor() ) {
+		if ( ! self::can_add_tab() || 'classic' !== Helper::get_current_editor() ) {
 			return;
 		}
 
@@ -109,7 +130,7 @@ class Content_AI {
 		$cmb = new_cmb2_box(
 			[
 				'id'               => $id,
-				'title'            => esc_html__( 'Rank Math Content AI', 'rank-math' ),
+				'title'            => esc_html__( 'Content AI', 'rank-math' ),
 				'object_types'     => array_keys( Helper::get_accessible_post_types() ),
 				'context'          => 'side',
 				'priority'         => 'high',
@@ -130,7 +151,7 @@ class Content_AI {
 	 * @return void
 	 */
 	public function editor_scripts() {
-		if ( ! $this->can_add_tab() ) {
+		if ( ! self::can_add_tab() ) {
 			return;
 		}
 
@@ -154,6 +175,10 @@ class Content_AI {
 			rank_math()->version,
 			true
 		);
+
+		wp_set_script_translations( 'rank-math-content-ai', 'rank-math' );
+
+		$this->localized_data();
 	}
 
 	/**
@@ -175,7 +200,7 @@ class Content_AI {
 
 		$values['contentAiCountry'] = Helper::get_settings( 'general.content_ai_country', 'all' );
 		$values['countries']        = $countries;
-		$values['ca_credits']       = get_option( 'rank_math_ca_credits' );
+		$values['ca_credits']       = Helper::get_credits();
 		$values['ca_keyword']       = '';
 		$values['ca_viewed']        = true;
 
@@ -200,20 +225,81 @@ class Content_AI {
 
 		$values['ca_keyword'] = $keyword;
 
+		$content_ai_data          = $screen->get_meta( $screen->get_object_type(), $screen->get_object_id(), 'rank_math_contentai_score' );
+		$content_ai_score         = ! empty( $content_ai_data ) && is_array( $content_ai_data ) ? round( array_sum( array_values( $content_ai_data ) ) / count( $content_ai_data ) ) : 0;
+		$values['contentAiScore'] = absint( $content_ai_score );
+
 		return $values;
 	}
 
 	/**
-	 * Ajax callback to update the Content AI Credits.
+	 * Whether to load Content AI data.
 	 */
-	public function update_content_ai_credits() {
-		check_ajax_referer( 'rank-math-ajax-nonce', 'security' );
-		$this->has_cap_ajax( 'content_ai' );
-		$this->success(
-			[
-				'credits' => Helper::get_content_ai_credits( true ),
-			]
-		);
+	public static function can_add_tab() {
+		return in_array( Helper::get_post_type(), (array) Helper::get_settings( 'general.content_ai_post_types' ), true );
+	}
+
+	/**
+	 * Localized data to use on the Content AI page.
+	 */
+	public static function localized_data() {
+		Helper::add_json( 'ca_audience', (array) Helper::get_settings( 'general.content_ai_audience', 'General Audience' ) );
+		Helper::add_json( 'ca_tone', (array) Helper::get_settings( 'general.content_ai_tone', 'Formal' ) );
+		Helper::add_json( 'ca_language', Helper::get_settings( 'general.content_ai_language', Helper::content_ai_default_language() ) );
+		Helper::add_json( 'contentAIHistory', Helper::get_outputs() );
+		Helper::add_json( 'contentAIChats', Helper::get_chats() );
+		Helper::add_json( 'contentAIRecentPrompts', Helper::get_recent_prompts() );
+		Helper::add_json( 'contentAIPrompts', Helper::get_prompts() );
+		Helper::add_json( 'isUserRegistered', Helper::is_site_connected() );
+		Helper::add_json( 'connectSiteUrl', AdminHelper::get_activate_url( Url::get_current_url() ) );
+		Helper::add_json( 'contentAICredits', Helper::get_content_ai_credits() );
+		Helper::add_json( 'contentAIPlan', Helper::get_content_ai_plan() );
+		Helper::add_json( 'contentAIErrors', Helper::get_content_ai_errors() );
+		Helper::add_json( 'connectData', AdminHelper::get_registration_data() );
+		Helper::add_json( 'registerWriteShortcut', version_compare( get_bloginfo( 'version' ), '6.2', '>=' ) );
+		Helper::add_json( 'contentAiMigrating', get_site_transient( 'rank_math_content_ai_migrating_user' ) );
+		Helper::add_json( 'contentAiUrl', CONTENT_AI_URL . '/ai/' );
+
+		$refresh_date = Helper::get_content_ai_refresh_date();
+		Helper::add_json( 'contentAIRefreshDate', $refresh_date ? wp_date( 'Y-m-d g:ia', $refresh_date ) : '' );
+	}
+
+	/**
+	 * Add Content AI details in System Info
+	 *
+	 * @param array $rankmath Array of rankmath.
+	 */
+	public function content_ai_info( $rankmath ) {
+		$refresh_date = Helper::get_content_ai_refresh_date();
+		$content_ai   = [
+			'ca_plan'         => [
+				'label' => esc_html__( 'Content AI Plan', 'rank-math' ),
+				'value' => \ucwords( Helper::get_content_ai_plan() ),
+			],
+			'ca_credits'      => [
+				'label' => esc_html__( 'Content AI Credits', 'rank-math' ),
+				'value' => Helper::get_content_ai_credits(),
+			],
+			'ca_refresh_date' => [
+				'label' => esc_html__( 'Content AI Refresh Date', 'rank-math' ),
+				'value' => $refresh_date ? wp_date( 'Y-m-d g:i a', $refresh_date ) : '',
+			],
+		];
+
+		array_splice( $rankmath['fields'], 3, 0, $content_ai );
+
+		return $rankmath;
+	}
+
+	/**
+	 * Refresh Content AI credits when account is connected.
+	 *
+	 * @param array $data Authentication data.
+	 *
+	 * @return void
+	 */
+	public function refresh_content_ai_credits( $data ) {
+		Helper::get_content_ai_credits( true );
 	}
 
 	/**
@@ -223,7 +309,7 @@ class Content_AI {
 	 * @return void
 	 */
 	private function reorder_content_ai_metabox( $id ) {
-		$post_type = WordPress::get_post_type();
+		$post_type = Helper::get_post_type();
 		if ( ! $post_type ) {
 			return;
 		}
@@ -271,10 +357,4 @@ class Content_AI {
 		update_user_option( $user->ID, 'meta-box-order_' . $post_type, $order, true );
 	}
 
-	/**
-	 * Whether to load Content AI data.
-	 */
-	private function can_add_tab() {
-		return in_array( WordPress::get_post_type(), (array) Helper::get_settings( 'general.content_ai_post_types' ), true );
-	}
 }

@@ -58,12 +58,12 @@
 		return false;
 	});
 
-	function vp_w2dc_init_fields($elements)
+	function w2dc_vp_init_fields($elements)
 	{
 		$elements.each(function(){
 			if($(this).parents('.tocopy').length <= 0)
 			{
-				vp_w2dc.init_controls($(this));
+				w2dc_vp.init_controls($(this));
 
 				var id         = $(this).attr('id'),
 					name       = $(this).attr('id'),
@@ -94,7 +94,7 @@
 		});
 	}
 
-	function vp_w2dc_init_groups($elements)
+	function w2dc_vp_init_groups($elements)
 	{
 		$elements.each(function(){
 			if($(this).parents('.tocopy').length <= 0 && !$(this).hasClass('.tocopy'))
@@ -110,7 +110,7 @@
 		});
 	}
 
-	function vp_w2dc_mb_sortable()
+	function w2dc_vp_mb_sortable()
 	{
 		var textareaIDs = [];
 		$('.wpa_loop.vp-sortable').sortable({
@@ -123,12 +123,12 @@
 				if(typeof window.KIA_metabox !== 'undefined')
 				{
 					textareaIDs = [];
-					vp_w2dc.tinyMCE_save();
+					w2dc_vp.tinyMCE_save();
 					$(ui.item).find('.customEditor textarea').each(function(){
 						if($(this).parents('.tocopy').length <= 0)
 						{
 							try { tinyMCE.execCommand('mceRemoveControl', false, this.id); } catch(e){}
-							textareaIDs.push(vp_w2dc.jqid(this.id));
+							textareaIDs.push(w2dc_vp.jqid(this.id));
 						}
 					});
 				}
@@ -143,7 +143,7 @@
 					textareaIDs = textareaIDs.join(", ");
 					try {
 						KIA_metabox.runTinyMCE($(textareaIDs));
-						vp_w2dc.tinyMCE_save();
+						w2dc_vp.tinyMCE_save();
 						for (var i = textareaIDs.length - 1; i >= 0; i--) {
 							var $textarea = $(textareaIDs[i]);
 							$textarea.val(switchEditors.pre_wpautop($textarea.val()));
@@ -155,15 +155,15 @@
 	}
 
 	$(document).ready(function () {
-		vp_w2dc_init_fields(jQuery('.vp-metabox .vp-field'));
-		vp_w2dc_init_groups(jQuery('.vp-metabox .vp-meta-group'));
+		w2dc_vp_init_fields(jQuery('.vp-metabox .vp-field'));
+		w2dc_vp_init_groups(jQuery('.vp-metabox .vp-meta-group'));
 		process_binding(bindings);
 		process_items_binding(items_binding);
 		process_dependency(dependencies);
-		vp_w2dc_mb_sortable();
+		w2dc_vp_mb_sortable();
 	});
 
-	vp_w2dc.is_multianswer = function(type){
+	w2dc_vp.is_multianswer = function(type){
 		var multi = ['vp-checkbox', 'vp-checkimage', 'vp-multiselect'];
 		if(jQuery.inArray(type, multi) !== -1 )
 		{
@@ -173,8 +173,8 @@
 	};
 
 	// image controls event bind
-	vp_w2dc.custom_check_radio_event(".vp-metabox", ".vp-field.vp-checkimage .field .input label");
-	vp_w2dc.custom_check_radio_event(".vp-metabox", ".vp-field.vp-radioimage .field .input label");
+	w2dc_vp.custom_check_radio_event(".vp-metabox", ".vp-field.vp-checkimage .field .input label");
+	w2dc_vp.custom_check_radio_event(".vp-metabox", ".vp-field.vp-radioimage .field .input label");
 
 	// Bind event to WP publish button to process metabox validation
 	$('#post').on( 'submit', function(e){
@@ -184,13 +184,13 @@
 		    errors    = 0;
 
 		// update tinyMCE textarea content
-		vp_w2dc.tinyMCE_save();
+		w2dc_vp.tinyMCE_save();
 
 		$('.vp-field').removeClass('vp-error');
 		$('.validation-msg.vp-error').remove();
 		$('.vp-metabox-error').remove();
 
-		errors = vp_w2dc.fields_validation_loop(validation);
+		errors = w2dc_vp.fields_validation_loop(validation);
 
 		if(errors > 0)
 		{
@@ -226,7 +226,7 @@
 
 	});
 
-	$("#post input[type=submit]").click(function() {
+	$("#post input[type=submit]").on('click', function() {
 		$("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
 		$(this).attr("clicked", "true");
 	});
@@ -255,7 +255,7 @@
 
 			for (j = 0; j < ids.length; j++)
 			{
-				vp_w2dc.binding_event(ids, j, field, func, '.vp-metabox', 'metabox');
+				w2dc_vp.binding_event(ids, j, field, func, '.vp-metabox', 'metabox');
 			}
 		}
 	}
@@ -284,7 +284,7 @@
 
 			for (j = 0; j < ids.length; j++)
 			{
-				vp_w2dc.items_binding_event(ids, j, field, func, '.vp-metabox', 'metabox');
+				w2dc_vp.items_binding_event(ids, j, field, func, '.vp-metabox', 'metabox');
 			}
 		}
 	}
@@ -308,15 +308,15 @@
 			}
 			else if(field.type === 'section')
 			{
-				var $source = jQuery(vp_w2dc.jqid(field.source));
+				var $source = jQuery(w2dc_vp.jqid(field.source));
 				if($source.parents('.wpa_group').length > 0)
 				{
-					prefix = jQuery(vp_w2dc.jqid(field.source)).parents('.wpa_group').first().attr('id');
+					prefix = jQuery(w2dc_vp.jqid(field.source)).parents('.wpa_group').first().attr('id');
 				}
 				else
 				{
 					// get the closest 'postbox' class parent id
-					prefix = jQuery(vp_w2dc.jqid(field.source)).parents('.postbox').attr('id');
+					prefix = jQuery(w2dc_vp.jqid(field.source)).parents('.postbox').attr('id');
 					// strip the '_metabox'
 					prefix = prefix.substring(0, prefix.lastIndexOf('_'));
 				}
@@ -332,7 +332,7 @@
 
 			for (j = 0; j < ids.length; j++)
 			{
-				vp_w2dc.dependency_event(ids, j, field, func, '.vp-metabox');
+				w2dc_vp.dependency_event(ids, j, field, func, '.vp-metabox');
 			}
 		}
 	}
@@ -346,10 +346,10 @@
 		// delete tocopy hidden field
 		clone.find('input[class="tocopy-hidden"]').first().remove();
 
-		vp_w2dc_init_fields(clone.find('.vp-field'));
-		vp_w2dc_init_groups(clone.find('.vp-meta-group'));
+		w2dc_vp_init_fields(clone.find('.vp-field'));
+		w2dc_vp_init_groups(clone.find('.vp-meta-group'));
 
-		clone.find('.vp-wpa-group-title:first').click();
+		clone.find('.vp-wpa-group-title:first').trigger('click');
 
 		process_binding(bindings);
 		process_items_binding(items_binding);

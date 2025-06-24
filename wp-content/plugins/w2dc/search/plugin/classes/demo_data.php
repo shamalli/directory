@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 define('WCSEARCH_DEMO_DATA_PATH', WCSEARCH_PATH . 'demo-data/');
 
 class wcsearch_demo_data_manager {
@@ -103,8 +105,8 @@ class wcsearch_demo_data_manager {
 		}
 		
 		add_submenu_page('edit.php?post_type=wcsearch_form',
-		__('Demo data Import', 'WCSEARCH'),
-		__('Demo data Import', 'WCSEARCH'),
+		esc_html__('Demo data Import', 'wcsearch'),
+		esc_html__('Demo data Import', 'wcsearch'),
 		$capability,
 		'wcsearch_demo_data',
 		array($this, 'wcsearch_demo_data_import_page')
@@ -117,6 +119,9 @@ class wcsearch_demo_data_manager {
 			$pages_files = glob(WCSEARCH_DEMO_DATA_PATH . 'pages/*.{txt}', GLOB_BRACE);
 			foreach ($pages_files AS $file) {
 				$title = basename($file, '.txt');
+				$title = str_replace("[", "", $title);
+				$title = str_replace("]", "", $title);
+				$title = str_replace("_", " ", $title);
 				$content = file_get_contents($file);
 				
 				$page_id = wp_insert_post(array(
@@ -131,6 +136,9 @@ class wcsearch_demo_data_manager {
 			$search_forms_files = glob(WCSEARCH_DEMO_DATA_PATH . 'search_forms/*.{txt}', GLOB_BRACE);
 			foreach ($search_forms_files AS $file) {
 				$title = basename($file, '.txt');
+				$title = str_replace("[", "", $title);
+				$title = str_replace("]", "", $title);
+				$title = str_replace("_", " ", $title);
 					
 				$search_form_id = wp_insert_post(array(
 						'post_type' => WCSEARCH_FORM_TYPE,
@@ -146,7 +154,7 @@ class wcsearch_demo_data_manager {
 				}
 			}
 			
-			wcsearch_addMessage(sprintf(__("Import of the demo data was successfully completed. Look at your <a href='%s'>search forms</a> and <a href='%s'>demo pages</a>.", "WCSEARCH"), admin_url('edit.php?post_type=wcsearch_form'), admin_url('edit.php?post_type=page')));
+			wcsearch_addMessage(sprintf(wp_kses(__("Import of the demo data was successfully completed. Look at your <a href='%s'>search forms</a> and <a href='%s'>demo pages</a>.", "wcsearch"), 'post'), admin_url('edit.php?post_type=wcsearch_form'), admin_url('edit.php?post_type=page')));
 			
 			wcsearch_renderTemplate('demo_data_import.tpl.php');
 		} else {

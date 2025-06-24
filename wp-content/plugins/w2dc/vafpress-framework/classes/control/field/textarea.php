@@ -1,6 +1,6 @@
 <?php
 
-class VP_W2DC_Control_Field_TextArea extends VP_W2DC_Control_Field
+class W2DC_VP_Control_Field_TextArea extends W2DC_VP_Control_Field
 {
 
 	public function __construct()
@@ -22,7 +22,7 @@ class VP_W2DC_Control_Field_TextArea extends VP_W2DC_Control_Field
 	{
 		$this->_setup_data();
 		$this->add_data('is_compact', $is_compact);
-		return VP_W2DC_View::instance()->load('control/textarea', $this->get_data());
+		return W2DC_VP_View::instance()->load('control/textarea', $this->get_data());
 	}
 
 	public function set_value($_value)

@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 /**
  * Extended version of WPAlchemy Class
  * so that it can process metabox using an array specification
@@ -11,10 +13,10 @@
 /////////////////////////////////////////
 if(!class_exists('WPAlchemy_MetaBox'))
 {
-	require_once VP_W2DC_FileSystem::instance()->resolve_path('includes', 'wpalchemy/MetaBox');
+	require_once W2DC_VP_FileSystem::instance()->resolve_path('includes', 'wpalchemy/MetaBox');
 }
 
-class VP_W2DC_Metabox extends WPAlchemy_MetaBox
+class W2DC_VP_Metabox extends WPAlchemy_MetaBox
 {
 
 	public static $pool = array();
@@ -32,10 +34,10 @@ class VP_W2DC_Metabox extends WPAlchemy_MetaBox
 		// Modify title in dev mode
 		if( $this->is_dev_mode )
 		{
-			$this->title = __('[Development Mode] ', 'vp_w2dc_textdomain') . $this->title;
+			$this->title = esc_html__('[Development Mode] ', 'w2dc') . $this->title;
 		}
 
-		if ($this->can_output() and VP_W2DC_WP_Admin::is_post_or_page() )
+		if ($this->can_output() and W2DC_VP_WP_Admin::is_post_or_page() )
 		{
 			// make sure metabox template loaded
 			if( !is_array($this->template) and file_exists($this->template) )
@@ -48,7 +50,7 @@ class VP_W2DC_Metabox extends WPAlchemy_MetaBox
 
 	public function register_fields()
 	{
-		$loader = VP_W2DC_WP_Loader::instance();
+		$loader = W2DC_VP_WP_Loader::instance();
 		$loader->add_types( $this->get_field_types(), 'metabox' );
 	}
 
@@ -139,7 +141,7 @@ class VP_W2DC_Metabox extends WPAlchemy_MetaBox
 		{
 			function inner_build($fields, &$types)
 			{
-				$rules = VP_W2DC_Util_Config::instance()->load('dependencies', 'rules');
+				$rules = W2DC_VP_Util_Config::instance()->load('dependencies', 'rules');
 				foreach ($fields as $field)
 				{
 					if($field['type'] == 'group')
@@ -216,7 +218,7 @@ class VP_W2DC_Metabox extends WPAlchemy_MetaBox
 					}
 					$result = call_user_func_array($func, $values);
 
-					if(VP_W2DC_Util_Reflection::is_multiselectable($field))
+					if(W2DC_VP_Util_Reflection::is_multiselectable($field))
 					{
 						$result = (array) $result;
 					}
@@ -230,7 +232,7 @@ class VP_W2DC_Metabox extends WPAlchemy_MetaBox
 					}
 					$field->set_value($result);
 				}
-				if($field instanceof VP_W2DC_Control_FieldMulti)
+				if($field instanceof W2DC_VP_Control_FieldMulti)
 				{
 					$bind = $field->get_items_binding();
 					if(!empty($bind))
@@ -273,7 +275,7 @@ class VP_W2DC_Metabox extends WPAlchemy_MetaBox
 					}
 
 					$dependency = '';
-					if($field instanceof VP_W2DC_Control_Field)
+					if($field instanceof W2DC_VP_Control_Field)
 					{
 						$dependency = $field->get_dependency();
 						if(!empty($dependency))
@@ -310,7 +312,7 @@ class VP_W2DC_Metabox extends WPAlchemy_MetaBox
 						$result  = call_user_func_array($func, $values);
 						if(!$result)
 						{
-							if($field instanceof VP_W2DC_Control_Field)
+							if($field instanceof W2DC_VP_Control_Field)
 							{
 								$field->is_hidden(true);
 								if($field->is_hidden())
@@ -339,7 +341,7 @@ class VP_W2DC_Metabox extends WPAlchemy_MetaBox
 
 	function _enfactor_field($field, $mb, $in_group = false)
 	{
-		$is_multi = VP_W2DC_Util_Reflection::is_multiselectable($field['type']);
+		$is_multi = W2DC_VP_Util_Reflection::is_multiselectable($field['type']);
 
 		if( !$is_multi )
 		{
@@ -352,13 +354,13 @@ class VP_W2DC_Metabox extends WPAlchemy_MetaBox
 		$field['name'] = $mb->get_the_name();
 
 		// create the object
-		$make     = VP_W2DC_Util_Reflection::field_class_from_type($field['type']);
-		$vp_w2dc_field = call_user_func("$make::withArray", $field);
+		$make     = W2DC_VP_Util_Reflection::field_class_from_type($field['type']);
+		$w2dc_vp_field = call_user_func("$make::withArray", $field);
 
 		// get value from mb
 		$value    = $mb->get_the_value();
 		// get default from array
-		$default  = $vp_w2dc_field->get_default();
+		$default  = $w2dc_vp_field->get_default();
 
 		// if tocopy always assign default
 		if( $mb->is_parent_multi() and $mb->is_in_multi_last() )
@@ -375,7 +377,7 @@ class VP_W2DC_Metabox extends WPAlchemy_MetaBox
 			// if not then set up value from mb
 			else
 			{
-				if( VP_W2DC_Util_Reflection::is_multiselectable($field['type']) )
+				if( W2DC_VP_Util_Reflection::is_multiselectable($field['type']) )
 				{
 					if( !is_array($value) and !is_null($value) )
 						$value = array( $value );
@@ -384,14 +386,14 @@ class VP_W2DC_Metabox extends WPAlchemy_MetaBox
 				}
 			}
 		}
-		$vp_w2dc_field->set_value($value);
+		$w2dc_vp_field->set_value($value);
 
 		if (!$in_group)
 		{
-			$vp_w2dc_field->add_container_extra_classes(array('vp-meta-single'));
+			$w2dc_vp_field->add_container_extra_classes(array('vp-meta-single'));
 		}
 
-		return $vp_w2dc_field;
+		return $w2dc_vp_field;
 	}
 
 	function _enfactor_group($field, $mb, $repeating)
@@ -499,7 +501,7 @@ class VP_W2DC_Metabox extends WPAlchemy_MetaBox
 				. '" class="vp-wpa-loop level-' . $oddity . ' wpa_loop wpa_loop-' . $name . ' vp-fixed-loop vp-meta-group'
 				. (isset($group['container_extra_classes']) ? (' ' . implode(' ', $group['container_extra_classes'])) : '')
 				. '"'
-				. VP_W2DC_Util_Text::return_if_exists(isset($dependency) ? $dependency : '', 'data-vp-dependency="%s"')
+				. W2DC_VP_Util_Text::return_if_exists(isset($dependency) ? $dependency : '', 'data-vp-dependency="%s"')
 				. '>';
 
 		$icon = '';
@@ -547,7 +549,7 @@ class VP_W2DC_Metabox extends WPAlchemy_MetaBox
 				. '" class="vp-wpa-loop level-' . $oddity . ' wpa_loop wpa_loop-' . $name . ' vp-repeating-loop vp-meta-group'
 				. (isset($group['container_extra_classes']) ? (' ' . implode(' ', $group['container_extra_classes'])) : '')
 				. '"'
-				. VP_W2DC_Util_Text::return_if_exists(isset($dependency) ? $dependency : '', 'data-vp-dependency="%s"')
+				. W2DC_VP_Util_Text::return_if_exists(isset($dependency) ? $dependency : '', 'data-vp-dependency="%s"')
 				. '>';
 
 		$icon = '';
@@ -563,7 +565,7 @@ class VP_W2DC_Metabox extends WPAlchemy_MetaBox
 			if ($g === reset($group['groups'])){ $is_first = true; $class = ' first';}
 
 			$html .= '<div id="'. $g['name'] .'" class="vp-wpa-group wpa_group wpa_group-' . $name . $class . '">';
-			$html .= '<div class="vp-wpa-group-heading"><a href="#" class="vp-wpa-group-title">' . $icon . $group['title'] . '</a><a href="#" class="dodelete vp-wpa-group-remove" title="'. __('Remove', 'vp_w2dc_textdomain') .'"><i class="fa fa-times"></i> '. __('Remove', 'vp_w2dc_textdomain') .'</a></div>';
+			$html .= '<div class="vp-wpa-group-heading"><a href="#" class="vp-wpa-group-title">' . $icon . $group['title'] . '</a><a href="#" class="dodelete vp-wpa-group-remove" title="'. esc_html__('Remove', 'w2dc') .'"><i class="fa fa-times"></i> '. esc_html__('Remove', 'w2dc') .'</a></div>';
 			$html .= '<div class="vp-controls' . ((!$is_first) ? ' vp-hide' : '') . '">';
 			if ($g === end($group['groups']))
 			{
@@ -585,7 +587,7 @@ class VP_W2DC_Metabox extends WPAlchemy_MetaBox
 		}
 
 		$html .= '<div class="vp-wpa-group-add">';
-		$html .= '<a href="#" class="button button-large docopy-' . $name . '">'. __('Add More', 'vp_w2dc_textdomain') . ' ' . $group['title'] . '</a>';
+		$html .= '<a href="#" class="button button-large docopy-' . $name . '">'. esc_html__('Add More', 'w2dc') . ' ' . $group['title'] . '</a>';
 		$html .= '</div>';
 
 		$html .= '</div>';

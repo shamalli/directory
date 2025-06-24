@@ -1,7 +1,12 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <?php w2dc_renderTemplate('admin_header.tpl.php'); ?>
 
 <h2>
-	<?php _e('Configure number field', 'W2DC'); ?>
+	<?php esc_html_e('Configure number field', 'w2dc'); ?>
 </h2>
 
 <form method="POST" action="">
@@ -10,7 +15,7 @@
 		<tbody>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Is integer or decimal', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Is integer or decimal', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<input
@@ -18,43 +23,43 @@
 						type="radio"
 						value="1"
 						<?php if($content_field->is_integer) echo 'checked'; ?> />
-					<?php _e('integer', 'W2DC')?>
+					<?php esc_html_e('integer', 'w2dc')?>
 					&nbsp;&nbsp;
 					<input
 						name="is_integer"
 						type="radio"
 						value="0"
 						<?php if(!$content_field->is_integer) echo 'checked'; ?> />
-					<?php _e('decimal', 'W2DC')?>
+					<?php esc_html_e('decimal', 'w2dc')?>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Decimal separator', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Decimal separator', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<select name="decimal_separator">
-						<option value="." <?php if($content_field->decimal_separator == '.') echo 'selected'; ?>><?php _e('dot', 'W2DC')?></option>
-						<option value="," <?php if($content_field->decimal_separator == ',') echo 'selected'; ?>><?php _e('comma', 'W2DC')?></option>
+						<option value="." <?php if($content_field->decimal_separator == '.') echo 'selected'; ?>><?php esc_html_e('dot', 'w2dc')?></option>
+						<option value="," <?php if($content_field->decimal_separator == ',') echo 'selected'; ?>><?php esc_html_e('comma', 'w2dc')?></option>
 					</select>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Thousands separator', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Thousands separator', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<select name="thousands_separator">
-						<option value="" <?php if($content_field->thousands_separator == '') echo 'selected'; ?>><?php _e('no separator', 'W2DC')?></option>
-						<option value="." <?php if($content_field->thousands_separator == '.') echo 'selected'; ?>><?php _e('dot', 'W2DC')?></option>
-						<option value="," <?php if($content_field->thousands_separator == ',') echo 'selected'; ?>><?php _e('comma', 'W2DC')?></option>
-						<option value=" " <?php if($content_field->thousands_separator == ' ') echo 'selected'; ?>><?php _e('space', 'W2DC')?></option>
+						<option value="" <?php if($content_field->thousands_separator == '') echo 'selected'; ?>><?php esc_html_e('no separator', 'w2dc')?></option>
+						<option value="." <?php if($content_field->thousands_separator == '.') echo 'selected'; ?>><?php esc_html_e('dot', 'w2dc')?></option>
+						<option value="," <?php if($content_field->thousands_separator == ',') echo 'selected'; ?>><?php esc_html_e('comma', 'w2dc')?></option>
+						<option value=" " <?php if($content_field->thousands_separator == ' ') echo 'selected'; ?>><?php esc_html_e('space', 'w2dc')?></option>
 					</select>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Min', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Min', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<input
@@ -62,12 +67,12 @@
 						type="text"
 						size="2"
 						value="<?php echo esc_attr($content_field->min); ?>" />
-					<p class="description"><?php _e("leave empty if you do not need to limit this field", 'W2DC'); ?></p>
+					<p class="description"><?php esc_html_e("leave empty if you do not need to limit this field", 'w2dc'); ?></p>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Max', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Max', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<input
@@ -75,13 +80,13 @@
 						type="text"
 						size="2"
 						value="<?php echo esc_attr($content_field->max); ?>" />
-					<p class="description"><?php _e("leave empty if you do not need to limit this field", 'W2DC'); ?></p>
+					<p class="description"><?php esc_html_e("leave empty if you do not need to limit this field", 'w2dc'); ?></p>
 				</td>
 			</tr>
 		</tbody>
 	</table>
 	
-	<?php submit_button(__('Save changes', 'W2DC')); ?>
+	<?php submit_button(esc_html__('Save changes', 'w2dc')); ?>
 </form>
 
 <?php w2dc_renderTemplate('admin_footer.tpl.php'); ?>

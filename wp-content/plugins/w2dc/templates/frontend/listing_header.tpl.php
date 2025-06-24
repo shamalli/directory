@@ -1,3 +1,8 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 				<header class="w2dc-listing-header">
 					<?php if (!$listing->level->listings_own_page): ?>
 					<h2><?php echo $listing->title(); ?></h2><?php if (!isset($frontend_controller->args['rating_stars']) || $frontend_controller->args['rating_stars']) do_action('w2dc_listing_title_html', $listing, false); ?>

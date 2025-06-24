@@ -1,3 +1,8 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 		<div class="w2dc-content w2dc-listing-single">
 			<?php w2dc_renderMessages(); ?>
 
@@ -6,7 +11,7 @@
 				<?php $frontend_controller->query->the_post(); ?>
 				<?php $listing = $frontend_controller->listings[get_the_ID()]; ?>
 
-				<div id="<?php echo $listing->post->post_name; ?>" itemscope itemtype="http://schema.org/LocalBusiness">
+				<div id="<?php w2dc_esc_e($listing->post->post_name); ?>" itemscope itemtype="http://schema.org/LocalBusiness">
 					<meta itemprop="priceRange" content="$$$" />
 					<?php $hide_button_text = apply_filters('w2dc_hide_button_text_on_listing', true)?>
 					<?php $frontpanel_buttons = new w2dc_frontpanel_buttons(array('hide_button_text' => $hide_button_text)); ?>
@@ -53,23 +58,23 @@
 							): ?>
 						<ul class="w2dc-listing-tabs w2dc-nav w2dc-nav-tabs w2dc-clearfix" role="tablist">
 							<?php if (get_option('w2dc_map_on_single') && $listing->isMap()): ?>
-							<li><a href="javascript: void(0);" data-tab="#addresses-tab" data-toggle="w2dc-tab" role="tab"><?php _e('Map', 'W2DC'); ?></a></li>
+							<li><a href="javascript: void(0);" data-tab="#addresses-tab" data-toggle="w2dc-tab" role="tab"><?php esc_html_e('Map', 'w2dc'); ?></a></li>
 							<?php endif; ?>
 							<?php if (w2dc_comments_open()): ?>
 							<li><a href="javascript: void(0);" data-tab="#comments-tab" data-toggle="w2dc-tab" role="tab"><?php echo w2dc_comments_label($listing); ?></a></li>
 							<?php endif; ?>
 							<?php if ($listing->level->videos_number && $listing->videos): ?>
-							<li><a href="javascript: void(0);" data-tab="#videos-tab" data-toggle="w2dc-tab" role="tab"><?php echo _n('Video', 'Videos', count($listing->videos), 'W2DC'); ?> (<?php echo count($listing->videos); ?>)</a></li>
+							<li><a href="javascript: void(0);" data-tab="#videos-tab" data-toggle="w2dc-tab" role="tab"><?php echo _n('Video', 'Videos', count($listing->videos), 'w2dc'); ?> (<?php echo count($listing->videos); ?>)</a></li>
 							<?php endif; ?>
 							<?php if ($listing->isContactForm()): ?>
-							<li><a href="javascript: void(0);" data-tab="#contact-tab" data-toggle="w2dc-tab" role="tab"><?php _e('Contact', 'W2DC'); ?></a></li>
+							<li><a href="javascript: void(0);" data-tab="#contact-tab" data-toggle="w2dc-tab" role="tab"><?php esc_html_e('Contact', 'w2dc'); ?></a></li>
 							<?php endif; ?>
 							<?php if (get_option('w2dc_report_form')): ?>
-							<li><a href="javascript: void(0);" data-tab="#report-tab" data-toggle="w2dc-tab" role="tab"><?php _e('Report', 'W2DC'); ?></a></li>
+							<li><a href="javascript: void(0);" data-tab="#report-tab" data-toggle="w2dc-tab" role="tab"><?php esc_html_e('Report', 'w2dc'); ?></a></li>
 							<?php endif; ?>
 							<?php
 							foreach ($fields_groups AS $fields_group): ?>
-							<li><a href="javascript: void(0);" data-tab="#field-group-tab-<?php echo $fields_group->id; ?>" data-toggle="w2dc-tab" role="tab"><?php echo $fields_group->name; ?></a></li>
+							<li><a href="javascript: void(0);" data-tab="#field-group-tab-<?php w2dc_esc_e($fields_group->id); ?>" data-toggle="w2dc-tab" role="tab"><?php w2dc_esc_e($fields_group->name); ?></a></li>
 							<?php endforeach; ?>
 							<?php do_action('w2dc_listing_single_tabs', $listing); ?>
 						</ul>
@@ -106,7 +111,7 @@
 									<?php w2dc_renderTemplate('frontend/single_parts/contact_form.tpl.php', array('listing' => $listing)); ?>
 								<?php endif; ?>
 							<?php else: ?>
-								<?php printf(__('You must be <a href="%s">logged in</a> to submit contact form', 'W2DC'), wp_login_url(get_permalink($listing->post->ID))); ?>
+								<?php printf(wp_kses(__('You must be <a href="%s">logged in</a> to submit contact form', 'w2dc'), 'post'), wp_login_url(get_permalink($listing->post->ID))); ?>
 							<?php endif; ?>
 							</div>
 							<?php endif; ?>
@@ -119,7 +124,7 @@
 							<?php endif; ?>
 							
 							<?php foreach ($fields_groups AS $fields_group): ?>
-							<div id="field-group-tab-<?php echo $fields_group->id; ?>" class="w2dc-tab-pane w2dc-fade" role="tabpanel">
+							<div id="field-group-tab-<?php w2dc_esc_e($fields_group->id); ?>" class="w2dc-tab-pane w2dc-fade" role="tabpanel">
 								<?php do_action('w2dc_pre_field-group_tab', $fields_group); ?>
 								<?php echo $fields_group->renderOutput($listing, true); ?>
 							</div>

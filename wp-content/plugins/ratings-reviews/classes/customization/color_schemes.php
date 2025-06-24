@@ -71,43 +71,43 @@ function w2rr_affect_setting_w2rr_links_color($scheme) {
 	global $w2rr_color_schemes;
 	return $w2rr_color_schemes[$scheme]['w2rr_links_color'];
 }
-VP_W2RR_Security::instance()->whitelist_function('w2rr_affect_setting_w2rr_links_color');
+W2RR_VP_Security::instance()->whitelist_function('w2rr_affect_setting_w2rr_links_color');
 
 function w2rr_affect_setting_w2rr_links_hover_color($scheme) {
 	global $w2rr_color_schemes;
 	return $w2rr_color_schemes[$scheme]['w2rr_links_hover_color'];
 }
-VP_W2RR_Security::instance()->whitelist_function('w2rr_affect_setting_w2rr_links_hover_color');
+W2RR_VP_Security::instance()->whitelist_function('w2rr_affect_setting_w2rr_links_hover_color');
 
 function w2rr_affect_setting_w2rr_button_1_color($scheme) {
 	global $w2rr_color_schemes;
 	return $w2rr_color_schemes[$scheme]['w2rr_button_1_color'];
 }
-VP_W2RR_Security::instance()->whitelist_function('w2rr_affect_setting_w2rr_button_1_color');
+W2RR_VP_Security::instance()->whitelist_function('w2rr_affect_setting_w2rr_button_1_color');
 
 function w2rr_affect_setting_w2rr_button_2_color($scheme) {
 	global $w2rr_color_schemes;
 	return $w2rr_color_schemes[$scheme]['w2rr_button_2_color'];
 }
-VP_W2RR_Security::instance()->whitelist_function('w2rr_affect_setting_w2rr_button_2_color');
+W2RR_VP_Security::instance()->whitelist_function('w2rr_affect_setting_w2rr_button_2_color');
 
 function w2rr_affect_setting_w2rr_button_text_color($scheme) {
 	global $w2rr_color_schemes;
 	return $w2rr_color_schemes[$scheme]['w2rr_button_text_color'];
 }
-VP_W2RR_Security::instance()->whitelist_function('w2rr_affect_setting_w2rr_button_text_color');
+W2RR_VP_Security::instance()->whitelist_function('w2rr_affect_setting_w2rr_button_text_color');
 
 function w2rr_affect_setting_w2rr_stars_color($scheme) {
 	global $w2rr_color_schemes;
 	return $w2rr_color_schemes[$scheme]['w2rr_stars_color'];
 }
-VP_W2RR_Security::instance()->whitelist_function('w2rr_affect_setting_w2rr_stars_color');
+W2RR_VP_Security::instance()->whitelist_function('w2rr_affect_setting_w2rr_stars_color');
 
 function w2rr_affect_setting_w2rr_primary_color($scheme) {
 	global $w2rr_color_schemes;
 	return $w2rr_color_schemes[$scheme]['w2rr_primary_color'];
 }
-VP_W2RR_Security::instance()->whitelist_function('w2rr_affect_setting_w2rr_primary_color');
+W2RR_VP_Security::instance()->whitelist_function('w2rr_affect_setting_w2rr_primary_color');
 
 function w2rr_get_dynamic_option($option_name) {
 	global $w2rr_color_schemes;

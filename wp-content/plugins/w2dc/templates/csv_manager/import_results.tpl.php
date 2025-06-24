@@ -1,3 +1,8 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <form method="POST" action="">
 	<input type="hidden" name="action" value="import_settings">
 	<input type="hidden" name="import_type" value="<?php echo esc_attr($import_type); ?>">
@@ -19,11 +24,11 @@
 	<?php wp_nonce_field(W2DC_PATH, 'w2dc_csv_import_nonce');?>
 
 	<?php if ($log['errors'] || $test_mode): ?>
-	<?php submit_button(__('Go back', 'W2DC'), 'primary', 'goback', false); ?>
+	<?php submit_button(esc_html__('Go back', 'w2dc'), 'primary', 'goback', false); ?>
 	&nbsp;&nbsp;&nbsp;
 	<?php endif; ?>
 
-	<a href="<?php echo admin_url('admin.php?page=w2dc_csv_import'); ?>" class="button button-primary"><?php _e('Import new file', 'W2DC'); ?></a>
+	<a href="<?php echo admin_url('admin.php?page=w2dc_csv_import'); ?>" class="button button-primary"><?php esc_html_e('Import new file', 'w2dc'); ?></a>
 </form>
 
 <?php w2dc_renderTemplate('admin_footer.tpl.php'); ?>

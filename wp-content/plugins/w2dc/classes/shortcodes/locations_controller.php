@@ -47,7 +47,7 @@ class w2dc_locations_controller extends w2dc_frontend_controller {
 		}
 		
 		if (isset($this->args['locations']) && !is_array($this->args['locations'])) {
-			if ($locations = array_filter(explode(',', $this->args['locations']), 'trim')) {
+			if ($locations = w2dc_parse_slugs_ids_list($this->args['locations'])) {
 				$this->args['locations'] = $locations;
 			}
 		}

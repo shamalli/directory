@@ -7,7 +7,7 @@ class w2rr_add_review_button_elementor_widget extends w2rr_elementor_widget {
 	}
 
 	public function get_title() {
-		return __('Add review button', 'W2RR');
+		return esc_html__('Add review button', 'w2rr');
 	}
 
 	public function get_icon() {
@@ -23,7 +23,7 @@ class w2rr_add_review_button_elementor_widget extends w2rr_elementor_widget {
 		$this->start_controls_section(
 				'content_section',
 				array(
-						'label' => esc_html__('Add review button', 'W2RR'),
+						'label' => esc_html__('Add review button', 'w2rr'),
 						'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
 				)
 		);

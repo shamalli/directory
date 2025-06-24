@@ -46,8 +46,6 @@
 .w2dc-choose-plan:hover,
 .w2dc-choose-plan.w2dc-featured-level {
 	box-shadow: 5px 0px 40px rgba(0,0,0, .2);
-	/* transform: scale(1.15);
-	z-index: 1; */
 }
 .w2dc-choose-plan {
 	text-align: center;
@@ -104,7 +102,7 @@
 	font-size: 1.3em;
 }
 .w2dc-choose-plan-option-icon {
-	font: normal normal normal 14px/1 FontAwesome;
+	font: normal normal normal 14px/1 FontAwesomeW2DC;
 	font-size: inherit;
 	text-rendering: auto;
 	-webkit-font-smoothing: antialiased;
@@ -182,6 +180,7 @@ ul.w2dc-categorychecklist li.parent > .w2dc-category-parent {
 	height: 21px;
 	width: 25px;
 	cursor: pointer;
+	transition: none;
 }
 ul.w2dc-categorychecklist li > .w2dc-category-empty {
 	display: inline-block;
@@ -253,6 +252,12 @@ ul.w2dc-categorychecklist li ul li:before {
 		}
 		.w2dc-td-listing-options .w2dc-dashboard-btn-mobile {
 			display: block;
+		}
+	}
+	/* Minimum width of 769 pixels. */
+	@media screen and (min-width: $mobile-screen-width + 1) {
+		.w2dc-btn-group {
+			display: flex;
 		}
 	}
 }
@@ -553,7 +558,6 @@ ul.w2dc-dashboard-tabs.w2dc-nav {
 }
 .w2dc-upload-image {
 	background-color: #ababab;
-	/* border: 2px dashed #7e7e7e; */
 	text-align: center;
 	margin-bottom: 10px;
 	display: block;

@@ -1,6 +1,6 @@
 <?php
 
-class VP_W2RR_WP_Admin
+class W2RR_VP_WP_Admin
 {
 
 	/**
@@ -43,7 +43,7 @@ class VP_W2RR_WP_Admin
 		
 		if(!class_exists('WPAlchemy_MetaBox'))
 		{
-			require_once VP_W2RR_FileSystem::instance()->resolve_path('includes', 'wpalchemy/MetaBox');
+			require_once W2RR_VP_FileSystem::instance()->resolve_path('includes', 'wpalchemy/MetaBox');
 		}
 
 		$uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : NULL ;
@@ -52,24 +52,27 @@ class VP_W2RR_WP_Admin
 		{
 			$uri_parts = parse_url($uri);
 
-			$file = basename($uri_parts['path']);
-
-			if ($uri AND in_array($file, array('post.php', 'post-new.php')))
-			{
-				$post_id = WPAlchemy_MetaBox::_get_post_id();
-
-				$post_type = isset($_GET['post_type']) ? sanitize_text_field($_GET['post_type']) : NULL ;
-
-				$post_type = $post_id ? get_post_type($post_id) : $post_type ;
-
-				if (isset($post_type))
+			if (isset($uri_parts['path'])) {
+				
+				$file = basename($uri_parts['path']);
+	
+				if ($uri AND in_array($file, array('post.php', 'post-new.php')))
 				{
-					return $post_type;
-				}
-				else
-				{
-					// because of the 'post.php' and 'post-new.php' checks above, we can default to 'post'
-					return 'post';
+					$post_id = WPAlchemy_MetaBox::_get_post_id();
+	
+					$post_type = isset($_GET['post_type']) ? sanitize_text_field($_GET['post_type']) : NULL ;
+	
+					$post_type = $post_id ? get_post_type($post_id) : $post_type ;
+	
+					if (isset($post_type))
+					{
+						return $post_type;
+					}
+					else
+					{
+						// because of the 'post.php' and 'post-new.php' checks above, we can default to 'post'
+						return 'post';
+					}
 				}
 			}
 		}

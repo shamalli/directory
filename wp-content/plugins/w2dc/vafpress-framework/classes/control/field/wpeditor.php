@@ -1,6 +1,6 @@
 <?php
 
-class VP_W2DC_Control_Field_WPEditor extends VP_W2DC_Control_Field
+class W2DC_VP_Control_Field_WPEditor extends W2DC_VP_Control_Field
 {
 
 	private $_use_external_plugins       = true;
@@ -49,7 +49,7 @@ class VP_W2DC_Control_Field_WPEditor extends VP_W2DC_Control_Field
 			'disabled_externals_plugins' => implode(',', $this->get_disabled_externals_plugins()),
 			'disabled_internals_plugins' => implode(',', $this->get_disabled_internals_plugins()),
 		);
-		$this->add_data('opt', VP_W2DC_Util_Text::make_opt($opt));
+		$this->add_data('opt', W2DC_VP_Util_Text::make_opt($opt));
 		$this->add_data('opt_raw', $opt);
 		parent::_setup_data();
 	}
@@ -58,7 +58,7 @@ class VP_W2DC_Control_Field_WPEditor extends VP_W2DC_Control_Field
 	{
 		$this->_setup_data();
 		$this->add_data('is_compact', $is_compact);
-		return VP_W2DC_View::instance()->load('control/wpeditor', $this->get_data());
+		return W2DC_VP_View::instance()->load('control/wpeditor', $this->get_data());
 	}
 
 	public function set_value($_value)

@@ -16,14 +16,55 @@ final class FLBuilderFonts {
 
 	static private $enqueued_google_fonts_done = false;
 
+	static $preload_fa5 = array();
+
 	/**
 	 * @since 1.9.5
 	 * @return void
 	 */
 	static public function init() {
+		add_filter( 'the_content', __CLASS__ . '::combine_google_fonts', 11 );
 		add_action( 'wp_enqueue_scripts', __CLASS__ . '::combine_google_fonts', 10000 );
 		add_action( 'wp_enqueue_scripts', __CLASS__ . '::enqueue_google_fonts', 9999 );
 		add_filter( 'wp_resource_hints', __CLASS__ . '::resource_hints', 10, 2 );
+		add_action( 'wp_head', array( __CLASS__, 'preload' ), 5 );
+	}
+
+	static public function preload() {
+		$fa_version = FLBuilder::get_fa5_version();
+		$icons      = array(
+			'foundation-icons' => array(
+				'https://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.woff',
+			),
+			'font-awesome-5'   => array(),
+		);
+
+		foreach ( array_unique( FLBuilderFonts::$preload_fa5 ) as $type ) {
+			switch ( $type ) {
+				case 'fas':
+					$icons['font-awesome-5'][] = FLBuilder::plugin_url() . 'fonts/fontawesome/' . $fa_version . '/webfonts/fa-solid-900.woff2';
+					break;
+				case 'far':
+					$icons['font-awesome-5'][] = FLBuilder::plugin_url() . 'fonts/fontawesome/' . $fa_version . '/webfonts/fa-regular-400.woff2';
+					break;
+				case 'fab':
+					$icons['font-awesome-5'][] = FLBuilder::plugin_url() . 'fonts/fontawesome/' . $fa_version . '/webfonts/fa-brands-400.woff2';
+					break;
+			}
+		}
+
+		// if using pro cdn do not preload as we have no idea what the url will be.
+		if ( get_option( '_fl_builder_enable_fa_pro', false ) || apply_filters( 'fl_enable_fa5_pro', false ) || empty( $icons['font-awesome-5'] ) ) {
+			unset( $icons['font-awesome-5'] );
+		}
+
+		foreach ( $icons as $key => $preloads ) {
+			if ( wp_style_is( $key, 'enqueued' ) ) {
+				foreach ( $preloads as $url ) {
+					printf( '<link rel="preload" href="%s" as="font" type="font/woff2" crossorigin="anonymous">' . "\n", $url );
+				}
+			}
+		}
 	}
 
 	/**
@@ -33,9 +74,18 @@ final class FLBuilderFonts {
 	 * @return void
 	 */
 	static public function js() {
+		/**
+		 * @see fl_builder_font_families_default
+		 */
 		$default = json_encode( apply_filters( 'fl_builder_font_families_default', FLBuilderFontFamilies::$default ) );
-		$system  = json_encode( apply_filters( 'fl_builder_font_families_system', FLBuilderFontFamilies::$system ) );
-		$google  = json_encode( apply_filters( 'fl_builder_font_families_google', self::prepare_google_fonts( FLBuilderFontFamilies::google() ) ) );
+		/**
+		 * @see fl_builder_font_families_system
+		 */
+		$system = json_encode( apply_filters( 'fl_builder_font_families_system', FLBuilderFontFamilies::$system ) );
+		/**
+		 * @see fl_builder_font_families_google
+		 */
+		$google = json_encode( apply_filters( 'fl_builder_font_families_google', self::prepare_google_fonts( FLBuilderFontFamilies::google() ) ) );
 
 		echo 'var FLBuilderFontFamilies = { default: ' . $default . ', system: ' . $system . ', google: ' . $google . ' };';
 	}
@@ -62,6 +112,13 @@ final class FLBuilderFonts {
 		$system_fonts = apply_filters( 'fl_builder_font_families_system', FLBuilderFontFamilies::$system );
 		$google_fonts = apply_filters( 'fl_builder_font_families_google', FLBuilderFontFamilies::google() );
 		$recent_fonts = get_option( 'fl_builder_recent_fonts', array() );
+
+		// Check if font is valid
+		foreach ( $recent_fonts as $name => $variants ) {
+			if ( ! array_key_exists( $name, $google_fonts ) && ! array_key_exists( $name, $system_fonts ) ) {
+				unset( $recent_fonts[ $name ] );
+			}
+		}
 
 		echo '<option value="Default" ' . selected( 'Default', $font, false ) . '>' . __( 'Default', 'fl-builder' ) . '</option>';
 
@@ -134,6 +191,10 @@ final class FLBuilderFonts {
 	 * Return font weight strings.
 	 */
 	static public function get_font_weight_strings() {
+		/**
+		 * Array of font weights
+		 * @see fl_builder_font_weight_strings
+		 */
 		return apply_filters( 'fl_builder_font_weight_strings', array(
 			'default'   => __( 'Default', 'fl-builder' ),
 			'regular'   => __( 'Regular', 'fl-builder' ),
@@ -220,19 +281,22 @@ final class FLBuilderFonts {
 
 		// needed for italics.
 		$google = FLBuilderFontFamilies::google();
+		$bold   = false;
 
 		foreach ( $fields as $name => $field ) {
+
 			if ( 'font' == $field['type'] && isset( $module->settings->$name ) ) {
 				self::add_font( $module->settings->$name );
-			} elseif ( 'typography' == $field['type'] && ! empty( $module->settings->$name ) && isset( $module->settings->{ $name }['font_family'] ) && isset( $module->settings->{ $name }['font_weight'] ) ) {
+			} elseif ( 'typography' == $field['type'] && ! empty( $module->settings->$name ) && isset( $module->settings->{ $name }['font_family'] ) ) {
 				$fname  = $module->settings->{ $name }['font_family'];
-				$weight = $module->settings->{ $name }['font_weight'];
-
+				$weight = isset( $module->settings->{ $name }['font_weight'] ) && '' !== $module->settings->{ $name }['font_weight'] ? $module->settings->{ $name }['font_weight'] : '400';
 				// handle google italics.
 				if ( isset( $google[ $fname ] ) ) {
-					$selected_weight = $module->settings->{ $name }['font_weight'];
+					$selected_weight = $weight;
 					$italic          = ( isset( $module->settings->{ $name }['font_style'] ) ) ? $module->settings->{ $name }['font_style'] : '';
-
+					if ( ! $italic && count( $google[ $fname ] ) === 1 && 'italic' === $google[ $fname ][0] ) {
+						$italic = 'italic';
+					}
 					if ( in_array( $selected_weight . 'i', $google[ $fname ] ) && 'italic' == $italic ) {
 						$weight = $selected_weight . 'i';
 					}
@@ -241,10 +305,17 @@ final class FLBuilderFonts {
 					}
 				}
 
+				if ( 'Molle' === $module->settings->{ $name }['font_family'] ) {
+					$weight = 'i';
+				}
+
+				if ( $module instanceof FLRichTextModule ) {
+					$bold = true;
+				}
 				self::add_font( array(
 					'family' => $module->settings->{ $name }['font_family'],
 					'weight' => $weight,
-				) );
+				), $bold );
 			} elseif ( isset( $field['form'] ) ) {
 				$form = FLBuilderModel::$settings_forms[ $field['form'] ];
 				self::add_fonts_for_nested_module_form( $module, $form['tabs'], $name );
@@ -292,6 +363,10 @@ final class FLBuilderFonts {
 	 * @since 2.1.3
 	 */
 	static public function enqueue_google_fonts() {
+		/**
+		 * Google fonts domain
+		 * @see fl_builder_google_fonts_domain
+		 */
 		$google_fonts_domain = apply_filters( 'fl_builder_google_fonts_domain', '//fonts.googleapis.com/' );
 		$google_url          = $google_fonts_domain . 'css?family=';
 
@@ -299,7 +374,7 @@ final class FLBuilderFonts {
 		 * Allow users to control what fonts are enqueued by modules.
 		 * Returning array() will disable all enqueues.
 		 * @see fl_builder_google_fonts_pre_enqueue
-		 * @link https://kb.wpbeaverbuilder.com/article/648-load-google-fonts-and-font-awesome-icons-locally-gdpr
+		 * @link https://docs.wpbeaverbuilder.com/beaver-builder/developer/how-to-tips/load-google-fonts-locally-gdpr
 		 */
 		if ( count( apply_filters( 'fl_builder_google_fonts_pre_enqueue', self::$fonts ) ) > 0 ) {
 
@@ -309,7 +384,9 @@ final class FLBuilderFonts {
 
 			$google_url = substr( $google_url, 0, -1 );
 
-			wp_enqueue_style( 'fl-builder-google-fonts-' . md5( $google_url ), $google_url, array() );
+			if ( true === apply_filters( 'fl_enable_google_fonts_enqueue', true ) ) {
+				wp_enqueue_style( 'fl-builder-google-fonts-' . md5( $google_url ), $google_url, array() );
+			}
 
 			self::$fonts = array();
 		}
@@ -322,7 +399,7 @@ final class FLBuilderFonts {
 	 * @param  array $font an array with the font family and weight to add.
 	 * @return void
 	 */
-	static public function add_font( $font ) {
+	static public function add_font( $font, $bold = false ) {
 
 		$recent_fonts_db = get_option( 'fl_builder_recent_fonts', array() );
 		$recent_fonts    = array();
@@ -346,16 +423,20 @@ final class FLBuilderFonts {
 					self::$fonts[ $font['family'] ] = array( $font['weight'] );
 
 				}
+				if ( $bold ) {
+					self::$fonts[ $font['family'] ][] = ( strstr( $font['weight'], 'i' ) ) ? '700i' : '700';
+				}
+				self::$fonts[ $font['family'] ] = array_unique( self::$fonts[ $font['family'] ] );
 			}
 			if ( ! isset( $recent_fonts_db[ $font['family'] ] ) ) {
 				$recent_fonts[ $font['family'] ] = $font['weight'];
 			}
 		}
 
-		$recent = array_merge( $recent_fonts, $recent_fonts_db );
+		$recent = array_merge( (array) $recent_fonts, (array) $recent_fonts_db );
 
 		if ( isset( $_GET['fl_builder'] ) && ! empty( $recent ) && serialize( $recent ) !== serialize( $recent_fonts_db ) ) {
-			update_option( 'fl_builder_recent_fonts', array_slice( $recent, -11 ) );
+			FLBuilderUtils::update_option( 'fl_builder_recent_fonts', array_slice( $recent, -11 ) );
 		}
 
 	}
@@ -366,13 +447,16 @@ final class FLBuilderFonts {
 	 * @since  1.9.5
 	 * @return void
 	 */
-	static public function combine_google_fonts() {
+	static public function combine_google_fonts( $content = false ) {
 		global $wp_styles;
 
 		// Check for any enqueued `fonts.googleapis.com` from BB theme or plugin
 		if ( isset( $wp_styles->queue ) ) {
 
-			$google_fonts_domain   = apply_filters( 'fl_builder_google_fonts_domain', '//fonts.googleapis.com/css' );
+			/**
+			 * @see fl_builder_combine_google_fonts_domain
+			 */
+			$google_fonts_domain   = apply_filters( 'fl_builder_combine_google_fonts_domain', '//fonts.googleapis.com/css' );
 			$enqueued_google_fonts = array();
 			$families              = array();
 			$subsets               = array();
@@ -450,6 +534,10 @@ final class FLBuilderFonts {
 						$font_args['subset'] = implode( ',', $subsets );
 					}
 
+					/**
+					 * Array of extra args passed to google fonts.
+					 * @see fl_builder_google_font_args
+					 */
 					$font_args = apply_filters( 'fl_builder_google_font_args', $font_args );
 
 					$src = add_query_arg( $font_args, $google_fonts_domain );
@@ -466,6 +554,7 @@ final class FLBuilderFonts {
 				}
 			}
 		}
+		return $content;
 	}
 
 	/**
@@ -524,7 +613,9 @@ final class FLBuilderFontFamilies {
 	/**
 	 * Cache for google fonts
 	 */
-	static private $_google_json = array();
+	static private $_google_json  = array();
+	static private $_google_fonts = false;
+	static private $_google_run   = 0;
 
 	/**
 	 * Array with a list of default font weights.
@@ -607,6 +698,10 @@ final class FLBuilderFontFamilies {
 	 */
 	static function google() {
 
+		if ( false !== self::$_google_fonts ) {
+			return self::$_google_fonts;
+		}
+
 		$fonts = array();
 		$json  = self::_get_json();
 
@@ -615,16 +710,22 @@ final class FLBuilderFontFamilies {
 			$name = key( $font );
 
 			foreach ( $font[ $name ]['variants'] as $key => $variant ) {
-				if ( stristr( $variant, 'italic' ) && 'italic' !== $variant ) {
-					$font[ $name ]['variants'][ $key ] = str_replace( 'talic', '', $variant );
+				if ( 'italic' !== $variant ) {
+					if ( stristr( $variant, 'italic' ) ) {
+						$font[ $name ]['variants'][ $key ] = str_replace( 'talic', '', $variant );
+					}
 				}
 				if ( 'regular' == $variant ) {
 					$font[ $name ]['variants'][ $key ] = '400';
 				}
 			}
-
 			$fonts[ $name ] = $font[ $name ]['variants'];
 		}
+		// only cache after 1st run to save rams.
+		if ( self::$_google_run > 0 ) {
+			self::$_google_fonts = $fonts;
+		}
+		self::$_google_run++;
 		return $fonts;
 	}
 

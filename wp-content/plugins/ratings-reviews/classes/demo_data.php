@@ -15,8 +15,8 @@ class w2rr_demo_data_manager {
 		}
 		
 		add_submenu_page('w2rr_settings',
-		esc_html__('Demo data Import', 'W2RR'),
-		esc_html__('Demo data Import', 'W2RR'),
+		esc_html__('Demo data Import', 'w2rr'),
+		esc_html__('Demo data Import', 'w2rr'),
 		$capability,
 		'w2rr_demo_data',
 		array($this, 'w2rr_demo_data_import_page')
@@ -43,7 +43,7 @@ Distance';
 			
 			$page = array(
 					'post_status' => 'publish',
-					'post_title' => esc_html__('Sample Reviews Page', 'W2RR'),
+					'post_title' => esc_html__('Sample Reviews Page', 'w2rr'),
 					'post_type' => 'page',
 					'post_content' => '',
 					'comment_status' => 'open'
@@ -53,7 +53,7 @@ Distance';
 			
 			$page = array(
 					'post_status' => 'publish',
-					'post_title' => esc_html__('Submit Review Page', 'W2RR'),
+					'post_title' => esc_html__('Submit Review Page', 'w2rr'),
 					'post_type' => 'page',
 					'post_content' => '',
 					'comment_status' => 'closed'
@@ -63,9 +63,9 @@ Distance';
 			
 			$page = array(
 					'post_status' => 'publish',
-					'post_title' => esc_html__('Single Review Page', 'W2RR'),
+					'post_title' => esc_html__('Single Review Page', 'w2rr'),
 					'post_type' => 'page',
-					'post_content' => '',
+					'post_content' => '[webrr-review-page]',
 					'comment_status' => 'closed'
 			);
 			$page_id = wp_insert_post($page);
@@ -73,7 +73,7 @@ Distance';
 			
 			$page = array(
 					'post_status' => 'publish',
-					'post_title' => esc_html__('Reviews Dashboard Page', 'W2RR'),
+					'post_title' => esc_html__('Reviews Dashboard Page', 'w2rr'),
 					'post_type' => 'page',
 					'post_content' => '',
 					'comment_status' => 'closed'
@@ -153,7 +153,7 @@ Distance';
 			$reviews_link = "<a href='".admin_url('edit.php?post_type=w2rr_review')."'>reviews</a>";
 			$pages_link = "<a href='".admin_url('edit.php?post_type=page')."'>pages</a>";
 			
-			w2rr_addMessage(sprintf(esc_html__("Import of the demo data was successfully completed. Look at your %s and %s.", "W2RR"), $reviews_link, $pages_link));
+			w2rr_addMessage(sprintf(esc_html__("Import of the demo data was successfully completed. Look at your %s and %s.", "w2rr"), $reviews_link, $pages_link));
 			
 			w2rr_renderTemplate('demo_data_import.tpl.php');
 		} elseif (w2rr_is_w2dc() && w2rr_getValue($_POST, 'submit_w2dc') && wp_verify_nonce($_POST['w2rr_csv_import_nonce'], W2RR_PATH) && (!defined('W2RR_DEMO') || !W2RR_DEMO)) {
@@ -175,7 +175,7 @@ Distance';
 			}
 			
 			$reviews_link = "<a href='".admin_url('edit.php?post_type=w2rr_review')."'>reviews</a>";
-			w2rr_addMessage(sprintf(esc_html__("Import of W2DC data was successfully completed. Look at your %s.", "W2RR"), $reviews_link));
+			w2rr_addMessage(sprintf(esc_html__("Import of W2DC data was successfully completed. Look at your %s.", "w2rr"), $reviews_link));
 			
 			w2rr_renderTemplate('demo_data_import.tpl.php');
 		} else {

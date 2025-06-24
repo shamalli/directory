@@ -102,33 +102,41 @@
       }
     }
     .vc_field {
-      float: left;
       padding: 5px;
-      width: 48%;
+      margin-top: 6px;
+      display: flex;
+      align-items: flex-start;
+      gap: 20px; 
+
       .box-sizing(border-box);
+      .wpb_settings-title {
+        display: flex;
+        width: 200px;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0;
+      }
       label {
-        padding: 0;
-        display: inline-block;
-        vertical-align: top;
-        margin-top: 6px;
-        height: 22px;
-        width: 30%;
+        color: #3c434a;
+        font-size: 13px;
+        font-style: normal;
         font-weight: bold;
+        line-height: 1.4em;
+        width: 200px;
+        padding: 0;
+        vertical-align: top;
+        height: 22px;
+        
       }
       input[type=text], textarea {
-        width: 65%;
-        float: right;
+        flex: 1;
       }
       &.vc_is-container {
-        clear: both;
-        float: none;
         label {
-          margin-left: 30%;
-          width: 65%;
+          flex: 1;
         }
       }
       &.vc_description {
-        float: right;
         textarea {
           height: 70px;
         }
@@ -152,6 +160,9 @@
             padding: 3px 6px 3px 8px;
             .box-sizing(border-box);
             width: 19%;
+            .wpb_settings-title {
+              margin-bottom: 0;
+            }
             label {
               font-weight: bold;
               padding: 6px 0;

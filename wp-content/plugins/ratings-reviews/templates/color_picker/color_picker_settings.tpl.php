@@ -33,7 +33,7 @@
 			<input type="hidden" id="w2rr_color_scheme" name="w2rr_color_scheme" value="<?php echo esc_attr($selected_scheme); ?>" />
 			<div class="w2rr-color-option color-option <?php if ($selected_scheme == 'default') echo 'selected'; ?>">
 				<input type="hidden" class="css_name" value="default" />
-				<div class="w2rr-color-scheme-name"><?php esc_html_e('Default', 'W2RR'); ?></div>
+				<div class="w2rr-color-scheme-name"><?php esc_html_e('Default', 'w2rr'); ?></div>
 				<table class="color-palette">
 					<tr>
 						<td style="background-color: #a5ffff">&nbsp;</td>
@@ -45,7 +45,7 @@
 			</div>
 			<div class="w2rr-color-option color-option <?php if ($selected_scheme == 'orange') echo 'selected'; ?>">
 				<input type="hidden" class="css_name" value="orange" />
-				<div class="w2rr-color-scheme-name"><?php esc_html_e('Orange', 'W2RR'); ?></div>
+				<div class="w2rr-color-scheme-name"><?php esc_html_e('Orange', 'w2rr'); ?></div>
 				<table class="color-palette">
 					<tr>
 						<td style="background-color: #ff8000">&nbsp;</td>
@@ -57,7 +57,7 @@
 			</div>
 			<div class="w2rr-color-option color-option <?php if ($selected_scheme == 'red') echo 'selected'; ?>">
 				<input type="hidden" class="css_name" value="red" />
-				<div class="w2rr-color-scheme-name"><?php esc_html_e('Red-Blue', 'W2RR'); ?></div>
+				<div class="w2rr-color-scheme-name"><?php esc_html_e('Red-Blue', 'w2rr'); ?></div>
 				<table class="color-palette">
 					<tr>
 						<td style="background-color: #ed4e6e">&nbsp;</td>
@@ -69,7 +69,7 @@
 			</div>
 			<div class="w2rr-color-option color-option <?php if ($selected_scheme == 'yellow') echo 'selected'; ?>">
 				<input type="hidden" class="css_name" value="yellow" />
-				<div class="w2rr-color-scheme-name"><?php esc_html_e('Yellow', 'W2RR'); ?></div>
+				<div class="w2rr-color-scheme-name"><?php esc_html_e('Yellow', 'w2rr'); ?></div>
 				<table class="color-palette">
 					<tr>
 						<td style="background-color: #ffff00">&nbsp;</td>
@@ -81,7 +81,7 @@
 			</div>
 			<div class="w2rr-color-option color-option <?php if ($selected_scheme == 'green') echo 'selected'; ?>">
 				<input type="hidden" class="css_name" value="green" />
-				<div class="w2rr-color-scheme-name"><?php esc_html_e('Green', 'W2RR'); ?></div>
+				<div class="w2rr-color-scheme-name"><?php esc_html_e('Green', 'w2rr'); ?></div>
 				<table class="color-palette">
 					<tr>
 						<td style="background-color: #7fff00">&nbsp;</td>
@@ -93,7 +93,7 @@
 			</div>
 			<div class="w2rr-color-option color-option <?php if ($selected_scheme == 'gray') echo 'selected'; ?>">
 				<input type="hidden" class="css_name" value="gray" />
-				<div class="w2rr-color-scheme-name"><?php esc_html_e('Gray', 'W2RR'); ?></div>
+				<div class="w2rr-color-scheme-name"><?php esc_html_e('Gray', 'w2rr'); ?></div>
 				<table class="color-palette">
 					<tr>
 						<td style="background-color: #cfdbc5">&nbsp;</td>
@@ -105,7 +105,7 @@
 			</div>
 			<div class="w2rr-color-option color-option <?php if ($selected_scheme == 'blue') echo 'selected'; ?>">
 				<input type="hidden" class="css_name" value="blue" />
-				<div class="w2rr-color-scheme-name"><?php esc_html_e('Blue', 'W2RR'); ?></div>
+				<div class="w2rr-color-scheme-name"><?php esc_html_e('Blue', 'w2rr'); ?></div>
 				<table class="color-palette">
 					<tr>
 						<td style="background-color: #499df5">&nbsp;</td>

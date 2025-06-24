@@ -5,7 +5,7 @@
  */
 final class FLBuilderUsage {
 
-	protected static $url = 'http://stats.wpbeaverbuilder.com/';
+	protected static $url = 'https://stats.wpbeaverbuilder.com/';
 
 	protected static $seconds = 604800;
 
@@ -39,8 +39,8 @@ final class FLBuilderUsage {
 	}
 
 	public static function scripts() {
-		wp_enqueue_style( 'fl-builder-admin-usage', FL_BUILDER_URL . 'css/fl-builder-admin-usage.css', array(), FL_BUILDER_VERSION );
-		wp_enqueue_script( 'fl-builder-admin-usage', FL_BUILDER_URL . 'js/fl-builder-admin-usage.js', array( 'jquery' ), FL_BUILDER_VERSION );
+		wp_enqueue_style( 'fl-builder-admin-usage', FLBuilder::plugin_url() . 'css/fl-builder-admin-usage.css', array(), FL_BUILDER_VERSION );
+		wp_enqueue_script( 'fl-builder-admin-usage', FLBuilder::plugin_url() . 'js/fl-builder-admin-usage.js', array( 'jquery' ), FL_BUILDER_VERSION );
 	}
 
 	/**
@@ -217,7 +217,7 @@ final class FLBuilderUsage {
 			),
 			'settings' => array(
 				'name' => __( 'Builder Settings', 'fl-builder' ),
-				'data' => __( 'UI theme, pinned settings etc.' ),
+				'data' => __( 'UI theme, pinned settings etc.', 'fl-builder' ),
 			),
 		);
 
@@ -247,7 +247,7 @@ final class FLBuilderUsage {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 
-		$data                   = array(
+		$data                             = array(
 			'modules' => array(),
 			'license' => array(),
 			'themer'  => array(
@@ -263,13 +263,19 @@ final class FLBuilderUsage {
 				'unpinned' => 0,
 			),
 		);
-		$users                  = count_users();
-		$plugins_data           = get_plugins();
-		$data['plugins']        = count( $plugins_data );
-		$data['plugins_active'] = 0;
+		$users                            = count_users();
+		$plugins_data                     = get_plugins();
+		$data['plugins']                  = count( $plugins_data );
+		$data['plugins_active']           = 0;
+		$data['active_plugins_installed'] = array();
 
 		foreach ( (array) $plugins_data as $plugin_slug => $plugin ) {
 			if ( is_plugin_active( $plugin_slug ) ) {
+				$data['active_plugins_installed'][] = array(
+					'name'    => $plugin['Name'],
+					'version' => $plugin['Version'],
+					'slug'    => $plugin_slug,
+				);
 				$data['plugins_active'] ++;
 			}
 		}

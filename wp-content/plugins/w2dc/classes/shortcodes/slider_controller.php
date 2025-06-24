@@ -13,7 +13,6 @@ class w2dc_slider_controller extends w2dc_frontend_controller {
 		parent::init($args);
 
 		$shortcode_atts = array_merge(array(
-				//'directories' => '',
 				'slides' => 5,
 				'captions' => 1,
 				'pager' => 1,
@@ -29,7 +28,6 @@ class w2dc_slider_controller extends w2dc_frontend_controller {
 				'order_by_rand' => 0,
 				'crop' => 1,
 				'include_categories_children' => 1,
-				'author' => 0,
 				'related_categories' => 0,
 				'related_locations' => 0,
 				'related_tags' => 0,
@@ -54,42 +52,29 @@ class w2dc_slider_controller extends w2dc_frontend_controller {
 		else
 			$args = array_merge($args, apply_filters('w2dc_order_args', array(), $shortcode_atts, false));
 		
-		if ($shortcode_atts['author']) {
+		if (!empty($shortcode_atts['author'])) {
 			$args['author'] = $shortcode_atts['author'];
 		}
 
 		if (!empty($this->args['post__in'])) {
 			if (is_string($this->args['post__in']) || is_numeric($this->args['post__in'])) {
-				$args = array_merge($args, array('post__in' => explode(',', $this->args['post__in'])));
+				$args = array_merge($args, array('post__in' => wp_parse_id_list($this->args['post__in'])));
 			} elseif (is_array($this->args['post__in'])) {
 				$args['post__in'] = $this->args['post__in'];
 			}
 		}
 		if (!empty($this->args['post__not_in'])) {
-			$args = array_merge($args, array('post__not_in' => explode(',', $this->args['post__not_in'])));
+			$args = array_merge($args, array('post__not_in' => wp_parse_id_list($this->args['post__not_in'])));
 		}
 		
 		if (!empty($this->args['directories'])) {
-			if ($directories_ids = array_filter(explode(',', $this->args['directories']), 'trim')) {
+			if ($directories_ids = wp_parse_id_list($this->args['directories'])) {
 				$args = w2dc_set_directory_args($args, $directories_ids);
 			}
 		}
 		
-		/* if (isset($this->args['levels']) && !is_array($this->args['levels'])) {
-			if ($levels = array_filter(explode(',', $this->args['levels']), 'trim')) {
-				$this->levels_ids = $levels;
-				add_filter('posts_where', array($this, 'where_levels_ids'));
-			}
-		}
-
-		if (isset($this->args['levels']) || $this->args['sticky_featured']) {
-			add_filter('posts_join', 'w2dc_join_levels');
-			if ($this->args['sticky_featured'])
-				add_filter('posts_where', 'w2dc_where_sticky_featured');
-		} */
 		$this->query = new WP_Query($args);
 		$this->processQuery(false);
-		//var_dump($this->query->request);
 
 		if ($this->args['sticky_featured']) {
 			remove_filter('posts_join', 'w2dc_join_levels');

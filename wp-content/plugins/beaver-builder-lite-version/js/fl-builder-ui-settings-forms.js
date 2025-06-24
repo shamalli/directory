@@ -71,6 +71,7 @@
 					title     : '',
 					badges	  : [],
 					tabs      : [],
+					activeTab : null,
 					buttons	  : [],
 					settings  : {},
 					legacy    : null,
@@ -114,6 +115,30 @@
 					this.showLightboxLoader();
 				}
 			}
+
+			// Clear any visible registered panels
+			const panel = FL.Builder.data.getSystemState().currentPanel
+			if ( null !== panel && 'outline' !== panel ) {
+				const actions = FL.Builder.data.getSystemActions()
+				actions.hideCurrentPanel()
+			}
+		},
+
+		/**
+		 * Cache current settings
+		 *
+		 * @method cacheCurrentSettings
+		 */
+		cacheCurrentSettings: function() {
+			var form = $('.fl-builder-settings:visible', window.parent.document);
+
+			if (!form.closest('.fl-lightbox-wrap[data-parent]').length) {
+				this.settings = FLBuilder._getSettingsForChangedCheck(this.config.nodeId, form);
+
+				if (FLBuilder.preview) {
+					FLBuilder.preview._savedSettings = this.settings;
+				}
+			}
 		},
 
 		/**
@@ -133,6 +158,7 @@
 				node_id  : config.nodeId,
 			}, function( response ) {
 				config.settings = FLBuilder._jsonParse( response );
+
 				FLBuilderSettingsConfig.nodes[ config.nodeId ] = config.settings;
 				FLBuilderSettingsForms.render( config, callback );
 				FLBuilder.hideAjaxLoader();
@@ -148,9 +174,10 @@
 		 * @return {Boolean}
 		 */
 		renderLightbox: function( config ) {
-			var template = wp.template( 'fl-builder-settings' ),
-				form	 = FLBuilder._lightbox._node.find( 'form.fl-builder-settings' ),
-				nested   = $( '.fl-lightbox-wrap[data-parent]' );
+			var template 	= wp.template( 'fl-builder-settings' ),
+				form	 	= FLBuilder._lightbox._node.find( 'form.fl-builder-settings' ),
+				nested   	= $( '.fl-lightbox-wrap[data-parent]', window.parent.document ),
+				cachedTabId = localStorage.getItem( 'fl-builder-settings-tab' );
 
 			// Don't render a node form if it's already open.
 			if ( config.nodeId && config.nodeId === form.data( 'node' ) && ! config.lightbox ) {
@@ -160,6 +187,20 @@
 
 			if ( config.hide ) {
 				return true;
+			}
+
+			// Set the active tab from local storage.
+			if ( cachedTabId ) {
+				for ( var tabId in config.tabs ) {
+					if ( tabId === cachedTabId.replace( 'fl-builder-settings-tab-', '' ) ) {
+						config.activeTab = tabId;
+					}
+				}
+			}
+
+			// Make sure we have an active tab.
+			if ( ! config.activeTab ) {
+				config.activeTab = Object.keys( config.tabs ).shift();
 			}
 
 			// Render the lightbox and form.
@@ -181,6 +222,7 @@
 				config.lightbox.setContent( template( config ) );
 			}
 
+			FL.Builder.data.getOutlinePanelActions().setActiveNode( config.nodeId );
 			return true;
 		},
 
@@ -193,8 +235,6 @@
 		 * @param {Function} callback
 		 */
 		renderComplete: function( config, callback ) {
-			var form = $( '.fl-builder-settings:visible' );
-
 			// This is done on a timeout to keep it from delaying painting
 			// of the settings form in the DOM by a fraction of a second.
 			setTimeout( function() {
@@ -216,10 +256,8 @@
 					config.helper.init();
 				}
 
-				// Cache the original settings.
-				if ( ! form.closest( '.fl-lightbox-wrap[data-parent]' ).length ) {
-					this.settings = FLBuilder._getSettingsForChangedCheck( this.config.nodeId, form );
-				}
+				// Cache current settings.
+				this.cacheCurrentSettings();
 
 			}.bind( this ), 1 );
 		},
@@ -241,16 +279,20 @@
 				value 			 = null,
 				isMultiple       = false,
 				responsive		 = null,
-				responsiveFields = [ 'align', 'border', 'dimension', 'unit', 'photo', 'select', 'typography' ],
+				responsiveFields = FLBuilderConfig.responsiveFields,
 				settings		 = ! settings ? this.config.settings : settings,
 				globalSettings   = FLBuilderConfig.global;
 
-			for ( name in fields ) {
 
-				field 				= fields[ name ];
-				isMultiple 		 	= field.multiple ? true : false;
-				supportsResponsive 	= $.inArray( field['type'], responsiveFields ) > -1,
-				value 			 	= ! _.isUndefined( settings[ name ] ) ? settings[ name ] : '';
+			for ( name in fields ) {
+				field = fields[ name ];
+				// Make sure this field is even a thing!
+				if ( ! field ) {
+					continue;
+				}
+				isMultiple         = field.multiple ? true : false;
+				supportsResponsive = $.inArray( field['type'], responsiveFields ) > -1,
+				value              = ! _.isUndefined( settings[ name ] ) ? settings[ name ] : '';
 
 				// Make sure this field has a type, if not the sky falls.
 				if ( ! field.type ) {
@@ -348,7 +390,7 @@
 		 * @return {Boolean}
 		 */
 		renderLegacySettings: function( config, callback ) {
-			var form     = $( '.fl-builder-settings:visible' ),
+			var form     = $( '.fl-builder-settings:visible', window.parent.document ),
 				name     = null,
 				ele      = null,
 				render   = false,
@@ -433,10 +475,10 @@
 
 			// Get the form object.
 			if ( data.lightbox ) {
-				lightbox = $( '.fl-builder-lightbox[data-instance-id=' + data.lightbox + ']' );
+				lightbox = $( '.fl-builder-lightbox[data-instance-id=' + data.lightbox + ']', window.parent.document );
 				form = lightbox.length ? lightbox.find( '.fl-builder-settings' ) : null;
 			} else {
-				form = $( '.fl-builder-settings:visible' );
+				form = $( '.fl-builder-settings:visible', window.parent.document );
 				lightbox = form.closest( '.fl-builder-lightbox' );
 			}
 
@@ -447,13 +489,13 @@
 
 			// Fields
 			for ( name in data.fields ) {
-				field = $( '#fl-field-' + name ).attr( 'id', '' );
+				field = $( '#fl-field-' + name, window.parent.document ).attr( 'id', '' );
 				field.after( data.fields[ name ] ).remove();
 			}
 
 			// Field extras
 			for ( name in data.extras ) {
-				field = $( '#fl-field-' + name ).find( '.fl-field-control-wrapper' );
+				field = $( '#fl-field-' + name, window.parent.document ).find( '.fl-field-control-wrapper' );
 				if ( data.extras[ name ].multiple ) {
 					field.each( function( i, field_item ) {
 						if ( ( i in data.extras[ name ].before ) && ( data.extras[ name ].before[ i ] != "" ) ) {
@@ -492,14 +534,14 @@
 			// Sections
 			for ( tab in data.sections ) {
 				for ( name in data.sections[ tab ] ) {
-					section = $( '#fl-builder-settings-section-' + name );
+					section = $( '#fl-builder-settings-section-' + name, window.parent.document );
 					section.html( data.sections[ tab ][ name ] );
 				}
 			}
 
 			// Tabs
 			for ( name in data.tabs ) {
-				tab = $( '#fl-builder-settings-tab-' + name );
+				tab = $( '#fl-builder-settings-tab-' + name, window.parent.document );
 				tab.html( data.tabs[ name ] );
 			}
 
@@ -531,7 +573,7 @@
 		 * @return {Object}
 		 */
 		getLegacyVars: function() {
-			var form     = $( '.fl-builder-settings:visible' ),
+			var form     = $( '.fl-builder-settings:visible', window.parent.document ),
 				lightbox = form.closest( '.fl-builder-lightbox' ),
 				parent   = lightbox.attr( 'data-parent' ),
 				settings = null,
@@ -539,7 +581,7 @@
 				vars     = {};
 
 			if ( parent ) {
-				parent   = $( '.fl-builder-lightbox[data-instance-id=' + parent + ']' );
+				parent   = $( '.fl-builder-lightbox[data-instance-id=' + parent + ']', window.parent.document );
 				form     = parent.find( 'form.fl-builder-settings' );
 				settings = FLBuilder._getSettings( form );
 				nodeId   = form.attr( 'data-node' );
@@ -575,11 +617,10 @@
 		 * @since 2.0
 		 * @method closeOnDeleteNode
 		 * @param {Object} e
-		 * @param {String} nodeId
 		 */
-		closeOnDeleteNode: function( e, nodeId )
+		closeOnDeleteNode: function( e )
 		{
-			var settings = $( '.fl-builder-settings[data-node]' ),
+			var settings = $( '.fl-builder-settings[data-node]', window.parent.document ),
 				selector = FLBuilder._contentClass + ' .fl-node-' + settings.data( 'node' );
 
 			if ( settings.length && ! $( selector ).length ) {
@@ -594,7 +635,7 @@
 		 * @method showLightboxLoader
 		 */
 		showLightboxLoader: function() {
-			$( '.fl-builder-settings:visible' ).append( '<div class="fl-builder-loading"></div>' );
+			$( '.fl-builder-settings:visible', window.parent.document ).append( '<div class="fl-builder-loading"></div>' );
 		},
 
 		/**
@@ -604,7 +645,7 @@
 		 * @method hideLightboxLoader
 		 */
 		hideLightboxLoader: function( ele ) {
-			$( '.fl-builder-settings:visible .fl-builder-loading' ).remove();
+			$( '.fl-builder-settings:visible .fl-builder-loading', window.parent.document ).remove();
 		},
 
 		/**
@@ -687,7 +728,10 @@
 			FLBuilder.addHook( 'didApplyRowTemplateComplete', this.updateOnApplyTemplate.bind( this ) );
 			FLBuilder.addHook( 'didApplyColTemplateComplete', this.updateOnApplyTemplate.bind( this ) );
 			FLBuilder.addHook( 'didSaveGlobalNodeTemplate', this.updateOnApplyTemplate.bind( this ) );
+
+			// Revisions and history
 			FLBuilder.addHook( 'didRestoreRevisionComplete', this.updateOnApplyTemplate.bind( this ) );
+			FLBuilder.addHook( 'didRestoreHistoryComplete', this.updateOnHistoryRestored.bind( this ) );
 		},
 
 		/**
@@ -713,6 +757,7 @@
 		 */
 		updateOnSaveGlobalSettings: function( e, settings ) {
 			this.settings.global = settings;
+			FLBuilderConfig.global = settings;
 		},
 
 		/**
@@ -738,11 +783,11 @@
 			var event = arguments[0];
 
 			if ( event.namespace.indexOf( 'didAdd' ) > -1 ) {
-				this.addNode( arguments[1] );
+				this.addNode( 'object' === typeof arguments[1] ? arguments[1].nodeId : arguments[1] );
 			} else if ( event.namespace.indexOf( 'didSaveNodeSettings' ) > -1 ) {
 				this.updateNode( arguments[1].nodeId, arguments[1].settings );
 			} else if ( event.namespace.indexOf( 'didDelete' ) > -1 ) {
-				this.deleteNodes();
+				this.deleteNodes( 'object' === typeof arguments[1] ? arguments[1].nodeId : arguments[1] );
 			} else if ( event.namespace.indexOf( 'didDuplicate' ) > -1 ) {
 				this.duplicateNode( arguments[1].oldNodeId, arguments[1].newNodeId );
 			}
@@ -817,6 +862,22 @@
 		updateOnApplyTemplate: function( e, config ) {
 			this.nodes = config.nodes;
 			this.attachments = config.attachments;
+		},
+
+		/**
+		 * Updates the node config when a history state is rendered.
+		 *
+		 * @since 2.0
+		 * @method updateOnHistoryRestored
+		 * @param {Object} e
+		 * @param {Object} data
+		 */
+		updateOnHistoryRestored: function( e, data ) {
+			this.nodes = data.config.nodes
+			this.attachments = data.config.attachments
+			this.settings.layout = data.settings.layout
+			this.settings.global = data.settings.global
+			FLBuilderConfig.global = data.settings.global
 		},
 
 		/**
@@ -934,6 +995,10 @@
 
 			var nodeId  = '',
 				content = $( FLBuilder._contentClass ).html();
+
+			if ( ! content ) {
+				return
+			}
 
 			for ( nodeId in this.nodes ) {
 				if ( content.indexOf( nodeId ) === -1 ) {

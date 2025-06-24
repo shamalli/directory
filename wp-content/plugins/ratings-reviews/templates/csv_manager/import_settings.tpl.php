@@ -2,7 +2,7 @@
 
 <h2><?php esc_html_e('CSV Import'); ?></h2>
 
-<p class="description"><?php esc_html_e('On this first step select CSV file for import, also you may import images in zip archive', 'W2RR'); ?></p>
+<p class="description"><?php esc_html_e('On this first step select CSV file for import, also you may import images in zip archive', 'w2rr'); ?></p>
 
 <script>
 	(function($) {
@@ -22,12 +22,12 @@
 	<input type="hidden" name="action" value="import_settings">
 	<?php wp_nonce_field(W2RR_PATH, 'w2rr_csv_import_nonce');?>
 	
-	<h3><?php esc_html_e('Import settings', 'W2RR'); ?></h3>
+	<h3><?php esc_html_e('Import settings', 'w2rr'); ?></h3>
 	<table class="form-table">
 		<tbody>
 			<tr>
 				<th scope="row">
-					<label><?php esc_html_e('Import type', 'W2RR'); ?><span class="w2rr-red-asterisk">*</span></label>
+					<label><?php esc_html_e('Import type', 'w2rr'); ?><span class="w2rr-red-asterisk">*</span></label>
 				</th>
 				<td>
 					<label>
@@ -36,7 +36,7 @@
 							type="radio"
 							value="create_reviews"
 							checked />
-						<?php esc_html_e('create new reviews', 'W2RR'); ?>
+						<?php esc_html_e('create new reviews', 'w2rr'); ?>
 					</label>
 
 					<br />
@@ -46,13 +46,13 @@
 							name="import_type"
 							type="radio"
 							value="update_reviews" />
-						<?php esc_html_e('update existing reviews (review ID column required)', 'W2RR'); ?>
+						<?php esc_html_e('update existing reviews (review ID column required)', 'w2rr'); ?>
 					</label>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php esc_html_e('CSV File', 'W2RR'); ?><span class="w2rr-red-asterisk">*</span></label>
+					<label><?php esc_html_e('CSV File', 'w2rr'); ?><span class="w2rr-red-asterisk">*</span></label>
 				</th>
 				<td>
 					<input
@@ -62,7 +62,7 @@
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php esc_html_e('Images ZIP archive', 'W2RR'); ?>
+					<label><?php esc_html_e('Images ZIP archive', 'w2rr'); ?>
 				</th>
 				<td>
 					<input
@@ -72,7 +72,7 @@
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php esc_html_e('Columns separator', 'W2RR'); ?><span class="w2rr-red-asterisk">*</span></label>
+					<label><?php esc_html_e('Columns separator', 'w2rr'); ?><span class="w2rr-red-asterisk">*</span></label>
 				</th>
 				<td>
 					<input
@@ -84,7 +84,7 @@
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php esc_html_e('Categories, Locations, Tags, Images, MultiValues separator', 'W2RR'); ?><span class="w2rr-red-asterisk">*</span></label>
+					<label><?php esc_html_e('Categories, Locations, Tags, Images, MultiValues separator', 'w2rr'); ?><span class="w2rr-red-asterisk">*</span></label>
 				</th>
 				<td>
 					<input
@@ -99,12 +99,12 @@
 	
 	<?php w2rr_renderTemplate('csv_manager/import_instructions.tpl.php'); ?>
 	
-	<?php submit_button(esc_html__('Upload', 'W2RR'), 'primary', 'submit', true, array('id' => 'import_button')); ?>
+	<?php submit_button(esc_html__('Upload', 'w2rr'), 'primary', 'submit', true, array('id' => 'import_button')); ?>
 </form>
 
 <h2><?php esc_html_e('CSV Export'); ?></h2>
 
-<p class="description"><?php esc_html_e('Enter offset of items to start with. Enter 0 to start from the beginning. It will export entered number of items. Reduce the number of items if you get timeout message.', 'W2RR'); ?></p>
+<p class="description"><?php esc_html_e('Enter offset of items to start with. Enter 0 to start from the beginning. It will export entered number of items. Reduce the number of items if you get timeout message.', 'w2rr'); ?></p>
 
 <form method="POST" action="">
 	<input type="hidden" name="action" value="export_settings">
@@ -115,7 +115,7 @@
 		<tbody>
 			<tr>
 				<th scope="row">
-					<?php esc_html_e('Items number', 'W2RR'); ?>
+					<?php esc_html_e('Items number', 'w2rr'); ?>
 				</th>
 				<td>
 					<input
@@ -126,7 +126,7 @@
 			</tr>
 			<tr>
 				<th scope="row">
-					<?php esc_html_e('Items offset', 'W2RR'); ?>
+					<?php esc_html_e('Items offset', 'w2rr'); ?>
 				</th>
 				<td>
 					<input
@@ -138,8 +138,8 @@
 		</tbody>
 	</table>
 	
-	<?php submit_button(esc_html__('Export', 'W2RR'), 'primary', 'csv_export'); ?>
-	<?php submit_button(esc_html__('Download Images', 'W2RR'), 'primary', 'export_images'); ?>
+	<?php submit_button(esc_html__('Export', 'w2rr'), 'primary', 'csv_export'); ?>
+	<?php submit_button(esc_html__('Download Images', 'w2rr'), 'primary', 'export_images'); ?>
 </form>
 
 <?php w2rr_renderTemplate('admin_footer.tpl.php'); ?>

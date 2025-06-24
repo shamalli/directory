@@ -1,6 +1,6 @@
 <?php
 
-class VP_W2DC_Control_Field_RadioImage extends VP_W2DC_Control_FieldMultiImage
+class W2DC_VP_Control_Field_RadioImage extends W2DC_VP_Control_FieldMultiImage
 {
 
 	public function __construct()
@@ -24,7 +24,7 @@ class VP_W2DC_Control_Field_RadioImage extends VP_W2DC_Control_FieldMultiImage
 	{
 		$this->_setup_data();
 		$this->add_data('is_compact', $is_compact);
-		return VP_W2DC_View::instance()->load('control/radioimage', $this->get_data());
+		return W2DC_VP_View::instance()->load('control/radioimage', $this->get_data());
 	}
 
 }

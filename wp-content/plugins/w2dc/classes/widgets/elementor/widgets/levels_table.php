@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 class w2dc_levels_table_elementor_widget extends w2dc_elementor_widget {
 
 	public function get_name() {
@@ -7,7 +9,7 @@ class w2dc_levels_table_elementor_widget extends w2dc_elementor_widget {
 	}
 
 	public function get_title() {
-		return __('Levels table', 'W2DC');
+		return esc_html__('Levels table', 'w2dc');
 	}
 
 	public function get_icon() {
@@ -23,7 +25,7 @@ class w2dc_levels_table_elementor_widget extends w2dc_elementor_widget {
 		$this->start_controls_section(
 				'content_section',
 				array(
-						'label' => esc_html__('Levels table', 'W2DC'),
+						'label' => esc_html__('Levels table', 'w2dc'),
 						'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
 				)
 		);
@@ -40,6 +42,13 @@ class w2dc_levels_table_elementor_widget extends w2dc_elementor_widget {
 	}
 	
 	protected function render() {
+		
+		global $w2dc_fsubmit_instance;
+		
+		if (!$w2dc_fsubmit_instance) {
+			printf(esc_html__('Please enable <a href="%s">"Frontend submission & dashboard addon" to display this widget', 'w2dc'), admin_url('admin.php?page=w2dc_settings'));
+			return ;
+		}
 		
 		$settings = $this->get_settings_for_display();
 		

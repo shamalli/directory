@@ -1,3 +1,8 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <div class="w2dc-field w2dc-field-output-block <?php echo $content_field->printClasses($css_classes); ?>">
 	<?php if ($content_field->icon_image || !$content_field->is_hide_name): ?>
 	<span class="w2dc-field-caption <?php w2dc_is_any_field_name_in_group($group); ?>">

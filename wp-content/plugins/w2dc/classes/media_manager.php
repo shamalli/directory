@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+// @codingStandardsIgnoreFile
 
 class w2dc_media_manager {
 	public $images = array();
@@ -85,7 +87,7 @@ class w2dc_media_manager {
 			foreach ($reals as $real)
 			$num_posts[$type] = (isset($num_posts[$type])) ? $num_posts[$type] + $_num_posts[$real] : $_num_posts[$real];
 		$class = (empty($_GET['post_mime_type']) && !$detached && !isset($_GET['status'])) ? ' class="current"' : '';
-		$views['all'] = "<a href='upload.php'$class>" . sprintf(__('All <span class="count">(%s)</span>', 'W2DC'), number_format_i18n($_total_posts)) . '</a>';
+		$views['all'] = "<a href='upload.php'$class>" . sprintf(wp_kses(__('All <span class="count">(%s)</span>', 'w2dc'), 'post'), number_format_i18n($_total_posts)) . '</a>';
 		foreach ($post_mime_types as $mime_type => $label) {
 			$class = '';
 			if (!wp_match_mime_types($mime_type, $avail_post_mime_types))
@@ -95,7 +97,7 @@ class w2dc_media_manager {
 			if (!empty( $num_posts[$mime_type]))
 				$views[$mime_type] = "<a href='upload.php?post_mime_type=$mime_type'$class>" . sprintf(translate_nooped_plural($label[2], $num_posts[$mime_type]), $num_posts[$mime_type]) . '</a>';
 		}
-		$views['detached'] = '<a href="upload.php?detached=1"' . ($detached ? ' class="current"' : '') . '>' . sprintf(__( 'Unattached <span class="count">(%s)</span>', 'W2DC'), $total_orphans) . '</a>';
+		$views['detached'] = '<a href="upload.php?detached=1"' . ($detached ? ' class="current"' : '') . '>' . sprintf(wp_kses(__( 'Unattached <span class="count">(%s)</span>', 'w2dc'), 'post'), $total_orphans) . '</a>';
 		return $views;
 	}
 
@@ -121,8 +123,6 @@ class w2dc_media_manager {
 						unset($attached_ids[$key]);
 					}
 					update_post_meta($post_id, '_attached_images_order', implode(',', $attached_ids));
-					
-					//wp_delete_attachment($attachment_id, true);
 				}
 			}
 		}
@@ -192,15 +192,15 @@ class w2dc_media_manager {
 							} else // wp_handle_upload returned some kind of error. the return does contain error details, so you can use it here if you want.
 								$result['error_msg'] = 'There was a problem with your upload: ' . $uploaded_file['error'];
 						} else // wrong file type
-							$result['error_msg'] = __('Please upload only image files (jpg, gif or png).', 'W2DC');
+							$result['error_msg'] = esc_html__('Please upload only image files (jpg, gif or png).', 'w2dc');
 					} else
-						$result['error_msg'] = __('Number of images exceed limit.', 'W2DC');
+						$result['error_msg'] = esc_html__('Number of images exceed limit.', 'w2dc');
 				} else
-					$result['error_msg'] = __('You do not have permissions to edit this listing!', 'W2DC');
+					$result['error_msg'] = esc_html__('You do not have permissions to edit this listing!', 'w2dc');
 			} else
-				$result['error_msg'] = __('Wrong listing ID.', 'W2DC');
+				$result['error_msg'] = esc_html__('Wrong listing ID.', 'w2dc');
 		} else // no file was passed
-			$result['error_msg'] = __('Choose image to upload first!', 'W2DC');
+			$result['error_msg'] = esc_html__('Choose image to upload first!', 'w2dc');
 		
 		echo json_encode($result);
 		die();
@@ -244,15 +244,15 @@ class w2dc_media_manager {
 				} else {
 					$required = '';
 				}
-				$validation->set_rules('attached_image_id[]', __('Attached images ID', 'W2DC'), $required);
-				$validation->set_rules('attached_image_title[]', __('Attached images caption', 'W2DC'));
-				$validation->set_rules('attached_images_order', __('Attached images order', 'W2DC'));
+				$validation->set_rules('attached_image_id[]', esc_html__('Attached images ID', 'w2dc'), $required);
+				$validation->set_rules('attached_image_title[]', esc_html__('Attached images caption', 'w2dc'));
+				$validation->set_rules('attached_images_order', esc_html__('Attached images order', 'w2dc'));
 				if ($this->params['logo_enabled']) {
-					$validation->set_rules('attached_image_as_logo', __('Logo image selection', 'W2DC'));
+					$validation->set_rules('attached_image_as_logo', esc_html__('Logo image selection', 'w2dc'));
 				}
 			}
 			if ($this->params['videos_number']) {
-				$validation->set_rules('attached_video_id[]', __('Attached video ID', 'W2DC'));
+				$validation->set_rules('attached_video_id[]', esc_html__('Attached video ID', 'w2dc'));
 			}
 	
 			if (!$validation->run()) {
@@ -291,7 +291,6 @@ class w2dc_media_manager {
 			}
 
 			foreach ($existed_images AS $attachment_id) {
-				//wp_delete_attachment($attachment_id, true);
 				delete_post_meta($post_id, '_attached_image', $attachment_id);
 			}
 			
@@ -341,7 +340,7 @@ class w2dc_media_manager {
 	public function admin_enqueue_scripts_styles() {
 		if (get_option('w2dc_images_lightbox') || is_admin()) {
 			wp_enqueue_style('w2dc-media-styles');
-			wp_enqueue_script('w2dc_media_scripts_lightbox');
+			wp_enqueue_script('w2dc-media-scripts-lightbox');
 		}
 		
 		wp_enqueue_script('jquery-ui-sortable');
@@ -349,10 +348,10 @@ class w2dc_media_manager {
 		if (is_admin() && current_user_can('upload_files')) {
 			wp_enqueue_media();
 		} else {
-			wp_register_script('w2dc_fileupload', W2DC_RESOURCES_URL . 'js/jquery.fileupload.js', array('jquery'), false, true);
-			wp_register_script('w2dc_fileupload_iframe', W2DC_RESOURCES_URL . 'js/jquery.iframe-transport.js', array('jquery'), false, true);
-			wp_enqueue_script('w2dc_fileupload');
-			wp_enqueue_script('w2dc_fileupload_iframe');
+			wp_register_script('w2dc-fileupload', W2DC_RESOURCES_URL . 'js/jquery.fileupload.js', array('jquery'), false, true);
+			wp_register_script('w2dc-fileupload-iframe', W2DC_RESOURCES_URL . 'js/jquery.iframe-transport.js', array('jquery'), false, true);
+			wp_enqueue_script('w2dc-fileupload');
+			wp_enqueue_script('w2dc-fileupload-iframe');
 			wp_enqueue_script('jquery-ui-widget');
 		}
 	}

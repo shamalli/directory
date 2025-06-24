@@ -1,6 +1,6 @@
 <?php
 
-abstract class VP_W2DC_Option_Control_Group
+abstract class W2DC_VP_Option_Control_Group
 {
 
 

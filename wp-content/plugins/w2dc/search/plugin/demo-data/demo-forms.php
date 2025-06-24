@@ -3,7 +3,7 @@
 $demo_forms = array(
 		
 		"keywords+search+reset" => array(
-				'_model' => '{\"placeholders\":[{\"columns\":2,\"rows\":1,\"input\":{\"type\":\"keywords\",\"slug\":\"keywords\",\"title\":\"\",\"placeholder\":\"Enter keywords\",\"visible_status\":\"always_opened\",\"suggestions\":\"sport,business,event\",\"autocomplete\":1,\"orderby\":\"relevance\",\"order\":\"ASC\",\"do_links\":1,\"do_links_blank\":\"blank\",\"tax\":\"\",\"values\":\"\",\"used_by\":\"wc\"}},{\"columns\":1,\"rows\":1,\"input\":{\"type\":\"button\",\"slug\":\"submit\",\"text\":\"Search\",\"title\":\"Search button\",\"used_by\":\"wc\"}},{\"columns\":1,\"rows\":1,\"input\":{\"type\":\"reset\",\"slug\":\"reset\",\"used_by\":\"wc\",\"title\":\"Reset button\",\"text\":\"Reset\"}}]}',
+				'_model' => '{\"placeholders\":[{\"columns\":2,\"rows\":1,\"input\":{\"type\":\"keywords\",\"slug\":\"keywords\",\"title\":\"\",\"placeholder\":\"Enter keywords\",\"visible_status\":\"always_opened\",\"suggestions\":\"sport,business,event\",\"autocomplete\":1,\"orderby\":\"relevance\",\"order\":\"ASC\",\"do_links\":1,\"do_links_blank\":\"blank\",\"tax\":\"\",\"values\":\"\",\"used_by\":\"wc\"}},{\"columns\":1,\"rows\":1,\"input\":{\"type\":\"button\",\"slug\":\"submit\",\"text\":\"Search\",\"title\":\"Submit button\",\"used_by\":\"wc\"}},{\"columns\":1,\"rows\":1,\"input\":{\"type\":\"reset\",\"slug\":\"reset\",\"used_by\":\"wc\",\"title\":\"Reset button\",\"text\":\"Reset\"}}]}',
 				'_columns_num' => '4',
 				'_bg_color' => '#a3c6c6',
 				'_bg_transparency' => '100',
@@ -43,7 +43,7 @@ $demo_forms = array(
 		),
 		
 		"TopBar (sticky)" => array(
-				'_model' => '{\"placeholders\":[{\"columns\":3,\"rows\":2,\"input\":{\"type\":\"keywords\",\"slug\":\"keywords\",\"used_by\":\"wc\",\"values\":\"\",\"tax\":\"\",\"do_links_blank\":\"blank\",\"do_links\":1,\"order\":\"ASC\",\"orderby\":\"relevance\",\"autocomplete\":1,\"suggestions\":\"sport,business,event\",\"visible_status\":\"always_opened\",\"placeholder\":\"Enter keywords\",\"title\":\"\"}},{\"columns\":1,\"rows\":1,\"input\":{\"type\":\"button\",\"slug\":\"submit\",\"text\":\"Search\",\"title\":\"Search button\",\"used_by\":\"wc\"}}]}',
+				'_model' => '{\"placeholders\":[{\"columns\":3,\"rows\":2,\"input\":{\"type\":\"keywords\",\"slug\":\"keywords\",\"used_by\":\"wc\",\"values\":\"\",\"tax\":\"\",\"do_links_blank\":\"blank\",\"do_links\":1,\"order\":\"ASC\",\"orderby\":\"relevance\",\"autocomplete\":1,\"suggestions\":\"sport,business,event\",\"visible_status\":\"always_opened\",\"placeholder\":\"Enter keywords\",\"title\":\"\"}},{\"columns\":1,\"rows\":1,\"input\":{\"type\":\"button\",\"slug\":\"submit\",\"text\":\"Search\",\"title\":\"Submit button\",\"used_by\":\"wc\"}}]}',
 				'_columns_num' => '4',
 				'_bg_color' => '#a3c6c6',
 				'_bg_transparency' => '100',

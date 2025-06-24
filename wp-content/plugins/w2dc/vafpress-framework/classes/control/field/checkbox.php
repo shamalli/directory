@@ -1,6 +1,6 @@
 <?php
 
-class VP_W2DC_Control_Field_CheckBox extends VP_W2DC_Control_FieldMulti implements VP_W2DC_MultiSelectable
+class W2DC_VP_Control_Field_CheckBox extends W2DC_VP_Control_FieldMulti implements W2DC_VP_MultiSelectable
 {
 
 	public function __construct()
@@ -24,7 +24,7 @@ class VP_W2DC_Control_Field_CheckBox extends VP_W2DC_Control_FieldMulti implemen
 	{
 		$this->_setup_data();
 		$this->add_data('is_compact', $is_compact);
-		return VP_W2DC_View::instance()->load('control/checkbox', $this->get_data());
+		return W2DC_VP_View::instance()->load('control/checkbox', $this->get_data());
 	}
 
 }

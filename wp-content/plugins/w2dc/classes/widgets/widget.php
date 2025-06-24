@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 abstract class w2dc_widget extends WP_Widget {
 	protected $fields = array();
 	
@@ -10,7 +12,7 @@ abstract class w2dc_widget extends WP_Widget {
 		
 		parent::__construct($id_base, $name, $options);
 		
-		$this->addField("textfield", "title", __("Title", "W2DC"));
+		$this->addField("textfield", "title", esc_html__("Title", "w2dc"));
 
 		// enqueue scripts and styles only for directory widgets and when "Show only on directory pages" setting is OFF or this setting does not exist for this widget
 		add_action('wp_enqueue_scripts', array($this, 'wp_enqueue_scripts'));
@@ -279,7 +281,7 @@ abstract class w2dc_widget extends WP_Widget {
 			$this->renderLabel($field, $id);
 	
 			echo "<select id=\"{$id}\" name=\"{$name}\" class=\"widefat w2dc-widget-select-control\">";
-			echo "<option value=\"0\" " . selected($value, 0) . ">" . __('Default', 'W2DC') . "</option>";
+			echo "<option value=\"0\" " . selected($value, 0) . ">" . esc_html__('Default', 'w2dc') . "</option>";
 			foreach (w2dc_getAllMapStyles() AS $style_name=>$style) {
 				echo "<option value=\"{$style_name}\" " . selected($value, $style_name) . ">{$style_name}</option>";
 			}
@@ -301,7 +303,7 @@ abstract class w2dc_widget extends WP_Widget {
 		$this->renderLabel($field, $id);
 
 		echo "<select id=\"{$id}\" name=\"{$name}\" class=\"widefat w2dc-widget-select-control\">";
-		echo "<option value=\"\" " . selected($value, '', false) . ">" . __('Default', 'W2DC') . "</option>";
+		echo "<option value=\"\" " . selected($value, '', false) . ">" . esc_html__('Default', 'w2dc') . "</option>";
 		foreach ($ordering AS $ordering_item) {
 			echo "<option value=\"{$ordering_item['value']}\" " . selected($value, $ordering_item['value']) . ">{$ordering_item['label']}</option>";
 		}
@@ -327,9 +329,9 @@ abstract class w2dc_widget extends WP_Widget {
 		$this->renderLabel($field, $id);
 	
 		echo "<select id=\"{$name}" . ($multiple ? "_select" : "") . "\" name=\"{$name}" . ($multiple ? "_select" : "") . "\" " . ($multiple ? "multiple=\"multiple\" class=\"widefat w2dc-widget-select-multiple-control\"" : "class=\"widefat w2dc-widget-select-control\"") . " data-original-name=\"{$field->name}\">";
-		echo "<option value=\"0\" " . selected($value, 0) . ">" . __('- All levels -', 'W2DC') . "</option>";
+		echo "<option value=\"0\" " . selected($value, 0) . ">" . esc_html__('- All levels -', 'w2dc') . "</option>";
 		foreach ($w2dc_instance->levels->levels_array AS $level) {
-			echo "<option value=\"{$level->id}\" " . (in_array($level->id, explode(',', $value)) ? "selected=\"selected\"" : "") . ">{$level->name}</option>";
+			echo "<option value=\"{$level->id}\" " . (in_array($level->id, wp_parse_id_list($value)) ? "selected=\"selected\"" : "") . ">{$level->name}</option>";
 		}
 		echo "</select>";
 		if ($multiple) {
@@ -356,9 +358,9 @@ abstract class w2dc_widget extends WP_Widget {
 			$this->renderDependency($field);
 			$this->renderLabel($field, $id);
 			echo "<select id=\"{$name}" . ($multiple ? "_select" : "") . "\" name=\"{$name}" . ($multiple ? "_select" : "") . "\" " . ($multiple ? "multiple=\"multiple\" class=\"widefat w2dc-widget-select-multiple-control\"" : "class=\"widefat w2dc-widget-select-control\"") . ">";
-			echo "<option value=\"0\" " . selected($value, 0) . ">" . __('- Auto -', 'W2DC') . "</option>";
+			echo "<option value=\"0\" " . selected($value, 0) . ">" . esc_html__('- Auto -', 'w2dc') . "</option>";
 			foreach ($w2dc_instance->directories->directories_array AS $directory) {
-				echo "<option value=\"{$directory->id}\" " . (in_array($directory->id, explode(',', $value)) ? "selected=\"selected\"" : "") . ">{$directory->name}</option>";
+				echo "<option value=\"{$directory->id}\" " . (in_array($directory->id, wp_parse_id_list($value)) ? "selected=\"selected\"" : "") . ">{$directory->name}</option>";
 			}
 			echo "</select>";
 			if ($multiple) {
@@ -383,9 +385,9 @@ abstract class w2dc_widget extends WP_Widget {
 		$this->renderDependency($field);
 		$this->renderLabel($field, $id);
 		echo "<select id=\"{$name}" . ($multiple ? "_select" : "") . "\" name=\"{$name}" . ($multiple ? "_select" : "") . "\" " . ($multiple ? "multiple=\"multiple\" class=\"widefat w2dc-widget-select-multiple-control\"" : "class=\"widefat w2dc-widget-select-control\"") . ">";
-		echo "<option value=\"\" " . selected($value, '') . ">" . __('- No category selected -', 'W2DC') . "</option>";
+		echo "<option value=\"\" " . selected($value, '') . ">" . esc_html__('- No category selected -', 'w2dc') . "</option>";
 		ob_start();
-		w2dc_renderOptionsTerms(W2DC_CATEGORIES_TAX, 0, explode(',', $value));
+		w2dc_renderOptionsTerms(W2DC_CATEGORIES_TAX, 0, w2dc_parse_slugs_ids_list($value));
 		echo ob_get_clean();
 		echo "</select>";
 		if ($multiple) {
@@ -409,9 +411,9 @@ abstract class w2dc_widget extends WP_Widget {
 		$this->renderDependency($field);
 		$this->renderLabel($field, $id);
 		echo "<select id=\"{$name}" . ($multiple ? "_select" : "") . "\" name=\"{$name}" . ($multiple ? "_select" : "") . "\" " . ($multiple ? "multiple=\"multiple\" class=\"widefat w2dc-widget-select-multiple-control\"" : "class=\"widefat w2dc-widget-select-control\"") . ">";
-		echo "<option value=\"\" " . selected($value, '') . ">" . __('- No location selected -', 'W2DC') . "</option>";
+		echo "<option value=\"\" " . selected($value, '') . ">" . esc_html__('- No location selected -', 'w2dc') . "</option>";
 		ob_start();
-		w2dc_renderOptionsTerms(W2DC_LOCATIONS_TAX, 0, explode(',', $value));
+		w2dc_renderOptionsTerms(W2DC_LOCATIONS_TAX, 0, w2dc_parse_slugs_ids_list($value));
 		echo ob_get_clean();
 		echo "</select>";
 		if ($multiple) {
@@ -465,15 +467,15 @@ abstract class w2dc_widget extends WP_Widget {
 		$id = $this->get_field_id($field->name);
 		$name = $this->get_field_name($field->name);
 		$value = isset($instance[$field->name]) ? $instance[$field->name] : '';
-		$content_fields_ids = explode(',', $value);
+		$content_fields_ids = w2dc_parse_slugs_ids_list($value);
 		
 		$this->outputJSforMultipleDropBox();
 		echo "<p " . $this->checkDependency($field, $instance) . ">";
 		$this->renderDependency($field);
 		$this->renderLabel($field, $id);
 		echo "<select id=\"{$name}_select\" name=\"{$name}_select\" multiple=\"multiple\" class=\"widefat w2dc-widget-select-multiple-control\">";
-		echo "<option value=\"\" " . selected($value, '') . ">" . __('- All content fields -', 'W2DC') . "</option>";
-		echo "<option value=\"-1\" " . selected($value, -1) . ">" . __('- No content fields -', 'W2DC') . "</option>";
+		echo "<option value=\"\" " . selected($value, '') . ">" . esc_html__('- All content fields -', 'w2dc') . "</option>";
+		echo "<option value=\"-1\" " . selected($value, -1) . ">" . esc_html__('- No content fields -', 'w2dc') . "</option>";
 		foreach ($w2dc_instance->search_fields->search_fields_array AS $search_field) {
 			echo "<option value=\"{$search_field->content_field->id}\" " . (in_array($search_field->content_field->id, $content_fields_ids) ? 'selected' : '') . ">{$search_field->content_field->name}</option>";
 		}
@@ -492,7 +494,7 @@ abstract class w2dc_widget extends WP_Widget {
 		$this->renderDependency($field);
 		$this->renderLabel($field, $id);
 		echo "<select id=\"{$name}" . "\" name=\"{$name}" . "\" " . "class=\"widefat w2dc-widget-select-control\"" . ">";
-		echo "<option value=\"0\" " . selected($value, 0) . ">" . esc_html__('- Select Form -', 'WCSEARCH') . "</option>";
+		echo "<option value=\"0\" " . selected($value, 0) . ">" . esc_html__('- Select Form -', 'wcsearch') . "</option>";
 		foreach (wcsearch_get_search_forms_posts() AS $id=>$title) {
 		echo "<option value=\"{$id}\" " . (($value == $id) ? "selected=\"selected\"" : "") . ">{$title}</option>";
 		}

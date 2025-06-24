@@ -1,18 +1,23 @@
-<?php if(!$is_compact) echo VP_W2RR_View::instance()->load('control/template_control_head', $head_info); ?>
+<?php
 
-<select multiple name="<?php echo $name; ?>" class="vp-input vp-js-sorter" data-vp-opt="<?php echo $opt; ?>">
+// @codingStandardsIgnoreFile
+
+?>
+<?php if(!$is_compact) echo W2RR_VP_View::instance()->load('control/template_control_head', $head_info); ?>
+
+<select multiple name="<?php w2rr_esc_e($name); ?>" class="vp-input vp-js-sorter" data-vp-opt="<?php w2rr_esc_e($opt); ?>">
 	<?php
 	$labels = array();
 	foreach ($items as $item) $labels[$item->value] = $item->label;
 	?>
 
 	<?php foreach ($value as $v): ?>
-	<option selected value="<?php echo $v; ?>"><?php echo $labels[$v]; ?></option>
+	<option selected value="<?php w2rr_esc_e($v); ?>"><?php echo esc_html($labels[$v]); ?></option>
 	<?php unset($labels[$v]); endforeach; ?>
 
 	<?php foreach ($labels as $i => $label): ?>
-	<option value="<?php echo $i; ?>"><?php echo $label; ?></option>
+	<option value="<?php w2rr_esc_e($i); ?>"><?php echo esc_html($label); ?></option>
 	<?php endforeach; ?>
 </select>
 
-<?php if(!$is_compact) echo VP_W2RR_View::instance()->load('control/template_control_foot'); ?>
+<?php if(!$is_compact) echo W2RR_VP_View::instance()->load('control/template_control_foot'); ?>

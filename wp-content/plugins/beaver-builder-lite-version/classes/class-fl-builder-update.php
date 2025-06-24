@@ -15,6 +15,18 @@ final class FLBuilderUpdate {
 	 */
 	static public function init() {
 		add_action( 'init', __CLASS__ . '::maybe_run', 11 );
+		add_action( 'fl_site_url_changed', array( __CLASS__, 'maybe_reregister_license' ), 10, 2 );
+	}
+
+	public static function maybe_reregister_license( $current, $saved ) {
+		if ( ! class_exists( 'FLUpdater' ) ) {
+			return;
+		}
+		$license = FLUpdater::get_subscription_license();
+		if ( '' !== $license ) {
+			FLUpdater::save_subscription_license( '' );
+			FLUpdater::save_subscription_license( $license );
+		}
 	}
 
 	/**
@@ -336,7 +348,7 @@ final class FLBuilderUpdate {
 		$settings = get_option( '_fl_builder_settings' );
 
 		if ( $settings && is_string( $settings ) ) {
-			update_option( '_fl_builder_settings', json_decode( $settings ) );
+			FLBuilderUtils::update_option( '_fl_builder_settings', json_decode( $settings ) );
 		}
 	}
 
@@ -493,7 +505,7 @@ final class FLBuilderUpdate {
 			if ( $network ) {
 				update_site_option( '_fl_builder_user_access', $user_access );
 			} else {
-				update_option( '_fl_builder_user_access', $user_access );
+				FLBuilderUtils::update_option( '_fl_builder_user_access', $user_access );
 			}
 		}
 	}

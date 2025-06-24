@@ -1,7 +1,7 @@
 <?php
 
 return array(
-	'title' => 'Map Management',
+	'title' => 'Maps Management',
 	'content' => '
 	
 	<div class="w2dc-docs w2dc-docs-side">

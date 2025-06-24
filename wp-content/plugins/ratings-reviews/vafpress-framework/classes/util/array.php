@@ -1,6 +1,6 @@
 <?php
 
-class VP_W2RR_Util_Array
+class W2RR_VP_Util_Array
 {
 
 	public static function first($array)
@@ -75,7 +75,7 @@ class VP_W2RR_Util_Array
 		if (!is_array($paArray1) or !is_array($paArray2)) { return $paArray2; }
 		foreach ($paArray2 AS $sKey2 => $sValue2)
 		{
-			$paArray1[$sKey2] = self::array_merge_recursive_all(@$paArray1[$sKey2], $sValue2);
+			$paArray1[$sKey2] = self::array_merge_recursive_all($paArray1[$sKey2], $sValue2);
 		}
 		return $paArray1;
 	}

@@ -58,6 +58,11 @@
 .wcsearch-search-input-terms-column .wcsearch-checkbox {
 	margin: 15px 0 15px 10px !important;
 }
+/* first element in columns without top margin */
+.wcsearch-search-input-terms-column .wcsearch-radio:first-child,
+.wcsearch-search-input-terms-column .wcsearch-checkbox:first-child {
+	margin-top: 0 !important;
+}
 .wcsearch-form-control.wcsearch-search-input-1,
 .wcsearch-form-control.wcsearch-search-input-1:focus {
 	float: right;

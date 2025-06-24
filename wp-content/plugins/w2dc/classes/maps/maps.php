@@ -285,7 +285,7 @@ class w2dc_maps {
 				'height' => 400,
 				'sticky_scroll' => false,
 				'sticky_scroll_toppadding' => 10,
-				'map_style_name' => '',
+				'map_style' => '',
 				'search_form' => false,
 				'draw_panel' => false,
 				'custom_home' => false,
@@ -320,7 +320,7 @@ class w2dc_maps {
 							'map_zoom' => $this->map_zoom,
 							'show_summary_button' => $this->display_args['show_summary_button'],
 							'show_readmore_button' => $this->display_args['show_readmore_button'],
-							'map_style' => w2dc_getSelectedMapStyle($this->display_args['map_style_name']),
+							'map_style' => w2dc_getSelectedMapStyle($this->display_args['map_style']),
 							'search_form' => $this->display_args['search_form'],
 							'draw_panel' => $this->display_args['draw_panel'],
 							'custom_home' => $this->display_args['custom_home'],
@@ -343,8 +343,8 @@ class w2dc_maps {
 		}
 	}
 	
-	public function is_ajax_loading() {
-		if (isset($this->args['ajax_loading']) && $this->args['ajax_loading'] && ((isset($this->args['start_address']) && $this->args['start_address']) || ((isset($this->args['start_latitude']) && $this->args['start_latitude']) && (isset($this->args['start_longitude']) && $this->args['start_longitude']))))
+	public function is_ajax_map_loading() {
+		if (isset($this->args['ajax_map_loading']) && $this->args['ajax_map_loading'] && ((isset($this->args['start_address']) && $this->args['start_address']) || ((isset($this->args['start_latitude']) && $this->args['start_latitude']) && (isset($this->args['start_longitude']) && $this->args['start_longitude']))))
 			return true;
 		else
 			return false;

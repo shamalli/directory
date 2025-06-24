@@ -1,3 +1,8 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <div class="w2dc-content">
 	<?php w2dc_renderMessages(); ?>
 
@@ -13,15 +18,15 @@
 		<?php foreach ($frontend_controller->levels AS $level): ?>
 		<?php $tcounter++; ?>
 		<?php if ($counter == 0): ?>
-		<div class="w2dc-row" style="text-align: center;">
+		<div class="w2dc-row w2dc-text-align-center">
 		<?php endif; ?>
 
-			<div class="w2dc-col-sm-<?php echo $cols_width; ?> w2dc-plan-column w2dc-plan-column-<?php echo $level->id; ?>" style="width: <?php echo $cols_width_percents; ?>%;">
+			<div class="w2dc-col-sm-<?php w2dc_esc_e($cols_width); ?> w2dc-plan-column w2dc-plan-column-<?php w2dc_esc_e($level->id); ?>" style="width: <?php w2dc_esc_e($cols_width_percents); ?>%;">
 				<div class="w2dc-panel w2dc-panel-default w2dc-choose-plan <?php if ($level->featured): ?>w2dc-featured-level<?php endif; ?>">
 					<div class="w2dc-panel-heading w2dc-choose-plan-head <?php if ($level->featured): ?>w2dc-featured<?php endif; ?>">
 						<div class="w2dc-choose-plan-level">
 							<h3>
-								<?php echo $level->name; ?>
+								<?php w2dc_esc_e($level->name); ?>
 							</h3>
 							<?php echo $w2dc_instance->listings_packages->submitlisting_level_message($level, $directory); ?>
 							<?php do_action('w2dc_submitlisting_level_name', $level); ?>
@@ -29,7 +34,7 @@
 						<?php echo w2dc_levelPriceString($level); ?>
 						<?php if ($level->listings_in_package > 1): ?>
 						<div class="w2dc-choose-plan-package-number">
-							<?php printf(__("for <strong>%d</strong> %s in the package", "W2DC"), $level->listings_in_package, _n($directory->single, $directory->plural, $level->listings_in_package)); ?>
+							<?php printf(w2dc_esc_("for <strong>%d</strong> %s in the package", "w2dc"), $level->listings_in_package, _n($directory->single, $directory->plural, $level->listings_in_package)); ?>
 						</div>
 						<?php endif; ?>
 						<?php if ($level->description) w2dc_hintMessage(nl2br($level->description), 'bottom'); ?>
@@ -40,7 +45,7 @@
 						<?php do_action('w2dc_submitlisting_levels_rows_after', $level, '<li class="w2dc-list-group-item w2dc-choose-plan-option">', '</li>'); ?>
 						<?php if (!empty($w2dc_instance->submit_pages_all)): ?>
 						<li class="w2dc-list-group-item">
-							<a href="<?php echo w2dc_submitUrl(array('level' => $level->id, 'directory' => $directory->id)); ?>" class="w2dc-btn w2dc-btn-primary"><?php _e('Submit', 'W2DC'); ?></a>
+							<a href="<?php echo w2dc_submitUrl(array('level' => $level->id, 'directory' => $directory->id)); ?>" class="w2dc-btn w2dc-btn-primary"><?php esc_html_e('Submit', 'w2dc'); ?></a>
 						</li>
 						<?php endif; ?>
 					</ul>

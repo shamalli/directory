@@ -2,8 +2,8 @@
 Contributors: Mihail Chepovskiy
 Donate link: https://www.salephpscripts.com/
 Tags: business directory, cars directory, classifieds, classifieds directory, directory, events directory, google maps, listings directory, locations, pets directory, real estate directory, vehicles dealers directory, wordpress directory, yellow pages, youtube videos
-Tested up to: 6.2
-Stable tag: 2.9.19
+Tested up to: 6.8
+Stable tag: 2.10.9
 License: Commercial
 
 == Description ==
@@ -12,7 +12,93 @@ Build Directory or Classifieds site in some minutes. The plugin combines flexibi
 
 Look at our [demo](https://www.salephpscripts.com/wordpress_directory/demo/)
 
+Plugin [documentation](https://www.salephpscripts.com/wordpress_directory/demo/documentation/)
+
 == Changelog ==
+
+= Version 2.10.9 =
+* bug fix: upgrade/downgrade listings level option did not work on certain occasions
+
+= Version 2.10.8 =
+* improvement: dependency terms and exact terms lists in the search system fields were rebuilt
+* improvement: "Search button" name in the search system now "Submit button"
+* bug fix: problems with frontend files upload fixed
+
+= Version 2.10.7 =
+* security update
+
+= Version 2.10.6 =
+* improvement: updater supports Auto-updates now
+* improvement: level ID will be inserted in listings on CSV re-import, if it was missing in initial import
+* improvement: MapBox Geocoding API was updated to v6
+* bug fix: Elementor map widget and map shortcode now supports map styles
+
+= Version 2.10.5 =
+* improvement: open address links on Google Maps and OpenStreetMap sites when maps disabled on directory pages
+* improvement: "All day long" mark when opening hours set from 00:00 to 00:00 time
+* improvement: Contact Form 7 now uses hash in ID parameter in their shortcodes
+
+= Version 2.10.4 =
+* improvement: empty output on single listings pages for some WP themes
+* bug fix: missing rating stars
+* bug fix: wrong Elementor control for checkboxes content field when only 2 items
+
+= Version 2.10.3 =
+* bug fix: PHP error using WPML
+* bug fix: missing buttons on single listing pages
+
+= Version 2.10.2 =
+* improvement: empty output on single listings pages for some WP themes
+* bug fix: "Hide listings with passed dates" feature worked wrongly
+
+= Version 2.10.1 =
+* security update
+
+= Version 2.10.0 =
+* improvement: MapBox GL version was updated
+* improvement: MapBox styles were updated and new styles added
+* improvement: radius search filter now can be displayed as a selectbox
+* improvement: adapted for new versions of Elementor plugin
+* new shortcodes and Elementor widgets:
+[webdirectory-page-title]
+[webdirectory-category-page]
+[webdirectory-category-lisitngs
+[webdirectory-category-map]
+[webdirectory-category-search]
+
+* bug fix: wrong author on the listing page header element
+* bug fix: content fields Elementor widgets ID parameters conflicting
+* bug fix: listings widget in WPBakery Page Builder had wrong default order setting
+
+= Version 2.9.25 =
+* improvement: new parameter "start_listings" for directory, map and listings shortcodes. Display specific listings by default, then directory searches as usual.
+* improvement: categories and locations grids styles improved
+* improvement: better compatibility with Yoast SEO plugin in "Imitation mode" for some themes
+* bug fix: address line autocomplete option did not work on MapBox engine
+
+= Version 2.9.24 =
+* improvement: buttons group at the frontend dashboard listings table now does not apply line breaks
+* bug fix: address line autocomplete option did not work
+
+= Version 2.9.23 =
+* bug fix: fixed error "Call to undefined function is_plugin_active()" at the frontend
+* bug fix: 404 error on taxonomy pages in Imitation mode on some WP themes
+
+= Version 2.9.22 =
+* improvement: search reset sets the radius slider to its default value instead of zero 0
+* improvement: better compatibility with WooCommerce plugin on PHP 8.2
+* improvement: compatibility with Yoast SEO plugin in "Imitation mode"
+* bug fix: special HTML characters decoded in keywords search auto-suggestion output
+
+= Version 2.9.21 =
+* new feature: hide listings with passed dates by date-time content field
+* improvement: map infoWindow max width responsive to map width
+* bug fix: "no listings" error when random sorting
+
+= Version 2.9.20 =
+* bug fix: date-time content field range parameters were corrected
+* bug fix: load scripts and styles for directory elementor widgets
+* bug fix: error messages while create/edit listings under "editor" user role
 
 = Version 2.9.19 =
 * improvement: better compatibility with PHP 8.2
@@ -23,7 +109,7 @@ Look at our [demo](https://www.salephpscripts.com/wordpress_directory/demo/)
 = Version 2.9.18 =
 * improvement: better compatibility with PHP 8.2
 * improvement: adapted for new versions of Elementor plugin
-* bug fix: 'Show more listings' button gave wrong results when 'Display all map markers' mode was enabled on the map
+* bug fix: "Show more listings" button gave wrong results when "Display all map markers" mode was enabled on the map
 
 = Version 2.9.17 =
 * new setting: Images required

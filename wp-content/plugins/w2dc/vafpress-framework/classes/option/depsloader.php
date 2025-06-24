@@ -1,10 +1,10 @@
 <?php
 
-class VP_W2DC_Option_Depsloader
+class W2DC_VP_Option_Depsloader
 {
 
 	/**
-	 * The VP_W2DC_Option_Set object!
+	 * The W2DC_VP_Option_Set object!
 	 */
 	private $things;
 
@@ -21,7 +21,7 @@ class VP_W2DC_Option_Depsloader
 		$result = array(
 			'scripts'              => array(),
 			'styles'               => array(),
-			'localize_name'        => 'vp_w2dc_opt',
+			'localize_name'        => 'w2dc_vp_opt',
 			'localize_default'     => array(
 				'nonce', 'impexp_msg'
 			),
@@ -32,25 +32,25 @@ class VP_W2DC_Option_Depsloader
 			'use_new_media_upload' => false,
 			'main_js'  => array(
 				'name' => 'vp-option',
-				'path' => VP_W2DC_PUBLIC_URL . '/js/option.min.js',
+				'path' => W2DC_VP_PUBLIC_URL . '/js/option.min.js',
 			),
 			'main_css' => array(
 				'name' => 'vp-option',
-				'path' => VP_W2DC_PUBLIC_URL . '/css/option.min.css'
+				'path' => W2DC_VP_PUBLIC_URL . '/css/option.min.css'
 			),
 		);
 
-		$result['scripts'] = VP_W2DC_Util_Config::instance()->load('dependencies', 'scripts.always');
-		$result['styles']  = VP_W2DC_Util_Config::instance()->load('dependencies', 'styles.always');
+		$result['scripts'] = W2DC_VP_Util_Config::instance()->load('dependencies', 'scripts.always');
+		$result['styles']  = W2DC_VP_Util_Config::instance()->load('dependencies', 'styles.always');
 
-		$scripts = VP_W2DC_Util_Config::instance()->load('dependencies', 'scripts.paths');
-		$styles  = VP_W2DC_Util_Config::instance()->load('dependencies', 'styles.paths');
-		$rules   = VP_W2DC_Util_Config::instance()->load('dependencies', 'rules');
+		$scripts = W2DC_VP_Util_Config::instance()->load('dependencies', 'scripts.paths');
+		$styles  = W2DC_VP_Util_Config::instance()->load('dependencies', 'styles.paths');
+		$rules   = W2DC_VP_Util_Config::instance()->load('dependencies', 'rules');
 
 		$fields  = $set->get_fields();
 		foreach ($fields as $field)
 		{
-			$type = VP_W2DC_Util_Reflection::field_type_from_class(get_class($field));
+			$type = W2DC_VP_Util_Reflection::field_type_from_class(get_class($field));
 			if( array_key_exists($type, $rules) )
 			{
 				$result['scripts'] = array_merge($result['scripts'], $rules[$type]['js']);
@@ -71,7 +71,7 @@ class VP_W2DC_Option_Depsloader
 	public function can_output($hook_suffix = '')
 	{
 		// if not in option page, don't load
-		$menu_page_slug = VP_W2DC_Util_Config::instance()->load('option', 'menu_page_slug');
+		$menu_page_slug = W2DC_VP_Util_Config::instance()->load('option', 'menu_page_slug');
 		if( $hook_suffix == ('appearance_page_' . $menu_page_slug) )
 			return true;
 		return false;

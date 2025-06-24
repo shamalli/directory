@@ -14,6 +14,7 @@
 var KIA_metabox, tinyMCEbackupConfig = null;
 
 ;(function ($) {
+	"use strict";
 
 	KIA_metabox = {
 
@@ -73,7 +74,7 @@ var KIA_metabox, tinyMCEbackupConfig = null;
 				}
 
 				var options  = $(this).getDatas();
-				options      = vp_w2rr.parseOpt(options.opt);
+				options      = w2rr_vp.parseOpt(options.opt);
 				options.use_external_plugins = options.use_external_plugins ? true : false;
 
 				var plugins                 = tinyMCE.settings.plugins;

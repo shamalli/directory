@@ -18,9 +18,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Vc_Shortcode_Edit_Form {
 	protected $initialized;
 
-	/**
-	 *
-	 */
 	public function init() {
 		if ( $this->initialized ) {
 			return;
@@ -42,9 +39,6 @@ class Vc_Shortcode_Edit_Form {
 		) );
 	}
 
-	/**
-	 *
-	 */
 	public function render() {
 		vc_include_template( 'editors/popups/vc_ui-panel-edit-element.tpl.php', array(
 			'box' => $this,

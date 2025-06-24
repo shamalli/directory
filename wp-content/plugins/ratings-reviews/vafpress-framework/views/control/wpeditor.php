@@ -1,4 +1,9 @@
-<?php if(!$is_compact) echo VP_W2RR_View::instance()->load('control/template_control_head', $head_info); ?>
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php if(!$is_compact) echo W2RR_VP_View::instance()->load('control/template_control_head', $head_info); ?>
 
 <?php
 	// prepare value for tinyMCE editor
@@ -12,7 +17,7 @@
 	<div class="wp-editor-tools">
 		<div class="custom_upload_buttons hide-if-no-js wp-media-buttons"><?php do_action( 'media_buttons' ); ?></div>
 	</div>
-	<textarea class="vp-input vp-js-wpeditor" id="<?php echo $name . '_ce'; ?>" data-vp-opt="<?php echo $opt; ?>" rows="10" cols="50" name="<?php echo $name; ?>" rows="3"><?php echo $value; ?></textarea>
+	<textarea class="vp-input vp-js-wpeditor" id="<?php w2rr_esc_e($name . '_ce'); ?>" data-vp-opt="<?php w2rr_esc_e($opt); ?>" rows="10" cols="50" name="<?php w2rr_esc_e($name); ?>" rows="3"><?php w2rr_esc_e($value); ?></textarea>
 </div>
 
-<?php if(!$is_compact) echo VP_W2RR_View::instance()->load('control/template_control_foot'); ?>
+<?php if(!$is_compact) echo W2RR_VP_View::instance()->load('control/template_control_foot'); ?>

@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+// @codingStandardsIgnoreFile
 
 class w2dc_content_field_excerpt extends w2dc_content_field {
 	protected $can_be_ordered = false;
@@ -15,7 +17,7 @@ class w2dc_content_field_excerpt extends w2dc_content_field {
 	public function validateValues(&$errors, $data) {
 		$listing = w2dc_getCurrentListingInAdmin();
 		if (post_type_supports(W2DC_POST_TYPE, 'excerpt') && $this->is_required && (!isset($data['post_excerpt']) || !$data['post_excerpt']))
-			$errors[] = __('Listing excerpt is required', 'W2DC');
+			$errors[] = esc_html__('Listing excerpt is required', 'w2dc');
 		else
 			return $listing->post->post_excerpt;
 	}
@@ -34,14 +36,6 @@ class w2dc_content_field_excerpt extends w2dc_content_field {
 		}
 		
 		w2dc_renderTemplate($template, array('content' => $content, 'content_field' => $this, 'listing' => $listing, 'group' => $group, 'css_classes' => $css_classes));
-		
-		/* $query = new WP_Query('name=' . $listing->post->post_name . '&post_type=' . W2DC_POST_TYPE);
-		while ($query->have_posts()) {
-			$query->the_post();
-			w2dc_renderTemplate($template, array('content_field' => $this, 'listing' => $listing, 'group' => $group, 'css_classes' => $css_classes));
-			break;
-		}
-		wp_reset_postdata(); */
 	}
 	
 	public function renderOutputForMap($location, $listing) {

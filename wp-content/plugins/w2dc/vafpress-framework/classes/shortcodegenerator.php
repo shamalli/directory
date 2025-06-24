@@ -1,6 +1,8 @@
 <?php
 
-class VP_W2DC_ShortcodeGenerator
+// @codingStandardsIgnoreFile
+
+class W2DC_VP_ShortcodeGenerator
 {
 
 	public static $pool = array();
@@ -23,8 +25,8 @@ class VP_W2DC_ShortcodeGenerator
 
 	public function __construct($arr)
 	{
-		$this->main_image     = VP_W2DC_PUBLIC_URL . '/img/vp_w2dc_shortcode_icon.png';
-		$this->sprite_image   = VP_W2DC_PUBLIC_URL . '/img/vp_w2dc_shortcode_icon_sprite.png';
+		$this->main_image     = W2DC_VP_PUBLIC_URL . '/img/w2dc_vp_shortcode_icon.png';
+		$this->sprite_image   = W2DC_VP_PUBLIC_URL . '/img/w2dc_vp_shortcode_icon_sprite.png';
 		$this->types          = array( 'post', 'page' );
 		$this->included_pages = array();
 
@@ -57,7 +59,7 @@ class VP_W2DC_ShortcodeGenerator
 			// print modal dialog dom
 			add_action( 'admin_footer', array($this, 'print_modal') );
 			// populate scripts and styles dependencies
-			$loader = VP_W2DC_WP_Loader::instance();
+			$loader = W2DC_VP_WP_Loader::instance();
 			$loader->add_types( $this->get_field_types(), 'shortcodegenerator' );
 		}
 	}
@@ -117,7 +119,7 @@ class VP_W2DC_ShortcodeGenerator
 
 	public function supports_editor()
 	{
-		$post_type  = VP_W2DC_Metabox::_get_current_post_type();
+		$post_type  = W2DC_VP_Metabox::_get_current_post_type();
 		$has_editor = post_type_supports( $post_type, 'editor' );
 		return $has_editor;
 	}
@@ -146,11 +148,11 @@ class VP_W2DC_ShortcodeGenerator
 		}
 
 		// if in post / page
-		if( VP_W2DC_Metabox::_is_post_or_page() )
+		if( W2DC_VP_Metabox::_is_post_or_page() )
 		{
 			// then consider the types
 			if( !in_array("*", $this->types) ) // if wildcard exists, then always shows
-				$can &= in_array(VP_W2DC_Metabox::_get_current_post_type(), $this->types);
+				$can &= in_array(W2DC_VP_Metabox::_get_current_post_type(), $this->types);
 			else
 				$can &= true;
 		}
@@ -177,16 +179,16 @@ class VP_W2DC_ShortcodeGenerator
 	{
 		$modal_id = $this->name . '_modal';
 		?>
-		<div id="<?php echo $modal_id; ?>" class="vp-sc-dialog reveal-modal xlarge">
-			<h1><?php echo $this->modal_title; ?></h1>
+		<div id="<?php w2dc_esc_e($modal_id); ?>" class="vp-sc-dialog reveal-modal xlarge">
+			<h1><?php w2dc_esc_e($this->modal_title); ?></h1>
 			<div class="vp-sc-scroll-container">
 				<div class="vp-sc-wrapper">
 					<ul class="vp-sc-menu">
 					<?php foreach ($this->template as $title => $menu): ?>
 						<?php if(reset($this->template) == $menu): ?>
-						<li class="current"><a href="#<?php echo str_replace(' ', '_', $title); ?>"><?php echo $title ?></li></a>
+						<li class="current"><a href="#<?php echo str_replace(' ', '_', $title); ?>"><?php w2dc_esc_e($title); ?></li></a>
 						<?php else: ?>
-						<li><a href="#<?php echo str_replace(' ', '_', $title); ?>"><?php echo $title ?></li></a>
+						<li><a href="#<?php echo str_replace(' ', '_', $title); ?>"><?php w2dc_esc_e($title); ?></li></a>
 						<?php endif; ?>
 					<?php endforeach; ?>
 					</ul>
@@ -201,14 +203,14 @@ class VP_W2DC_ShortcodeGenerator
 								<li class="vp-sc-element postbox<?php if(isset($element['attributes'])) echo ' has-options'; ?><?php if(isset($element['active']) && $element['active'] == true) echo ' active'; ?>">
 									<h3 class="hndle vp-sc-element-heading">
 										<a href="#">
-											<?php echo $element['title']; ?>
+											<?php w2dc_esc_e($element['title']); ?>
 											<?php if(isset($element['attributes'])) echo '<i class="fa fa-arrow-down"></i>'; ?>
 										</a>
 									</h3>
 									<div class="hidden vp-sc-code"><?php echo htmlentities($element['code']); ?></div>
 									<?php if(isset($element['attributes']) and !empty($element['attributes'])): ?>
 									<form class="vp-sc-element-form <?php if(!isset($element['active']) || isset($element['active']) && $element['active'] == false):?>vp-hide<?php endif; ?> inside">
-										<?php echo $this->print_form($element['attributes']); ?>
+										<?php w2dc_esc_e($this->print_form($element['attributes'])); ?>
 									</form>
 									<?php endif; ?>
 								</li>
@@ -231,7 +233,7 @@ class VP_W2DC_ShortcodeGenerator
 		foreach ($attributes as $attr)
 		{
 			// create the object
-			$make           = VP_W2DC_Util_Reflection::field_class_from_type($attr['type']);
+			$make           = W2DC_VP_Util_Reflection::field_class_from_type($attr['type']);
 			// prefix name
 			$attr['name']   = '_' . $attr['name'];
 			$field          = call_user_func("$make::withArray", $attr);
@@ -241,13 +243,13 @@ class VP_W2DC_ShortcodeGenerator
 			?>
 
 			<?php if($attr['type'] !== 'notebox'): ?>
-				<div class="vp-sc-field vp-<?php echo $attr['type']; ?>" data-vp-type="vp-<?php echo $attr['type']; ?>">
-					<div class="label"><label><?php echo $attr['label']; ?></label></div>
+				<div class="vp-sc-field vp-<?php w2dc_esc_e($attr['type']); ?>" data-vp-type="vp-<?php w2dc_esc_e($attr['type']); ?>">
+					<div class="label"><label><?php w2dc_esc_e($attr['label']); ?></label></div>
 					<div class="field"><div class="input"><?php echo $field->render(true); ?></div></div>
 				</div>
 			<?php else: ?>
 				<?php $status = isset($attr['status']) ? $attr['status'] : 'normal'; ?>
-				<div class="vp-sc-field vp-<?php echo $attr['type']; ?> note-<?php echo $status; ?>" data-vp-type="vp-<?php echo $attr['type']; ?>">
+				<div class="vp-sc-field vp-<?php w2dc_esc_e($attr['type']); ?> note-<?php w2dc_esc_e($status); ?>" data-vp-type="vp-<?php w2dc_esc_e($attr['type']); ?>">
 					<?php echo $field->render(true); ?>
 				</div>
 			<?php endif; ?>
@@ -257,8 +259,8 @@ class VP_W2DC_ShortcodeGenerator
 		?>
 		</div>
 		<div class="vp-sc-action">
-			<button class="vp-sc-insert button"><?php _e('Insert', 'vp_w2dc_textdomain'); ?></button>
-			<button class="vp-sc-cancel button"><?php _e('Cancel', 'vp_w2dc_textdomain') ?></button>
+			<button class="vp-sc-insert button"><?php esc_html_e('Insert', 'w2dc'); ?></button>
+			<button class="vp-sc-cancel button"><?php esc_html_e('Cancel', 'w2dc') ?></button>
 		</div>
 		<?php
 	}
@@ -281,7 +283,7 @@ class VP_W2DC_ShortcodeGenerator
 
 	public static function init_buttons()
 	{
-		if( VP_W2DC_Metabox::_is_post_or_page() && !current_user_can( 'edit_posts' ) &&
+		if( W2DC_VP_Metabox::_is_post_or_page() && !current_user_can( 'edit_posts' ) &&
 			!current_user_can( 'edit_pages' ) && get_user_option( 'rich_editing' ) == 'true')
 			return;
 
@@ -296,12 +298,12 @@ class VP_W2DC_ShortcodeGenerator
 		?>
 			<style type="text/css">
 				<?php foreach (self::$pool as $sg): ?>
-				#qt_content_<?php echo $sg->name; ?>{
-					background: url('<?php echo $sg->sprite_image; ?>') 2px -21px no-repeat !important;
+				#qt_content_<?php w2dc_esc_e($sg->name); ?>{
+					background: url('<?php w2dc_esc_e($sg->sprite_image); ?>') 2px -21px no-repeat !important;
 					text-indent: -999px;
 				}
-				span.mce_<?php echo $sg->name; ?>{
-					background: url('<?php echo $sg->sprite_image; ?>') 0 0 no-repeat !important;
+				span.mce_<?php w2dc_esc_e($sg->name); ?>{
+					background: url('<?php w2dc_esc_e($sg->sprite_image); ?>') 0 0 no-repeat !important;
 				}
 				<?php endforeach; ?>
 			</style>
@@ -313,20 +315,16 @@ class VP_W2DC_ShortcodeGenerator
 		foreach (self::$pool as $sg)
 		{
 			if( $sg->can_output() )
-				$vp_w2dc_buttons[] = $sg->name;
+				$w2dc_vp_buttons[] = $sg->name;
 		}
-		$buttons = array_merge($buttons, $vp_w2dc_buttons);
+		$buttons = array_merge($buttons, $w2dc_vp_buttons);
 		return $buttons;
 	}
 
 	public static function add_buttons($plugin_array)
 	{
-		$plugin_array['vp_w2dc_sc_button'] = VP_W2DC_PUBLIC_URL .'/js/shortcodes.js';
-		foreach (self::$pool as $sg)
-		{
-			if( $sg->can_output() )
-				$plugin_array[$sg->name] = VP_W2DC_PUBLIC_URL .'/js/dummy.js';
-		}
+		$plugin_array['w2dc_vp_sc_button'] = W2DC_VP_PUBLIC_URL .'/js/shortcodes.js';
+		
 		return $plugin_array;
 	}
 

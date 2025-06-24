@@ -11,9 +11,9 @@ class w2rr_all_reviews_controller extends w2rr_frontend_controller {
 		if (w2rr_isAllReviews()) {
 			if ($target_post = $w2rr_instance->reviews_manager->setup_breadcrumbs($this)) {
 				array_pop($this->breadcrumbs);
-				$this->addBreadCrumbs(esc_html__('Reviews', 'W2RR'));
-				$this->addBreadCrumbs(esc_html__('Reviews:', 'W2RR') . ' ' . $target_post->title());
-				$this->page_title = esc_html__('Reviews:', 'W2RR') . ' ' . $target_post->title();
+				$this->addBreadCrumbs(esc_html__('Reviews', 'w2rr'));
+				$this->addBreadCrumbs(esc_html__('Reviews:', 'w2rr') . ' ' . $target_post->title());
+				$this->page_title = esc_html__('Reviews:', 'w2rr') . ' ' . $target_post->title();
 					
 				$reviews_controller = new w2rr_reviews_controller;
 				$reviews_controller->init(array_merge(array(

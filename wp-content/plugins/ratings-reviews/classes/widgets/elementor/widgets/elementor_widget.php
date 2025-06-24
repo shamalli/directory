@@ -10,6 +10,10 @@ abstract class w2rr_elementor_widget extends \Elementor\Widget_Base {
 		
 		$settings = parent::get_settings_for_display($setting_key);
 		
+		if (!is_array($settings)) {
+			$settings = array($settings);
+		}
+		
 		foreach ($settings AS $key=>$setting) {
 			if (is_null($setting)) {
 				unset($settings[$key]);

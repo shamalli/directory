@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+// @codingStandardsIgnoreFile
 
 class w2dc_content_field_fileupload extends w2dc_content_field {
 	public $use_text = true;
@@ -22,14 +24,14 @@ class w2dc_content_field_fileupload extends w2dc_content_field {
 
 		if (w2dc_getValue($_POST, 'submit') && wp_verify_nonce($_POST['w2dc_configure_content_fields_nonce'], W2DC_PATH)) {
 			$validation = new w2dc_form_validation();
-			$validation->set_rules('use_text', __('Default file title text', 'W2DC'), 'is_checked');
-			$validation->set_rules('default_text', __('Default file title text', 'W2DC'));
-			$validation->set_rules('use_default_text', __('Use default file title text', 'W2DC'), 'is_checked');
-			$validation->set_rules('allowed_mime_types', __('Use default file title text', 'W2DC'));
+			$validation->set_rules('use_text', esc_html__('Default file title text', 'w2dc'), 'is_checked');
+			$validation->set_rules('default_text', esc_html__('Default file title text', 'w2dc'));
+			$validation->set_rules('use_default_text', esc_html__('Use default file title text', 'w2dc'), 'is_checked');
+			$validation->set_rules('allowed_mime_types', esc_html__('Use default file title text', 'w2dc'));
 			if ($validation->run()) {
 				$result = $validation->result_array();
 				if ($wpdb->update($wpdb->w2dc_content_fields, array('options' => serialize(array('use_text' => $result['use_text'], 'default_text' => $result['default_text'], 'use_default_text' => $result['use_default_text'], 'allowed_mime_types' => $result['allowed_mime_types']))), array('id' => $this->id), null, array('%d')))
-					w2dc_addMessage(__('Field configuration was updated successfully!', 'W2DC'));
+					w2dc_addMessage(esc_html__('Field configuration was updated successfully!', 'w2dc'));
 				
 				$w2dc_instance->content_fields_manager->showContentFieldsTable();
 			} else {
@@ -106,7 +108,7 @@ class w2dc_content_field_fileupload extends w2dc_content_field {
 
 		if ($this->canBeRequired() && $this->is_required) {
 			if (empty($_POST[$field_index_uploaded]) && (empty($_FILES) || !isset($_FILES[$field_index_input]) || !$_FILES[$field_index_input]['tmp_name'])) {
-				$errors[] = sprintf(__('%s is required to be uploaded!', 'W2DC'), $this->name);
+				$errors[] = sprintf(esc_html__('%s is required to be uploaded!', 'w2dc'), $this->name);
 				return false;
 			}
 		} elseif (empty($_FILES) || !isset($_FILES[$field_index_input]) || !$_FILES[$field_index_input]['tmp_name']) {
@@ -123,16 +125,16 @@ class w2dc_content_field_fileupload extends w2dc_content_field {
 		$file['name'] = sanitize_file_name($file['name']);
 
 		if ($file['tmp_name'] == "") {
-			$upload_errors[] = __('File upload failed!', 'W2DC');
+			$upload_errors[] = esc_html__('File upload failed!', 'w2dc');
 		}
 
 		$typecheck = wp_check_filetype_and_ext($file['tmp_name'], $file['name'], false);
 		if (!in_array($typecheck['type'], $allowed_mimes)) {
-			$upload_errors[] = __('This type of file is not allowed!', 'W2DC');
+			$upload_errors[] = esc_html__('This type of file is not allowed!', 'w2dc');
 		}
 
 		if ($this->check_file_contents(file_get_contents($file['tmp_name'])) !== 0) {
-			$upload_errors[] = __('The content of file is not allowed!', 'W2DC');
+			$upload_errors[] = esc_html__('The content of file is not allowed!', 'w2dc');
 		}
 
 		if (!$upload_errors) {
@@ -142,7 +144,7 @@ class w2dc_content_field_fileupload extends w2dc_content_field {
 				$media_id = $upload_id;
 				return array('id' => $media_id, 'text' => $validation->result_array($field_index_text));
 			} else {
-				$upload_errors[] = __('Error during file upload!', 'W2DC');
+				$upload_errors[] = esc_html__('Error during file upload!', 'w2dc');
 				$errors = array_merge($errors, $upload_errors);
 				return false;
 			}
@@ -195,7 +197,7 @@ class w2dc_content_field_fileupload extends w2dc_content_field {
 		$value = explode('>', $value);
 		$id = $value[0];
 		if (is_integer($id))
-			$errors[] = __("ID of media attachment is invalid", "W2DC");
+			$errors[] = esc_html__("ID of media attachment is invalid", "w2dc");
 
 		$text = (isset($value[1]) ? $value[1] : '');
 		return array('id' => $id, 'text' => $text);

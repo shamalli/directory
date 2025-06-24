@@ -66,6 +66,10 @@ function vc_grid_item_render_preview() {
 		$vcGridPreview,
 		'addImageUrl',
 	) );
+	add_filter( 'vc_gitem_template_attribute_post_full_image_url_value', array(
+		$vcGridPreview,
+		'addImageUrl',
+	) );
 	add_filter( 'vc_gitem_template_attribute_post_image_html', array(
 		$vcGridPreview,
 		'addImage',
@@ -126,8 +130,7 @@ function vc_grid_item_get_post_type() {
 function vc_grid_item_editor_shortcodes() {
 	require_once vc_path_dir( 'PARAMS_DIR', 'vc_grid_item/editor/class-vc-grid-item-editor.php' );
 	// TODO: remove this because mapping can be based on post_type
-	if ( ( 'true' === vc_request_param( 'vc_grid_item_editor' ) || ( is_admin() && vc_grid_item_get_post_type() === Vc_Grid_Item_Editor::postType() ) && vc_user_access()
-			->wpAny( 'edit_posts', 'edit_pages' )->part( 'grid_builder' )->can()->get() ) ) {
+	if ( ( 'true' === vc_request_param( 'vc_grid_item_editor' ) || ( is_admin() && vc_grid_item_get_post_type() === Vc_Grid_Item_Editor::postType() ) && vc_user_access()->wpAny( 'edit_posts', 'edit_pages' )->part( 'grid_builder' )->can()->get() ) ) {
 
 		global $vc_grid_item_editor;
 		add_action( 'vc_user_access_check-shortcode_edit', array(
@@ -267,7 +270,7 @@ function vc_gitem_has_content( $content ) {
  * @since 4.5
  */
 function vc_gitem_add_submenu_page() {
-	if ( vc_user_access()->part( 'grid_builder' )->can()->get() ) {
+	if ( vc_user_access()->part( 'grid_builder' )->getState() ) {
 		$labels = Vc_Grid_Item_Editor::getPostTypesLabels();
 		add_submenu_page( VC_PAGE_MAIN_SLUG, $labels['name'], $labels['name'], 'edit_posts', 'edit.php?post_type=' . rawurlencode( Vc_Grid_Item_Editor::postType() ), '' );
 	}

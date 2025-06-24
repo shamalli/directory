@@ -10,7 +10,7 @@ a.w2dc-hint-icon:before {
 	content: "\f059";
 }
 a.w2dc-hint-icon {
-	font-family: 'FontAwesome' !important;
+	font-family: 'FontAwesomeW2DC' !important;
 	text-decoration: none !important;
 	font-size: 24px;
 }
@@ -29,19 +29,51 @@ a.w2dc-hint-icon {
 		display: none;
 	}
 }
-/*
-print landscape
-
-.w2dc-print {
-	size: landscape;
-	-webkit-transform: rotate(-90deg); 
-	-moz-transform:rotate(-90deg);
-	filter:progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
-	page-break-before: avoid;
-	width:100%;
-	height:100%;
-} */
-
+.w2dc-display-none {
+	display: none;
+}
+.w2dc-width-auto {
+	width: auto;
+}
+.w2dc-width-100 {
+	width: 100%;
+}
+.w2dc-width-300 {
+	width: 300px;
+}
+.w2dc-height-300 {
+	height: 300px;
+}
+.w2dc-height-450 {
+	height: 450px;
+}
+.w2dc-height-auto {
+	height: auto;
+}
+.w2dc-text-align-center {
+	text-align: center;
+}
+.w2dc-vertical-align-middle {
+	vertical-align: middle;
+}
+.w2dc-source-shortcode {
+	padding: 20px 0;
+}
+.w2dc-margin-10 {
+	margin: 10px;
+}
+.w2dc-margin-left-10 {
+	margin-left: 10px;
+}
+.w2dc-debug-textarea {
+	width: 100%;
+	height: 700px
+}
+.w2dc-contact-warning,
+.w2dc-report-warning {
+	display: none;
+	color: red;
+}
 
 /************************ Our plugin section in settings manager ************************/
 .w2dc-our-plugins {

@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+// @codingStandardsIgnoreFile
 
 include_once W2DC_PATH . 'search/plugin/search.php';
 include_once W2DC_PATH . 'search/query.php';
@@ -63,9 +65,9 @@ function w2dc_get_taxonomies($taxonomies = array()) {
 add_filter("wcsearch_get_taxonomies_names", "w2dc_get_taxonomies_names");
 function w2dc_get_taxonomies_names($taxonomies_names = array()) {
 	
-	$taxonomies_names['w2dc-category'] = esc_html__("Directory categories", "W2DC");
-	$taxonomies_names['w2dc-location'] = esc_html__("Directory locations", "W2DC");
-	$taxonomies_names['w2dc-tag'] = esc_html__("Directory tags", "W2DC");
+	$taxonomies_names['w2dc-category'] = esc_html__("Directory categories", "w2dc");
+	$taxonomies_names['w2dc-location'] = esc_html__("Directory locations", "w2dc");
+	$taxonomies_names['w2dc-tag'] = esc_html__("Directory tags", "w2dc");
 	
 	$search_fields = w2dc_get_search_fields();
 	
@@ -139,7 +141,7 @@ function w2dc_set_args_from_old_form($form_args, $args, $search_form) {
 				"title" => "",
 				"visible_status" => "always_opened",
 				"mode" => "dropdown_keywords",
-				'placeholder' => esc_html__("Enter keywords or select category", "W2DC"),
+				'placeholder' => esc_html__("Enter keywords or select category", "w2dc"),
 		);
 		if (!empty($args['keywords_ajax_search'])) {
 			$input['autocomplete'] = 1;
@@ -171,7 +173,7 @@ function w2dc_set_args_from_old_form($form_args, $args, $search_form) {
 				"visible_status" => "always_opened",
 				"mode" => "dropdown",
 				"values" => "",
-				"placeholder" => esc_html__("Select category", "W2DC"),
+				"placeholder" => esc_html__("Select category", "w2dc"),
 		);
 		if (!empty($args['categories_search_level'])) {
 			$input['depth'] = (int) $args['categories_search_level'];
@@ -188,7 +190,7 @@ function w2dc_set_args_from_old_form($form_args, $args, $search_form) {
 				"slug" => "keywords",
 				"title" => "",
 				"visible_status" => "always_opened",
-				"placeholder" => esc_html__("Enter keywords", "W2DC"),
+				"placeholder" => esc_html__("Enter keywords", "w2dc"),
 		);
 		if (!empty($args['keywords_ajax_search'])) {
 			$input['autocomplete'] = 1;
@@ -219,7 +221,7 @@ function w2dc_set_args_from_old_form($form_args, $args, $search_form) {
 				"visible_status" => "always_opened",
 				"mode" => "dropdown_address",
 				"values" => "",
-				"placeholder" => esc_html__("Enter address or select location", "W2DC"),
+				"placeholder" => esc_html__("Enter address or select location", "w2dc"),
 		);
 		if (!empty($args['locations_search_level'])) {
 			$input['depth'] = (int) $args['locations_search_level'];
@@ -242,7 +244,7 @@ function w2dc_set_args_from_old_form($form_args, $args, $search_form) {
 				"visible_status" => "always_opened",
 				"mode" => "dropdown",
 				"values" => "",
-				"placeholder" => esc_html__("Select location", "W2DC"),
+				"placeholder" => esc_html__("Select location", "w2dc"),
 		);
 		if (!empty($args['locations_search_level'])) {
 			$input['depth'] = (int) $args['locations_search_level'];
@@ -261,7 +263,7 @@ function w2dc_set_args_from_old_form($form_args, $args, $search_form) {
 				"visible_status" => "always_opened",
 				"address_suggestions" => "",
 				"values" => "",
-				"placeholder" => esc_html__("Enter address", "W2DC"),
+				"placeholder" => esc_html__("Enter address", "w2dc"),
 		);
 		if (!empty($args['address_placeholder'])) {
 			$input['placeholder'] = esc_attr($args['address_placeholder']);
@@ -339,8 +341,6 @@ function w2dc_set_args_from_old_form($form_args, $args, $search_form) {
 		if ($all_search_fields = w2dc_get_search_fields()) {
 			foreach ($all_search_fields AS $slug=>$search_field) {
 
-				//if (in_array($search_field->content_field->id, $search_fields) || in_array($search_field->content_field->id, $search_fields_advanced)) {
-
 				if (in_array($search_field->content_field->type, array("select", "checkbox", "radio"))) {
 					$type= "select";
 				}
@@ -373,7 +373,6 @@ function w2dc_set_args_from_old_form($form_args, $args, $search_form) {
 						"rows" => 1,
 						"input" => $input,
 				);
-				//}
 
 				if (!empty($args[$slug])) {
 
@@ -579,7 +578,7 @@ function w2dc_filter_model_fields($model_fields, $used_by) {
 					'icon' => 'wcsearch-fa-search',
 			),
 			array(
-					'name' => 'Search button',
+					'name' => 'Submit button',
 					'type' => 'button',
 					'slug' => 'submit',
 					'icon' => 'wcsearch-fa-sign-in',
@@ -597,7 +596,7 @@ function w2dc_filter_model_fields($model_fields, $used_by) {
 					'icon' => 'wcsearch-fa-chevron-down',
 			),
 			array(
-					'name' => esc_html__('Categories', "W2DC"),
+					'name' => esc_html__('Categories', "w2dc"),
 					'type' => 'tax',
 					'tax' => 'w2dc-category',
 					'slug' => 'categories',
@@ -605,7 +604,7 @@ function w2dc_filter_model_fields($model_fields, $used_by) {
 					'values' => '',
 			),
 			array(
-					'name' => esc_html__('Locations', "W2DC"),
+					'name' => esc_html__('Locations', "w2dc"),
 					'type' => 'tax',
 					'tax' => 'w2dc-location',
 					'slug' => 'locations',
@@ -613,7 +612,7 @@ function w2dc_filter_model_fields($model_fields, $used_by) {
 					'values' => '',
 			),
 			array(
-					'name' => esc_html__('Tags', "W2DC"),
+					'name' => esc_html__('Tags', "w2dc"),
 					'type' => 'tax',
 					'tax' => 'w2dc-tag',
 					'slug' => 'tags',
@@ -705,12 +704,12 @@ function w2dc_filter_model_fields($model_fields, $used_by) {
 	return $model_fields;
 }
 
-add_action("admin_init", "w2dc_remove_native_demo_forms_menu_link");
+add_action("admin_menu", "w2dc_remove_native_demo_forms_menu_link", 11);
 function w2dc_remove_native_demo_forms_menu_link() {
 	remove_submenu_page('edit.php?post_type=wcsearch_form', 'wcsearch_demo_data');
 }
 
-add_action("admin_init", "w2dc_remove_search_settings_menu_link");
+add_action("admin_menu", "w2dc_remove_search_settings_menu_link", 11);
 function w2dc_remove_search_settings_menu_link() {
 	remove_submenu_page('edit.php?post_type=wcsearch_form', 'wcsearch_settings');
 }

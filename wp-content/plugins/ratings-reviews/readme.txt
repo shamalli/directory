@@ -2,8 +2,8 @@
 Contributors: Mihail Chepovskiy
 Donate link: https://www.salephpscripts.com/
 Tags: reviews, business reviews, directory, wordpress reviews, ratings, images reviews, woocommerce reviews, comments, stars
-Tested up to: 6.2
-Stable tag: 1.3.3
+Tested up to: 6.8
+Stable tag: 1.3.4
 License: Commercial
 
 == Description ==
@@ -22,6 +22,9 @@ The plugin has lots of features, including:
 Look at our [demo](https://www.salephpscripts.com/wordpress-ratings-reviews/demo)
 
 == Changelog ==
+
+= Version 1.3.4 =
+* bug fixes and common improvements
 
 = Version 1.3.3 =
 * improvement: better compatibility with PHP 8.2

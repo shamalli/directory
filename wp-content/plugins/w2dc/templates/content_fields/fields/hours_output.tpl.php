@@ -1,3 +1,8 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <?php if (array_filter($content_field->value)): ?>
 <div class="w2dc-field w2dc-field-output-block <?php echo $content_field->printClasses($css_classes); ?>">
 	<?php if ($content_field->icon_image || !$content_field->is_hide_name): ?>
@@ -13,7 +18,7 @@
 	<?php if ($strings = $content_field->processStrings()): ?>
 	<div class="w2dc-field-content w2dc-hours-field">
 		<?php foreach ($strings AS $string): ?>
-		<div><?php echo $string; ?></div>
+		<div><?php w2dc_esc_e($string); ?></div>
 		<?php endforeach; ?>
 		<div class="w2dc-clearfix"></div>
 	</div>

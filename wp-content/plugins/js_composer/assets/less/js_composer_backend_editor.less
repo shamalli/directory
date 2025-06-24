@@ -25,15 +25,21 @@
 @import "modules/vc_fullscreen.less";
 // Message box shown when post content is empty
 @import "modules/vc_welcome.less";
+@import "modules/vc_post_custom_layout.less";
 
 // Backend switcher
 @import "modules/vc_switcher.less";
 // Edit form for shortcode
 @import "popups/panel_edit_form.less";
+// Seo popup
+@import "popups/panel_seo.less";
 
+@import "popups/panel_seo_social";
 // Template library
 @import "popups/panel_template_library";
 
+// AI icon
+@import "modules/ui/vc_ui-icon-ai.less";
 // Templates editor
 @import "modules/ui/vc_ui-panel-templates.less";
 //Presets
@@ -43,6 +49,7 @@
 #vc_settings-title-container {
   display: none;
 }
+@import "modules/vc_info_tooltip.less";
 
 // Backend controls
 @import "lib/controls.less";
@@ -136,7 +143,7 @@
 
 @import "lib/vc_font.less";
 
-#wpb_visual_composer {
+#wpb_wpbakery {
   display: none;
 
   > .inside {
@@ -197,7 +204,7 @@
   }
 }
 
-#visual_composer_content {
+#wpbakery_content {
   margin: 14px 14px 0 14px;
   line-height: 1.2;
 }
@@ -241,7 +248,7 @@
   }
 }
 
-#wpb_csseditor {
+.custom_code {
   border: 1px solid #BABABA;
 }
 

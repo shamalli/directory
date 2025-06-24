@@ -2,10 +2,8 @@
 
 class w2rr_query {
 	
-	private $_temp_queried_object_id;
-	private $_temp_queried_object;
-	private $_temp_is_singular;
 	private $_temp_post;
+	private $_temp_query;
 	
 	public function __construct() {
 		
@@ -15,8 +13,8 @@ class w2rr_query {
 		add_filter('template_include', array($this, 'template_include'), 99);
 		add_filter('the_content', array($this, 'the_content'));
 		add_filter('has_post_thumbnail', array($this, 'has_post_thumbnail'), 10, 3);
-		add_action('wp_head', array($this, 'body_class_before'), 9999);
-		add_filter('body_class', array($this, 'body_class_after'), 100);
+		add_action('wp_head', array($this, 'change_wp_query'), -99999);
+		add_action('wp_head', array($this, 'back_wp_query'), 99999);
 		add_filter("the_title", array($this, "the_title"));
 		
 		add_filter('redirect_canonical', array($this, 'prevent_wrong_redirect'), 10, 2);
@@ -24,38 +22,48 @@ class w2rr_query {
 		add_filter('wp_unique_post_slug_is_bad_flat_slug', array($this, 'reserve_slugs'), 10, 2);
 	}
 	
-	public function body_class_before() {
+	public function change_wp_query() {
 		global $post;
 		global $wp_query;
-		global $w2rr_instance;
 	
-		// set queried_object in 9999 wp_head, can not do this earlier
-	
-		if (w2rr_isReview() && $w2rr_instance->review_page_id) {
-			$this->_temp_queried_object_id = $wp_query->queried_object_id;
-			$this->_temp_queried_object = $wp_query->queried_object;
-			$this->_temp_is_singular = $wp_query->is_singular;
-			$this->_temp_post = $post;
-	
-			$wp_query->is_singular = true;
-			$wp_query->queried_object = get_post($w2rr_instance->review_page_id);
-			$wp_query->queried_object_id = $w2rr_instance->review_page_id;
-			$post = get_post($w2rr_instance->review_page_id);
+		if ($queried_object = w2rr_isReview()) {
+			$this->_temp_post 				= $post;
+			$this->_temp_query 				= $wp_query;
+			
+			$wp_query = new WP_Query(array(
+					'post_type' => W2RR_REVIEW_TYPE,
+					'name' => $queried_object->post->post_name,
+					'posts_per_page' => 1,
+			));
+			
+			$post							= $queried_object->post;
+			$GLOBALS['wp_the_query'] 		= $wp_query;
+			$GLOBALS['post']				= $post;
 		}
 	}
 	
-	public function body_class_after($classes) {
-		global $post;
-		global $wp_query;
-	
-		if (isset($this->_temp_is_singular)) {
-			$wp_query->is_singular = $this->_temp_is_singular;
-			$wp_query->queried_object = $this->_temp_queried_object;
-			$wp_query->queried_object_id = $this->_temp_queried_object_id;
-			$post = $this->_temp_post;
+	public function back_wp_query() {
+		
+		if ($this->_temp_query) {
+			global $post;
+			global $wp_query;
+			global $w2rr_instance;
+			
+			if ($wp_query->query_vars['post_type'] == W2RR_REVIEW_TYPE && $w2rr_instance->review_page_id) {
+				$post = get_post($w2rr_instance->review_page_id);
+			} else {
+				$post = $this->_temp_post;
+			}
+			$wp_query 							= $this->_temp_query;
+			$GLOBALS['wp_the_query'] 			= $wp_query;
+			
+			$wp_query->is_singular			= true;
+			$wp_query->is_tax				= false;
+			$wp_query->is_home				= false;
+			$wp_query->is_page				= true;
+			$wp_query->queried_object_id	= $post->ID;
+			$wp_query->queried_object		= $post;
 		}
-	
-		return $classes;
 	}
 	
 	public function template_redirect() {
@@ -68,7 +76,7 @@ class w2rr_query {
 			$wp_query->posts[] = get_post($w2rr_instance->review_page_id);
 		}
 	
-		if (w2rr_isReview()) {
+		if (w2rr_isReview() && $w2rr_instance->review_page_id) {
 			$controller = new w2rr_single_review_controller();
 			$controller->init();
 	
@@ -79,7 +87,9 @@ class w2rr_query {
 	public function template_include($template) {
 	
 		if (w2rr_isReview()) {
+			
 			$default_template = w2rr_locate_template();
+			
 			if ($default_template != '') {
 				return $default_template;
 			}
@@ -101,25 +111,15 @@ class w2rr_query {
 				return $content;
 			}
 				
-			if (w2rr_isReview()) {
-				if ($w2rr_instance->review_page_id) {
-					$content = get_the_content(null, false, $w2rr_instance->review_page_id);
+			if (w2rr_isReview() && $w2rr_instance->review_page_id) {
+				$content = get_the_content(null, false, $w2rr_instance->review_page_id);
 					
-					$content = do_shortcode($content);
-						
-					$content = apply_filters("w2rr_the_content_review_page", $content);
-						
-					if ($content) {
-						return $content;
-					}
-				}
+				$content = apply_filters("w2rr_the_content_review_page", $content);
 				
-				if (!empty(w2rr_getFrontendControllers(W2RR_REVIEW_PAGE_SHORTCODE))) {
-					$controllers = w2rr_getFrontendControllers(W2RR_REVIEW_PAGE_SHORTCODE);
-						
-					$content = $controllers[0]->display();
-					echo $content;
-					return "";
+				$content = do_shortcode($content);
+					
+				if ($content) {
+					return $content;
 				}
 			}
 		}

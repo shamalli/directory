@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WPBakery WPBakery Page Builder Main manager.
+ * WPBakery Page Builder Main manager.
  *
  * @package WPBakeryPageBuilder
  * @since   4.2
@@ -24,8 +24,19 @@ if ( ! function_exists( 'visual_composer' ) ) {
 	 * WPBakery Page Builder instance.
 	 * @return Vc_Base
 	 * @since 4.2
+	 * @depreacted 5.8, use wpbakery() instead
 	 */
 	function visual_composer() {
+		return wpbakery();
+	}
+}
+if ( ! function_exists( 'wpbakery' ) ) {
+	/**
+	 * WPBakery Page Builder instance.
+	 * @return Vc_Base
+	 * @since 6.8
+	 */
+	function wpbakery() {
 		return vc_manager()->vc();
 	}
 }
@@ -66,6 +77,24 @@ if ( ! function_exists( 'vc_automapper' ) ) {
 	 */
 	function vc_automapper() {
 		return vc_manager()->automapper();
+	}
+}
+if ( ! function_exists( 'vc_autoload_manager' ) ) {
+	/**
+	 * @return Vc_Autoload_Manager
+	 * @since 7.7
+	 */
+	function vc_autoload_manager() {
+		return vc_manager()->autoload();
+	}
+}
+if ( ! function_exists( 'vc_modules_manager' ) ) {
+	/**
+	 * @return Vc_Modules_Manager
+	 * @since 7.7
+	 */
+	function vc_modules_manager() {
+		return vc_manager()->modules();
 	}
 }
 if ( ! function_exists( 'vc_frontend_editor' ) ) {
@@ -173,6 +202,7 @@ if ( ! function_exists( 'vc_post_param' ) ) {
 			check_ajax_referer();
 		}
 
+        // phpcs:ignore
 		return isset( $_POST[ $param ] ) ? $_POST[ $param ] : $default;
 	}
 }
@@ -206,7 +236,7 @@ if ( ! function_exists( 'vc_request_param' ) ) {
 	 * @param $default
 	 *
 	 * @param bool $check
-	 * @return null|string - null for undefined param.
+	 * @return mixed - null for undefined param.
 	 * @since 4.4
 	 */
 	function vc_request_param( $param, $default = null, $check = false ) {
@@ -236,6 +266,26 @@ if ( ! function_exists( 'vc_is_page_editable' ) ) {
 	 */
 	function vc_is_page_editable() {
 		return 'page_editable' === vc_mode();
+	}
+}
+if ( ! function_exists( 'vc_is_gutenberg_editor' ) ) {
+	/**
+	 * Check if current screen is Gutenberg editor screen.
+	 *
+	 * @return bool
+	 * @since 7.0
+	 */
+	function vc_is_gutenberg_editor() {
+		if ( ! function_exists( 'get_current_screen' ) ) {
+			return false;
+		}
+
+		$current_screen = get_current_screen();
+		if ( ! method_exists( $current_screen, 'is_block_editor' ) ) {
+			return false;
+		}
+
+		return get_current_screen()->is_block_editor();
 	}
 }
 if ( ! function_exists( 'vc_action' ) ) {
@@ -297,23 +347,34 @@ function vc_value_from_safe( $value, $encode = false ) {
 		$value = htmlentities( $value, ENT_COMPAT, 'UTF-8' );
 	}
 
-	return $value;
+	return str_replace( [
+		'`{`',
+		'`}`',
+		'``',
+	], [
+		'[',
+		']',
+		'"',
+	], $value );
 }
 
 /**
+ * @depreacted 7.7 ( use modules settings )
  * @param bool $disable
  * @since 4.2
- *
  */
 function vc_disable_automapper( $disable = true ) {
+	_deprecated_function( __FUNCTION__, '7.7', 'Use plugin settings module tab to disable automapper' );
 	vc_automapper()->setDisabled( $disable );
 }
 
 /**
+ * @depreacted 7.7 ( use modules settings )
  * @return bool
  * @since 4.2
  */
 function vc_automapper_is_disabled() {
+	_deprecated_function( __FUNCTION__, '7.7', 'Use plugin settings module tab to disable automapper' );
 	return vc_automapper()->disabled();
 }
 
@@ -478,7 +539,7 @@ function vc_user_roles_get_all() {
 	foreach ( $vc_roles->getParts() as $part ) {
 		$partObj = vc_user_access()->part( $part );
 		$capabilities[ $part ] = array(
-			'state' => (is_multisite() && is_super_admin()) ? true : $partObj->getState(),
+			'state' => ( is_multisite() && is_super_admin() ) ? true : $partObj->getState(),
 			'state_key' => $partObj->getStateKey(),
 			'capabilities' => $partObj->getAllCaps(),
 		);
@@ -559,14 +620,22 @@ function vc_check_post_type( $type = '' ) {
 		if ( is_multisite() && is_super_admin() ) {
 			return true;
 		}
-		$state = vc_user_access()->part( 'post_types' )->getState();
+		$currentUser = wp_get_current_user();
+		$allCaps = $currentUser->get_role_caps();
+		$capKey = vc_user_access()->part( 'post_types' )->getStateKey();
+		$state = null;
+		if ( array_key_exists( $capKey, $allCaps ) ) {
+			$state = $allCaps[ $capKey ];
+		}
+		if ( false === $state ) {
+			return false;
+		}
+
 		if ( null === $state ) {
 			return in_array( $type, vc_default_editor_post_types(), true );
-		} elseif ( true === $state && ! in_array( $type, vc_default_editor_post_types(), true ) ) {
-			$valid = false;
-		} else {
-			$valid = vc_user_access()->part( 'post_types' )->can( $type )->get();
 		}
+
+		return in_array( $type, vc_editor_post_types(), true );
 	}
 
 	return $valid;
@@ -644,4 +713,23 @@ function vc_str_remove_protocol( $str ) {
 		'https://',
 		'http://',
 	), '//', $str );
+}
+
+if ( ! function_exists( 'wpb_get_current_theme_slug' ) ) {
+	/**
+	 * Get current theme slug (actually the directory name)
+	 *
+	 * When child theme is in use will return the parent's slug.
+	 *
+	 * @return string
+	 */
+	function wpb_get_current_theme_slug() {
+		$theme  = wp_get_theme();
+		$parent = $theme->parent();
+		if ( $parent instanceof WP_Theme ) {
+			return $parent->get_stylesheet();
+		}
+
+		return $theme->get_stylesheet();
+	}
 }

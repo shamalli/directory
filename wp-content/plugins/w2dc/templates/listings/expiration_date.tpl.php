@@ -1,11 +1,16 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <?php w2dc_renderTemplate('admin_header.tpl.php'); ?>
 
 <h2>
-	<?php _e('Change expiration date', 'W2DC'); ?>
+	<?php esc_html_e('Change expiration date', 'w2dc'); ?>
 </h2>
 
 <?php if (!get_option('w2dc_change_expiration_date') && current_user_can('manage_options')): ?>
-<p><?php _e("Regular users can not change expiration date. This option is available only for admins.", 'W2DC'); ?></p>
+<p><?php esc_html_e("Regular users can not change expiration date. This option is available only for admins.", 'w2dc'); ?></p>
 <?php endif; ?>
 
 <script>
@@ -20,7 +25,7 @@
 	); ?>;
 </script>
 
-<p><?php _e("Set new expiration date and time of the listing.<br />Be careful: If you'll set past date - listing will expire in some minutes.", 'W2DC'); ?></p>
+<p><?php echo wp_kses(__("Set new expiration date and time of the listing.<br />Be careful: If you'll set past date - listing will expire in some minutes.", 'w2dc'), 'post'); ?></p>
 
 <form action="<?php echo admin_url('options.php?page=w2dc_changedate&listing_id=' . $listing->post->ID . '&changedate_action=changedate&referer=' . urlencode($referer)); ?>" method="POST">
 	<p>
@@ -29,7 +34,7 @@
 		<?php $hour = date('H', intval($listing->expiration_date)); ?>
 		<?php $minute = date('i', intval($listing->expiration_date)); ?>
 		<input type="hidden" name="expiration_date_tmstmp" value="<?php echo esc_attr(intval($listing->expiration_date) - ($hour*3600) - ($minute*60)); ?>"/>
-		&nbsp;&nbsp;&nbsp;<?php _e('Time:', 'W2DC'); ?>
+		&nbsp;&nbsp;&nbsp;<?php esc_html_e('Time:', 'w2dc'); ?>
 		<select name="expiration_date_hour">
 			<option value="00" <?php if ($hour == '00') echo 'selected'; ?>>00</option>
 			<option value="01" <?php if ($hour == '01') echo 'selected'; ?>>01</option>
@@ -124,11 +129,11 @@
 	<?php do_action('w2dc_changedate_html', $listing); ?>
 	
 	<?php if ($action == 'show'): ?>
-	<input type="submit" value="<?php esc_attr_e('Save changes', 'W2DC'); ?>" class="button button-primary" id="submit" name="submit">
+	<input type="submit" value="<?php esc_attresc_html_e('Save changes', 'w2dc'); ?>" class="button button-primary" id="submit" name="submit">
 	&nbsp;&nbsp;&nbsp;
-	<a href="<?php echo $referer; ?>" class="button button-primary"><?php _e('Cancel', 'W2DC'); ?></a>
+	<a href="<?php echo esc_attr($referer); ?>" class="button button-primary"><?php esc_html_e('Cancel', 'w2dc'); ?></a>
 	<?php elseif ($action == 'changedate'): ?>
-	<a href="<?php echo $referer; ?>" class="button button-primary"><?php _e('Go back ', 'W2DC'); ?></a>
+	<a href="<?php echo esc_attr($referer); ?>" class="button button-primary"><?php esc_html_e('Go back ', 'w2dc'); ?></a>
 	<?php endif; ?>
 </form>
 

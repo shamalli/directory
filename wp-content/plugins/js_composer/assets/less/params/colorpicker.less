@@ -30,19 +30,24 @@
   .wp-picker-clear {
     padding: 2px 4px;
   }
+  
   .wp-picker-holder {
     z-index: 10000;
     position: relative;
+
+    .vc_alpha-wrapper {
+      position: absolute;
+      width: 256px;
+      left: -1px;
+      z-index: 1000;
+      bottom: -74px;
+      padding-bottom: 10px;
+    }
     .vc_alpha-container {
       border-radius: 0;
       border: 1px solid #dfdfdf;
       padding: 6px;
       background: #ffffff;
-      position: absolute;
-      width: 243px;
-      left: -1px;
-      z-index: 1000;
-      bottom: -64px;
       label {
         display: block;
         output {

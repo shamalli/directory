@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+// @codingStandardsIgnoreFile
 
 class w2dc_content_field_website extends w2dc_content_field {
 	public $is_blank = false;
@@ -23,15 +25,15 @@ class w2dc_content_field_website extends w2dc_content_field {
 
 		if (w2dc_getValue($_POST, 'submit') && wp_verify_nonce($_POST['w2dc_configure_content_fields_nonce'], W2DC_PATH)) {
 			$validation = new w2dc_form_validation();
-			$validation->set_rules('is_blank', __('Open link in new window', 'W2DC'), 'is_checked');
-			$validation->set_rules('is_nofollow', __('Add nofollow attribute', 'W2DC'), 'is_checked');
-			$validation->set_rules('use_link_text', __('Placeholder link text', 'W2DC'), 'is_checked');
-			$validation->set_rules('default_link_text', __('Placeholder link text', 'W2DC'));
-			$validation->set_rules('use_default_link_text', __('Use placeholder link text', 'W2DC'), 'is_checked');
+			$validation->set_rules('is_blank', esc_html__('Open link in new window', 'w2dc'), 'is_checked');
+			$validation->set_rules('is_nofollow', esc_html__('Add nofollow attribute', 'w2dc'), 'is_checked');
+			$validation->set_rules('use_link_text', esc_html__('Placeholder link text', 'w2dc'), 'is_checked');
+			$validation->set_rules('default_link_text', esc_html__('Placeholder link text', 'w2dc'));
+			$validation->set_rules('use_default_link_text', esc_html__('Use placeholder link text', 'w2dc'), 'is_checked');
 			if ($validation->run()) {
 				$result = $validation->result_array();
 				if ($wpdb->update($wpdb->w2dc_content_fields, array('options' => serialize(array('is_blank' => $result['is_blank'], 'is_nofollow' => $result['is_nofollow'], 'use_link_text' => $result['use_link_text'], 'default_link_text' => $result['default_link_text'], 'use_default_link_text' => $result['use_default_link_text']))), array('id' => $this->id), null, array('%d')))
-					w2dc_addMessage(__('Field configuration was updated successfully!', 'W2DC'));
+					w2dc_addMessage(esc_html__('Field configuration was updated successfully!', 'w2dc'));
 				
 				$w2dc_instance->content_fields_manager->showContentFieldsTable();
 			} else {
@@ -139,7 +141,7 @@ class w2dc_content_field_website extends w2dc_content_field {
 		$url = $value[0];
 		$validation = new w2dc_form_validation();
 		if (!$validation->valid_url($url))
-			$errors[] = __("Website URL field is invalid", "W2DC");
+			$errors[] = esc_html__("Website URL field is invalid", "w2dc");
 
 		$text = (isset($value[1]) ? $value[1] : '');
 		return array('url' => $url, 'text' => $text);

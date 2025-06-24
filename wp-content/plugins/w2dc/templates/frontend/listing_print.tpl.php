@@ -1,4 +1,7 @@
 <?php
+
+// @codingStandardsIgnoreFile
+
 global $w2dc_instance;
 $frontend_controller = new w2dc_directory_controller();
 $frontend_controller->init();
@@ -8,6 +11,8 @@ if ($w2dc_instance->action == 'pdflisting')
 	$pdflisting = true;
 else
 	$pdflisting = false;
+
+$bg_color = '#FFF';
 
 ?>
 
@@ -26,7 +31,7 @@ else
 	<?php wp_head(); ?>
 </head>
 
-<body <?php body_class(); ?> style="background-color: #FFF">
+<body <?php body_class(); ?> style="background-color: {$bg_color}">
 	<div id="page" class="site w2dc-content w2dc-print">
 		<div id="main" class="wrapper">
 			<div class="w2dc-container-fluid entry-content">
@@ -35,8 +40,8 @@ else
 				<?php if (!$pdflisting): ?>
 				<div class="w2dc-print-buttons w2dc-row w2dc-clearfix">
 					<div class="w2dc-col-sm-12">
-						<input type="button" class="w2dc-btn w2dc-btn-primary" onclick="window.print();" value="<?php esc_attr_e('Print listing', 'W2DC'); ?>" />
-						<input type="button" class="w2dc-btn w2dc-btn-primary" onclick="window.close();" value="<?php esc_attr_e('Close window', 'W2DC'); ?>" />
+						<input type="button" class="w2dc-btn w2dc-btn-primary" onclick="window.print();" value="<?php esc_attr_e('Print listing', 'w2dc'); ?>" />
+						<input type="button" class="w2dc-btn w2dc-btn-primary" onclick="window.close();" value="<?php esc_attr_e('Close window', 'w2dc'); ?>" />
 					</div>
 				</div>
 				<?php endif; ?>
@@ -79,16 +84,16 @@ else
 				<div class="w2dc-clearfix"></div>
 
 				<?php if (get_option('w2dc_map_on_single') && $listing->isMap()): ?>
-				<h2><?php _e('Map', 'W2DC'); ?></h2>
+				<h2><?php esc_html_e('Map', 'w2dc'); ?></h2>
 				<?php $listing->renderMap($frontend_controller->hash, false, true); ?>
 				<?php endif; ?>
 				
 				<?php if (count($listing->images) > 1): ?>
-				<h2><?php _e('Images', 'W2DC'); ?> (<?php echo count($listing->images); ?>)</h2>
+				<h2><?php esc_html_e('Images', 'w2dc'); ?> (<?php echo count($listing->images); ?>)</h2>
 				<?php foreach ($listing->images AS $attachment_id=>$image): ?>
 					<?php $src_thumbnail = wp_get_attachment_image_src($attachment_id, 'large'); ?>
-					<div style="margin: 10px">
-						<img src="<?php echo $src_thumbnail[0]; ?>"/>
+					<div class="w2dc-margin-10">
+						<img src="<?php w2dc_esc_e($src_thumbnail[0]); ?>"/>
 					</div>
 				<?php endforeach; ?>
 				<?php endif; ?>
@@ -101,8 +106,8 @@ else
 				<?php if (!$pdflisting): ?>
 				<div class="w2dc-print-buttons w2dc-row">
 					<div class="w2dc-col-sm-12">
-						<input type="button" class="w2dc-btn w2dc-btn-primary" onclick="window.print();" value="<?php esc_attr_e('Print listing', 'W2DC'); ?>" />
-						<input type="button" class="w2dc-btn w2dc-btn-primary" onclick="window.close();" value="<?php esc_attr_e('Close window', 'W2DC'); ?>" />
+						<input type="button" class="w2dc-btn w2dc-btn-primary" onclick="window.print();" value="<?php esc_attr_e('Print listing', 'w2dc'); ?>" />
+						<input type="button" class="w2dc-btn w2dc-btn-primary" onclick="window.close();" value="<?php esc_attr_e('Close window', 'w2dc'); ?>" />
 					</div>
 				</div>
 				<?php endif; ?>

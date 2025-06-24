@@ -10,7 +10,7 @@ abstract class w2rr_widget extends WP_Widget {
 		
 		parent::__construct($id_base, $name, $options);
 		
-		$this->addField("textfield", "title", esc_html__("Title", "W2RR"));
+		$this->addField("textfield", "title", esc_html__("Title", "w2rr"));
 
 		add_action('wp_enqueue_scripts', array($this, 'wp_enqueue_scripts'));
 		add_action('wp_enqueue_scripts', array($this, 'wp_enqueue_custom_style'), 9999);
@@ -417,7 +417,7 @@ abstract class w2rr_widget extends WP_Widget {
 		$name = $this->get_field_name($field->name);
 		$value = isset($instance[$field->name]) ? $instance[$field->name] : '';
 		
-		$post_types = array(0 => esc_html__("- All -", "W2RR"));
+		$post_types = array(0 => esc_html__("- All -", "w2rr"));
 	
 		$_post_types = w2rr_getWorkingPostTypes();
 		
@@ -445,7 +445,7 @@ abstract class w2rr_widget extends WP_Widget {
 		$name = $this->get_field_name($field->name);
 		$value = isset($instance[$field->name]) ? $instance[$field->name] : '';
 		
-		$taxes = array(0 => esc_html__("- No tax -", "W2RR"));
+		$taxes = array(0 => esc_html__("- No tax -", "w2rr"));
 		
 		$_taxes = get_taxonomies(array(), 'objects');
 		

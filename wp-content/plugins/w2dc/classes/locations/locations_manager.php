@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+// @codingStandardsIgnoreFile
 
 class w2dc_locations_manager {
 	
@@ -40,7 +42,7 @@ class w2dc_locations_manager {
 	public function addLocationsMetabox($post_type) {
 		if ($post_type == W2DC_POST_TYPE && ($level = w2dc_getCurrentListingInAdmin()->level) && $level->locations_number > 0) {
 			add_meta_box('w2dc_locations',
-					__('Listing locations', 'W2DC'),
+					esc_html__('Listing locations', 'w2dc'),
 					array($this, 'listingLocationsMetabox'),
 					W2DC_POST_TYPE,
 					'normal',
@@ -94,22 +96,21 @@ class w2dc_locations_manager {
 		global $w2dc_instance;
 
 		$validation = new w2dc_form_validation();
-		$validation->set_rules('w2dc_location[]', __('Listing location', 'W2DC'), 'is_natural');
-		$validation->set_rules('selected_tax[]', __('Selected location', 'W2DC'), 'is_natural');
-		$validation->set_rules('place_id[]', __('Place ID', 'W2DC'));
-		$validation->set_rules('address_line_1[]', __('Address line 1', 'W2DC'));
-		$validation->set_rules('address_line_2[]', __('Address line 2', 'W2DC'));
-		$validation->set_rules('zip_or_postal_index[]', __('Zip code', 'W2DC'));
-		$validation->set_rules('additional_info[]', __('Additional info', 'W2DC'));
-		$validation->set_rules('manual_coords[]', __('Use manual coordinates', 'W2DC'), 'is_checked');
-		$validation->set_rules('map_coords_1[]', __('Latitude', 'W2DC'), 'numeric');
-		$validation->set_rules('map_coords_2[]', __('Longitude', 'W2DC'), 'numeric');
-		$validation->set_rules('map_icon_file[]', __('Map icon file', 'W2DC'));
-		$validation->set_rules('map_zoom', __('Map zoom', 'W2DC'), 'is_natural');
+		$validation->set_rules('w2dc_location[]', esc_html__('Listing location', 'w2dc'), 'is_natural');
+		$validation->set_rules('selected_tax[]', esc_html__('Selected location', 'w2dc'), 'is_natural');
+		$validation->set_rules('place_id[]', esc_html__('Place ID', 'w2dc'));
+		$validation->set_rules('address_line_1[]', esc_html__('Address line 1', 'w2dc'));
+		$validation->set_rules('address_line_2[]', esc_html__('Address line 2', 'w2dc'));
+		$validation->set_rules('zip_or_postal_index[]', esc_html__('Zip code', 'w2dc'));
+		$validation->set_rules('additional_info[]', esc_html__('Additional info', 'w2dc'));
+		$validation->set_rules('manual_coords[]', esc_html__('Use manual coordinates', 'w2dc'), 'is_checked');
+		$validation->set_rules('map_coords_1[]', esc_html__('Latitude', 'w2dc'), 'numeric|greater_than[-90]|less_than[90]');
+		$validation->set_rules('map_coords_2[]', esc_html__('Longitude', 'w2dc'), 'numeric|greater_than[-180]|less_than[180]');
+		$validation->set_rules('map_icon_file[]', esc_html__('Map icon file', 'w2dc'));
+		$validation->set_rules('map_zoom', esc_html__('Map zoom', 'w2dc'), 'is_natural');
 	
 		if (!$validation->run()) {
 			$errors[] = $validation->error_array();
-			//return false;
 		} else {
 			$passed = true;
 			if ($w2dc_instance->content_fields->getContentFieldBySlug('address')->is_required) {
@@ -121,7 +122,7 @@ class w2dc_locations_manager {
 					}
 				}
 				if (!$address_passed) {
-					$errors[] = __('Location, address or zip is required!', 'W2DC');
+					$errors[] = esc_html__('Location, address or zip is required!', 'w2dc');
 					$passed = false;
 				}
 			}
@@ -135,15 +136,12 @@ class w2dc_locations_manager {
 					}
 				}
 				if (!$map_passed) {
-					$errors[] = __('Listing must contain at least one map marker!', 'W2DC');
+					$errors[] = esc_html__('Listing must contain at least one map marker!', 'w2dc');
 					$passed = false;
 				}
 			}
 
-			//if ($passed)
-				return $validation->result_array();
-			//else 
-				//return false;
+			return $validation->result_array();
 		}
 	}
 	
@@ -170,25 +168,28 @@ class w2dc_locations_manager {
 				) {
 					$insert_values = array(
 							'post_id' => $post_id,
-							'location_id' => esc_sql($location_id),
-							'place_id' => esc_sql($validation_results['place_id[]'][$key]),
-							'address_line_1' => esc_sql($validation_results['address_line_1[]'][$key]),
-							'address_line_2' => esc_sql($validation_results['address_line_2[]'][$key]),
-							'zip_or_postal_index' => esc_sql($validation_results['zip_or_postal_index[]'][$key]),
-							'additional_info' => (isset($validation_results['additional_info[]'][$key]) ? esc_sql($validation_results['additional_info[]'][$key]) : ''),
+							'location_id' => $location_id,
+							'place_id' => $validation_results['place_id[]'][$key],
+							'address_line_1' => $validation_results['address_line_1[]'][$key],
+							'address_line_2' => $validation_results['address_line_2[]'][$key],
+							'zip_or_postal_index' => $validation_results['zip_or_postal_index[]'][$key],
+							'additional_info' => (isset($validation_results['additional_info[]'][$key]) ? $validation_results['additional_info[]'][$key] : ''),
 					);
 					if ($level->map) {
 						if (is_array($validation_results['manual_coords[]'])) {
-							if (in_array($key, array_keys($validation_results['manual_coords[]'])) && $validation_results['manual_coords[]'][$key])
+							if (in_array($key, array_keys($validation_results['manual_coords[]'])) && $validation_results['manual_coords[]'][$key]) {
 								$insert_values['manual_coords'] = 1;
-							else
+							} else {
 								$insert_values['manual_coords'] = 0;
-						} else
+							}
+						} else {
 							$insert_values['manual_coords'] = 0;
+						}
 						$insert_values['map_coords_1'] = $validation_results['map_coords_1[]'][$key];
 						$insert_values['map_coords_2'] = $validation_results['map_coords_2[]'][$key];
-						if ($level->map_markers)
-							$insert_values['map_icon_file'] = esc_sql($validation_results['map_icon_file[]'][$key]);
+						if ($level->map_markers) {
+							$insert_values['map_icon_file'] = $validation_results['map_icon_file[]'][$key];
+						}
 					}
 					$keys = array_keys($insert_values);
 
@@ -199,9 +200,7 @@ class w2dc_locations_manager {
 						}
 					}
 					
-					array_walk($keys, 'w2dc_wrapKeys');
-					array_walk($insert_values, 'w2dc_wrapValues');
-					$wpdb->query("INSERT INTO {$wpdb->w2dc_locations_relationships} (" . implode(', ', $keys) . ") VALUES (" . implode(', ', $insert_values) . ")");
+					$wpdb->insert($wpdb->w2dc_locations_relationships, $insert_values);
 				}
 			}
 
@@ -235,9 +234,9 @@ class w2dc_locations_manager {
 	public function taxonomy_columns($original_columns) {
 		$new_columns = $original_columns;
 		array_splice($new_columns, 1);
-		$new_columns['w2dc_location_id'] = __('Location ID', 'W2DC');
-		$new_columns['w2dc_location_image'] = __('Image', 'W2DC');
-		$new_columns['w2dc_location_icon'] = __('Icon', 'W2DC');
+		$new_columns['w2dc_location_id'] = esc_html__('Location ID', 'w2dc');
+		$new_columns['w2dc_location_image'] = esc_html__('Image', 'w2dc');
+		$new_columns['w2dc_location_icon'] = esc_html__('Icon', 'w2dc');
 		if (isset($original_columns['description']))
 			unset($original_columns['description']);
 		return array_merge($new_columns, $original_columns);
@@ -249,7 +248,7 @@ class w2dc_locations_manager {
 		}
 		if ($column_name == 'w2dc_location_image') {
 			$url = $this->get_featured_image_url($term_id);
-			return $row . '<a href="' . get_edit_term_link($term_id, W2DC_LOCATIONS_TAX, W2DC_POST_TYPE) . '">' . ($url ? '<img src="' . $url . '" width="100" /><br />' : '') . __("Select image", "W2DC") . '</a>';
+			return $row . '<a href="' . get_edit_term_link($term_id, W2DC_LOCATIONS_TAX, W2DC_POST_TYPE) . '">' . ($url ? '<img src="' . $url . '" width="100" /><br />' : '') . esc_html__("Select image", "w2dc") . '</a>';
 		}
 		if ($column_name == 'w2dc_location_icon') {
 			return $row . $this->choose_icon_link($term_id);
@@ -291,7 +290,7 @@ class w2dc_locations_manager {
 				if (is_file(W2DC_LOCATION_ICONS_PATH . $icon_file)) {
 					$icons[$location_id] = $icon_file;
 					update_option('w2dc_locations_icons', $icons);
-					echo $location_id;
+					w2dc_esc_e($location_id);
 				}
 			} else {
 				if (isset($icons[$location_id]))
@@ -343,7 +342,7 @@ class w2dc_locations_manager {
 	
 	public function admin_enqueue_scripts_styles() {
 		wp_localize_script(
-				'w2dc_js_functions',
+				'w2dc-js-functions',
 				'w2dc_maps_callback',
 				array(
 						'callback' => 'w2dc_load_maps_api_backend'
@@ -352,13 +351,13 @@ class w2dc_locations_manager {
 	}
 	
 	public function admin_enqueue_location_edit_scripts() {
-		wp_enqueue_script('w2dc_locations_edit_scripts');
+		wp_enqueue_script('w2dc-locations-edit-scripts');
 		wp_localize_script(
-				'w2dc_locations_edit_scripts',
+				'w2dc-locations-edit-scripts',
 				'locations_icons',
 				array(
 						'locations_icons_url' => W2DC_LOCATIONS_ICONS_URL,
-						'ajax_dialog_title' => __('Select location icon', 'W2DC')
+						'ajax_dialog_title' => esc_html__('Select location icon', 'w2dc')
 				)
 		);
 		wp_enqueue_media();

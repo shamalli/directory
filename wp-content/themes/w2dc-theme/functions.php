@@ -160,4 +160,31 @@ function wdt_title_tag($title, $separator = ' - ') {
 }
 add_filter('pre_get_document_title', 'wdt_title_tag', 16, 2);
 
+
+
+
+function wdt_get_document_title($title) {
+
+	$plugin_title = 'Web 2.0 Directory plugin';
+	
+	//var_dump($title);
+	$title = str_ireplace(array(
+			' - ' . $plugin_title,
+			$plugin_title,
+			' - Web 2.0 Directory',
+			'  -  Web 2.0 Directory'
+	), '', $title);
+	//var_dump($title);
+	
+	if ($title) {
+		$title = $title . ' - ' . $plugin_title;
+	} else {
+		$title = $plugin_title;
+	}
+
+	return $title;
+}
+add_filter('pre_get_document_title', 'wdt_get_document_title', 100);
+
+
 ?>

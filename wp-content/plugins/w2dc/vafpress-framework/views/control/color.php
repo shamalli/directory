@@ -1,7 +1,12 @@
-<?php if(!$is_compact) echo VP_W2DC_View::instance()->load('control/template_control_head', $head_info); ?>
+<?php
 
-<label class="indicator" for="<?php echo $name; ?>"><span style="background-color: <?php echo $value; ?>;"></span></label>
-<input id="<?php echo $name; ?>" class="vp-input vp-js-colorpicker"
-	type="text" name="<?php echo $name ?>" value="<?php echo $value; ?>" data-vp-opt="<?php echo $opt; ?>" />
+// @codingStandardsIgnoreFile
 
-<?php if(!$is_compact) echo VP_W2DC_View::instance()->load('control/template_control_foot'); ?>
+?>
+<?php if(!$is_compact) echo W2DC_VP_View::instance()->load('control/template_control_head', $head_info); ?>
+
+<label class="indicator" for="<?php w2dc_esc_e($name); ?>"><span style="background-color: <?php w2dc_esc_e($value); ?>;"></span></label>
+<input id="<?php w2dc_esc_e($name); ?>" class="vp-input vp-js-colorpicker"
+	type="text" name="<?php w2dc_esc_e($name); ?>" value="<?php echo w2dc_esc_e($value); ?>" data-vp-opt="<?php w2dc_esc_e($opt); ?>" />
+
+<?php if(!$is_compact) echo W2DC_VP_View::instance()->load('control/template_control_foot'); ?>

@@ -196,7 +196,8 @@ function vc_action_render_settings_preset_title_prompt() {
 	vc_user_access()->checkAdminNonce()->validateDie()->wpAny( 'edit_posts', 'edit_pages' )->validateDie()->part( 'presets' )->can()->validateDie();
 
 	ob_start();
-	vc_include_template( apply_filters( 'vc_render_settings_preset_title_prompt', 'editors/partials/prompt-presets.tpl.php' ) );
+	$info = vc_get_template( 'editors/partials/param-info.tpl.php', ['description' => esc_html__( 'Enter element title.', 'js_composer' )] );
+	vc_include_template( apply_filters( 'vc_render_settings_preset_title_prompt', 'editors/partials/prompt-presets.tpl.php' ), ['info' => $info] );
 	$html = ob_get_clean();
 
 	$response = array(

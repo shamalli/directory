@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 class w2dc_item_listing_upgrade extends w2dc_item_listing {
 	public $name = 'listing_upgrade';
 	
@@ -13,9 +15,9 @@ class w2dc_item_listing_upgrade extends w2dc_item_listing {
 			$new_level_id = get_post_meta($listing->post->ID, '_new_level_id', true);
 			$new_level = $w2dc_instance->levels->levels_array[$new_level_id];
 			
-			return sprintf(__("From '%s' to '%s' level", 'W2DC'), $old_level->name, $new_level->name);
+			return sprintf(esc_html__("From '%s' to '%s' level", 'w2dc'), $old_level->name, $new_level->name);
 		} else
-			return __("N/A", 'W2DC');
+			return esc_html__("N/A", 'w2dc');
 	}
 	
 	public function getItemOptionsString() {
@@ -28,9 +30,9 @@ class w2dc_item_listing_upgrade extends w2dc_item_listing {
 			$new_level_id = get_post_meta($listing->post->ID, '_new_level_id', true);
 			$new_level = $w2dc_instance->levels->levels_array[$new_level_id];
 			
-			return sprintf(__("From '%s' to '%s' level", 'W2DC'), $old_level->name, $new_level->name);
+			return sprintf(esc_html__("From '%s' to '%s' level", 'w2dc'), $old_level->name, $new_level->name);
 		} else
-			return __("N/A", 'W2DC');
+			return esc_html__("N/A", 'w2dc');
 	}
 
 	public function complete() {
@@ -57,14 +59,14 @@ function w2dc_create_upgrade_listing_invoice($continue, $listing, $continue_invo
 			if (!($invoice_id = get_post_meta($listing->post->ID, '_listing_upgrade_invoice', true)) || !($invoice = getInvoiceByID($invoice_id))) {
 				$invoice_args = array(
 						'item' => 'listing_upgrade',
-						'title' => sprintf(__('Invoice for upgrade of listing: %s', 'W2DC'), $listing->title()),
+						'title' => sprintf(esc_html__('Invoice for upgrade of listing: %s', 'w2dc'), $listing->title()),
 						'is_subscription' => false,
 						'price' => $listing->level->upgrade_meta[$new_level_id]['price'],
 						'item_id' => $listing->post->ID,
 						'author_id' => $listing->post->post_author
 				);
 				if ($invoice_id = call_user_func_array('w2dc_create_invoice', $invoice_args)) {
-					w2dc_addMessage(sprintf(__('New <a href="%s">invoice</a> was created successfully, listing "%s" will be upgraded after payment', 'W2DC'), w2dc_get_edit_invoice_link($invoice_id, 'url'), $listing->title()));
+					w2dc_addMessage(sprintf(wp_kses(__('New <a href="%s">invoice</a> was created successfully, listing "%s" will be upgraded after payment', 'w2dc'), 'post'), w2dc_get_edit_invoice_link($invoice_id, 'url'), $listing->title()));
 					update_post_meta($listing->post->ID, '_listing_upgrade_invoice', $invoice_id);
 					return false;
 				}

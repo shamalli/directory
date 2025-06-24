@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 define('W2DC_INVOICE_TYPE', 'w2dc_invoice');
 
 define('W2DC_PAYMENTS_PATH', plugin_dir_path(__FILE__));
@@ -18,7 +20,6 @@ class w2dc_payments_plugin {
 		global $w2dc_instance;
 		
 		if (!get_option('w2dc_installed_payments'))
-			//w2dc_install_payments();
 			add_action('init', 'w2dc_install_payments', 0);
 		add_action('w2dc_version_upgrade', 'w2dc_upgrade_payments');
 
@@ -107,16 +108,16 @@ class w2dc_payments_plugin {
 	}
 
 	public function add_invoices_table_columns($columns) {
-		$w2dc_columns['item'] = __('Item', 'W2DC');
-		$w2dc_columns['price'] = __('Price', 'W2DC');
-		$w2dc_columns['payment'] = __('Payment', 'W2DC');
+		$w2dc_columns['item'] = esc_html__('Item', 'w2dc');
+		$w2dc_columns['price'] = esc_html__('Price', 'w2dc');
+		$w2dc_columns['payment'] = esc_html__('Payment', 'w2dc');
 
-		$columns['title'] = __('Invoice', 'W2DC');
+		$columns['title'] = esc_html__('Invoice', 'w2dc');
 		
 		unset($columns['cb']);
 
 		return
-			array('id' => __('Id', 'W2DC')) +
+			array('id' => esc_html__('Id', 'w2dc')) +
 			array_slice($columns, 0, 1, true) +
 			$w2dc_columns +
 			array_slice($columns, 1, count($columns)-1, true);
@@ -125,7 +126,7 @@ class w2dc_payments_plugin {
 	public function manage_invoices_table_rows($column, $invoice_id) {
 		switch ($column) {
 			case "id":
-				echo $invoice_id;
+				w2dc_esc_e($invoice_id);
 				break;
 			case "item":
 				if (($invoice = getInvoiceByID($invoice_id)) && is_object($invoice->item_object))
@@ -138,15 +139,15 @@ class w2dc_payments_plugin {
 			case "payment":
 				if ($invoice = getInvoiceByID($invoice_id))
 					if ($invoice->status == 'unpaid') {
-						echo '<span class="w2dc-badge w2dc-invoice-status-unpaid">' . __('unpaid', 'W2DC') . '</span>';
+						echo '<span class="w2dc-badge w2dc-invoice-status-unpaid">' . esc_html__('unpaid', 'w2dc') . '</span>';
 						if (w2dc_current_user_can_edit_listing($invoice->post->ID) && current_user_can('edit_published_posts'))
-							echo '<br /><a href="' . w2dc_get_edit_invoice_link($invoice_id) . '">' . __('pay invoice', 'W2DC') . '</a>';
+							echo '<br /><a href="' . w2dc_get_edit_invoice_link($invoice_id) . '">' . esc_html__('pay invoice', 'w2dc') . '</a>';
 					} elseif ($invoice->status == 'paid') {
-						echo '<span class="w2dc-badge w2dc-invoice-status-paid">' . __('paid', 'W2DC') . '</span>';
+						echo '<span class="w2dc-badge w2dc-invoice-status-paid">' . esc_html__('paid', 'w2dc') . '</span>';
 						if ($invoice->gateway)
 							echo '<br /><b>' . gatewayName($invoice->gateway) . '</b>';
 					} elseif ($invoice->status == 'pending') {
-						echo '<span class="w2dc-badge w2dc-invoice-status-pending">' . __('pending', 'W2DC') . '</span>';
+						echo '<span class="w2dc-badge w2dc-invoice-status-pending">' . esc_html__('pending', 'w2dc') . '</span>';
 						if ($invoice->gateway)
 							echo '<br /><b>' . gatewayName($invoice->gateway) . '</b>';
 					}
@@ -158,7 +159,6 @@ class w2dc_payments_plugin {
 		if ($post->post_type == W2DC_INVOICE_TYPE) {
 			unset($actions['inline hide-if-no-js']);
 			unset($actions['view']);
-			//unset($actions['trash']);
 		}
 		return $actions;
 	}
@@ -178,7 +178,7 @@ class w2dc_payments_plugin {
 	public function add_invoice_info_metabox($post_type) {
 		if ($post_type == W2DC_INVOICE_TYPE) {
 			add_meta_box('w2dc_invoice_info',
-					__('Invoice Info', 'W2DC'),
+					esc_html__('Invoice Info', 'w2dc'),
 					array($this, 'invoice_info_metabox'),
 					W2DC_INVOICE_TYPE,
 					'normal',
@@ -197,7 +197,7 @@ class w2dc_payments_plugin {
 		if ($post_type == W2DC_INVOICE_TYPE) {
 			if ($post && ($invoice = getInvoiceByID($post->ID)) && $invoice->log) {
 				add_meta_box('w2dc_invoice_log',
-						__('Invoice Log', 'W2DC'),
+						esc_html__('Invoice Log', 'w2dc'),
 						array($this, 'invoice_log_metabox'),
 						W2DC_INVOICE_TYPE,
 						'normal',
@@ -217,7 +217,7 @@ class w2dc_payments_plugin {
 		if ($post_type == W2DC_INVOICE_TYPE && $post && ($invoice = getInvoiceByID($post->ID))) {
 			if ($invoice->isPaymentMetabox()) {
 				add_meta_box('w2dc_invoice_payment',
-						__('Invoice Payment - choose payment gateway', 'W2DC'),
+						esc_html__('Invoice Payment - choose payment gateway', 'w2dc'),
 						array($this, 'invoice_payment_metabox'),
 						W2DC_INVOICE_TYPE,
 						'normal',
@@ -240,7 +240,7 @@ class w2dc_payments_plugin {
 	public function add_invoice_actions_metabox($post_type) {
 		if ($post_type == W2DC_INVOICE_TYPE) {
 			add_meta_box('w2dc_invoice_actions',
-					__('Invoice actions', 'W2DC'),
+					esc_html__('Invoice actions', 'w2dc'),
 					array($this, 'invoice_actions_metabox'),
 					W2DC_INVOICE_TYPE,
 					'side',
@@ -256,65 +256,59 @@ class w2dc_payments_plugin {
 	public function plugin_settings($options) {
 		$options['template']['menus']['payments'] = array(
 			'name' => 'payments',
-			'title' => __('Payments settings', 'W2DC'),
+			'title' => esc_html__('Payments settings', 'w2dc'),
 			'icon' => 'font-awesome:w2dc-fa-dollar',
 			'controls' => array(
 				'payments' => array(
 					'type' => 'section',
-					'title' => __('General payments settings', 'W2DC'),
-					'description' => __('These settings are not related to price content fields. To see content fields settings - click on \'Configure\' link near price content field.', 'W2DC'),
+					'title' => esc_html__('General payments settings', 'w2dc'),
+					'description' => esc_html__('These settings are not related to price content fields. To see content fields settings - click on \'Configure\' link near price content field.', 'w2dc'),
 					'fields' => array(
-						/* array(
-							'type' => 'toggle',
-							'name' => 'w2dc_payments_free_for_admins',
-							'label' => __('Any services are Free for administrators', 'W2DC'),
-							'default' => get_option('w2dc_payments_free_for_admins'),
-						), */
 						array(
 							'type' => 'select',
 							'name' => 'w2dc_payments_currency',
-							'label' => __('Currency', 'W2DC'),
+							'label' => esc_html__('Currency', 'w2dc'),
 							'items' => array(
-								array('value' => 'USD', 'label' => __('US Dollars ($)', 'W2DC')),
-								array('value' => 'EUR', 'label' => __('Euros (€)', 'W2DC')),
-								array('value' => 'GBP', 'label' => __('Pounds Sterling (£)', 'W2DC')),
-								array('value' => 'AUD', 'label' => __('Australian Dollars ($)', 'W2DC')),
-								array('value' => 'BRL', 'label' => __('Brazilian Real (R$)', 'W2DC')),
-								array('value' => 'CAD', 'label' => __('Canadian Dollars ($)', 'W2DC')),
-								array('value' => 'CZK', 'label' => __('Czech Koruna (Kč)', 'W2DC')),
-								array('value' => 'DKK', 'label' => __('Danish Krone (kr)', 'W2DC')),
-								array('value' => 'HKD', 'label' => __('Hong Kong Dollar ($)', 'W2DC')),
-								array('value' => 'HUF', 'label' => __('Hungarian Forint (Ft)', 'W2DC')),
-								array('value' => 'ILS', 'label' => __('Israeli Shekel (₪)', 'W2DC')),
-								array('value' => 'INR', 'label' => __('Indian Rupee (₹)', 'W2DC')),
-								array('value' => 'JPY', 'label' => __('Japanese Yen (¥)', 'W2DC')),
-								array('value' => 'MYR', 'label' => __('Malaysian Ringgits (RM)', 'W2DC')),
-								array('value' => 'MXN', 'label' => __('Mexican Peso ($)', 'W2DC')),
-								array('value' => 'NZD', 'label' => __('New Zealand Dollar ($)', 'W2DC')),
-								array('value' => 'NOK', 'label' => __('Norwegian Krone (kr)', 'W2DC')),
-								array('value' => 'PHP', 'label' => __('Philippine Pesos (P)', 'W2DC')),
-								array('value' => 'PLN', 'label' => __('Polish Zloty (zł)', 'W2DC')),
-								array('value' => 'RUB', 'label' => __('Russian Ruble (₽)', 'W2DC')),
-								array('value' => 'SGD', 'label' => __('Singapore Dollar ($)', 'W2DC')),
-								array('value' => 'SEK', 'label' => __('Swedish Krona (kr)', 'W2DC')),
-								array('value' => 'CHF', 'label' => __('Swiss Franc (Fr)', 'W2DC')),
-								array('value' => 'TWD', 'label' => __('Taiwan New Dollar ($)', 'W2DC')),
-								array('value' => 'THB', 'label' => __('Thai Baht (฿)', 'W2DC')),
-								array('value' => 'TRY', 'label' => __('Turkish Lira (₤)', 'W2DC')),
+								array('value' => 'USD', 'label' => esc_html__('US Dollars ($)', 'w2dc')),
+								array('value' => 'EUR', 'label' => esc_html__('Euros (€)', 'w2dc')),
+								array('value' => 'GBP', 'label' => esc_html__('Pounds Sterling (£)', 'w2dc')),
+								array('value' => 'AUD', 'label' => esc_html__('Australian Dollars ($)', 'w2dc')),
+								array('value' => 'BRL', 'label' => esc_html__('Brazilian Real (R$)', 'w2dc')),
+								array('value' => 'CAD', 'label' => esc_html__('Canadian Dollars ($)', 'w2dc')),
+								array('value' => 'CZK', 'label' => esc_html__('Czech Koruna (Kč)', 'w2dc')),
+								array('value' => 'DKK', 'label' => esc_html__('Danish Krone (kr)', 'w2dc')),
+								array('value' => 'HKD', 'label' => esc_html__('Hong Kong Dollar ($)', 'w2dc')),
+								array('value' => 'HUF', 'label' => esc_html__('Hungarian Forint (Ft)', 'w2dc')),
+								array('value' => 'ILS', 'label' => esc_html__('Israeli Shekel (₪)', 'w2dc')),
+								array('value' => 'INR', 'label' => esc_html__('Indian Rupee (₹)', 'w2dc')),
+								array('value' => 'JPY', 'label' => esc_html__('Japanese Yen (¥)', 'w2dc')),
+								array('value' => 'MYR', 'label' => esc_html__('Malaysian Ringgits (RM)', 'w2dc')),
+								array('value' => 'MXN', 'label' => esc_html__('Mexican Peso ($)', 'w2dc')),
+								array('value' => 'NZD', 'label' => esc_html__('New Zealand Dollar ($)', 'w2dc')),
+								array('value' => 'NOK', 'label' => esc_html__('Norwegian Krone (kr)', 'w2dc')),
+								array('value' => 'PHP', 'label' => esc_html__('Philippine Pesos (P)', 'w2dc')),
+								array('value' => 'PLN', 'label' => esc_html__('Polish Zloty (zł)', 'w2dc')),
+								array('value' => 'RUB', 'label' => esc_html__('Russian Ruble (₽)', 'w2dc')),
+								array('value' => 'SGD', 'label' => esc_html__('Singapore Dollar ($)', 'w2dc')),
+								array('value' => 'SEK', 'label' => esc_html__('Swedish Krona (kr)', 'w2dc')),
+								array('value' => 'CHF', 'label' => esc_html__('Swiss Franc (Fr)', 'w2dc')),
+								array('value' => 'TWD', 'label' => esc_html__('Taiwan New Dollar ($)', 'w2dc')),
+								array('value' => 'THB', 'label' => esc_html__('Thai Baht (฿)', 'w2dc')),
+								array('value' => 'TRY', 'label' => esc_html__('Turkish Lira (₤)', 'w2dc')),
 							),
-							'description' => __('only PayPal currencies supported', 'W2DC'),
+							'description' => esc_html__('only PayPal currencies supported', 'w2dc'),
 							'default' => array(get_option('w2dc_payments_currency')),
 						),
 						array(
 							'type' => 'textbox',
 							'name' => 'w2dc_payments_symbol_code',
-							'label' => __('Currency symbol or code', 'W2DC'),
+							'label' => esc_html__('Currency symbol or code', 'w2dc'),
 							'default' => get_option('w2dc_payments_symbol_code'),
 						),
 						array(
 							'type' => 'radiobutton',
 							'name' => 'w2dc_payments_symbol_position',
-							'label' => __('Currency symbol or code position', 'W2DC'),
+							'label' => esc_html__('Currency symbol or code position', 'w2dc'),
 							'items' => array(
 								array('value' => 1, 'label' => '$1.00'),
 								array('value' => 2, 'label' => '$ 1.00'),
@@ -326,28 +320,28 @@ class w2dc_payments_plugin {
 						array(
 							'type' => 'radiobutton',
 							'name' => 'w2dc_payments_decimal_separator',
-							'label' => __('Decimal separator', 'W2DC'),
+							'label' => esc_html__('Decimal separator', 'w2dc'),
 							'items' => array(
-								array('value' => '.', 'label' => __('dot', 'W2DC')),
-								array('value' => ',', 'label' => __('comma', 'W2DC')),
+								array('value' => '.', 'label' => esc_html__('dot', 'w2dc')),
+								array('value' => ',', 'label' => esc_html__('comma', 'w2dc')),
 							),
 							'default' => array(get_option('w2dc_payments_decimal_separator')),
 						),
 						array(
 							'type' => 'toggle',
 							'name' => 'w2dc_hide_decimals',
-							'label' => __('Hide decimals in levels price table', 'W2DC'),
+							'label' => esc_html__('Hide decimals in levels price table', 'w2dc'),
 							'default' => get_option('w2dc_hide_decimals'),
 						),
 						array(
 							'type' => 'radiobutton',
 							'name' => 'w2dc_payments_thousands_separator',
-							'label' => __('Thousands separator', 'W2DC'),
+							'label' => esc_html__('Thousands separator', 'w2dc'),
 							'items' => array(
-								array('value' => '', 'label' => __('no separator', 'W2DC')),
-								array('value' => '.', 'label' => __('dot', 'W2DC')),
-								array('value' => ',', 'label' => __('comma', 'W2DC')),
-								array('value' => 'space', 'label' => __('space', 'W2DC')),
+								array('value' => '', 'label' => esc_html__('no separator', 'w2dc')),
+								array('value' => '.', 'label' => esc_html__('dot', 'w2dc')),
+								array('value' => ',', 'label' => esc_html__('comma', 'w2dc')),
+								array('value' => 'space', 'label' => esc_html__('space', 'w2dc')),
 							),
 							'default' => array(get_option('w2dc_payments_thousands_separator')),
 						),
@@ -355,42 +349,42 @@ class w2dc_payments_plugin {
 				),
 				'taxes' => array(
 					'type' => 'section',
-					'title' => __('Sales tax', 'W2DC'),
+					'title' => esc_html__('Sales tax', 'w2dc'),
 					'fields' => array(
 						array(
 							'type' => 'toggle',
 							'name' => 'w2dc_enable_taxes',
-							'label' => __('Enable taxes', 'W2DC'),
+							'label' => esc_html__('Enable taxes', 'w2dc'),
 							'default' => get_option('w2dc_enable_taxes'),
 						),
 						array(
 							'type' => 'textarea',
 							'name' => 'w2dc_taxes_info',
-							'label' => __('Selling company information', 'W2DC'),
+							'label' => esc_html__('Selling company information', 'w2dc'),
 							'default' => get_option('w2dc_taxes_info'),
 						),
 						array(
 							'type' => 'textbox',
 							'name' => 'w2dc_tax_name',
-							'label' => __('Tax name', 'W2DC'),
-							'description' => __('abbreviation, e.g. "VAT"', 'W2DC'),
+							'label' => esc_html__('Tax name', 'w2dc'),
+							'description' => esc_html__('abbreviation, e.g. "VAT"', 'w2dc'),
 							'default' => get_option('w2dc_tax_name'),
 						),
 						array(
 							'type' => 'textbox',
 							'name' => 'w2dc_tax_rate',
-							'label' => __('Tax rate', 'W2DC'),
-							'description' => __('In percents', 'W2DC'),
+							'label' => esc_html__('Tax rate', 'w2dc'),
+							'description' => esc_html__('In percents', 'w2dc'),
 							'default' => get_option('w2dc_tax_rate'),
 						),
 						array(
 							'type' => 'radiobutton',
 							'name' => 'w2dc_taxes_mode',
-							'label' => __('Include or exclude value added taxes', 'W2DC'),
-							'description' => __('Do you want prices on the website to be quoted including or excluding value added taxes?', 'W2DC'),
+							'label' => esc_html__('Include or exclude value added taxes', 'w2dc'),
+							'description' => esc_html__('Do you want prices on the website to be quoted including or excluding value added taxes?', 'w2dc'),
 							'items' => array(
-								array('value' => 'include', 'label' => __('Include', 'W2DC')),
-								array('value' => 'exclude', 'label' => __('Exclude', 'W2DC')),
+								array('value' => 'include', 'label' => esc_html__('Include', 'w2dc')),
+								array('value' => 'exclude', 'label' => esc_html__('Exclude', 'w2dc')),
 							),
 							'default' => array(get_option('w2dc_taxes_mode')),
 						),
@@ -398,87 +392,87 @@ class w2dc_payments_plugin {
 				),
 				'bank' => array(
 					'type' => 'section',
-					'title' => __('Bank transfer settings', 'W2DC'),
+					'title' => esc_html__('Bank transfer settings', 'w2dc'),
 					'fields' => array(
 						array(
 							'type' => 'toggle',
 							'name' => 'w2dc_allow_bank',
-							'label' => __('Allow bank transfer', 'W2DC'),
+							'label' => esc_html__('Allow bank transfer', 'w2dc'),
 							'default' => get_option('w2dc_allow_bank'),
 						),
 						array(
 							'type' => 'textarea',
 							'name' => 'w2dc_bank_info',
-							'label' => __('Bank transfer information', 'W2DC'),
+							'label' => esc_html__('Bank transfer information', 'w2dc'),
 							'default' => get_option('w2dc_bank_info'),
 						),
 					),
 				),
 				'paypal' => array(
 					'type' => 'section',
-					'title' => __('PayPal settings', 'W2DC'),
+					'title' => esc_html__('PayPal settings', 'w2dc'),
 					'fields' => array(
 						array(
 							'type' => 'textbox',
 							'name' => 'w2dc_paypal_email',
-							'label' => __('Business email', 'W2DC'),
+							'label' => esc_html__('Business email', 'w2dc'),
 							'default' => get_option('w2dc_paypal_email'),
 						),
 						array(
 							'type' => 'toggle',
 							'name' => 'w2dc_paypal_single',
-							'label' => __('Allow single payment', 'W2DC'),
+							'label' => esc_html__('Allow single payment', 'w2dc'),
 							'default' => get_option('w2dc_paypal_single'),
 						),
 						array(
 							'type' => 'toggle',
 							'name' => 'w2dc_paypal_subscriptions',
-							'label' => __('Allow subscriptions', 'W2DC'),
-							'description' => __('Only for listings with limited active period', 'W2DC'),
+							'label' => esc_html__('Allow subscriptions', 'w2dc'),
+							'description' => esc_html__('Only for listings with limited active period', 'w2dc'),
 							'default' => get_option('w2dc_paypal_subscriptions'),
 						),
 						array(
 							'type' => 'toggle',
 							'name' => 'w2dc_paypal_test',
-							'label' => __('Test Sandbox mode', 'W2DC'),
-							'description' => sprintf(__('You must have a <a href="%s" target="_blank">PayPal Sandbox</a> account setup before using this feature. <a href="%s">IPN URL</a>', 'W2DC'), 'https://sandbox.paypal.com/', home_url('ipn_token/'.ipn_token().'/gateway/paypal')),
+							'label' => esc_html__('Test Sandbox mode', 'w2dc'),
+							'description' => sprintf(wp_kses(__('You must have a <a href="%s" target="_blank">PayPal Sandbox</a> account setup before using this feature. <a href="%s">IPN URL</a>', 'w2dc'), 'post'), 'https://sandbox.paypal.com/', home_url('ipn_token/'.ipn_token().'/gateway/paypal')),
 							'default' => get_option('w2dc_paypal_test'),
 						),
 					),
 				),
 				'stripe' => array(
 					'type' => 'section',
-					'title' => __('Stripe settings', 'W2DC'),
+					'title' => esc_html__('Stripe settings', 'w2dc'),
 					'fields' => array(
 						array(
 							'type' => 'textbox',
 							'name' => 'w2dc_stripe_test_secret',
-							'label' => __('Test secret key', 'W2DC'),
+							'label' => esc_html__('Test secret key', 'w2dc'),
 							'default' => get_option('w2dc_stripe_test_secret'),
 						),
 						array(
 							'type' => 'textbox',
 							'name' => 'w2dc_stripe_test_public',
-							'label' => __('Test publishable key', 'W2DC'),
+							'label' => esc_html__('Test publishable key', 'w2dc'),
 							'default' => get_option('w2dc_stripe_test_public'),
 						),
 						array(
 							'type' => 'textbox',
 							'name' => 'w2dc_stripe_live_secret',
-							'label' => __('Live secret key', 'W2DC'),
+							'label' => esc_html__('Live secret key', 'w2dc'),
 							'default' => get_option('w2dc_stripe_live_secret'),
 						),
 						array(
 							'type' => 'textbox',
 							'name' => 'w2dc_stripe_live_public',
-							'label' => __('Live publishable key', 'W2DC'),
+							'label' => esc_html__('Live publishable key', 'w2dc'),
 							'default' => get_option('w2dc_stripe_live_public'),
 						),
 						array(
 							'type' => 'toggle',
 							'name' => 'w2dc_stripe_test',
-							'label' => __('Test Sandbox mode', 'W2DC'),
-							'description' => __('You can only use <a href="http://stripe.com/" target="_blank">Stripe</a> in test mode until you activate your account.', 'W2DC'),
+							'label' => esc_html__('Test Sandbox mode', 'w2dc'),
+							'description' => wp_kses(__('You can only use <a href="http://stripe.com/" target="_blank">Stripe</a> in test mode until you activate your account.', 'w2dc'), 'post'),
 							'default' => get_option('w2dc_stripe_test'),
 						),
 					),
@@ -489,17 +483,17 @@ class w2dc_payments_plugin {
 		$options['template']['menus']['notifications']['controls']['notifications']['fields'][] = array(
 				'type' => 'textarea',
 				'name' => 'w2dc_invoice_create_notification',
-				'label' => __('Notification of new invoice', 'W2DC'),
+				'label' => esc_html__('Notification of new invoice', 'w2dc'),
 				'default' => get_option('w2dc_invoice_create_notification'),
-				'description' => __('Tags allowed: ', 'W2DC') . '[author], [invoice], [id], [billing], [item], [price], [link]',
+				'description' => esc_html__('Tags allowed: ', 'w2dc') . '[author], [invoice], [id], [billing], [item], [price], [link]',
 		);
 
 		$options['template']['menus']['notifications']['controls']['notifications']['fields'][] = array(
 				'type' => 'textarea',
 				'name' => 'w2dc_invoice_paid_notification',
-				'label' => __('Notification of paid invoice', 'W2DC'),
+				'label' => esc_html__('Notification of paid invoice', 'w2dc'),
 				'default' => get_option('w2dc_invoice_paid_notification'),
-				'description' => __('Tags allowed: ', 'W2DC') . '[author], [invoice], [price]',
+				'description' => esc_html__('Tags allowed: ', 'w2dc') . '[author], [invoice], [price]',
 		);
 		
 		return $options;
@@ -508,19 +502,19 @@ class w2dc_payments_plugin {
 	public function register_invoice_type() {
 		$args = array(
 			'labels' => array(
-				'name' => __('Directory invoices', 'W2DC'),
-				'singular_name' => __('Directory invoice', 'W2DC'),
-				'edit_item' => __('View Invoice', 'W2DC'),
-				'search_items' => __('Search invoices', 'W2DC'),
-				'not_found' =>  __('No invoices found', 'W2DC'),
-				'not_found_in_trash' => __('No invoices found in trash', 'W2DC')
+				'name' => esc_html__('Directory invoices', 'w2dc'),
+				'singular_name' => esc_html__('Directory invoice', 'w2dc'),
+				'edit_item' => esc_html__('View Invoice', 'w2dc'),
+				'search_items' => esc_html__('Search invoices', 'w2dc'),
+				'not_found' =>  esc_html__('No invoices found', 'w2dc'),
+				'not_found_in_trash' => esc_html__('No invoices found in trash', 'w2dc')
 			),
 			'capabilities' => array(
 				'create_posts' => false, // Removes support for the "Add New" function ( use 'do_not_allow' instead of false for multisite set ups )
 			),
 			'map_meta_cap' => true, // Set to `false`, if users are not allowed to edit/delete existing posts
 			'has_archive' => true,
-			'description' => __('Directory invoices', 'W2DC'),
+			'description' => esc_html__('Directory invoices', 'w2dc'),
 			'show_ui' => true,
 			'supports' => array('author'),
 			'menu_icon' => W2DC_PAYMENTS_RESOURCES_URL . 'images/dollar.png',
@@ -571,8 +565,8 @@ class w2dc_payments_plugin {
 	}
 	
 	public function levels_price_in_level_validation($validation) {
-		$validation->set_rules('price', __('Listings price', 'W2DC'), 'is_numeric');
-		$validation->set_rules('raiseup_price', __('Listings raise up price', 'W2DC'), 'is_numeric');
+		$validation->set_rules('price', esc_html__('Listings price', 'w2dc'), 'is_numeric');
+		$validation->set_rules('raiseup_price', esc_html__('Listings raise up price', 'w2dc'), 'is_numeric');
 		
 		return $validation;
 	}
@@ -584,7 +578,7 @@ class w2dc_payments_plugin {
 	}
 	
 	public function levels_price_table_header($columns) {
-		$w2dc_columns['price'] = __('Price', 'W2DC');
+		$w2dc_columns['price'] = esc_html__('Price', 'w2dc');
 		
 		return array_slice($columns, 0, 2, true) + $w2dc_columns + array_slice($columns, 2, count($columns)-2, true);
 	}
@@ -667,8 +661,8 @@ class w2dc_payments_plugin {
 		if ($level && recalcPrice($level->price)) {
 			echo '<div class="w2dc-adv-line"></div>';
 			echo '<div class="w2dc-adv-step">';
-			echo '<div class="w2dc-adv-circle">' . __('Step', 'W2DC') . $step++ . '</div>';
-			echo __('Pay Invoice', 'W2DC');
+			echo '<div class="w2dc-adv-circle">' . esc_html__('Step', 'w2dc') . $step++ . '</div>';
+			echo esc_html__('Pay Invoice', 'w2dc');
 			echo '</div>';
 		}
 		return $step++;
@@ -686,7 +680,7 @@ class w2dc_payments_plugin {
 		global $w2dc_instance;
 		
 		if ($w2dc_instance->listings_packages->can_user_create_listing_in_level($listing->level->id)) {
-			return $link_text .' - ' . __('FREE', 'W2DC');
+			return $link_text .' - ' . esc_html__('FREE', 'w2dc');
 		} else {
 			return $link_text .' - ' . formatPrice(recalcPrice($listing->level->price));
 		}
@@ -744,8 +738,8 @@ class w2dc_payments_plugin {
 						$invoice->setGateway($gateway);
 
 						$gateway = $invoice->getGatewayObject();
-						$invoice->logMessage(sprintf(__('Payment gateway was selected: %s', 'W2DC'), $gateway->name()));
-						w2dc_addMessage(__('Payment gateway was selected!', 'W2DC'));
+						$invoice->logMessage(sprintf(esc_html__('Payment gateway was selected: %s', 'w2dc'), $gateway->name()));
+						w2dc_addMessage(esc_html__('Payment gateway was selected!', 'w2dc'));
 						$gateway->submitPayment($invoice);
 						$redirect = true;
 					}
@@ -754,18 +748,18 @@ class w2dc_payments_plugin {
 				if (isset($_GET['invoice_action']) && $_GET['invoice_action'] == 'reset_gateway') {
 					$invoice->setStatus('unpaid');
 					$invoice->setGateway('');
-					$invoice->logMessage(__('Payment gateway was reset', 'W2DC'));
-					w2dc_addMessage(__('Payment gateway was reset!', 'W2DC'));
+					$invoice->logMessage(esc_html__('Payment gateway was reset', 'w2dc'));
+					w2dc_addMessage(esc_html__('Payment gateway was reset!', 'w2dc'));
 					$redirect = true;
 				}
 				
 				if (isset($_GET['invoice_action']) && $_GET['invoice_action'] == 'set_paid' && $invoice->status != 'paid' && current_user_can('edit_others_posts')) {
 					if ($invoice->item_object->complete()) {
 						$invoice->setStatus('paid');
-						$invoice->logMessage(__('Invoice was manually set as paid', 'W2DC'));
-						w2dc_addMessage(__('Invoice was manually set as paid!', 'W2DC'));
+						$invoice->logMessage(esc_html__('Invoice was manually set as paid', 'w2dc'));
+						w2dc_addMessage(esc_html__('Invoice was manually set as paid!', 'w2dc'));
 					} else 
-						w2dc_addMessage(__('An error has occured!', 'W2DC'), 'error');
+						w2dc_addMessage(esc_html__('An error has occured!', 'w2dc'), 'error');
 					$redirect = true;
 				}
 
@@ -826,7 +820,7 @@ class w2dc_payments_plugin {
 		global $w2dc_instance;
 		$this->process_invoices_query($frontend_controller);
 
-		echo '<li ' . (($frontend_controller->active_tab == 'invoices') ? 'class="w2dc-active"' : '') . '><a href="' . w2dc_dashboardUrl(array('w2dc_action' => 'invoices')) . '">' . __('Invoices', 'W2DC'). ' (' . $frontend_controller->invoices_query->found_posts . ')</a></li>';
+		echo '<li ' . (($frontend_controller->active_tab == 'invoices') ? 'class="w2dc-active"' : '') . '><a href="' . w2dc_dashboardUrl(array('w2dc_action' => 'invoices')) . '">' . esc_html__('Invoices', 'w2dc'). ' (' . $frontend_controller->invoices_query->found_posts . ')</a></li>';
 	}
 	
 	public function handle_dashboard_controller($frontend_controller) {
@@ -933,24 +927,24 @@ class w2dc_payments_plugin {
 			switch ($invoice->item_object->name) {
 				case 'listing':
 					$level_id = $listing->level->id;
-					$action = __("activate", "W2DC");
+					$action = esc_html__("activate", "w2dc");
 					break;
 				case 'listing_raiseup':
 					$level_id = $listing->level->id;
-					$action = __("raise up", "W2DC");
+					$action = esc_html__("raise up", "w2dc");
 					break;
 				case 'listing_upgrade':
 					$level_id = get_post_meta($listing->post->ID, '_new_level_id', true);
-					$action = __("upgrade", "W2DC");
+					$action = esc_html__("upgrade", "w2dc");
 					break;
 			}
 			
 			if ($invoice->status != 'paid') {
 				if ($w2dc_instance->listings_packages->can_user_create_listing_in_level($level_id)) {
-					$title = esc_attr(strip_tags($w2dc_instance->listings_packages->available_listings_descr($level_id, __('renew', 'W2DC'))));
+					$title = esc_attr(strip_tags($w2dc_instance->listings_packages->available_listings_descr($level_id, esc_html__('renew', 'w2dc'))));
 					echo "<br />";
 					echo $w2dc_instance->listings_packages->available_listings_descr($level_id, $action);
-					echo __('You can', 'W2DC') . ' <a href="' . wp_nonce_url(add_query_arg('apply_listing_payment', $listing->post->ID), 'w2dc_invoice_apply', '_nonce') . '">' . __('apply payment', 'W2DC') . '</a>.';
+					echo esc_html__('You can', 'w2dc') . ' <a href="' . wp_nonce_url(add_query_arg('apply_listing_payment', $listing->post->ID), 'w2dc_invoice_apply', '_nonce') . '">' . esc_html__('apply payment', 'w2dc') . '</a>.';
 				}
 			}
 		}
@@ -978,7 +972,7 @@ class w2dc_payments_plugin {
 					if ($w2dc_instance->listings_packages->can_user_create_listing_in_level($level_id)) {
 						if ($invoice->item_object->complete()) {
 							$invoice->setStatus('paid');
-							$invoice->logMessage(__('Payment applied from user listings package.', 'W2DC'));
+							$invoice->logMessage(esc_html__('Payment applied from user listings package.', 'w2dc'));
 	
 							$w2dc_instance->listings_packages->process_listing_creation_for_user($listing->level->id);
 							
@@ -1002,7 +996,7 @@ function recalcPrice($price) {
 
 function formatPrice($value = 0) {
 	if ($value == 0) {
-		$out = '<span class="w2dc-payments-free">' . __('FREE', 'W2DC') . '</span>';
+		$out = '<span class="w2dc-payments-free">' . esc_html__('FREE', 'w2dc') . '</span>';
 	} else {
 		$decimal_separator = get_option('w2dc_payments_decimal_separator');
 

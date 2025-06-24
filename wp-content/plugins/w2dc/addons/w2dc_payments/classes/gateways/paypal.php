@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 class w2dc_paypal extends w2dc_payment_gateway
 {
     /**
@@ -32,11 +34,11 @@ class w2dc_paypal extends w2dc_payment_gateway
     }
     
     public function name() {
-    	return __('PayPal', 'W2DC');
+    	return esc_html__('PayPal', 'w2dc');
     }
 
     public function description() {
-    	return __('One time payment by PayPal. After successful transaction listing will become active and raised up.', 'W2DC');
+    	return esc_html__('One time payment by PayPal. After successful transaction listing will become active and raised up.', 'w2dc');
     }
     
     public function buy_button() {
@@ -166,10 +168,10 @@ function w2dc_handle_ipn_paypal($wp) {
 									foreach ($paypal->ipnData AS $key=>$value) {
 										$transaction_data[] = $key . ' = ' . esc_attr($value);
 									}
-									$invoice->logMessage(sprintf(__('Payment successfully completed. Transaction data: %s', 'W2DC'), implode('; ', $transaction_data)));
+									$invoice->logMessage(sprintf(esc_html__('Payment successfully completed. Transaction data: %s', 'w2dc'), implode('; ', $transaction_data)));
 								}
 							} else {
-								$invoice->logMessage(sprintf(__('Payment status: %s', 'W2DC'),  $paypal->ipnData['payment_status']));
+								$invoice->logMessage(sprintf(esc_html__('Payment status: %s', 'w2dc'),  $paypal->ipnData['payment_status']));
 							}
 						}
 					}
@@ -184,16 +186,6 @@ function w2dc_handle_ipn_paypal($wp) {
 	}
 }
 add_action('parse_request', 'w2dc_handle_ipn_paypal');
-
-
-// Paypal does not allow you to active your IPN in Paypal if a given URL has GET arguments, so we have to use permalinks
-
-
-/* function w2dc_handle_ipn_paypal_rewrite_rules($wp_rewrite) {
-	$new_rules = array('ipn_token/'.ipn_token().'/gateway/paypal' => 'index.php?ipn_token='.ipn_token().'&gateway=paypal');
-	$wp_rewrite->rules = $new_rules + $wp_rewrite->rules;
-} */
-//add_action('generate_rewrite_rules', 'w2dc_handle_ipn_paypal_rewrite_rules');
 
 function w2dc_handle_ipn_paypal_rewrite_rules($rules) {
 	return array('ipn_token/'.ipn_token().'/gateway/paypal' => 'index.php?ipn_token='.ipn_token().'&gateway=paypal') + $rules;

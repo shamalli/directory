@@ -24,7 +24,7 @@
 				spacer: 'sticky-spacer',
 			},
 			isRTL: false,
-			relativeTarget: 'parent',
+			isScrollSnapActive: false,
 			handleScrollbarWidth: false,
 		};
 
@@ -32,6 +32,7 @@
 			$element = $( element ).addClass( settings.classes.sticky );
 
 			elements.$window = $( window );
+			elements.$body = $( document ).find( 'body' );
 
 			if ( settings.parent ) {
 				elements.$parent = $element.parent();
@@ -47,16 +48,21 @@
 		};
 
 		var bindEvents = function() {
-			elements.$window.on( {
-				scroll: onWindowScroll,
-				resize: onWindowResize,
-			} );
+			elements.$window.on( 'resize', onWindowResize );
+
+			if ( settings.isScrollSnapActive ) {
+				elements.$body.on( 'scroll', onWindowScroll );
+			} else {
+				elements.$window.on( 'scroll', onWindowScroll );
+			}
 		};
 
 		var unbindEvents = function() {
 			elements.$window
 				.off( 'scroll', onWindowScroll )
 				.off( 'resize', onWindowResize );
+
+			elements.$body.off( 'scroll', onWindowScroll );
 		};
 
 		var init = function() {
@@ -85,21 +91,14 @@
 		};
 
 		const updateElementSizesData = () => {
-			if ( 'document' === settings.relativeTarget ) {
-				if ( isSticky ) {
-					elementOffsetValue = elements.$spacer.offset().left;
-				} else {
-					elementOffsetValue = $element.offset().left;
-				}
+			elementWidth = getElementOuterSize( $element, 'width' );
+			elementOffsetValue = $element.offset().left;
 
-				if ( settings.isRTL ) {
-					// `window.innerWidth` includes the scrollbar while `document.body.offsetWidth` doesn't.
-					const documentWidth = settings.handleScrollbarWidth ? window.innerWidth : document.body.offsetWidth;
+			if ( settings.isRTL ) {
+				// `window.innerWidth` includes the scrollbar while `document.body.offsetWidth` doesn't.
+				const documentWidth = settings.handleScrollbarWidth ? window.innerWidth : document.body.offsetWidth;
 
-					elementOffsetValue = Math.max( documentWidth - elementWidth - elementOffsetValue, 0 );
-				}
-			} else {
-				elementWidth = getElementOuterSize( $element, 'width' );
+				elementOffsetValue = Math.max( documentWidth - elementWidth - elementOffsetValue, 0 );
 			}
 		}
 
@@ -152,11 +151,23 @@
 
 			elements.$parent.css( 'position', 'relative' );
 
-			backupCSS( $element, 'notFollowing', [ 'position', 'top', 'bottom' ] );
+			backupCSS( $element, 'notFollowing', [ 'position', 'inset-inline-start', 'top', 'bottom' ] );
 
 			const css = {
 				position: 'absolute',
 			};
+
+			elementOffsetValue = elements.$spacer.position().left;
+
+			if ( settings.isRTL ) {
+				const parentWidth = $element.parent().outerWidth(),
+					elementOffsetValueLeft = elements.$spacer.position().left;
+
+				elementWidth = elements.$spacer.outerWidth();
+				elementOffsetValue = Math.max( parentWidth - elementWidth - elementOffsetValueLeft, 0 );
+			}
+
+			css[ 'inset-inline-start' ] = elementOffsetValue + 'px';
 
 			css[ settings.to ] = '';
 
@@ -317,20 +328,18 @@
 				return;
 			}
 
-			// In case the relative parent is the document, and the element is currently sticky, the element width is
-			// backed up in order to retain the correct width after unsticking the element.
-			if ( 'document' === settings.relativeTarget && isSticky ) {
-				elementWidth = elements.$spacer.width();
-			}
-
 			unstickElement();
 
+			removeSpacer();
+
 			updateElementSizesData();
+
+			addSpacer();
 
 			stickElement();
 
 			if ( settings.parent ) {
-				// Force recalculation of the relation between the element and its parent
+				// Force recalculation of the relation between the element and its parent.
 				isFollowingParent = false;
 
 				checkParent();

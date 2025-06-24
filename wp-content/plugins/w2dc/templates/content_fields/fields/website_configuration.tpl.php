@@ -1,7 +1,12 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <?php w2dc_renderTemplate('admin_header.tpl.php'); ?>
 
 <h2>
-	<?php _e('Configure website field', 'W2DC'); ?>
+	<?php esc_html_e('Configure website field', 'w2dc'); ?>
 </h2>
 
 <form method="POST" action="">
@@ -10,7 +15,7 @@
 		<tbody>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Open link in new window', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Open link in new window', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<input
@@ -23,7 +28,7 @@
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Add nofollow attribute', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Add nofollow attribute', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<input
@@ -36,7 +41,7 @@
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Enable link text field', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Enable link text field', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<input
@@ -49,7 +54,7 @@
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Use placeholder link text when empty', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Use placeholder link text when empty', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<input
@@ -58,12 +63,12 @@
 						class="regular-text"
 						value="1"
 						<?php if($content_field->use_default_link_text) echo 'checked'; ?> />
-						<p class="description"><?php _e('In other case the URL will be displayed as link text'); ?></p>
+						<p class="description"><?php esc_html_e('In other case the URL will be displayed as link text'); ?></p>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Placeholder link text', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Placeholder link text', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<input
@@ -76,7 +81,7 @@
 		</tbody>
 	</table>
 	
-	<?php submit_button(__('Save changes', 'W2DC')); ?>
+	<?php submit_button(esc_html__('Save changes', 'w2dc')); ?>
 </form>
 
 <?php w2dc_renderTemplate('admin_footer.tpl.php'); ?>

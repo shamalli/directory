@@ -167,6 +167,8 @@ final class FLBuilderModel {
 	 */
 	static private $node_template_types = array();
 
+	static private $get_user_templates_cache = array();
+
 	/**
 	 * Initialize hooks.
 	 *
@@ -189,6 +191,7 @@ final class FLBuilderModel {
 		add_action( 'fl_builder_after_save_user_template', __CLASS__ . '::save_layout_revision' );
 
 		/* Filters */
+		add_filter( 'fl_builder_get_global_settings', __CLASS__ . '::filter_global_settings', 10, 1 );
 		add_filter( 'heartbeat_received', __CLASS__ . '::lock_post', 10, 2 );
 		add_filter( 'fl_builder_register_settings_form', __CLASS__ . '::filter_row_settings_for_resize', 10, 2 );
 		add_filter( 'wp_revisions_to_keep', __CLASS__ . '::limit_revisions', 10, 2 );
@@ -202,9 +205,10 @@ final class FLBuilderModel {
 	 *
 	 * @since 1.0
 	 * @param int $post_id The post id to get an edit url for.
+	 * @param bool $include_ui Return the full UI URL or just the layout.
 	 * @return string
 	 */
-	static public function get_edit_url( $post_id = false ) {
+	static public function get_edit_url( $post_id = false, $include_ui = true ) {
 		if ( false === $post_id ) {
 			global $post;
 		} else {
@@ -214,8 +218,23 @@ final class FLBuilderModel {
 		preg_match( '/(https?)/', get_bloginfo( 'url' ), $matches );
 
 		$scheme = ( isset( $matches[1] ) ) ? $matches[1] : false;
+		$url    = set_url_scheme( get_permalink( $post->ID ), $scheme );
+		$url    = add_query_arg( 'fl_builder', '', $url );
 
-		$url = set_url_scheme( add_query_arg( 'fl_builder', '', get_permalink( $post->ID ) ), $scheme );
+		if ( FLBuilderUIIFrame::is_enabled() ) {
+			if ( $include_ui ) {
+				$url = add_query_arg( 'fl_builder_ui', '', $url );
+			} else {
+				/**
+				 * Preserve any query args and pass to the iframe
+				 */
+				$args = array();
+				parse_str( $_SERVER['QUERY_STRING'], $args );
+				$args['fl_builder_ui_iframe'] = '';
+				unset( $args['fl_builder_ui'] );
+				$url = add_query_arg( $args, $url );
+			}
+		}
 
 		/**
 		 * Filter the bb edit url.
@@ -240,7 +259,7 @@ final class FLBuilderModel {
 		 * Use this filter to modify the upgrade URL in Beaver Builder Lite.
 		 * This can be used to add an affiliate ID.
 		 * @see fl_builder_upgrade_url
-		 * @link https://kb.wpbeaverbuilder.com/article/117-plugin-filter-reference
+		 * @link https://docs.wpbeaverbuilder.com/beaver-builder/developer/tutorials-guides/common-beaver-builder-filter-examples
 		 */
 		return apply_filters( 'fl_builder_upgrade_url', self::get_store_url( '', $params ) );
 	}
@@ -254,9 +273,25 @@ final class FLBuilderModel {
 	 * @return string
 	 */
 	static public function get_store_url( $path = '', $params = array() ) {
-		$url = trailingslashit( FL_BUILDER_STORE_URL . $path ) . '?' . http_build_query( $params, '', '&' );
-
+		$url = add_query_arg( $params, FL_BUILDER_STORE_URL . $path );
 		return apply_filters( 'fl_builder_store_url', $url, $path );
+	}
+
+	/**
+	 * Returns the relative URL for the plugin folder.
+	 *
+	 * @since 2.3
+	 * @return string
+	 */
+	static public function get_relative_plugin_url() {
+		$url         = str_ireplace( home_url(), '', FLBuilder::plugin_url() );
+		$parsed_path = parse_url( FLBuilder::plugin_url(), PHP_URL_PATH );
+
+		if ( strstr( $url, '://' ) && $parsed_path ) {
+			$url = $parsed_path;
+		}
+
+		return $url;
 	}
 
 	/**
@@ -334,7 +369,7 @@ final class FLBuilderModel {
 		/**
 		 * Use this filter to modify the post types that the builder works with.
 		 * @see fl_builder_post_types
-		 * @link https://kb.wpbeaverbuilder.com/article/117-plugin-filter-reference
+		 * @link https://docs.wpbeaverbuilder.com/beaver-builder/developer/tutorials-guides/common-beaver-builder-filter-examples
 		 */
 		return apply_filters( 'fl_builder_post_types', $value );
 	}
@@ -349,7 +384,7 @@ final class FLBuilderModel {
 	static public function get_global_posts() {
 		/**
 		 * Use this filter to specify a post or posts whose CSS and JavaScript assets should be loaded globally.
-		 * @link https://kb.wpbeaverbuilder.com/article/117-plugin-filter-reference
+		 * @link https://docs.wpbeaverbuilder.com/beaver-builder/developer/tutorials-guides/common-beaver-builder-filter-examples
 		 * @see fl_builder_global_posts
 		 * @since 1.0
 		 */
@@ -399,10 +434,10 @@ final class FLBuilderModel {
 
 			if ( ! empty( self::$post_id ) ) {
 				// Get a post ID from the internal $post_id array if not empty.
-				return self::$post_id[0];
+				return (int) self::$post_id[0];
 			} elseif ( isset( $post_data['post_id'] ) ) {
 				// Get a post ID from an AJAX request.
-				return $post_data['post_id'];
+				return (int) $post_data['post_id'];
 			}
 		}
 
@@ -410,12 +445,12 @@ final class FLBuilderModel {
 		global $wp_the_query;
 		global $post;
 
-		if ( in_the_loop() && is_main_query() && isset( $wp_the_query->post ) ) {
+		if ( in_the_loop() && is_main_query() && isset( $wp_the_query->post ) && $wp_the_query->post instanceof WP_Post ) {
 			// Get a post ID from the main query.
-			return $wp_the_query->post->ID;
-		} elseif ( isset( $post ) ) {
+			return (int) $wp_the_query->post->ID;
+		} elseif ( $post instanceof WP_Post ) {
 			// Get a post ID in a query outside of the main loop.
-			return $post->ID;
+			return (int) $post->ID;
 		}
 
 		// No post ID found.
@@ -474,8 +509,161 @@ final class FLBuilderModel {
 				$editable = true;
 			}
 		}
-
+		/**
+		 * Checks to see if the builder can be enabled for
+		 * the current post in the main query.
+		 * @see fl_builder_is_post_editable
+		 */
 		return (bool) apply_filters( 'fl_builder_is_post_editable', $editable );
+	}
+
+	/**
+	 * Filter global settings.
+	 *
+	 * @return object
+	 */
+	static public function filter_global_settings( $new_settings ) {
+		// row margin.
+		if ( isset( $new_settings->row_margins ) ) {
+			$new_settings->row_margins_top    = $new_settings->row_margins;
+			$new_settings->row_margins_right  = $new_settings->row_margins;
+			$new_settings->row_margins_bottom = $new_settings->row_margins;
+			$new_settings->row_margins_left   = $new_settings->row_margins;
+
+			unset( $new_settings->row_margins );
+		}
+
+		if ( isset( $new_settings->row_margins_medium ) ) {
+			$new_settings->row_margins_top_medium    = $new_settings->row_margins_medium;
+			$new_settings->row_margins_right_medium  = $new_settings->row_margins_medium;
+			$new_settings->row_margins_bottom_medium = $new_settings->row_margins_medium;
+			$new_settings->row_margins_left_medium   = $new_settings->row_margins_medium;
+
+			unset( $new_settings->row_margins_medium );
+		}
+
+		if ( isset( $new_settings->row_margins_responsive ) ) {
+			$new_settings->row_margins_top_responsive    = $new_settings->row_margins_responsive;
+			$new_settings->row_margins_right_responsive  = $new_settings->row_margins_responsive;
+			$new_settings->row_margins_bottom_responsive = $new_settings->row_margins_responsive;
+			$new_settings->row_margins_left_responsive   = $new_settings->row_margins_responsive;
+
+			unset( $new_settings->row_margins_responsive );
+		}
+
+		// row padding.
+		if ( isset( $new_settings->row_padding ) ) {
+			$new_settings->row_padding_top    = $new_settings->row_padding;
+			$new_settings->row_padding_right  = $new_settings->row_padding;
+			$new_settings->row_padding_bottom = $new_settings->row_padding;
+			$new_settings->row_padding_left   = $new_settings->row_padding;
+
+			unset( $new_settings->row_padding );
+		}
+
+		if ( isset( $new_settings->row_padding_medium ) ) {
+			$new_settings->row_padding_top_medium    = $new_settings->row_padding_medium;
+			$new_settings->row_padding_right_medium  = $new_settings->row_padding_medium;
+			$new_settings->row_padding_bottom_medium = $new_settings->row_padding_medium;
+			$new_settings->row_padding_left_medium   = $new_settings->row_padding_medium;
+
+			unset( $new_settings->row_padding_medium );
+		}
+
+		if ( isset( $new_settings->row_padding_responsive ) ) {
+			$new_settings->row_padding_top_responsive    = $new_settings->row_padding_responsive;
+			$new_settings->row_padding_right_responsive  = $new_settings->row_padding_responsive;
+			$new_settings->row_padding_bottom_responsive = $new_settings->row_padding_responsive;
+			$new_settings->row_padding_left_responsive   = $new_settings->row_padding_responsive;
+
+			unset( $new_settings->row_padding_responsive );
+		}
+
+		// column margin.
+		if ( isset( $new_settings->column_margins ) ) {
+			$new_settings->column_margins_top    = $new_settings->column_margins;
+			$new_settings->column_margins_right  = $new_settings->column_margins;
+			$new_settings->column_margins_bottom = $new_settings->column_margins;
+			$new_settings->column_margins_left   = $new_settings->column_margins;
+
+			unset( $new_settings->column_margins );
+		}
+
+		if ( isset( $new_settings->column_margins_medium ) ) {
+			$new_settings->column_margins_top_medium    = $new_settings->column_margins_medium;
+			$new_settings->column_margins_right_medium  = $new_settings->column_margins_medium;
+			$new_settings->column_margins_bottom_medium = $new_settings->column_margins_medium;
+			$new_settings->column_margins_left_medium   = $new_settings->column_margins_medium;
+
+			unset( $new_settings->column_margins_medium );
+		}
+
+		if ( isset( $new_settings->column_margins_responsive ) ) {
+			$new_settings->column_margins_top_responsive    = $new_settings->column_margins_responsive;
+			$new_settings->column_margins_right_responsive  = $new_settings->column_margins_responsive;
+			$new_settings->column_margins_bottom_responsive = $new_settings->column_margins_responsive;
+			$new_settings->column_margins_left_responsive   = $new_settings->column_margins_responsive;
+
+			unset( $new_settings->column_margins_responsive );
+		}
+
+		// column padding.
+		if ( isset( $new_settings->column_padding ) ) {
+			$new_settings->column_padding_top    = $new_settings->column_padding;
+			$new_settings->column_padding_right  = $new_settings->column_padding;
+			$new_settings->column_padding_bottom = $new_settings->column_padding;
+			$new_settings->column_padding_left   = $new_settings->column_padding;
+
+			unset( $new_settings->column_padding );
+		}
+
+		if ( isset( $new_settings->column_padding_medium ) ) {
+			$new_settings->column_padding_top_medium    = $new_settings->column_padding_medium;
+			$new_settings->column_padding_right_medium  = $new_settings->column_padding_medium;
+			$new_settings->column_padding_bottom_medium = $new_settings->column_padding_medium;
+			$new_settings->column_padding_left_medium   = $new_settings->column_padding_medium;
+
+			unset( $new_settings->column_padding_medium );
+		}
+
+		if ( isset( $new_settings->column_padding_responsive ) ) {
+			$new_settings->column_padding_top_responsive    = $new_settings->column_padding_responsive;
+			$new_settings->column_padding_right_responsive  = $new_settings->column_padding_responsive;
+			$new_settings->column_padding_bottom_responsive = $new_settings->column_padding_responsive;
+			$new_settings->column_padding_left_responsive   = $new_settings->column_padding_responsive;
+
+			unset( $new_settings->column_padding_responsive );
+		}
+
+		// module margin.
+		if ( isset( $new_settings->module_margins ) ) {
+			$new_settings->module_margins_top    = $new_settings->module_margins;
+			$new_settings->module_margins_right  = $new_settings->module_margins;
+			$new_settings->module_margins_bottom = $new_settings->module_margins;
+			$new_settings->module_margins_left   = $new_settings->module_margins;
+
+			unset( $new_settings->module_margins );
+		}
+
+		if ( isset( $new_settings->module_margins_medium ) ) {
+			$new_settings->module_margins_top_medium    = $new_settings->module_margins_medium;
+			$new_settings->module_margins_right_medium  = $new_settings->module_margins_medium;
+			$new_settings->module_margins_bottom_medium = $new_settings->module_margins_medium;
+			$new_settings->module_margins_left_medium   = $new_settings->module_margins_medium;
+
+			unset( $new_settings->module_margins_medium );
+		}
+
+		if ( isset( $new_settings->module_margins_responsive ) ) {
+			$new_settings->module_margins_top_responsive    = $new_settings->module_margins_responsive;
+			$new_settings->module_margins_right_responsive  = $new_settings->module_margins_responsive;
+			$new_settings->module_margins_bottom_responsive = $new_settings->module_margins_responsive;
+			$new_settings->module_margins_left_responsive   = $new_settings->module_margins_responsive;
+
+			unset( $new_settings->module_margins_responsive );
+		}
+
+		return $new_settings;
 	}
 
 	/**
@@ -492,6 +680,7 @@ final class FLBuilderModel {
 
 			wp_set_post_lock( $data['fl_builder_post_lock']['post_id'] );
 		}
+		return $response;
 	}
 
 	/**
@@ -544,7 +733,7 @@ final class FLBuilderModel {
 		$post_id  = ( isset( $post->ID ) ) ? $post->ID : false;
 
 		if ( null !== self::$active ) {
-			return self::$active;
+			return apply_filters( 'fl_builder_model_is_builder_active', self::$active );
 		} elseif ( ! is_admin() && is_singular() && $query_id != $post_id ) {
 			self::$active = false;
 		} elseif ( is_customize_preview() ) {
@@ -553,8 +742,7 @@ final class FLBuilderModel {
 			$post_data    = self::get_post_data();
 			self::$active = isset( $_GET['fl_builder'] ) || isset( $post_data['fl_builder'] );
 		}
-
-		return self::$active;
+		return apply_filters( 'fl_builder_model_is_builder_active', self::$active );
 	}
 
 	/**
@@ -577,6 +765,9 @@ final class FLBuilderModel {
 	static public function is_new_user() {
 		if ( self::is_builder_active() ) {
 
+			if ( FLBuilderUIIFrame::is_enabled() && ! FLBuilderUIIFrame::is_iframe_request() ) {
+				return false;
+			}
 			$current_user = wp_get_current_user();
 			$launched     = get_user_meta( $current_user->ID, '_fl_builder_launched', true );
 
@@ -599,6 +790,9 @@ final class FLBuilderModel {
 	 */
 	static public function get_node_status() {
 		$status = self::is_builder_active() ? 'draft' : 'published';
+		/**
+		 * @see fl_builder_node_status
+		 */
 		return apply_filters( 'fl_builder_node_status', $status );
 	}
 
@@ -619,7 +813,10 @@ final class FLBuilderModel {
 	 * @return void
 	 */
 	static public function disable() {
-		update_post_meta( self::get_post_id(), '_fl_builder_enabled', false );
+		if ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'fl-enable-editor' ) ) {
+			update_post_meta( self::get_post_id(), '_fl_builder_enabled', false );
+		}
+		exit;
 	}
 
 	/**
@@ -636,7 +833,11 @@ final class FLBuilderModel {
 			$post      = $wp_the_query->post;
 			$published = self::get_layout_data( 'published' );
 			$draft     = self::get_layout_data( 'draft' );
-			$content   = apply_filters( 'fl_builder_migrated_post_content', $post->post_content );
+			/**
+			 * Original post content from database
+			 * @see fl_builder_migrated_post_content
+			 */
+			$content = apply_filters( 'fl_builder_migrated_post_content', $post->post_content );
 
 			// Migrate existing post content to the builder?
 			if ( empty( $published ) && empty( $draft ) && ! empty( $content ) ) {
@@ -708,7 +909,7 @@ final class FLBuilderModel {
 		/**
 		 * Use this filter to modify the upload directory path and URL that the builder uses to store things like the cache and custom icons.
 		 * @see fl_builder_get_upload_dir
-		 * @link https://kb.wpbeaverbuilder.com/article/117-plugin-filter-reference
+		 * @link https://docs.wpbeaverbuilder.com/beaver-builder/developer/tutorials-guides/common-beaver-builder-filter-examples
 		 */
 		return apply_filters( 'fl_builder_get_upload_dir', $dir_info );
 	}
@@ -747,7 +948,7 @@ final class FLBuilderModel {
 		}
 		/**
 		 * Use this filter to modify the cache directory path and URL that the builder uses to store cached images, JavaScript, and CSS files.
-		 * @link https://kb.wpbeaverbuilder.com/article/117-plugin-filter-reference
+		 * @link https://docs.wpbeaverbuilder.com/beaver-builder/developer/tutorials-guides/common-beaver-builder-filter-examples
 		 * @see fl_builder_get_cache_dir
 		 */
 		return apply_filters( 'fl_builder_get_cache_dir', $dir_info );
@@ -762,17 +963,18 @@ final class FLBuilderModel {
 	 * @since 1.0
 	 * @return string
 	 */
-	static public function get_asset_version() {
+	static public function get_asset_version( $path = false ) {
 		$post_id = self::get_post_id();
 		$active  = self::is_builder_active();
 		$preview = self::is_builder_draft_preview();
 
 		if ( $active || $preview ) {
-			return md5( uniqid() );
+			return md5( FLBuilderModel::uniqid() );
 		} else {
-			return md5( get_post_modified_time( 'U', false, $post_id ) );
+			return $path ? md5( file_get_contents( $path ) ) : md5( get_post_modified_time( 'U', false, $post_id ) );
 		}
 	}
+
 
 	/**
 	 * Returns an array of paths for the CSS and JS assets
@@ -827,6 +1029,11 @@ final class FLBuilderModel {
 	 * @return string
 	 */
 	static public function get_asset_enqueue_method() {
+		/**
+		 * Should assets be rendered inline
+		 * @since 2.1.5
+		 * @see fl_builder_render_assets_inline
+		 */
 		return apply_filters( 'fl_builder_render_assets_inline', false ) ? 'inline' : 'file';
 	}
 
@@ -918,11 +1125,10 @@ final class FLBuilderModel {
 	 * @since 1.6.3
 	 * @return void
 	 */
-	static public function delete_asset_cache_for_all_posts() {
+	static public function delete_asset_cache_for_all_posts( $parts = '*' ) {
 		$cache_dir = self::get_cache_dir();
-		$css       = glob( $cache_dir['path'] . '*.css' );
-		$js        = glob( $cache_dir['path'] . '*.js' );
-
+		$css       = glob( $cache_dir['path'] . $parts . '.css' );
+		$js        = glob( $cache_dir['path'] . $parts . '.js' );
 		if ( is_array( $css ) ) {
 			array_map( array( fl_builder_filesystem(), 'unlink' ), $css );
 		}
@@ -939,7 +1145,7 @@ final class FLBuilderModel {
 	 * @return string
 	 */
 	static public function generate_node_id() {
-		$node_id = uniqid();
+		$node_id = FLBuilderModel::uniqid();
 
 		if ( $node_id == self::$last_generated_node_id ) {
 			return self::generate_node_id();
@@ -1250,12 +1456,17 @@ final class FLBuilderModel {
 	 * @return array
 	 */
 	static public function get_categorized_nodes() {
+		//      global $get_categorized_nodes;
 		$nodes = array(
 			'rows'    => array(),
 			'groups'  => array(),
 			'columns' => array(),
 			'modules' => array(),
 		);
+
+		// if ( ! empty( $get_categorized_nodes ) ) {
+		// 	return $get_categorized_nodes;
+		// }
 
 		if ( self::is_post_user_template( 'module' ) ) {
 			$nodes['modules'] = self::get_all_modules();
@@ -1337,7 +1548,7 @@ final class FLBuilderModel {
 				}
 			}
 		}
-
+		//      $get_categorized_nodes = $nodes;
 		return $nodes;
 	}
 
@@ -1355,7 +1566,7 @@ final class FLBuilderModel {
 		$post_data = self::get_post_data();
 
 		// Get the node settings for a node template's root node?
-		if ( self::is_node_template_root( $node ) && ! self::is_post_node_template() ) {
+		if ( self::is_node_template_root( $node ) && ! self::is_post_node_template( false, $node->type ) ) {
 			$template_post_id = self::get_node_template_post_id( $node->template_id );
 			$template_data    = self::get_layout_data( 'published', $template_post_id );
 
@@ -1478,6 +1689,43 @@ final class FLBuilderModel {
 	}
 
 	/**
+	 * Get the placeholder data for node spacing breakpoint fields.
+	 *
+	 * @since 2.6
+	 * @param string $type The type of node.
+	 * @param string $property Either padding or margins.
+	 * @param string $size The breakpoint size key.
+	 * @return object
+	 */
+	static public function get_node_spacing_breakpoint_placeholders( $type, $property, $size ) {
+		$global_settings = self::get_global_settings();
+		$sizes           = array( 'large', 'medium', 'responsive' );
+		$fallbacks       = array_reverse( array_slice( $sizes, 0, array_search( $size, $sizes ) ) );
+		$sides           = array( 'top', 'right', 'bottom', 'left' );
+		$placeholders    = array();
+
+		foreach ( $sides as $side ) {
+			$key                   = $type . '_' . $property . '_' . $side . '_' . $size;
+			$placeholders[ $side ] = '';
+
+			if ( '' === $global_settings->{ $key } ) {
+				foreach ( $fallbacks as $fallback ) {
+					$fallback_key = $type . '_' . $property . '_' . $side . '_' . $fallback;
+
+					if ( '' !== $global_settings->{ $fallback_key } ) {
+						$placeholders[ $side ] = $global_settings->{ $fallback_key };
+						break;
+					}
+				}
+			} else {
+				$placeholders[ $side ] = $global_settings->{ $key };
+			}
+		}
+
+		return $placeholders;
+	}
+
+	/**
 	 * Callback for the uasort function.
 	 *
 	 * @since 1.0
@@ -1574,7 +1822,7 @@ final class FLBuilderModel {
 	 * @param object $data The data array to delete from.
 	 * @return void
 	 */
-	static public function delete_child_nodes_from_data( $parent = null, &$data ) {
+	static public function delete_child_nodes_from_data( $parent, &$data ) {
 		$children = self::get_nodes( null, $parent );
 
 		foreach ( $children as $child_id => $child ) {
@@ -1641,13 +1889,27 @@ final class FLBuilderModel {
 		array_splice( $nodes, $position, 0, $removed );
 
 		// Update the position data.
+		$updated_nodes = array();
 		foreach ( $nodes as $node ) {
 			$data[ $node->node ]->position = $new_pos;
+
+			// Get node fragments for redux
+			$updated_nodes[ $node->node ]           = new StdClass();
+			$updated_nodes[ $node->node ]->position = $new_pos;
+
 			$new_pos++;
 		}
 
 		// Update the layout data.
 		self::update_layout_data( $data );
+
+		return array(
+			'nodeId'       => $node_id,
+			'nodeType'     => $data[ $node_id ]->type,
+			'moduleType'   => 'module' === $data[ $node_id ]->type ? $data[ $node_id ]->settings->type : null,
+			'parent'       => $node->parent,
+			'updatedNodes' => $updated_nodes,
+		);
 	}
 
 	/**
@@ -1682,7 +1944,21 @@ final class FLBuilderModel {
 		self::update_layout_data( $data );
 
 		// Set the node's new order.
-		self::reorder_node( $node_id, $position );
+		$reordered = self::reorder_node( $node_id, $position );
+
+		// Get updated node fragments for redux
+		$updated                       = $reordered['updatedNodes'];
+		$updated[ $node_id ]           = new StdClass();
+		$updated[ $node_id ]->position = intval( $position );
+		$updated[ $node_id ]->parent   = $new_parent_id;
+
+		return array(
+			'nodeId'       => $node_id,
+			'nodeType'     => $node->type,
+			'moduleType'   => 'module' === $node->type ? $node->settings->type : null,
+			'parent'       => $new_parent_id,
+			'updatedNodes' => $updated,
+		);
 	}
 
 	/**
@@ -1730,7 +2006,7 @@ final class FLBuilderModel {
 	}
 
 	/**
-	 * Copys a row and adds it to the current layout.
+	 * Copies a row and adds it to the current layout.
 	 *
 	 * @since 1.0
 	 * @param string $node_id Node ID of the row to copy.
@@ -1913,7 +2189,7 @@ final class FLBuilderModel {
 		}
 
 		// Cache background slideshow data.
-		if ( 'slideshow' == $new_settings->bg_type && 'wordpress' == $new_settings->ss_source ) {
+		if ( 'slideshow' == $new_settings->bg_type && 'wordpress' == $new_settings->ss_source && class_exists( 'FLSlideshowModule' ) ) {
 
 			// Make sure we have a photo data object.
 			if ( ! isset( $row->settings->ss_photo_data ) ) {
@@ -1930,6 +2206,7 @@ final class FLBuilderModel {
 
 		return $new_settings;
 	}
+
 
 	/**
 	 * Returns background data for a row.
@@ -2280,9 +2557,9 @@ final class FLBuilderModel {
 		$min_width      = 8;
 		$max_width      = 100 - $min_width;
 
-		// Don't resize if only one column or width isn't a number.
+		// Since version 2.5. Allow single column to be resized.
 		if ( 1 == $num_cols || ! is_numeric( $new_width ) ) {
-			return $col->settings->size;
+			return absint( $new_width );
 		}
 
 		// Find the sibling column to absorb this resize.
@@ -2343,7 +2620,7 @@ final class FLBuilderModel {
 	 * @param int $col_width New width of the column.
 	 * @param string $sibling_id Node ID of the sibling to resize.
 	 * @param int $sibling_width New width of the sibling.
-	 * @return void
+	 * @return Array affected node fragments
 	 */
 	static public function resize_cols( $col_id = null, $col_width = null, $sibling_id = null, $sibling_width = null ) {
 		$data = self::get_layout_data();
@@ -2356,6 +2633,23 @@ final class FLBuilderModel {
 
 		// Update the layout data.
 		self::update_layout_data( $data );
+
+		// Return node fragments for redux
+		$updated_nodes = array(
+			$col_id     => array(
+				'settings' => array(
+					'size' => $col_width,
+				),
+			),
+			$sibling_id => array(
+				'settings' => array(
+					'size' => $sibling_width,
+				),
+			),
+		);
+
+		// Passed in array for consistency with other responses
+		return array( 'updatedNodes' => $updated_nodes );
 	}
 
 	/**
@@ -2366,6 +2660,11 @@ final class FLBuilderModel {
 	 * @return void
 	 */
 	static public function reset_col_widths( $group_id = null ) {
+
+		if ( ! $group_id ) {
+			return;
+		}
+
 		if ( 'array' == gettype( $group_id ) ) {
 			foreach ( $group_id as $id ) {
 				self::reset_col_widths( $id );
@@ -2585,7 +2884,7 @@ final class FLBuilderModel {
 	}
 
 	/**
-	 * Copys a column and adds it to the current layout.
+	 * Copies a column and adds it to the current layout.
 	 *
 	 * @since 2.0
 	 * @param string $node_id Node ID of the column to copy.
@@ -2785,20 +3084,20 @@ final class FLBuilderModel {
 			/**
 			 * Use this filter to override the modules that are enabled in the builder.
 			 * @see fl_builder_register_module
-			 * @link https://kb.wpbeaverbuilder.com/article/117-plugin-filter-reference
+			 * @link https://docs.wpbeaverbuilder.com/beaver-builder/developer/tutorials-guides/common-beaver-builder-filter-examples
 			 */
 			$instance->enabled = apply_filters( 'fl_builder_register_module', $instance->enabled, $instance );
 
 			// Save the instance in the modules array.
-			self::$modules[ $instance->slug ] = $instance;
-
-			/**
-			 * Use this filter to modify the config array for a settings form when it is registered.
-			 * @see fl_builder_register_settings_form
-			 * @link https://kb.wpbeaverbuilder.com/article/117-plugin-filter-reference
-			 */
+			self::$modules[ $instance->slug ]                   = $instance;
 			self::$modules[ $instance->slug ]->form             = apply_filters( 'fl_builder_register_settings_form', $form, $instance->slug );
 			self::$modules[ $instance->slug ]->form['advanced'] = self::$settings_forms['module_advanced'];
+			/**
+			 * Use this filter to modify the config array for a settings form when it is registered.
+			 * @see fl_builder_register_module_settings_form
+			 * @link https://docs.wpbeaverbuilder.com/beaver-builder/developer/tutorials-guides/common-beaver-builder-filter-examples
+			 */
+			self::$modules[ $instance->slug ]->form = apply_filters( 'fl_builder_register_module_settings_form', self::$modules[ $instance->slug ]->form, $instance->slug );
 		}
 	}
 
@@ -2872,10 +3171,7 @@ final class FLBuilderModel {
 	static public function get_default_enabled_modules() {
 		$default = array_keys( self::$modules );
 
-		// These modules are deprecated and disabled by default.
-		$deprecated = array(
-			'social-buttons',
-		);
+		$deprecated = self::get_deprecated_modules();
 
 		// Remove deprecated modules from the defaults.
 		foreach ( $default as $key => $slug ) {
@@ -2885,6 +3181,17 @@ final class FLBuilderModel {
 		}
 
 		return array_values( $default );
+	}
+
+	/**
+	 * @since 2.4.1
+	 */
+	static public function get_deprecated_modules() {
+		// These modules are deprecated and disabled by default.
+		$deprecated = array(
+			'social-buttons',
+		);
+		return $deprecated;
 	}
 
 	/**
@@ -2911,7 +3218,10 @@ final class FLBuilderModel {
 				unset( $setting[ $key ] );
 			}
 		}
-
+		/**
+		 * Array of enabled modules.
+		 * @see fl_builder_enabled_modules
+		 */
 		return apply_filters( 'fl_builder_enabled_modules', $setting );
 	}
 
@@ -2989,7 +3299,7 @@ final class FLBuilderModel {
 		/**
 		 * Use this filter to add custom module categories that will show up before the default module categories in the builder’s UI.
 		 * @see fl_builder_module_categories
-		 * @link https://kb.wpbeaverbuilder.com/article/117-plugin-filter-reference
+		 * @link https://docs.wpbeaverbuilder.com/beaver-builder/developer/tutorials-guides/common-beaver-builder-filter-examples
 		 */
 		foreach ( apply_filters( 'fl_builder_module_categories', array() ) as $custom_category ) {
 			$categories[ $custom_category ] = array();
@@ -3149,7 +3459,7 @@ final class FLBuilderModel {
 				$data->id          = $widget->id;
 				$data->name        = $widget->name;
 				$data->class       = $widget->class;
-				$data->category    = $widget->category;
+				$data->category    = $widget->fl_category;
 				$data->kind        = 'module';
 				$data->isWidget = true; // @codingStandardsIgnoreLine
 				$data->isAlias = false; // @codingStandardsIgnoreLine
@@ -3271,6 +3581,10 @@ final class FLBuilderModel {
 		$parent         = self::get_node( $parent_id );
 		$module_node_id = self::generate_node_id();
 		$settings->type = $type;
+
+		if ( ! self::$modules[ $type ] ) {
+			return false;
+		}
 
 		// Run module update method.
 		$class              = get_class( self::$modules[ $type ] );
@@ -3394,7 +3708,7 @@ final class FLBuilderModel {
 	 * @return array $defaults Default settings for the module.
 	 */
 	static public function add_default_module( $parent_id = null, $type = null, $position = null, $defaults = null ) {
-		$parent         = ( 0 == $parent_id ) ? null : self::get_node( $parent_id );
+		$parent         = ( 0 === $parent_id ) ? null : self::get_node( $parent_id );
 		$settings       = self::get_module_defaults( $type );
 		$module_node_id = self::generate_node_id();
 
@@ -3570,6 +3884,7 @@ final class FLBuilderModel {
 			'WP_Widget_Media_Gallery',
 			'WP_Widget_Text',
 			'WP_Widget_Custom_HTML',
+			'WP_Widget_Block',
 		) );
 
 		foreach ( $wp_widget_factory->widgets as $class => $widget ) {
@@ -3578,7 +3893,7 @@ final class FLBuilderModel {
 			}
 			$widget->class            = $class;
 			$widget->isWidget         = true; // @codingStandardsIgnoreLine
-			$widget->category         = __( 'WordPress Widgets', 'fl-builder' );
+			$widget->fl_category      = __( 'WordPress Widgets', 'fl-builder' );
 			$widgets[ $widget->name ] = $widget;
 		}
 
@@ -3691,7 +4006,7 @@ final class FLBuilderModel {
 		/**
 		 * Use this filter to modify the config array for a settings form when it is registered.
 		 * @see fl_builder_register_settings_form
-		 * @link https://kb.wpbeaverbuilder.com/article/117-plugin-filter-reference
+		 * @link https://docs.wpbeaverbuilder.com/beaver-builder/developer/tutorials-guides/common-beaver-builder-filter-examples
 		 */
 		self::$settings_forms[ $id ] = apply_filters( 'fl_builder_register_settings_form', $form, $id );
 
@@ -3819,7 +4134,7 @@ final class FLBuilderModel {
 			$responsive        = isset( $field['responsive'] ) && $field['responsive'] ? $field['responsive'] : false;
 
 			// Get the default unit if this field has more than one unit.
-			if ( isset( $field['units'] ) && count( $field['units'] ) > 1 ) {
+			if ( isset( $field['units'] ) && is_array( $field['units'] ) && count( $field['units'] ) > 1 ) {
 				$default_unit = isset( $field['default_unit'] ) ? $field['default_unit'] : $field['units'][0];
 			} else {
 				$default_unit = null;
@@ -3830,7 +4145,7 @@ final class FLBuilderModel {
 				$defaults->$name = is_array( $default ) ? $default : array( $default );
 			} else {
 
-				foreach ( array( 'default', 'medium', 'responsive' ) as $device ) {
+				foreach ( array( 'default', 'large', 'medium', 'responsive' ) as $device ) {
 
 					if ( ! $responsive && 'default' !== $device ) {
 						continue;
@@ -3879,7 +4194,7 @@ final class FLBuilderModel {
 		/**
 		 * Use this filter to change the defaults for any of the settings forms in the builder including global, row, column and module settings.
 		 * @see fl_builder_settings_form_defaults
-		 * @link https://kb.wpbeaverbuilder.com/article/117-plugin-filter-reference
+		 * @link https://docs.wpbeaverbuilder.com/beaver-builder/developer/tutorials-guides/common-beaver-builder-filter-examples
 		 */
 		self::$settings_form_defaults[ $type ] = apply_filters( 'fl_builder_settings_form_defaults', $defaults, $form_type );
 
@@ -3941,9 +4256,18 @@ final class FLBuilderModel {
 	 * @return void
 	 */
 	static public function save_settings( $node_id = null, $settings = null ) {
-		$node             = self::get_node( $node_id );
+		$node = self::get_node( $node_id );
+		if ( ! FLBuilderModel::user_has_unfiltered_html() && true !== self::verify_settings( $settings ) ) {
+			return array(
+				'node_id'  => $node->node,
+				'settings' => $node->settings,
+				'layout'   => FLBuilderAJAXLayout::render(),
+			);
+		}
+
 		$new_settings     = (object) array_merge( (array) $node->settings, (array) $settings );
 		$template_post_id = self::is_node_global( $node );
+		$post_id          = self::get_post_id();
 
 		// Process the settings.
 		$new_settings = self::process_node_settings( $node, $new_settings );
@@ -3956,7 +4280,7 @@ final class FLBuilderModel {
 		self::update_layout_data( $data );
 
 		// Save settings for a global node template?
-		if ( $template_post_id && ! self::is_post_node_template() ) {
+		if ( $template_post_id && $template_post_id !== $post_id && ! self::is_post_node_template( false, $node->type ) ) {
 
 			// Get the template data.
 			$template_data = self::get_layout_data( 'published', $template_post_id );
@@ -3980,6 +4304,77 @@ final class FLBuilderModel {
 			'layout'   => FLBuilderAJAXLayout::render(),
 		);
 	}
+
+	/**
+	 * Verify the settings for a node to make sure they
+	 * can be saved safely.
+	 *
+	 * @since 2.4.1
+	 * @param object $settings The settings to verify.
+	 * @return bool
+	 */
+	static public function verify_settings( $settings ) {
+		return self::verify_settings_kses( $settings );
+	}
+
+	/**
+	 * Verify the settings for a node by running them through wp_kses.
+	 * Any settings that have changed mean unallowed code was entered.
+	 *
+	 * @since 2.4.1
+	 * @param object $settings The settings to verify.
+	 * @return bool
+	 */
+	public static function verify_settings_kses( $settings ) {
+
+		if ( ! has_filter( 'safe_style_css', '__return_empty_array' ) ) {
+			add_filter( 'safe_style_css', '__return_empty_array' );
+		}
+
+		foreach ( $settings as $key => $value ) {
+			if ( is_string( $value ) ) {
+				$value     = stripslashes( $value );
+				$sanitized = wp_kses_post( $value );
+				if ( json_encode( $sanitized ) !== json_encode( self::fix_kses( $value ) ) ) {
+					remove_filter( 'safe_style_css', '__return_empty_array' );
+					$output = array(
+						'diff'   => wp_text_diff( $value, $sanitized, array( 'show_split_view' => false ) ),
+						'value'  => self::fix_kses( $value ),
+						'parsed' => $sanitized,
+						'key'    => $key,
+					);
+					return $output;
+				}
+			} else {
+				if ( is_object( $value ) || is_array( $value ) ) {
+					if ( ! self::verify_settings_kses( $value ) ) {
+						remove_filter( 'safe_style_css', '__return_empty_array' );
+						return false;
+					}
+				}
+			}
+		}
+
+		remove_filter( 'safe_style_css', '__return_empty_array' );
+		return true;
+	}
+
+	/**
+	 * Add a space to self closing tags and other things if there isn't one because kses will and checks will fail.
+	 * @since 2.4.2
+	 */
+	static public function fix_kses( $value ) {
+
+		// fix & -> &amp;
+		$value = preg_replace( '/&([a-z0-9#]+);/i', '&$1;', $value );
+		$value = preg_replace( '#(&)(?!(.*);)#i', '&amp;', $value );
+
+		// fix <br/> -> <br />
+		$value = preg_replace( '#(<[a-z]+)(\/>)#', '$1 $2', $value );
+
+		return $value;
+	}
+
 
 	/**
 	 * Sanitizes settings for a form.
@@ -4060,9 +4455,17 @@ final class FLBuilderModel {
 				$settings = new StdClass();
 			}
 
+			// Special handling for color scheme
+			if ( is_array( $settings ) ) {
+				$settings['color_scheme'] = FLBuilderUserSettings::get_color_scheme();
+			} else {
+				$settings->color_scheme = FLBuilderUserSettings::get_color_scheme();
+			}
+
 			// Merge in defaults and cache settings
 			self::$global_settings = (object) array_merge( (array) $defaults, (array) $settings );
 			self::$global_settings = self::merge_nested_form_defaults( 'general', 'global', self::$global_settings );
+			self::$global_settings = apply_filters( 'fl_builder_get_global_settings', self::$global_settings );
 		}
 
 		return self::$global_settings;
@@ -4077,15 +4480,31 @@ final class FLBuilderModel {
 	 */
 	static public function save_global_settings( $settings = array() ) {
 		$old_settings = self::get_global_settings();
-
-		$settings = self::sanitize_global( $settings );
-
+		$settings     = self::sanitize_global( $settings );
 		$new_settings = (object) array_merge( (array) $old_settings, (array) $settings );
+		/**
+		* Special handling for color scheme
+		* Color scheme is actually a user setting, not a global setting. It just appears in the global settings form.
+		*/
+		if ( property_exists( $new_settings, 'color_scheme' ) ) {
 
+			FLBuilderUserSettings::save_color_scheme( $new_settings->color_scheme );
+
+			// No need to store this in global settings
+			unset( $new_settings->color_scheme );
+		}
+
+		// delete all posts assets.
 		self::delete_asset_cache_for_all_posts();
+
+		// remove old global settings.
 		self::$global_settings = null;
 
-		update_option( '_fl_builder_settings', $new_settings );
+		// apply filter beofre update.
+		$new_settings = apply_filters( 'fl_builder_before_save_global_settings', $new_settings );
+
+		// update db with new settings.
+		FLBuilderUtils::update_option( '_fl_builder_settings', $new_settings );
 
 		return self::get_global_settings();
 	}
@@ -4114,10 +4533,10 @@ final class FLBuilderModel {
 	 * @since 1.0
 	 * @return int The new post ID.
 	 */
-	static public function duplicate_post() {
+	static public function duplicate_post( $post_id = false ) {
 		global $wpdb;
 
-		$post_id      = self::get_post_id();
+		$post_id      = ( ! $post_id ) ? self::get_post_id() : $post_id;
 		$post         = get_post( $post_id );
 		$current_user = wp_get_current_user();
 		$template_id  = false;
@@ -4161,6 +4580,9 @@ final class FLBuilderModel {
 				// @codingStandardsIgnoreEnd
 			}
 		}
+
+		// Flush the cache so new meta is returned in wp meta functions.
+		wp_cache_flush();
 
 		// Duplicate post terms.
 		$taxonomies = get_object_taxonomies( $post->post_type );
@@ -4252,7 +4674,7 @@ final class FLBuilderModel {
 
 		if ( 'fl-builder-template' == $post->post_type ) {
 			/**
-			 * Limit the ammount of revisions for the fl-builder-template type.
+			 * Limit the amount of revisions for the fl-builder-template type.
 			 * @see fl_builder_template_revisions
 			 */
 			$num = apply_filters( 'fl_builder_template_revisions', 25 );
@@ -4385,7 +4807,23 @@ final class FLBuilderModel {
 		$status   = ! $status ? self::get_node_status() : $status;
 		$key      = 'published' == $status ? '_fl_builder_data' : '_fl_builder_draft';
 		$raw_data = get_metadata( 'post', $post_id, $key );
-		$data     = self::slash_settings( self::clean_layout_data( $data ) );
+		/**
+		 * @since 2.6
+		 * @see fl_builder_enable_small_data_mode
+		 */
+		if ( apply_filters( 'fl_builder_enable_small_data_mode', false ) ) {
+			$data = self::slash_settings( self::clean_layout_data( $data ) );
+
+			if ( 'published' === $status ) {
+				foreach ( $data as $node_id => $node ) {
+					if ( isset( $node->settings ) ) {
+						$data[ $node_id ]->settings = (object) self::array_remove_by_values( (array) $node->settings, array( '', null, array() ) );
+					}
+				}
+			}
+		} else {
+			$data = self::slash_settings( self::clean_layout_data( $data ) );
+		}
 
 		// Update the data.
 		if ( 0 === count( $raw_data ) ) {
@@ -4460,12 +4898,37 @@ final class FLBuilderModel {
 					} else {
 						$cleaned[ $node->node ] = $node;
 					}
+
+					$cleaned[ $node->node ]->global = self::is_node_global( $node );
 				}
 			}
 		}
-
 		return $cleaned;
 	}
+
+	/**
+	* Remove all empty values from the settings object recursively to save ~60% db size
+	* @since 2.3
+	* @param array $haystack
+	* @param array $values
+	* @param array $whitelist
+	*
+	* @return array
+	*/
+	static public function array_remove_by_values( $haystack, $values, $whitelist = array( 'animation', 'style', 'post_columns' ) ) {
+		foreach ( $haystack as $key => $value ) {
+			if ( is_array( $value ) ) {
+				$haystack[ $key ] = self::array_remove_by_values( $haystack[ $key ], $values );
+			}
+
+			if ( in_array( $haystack[ $key ], $values, true ) && ! in_array( $key, $whitelist ) ) {
+				unset( $haystack[ $key ] );
+			}
+		}
+
+		return $haystack;
+	}
+
 
 	/**
 	 * Detect if the current layout has previously drafted changes.
@@ -4635,7 +5098,7 @@ final class FLBuilderModel {
 		/**
 		 * This action allows you to hook into before the data is saved for a layout.
 		 * @see fl_builder_before_save_layout
-		 * @link https://kb.wpbeaverbuilder.com/article/116-plugin-action-reference
+		 * @link https://docs.wpbeaverbuilder.com/beaver-builder/developer/tutorials-guides/common-beaver-builder-filter-examples
 		 */
 		do_action( 'fl_builder_before_save_layout', $post_id, $publish, $data, $settings );
 
@@ -4680,10 +5143,12 @@ final class FLBuilderModel {
 		// Rerender the assets for this layout.
 		FLBuilder::render_assets();
 
+		self::cleanup_post_data( $post_id );
+
 		/**
 		 * This action allows you to hook into after the data is saved for a layout.
 		 * @see fl_builder_after_save_layout
-		 * @link https://kb.wpbeaverbuilder.com/article/116-plugin-action-reference
+		 * @link https://docs.wpbeaverbuilder.com/beaver-builder/developer/tutorials-guides/common-beaver-builder-filter-examples
 		 */
 		do_action( 'fl_builder_after_save_layout', $post_id, $publish, $data, $settings );
 	}
@@ -4706,12 +5171,28 @@ final class FLBuilderModel {
 			self::save_layout( false );
 		}
 
+		self::cleanup_post_data( $post_id, false );
+
 		/**
 		 * After draft is saved.
 		 * @see fl_builder_after_save_draft
 		 */
 		do_action( 'fl_builder_after_save_draft', $post_id, $post_status );
 	}
+
+	static public function cleanup_post_data( $post_id, $history = true ) {
+
+		// remove any post lock
+		delete_post_meta( $post_id, '_edit_lock' );
+
+		if ( ! $history ) {
+			return;
+		}
+
+		// delete old states
+		FLBuilderHistoryManager::delete_states( $post_id );
+	}
+
 
 	/**
 	 * Duplicates a layout for WPML when the copy from original
@@ -4842,7 +5323,7 @@ final class FLBuilderModel {
 			'name'     => $settings['name'],
 			'id'       => get_post_meta( $post_id, '_fl_builder_template_id', true ),
 			'postId'   => $post_id,
-			'image'    => FL_BUILDER_URL . 'img/templates/blank.jpg',
+			'image'    => FLBuilder::plugin_url() . 'img/templates/blank.jpg',
 			'kind'     => 'template',
 			'content'  => 'layout',
 			'type'     => 'user',
@@ -4870,6 +5351,10 @@ final class FLBuilderModel {
 	 * @return array
 	 */
 	static public function get_user_templates( $type = 'layout' ) {
+
+		if ( isset( self::$get_user_templates_cache[ $type ] ) && ! is_multisite() ) {
+			return self::$get_user_templates_cache[ $type ];
+		}
 		$categorized = array(
 			'uncategorized' => array(
 				'name'      => _x( 'Uncategorized', 'Default user template category.', 'fl-builder' ),
@@ -4899,9 +5384,13 @@ final class FLBuilderModel {
 
 			if ( has_post_thumbnail( $post->ID ) ) {
 				$image_data = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'medium_large' );
-				$image      = $image_data[0];
+				if ( is_array( $image_data ) ) {
+					$image = $image_data[0];
+				} else {
+					$image = FLBuilder::plugin_url() . 'img/templates/blank.jpg';
+				}
 			} else {
-				$image = FL_BUILDER_URL . 'img/templates/blank.jpg';
+				$image = FLBuilder::plugin_url() . 'img/templates/blank.jpg';
 			}
 
 			$templates[] = array(
@@ -4921,7 +5410,11 @@ final class FLBuilderModel {
 		// Loop through templates and build the categorized array.
 		foreach ( $templates as $i => $template ) {
 
-			$cats = wp_get_post_terms( $template['postId'], 'fl-builder-template-category' );
+			$cats = get_the_terms( $template['postId'], 'fl-builder-template-category' );
+
+			if ( ! $cats ) {
+				$cats = array();
+			}
 
 			if ( 0 === count( $cats ) || is_wp_error( $cats ) ) {
 				$template['category']                        = array(
@@ -4955,11 +5448,11 @@ final class FLBuilderModel {
 
 		// sort the categories.
 		asort( $categorized );
-
-		return array(
+		self::$get_user_templates_cache[ $type ] = array(
 			'templates'   => $templates,
 			'categorized' => $categorized,
 		);
+		return self::$get_user_templates_cache[ $type ];
 	}
 
 	/**
@@ -4980,9 +5473,13 @@ final class FLBuilderModel {
 			return '';
 		} else {
 
-			$terms = wp_get_post_terms( $post->ID, 'fl-builder-template-type' );
+			$terms = get_the_terms( $post->ID, 'fl-builder-template-type' );
 
-			$type = ( 0 === count( $terms ) ) ? 'layout' : $terms[0]->slug;
+			if ( ! $terms ) {
+				$terms = array();
+			}
+
+			$type = ( is_wp_error( $terms ) || 0 === count( $terms ) ) ? 'layout' : $terms[0]->slug;
 
 			self::$node_template_types[ $template_id ] = $type;
 
@@ -4999,7 +5496,7 @@ final class FLBuilderModel {
 	 */
 	static public function delete_user_template( $template_id = null ) {
 		if ( isset( $template_id ) ) {
-			wp_delete_post( $template_id, true );
+			wp_trash_post( $template_id, true );
 		}
 	}
 
@@ -5012,6 +5509,8 @@ final class FLBuilderModel {
 	 * @return array
 	 */
 	static public function apply_user_template( $template = null, $append = false ) {
+
+		$data = array();
 		if ( $template ) {
 
 			// Delete existing nodes and settings?
@@ -5070,6 +5569,7 @@ final class FLBuilderModel {
 			'layout_css' => isset( $settings ) ? $settings->css : null,
 			'layout'     => FLBuilderAJAXLayout::render(),
 			'config'     => FLBuilderUISettingsForms::get_node_js_config(),
+			'newNodes'   => $data,
 		);
 	}
 
@@ -5097,9 +5597,10 @@ final class FLBuilderModel {
 	 *
 	 * @since 1.6.3
 	 * @param int $post_id If supplied, this post will be checked instead.
+	 * @param string $type If supplied, this node type will be checked instead of all types.
 	 * @return bool
 	 */
-	static public function is_post_node_template( $post_id = false ) {
+	static public function is_post_node_template( $post_id = false, $type = null ) {
 		$post_id = $post_id ? $post_id : self::get_post_id();
 		$post    = get_post( $post_id );
 
@@ -5109,7 +5610,9 @@ final class FLBuilderModel {
 
 			$saved_type = self::get_user_template_type( $post->ID );
 
-			if ( in_array( $saved_type, array( 'row', 'column', 'module' ) ) ) {
+			if ( $type ) {
+				return $type === $saved_type;
+			} elseif ( in_array( $saved_type, array( 'row', 'column', 'module' ) ) ) {
 				return true;
 			}
 		}
@@ -5200,7 +5703,53 @@ final class FLBuilderModel {
 	 * @return bool
 	 */
 	static public function node_has_visibility_rules( $node ) {
-		return isset( $node->settings->visibility_display ) && ( '' !== $node->settings->visibility_display );
+		$rules = false;
+		if ( isset( $node->settings->visibility_display ) && ( '' !== $node->settings->visibility_display ) ) {
+			$rules = true;
+		}
+		if ( isset( $node->settings->responsive_display ) && ( '' !== $node->settings->responsive_display ) ) {
+			$breakpoints = explode( ',', $node->settings->responsive_display );
+
+			if ( count( $breakpoints ) < 4 ) {
+				$rules = true;
+			}
+		}
+		return $rules;
+	}
+
+	/**
+	 * Returns visibility rule.
+	 *
+	 * @param object $node
+	 * @return bool
+	 */
+	static public function node_visibility_rules( $node ) {
+
+		$rule = isset( $node->settings->visibility_display ) ? $node->settings->visibility_display : '';
+		$text = '';
+
+		switch ( $rule ) {
+
+			case 'logged_in':
+				$text = __( 'Logged In', 'fl-builder' );
+				break;
+
+			case 'logged_out':
+				$text = __( 'Logged Out', 'fl-builder' );
+				break;
+
+			case 'logic':
+				$text = __( 'Logic', 'fl-builder' );
+				break;
+
+			default:
+				$text = __( 'Breakpoint', 'fl-builder' );
+		}
+
+		return array(
+			'text' => $text,
+			'type' => $rule,
+		);
 	}
 
 	/**
@@ -5411,13 +5960,14 @@ final class FLBuilderModel {
 
 			foreach ( $nodes as $node_id => $node ) {
 
-				$nodes[ $node_id ]->template_id      = $template_id;
-				$nodes[ $node_id ]->template_node_id = $node_id;
-
-				if ( $node_id == $root_node->node ) {
-					$nodes[ $node_id ]->template_root_node = true;
-				} elseif ( isset( $nodes[ $node_id ]->template_root_node ) ) {
-					unset( $nodes[ $node_id ]->template_root_node );
+				if ( false == $nodes[ $node_id ]->global ) {
+					$nodes[ $node_id ]->template_id      = $template_id;
+					$nodes[ $node_id ]->template_node_id = $node_id;
+					if ( $node_id == $root_node->node ) {
+						$nodes[ $node_id ]->template_root_node = true;
+					} elseif ( isset( $nodes[ $node_id ]->template_root_node ) ) {
+						unset( $nodes[ $node_id ]->template_root_node );
+					}
 				}
 			}
 		} else {
@@ -5463,14 +6013,20 @@ final class FLBuilderModel {
 
 		// Return an array of template settings.
 		return array(
-			'id'     => $template_id,
-			'global' => $settings['global'] ? true : false,
-			'link'   => add_query_arg( 'fl_builder', '', get_permalink( $post_id ) ),
-			'name'   => $settings['name'],
-			'type'   => $root_node->type,
-			'layout' => $settings['global'] ? FLBuilderAJAXLayout::render( $root_node->node, $template_node_id ) : null,
-			'config' => $settings['global'] ? FLBuilderUISettingsForms::get_node_js_config() : null,
-			'postID' => $post_id,
+			'id'                 => $template_id,
+			'global'             => $settings['global'] ? true : false,
+			'link'               => add_query_arg( 'fl_builder', '', get_permalink( $post_id ) ),
+			'name'               => $settings['name'],
+			'type'               => $root_node->type,
+			'layout'             => $settings['global'] ? FLBuilderAJAXLayout::render( $root_node->node, $template_node_id ) : null,
+			'config'             => $settings['global'] ? FLBuilderUISettingsForms::get_node_js_config() : null,
+			'postID'             => $post_id,
+			'template_id'        => $template_id,
+			'template_node_id'   => $root_node->node,
+			'template_root_node' => true,
+			'parent'             => $original_parent,
+			'position'           => $original_position,
+			'settings'           => $root_node->settings,
 		);
 	}
 
@@ -5496,6 +6052,10 @@ final class FLBuilderModel {
 			return;
 		}
 		if ( isset( $post_data['fl_action'] ) && 'duplicate_post' == $post_data['fl_action'] ) {
+			return;
+		}
+
+		if ( isset( $_GET['duplicate_layout'] ) ) {
 			return;
 		}
 
@@ -5531,7 +6091,7 @@ final class FLBuilderModel {
 		self::unlink_global_node_template_from_all_posts( $template_post_id );
 
 		// Delete the template post.
-		wp_delete_post( $template_post_id, true );
+		wp_trash_post( $template_post_id, true );
 	}
 
 	/**
@@ -5670,17 +6230,17 @@ final class FLBuilderModel {
 				// Unset this node in the layout data.
 				unset( $layout_data[ $node_id ] );
 
-				// Find sibiling nodes to update their position.
+				// Find sibling nodes to update their position.
 				foreach ( $layout_data as $i => $n ) {
 					if ( $n->parent == $node->parent ) {
 						$siblings[ $i ] = $n;
 					}
 				}
 
-				// Sort the sibiling nodes by position.
+				// Sort the sibling nodes by position.
 				uasort( $siblings, array( 'FLBuilderModel', 'order_nodes' ) );
 
-				// Update sibiling node positions.
+				// Update sibling node positions.
 				foreach ( $siblings as $i => $n ) {
 					$layout_data[ $i ]->position = $position;
 					$position++;
@@ -5708,7 +6268,7 @@ final class FLBuilderModel {
 	 * @return void
 	 */
 	static public function apply_node_template( $template_id = null, $parent_id = null, $position = 0, $template = null ) {
-		$parent           = ( 0 == $parent_id ) ? null : self::get_node( $parent_id );
+		$parent           = ( 0 === $parent_id ) ? null : self::get_node( $parent_id );
 		$template_post_id = self::get_node_template_post_id( $template_id );
 		$is_col_template  = false;
 
@@ -5741,6 +6301,9 @@ final class FLBuilderModel {
 			$type              = self::get_user_template_type( $template_post_id );
 			$global            = get_post_meta( $template_post_id, '_fl_builder_template_global', true );
 		}
+
+		// Filter the nodes for backwards compatibility with old settings.
+		$template_data = FLBuilderSettingsCompat::filter_layout_data( $template_data );
 
 		// Generate new node ids.
 		$template_data = self::generate_new_node_ids( $template_data );
@@ -5873,8 +6436,11 @@ final class FLBuilderModel {
 
 		// glob() will return false on error so cast as an array() just in case.
 		foreach ( (array) $templates as $template ) {
+			$basename = basename( $template );
 
-			if ( 'templates.dat' == basename( $template ) ) {
+			if ( 'templates.dat' === $basename ) {
+				continue;
+			} elseif ( true !== FL_BUILDER_LITE && 'templates-config.dat' === $basename ) {
 				continue;
 			}
 
@@ -5927,6 +6493,7 @@ final class FLBuilderModel {
 	static public function apply_core_template( $index = 0, $append = false, $type = 'layout' ) {
 		$template     = self::get_template( $index, $type );
 		$row_position = self::next_node_position( 'row' );
+		$data         = array();
 
 		// Delete existing nodes and settings?
 		if ( ! $append ) {
@@ -5974,8 +6541,9 @@ final class FLBuilderModel {
 
 		// Return the layout.
 		return array(
-			'layout' => FLBuilderAJAXLayout::render(),
-			'config' => FLBuilderUISettingsForms::get_node_js_config(),
+			'layout'   => FLBuilderAJAXLayout::render(),
+			'config'   => FLBuilderUISettingsForms::get_node_js_config(),
+			'newNodes' => $data,
 		);
 	}
 
@@ -6054,7 +6622,6 @@ final class FLBuilderModel {
 								$template_data[ $key ]->nodes = serialize( $template_data[ $key ]->nodes );
 							}
 						}
-
 						self::$template_data[ $template_type ] = array_merge( self::$template_data[ $template_type ], $template_data );
 					}
 				}
@@ -6063,6 +6630,11 @@ final class FLBuilderModel {
 
 		$templates = isset( self::$template_data[ $type ] ) ? self::$template_data[ $type ] : array();
 
+		ksort( $templates );
+
+		/**
+		 * @see fl_builder_get_templates
+		 */
 		return apply_filters( 'fl_builder_get_templates', $templates, $type );
 	}
 
@@ -6093,9 +6665,9 @@ final class FLBuilderModel {
 
 		// This is needed for backwards compat with the old core templates category.
 		$core_categories = array(
-			'general' => __( 'General', 'fl-builder' ),
-			'landing' => __( 'Landing Pages', 'fl-builder' ),
-			'company' => __( 'Content Pages', 'fl-builder' ),
+			'general' => 'General',
+			'landing' => 'Landing Pages',
+			'company' => 'Content Pages',
 		);
 
 		// Build the the templates array.
@@ -6114,7 +6686,7 @@ final class FLBuilderModel {
 			if ( strstr( $template->image, '://' ) || strstr( $template->image, ';base64,' ) ) {
 				$image = $template->image;
 			} else {
-				$image = FL_BUILDER_URL . 'img/templates/' . ( empty( $template->image ) ? 'blank.jpg' : $template->image );
+				$image = FLBuilder::plugin_url() . 'img/templates/' . ( empty( $template->image ) ? 'blank.jpg' : $template->image );
 			}
 
 			$templates[] = apply_filters( 'fl_builder_template_details', array(
@@ -6126,8 +6698,10 @@ final class FLBuilderModel {
 				'tags'     => array(),
 				'group'    => $template->group,
 				'type'     => 'core',
+				'subtype'  => $type,
 				'kind'     => 'template',
 				'content'  => ! in_array( $type, array( 'row', 'column', 'module' ) ) ? 'layout' : $type,
+				'premium'  => isset( $template->premium ) ? ! ! $template->premium : false,
 			), $template );
 		}
 
@@ -6151,7 +6725,7 @@ final class FLBuilderModel {
 			if ( ! $template['group'] ) {
 				// If we don't have a group, use categories as groups.
 				foreach ( $template['category'] as $cat_name ) {
-					$template_groups[] = $cat_name;
+					$template_groups[] = __( $cat_name, 'fl-builder' ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
 				}
 				// Clear the categories since we're using groups instead.
 				$template['category'] = array(
@@ -6246,6 +6820,23 @@ final class FLBuilderModel {
 	}
 
 	/**
+	 * Returns the config for pro modules if it exists.
+	 *
+	 * @since 2.4
+	 * @return object
+	 */
+	static public function get_pro_modules_config() {
+		$path   = FL_BUILDER_DIR . 'json/modules-config.json';
+		$config = new stdClass;
+
+		if ( file_exists( $path ) ) {
+			$config = json_decode( file_get_contents( $path ) );
+		}
+
+		return $config;
+	}
+
+	/**
 	 * Get color presets.
 	 *
 	 * @since 1.6.4
@@ -6265,7 +6856,7 @@ final class FLBuilderModel {
 	 * @return object
 	 */
 	static public function save_color_presets( $presets = array() ) {
-		return update_option( '_fl_builder_color_presets', $presets );
+		return FLBuilderUtils::update_option( '_fl_builder_color_presets', $presets );
 	}
 
 	/**
@@ -6299,7 +6890,21 @@ final class FLBuilderModel {
 	 * @return bool
 	 */
 	static public function is_codechecking_enabled() {
-		return apply_filters( 'fl_code_checking_enabled', true );
+
+		/**
+		 * Is code checking enabled?
+		 * @see fl_code_checking_enabled
+		 */
+		$enabled = apply_filters( 'fl_code_checking_enabled', true );
+		/**
+		 * Enable shortcodes in css/js
+		 * @see fl_enable_shortcode_css_js
+		 * @since 2.3
+		 */
+		if ( true === apply_filters( 'fl_enable_shortcode_css_js', false ) ) {
+			$enabled = false;
+		}
+		return $enabled;
 	}
 
 	/**
@@ -6314,9 +6919,15 @@ final class FLBuilderModel {
 			'enableBasicAutocompletion' => true,
 			'enableLiveAutocompletion'  => true,
 			'enableSnippets'            => false,
-			'showLineNumbers'           => false,
+			'showLineNumbers'           => true,
+			'wrap'                      => true,
 			'showFoldWidgets'           => false,
 		);
+		/**
+		 * Default Ace editor settings
+		 * @see fl_ace_editor_settings
+		 * @since 2.1
+		 */
 		return apply_filters( 'fl_ace_editor_settings', $defaults );
 	}
 
@@ -6345,7 +6956,7 @@ final class FLBuilderModel {
 			return FLBuilderWhiteLabel::get_branding_icon();
 		}
 
-		return FL_BUILDER_URL . 'img/beaver.png';
+		return FLBuilder::plugin_url() . 'img/beaver.png';
 	}
 
 	/**
@@ -6528,7 +7139,7 @@ final class FLBuilderModel {
 
 		$services[ $service ][ $account ] = $data;
 
-		update_option( '_fl_builder_services', $services );
+		FLBuilderUtils::update_option( '_fl_builder_services', $services );
 	}
 
 	/**
@@ -6549,7 +7160,7 @@ final class FLBuilderModel {
 			unset( $services[ $service ] );
 		}
 
-		update_option( '_fl_builder_services', $services );
+		FLBuilderUtils::update_option( '_fl_builder_services', $services );
 	}
 
 	/**
@@ -6598,7 +7209,7 @@ final class FLBuilderModel {
 			delete_option( $key );
 		} else {
 			// Update the option for single install or subsite.
-			update_option( $key, $value );
+			FLBuilderUtils::update_option( $key, $value );
 		}
 	}
 
@@ -6659,6 +7270,25 @@ final class FLBuilderModel {
 
 			exit;
 		}
+	}
+
+	/**
+	 * Be sure to return a unique string
+	 * @since 2.5
+	 */
+	static public function uniqid( $prefix = '', $length = 12 ) {
+		$id = substr( str_shuffle( '0123456789abcdefghijklmnopqrstuvwxyz' ), 0, $length );
+		if ( preg_match( '/^[0-9]+$/', $id ) ) {
+			$id = self::uniqid( $prefix, $length );
+		}
+		return ( $prefix ) ? $prefix . '-' . $id : $id;
+	}
+
+	/**
+	 * @since 2.6
+	 */
+	static public function user_has_unfiltered_html() {
+		return apply_filters( 'fl_user_has_unfiltered_html', current_user_can( 'unfiltered_html' ) );
 	}
 
 	/**

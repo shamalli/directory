@@ -1,3 +1,8 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <div class="wrap">
 	<h2><?php echo $set->get_title(); ?></h2>
 	<?php echo do_action('w2dc_settings_panel_top'); ?>
@@ -5,7 +10,7 @@
 		<div id="vp-option-panel"class="vp-option-panel <?php echo ($set->get_layout() === 'fixed') ? 'fixed-layout' : 'fluid-layout' ; ?>">
 			<div class="vp-left-panel">
 				<div id="vp-logo" class="vp-logo">
-					<img src="<?php echo VP_W2DC_Util_Res::img($set->get_logo()); ?>" alt="<?php echo $set->get_title(); ?>" />
+					<img src="<?php echo W2DC_VP_Util_Res::img($set->get_logo()); ?>" alt="<?php echo $set->get_title(); ?>" />
 				</div>
 				<div id="vp-menus" class="vp-menus">
 					<ul class="vp-menu-level-1">
@@ -24,11 +29,11 @@
 							<?php endif; ?>
 								<?php
 								$icon = $menu->get_icon();
-								$font_awesome = VP_W2DC_Util_Res::is_font_awesome($icon);
+								$font_awesome = W2DC_VP_Util_Res::is_font_awesome($icon);
 								if ($font_awesome !== false):
-									VP_W2DC_Util_Text::print_if_exists($font_awesome, '<i class="w2dc-fa %s"></i>');
+									W2DC_VP_Util_Text::print_if_exists($font_awesome, '<i class="w2dc-fa %s"></i>');
 								else:
-									VP_W2DC_Util_Text::print_if_exists(VP_W2DC_Util_Res::img($icon), '<i class="custom-menu-icon" style="background-image: url(\'%s\');"></i>');
+									W2DC_VP_Util_Text::print_if_exists(W2DC_VP_Util_Res::img($icon), '<i class="custom-menu-icon" style="background-image: url(\'%s\');"></i>');
 								endif;
 								?>
 								<span><?php echo $menu->get_title(); ?></span>
@@ -45,11 +50,11 @@
 									<a href="#<?php echo $submenu->get_name(); ?>" class="vp-js-menu-goto vp-menu-goto">
 										<?php
 										$sub_icon = $submenu->get_icon();
-										$font_awesome = VP_W2DC_Util_Res::is_font_awesome($sub_icon);
+										$font_awesome = W2DC_VP_Util_Res::is_font_awesome($sub_icon);
 										if ($font_awesome !== false):
-											VP_W2DC_Util_Text::print_if_exists($font_awesome, '<i class="w2dc-fa %s"></i>');
+											W2DC_VP_Util_Text::print_if_exists($font_awesome, '<i class="w2dc-fa %s"></i>');
 										else:
-											VP_W2DC_Util_Text::print_if_exists(VP_W2DC_Util_Res::img($sub_icon), '<i class="custom-menu-icon" style="background-image: url(\'%s\');"></i>');
+											W2DC_VP_Util_Text::print_if_exists(W2DC_VP_Util_Res::img($sub_icon), '<i class="custom-menu-icon" style="background-image: url(\'%s\');"></i>');
 										endif;
 										?>
 										<span><?php echo $submenu->get_title(); ?></span>
@@ -67,9 +72,9 @@
 				<form id="vp-option-form" class="vp-option-form vp-js-option-form" method="POST">
 					<div id="vp-submit-top" class="vp-submit top">
 						<div class="inner">
-							<input class="vp-save vp-button button button-primary" type="submit" value="<?php esc_attr_e('Save Changes', 'vp_w2dc_textdomain'); ?>" />
-							<p class="vp-js-save-loader save-loader" style="display: none;"><img src="<?php VP_W2DC_Util_Res::img_out('ajax-loader.gif', ''); ?>" /><?php _e('Saving Now', 'vp_w2dc_textdomain'); ?></p>
-							<p class="vp-js-save-status save-status" style="display: none;"></p>
+							<input class="vp-save vp-button button button-primary" type="submit" value="<?php w2dc_esc_e('Save Changes', 'w2dc'); ?>" />
+							<p class="vp-js-save-loader save-loader w2dc-display-none"><img src="<?php W2DC_VP_Util_Res::img_out('ajax-loader.gif', ''); ?>" /><?php esc_html_e('Saving Now', 'w2dc'); ?></p>
+							<p class="vp-js-save-status save-status w2dc-display-none"></p>
 						</div>
 					</div>
 					<?php foreach ($set->get_menus() as $menu): ?>
@@ -82,16 +87,13 @@
 					<?php endforeach; ?>
 					<div id="vp-submit-bottom" class="vp-submit bottom">
 						<div class="inner">
-							<input class="vp-save vp-button button button-primary" type="submit" value="<?php esc_attr_e('Save Changes', 'vp_w2dc_textdomain'); ?>" />
-							<p class="vp-js-save-loader save-loader" style="display: none;"><img src="<?php VP_W2DC_Util_Res::img_out('ajax-loader.gif', ''); ?>" /><?php _e('Saving Now', 'vp_w2dc_textdomain'); ?></p>
-							<p class="vp-js-save-status save-status" style="display: none;"></p>
+							<input class="vp-save vp-button button button-primary" type="submit" value="<?php w2dc_esc_e('Save Changes', 'w2dc'); ?>" />
+							<p class="vp-js-save-loader save-loader w2dc-display-none"><img src="<?php W2DC_VP_Util_Res::img_out('ajax-loader.gif', ''); ?>" /><?php esc_html_e('Saving Now', 'w2dc'); ?></p>
+							<p class="vp-js-save-status save-status w2dc-display-none"></p>
 						</div>
 					</div>
 				</form>
 			</div>
-		</div>
-		<div id="vp-copyright" class="vp-copyright">
-			<p><?php printf(__('This option panel is built using Vafpress Framework %s powered by Vafpress', 'vp_w2dc_textdomain'), VP_W2DC_VERSION); ?></p>
 		</div>
 	</div>
 	<?php echo do_action('w2dc_settings_panel_bottom'); ?>

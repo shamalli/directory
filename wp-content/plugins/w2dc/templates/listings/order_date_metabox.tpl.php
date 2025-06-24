@@ -10,12 +10,12 @@
 	); ?>;
 </script>
 
-<p><?php _e("Manually set new sorting date and time of the listing.<br />Sorting date will be automatically changed when listing activated, raised up or listing level was changed.", 'W2DC'); ?></p>
+<p><?php echo wp_kses(__("Manually set new sorting date and time of the listing.<br />Sorting date will be automatically changed when listing activated, raised up or listing level was changed.", 'w2dc'), 'post'); ?></p>
 
 <div class="w2dc-content">
 	<div class="w2dc-field w2dc-form-group w2dc-form-horizontal">
 		<label class="w2dc-col-md-1 w2dc-control-label">
-			<?php _e('Date:', 'W2DC'); ?>
+			<?php esc_html_e('Date:', 'w2dc'); ?>
 		</label>
 		<div class="w2dc-col-md-3">
 			<div class="w2dc-has-feedback">
@@ -23,7 +23,7 @@
 				<span class="w2dc-glyphicon w2dc-glyphicon-calendar w2dc-form-control-feedback"></span>
 			</div>
 		</div>
-		<label class="w2dc-col-md-1 w2dc-control-label"><?php _e('Time:', 'W2DC'); ?></label>
+		<label class="w2dc-col-md-1 w2dc-control-label"><?php esc_html_e('Time:', 'w2dc'); ?></label>
 		<div class="w2dc-col-md-3">
 			<?php $hour = date('H', intval($listing->order_date)); ?>
 			<?php $minute = date('i', intval($listing->order_date)); ?>

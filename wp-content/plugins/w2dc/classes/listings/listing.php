@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+// @codingStandardsIgnoreFile
 
 class w2dc_listing extends w2dc_post {
 	public $post;
@@ -18,7 +20,6 @@ class w2dc_listing extends w2dc_post {
 	public $map;
 	public $is_claimable;
 	public $claim;
-	public $logo_animation_effect;
 	public $contact_email;
 	public $avg_rating;
 
@@ -94,7 +95,7 @@ class w2dc_listing extends w2dc_post {
 			$this->directory = $w2dc_instance->directories->getDefaultDirectory();
 		}
 
-		if ($level_id = $wpdb->get_var("SELECT level_id FROM {$wpdb->w2dc_levels_relationships} WHERE post_id=" . $post_id)) {
+		if ($level_id = $wpdb->get_var($wpdb->prepare("SELECT level_id FROM {$wpdb->w2dc_levels_relationships} WHERE post_id=%d", $post_id))) {
 			$this->level = $w2dc_instance->levels->getLevelById($level_id);
 		}
 		if (!$this->level) {
@@ -107,7 +108,7 @@ class w2dc_listing extends w2dc_post {
 	public function setLocations() {
 		global $wpdb;
 
-		$results = $wpdb->get_results("SELECT * FROM {$wpdb->w2dc_locations_relationships} WHERE post_id=".$this->post->ID, ARRAY_A);
+		$results = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->w2dc_locations_relationships} WHERE post_id=%d", $this->post->ID), ARRAY_A);
 		
 		if ($this->level->map) {
 			$listing_categories = wp_get_object_terms($this->post->ID, W2DC_CATEGORIES_TAX, array('orderby' => 'name'));
@@ -289,14 +290,6 @@ class w2dc_listing extends w2dc_post {
 					$images = array_flip(array_replace(array_flip(array_unique(array_filter($images_order))), array_flip($images)));
 				}
 				foreach ($images AS $image_id) {
-					// temporarily remove this code to test,
-					// media manager saved images especially for each post separately, so we do not need to take their equivalent from translation post.
-					// adapted for WPML
-					/* global $sitepress;
-					if (function_exists('wpml_object_id_filter') && $sitepress) {
-						$image_id = apply_filters('wpml_object_id', $image_id, 'attachment', true);
-					} */
-
 					if ($image_post = get_post($image_id, ARRAY_A)) {
 						$this->images[$image_id] = $image_post;
 					}
@@ -542,11 +535,6 @@ class w2dc_listing extends w2dc_post {
 
 		if ($continue) {
 			$listings = array($this);
-			
-			// if it is expired listing - post_status = publish
-			/* if (get_post_meta($this->post->ID, '_expiration_notification_sent', true)) {
-				wp_update_post(array('ID' => $this->post->ID, 'post_status' => 'publish'));
-			} */
 
 			// adapted for WPML
 			global $sitepress;
@@ -706,7 +694,7 @@ class w2dc_listing extends w2dc_post {
 				
 				if ($continue) {
 					foreach ($listings AS $listing) {
-						if ($wpdb->query("UPDATE {$wpdb->w2dc_levels_relationships} SET level_id=" . $new_level_id . "  WHERE post_id=" . $listing->post->ID)) {
+						if ($wpdb->query($wpdb->prepare("UPDATE {$wpdb->w2dc_levels_relationships} SET level_id=%d  WHERE post_id=%d", $new_level_id, $listing->post->ID))) {
 							if ($this->level->upgrade_meta[$new_level_id]['raiseup']) {
 								update_post_meta($listing->post->ID, '_order_date', time());
 							}
@@ -893,8 +881,8 @@ class w2dc_listing extends w2dc_post {
 			}
 		}
 		
-		echo $info_output;
-		echo $fields_output;
+		w2dc_esc_e($info_output);
+		w2dc_esc_e($fields_output);
 	}
 
 	public function isLogoOnExcerpt() {
@@ -912,16 +900,16 @@ class w2dc_listing extends w2dc_post {
 	public function getPendingStatus() {
 		if ($this->post->post_status == 'pending') {
 			if ($this->status == 'unpaid') {
-				return __('Pending payment', 'W2DC');
+				return esc_html__('Pending payment', 'w2dc');
 			}
 			
 			$is_moderation = get_post_meta($this->post->ID, '_requires_moderation', true);
 			$is_approved = get_post_meta($this->post->ID, '_listing_approved', true);
 			if ($is_moderation && !$is_approved) {
-				return __('Pending approval', 'W2DC');
+				return esc_html__('Pending approval', 'w2dc');
 			}
 			
-			return __('Pending', 'W2DC');
+			return esc_html__('Pending', 'w2dc');
 		}
 	}
 	
@@ -1030,12 +1018,12 @@ class w2dc_listing_claim {
 	public function getClaimMessage() {
 		if ($this->claimer_id == get_current_user_id()) {
 			if ($this->status == 'approved')
-				return __('Your claim was approved successully', 'W2DC');
+				return esc_html__('Your claim was approved successully', 'w2dc');
 			else
-				return __('Your claim was not approved yet', 'W2DC');
+				return esc_html__('Your claim was not approved yet', 'w2dc');
 		} else {
 			if ($this->status != 'approved')
-				return sprintf(__('You may approve or decline claim <a href="%s">here</a>', 'W2DC'), w2dc_dashboardUrl(array('listing_id' => $this->listing_id, 'w2dc_action' => 'process_claim')));
+				return sprintf(esc_html__('You may approve or decline claim <a href="%s">here</a>', 'w2dc'), w2dc_dashboardUrl(array('listing_id' => $this->listing_id, 'w2dc_action' => 'process_claim')));
 		}
 	}
 
@@ -1060,21 +1048,5 @@ class w2dc_listing_claim {
 		}
 	}
 }
-
-// use this to allow previous owner to edit a listing
-/* add_filter("w2dc_user_can_edit_listing", "w2dc_user_can_edit_listing", 10, 2);
-function w2dc_user_can_edit_listing($can_edit, $listing_id) {
-	
-	if ($listing = w2dc_getListing($listing_id)) {
-		if ($owner_id = get_post_meta($listing->post->ID, '_original_owner', true)) {
-			$current_user = wp_get_current_user();
-			if ($current_user->ID == $owner_id) {
-				$can_edit = true;
-			}
-		}
-	}
-	
-	return $can_edit;
-} */
 
 ?>

@@ -1,3 +1,8 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <?php if ((!get_option('w2dc_payments_addon') && !w2dc_isWooActive()) && $args['show_period']): ?>
 	<li class="w2dc-list-group-item w2dc-choose-plan-option">
 		<div class="w2dc-choose-plan-option-wrapper">
@@ -14,7 +19,7 @@
 			<?php else: ?>
 			<span class="w2dc-choose-plan-option-icon w2dc-choose-plan-option-no"></span>
 			<?php endif; ?>
-			<?php _e('Sticky', 'W2DC'); ?>
+			<?php esc_html_e('Sticky', 'w2dc'); ?>
 		</div>
 	</li>
 <?php endif; ?>
@@ -26,7 +31,7 @@
 			<?php else: ?>
 			<span class="w2dc-choose-plan-option-icon w2dc-choose-plan-option-no"></span>
 			<?php endif; ?>
-			<?php _e('Featured', 'W2DC'); ?>
+			<?php esc_html_e('Featured', 'w2dc'); ?>
 		</div>
 	</li>
 <?php endif; ?>
@@ -39,23 +44,23 @@
 				?>
 				<span class="w2dc-choose-plan-option-icon w2dc-choose-plan-option-yes"></span>
 				<?php 
-					_e('1 category', 'W2DC');
+					esc_html_e('1 category', 'w2dc');
 				} elseif ($level->categories_number != 0) {
 				?>
 				<span class="w2dc-choose-plan-option-icon w2dc-choose-plan-option-yes"></span>
 				<?php 
-					printf(__('Up to <strong>%d</strong> categories', 'W2DC'), $level->categories_number);
+					printf(w2dc_esc_('Up to <strong>%d</strong> categories', 'w2dc'), $level->categories_number);
 				} else {
 				?>
 				<span class="w2dc-choose-plan-option-icon w2dc-choose-plan-option-no"></span>
 				<?php  
-					_e('No categories', 'W2DC');
+					esc_html_e('No categories', 'w2dc');
 				}
 			} else {
 			?>
 				<span class="w2dc-choose-plan-option-icon w2dc-choose-plan-option-yes"></span>
 			<?php 
-				_e('Unlimited categories', 'W2DC');
+				esc_html_e('Unlimited categories', 'w2dc');
 			}
 			?>
 		</div>
@@ -69,17 +74,17 @@
 			?>
 			<span class="w2dc-choose-plan-option-icon w2dc-choose-plan-option-yes"></span>
 			<?php 
-				_e('1 location', 'W2DC');
+				esc_html_e('1 location', 'w2dc');
 			} elseif ($level->locations_number != 0) {
 			?>
 			<span class="w2dc-choose-plan-option-icon w2dc-choose-plan-option-yes"></span>
 			<?php 
-				printf(__('Up to <strong>%d</strong> locations', 'W2DC'), $level->locations_number);
+				printf(w2dc_esc_('Up to <strong>%d</strong> locations', 'w2dc'), $level->locations_number);
 			} else {
 			?>
 			<span class="w2dc-choose-plan-option-icon w2dc-choose-plan-option-no"></span>
 			<?php 
-				_e('No locations', 'W2DC');
+				esc_html_e('No locations', 'w2dc');
 			}
 			?>
 		</div>
@@ -93,7 +98,7 @@
 			<?php else: ?>
 			<span class="w2dc-choose-plan-option-icon w2dc-choose-plan-option-no"></span>
 			<?php endif; ?>
-			<?php _e('Map', 'W2DC'); ?>
+			<?php esc_html_e('Map', 'w2dc'); ?>
 		</div>
 	</li>
 <?php endif; ?>
@@ -105,17 +110,17 @@
 			?>
 			<span class="w2dc-choose-plan-option-icon w2dc-choose-plan-option-yes"></span>
 			<?php 
-				_e('1 image', 'W2DC');
+				esc_html_e('1 image', 'w2dc');
 			} elseif ($level->images_number != 0) {
 			?>
 			<span class="w2dc-choose-plan-option-icon w2dc-choose-plan-option-yes"></span>
 			<?php 
-				printf(__('Up to <strong>%d</strong> images', 'W2DC'), $level->images_number);
+				printf(w2dc_esc_('Up to <strong>%d</strong> images', 'w2dc'), $level->images_number);
 			} else {
 			?>
 			<span class="w2dc-choose-plan-option-icon w2dc-choose-plan-option-no"></span>
 			<?php 
-				_e('No images', 'W2DC'); ?>
+				esc_html_e('No images', 'w2dc'); ?>
 			<?php
 			} 
 			?>
@@ -130,17 +135,17 @@
 			?>
 			<span class="w2dc-choose-plan-option-icon w2dc-choose-plan-option-yes"></span>
 			<?php 
-				_e('1 video', 'W2DC');
+				esc_html_e('1 video', 'w2dc');
 			} elseif ($level->videos_number != 0) {
 			?>
 			<span class="w2dc-choose-plan-option-icon w2dc-choose-plan-option-yes"></span>
 			<?php 
-				printf(__('Up to <strong>%d</strong> videos', 'W2DC'), $level->videos_number);
+				printf(w2dc_esc_('Up to <strong>%d</strong> videos', 'w2dc'), $level->videos_number);
 			} else {
 			?>
 			<span class="w2dc-choose-plan-option-icon w2dc-choose-plan-option-no"></span>
 			<?php 
-				_e('No videos', 'W2DC');
+				esc_html_e('No videos', 'w2dc');
 			}
 			?>
 		</div>
@@ -155,7 +160,7 @@
 			<?php elseif ($option_value == 'no'): ?>
 			<span class="w2dc-choose-plan-option-icon w2dc-choose-plan-option-no"></span>
 			<?php endif; ?>
-			<?php echo $option_name; ?>
+			<?php w2dc_esc_e($option_name); ?>
 		</div>
 	</li>
 <?php endforeach; ?>

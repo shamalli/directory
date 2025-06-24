@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+// @codingStandardsIgnoreFile
 
 function wcsearch_install_search() {
 	global $wpdb;

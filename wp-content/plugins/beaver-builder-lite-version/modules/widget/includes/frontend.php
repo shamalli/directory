@@ -5,10 +5,11 @@
 $post_data = FLBuilderModel::get_post_data();
 
 // Widget class
+$widget_class = '';
 if ( isset( $settings->widget ) ) {
-	$widget_class = $settings->widget;
+	$widget_class = urldecode( $settings->widget );
 } elseif ( isset( $post_data['widget'] ) && FLBuilderModel::is_builder_active() ) {
-	$widget_class = $post_data['widget'];
+	$widget_class = urldecode( $post_data['widget'] );
 }
 
 if ( isset( $widget_class ) && class_exists( $widget_class ) ) {
@@ -35,6 +36,10 @@ if ( isset( $widget_class ) && class_exists( $widget_class ) ) {
 		'widget_id' => 'fl_builder_widget_' . $module->node,
 	), $module );
 
+	/**
+	 * Is widget output disabled
+	 * @see fl_widget_module_output_disabled
+	 */
 	$disabled = apply_filters( 'fl_widget_module_output_disabled', false, $module, $widget_class );
 
 	if ( false !== $disabled ) {

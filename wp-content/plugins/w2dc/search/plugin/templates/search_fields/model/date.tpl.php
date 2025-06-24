@@ -1,3 +1,8 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <div class="wcsearch-search-model-input wcsearch-search-model-date-fields" <?php echo $search_model->getOptionsString(); ?>>
 	<label class="wcsearch-search-model-input-label"><?php echo esc_html($title); ?></label>
 	<div class="wcsearch-search-model-input-clear">

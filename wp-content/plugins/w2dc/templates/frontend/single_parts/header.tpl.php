@@ -1,13 +1,19 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <?php if ($listing->title()): ?>
 <header class="w2dc-content w2dc-listing-header">
+	<?php do_action('w2dc_listing_pre_title_html', $listing, true); ?>
 	<?php if (!get_option('w2dc_hide_listing_title')): ?>
-	<h2 class="w2dc-listing-single-title" itemprop="name"><?php echo $title; ?></h2>
+	<h2 class="w2dc-listing-single-title" itemprop="name"><?php w2dc_esc_e($title); ?></h2>
 	<?php endif; ?>
 	<?php do_action('w2dc_listing_title_html', $listing, true); ?>
 	<?php if (!get_option('w2dc_hide_views_counter')): ?>
 	<div class="w2dc-meta-data">
 		<div class="w2dc-views-counter">
-			<span class="w2dc-glyphicon w2dc-glyphicon-eye-open"></span> <?php _e('views', 'W2DC')?>: <?php echo get_post_meta($listing->post->ID, '_total_clicks', true); ?>
+			<span class="w2dc-glyphicon w2dc-glyphicon-eye-open"></span> <?php esc_html_e('views', 'w2dc')?>: <?php echo get_post_meta($listing->post->ID, '_total_clicks', true); ?>
 		</div>
 	</div>
 	<?php endif; ?>
@@ -19,7 +25,12 @@
 	<?php if (!get_option('w2dc_hide_author_link')): ?>
 	<div class="w2dc-meta-data">
 		<div class="w2dc-author-link">
-			<?php _e('By', 'W2DC'); ?> <?php echo get_the_author_link(); ?>
+			<?php
+			// change post author to correct listing author
+			global $authordata;
+			$authordata = get_userdata($listing->post->post_author);
+			?>
+			<?php esc_html_e('By', 'w2dc'); ?> <?php echo get_the_author_link(); ?>
 		</div>
 	</div>
 	<?php endif; ?>

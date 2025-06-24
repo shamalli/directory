@@ -1,11 +1,16 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <?php w2dc_renderTemplate('admin_header.tpl.php'); ?>
 
 <h2>
 	<?php
 	if ($level_id)
-		_e('Edit level', 'W2DC');
+		esc_html_e('Edit level', 'w2dc');
 	else
-		_e('Create new level', 'W2DC');
+		esc_html_e('Create new level', 'w2dc');
 	?>
 </h2>
 
@@ -51,7 +56,7 @@
 		<tbody>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Level name', 'W2DC'); ?><span class="w2dc-red-asterisk">*</span></label>
+					<label><?php esc_html_e('Level name', 'w2dc'); ?><span class="w2dc-red-asterisk">*</span></label>
 				</th>
 				<td>
 					<input
@@ -64,50 +69,50 @@
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Level description', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Level description', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<textarea
 						name="description"
 						cols="60"
 						rows="4" ><?php echo esc_textarea($level->description); ?></textarea>
-					<p class="description"><?php _e("Describe this level's advantages and options as much easier for users as you can", 'W2DC'); ?></p>
+					<p class="description"><?php esc_html_e("Describe this level's advantages and options as much easier for users as you can", 'w2dc'); ?></p>
 					<?php w2dc_wpmlTranslationCompleteNotice(); ?>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Who can view listings', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Who can view listings', 'w2dc'); ?></label>
 				</th>
 				<td>
-					<select multiple="multiple" name="who_can_view[]" class="w2dc-form-control w2dc-form-group" style="height: 300px">
-						<option value="" <?php echo ((!$level->who_can_view) ? 'selected' : ''); ?>><?php esc_html_e("Any users", "W2DC"); ?></option>
-						<option value="loggedinusers" <?php echo ((in_array('loggedinusers', $level->who_can_view)) ? 'selected' : ''); ?>><?php esc_html_e("Any logged in users", "W2DC"); ?></option>
+					<select multiple="multiple" name="who_can_view[]" class="w2dc-form-control w2dc-form-group w2dc-height-300">
+						<option value="" <?php echo ((!$level->who_can_view) ? 'selected' : ''); ?>><?php esc_html_e("Any users", "w2dc"); ?></option>
+						<option value="loggedinusers" <?php echo ((in_array('loggedinusers', $level->who_can_view)) ? 'selected' : ''); ?>><?php esc_html_e("Any logged in users", "w2dc"); ?></option>
 						<?php foreach (get_editable_roles() as $role_name => $role_info): ?>
-						<option value="<?php echo $role_name; ?>" <?php echo ((in_array($role_name, $level->who_can_view)) ? 'selected' : ''); ?>><?php echo $role_info['name']; ?></option>
+						<option value="<?php w2dc_esc_e($role_name); ?>" <?php echo ((in_array($role_name, $level->who_can_view)) ? 'selected' : ''); ?>><?php w2dc_esc_e($role_info['name']); ?></option>
 						<?php endforeach; ?>
 					</select>
-					<p class="description"><?php _e("Specify what users can see listings in this level: any users, only logged in users, or select specific users groups.", 'W2DC'); ?></p>
+					<p class="description"><?php esc_html_e("Specify what users can see listings in this level: any users, only logged in users, or select specific users groups.", 'w2dc'); ?></p>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Who can submit listings', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Who can submit listings', 'w2dc'); ?></label>
 				</th>
 				<td>
-					<select multiple="multiple" name="who_can_submit[]" class="w2dc-form-control w2dc-form-group" style="height: 300px">
-						<option value="" <?php echo ((!$level->who_can_submit) ? 'selected' : ''); ?>><?php esc_html_e("Any users", "W2DC"); ?></option>
-						<option value="loggedinusers" <?php echo ((in_array('loggedinusers', $level->who_can_submit)) ? 'selected' : ''); ?>><?php esc_html_e("Any logged in users", "W2DC"); ?></option>
+					<select multiple="multiple" name="who_can_submit[]" class="w2dc-form-control w2dc-form-group w2dc-height-300">
+						<option value="" <?php echo ((!$level->who_can_submit) ? 'selected' : ''); ?>><?php esc_html_e("Any users", "w2dc"); ?></option>
+						<option value="loggedinusers" <?php echo ((in_array('loggedinusers', $level->who_can_submit)) ? 'selected' : ''); ?>><?php esc_html_e("Any logged in users", "w2dc"); ?></option>
 						<?php foreach (get_editable_roles() as $role_name => $role_info): ?>
-						<option value="<?php echo $role_name; ?>" <?php echo ((in_array($role_name, $level->who_can_submit)) ? 'selected' : ''); ?>><?php echo $role_info['name']; ?></option>
+						<option value="<?php w2dc_esc_e($role_name); ?>" <?php echo ((in_array($role_name, $level->who_can_submit)) ? 'selected' : ''); ?>><?php w2dc_esc_e($role_info['name']); ?></option>
 						<?php endforeach; ?>
 					</select>
-					<p class="description"><?php _e("Specify what users can submit listings in this level: any users, only logged in users, or select specific users groups.", 'W2DC'); ?></p>
+					<p class="description"><?php esc_html_e("Specify what users can submit listings in this level: any users, only logged in users, or select specific users groups.", 'w2dc'); ?></p>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Eternal active period', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Eternal active period', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<input
@@ -116,12 +121,12 @@
 						value="1"
 						id="eternal_active_period"
 						<?php checked($level->eternal_active_period); ?> />
-					<p class="description"><?php _e("Listings will never expire.", 'W2DC'); ?></p>
+					<p class="description"><?php esc_html_e("Listings will never expire.", 'w2dc'); ?></p>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Active period', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Active period', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<select name="active_interval" id="active_interval" <?php disabled($level->eternal_active_period); ?> >
@@ -134,37 +139,37 @@
 					</select>
 					&nbsp;
 					<select name="active_period" id="active_period" <?php disabled($level->eternal_active_period); ?> >
-						<option value="day" <?php if ($level->active_period == 'day') echo 'selected'; ?> ><?php _e("day(s)", "W2DC"); ?></option>
-						<option value="week" <?php if ($level->active_period == 'week') echo 'selected'; ?> ><?php _e("week(s)", "W2DC"); ?></option>
-						<option value="month" <?php if ($level->active_period == 'month') echo 'selected'; ?> ><?php _e("month(s)", "W2DC"); ?></option>
-						<option value="year" <?php if ($level->active_period == 'year') echo 'selected'; ?> ><?php _e("year(s)", "W2DC"); ?></option>
+						<option value="day" <?php if ($level->active_period == 'day') echo 'selected'; ?> ><?php esc_html_e("day(s)", "w2dc"); ?></option>
+						<option value="week" <?php if ($level->active_period == 'week') echo 'selected'; ?> ><?php esc_html_e("week(s)", "w2dc"); ?></option>
+						<option value="month" <?php if ($level->active_period == 'month') echo 'selected'; ?> ><?php esc_html_e("month(s)", "w2dc"); ?></option>
+						<option value="year" <?php if ($level->active_period == 'year') echo 'selected'; ?> ><?php esc_html_e("year(s)", "w2dc"); ?></option>
 					</select>
 					<p class="description">
-						<?php _e("During this period the listing will have active status.", 'W2DC'); ?>
+						<?php esc_html_e("During this period the listing will have active status.", 'w2dc'); ?>
 					</p>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Change level after expiration', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Change level after expiration', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<select name="change_level_id" id="change_level_id" <?php disabled($level->eternal_active_period); ?> >
-						<option value="0" <?php if ($level->change_level_id == 0) echo 'selected'; ?> >- <?php _e("Just suspend", "W2DC"); ?> -</option>
+						<option value="0" <?php if ($level->change_level_id == 0) echo 'selected'; ?> >- <?php esc_html_e("Just suspend", "w2dc"); ?> -</option>
 						<?php foreach ($w2dc_instance->levels->levels_array AS $new_level): ?>
 						<?php if ($level->id != $new_level->id): ?>
-						<option value="<?php echo $new_level->id; ?>" <?php if ($level->change_level_id == $new_level->id) echo 'selected'; ?> ><?php echo $new_level->name; ?></option>
+						<option value="<?php w2dc_esc_e($new_level->id); ?>" <?php if ($level->change_level_id == $new_level->id) echo 'selected'; ?> ><?php w2dc_esc_e($new_level->name); ?></option>
 						<?php endif; ?>
 						<?php endforeach; ?>
 					</select>
 					<p class="description">
-						<?php _e("After expiration listing will change level automatically.", 'W2DC'); ?>
+						<?php esc_html_e("After expiration listing will change level automatically.", 'w2dc'); ?>
 					</p>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Number of listings in package', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Number of listings in package', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<input
@@ -172,13 +177,13 @@
 						name="listings_in_package"
 						type="text"
 						size="1"
-						value="<?php echo $level->listings_in_package; ?>" />
-					<p class="description"><?php _e("Enter more than 1 to allow users get packages of listings. Users will be able to use listings from their package to renew, raise up and upgrade existing listings.", 'W2DC'); ?></p>
+						value="<?php w2dc_esc_e($level->listings_in_package); ?>" />
+					<p class="description"><?php esc_html_e("Enter more than 1 to allow users get packages of listings. Users will be able to use listings from their package to renew, raise up and upgrade existing listings.", 'w2dc'); ?></p>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Ability to raise up listings', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Ability to raise up listings', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<input
@@ -186,12 +191,12 @@
 						type="checkbox"
 						value="1"
 						<?php checked($level->raiseup_enabled); ?> />
-					<p class="description"><?php _e("This option may be payment", 'W2DC'); ?></p>
+					<p class="description"><?php esc_html_e("This option may be payment", 'w2dc'); ?></p>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Sticky listings', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Sticky listings', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<input
@@ -199,12 +204,12 @@
 						type="checkbox"
 						value="1"
 						<?php checked($level->sticky); ?> />
-					<p class="description"><?php _e("Listings of this level will be on top", 'W2DC'); ?></p>
+					<p class="description"><?php esc_html_e("Listings of this level will be on top", 'w2dc'); ?></p>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Featured listings', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Featured listings', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<input
@@ -212,12 +217,12 @@
 						type="checkbox"
 						value="1"
 						<?php checked($level->featured); ?> />
-					<p class="description"><?php _e("Listings of this level will be on top and marked as featured", 'W2DC'); ?></p>
+					<p class="description"><?php esc_html_e("Listings of this level will be on top and marked as featured", 'w2dc'); ?></p>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Do listings have own single pages?', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Do listings have own single pages?', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<input
@@ -225,12 +230,12 @@
 						type="checkbox"
 						value="1"
 						<?php checked($level->listings_own_page); ?> />
-					<p class="description"><?php _e("When unchecked - listings info will be shown only on excerpt pages, without links to detailed pages.", 'W2DC'); ?></p>
+					<p class="description"><?php esc_html_e("When unchecked - listings info will be shown only on excerpt pages, without links to detailed pages.", 'w2dc'); ?></p>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Enable nofollow attribute for links to single listings pages', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Enable nofollow attribute for links to single listings pages', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<input
@@ -238,12 +243,12 @@
 						type="checkbox"
 						value="1"
 						<?php checked($level->nofollow); ?> />
-					<p class="description"><a href="https://support.google.com/webmasters/answer/96569"><?php _e("Description from Google Webmaster Tools", 'W2DC'); ?></a></p>
+					<p class="description"><a href="https://developers.google.com/search/docs/crawling-indexing/qualify-outbound-links"><?php esc_html_e("Description from Google Docs", 'w2dc'); ?></a></p>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Enable map', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Enable map', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<input
@@ -255,7 +260,7 @@
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Enable listing logos (thumbnails) on excerpt pages', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Enable listing logos (thumbnails) on excerpt pages', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<input
@@ -267,7 +272,7 @@
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Images number available', 'W2DC'); ?>
+					<label><?php esc_html_e('Images number available', 'w2dc'); ?>
 				</th>
 				<td>
 					<input
@@ -279,7 +284,7 @@
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Videos number available', 'W2DC'); ?>
+					<label><?php esc_html_e('Videos number available', 'w2dc'); ?>
 				</th>
 				<td>
 					<input
@@ -294,20 +299,20 @@
 			
 			<tr>
 				<th scope="row">
-					<label><?php _e('Locations number available', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Locations number available', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<input
 						name="locations_number"
 						type="text"
 						size="1"
-						value="<?php echo $level->locations_number; ?>" />
+						value="<?php w2dc_esc_e($level->locations_number); ?>" />
 				</td>
 			</tr>
 			<?php if (w2dc_is_maps_used()): ?>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Custom markers on the map', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Custom markers on the map', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<input
@@ -315,13 +320,13 @@
 						type="checkbox"
 						value="1"
 						<?php checked($level->map_markers); ?> />
-					<p class="description"><?php _e("Allow users to select map markers for their locations", 'W2DC'); ?></p>
+					<p class="description"><?php esc_html_e("Allow users to select map markers for their locations", 'w2dc'); ?></p>
 				</td>
 			</tr>
 			<?php endif; ?>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Categories number available', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Categories number available', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<input
@@ -339,13 +344,13 @@
 							type="checkbox"
 							value="1"
 							<?php checked($level->unlimited_categories); ?> />
-						<?php _e('unlimited categories', 'W2DC'); ?>
+						<?php esc_html_e('unlimited categories', 'w2dc'); ?>
 					</label>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Tags number available', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Tags number available', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<input
@@ -363,42 +368,42 @@
 							type="checkbox"
 							value="1"
 							<?php checked($level->unlimited_tags); ?> />
-						<?php _e('unlimited tags', 'W2DC'); ?>
+						<?php esc_html_e('unlimited tags', 'w2dc'); ?>
 					</label>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Assigned categories', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Assigned categories', 'w2dc'); ?></label>
 					<?php echo w2dc_get_wpml_dependent_option_description(); ?>
 				</th>
 				<td>
-					<p class="description"><?php _e('You may define some special categories available for this level', 'W2DC'); ?></p>
+					<p class="description"><?php esc_html_e('You may define some special categories available for this level', 'w2dc'); ?></p>
 					<?php w2dc_termsSelectList('categories', W2DC_CATEGORIES_TAX, $level->categories); ?>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Assigned locations', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Assigned locations', 'w2dc'); ?></label>
 					<?php echo w2dc_get_wpml_dependent_option_description(); ?>
 				</th>
 				<td>
-					<p class="description"><?php _e('You may define some special locations available for this level', 'W2DC'); ?></p>
+					<p class="description"><?php esc_html_e('You may define some special locations available for this level', 'w2dc'); ?></p>
 					<?php w2dc_termsSelectList('locations', W2DC_LOCATIONS_TAX, $level->locations); ?>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Assigned content fields', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Assigned content fields', 'w2dc'); ?></label>
 				</th>
 				<td>
-					<p class="description"><?php _e('You may define some special content fields available for this level', 'W2DC'); ?></p>
-					<select multiple="multiple" name="content_fields[]" class="selected_terms_list w2dc-form-control w2dc-form-group" style="height: 300px">
-					<option value="" <?php echo (!$level->content_fields) ? 'selected' : ''; ?>><?php _e('- Select All -', 'W2DC'); ?></option>
-					<option value="0" <?php echo ($level->content_fields == array(0)) ? 'selected' : ''; ?>><?php _e('- No fields -', 'W2DC'); ?></option>
+					<p class="description"><?php esc_html_e('You may define some special content fields available for this level', 'w2dc'); ?></p>
+					<select multiple="multiple" name="content_fields[]" class="selected_terms_list w2dc-form-control w2dc-form-group w2dc-height-300">
+					<option value="" <?php echo (!$level->content_fields) ? 'selected' : ''; ?>><?php esc_html_e('- Select All -', 'w2dc'); ?></option>
+					<option value="0" <?php echo ($level->content_fields == array(0)) ? 'selected' : ''; ?>><?php esc_html_e('- No fields -', 'w2dc'); ?></option>
 					<?php foreach ($content_fields AS $field): ?>
 					<?php if (!$field->is_core_field): ?>
-					<option value="<?php echo $field->id; ?>" <?php echo ($level->content_fields && in_array($field->id, $level->content_fields)) ? 'selected' : ''; ?>><?php echo $field->name; ?></option>
+					<option value="<?php w2dc_esc_e($field->id); ?>" <?php echo ($level->content_fields && in_array($field->id, $level->content_fields)) ? 'selected' : ''; ?>><?php w2dc_esc_e($field->name); ?></option>
 					<?php endif; ?>
 					<?php endforeach; ?>
 					</select>
@@ -409,9 +414,9 @@
 	
 	<?php
 	if ($level_id)
-		submit_button(__('Save changes', 'W2DC'));
+		submit_button(esc_html__('Save changes', 'w2dc'));
 	else
-		submit_button(__('Create level', 'W2DC'));
+		submit_button(esc_html__('Create level', 'w2dc'));
 	?>
 </form>
 

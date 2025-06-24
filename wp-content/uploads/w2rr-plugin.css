@@ -5,7 +5,7 @@ div.w2rr-content.w2rr-widget a,
 div.w2rr-content.w2rr-widget a:visited,
 div.w2rr-content.w2rr-widget a:focus,
 div.w2rr-content .w2rr-btn-default, div.w2rr-content div.w2rr-btn-default:visited, div.w2rr-content .w2rr-btn-default:focus {
-	color: 20;
+	color: #2393ba;
 }
 div.w2rr-content a:hover,
 div.w2rr-content .w2rr-pagination > li > a:hover {
@@ -126,15 +126,3 @@ label.w2rr-rating-icon {
 	height: 51px;
 }
 
-/* It works with devices width more than 768 pixels. */
-@media screen and (min-width: 768px) {
-	.w2rr-single-review-logo-wrap {
-		max-width: 270px;
-		float: left;
-		margin: 0 20px 20px 0;
-	}
-	.rtl .w2rr-single-review-logo-wrap {
-		float: right;
-		margin: 0 0 20px 20px;
-	}
-}

@@ -70,8 +70,13 @@ class Domain_Dropdown implements Integration {
 	 * @return void
 	 */
 	public function handle_submit() {
-		if ( \check_admin_referer( 'yoast_seo_domain_dropdown' ) !== false ) {
-			$this->option->set( 'myyoast_test_domain', \filter_input( \INPUT_POST, 'myyoast_test_domain', \FILTER_SANITIZE_STRING ) );
+		if ( ! \check_admin_referer( 'yoast_seo_domain_dropdown' ) && ! isset( $_POST['myyoast_test_domain'] ) ) {
+			return;
+		}
+
+		if ( isset( $_POST['myyoast_test_domain'] ) && \is_string( $_POST['myyoast_test_domain'] ) ) {
+			$myyoast_test_domain = \sanitize_text_field( \wp_unslash( $_POST['myyoast_test_domain'] ) );
+			$this->option->set( 'myyoast_test_domain', $myyoast_test_domain );
 		}
 
 		\wp_safe_redirect( \self_admin_url( 'tools.php?page=' . \apply_filters( 'Yoast\WP\Test_Helper\admin_page', '' ) ) );
@@ -117,6 +122,10 @@ class Domain_Dropdown implements Integration {
 		$host     = '';
 		$url_host = \wp_parse_url( $url, \PHP_URL_HOST );
 		$new_host = \wp_parse_url( $domain, \PHP_URL_HOST );
+
+		if ( $new_host === false || $new_host === null ) {
+			$new_host = '';
+		}
 
 		if ( $url_host === 'my.yoast.com' ) {
 			$host = isset( $headers['Host'] ) ? $headers['Host'] : $new_host;

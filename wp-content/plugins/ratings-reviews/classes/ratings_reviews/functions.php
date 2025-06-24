@@ -216,17 +216,17 @@ function w2rr_show_add_review_button_message($post_id) {
 	
 	// number of reviews for one user exceed limit
 	if (get_option('w2rr_reviews_number_allowed') && $reviews_counter >= get_option('w2rr_reviews_number_allowed')) {
-		return esc_html__("Number of reviews for one user exceed limit", "W2RR");
+		return esc_html__("Number of reviews for one user exceed limit", "w2rr");
 	}
 	
 	// only admins can post
 	if (!current_user_can('manage_options') && get_option('w2rr_reviews_allowed_users') == 'admin') {
-		return esc_html__("Only admins can post", "W2RR");
+		return esc_html__("Only admins can post", "w2rr");
 	}
 	
 	// regular user can not post without add-review-page
 	if (!$w2rr_instance->add_review_page_id) {
-		return esc_html__("No page to submit a review", "W2RR");
+		return esc_html__("No page to submit a review", "w2rr");
 	}
 }
 
@@ -243,11 +243,6 @@ function w2rr_get_all_reviews_link($target_post) {
 		$url = $url . '/reviews/';
 		return $url;
 	} else {
-		/* if (!($all_reviews_page_id = w2rr_getAllReviewsPage())) {
-			$all_reviews_page_url = $post_url;
-		} else {
-			$all_reviews_page_url = get_the_permalink($all_reviews_page_id);
-		} */
 		$all_reviews_page_url = '';
 
 		return add_query_arg(array('reviews-all' => 1, 'target-post' => $target_post->post->post_name), $all_reviews_page_url);
@@ -375,11 +370,11 @@ function w2rr_reviewsOrderLinks($base_url, $defaults = array(), $return = false,
 	}
 
 	$ordering = array();
-	$ordering['post_date']['DESC'] = esc_html__('Newest first', 'W2RR');
-	$ordering['post_date']['ASC'] = esc_html__('Oldest first', 'W2RR');
-	$ordering['rating'] = esc_html__('Best rating', 'W2RR');
+	$ordering['post_date']['DESC'] = esc_html__('Newest first', 'w2rr');
+	$ordering['post_date']['ASC'] = esc_html__('Oldest first', 'w2rr');
+	$ordering['rating'] = esc_html__('Best rating', 'w2rr');
 	if (get_option('w2rr_reviews_votes')) {
-		$ordering['votes'] = esc_html__('Best voted', 'W2RR');
+		$ordering['votes'] = esc_html__('Best voted', 'w2rr');
 	}
 	
 	$ordering_links = new w2rr_orderingLinks($ordering, $base_url, $order_by, $order);
@@ -392,7 +387,7 @@ function w2rr_reviewsOrderLinks($base_url, $defaults = array(), $return = false,
 function w2rr_reviewsOrderingItems() {
 	global $w2rr_instance;
 
-	$ordering = array('post_date' => esc_html__('Date', 'W2RR'), 'votes' => esc_html__('Votes', 'W2RR'), 'rating' => esc_html__('Rating', 'W2RR'), 'rand' => esc_html__('Random', 'W2RR'));
+	$ordering = array('post_date' => esc_html__('Date', 'w2rr'), 'votes' => esc_html__('Votes', 'w2rr'), 'rating' => esc_html__('Rating', 'w2rr'), 'rand' => esc_html__('Random', 'w2rr'));
 
 	$ordering = apply_filters('w2rr_default_reviews_orderby_options', $ordering);
 	$ordering_items = array();

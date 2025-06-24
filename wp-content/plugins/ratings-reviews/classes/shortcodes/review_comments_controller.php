@@ -33,7 +33,7 @@ class w2rr_review_comments_controller extends w2rr_frontend_controller {
 			echo '<div class="w2rr-single-review-comments">';
 			echo '<div class="w2rr-single-review-comments-label">';
 			echo $this->review->post->comment_count . ' ';
-			echo _n('Comment', 'Comments', $this->review->post->comment_count, 'W2RR');
+			echo _n('Comment', 'Comments', $this->review->post->comment_count, 'w2rr');
 			echo '</div>';
 			w2rr_renderTemplate('ratings_reviews/single_parts/comments.tpl.php', array('post' => $this->review->post));
 			echo '</div>';

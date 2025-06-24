@@ -1,9 +1,13 @@
 <?php
 
-global $w2dc_page_header_widget_params;
-$w2dc_page_header_widget_params = array(
-		
-);
+// @codingStandardsIgnoreFile
+
+add_action('init', function() {
+	global $w2dc_page_header_widget_params;
+	$w2dc_page_header_widget_params = array(
+			
+	);
+}, 0);
 
 class w2dc_page_header_widget extends w2dc_widget {
 
@@ -12,7 +16,7 @@ class w2dc_page_header_widget extends w2dc_widget {
 
 		parent::__construct(
 				'w2dc_page_header_shortcode_widget',
-				__('Directory - Listing contact', 'W2DC')
+				esc_html__('Directory widget - Page header', 'w2dc')
 		);
 
 		$this->convertParams($w2dc_page_header_widget_params);

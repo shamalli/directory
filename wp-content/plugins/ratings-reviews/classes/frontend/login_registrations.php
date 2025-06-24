@@ -99,16 +99,16 @@ class w2rr_login_registrations {
 							exit;
 						}
 					} else {
-						w2rr_addMessage(esc_html__("Anti-bot test wasn't passed!", 'W2RR'), 'error');
+						w2rr_addMessage(esc_html__("Anti-bot test wasn't passed!", 'w2rr'), 'error');
 					}
 				}
 				
 				if (w2rr_getValue($_GET, 'msg') == 'checkemail') {
-					w2rr_addMessage(__('Check your email for the confirmation link.', 'W2RR'));
+					w2rr_addMessage(__('Check your email for the confirmation link.', 'w2rr'));
 				} elseif (w2rr_getValue($_GET, 'msg') == 'expiredkey') {
-					w2rr_addMessage(__('Your password reset link has expired. Please request a new link below.', 'W2RR'), 'error');
+					w2rr_addMessage(__('Your password reset link has expired. Please request a new link below.', 'w2rr'), 'error');
 				} else if (w2rr_getValue($_GET, 'msg') == 'invalidkey') {
-					w2rr_addMessage(__('Your password reset link appears to be invalid. Please request a new link below.', 'W2RR'), 'error');
+					w2rr_addMessage(__('Your password reset link appears to be invalid. Please request a new link below.', 'w2rr'), 'error');
 				}
 				
 				return 'login/lostpassword_form.tpl.php';
@@ -151,8 +151,8 @@ class w2rr_login_registrations {
 				$errors = new WP_Error();
 				
 				if (isset($_POST['pass1']) && $_POST['pass1'] != $_POST['pass2']) {
-					w2rr_addMessage(__('The passwords do not match.', 'W2RR'), 'error');
-					$errors->add('password_reset_mismatch', __('The passwords do not match.', 'W2RR'));
+					w2rr_addMessage(__('The passwords do not match.', 'w2rr'), 'error');
+					$errors->add('password_reset_mismatch', esc_html__('The passwords do not match.', 'w2rr'));
 				}
 				
 				do_action( 'validate_password_reset', $errors, $user );
@@ -162,7 +162,7 @@ class w2rr_login_registrations {
 					
 					reset_password($user, $_POST['pass1']);
 					setcookie($rp_cookie, ' ', time() - YEAR_IN_SECONDS, $rp_path, COOKIE_DOMAIN, is_ssl(), true);
-					w2rr_addMessage(__('Your password has been reset.', 'W2RR'));
+					w2rr_addMessage(__('Your password has been reset.', 'w2rr'));
 					wp_safe_redirect(add_query_arg(array('w2rr_action' => 'login', 'redirect_to' => urlencode($redirect_to)), $current_url));
 					exit;
 				}
@@ -196,7 +196,7 @@ class w2rr_login_registrations {
 						$errors = register_new_user($user_login, $user_email);
 						remove_filter('wp_new_user_notification_email', array($this, 'replace_new_user_notification_email'));
 						if (!is_wp_error($errors)) {
-							w2rr_addMessage(__('Registration complete. Please check your email.', 'W2RR'));
+							w2rr_addMessage(__('Registration complete. Please check your email.', 'w2rr'));
 							if ($redirect_to) {
 								wp_safe_redirect($redirect_to);
 								exit;
@@ -205,7 +205,7 @@ class w2rr_login_registrations {
 							w2rr_addMessage(strip_tags($errors->get_error_message()), 'error');
 						}
 					} else {
-						w2rr_addMessage(esc_html__("Anti-bot test wasn't passed!", 'W2RR'), 'error');
+						w2rr_addMessage(esc_html__("Anti-bot test wasn't passed!", 'w2rr'), 'error');
 					}
 				}
 				
@@ -213,15 +213,6 @@ class w2rr_login_registrations {
 				
 				break;
 			case 'logout':
-				/* wp_logout();
-				
-				if ( ! empty( $_REQUEST['redirect_to'] ) ) {
-					$redirect_to = $requested_redirect_to = $_REQUEST['redirect_to'];
-				} else {
-					$redirect_to           = home_url();
-					$requested_redirect_to = '';
-				} */
-				
 				$user = wp_get_current_user();
 				
 				wp_logout();
@@ -266,7 +257,7 @@ class w2rr_login_registrations {
 							w2rr_addMessage(strip_tags($user->get_error_message()), 'error');
 						}
 					} else {
-						w2rr_addMessage(esc_html__("Anti-bot test wasn't passed!", 'W2RR'), 'error');
+						w2rr_addMessage(esc_html__("Anti-bot test wasn't passed!", 'w2rr'), 'error');
 					}
 				}
 
@@ -293,10 +284,10 @@ function w2rr_login_form($args = array()) {
 	$defaults = array(
 			'redirect' => $redirect_to, // Default redirect is back to the current page
 			'form_id' => 'loginform',
-			'label_username' => __( 'Username', 'W2RR' ),
-			'label_password' => __( 'Password', 'W2RR' ),
-			'label_remember' => __( 'Remember Me', 'W2RR' ),
-			'label_log_in' => __( 'Log In', 'W2RR' ),
+			'label_username' => esc_html__( 'Username', 'w2rr' ),
+			'label_password' => esc_html__( 'Password', 'w2rr' ),
+			'label_remember' => esc_html__( 'Remember Me', 'w2rr' ),
+			'label_log_in' => esc_html__( 'Log In', 'w2rr' ),
 			'id_username' => 'user_login',
 			'id_password' => 'user_pass',
 			'id_remember' => 'rememberme',
@@ -347,13 +338,12 @@ function w2rr_login_form($args = array()) {
 		</form>';
 
 	do_action('login_form');
-	//do_action('login_footer');  This outputs broken layout with "jQuery was not loaded!" error message
 	echo '<p id="nav">';
 	if (get_option('users_can_register')) {
-		echo '<a href="' . esc_url(wp_registration_url()) . '" rel="nofollow">' . __('Register', 'W2RR') . '</a> | ';
+		echo '<a href="' . esc_url(wp_registration_url()) . '" rel="nofollow">' . esc_html__('Register', 'w2rr') . '</a> | ';
 	}
 
-	echo '<a title="' . esc_attr__('Password Lost and Found', 'W2RR') . '" href="' . esc_url(wp_lostpassword_url()) . '">' . __('Lost your password?', 'W2RR') . '</a>';
+	echo '<a title="' . esc_attr__('Password Lost and Found', 'w2rr') . '" href="' . esc_url(wp_lostpassword_url()) . '">' . esc_html__('Lost your password?', 'w2rr') . '</a>';
 	echo '</p>';
 
 	echo '</div>';
@@ -371,9 +361,9 @@ function w2rr_resetpassword_form($args = array()) {
 	$defaults = array(
 			'redirect' => $redirect_to, // Default redirect is back to the current page
 			'form_id' => 'resetpassform',
-			'label_pass1' => __( 'New password', 'W2RR' ),
-			'label_pass2' => __( 'Confirm new password', 'W2RR' ),
-			'label_submit' => __( 'Reset Password', 'W2RR' ),
+			'label_pass1' => esc_html__( 'New password', 'w2rr' ),
+			'label_pass2' => esc_html__( 'Confirm new password', 'w2rr' ),
+			'label_submit' => esc_html__( 'Reset Password', 'w2rr' ),
 			'id_pass1' => 'password1',
 			'id_pass2' => 'password2',
 			'id_submit' => 'wp-submit',
@@ -418,8 +408,8 @@ function w2rr_lostpassword_form($args = array()) {
 	$defaults = array(
 			'redirect' => $redirect_to, // Default redirect is back to the current page
 			'form_id' => 'lostpasswordform',
-			'label_username' => __('Username or Email Address', 'W2RR'),
-			'label_submit' => __('Get New Password', 'W2RR'),
+			'label_username' => esc_html__('Username or Email Address', 'w2rr'),
+			'label_submit' => esc_html__('Get New Password', 'w2rr'),
 			'id_username' => 'user_login',
 			'id_submit' => 'wp-submit',
 	);
@@ -449,9 +439,9 @@ function w2rr_lostpassword_form($args = array()) {
 		</form>';
 
 	echo '<p id="nav">';
-	echo '<a href="' . esc_url(wp_login_url()) . '" rel="nofollow">' . __('Log in', 'W2RR') . '</a>';
+	echo '<a href="' . esc_url(wp_login_url()) . '" rel="nofollow">' . esc_html__('Log in', 'w2rr') . '</a>';
 	if (get_option('users_can_register')) {
-		echo ' | <a href="' . esc_url(wp_registration_url()) . '" rel="nofollow">' . __('Register', 'W2RR') . '</a>';
+		echo ' | <a href="' . esc_url(wp_registration_url()) . '" rel="nofollow">' . esc_html__('Register', 'w2rr') . '</a>';
 	}
 	echo '</p>';
 
@@ -470,9 +460,9 @@ function w2rr_registration_form($args = array()) {
 	$defaults = array(
 			'redirect' => $redirect_to, // Default redirect is back to the current page
 			'form_id' => 'registerform',
-			'label_username' => __('Username', 'W2RR'),
-			'label_email' => __('Email', 'W2RR'),
-			'label_submit' => __('Register', 'W2RR'),
+			'label_username' => esc_html__('Username', 'w2rr'),
+			'label_email' => esc_html__('Email', 'w2rr'),
+			'label_submit' => esc_html__('Register', 'w2rr'),
 			'id_username' => 'user_login',
 			'id_email' => 'user_email',
 			'id_submit' => 'wp-submit',
@@ -500,7 +490,7 @@ function w2rr_registration_form($args = array()) {
 		echo '</div>';
 	}
 	echo do_action('register_form') . '
-			<p id="reg_passmail">' . __('Registration confirmation will be emailed to you.', 'W2RR') . '</p>
+			<p id="reg_passmail">' . esc_html__('Registration confirmation will be emailed to you.', 'w2rr') . '</p>
 			<div class="w2rr-form-group">
 				<input type="submit" name="wp-submit" id="' . esc_attr($args['id_submit']) . '" class="w2rr-btn w2rr-btn-primary" value="' . esc_attr($args['label_submit']) . '" />
 				<input type="hidden" name="redirect_to" value="' . esc_url($args['redirect']) . '" />
@@ -509,8 +499,8 @@ function w2rr_registration_form($args = array()) {
 		</form>';
 
 	echo '<p id="nav">';
-	echo '<a href="' . esc_url(wp_login_url()) . '" rel="nofollow">' . __('Log in', 'W2RR') . '</a> | ';
-	echo '<a title="' . esc_attr__('Password Lost and Found', 'W2RR') . '" href="' . esc_url(wp_lostpassword_url()) . '">' . __('Lost your password?', 'W2RR') . '</a>';
+	echo '<a href="' . esc_url(wp_login_url()) . '" rel="nofollow">' . esc_html__('Log in', 'w2rr') . '</a> | ';
+	echo '<a title="' . esc_attr__('Password Lost and Found', 'w2rr') . '" href="' . esc_url(wp_lostpassword_url()) . '">' . esc_html__('Lost your password?', 'w2rr') . '</a>';
 	echo '</p>';
 
 	echo '</div>';

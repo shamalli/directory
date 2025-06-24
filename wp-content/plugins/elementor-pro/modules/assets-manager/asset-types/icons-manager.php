@@ -19,10 +19,6 @@ class Icons_Manager {
 
 	const CPT = 'elementor_icons';
 
-	const FONTS_OPTION_NAME = 'elementor_fonts_manager_fonts';
-
-	const FONTS_NAME_TYPE_OPTION_NAME = 'elementor_fonts_manager_font_types';
-
 	const MENU_SLUG = 'edit.php?post_type=' . self::CPT;
 
 	const PROMOTION_MENU_SLUG = 'e-custom-icons';
@@ -32,6 +28,8 @@ class Icons_Manager {
 	private $enqueued_fonts = [];
 
 	protected $icon_types = [];
+
+	private $has_icons = null;
 
 	/**
 	 * get a font type object for a given type
@@ -105,7 +103,7 @@ class Icons_Manager {
 			2 => esc_html__( 'Custom field updated.', 'elementor-pro' ),
 			3 => esc_html__( 'Custom field deleted.', 'elementor-pro' ),
 			4 => esc_html__( 'Icon Set updated.', 'elementor-pro' ),
-			/* translators: %s: date and time of the revision */
+			/* translators: %s: Date and time of the revision. */
 			5 => isset( $_GET['revision'] ) ? sprintf( esc_html__( 'Icon Set restored to revision from %s', 'elementor-pro' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
 			6 => esc_html__( 'Icon Set saved.', 'elementor-pro' ),
 			7 => esc_html__( 'Icon Set saved.', 'elementor-pro' ),
@@ -133,12 +131,18 @@ class Icons_Manager {
 	}
 
 	private function has_icons() {
-		$icons = get_posts( [
+		if ( null !== $this->has_icons ) {
+			return $this->has_icons;
+		}
+
+		$existing_icons = new \WP_Query( [
 			'post_type' => static::CPT,
-			'posts_per_page' => 1, // Avoid fetching too much data
+			'posts_per_page' => 1,
 		] );
 
-		return ! empty( $icons );
+		$this->has_icons = $existing_icons->post_count > 0;
+
+		return $this->has_icons;
 	}
 
 	public function redirect_admin_old_page_to_new() {

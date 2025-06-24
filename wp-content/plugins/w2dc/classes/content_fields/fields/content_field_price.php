@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+// @codingStandardsIgnoreFile
 
 class w2dc_content_field_price extends w2dc_content_field {
 	public $is_integer = false; // required for the search function
@@ -12,7 +14,7 @@ class w2dc_content_field_price extends w2dc_content_field {
 	protected $can_be_searched = true;
 	
 	public function isNotEmpty($listing) {
-		if ($this->value) {
+		if (is_numeric($this->value)) {
 			return true;
 		} else {
 			return false;
@@ -24,11 +26,11 @@ class w2dc_content_field_price extends w2dc_content_field {
 
 		if (w2dc_getValue($_POST, 'submit') && wp_verify_nonce($_POST['w2dc_configure_content_fields_nonce'], W2DC_PATH)) {
 			$validation = new w2dc_form_validation();
-			$validation->set_rules('currency_symbol', __('Currency symbol', 'W2DC'), 'required');
-			$validation->set_rules('decimal_separator', __('Decimal separator', 'W2DC'), 'required|max_length[1]');
-			$validation->set_rules('thousands_separator', __('Thousands separator', 'W2DC'), 'max_length[1]');
-			$validation->set_rules('symbol_position', __('Currency symbol position', 'W2DC'), 'integer');
-			$validation->set_rules('hide_decimals', __('Hide decimals', 'W2DC'), 'required');
+			$validation->set_rules('currency_symbol', esc_html__('Currency symbol', 'w2dc'), 'required');
+			$validation->set_rules('decimal_separator', esc_html__('Decimal separator', 'w2dc'), 'required|max_length[1]');
+			$validation->set_rules('thousands_separator', esc_html__('Thousands separator', 'w2dc'), 'max_length[1]');
+			$validation->set_rules('symbol_position', esc_html__('Currency symbol position', 'w2dc'), 'integer');
+			$validation->set_rules('hide_decimals', esc_html__('Hide decimals', 'w2dc'), 'required');
 			if ($validation->run()) {
 				$result = $validation->result_array();
 				if ($wpdb->update($wpdb->w2dc_content_fields, array('options' => serialize(
@@ -40,7 +42,7 @@ class w2dc_content_field_price extends w2dc_content_field {
 								'hide_decimals' => $result['hide_decimals'],
 						)
 					)), array('id' => $this->id), null, array('%d'))) {
-						w2dc_addMessage(__('Field configuration was updated successfully!', 'W2DC'));
+						w2dc_addMessage(esc_html__('Field configuration was updated successfully!', 'w2dc'));
 				}
 				
 				$w2dc_instance->content_fields_manager->showContentFieldsTable();
@@ -124,10 +126,12 @@ class w2dc_content_field_price extends w2dc_content_field {
 		}
 	}
 	
-	public function orderParams() {
-		$order_params = array('orderby' => 'meta_value_num', 'meta_key' => '_content_field_' . $this->id);
+	public function orderParams($order_args) {
+		$order_args['orderby'] = 'meta_value_num';
+		$order_args['meta_key'] = '_content_field_' . $this->id;
+		
 		if (get_option('w2dc_orderby_exclude_null')) {
-			$order_params['meta_query'] = array(
+			$order_args['meta_query'][] = array(
 				array(
 					'key' => '_content_field_' . $this->id,
 					'value'   => array(''),
@@ -135,12 +139,12 @@ class w2dc_content_field_price extends w2dc_content_field {
 				)
 			);
 		}
-		return $order_params;
+		return $order_args;
 	}
 	
 	public function validateCsvValues($value, &$errors) {
 		if (!is_numeric($value)) {
-			$errors[] = sprintf(__('The %s field must contain only numbers.', 'W2DC'), $this->name);
+			$errors[] = sprintf(esc_html__('The %s field must contain only numbers.', 'w2dc'), $this->name);
 		}
 
 		return $value;
@@ -192,7 +196,7 @@ class w2dc_content_field_price extends w2dc_content_field {
 						'type' => 'textfield',
 						'param_name' => $this->slug,
 						'heading' => $this->name,
-						'description' => esc_html__("Example: 1-10, 5-, -5", "W2DC")
+						'description' => esc_html__("Example: 1-10, 5-, -5", "w2dc")
 				),
 		);
 	}

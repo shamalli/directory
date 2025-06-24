@@ -2,7 +2,7 @@
 	display: inline-block;
 }
 .w2rr-rating {
-	font-size: 18px;
+	font-size: $rating-star-size;
 	display: inline-block;
 	margin: 5px 0;
 	vertical-align: middle;
@@ -18,26 +18,28 @@
 }
 .w2rr-rating-stars {
 	overflow: hidden;
+	width: $rating-star-size*5;
 }
 
 /* ratings stars in W2DC Maps */
 .w2dc-maps-canvas .w2rr-rating-icon {
-	font-size: 18px !important;
+	font-size: 18px;
 }
 .w2dc-maps-canvas .w2rr-rating-avgvalue span {
 	font-size: 11px !important;
 }
 
-label.w2rr-rating-icon {
-	margin: 0;
+.w2rr-rating-stars .w2rr-rating-icon {
 	float: right;
+}
+label.w2rr-rating-icon {
 	color: $rating-star-color;
-	width: 1em !important; /* Use width instead of padding-left to set stars without gaps on hover */
-	font-size: 1em !important;
+	width: $rating-star-size;
+	font-size: 1em;
 	font-weight: normal;
 	margin: 0 !important;
 }
-.w2rr-rating-active label.w2rr-rating-icon {
+.w2rr-rating-active .w2rr-rating-icon {
 	cursor: pointer;
 }
 .w2rr-rating-icon:last-child {

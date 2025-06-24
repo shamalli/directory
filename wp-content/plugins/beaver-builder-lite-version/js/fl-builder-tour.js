@@ -52,18 +52,20 @@
 		 */
 		_config: function()
 		{
+			var isIFrameUI = FLBuilder.UIIFrame.isEnabled();
+
 			var config = {
 				storage     : false,
 				onStart     : FLBuilderTour._onStart,
 				onPrev      : FLBuilderTour._onPrev,
 				onNext      : FLBuilderTour._onNext,
 				onEnd       : FLBuilderTour._onEnd,
-				template    : '<div class="popover" role="tooltip"> <i class="fas fa-times" data-role="end"></i> <div class="arrow"></div> <h3 class="popover-title"></h3> <div class="popover-content"></div> <div class="popover-navigation clearfix"> <button class="fl-builder-button fl-builder-button-primary fl-builder-tour-next" data-role="next">' + FLBuilderStrings.tourNext + '</button> </div> </div>',
+				template    : '<div class="popover" role="tooltip"> <div class="arrow"></div> <div class="popover-canvas"> <i class="fas fa-times" data-role="end"></i> <h3 class="popover-title"></h3> <div class="popover-content"></div> <div class="popover-navigation clearfix"> <button class="fl-builder-button fl-builder-button-primary fl-builder-tour-next" data-role="next">' + FLBuilderStrings.tourNext + '</button> </div> </div> </div>',
 				steps       : [
 					{
 						animation   : false,
 						element     : '.fl-builder--content-library-panel',
-						placement   : 'left',
+						placement   : FLBuilder.PinnedUI.isPinned() ? 'right' : 'left',
 						title       : FLBuilderStrings.tourTemplatesTitle,
 						content     : FLBuilderStrings.tourTemplates,
 						onShow		: function() {
@@ -73,7 +75,7 @@
 					{
 						animation   : false,
 						element     : '.fl-builder--content-library-panel',
-						placement   : 'left',
+						placement   : FLBuilder.PinnedUI.isPinned() ? 'right' : 'left',
 						title       : FLBuilderStrings.tourAddRowsTitle,
 						content     : FLBuilderStrings.tourAddRows,
 						onShow      : function() {
@@ -83,7 +85,7 @@
 					{
 						animation   : false,
 						element     : '.fl-builder--content-library-panel',
-						placement   : 'left',
+						placement   : FLBuilder.PinnedUI.isPinned() ? 'right' : 'left',
 						title       : FLBuilderStrings.tourAddContentTitle,
 						content     : FLBuilderStrings.tourAddContent,
 						onShow      : function() {
@@ -92,28 +94,30 @@
 					},
 					{
 						animation   : false,
-						element     : '.fl-row:first-of-type',
+						element     : isIFrameUI ? '.fl-builder-ui-iframe-canvas' : '.fl-row.fl-builder-tour-demo-content',
 						placement   : 'top',
 						title       : FLBuilderStrings.tourEditContentTitle,
 						content     : FLBuilderStrings.tourEditContent,
 						onShow      : function() {
+							var win = FLBuilder.UIIFrame.getIFrameWindow();
 							FLBuilderTour._dimSection( '.fl-builder-bar' );
 							FLBuilder._closePanel();
-							$( '.fl-row' ).eq( 0 ).trigger( 'mouseenter' );
-							$( '.fl-module' ).eq( 0 ).trigger( 'mouseenter' );
+							win.jQuery( '.fl-row.fl-builder-tour-demo-content' ).trigger( 'mouseenter' );
+							win.jQuery( '.fl-row.fl-builder-tour-demo-content .fl-module' ).eq( 0 ).trigger( 'mouseenter' );
 						}
 					},
 					{
 						animation   : false,
-						element     : '.fl-row:first-of-type .fl-module-overlay .fl-block-overlay-actions',
+						element     : isIFrameUI ? '.fl-builder-ui-iframe-canvas' : '.fl-row.fl-builder-tour-demo-content .fl-module-overlay .fl-block-overlay-actions',
 						placement   : 'top',
 						title       : FLBuilderStrings.tourEditContentTitle,
 						content     : FLBuilderStrings.tourEditContent2,
 						onShow      : function() {
+							var win = FLBuilder.UIIFrame.getIFrameWindow();
 							FLBuilderTour._dimSection( '.fl-builder-bar' );
 							FLBuilder._closePanel();
-							$( '.fl-row' ).eq( 0 ).trigger( 'mouseenter' );
-							$( '.fl-module' ).eq( 0 ).trigger( 'mouseenter' );
+							win.jQuery( '.fl-row.fl-builder-tour-demo-content' ).trigger( 'mouseenter' );
+							win.jQuery( '.fl-row.fl-builder-tour-demo-content .fl-module' ).eq( 0 ).trigger( 'mouseenter' );
 						}
 					},
 					{
@@ -123,29 +127,32 @@
 						title       : FLBuilderStrings.tourAddContentButtonTitle,
 						content     : FLBuilderStrings.tourAddContentButton,
 						onShow      : function() {
+							var win = FLBuilder.UIIFrame.getIFrameWindow();
 							FLBuilderTour._dimSection( 'body' );
-							$( '.fl-row' ).eq( 0 ).trigger( 'mouseleave' );
-							$( '.fl-module' ).eq( 0 ).trigger( 'mouseleave' );
+							win.jQuery( '.fl-row' ).eq( 0 ).trigger( 'mouseleave' );
+							win.jQuery( '.fl-module' ).eq( 0 ).trigger( 'mouseleave' );
 						}
 					},
 					{
 						animation   : false,
-						element     : '.fl-builder-templates-button',
-						placement   : 'bottom',
-						title       : FLBuilderStrings.tourTemplatesButtonTitle,
-						content     : FLBuilderStrings.tourTemplatesButton,
+						element     : '[title="Outline"]',
+						placement   : 'left',
+						title       : FLBuilderStrings.tourOutlinePanelTitle,
+						content     : FLBuilderStrings.tourOutlinePanel,
 						onShow      : function() {
 							FLBuilderTour._dimSection( 'body' );
+							FL.Builder.togglePanel('outline');
 						}
 					},
 					{
 						animation   : false,
-						element     : '.fl-builder-tools-button',
+						element     : '.fl-builder-bar-title',
 						placement   : 'bottom',
 						title       : FLBuilderStrings.tourToolsButtonTitle,
 						content     : FLBuilderStrings.tourToolsButton,
 						onShow      : function() {
 							FLBuilderTour._dimSection( 'body' );
+							FL.Builder.togglePanel('outline');
 						}
 					},
 					{
@@ -164,16 +171,13 @@
 						backdrop    : true,
 						title       : FLBuilderStrings.tourFinishedTitle,
 						content     : FLBuilderStrings.tourFinished,
-						template    : '<div class="popover" role="tooltip"> <div class="arrow"></div> <i class="fas fa-times" data-role="end"></i> <h3 class="popover-title"></h3> <div class="popover-content"></div> <div class="popover-navigation clearfix"> <button class="fl-builder-button fl-builder-button-primary fl-builder-tour-next" data-role="end">' + FLBuilderStrings.tourEnd + '</button> </div> </div>',
+						template    : '<div class="popover" role="tooltip"> <div class="popover-canvas"> <div class="arrow"></div> <i class="fas fa-times" data-role="end"></i> <h3 class="popover-title"></h3> <div class="popover-content"></div> <div class="popover-navigation clearfix"> <button class="fl-builder-button fl-builder-button-primary fl-builder-tour-next" data-role="end">' + FLBuilderStrings.tourEnd + '</button> </div> </div> </div>',
 					}
 				]
 			};
 
 			// Remove the first step if no templates.
-			if( FLBuilderConfig.lite ) {
-				config.steps.shift();
-			}
-			else if ( 'disabled' == FLBuilderConfig.enabledTemplates ) {
+			if ( 'disabled' == FLBuilderConfig.enabledTemplates ) {
 				config.steps.shift();
 			}
 			else if ( 'fl-builder-template' == FLBuilderConfig.postType ) {
@@ -191,15 +195,20 @@
 		 */
 		_onStart: function()
 		{
-			var body = $( 'body' );
-			body.scrollTop(0);
+			var win = FLBuilder.UIIFrame.getIFrameWindow(),
+				body = $( 'body' );
+				body.scrollTop( 0 );
 
 			body.append( '<div class="fl-builder-tour-mask"></div>' );
 
-			if ( 0 === $( '.fl-row' ).length && 'module' != FLBuilderConfig.userTemplateType ) {
-				$( '.fl-builder-content' ).append( '<div class="fl-builder-tour-demo-content fl-row fl-row-fixed-width fl-row-bg-none"> <div class="fl-row-content-wrap"> <div class="fl-row-content fl-row-fixed-width fl-node-content"> <div class="fl-col-group"> <div class="fl-col" style="width:100%"> <div class="fl-col-content fl-node-content"> <div class="fl-module fl-module-rich-text" data-type="rich-text" data-name="Text Editor"> <div class="fl-module-content fl-node-content"> <div class="fl-rich-text"> <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus pellentesque ut lorem non cursus. Sed mauris nunc, porttitor iaculis lorem a, sollicitudin lacinia sapien. Proin euismod orci lacus, et sollicitudin leo posuere ac. In hac habitasse platea dictumst. Maecenas elit magna, consequat in turpis suscipit, ultrices rhoncus arcu. Phasellus finibus sapien nec elit tempus venenatis. Maecenas tincidunt sapien non libero maximus, in aliquam felis tincidunt. Mauris mollis ultricies facilisis. Duis condimentum dignissim tortor sit amet facilisis. Aenean gravida lacus eu risus molestie egestas. Donec ut dolor dictum, fringilla metus malesuada, viverra nunc. Maecenas ut purus ac justo aliquet lacinia. Cras vestibulum elementum tincidunt. Maecenas mattis tortor neque, consectetur dignissim neque tempor nec.</p></div> </div> </div> </div> </div> </div> </div> </div> </div>' );
-				FLBuilder._setupEmptyLayout();
-				FLBuilder._highlightEmptyCols();
+			if ( 'module' !== FLBuilderConfig.userTemplateType ) {
+				if ( 0 === $( '.fl-row', win.document ).length ) {
+					$( '.fl-builder-content', win.document ).append( '<div class="fl-builder-tour-demo-content fl-builder-tour-placeholder-content fl-row fl-row-full-width fl-row-bg-none"> <div class="fl-row-content-wrap"> <div class="fl-row-content fl-row-fixed-width fl-node-content"> <div class="fl-col-group"> <div class="fl-col" style="width: 100%;"> <div class="fl-col-content fl-node-content"> <div class="fl-module fl-module-rich-text" data-type="rich-text" data-name="Text Editor"> <div class="fl-module-content fl-node-content"> <div class="fl-rich-text"> <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus pellentesque ut lorem non cursus. Sed mauris nunc, porttitor iaculis lorem a, sollicitudin lacinia sapien. Proin euismod orci lacus, et sollicitudin leo posuere ac. In hac habitasse platea dictumst. Maecenas elit magna, consequat in turpis suscipit, ultrices rhoncus arcu. Phasellus finibus sapien nec elit tempus venenatis. Maecenas tincidunt sapien non libero maximus, in aliquam felis tincidunt. Mauris mollis ultricies facilisis. Duis condimentum dignissim tortor sit amet facilisis. Aenean gravida lacus eu risus molestie egestas. Donec ut dolor dictum, fringilla metus malesuada, viverra nunc. Maecenas ut purus ac justo aliquet lacinia. Cras vestibulum elementum tincidunt. Maecenas mattis tortor neque, consectetur dignissim neque tempor nec.</p> </div> </div> </div> </div> </div> </div> </div> </div></div>' );
+					FLBuilder._setupEmptyLayout();
+					FLBuilder._highlightEmptyCols();
+				} else {
+					$( '.fl-row', win.document ).eq( 0 ).addClass( 'fl-builder-tour-demo-content' );
+				}
 			}
 		},
 
@@ -241,7 +250,8 @@
 			$( 'body' ).off( 'fl-builder.template-selector-loaded' );
 			$( '.fl-builder-tour-mask' ).remove();
 			$( '.fl-builder-tour-dimmed' ).remove();
-			$( '.fl-builder-tour-demo-content' ).remove();
+			$( '.fl-builder-tour-placeholder-content' ).remove();
+			$( '.fl-builder-tour-demo-content' ).removeClass( 'fl-builder-tour-demo-content' );
 
 			FLBuilder._setupEmptyLayout();
 			FLBuilder._highlightEmptyCols();

@@ -18,12 +18,13 @@ class w2dc_listings_controller extends w2dc_frontend_controller {
 			$paged = get_query_var('page');
 		} elseif (get_query_var('paged')) {
 			$paged = get_query_var('paged');
+		} elseif (w2dc_getValue($args, 'paged')) {
+			$paged = w2dc_getValue($args, 'paged');
 		} else {
 			$paged = 1;
 		}
 		
 		$shortcode_atts = array_merge(array(
-				//'directories' => '',
 				'how_to_load' => 'full', // full, for_map, for_ajax_map
 				'perpage' => 10,
 				'onepage' => 0,
@@ -47,9 +48,8 @@ class w2dc_listings_controller extends w2dc_frontend_controller {
 				'carousel_slide_width' => 250,
 				'carousel_slide_height' => 300,
 				'carousel_full_width' => 0,
-				'author' => 0,
 				'paged' => $paged,
-				'ajax_initial_load' => (int)get_option('w2dc_ajax_initial_load'), // 1 - loads listings after initialization, map can follow this when using uid
+				'ajax_initial_load' => 0, // 1 - loads listings after initialization, map can follow this when using uid
 				'include_categories_children' => 1,
 				'categories' => '',
 				'locations' => '',
@@ -65,6 +65,7 @@ class w2dc_listings_controller extends w2dc_frontend_controller {
 				'hide_listings' => 0, // hide listings on initial load
 				'template' => 'frontend/listings_block.tpl.php',
 				'uid' => null,
+				'start_listings' => array(),
 				'include_get_params' => 1,
 		), $args);
 		$this->args = apply_filters('w2dc_related_shortcode_args', $shortcode_atts, $args);
@@ -84,7 +85,7 @@ class w2dc_listings_controller extends w2dc_frontend_controller {
 		global $w2dc_global_base_url;
 		if (!$w2dc_global_base_url) {
 			$w2dc_global_base_url = $this->base_url;
-			add_filter('get_pagenum_link', array($this, 'get_pagenum_link'));
+			add_filter('get_pagenum_link', array($this, 'getPagenumLink'));
 		}
 
 		$this->template = $this->args['template'];
@@ -93,18 +94,32 @@ class w2dc_listings_controller extends w2dc_frontend_controller {
 			$this->template = 'frontend/listings_carousel.tpl.php';
 		}
 		
+		// display these listings by default, then directory searches as usual
+		if (!empty($this->args['start_listings'])) {
+			$this->args['post__in'] = $this->args['start_listings'];
+		}
+		
 		if (!empty($this->args['hide_listings'])) {
 			$this->do_initial_load = false;
-				
+			
+			// listings will not load, query will not be processed,
+			// make 'hide_listings' = 0 so AJAX can be called later
+			$this->args['hide_listings'] = 0;
+			
 			return false;
 		}
+		
+		// 'num' parameter from the maps controller
+		if (empty($args["perpage"]) && !empty($args['num'])) {
+			$this->args['perpage'] = $this->args['num'];
+		}
+		unset($this->args['num']);
 
 		if (empty($this->args['ajax_initial_load']) || !empty($this->args['from_set_ajax'])) {
 			$q_args = apply_filters("w2dc_query_input_args", $this->args);
 			
 			$query = new w2dc_search_query($q_args);
 			$this->query = $query->get_query();
-			//var_dump($this->query->request);
 			
 			$this->processQuery();
 		} else {

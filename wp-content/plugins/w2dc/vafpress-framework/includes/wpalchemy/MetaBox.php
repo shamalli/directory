@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 /**
  * @author		Dimas Begunoff
  * @copyright	Copyright (c) 2009, Dimas Begunoff, http://farinspace.com
@@ -542,7 +544,6 @@ class WPAlchemy_MetaBox
 						{
 							// try to fix corrupted serialized data, specifically "\r\n" being converted to "\n" during wordpress XML export (WXR)
 							// "maybe_unserialize()" fixes a wordpress bug which double serializes already serialized data during export/import
-							//$value = maybe_unserialize( preg_replace( '!s:(\d+):"(.*?)";!es', "'s:'.strlen('$2').':\"$2\";'", stripslashes( $meta['value'] ) ) );
 							$value = maybe_unserialize(stripslashes( $meta['value'] ));
 							
 							update_post_meta( $post_id, $key,  $value );
@@ -659,7 +660,7 @@ class WPAlchemy_MetaBox
 			$content = $this->apply_filters('head', $content);
 		}
 
-		echo $content;
+		w2dc_esc_e($content);
 
 		// action: head
 		if ($this->has_action('head'))
@@ -696,7 +697,7 @@ class WPAlchemy_MetaBox
 			(function($){ /* not using jQuery ondomready, code runs right away in footer */
 				"use strict";
 
-				var mb_id = '<?php echo $this->id; ?>';
+				var mb_id = '<?php w2dc_esc_e($this->id); ?>';
 				var mb = $('#' + mb_id + '_metabox');
 
 				<?php if (WPALCHEMY_LOCK_TOP == $this->lock): ?>
@@ -1103,10 +1104,6 @@ class WPAlchemy_MetaBox
 
 		$post_id = $g_post_id ? $g_post_id : $p_post_id ;
 
-		// this line commented not to mess up post types,
-		// for some reason some plugins inject into the global $post
-		//$post_id = isset($post->ID) ? $post->ID : $post_id ;
-
 		if (isset($post_id))
 		{
 			return (integer) $post_id;
@@ -1371,7 +1368,7 @@ class WPAlchemy_MetaBox
 			"use strict";
 
 			$(function() {
-				$(document).click(function(e)
+				$(document).on('click', function(e)
 				{		
 					var elem = $(e.target);
 	
@@ -2100,9 +2097,9 @@ class WPAlchemy_MetaBox
 			// use as stdClass object
 			$options = (object)$options;
 			
-			$length = @$options->length;
+			$length = $options->length;
 
-			$this->_loop_data->limit = @$options->limit;
+			$this->_loop_data->limit = $options->limit;
 		}
 		else
 		{
@@ -2518,7 +2515,6 @@ class WPAlchemy_MetaBox
 
 		// copy _loop_stack to prevent internal pointer ruined
 		$loop_stack = $this->get_the_loop_collection();
-		// print_r($loop_stack);
 		foreach ($loop_stack as $loop)
 		{
 			$loop_name .= '[' . $loop->name . '][' . $loop->current . ']';
@@ -2757,5 +2753,3 @@ class WPA_Loop
 	}
 
 }
-
-/* eof */

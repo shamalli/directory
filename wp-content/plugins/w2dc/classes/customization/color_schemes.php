@@ -78,49 +78,49 @@ function w2dc_affect_setting_w2dc_links_color($scheme) {
 	global $w2dc_color_schemes;
 	return $w2dc_color_schemes[$scheme]['w2dc_links_color'];
 }
-VP_W2DC_Security::instance()->whitelist_function('w2dc_affect_setting_w2dc_links_color');
+W2DC_VP_Security::instance()->whitelist_function('w2dc_affect_setting_w2dc_links_color');
 
 function w2dc_affect_setting_w2dc_links_hover_color($scheme) {
 	global $w2dc_color_schemes;
 	return $w2dc_color_schemes[$scheme]['w2dc_links_hover_color'];
 }
-VP_W2DC_Security::instance()->whitelist_function('w2dc_affect_setting_w2dc_links_hover_color');
+W2DC_VP_Security::instance()->whitelist_function('w2dc_affect_setting_w2dc_links_hover_color');
 
 function w2dc_affect_setting_w2dc_button_1_color($scheme) {
 	global $w2dc_color_schemes;
 	return $w2dc_color_schemes[$scheme]['w2dc_button_1_color'];
 }
-VP_W2DC_Security::instance()->whitelist_function('w2dc_affect_setting_w2dc_button_1_color');
+W2DC_VP_Security::instance()->whitelist_function('w2dc_affect_setting_w2dc_button_1_color');
 
 function w2dc_affect_setting_w2dc_button_2_color($scheme) {
 	global $w2dc_color_schemes;
 	return $w2dc_color_schemes[$scheme]['w2dc_button_2_color'];
 }
-VP_W2DC_Security::instance()->whitelist_function('w2dc_affect_setting_w2dc_button_2_color');
+W2DC_VP_Security::instance()->whitelist_function('w2dc_affect_setting_w2dc_button_2_color');
 
 function w2dc_affect_setting_w2dc_button_text_color($scheme) {
 	global $w2dc_color_schemes;
 	return $w2dc_color_schemes[$scheme]['w2dc_button_text_color'];
 }
-VP_W2DC_Security::instance()->whitelist_function('w2dc_affect_setting_w2dc_button_text_color');
+W2DC_VP_Security::instance()->whitelist_function('w2dc_affect_setting_w2dc_button_text_color');
 
 function w2dc_affect_setting_w2dc_primary_color($scheme) {
 	global $w2dc_color_schemes;
 	return $w2dc_color_schemes[$scheme]['w2dc_primary_color'];
 }
-VP_W2DC_Security::instance()->whitelist_function('w2dc_affect_setting_w2dc_primary_color');
+W2DC_VP_Security::instance()->whitelist_function('w2dc_affect_setting_w2dc_primary_color');
 
 function w2dc_affect_setting_w2dc_secandary_color($scheme) {
 	global $w2dc_color_schemes;
 	return $w2dc_color_schemes[$scheme]['w2dc_secandary_color'];
 }
-VP_W2DC_Security::instance()->whitelist_function('w2dc_affect_setting_w2dc_secandary_color');
+W2DC_VP_Security::instance()->whitelist_function('w2dc_affect_setting_w2dc_secandary_color');
 
 function w2dc_affect_setting_w2dc_jquery_ui_schemas($scheme) {
 	global $w2dc_color_schemes;
 	return $w2dc_color_schemes[$scheme]['w2dc_jquery_ui_schemas'];
 }
-VP_W2DC_Security::instance()->whitelist_function('w2dc_affect_setting_w2dc_jquery_ui_schemas');
+W2DC_VP_Security::instance()->whitelist_function('w2dc_affect_setting_w2dc_jquery_ui_schemas');
 
 function w2dc_get_dynamic_option($option_name) {
 	global $w2dc_color_schemes;

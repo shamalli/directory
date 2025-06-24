@@ -41,6 +41,11 @@ class w2dc_elementor_widgets {
 		require_once(W2DC_PATH . 'classes/widgets/elementor/widgets/search.php');
 		require_once(W2DC_PATH . 'classes/widgets/elementor/widgets/slider.php');
 		require_once(W2DC_PATH . 'classes/widgets/elementor/widgets/page_header.php');
+		require_once(W2DC_PATH . 'classes/widgets/elementor/widgets/page_title.php');
+		require_once(W2DC_PATH . 'classes/widgets/elementor/widgets/category_page.php');
+		require_once(W2DC_PATH . 'classes/widgets/elementor/widgets/category_listings.php');
+		require_once(W2DC_PATH . 'classes/widgets/elementor/widgets/category_map.php');
+		require_once(W2DC_PATH . 'classes/widgets/elementor/widgets/category_search.php');
 
 		add_action('elementor/widgets/register', array($this, 'register_widgets'));
 	}
@@ -72,6 +77,11 @@ class w2dc_elementor_widgets {
 		\Elementor\Plugin::instance()->widgets_manager->register( new w2dc_search_elementor_widget() );
 		\Elementor\Plugin::instance()->widgets_manager->register( new w2dc_slider_elementor_widget() );
 		\Elementor\Plugin::instance()->widgets_manager->register( new w2dc_page_header_elementor_widget() );
+		\Elementor\Plugin::instance()->widgets_manager->register( new w2dc_page_title_elementor_widget() );
+		\Elementor\Plugin::instance()->widgets_manager->register( new w2dc_category_page_elementor_widget() );
+		\Elementor\Plugin::instance()->widgets_manager->register( new w2dc_category_listings_elementor_widget() );
+		\Elementor\Plugin::instance()->widgets_manager->register( new w2dc_category_map_elementor_widget() );
+		\Elementor\Plugin::instance()->widgets_manager->register( new w2dc_category_search_elementor_widget() );
 	}
 
 }
@@ -91,7 +101,7 @@ function w2dc_add_elementor_widget_categories($elements_manager) {
 	$elements_manager->add_category(
 			'directory-category',
 			array(
-				'title' => esc_html__('Directory elements', 'W2DC'),
+				'title' => esc_html__('Directory elements', 'w2dc'),
 				'icon' => 'eicon-code',
 			)
 	);
@@ -99,7 +109,15 @@ function w2dc_add_elementor_widget_categories($elements_manager) {
 	$elements_manager->add_category(
 			'directory-single-category',
 			array(
-				'title' => esc_html__('Directory single listing', 'W2DC'),
+				'title' => esc_html__('Directory single listing', 'w2dc'),
+				'icon' => 'eicon-code',
+			)
+	);
+	
+	$elements_manager->add_category(
+			'directory-category-page-category',
+			array(
+				'title' => esc_html__('Directory category page', 'w2dc'),
 				'icon' => 'eicon-code',
 			)
 	);
@@ -180,14 +198,16 @@ function w2dc_elementor_convert_params($params) {
 			break;
 			
 			case 'directory':
-				$new_param['options'] = array(0 => esc_html__("- Auto -", "W2DC")) + w2dc_elementor_get_directories();
+				$new_param['options'] = array(0 => esc_html__("- Auto -", "w2dc")) + w2dc_elementor_get_directories();
 				$new_param['type'] = \Elementor\Controls_Manager::SELECT;
 			break;
 			
 			case 'directories':
-				$new_param['options'] = w2dc_elementor_get_directories();
-				$new_param['type'] = \Elementor\Controls_Manager::SELECT2;
-				$new_param['multiple'] = true;
+				if ($directories = w2dc_elementor_get_directories()) {
+					$new_param['options'] = $directories;
+					$new_param['type'] = \Elementor\Controls_Manager::SELECT2;
+					$new_param['multiple'] = true;
+				}
 			break;
 				
 			case 'ordering':
@@ -226,18 +246,16 @@ function w2dc_elementor_convert_params($params) {
 				break;
 				
 			case 'checkbox':
-				if (!empty($param['value']) && is_array($param['value'])) {
-					if (count($param['value']) == 2) {
-						$new_param['options'] = array_flip($param['value']);
-						$new_param['type'] = \Elementor\Controls_Manager::SELECT;
-					} else {
+				if (isset($param['value'])) {
+					if (is_array($param['value'])) {
 						$new_param['options'] = array_flip($param['value']);
 						$new_param['type'] = \Elementor\Controls_Manager::SELECT2;
 						$new_param['multiple'] = true;
 						$new_param['default'] = array();
+					} else {
+						$new_param['type'] = \Elementor\Controls_Manager::SWITCHER;
+						$new_param['return_value'] = 1;
 					}
-				} elseif(!is_array($param['value'])) {
-					$new_param['type'] = \Elementor\Controls_Manager::SWITCHER;
 				}
 				
 			break;
@@ -271,7 +289,7 @@ function w2dc_elementor_get_content_fields() {
 	
 	global $w2dc_instance;
 	
-	$content_fields = array(0 => esc_html__("- Select field -", "W2DC"));
+	$content_fields = array(0 => esc_html__("- Select field -", "w2dc"));
 	
 	foreach ($w2dc_instance->content_fields->content_fields_array AS $content_field) {
 		$content_fields[$content_field->id] = $content_field->name;
@@ -284,7 +302,7 @@ function w2dc_elementor_get_content_fields_groups() {
 	
 	global $w2dc_instance;
 	
-	$content_fields_groups = array(0 => esc_html__("- Select group -", "W2DC"));
+	$content_fields_groups = array(0 => esc_html__("- Select group -", "w2dc"));
 	
 	foreach ($w2dc_instance->content_fields->content_fields_groups_array AS $content_fields_group) {
 		$content_fields_groups[$content_fields_group->id] = $content_fields_group->name;
@@ -295,7 +313,7 @@ function w2dc_elementor_get_content_fields_groups() {
 
 function w2dc_elementor_get_ordering() {
 	
-	$ordering = array(0 => esc_html__("- Default -", "W2DC"));
+	$ordering = array(0 => esc_html__("- Default -", "w2dc"));
 	
 	$_ordering = w2dc_orderingItems();
 	
@@ -332,7 +350,7 @@ function w2dc_elementor_get_terms($tax, $parent = 0, &$options = array(), $level
 	));
 
 	foreach ($terms AS $term) {
-		$options[" $term->term_id"] = str_repeat("-&nbsp;", $level) . $term->name;
+		$options[$term->term_id] = str_repeat("- ", $level) . $term->name;
 		
 		w2dc_elementor_get_terms($tax, $term->term_id, $options, $level+1);
 	}
@@ -355,19 +373,31 @@ function w2dc_elementor_get_levels() {
 
 function w2dc_elementor_get_mapstyles() {
 	
-	if (w2dc_getMapEngine()) {
-
-		$styles = array(0 => esc_html__("- Default -", "W2DC"));
+	$styles = array(0 => esc_html__("- Default -", "w2dc"));
+	
+	if ($map_engine = w2dc_getMapEngine()) {
+		
+		if ($map_engine == 'google') {
 			
-		foreach (w2dc_getAllMapStyles() AS $style_name=>$style) {
-			$styles[$style_name] = $style;
+			global $w2dc_google_maps_styles;
+			
+			$google_maps_styles = array_keys($w2dc_google_maps_styles);
+		
+			$styles = $styles + array_combine($google_maps_styles, $google_maps_styles);
+		} elseif ($map_engine == 'mapbox') {
+			
+			$mapbox_styles = array_keys(w2dc_getMapBoxStyles());
+			
+			$styles = $styles + array_combine($mapbox_styles, $mapbox_styles);
 		}
 	}
+	
+	return $styles;
 }
 
 function w2dc_elementor_get_formids() {
 	
-	$search_forms = array();
+	$search_forms = array(0 => esc_html__("- Default -", "w2dc"));
 	
 	foreach (wcsearch_get_search_forms_posts() AS $id=>$title) {
 		$search_forms[$id] = $title;

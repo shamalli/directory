@@ -34,7 +34,7 @@ class w2rr_post_reviews_counter_controller extends w2rr_frontend_controller {
 					'paged' => 1,
 			));
 			
-			return '<div class="w2rr-content"><h3>' . $reviews_controller->query->found_posts . ' ' . _n('Review', 'Reviews', $reviews_controller->query->found_posts, 'W2RR') . '</h3></div>';
+			return '<div class="w2rr-content"><h3>' . $reviews_controller->query->found_posts . ' ' . _n('Review', 'Reviews', $reviews_controller->query->found_posts, 'w2rr') . '</h3></div>';
 		}
 	}
 }

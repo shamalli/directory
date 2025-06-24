@@ -1,13 +1,13 @@
 <?php
 
-class VP_W2RR_Util_Text
+class W2RR_VP_Util_Text
 {
 
 	public static function parse_md($text)
 	{
 		if(!class_exists('Parsedown'))
 		{
-			$path = VP_W2RR_FileSystem::instance()->resolve_path('includes', 'parsedown');
+			$path = W2RR_VP_FileSystem::instance()->resolve_path('includes', 'parsedown');
 			require $path;
 		}
 		return Parsedown::instance()->parse($text);
@@ -52,9 +52,9 @@ class VP_W2RR_Util_Text
 	public static function out($string, $default)
 	{
 		if( empty($string) )
-			echo $default;
+			w2rr_esc_e($default);
 		else
-			echo $string;
+			w2rr_esc_e($string);
 	}
 
 	public static function prefix(&$item, $key, $prefix)
@@ -64,7 +64,7 @@ class VP_W2RR_Util_Text
 
 	public static function prefix_array($array, $prefix)
 	{
-		array_walk( $array, 'VP_W2RR_Util_Text::prefix', $prefix);
+		array_walk( $array, 'W2RR_VP_Util_Text::prefix', $prefix);
 		return $array;
 	}
 

@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 global $w2dc_wpml_dependent_options;
 $w2dc_wpml_dependent_options[] = 'w2dc_listing_contact_form_7';
 $w2dc_wpml_dependent_options[] = 'w2dc_directory_title';
@@ -11,7 +13,7 @@ class w2dc_settings_manager {
 		add_action('init', array($this, 'plugin_settings'));
 		
 		if (!defined('W2DC_DEMO') || !W2DC_DEMO) {
-			add_action('vp_w2dc_option_after_ajax_save', array($this, 'save_option'), 10, 3);
+			add_action('w2dc_vp_option_after_ajax_save', array($this, 'save_option'), 10, 3);
 		}
 		
 		add_action('w2dc_settings_panel_bottom', array($this, 'our_plugins'));
@@ -31,9 +33,10 @@ class w2dc_settings_manager {
 		}
 
 		if ($w2dc_instance->index_page_id === 0 && isset($_GET['action']) && $_GET['action'] == 'directory_page_installation') {
-			$page = array('post_status' => 'publish', 'post_title' => __('Web 2.0 Directory', 'W2DC'), 'post_type' => 'page', 'post_content' => '[webdirectory]', 'comment_status' => 'closed');
-			if (wp_insert_post($page))
-				w2dc_addMessage(__('"Web 2.0 Directory" page with [webdirectory] shortcode was successfully created, thank you!'));
+			$page = array('post_status' => 'publish', 'post_title' => esc_html__('Web 2.0 Directory', 'w2dc'), 'post_type' => 'page', 'post_content' => '[webdirectory]', 'comment_status' => 'closed');
+			if (wp_insert_post($page)) {
+				w2dc_addMessage(esc_html__('"Web 2.0 Directory" page with [webdirectory] shortcode was successfully created, thank you!'));
+			}
 		}
 		
 		$w2dc_search_forms = array();
@@ -44,28 +47,28 @@ class w2dc_settings_manager {
 		$ordering_items = w2dc_orderingItems();
 		
 		$w2dc_social_services = array(
-			'facebook' => array('value' => 'facebook', 'label' => __('Facebook', 'W2DC')),
-			'twitter' => array('value' => 'twitter', 'label' => __('Twitter', 'W2DC')),
-			'google' => array('value' => 'google', 'label' => __('Google+', 'W2DC')),
-			'linkedin' => array('value' => 'linkedin', 'label' => __('LinkedIn', 'W2DC')),
-			'digg' => array('value' => 'digg', 'label' => __('Digg', 'W2DC')),
-			'reddit' => array('value' => 'reddit', 'label' => __('Reddit', 'W2DC')),
-			'pinterest' => array('value' => 'pinterest', 'label' => __('Pinterest', 'W2DC')),
-			'tumblr' => array('value' => 'tumblr', 'label' => __('Tumblr', 'W2DC')),
-			'stumbleupon' => array('value' => 'stumbleupon', 'label' => __('StumbleUpon', 'W2DC')),
-			'vk' => array('value' => 'vk', 'label' => __('VK', 'W2DC')),
-			'whatsapp' => array('value' => 'whatsapp', 'label' => __('WhatsApp', 'W2DC')),
-			'telegram' => array('value' => 'telegram', 'label' => __('Telegram', 'W2DC')),
-			'viber' => array('value' => 'viber', 'label' => __('Viber', 'W2DC')),
-			'email' => array('value' => 'email', 'label' => __('Email', 'W2DC')),
+			'facebook' => array('value' => 'facebook', 'label' => esc_html__('Facebook', 'w2dc')),
+			'twitter' => array('value' => 'twitter', 'label' => esc_html__('Twitter', 'w2dc')),
+			'google' => array('value' => 'google', 'label' => esc_html__('Google+', 'w2dc')),
+			'linkedin' => array('value' => 'linkedin', 'label' => esc_html__('LinkedIn', 'w2dc')),
+			'digg' => array('value' => 'digg', 'label' => esc_html__('Digg', 'w2dc')),
+			'reddit' => array('value' => 'reddit', 'label' => esc_html__('Reddit', 'w2dc')),
+			'pinterest' => array('value' => 'pinterest', 'label' => esc_html__('Pinterest', 'w2dc')),
+			'tumblr' => array('value' => 'tumblr', 'label' => esc_html__('Tumblr', 'w2dc')),
+			'stumbleupon' => array('value' => 'stumbleupon', 'label' => esc_html__('StumbleUpon', 'w2dc')),
+			'vk' => array('value' => 'vk', 'label' => esc_html__('VK', 'w2dc')),
+			'whatsapp' => array('value' => 'whatsapp', 'label' => esc_html__('WhatsApp', 'w2dc')),
+			'telegram' => array('value' => 'telegram', 'label' => esc_html__('Telegram', 'w2dc')),
+			'viber' => array('value' => 'viber', 'label' => esc_html__('Viber', 'w2dc')),
+			'email' => array('value' => 'email', 'label' => esc_html__('Email', 'w2dc')),
 		);
 
 		$listings_tabs = array(
-				array('value' => 'addresses-tab', 'label' => __('Addresses tab', 'W2DC')),
-				array('value' => 'comments-tab', 'label' => __('Comments tab', 'W2DC')),
-				array('value' => 'videos-tab', 'label' => __('Videos tab', 'W2DC')),
-				array('value' => 'contact-tab', 'label' => __('Contact tab', 'W2DC')),
-				array('value' => 'report-tab', 'label' => __('Report tab', 'W2DC')));
+				array('value' => 'addresses-tab', 'label' => esc_html__('Addresses tab', 'w2dc')),
+				array('value' => 'comments-tab', 'label' => esc_html__('Comments tab', 'w2dc')),
+				array('value' => 'videos-tab', 'label' => esc_html__('Videos tab', 'w2dc')),
+				array('value' => 'contact-tab', 'label' => esc_html__('Contact tab', 'w2dc')),
+				array('value' => 'report-tab', 'label' => esc_html__('Report tab', 'w2dc')));
 		foreach ($w2dc_instance->content_fields->content_fields_groups_array AS $fields_group) {
 			if ($fields_group->on_tab) {
 				$listings_tabs[] = array('value' => 'field-group-tab-'.$fields_group->id, 'label' => $fields_group->name);
@@ -90,7 +93,7 @@ class w2dc_settings_manager {
 		$map_zooms = array(
 						array(
 							'value' => '0',
-							'label' =>__('Auto', 'W2DC'),
+							'label' =>esc_html__('Auto', 'w2dc'),
 						),
 						array('value' => 1, 'label' => 1),
 						array('value' => 2, 'label' => 2),
@@ -114,74 +117,66 @@ class w2dc_settings_manager {
 		);
 		
 		$theme_options = array(
-				//'is_dev_mode' => true,
 				'option_key' => 'vpt_option',
 				'page_slug' => 'w2dc_settings',
 				'template' => array(
-					'title' => __('Web 2.0 Directory Settings', 'W2DC'),
+					'title' => esc_html__('Web 2.0 Directory Settings', 'w2dc'),
 					'logo' => W2DC_RESOURCES_URL . 'images/settings.png',
 					'menus' => array(
 						'general' => array(
 							'name' => 'general',
-							'title' => __('General settings', 'W2DC'),
+							'title' => esc_html__('General settings', 'w2dc'),
 							'icon' => 'font-awesome:w2dc-fa-home',
 							'controls' => array(
-								'ajax_loading' => array(
+								'ajax_map_loading' => array(
 									'type' => 'section',
-									'title' => __('AJAX loading', 'W2DC'),
+									'title' => esc_html__('AJAX loading', 'w2dc'),
 									'fields' => array(
 									 	array(
 											'type' => 'toggle',
 											'name' => 'w2dc_ajax_load',
-											'label' => __('Use AJAX loading', 'W2DC'),
-									 		'description' => __('Load maps and listings using AJAX when click sorting buttons and pagination buttons. Manage search settings', 'W2DC') . " " . "<a href='" . admin_url("edit.php?post_type=wcsearch_form") . "'>" . esc_html__("here", "W2DC") . "</a>",
+											'label' => esc_html__('Use AJAX loading', 'w2dc'),
+									 		'description' => esc_html__('Load maps and listings using AJAX when click sorting buttons and pagination buttons. Manage search settings', 'w2dc') . " " . "<a href='" . admin_url("edit.php?post_type=wcsearch_form") . "'>" . esc_html__("here", "w2dc") . "</a>",
 											'default' => get_option('w2dc_ajax_load'),
 										),
 									 	array(
 											'type' => 'toggle',
 											'name' => 'w2dc_show_more_button',
-											'label' => __('Display "Show More Listings" button instead of default paginator', 'W2DC'),
+											'label' => esc_html__('Display "Show More Listings" button instead of default paginator', 'w2dc'),
 											'default' => get_option('w2dc_show_more_button'),
 										),
 									),
 								),
 								'title_slugs' => array(
 									'type' => 'section',
-									'title' => __('Titles, Labels & Permalinks', 'W2DC'),
+									'title' => esc_html__('Titles, Labels & Permalinks', 'w2dc'),
 									'fields' => array(
 									 	array(
 											'type' => 'textbox',
 											'name' => w2dc_get_wpml_dependent_option_name('w2dc_directory_title'), // adapted for WPML
-											'label' => __('Directory title', 'W2DC'),
+											'label' => esc_html__('Directory title', 'w2dc'),
 									 		'description' => w2dc_get_wpml_dependent_option_description(),
 											'default' => w2dc_get_wpml_dependent_option('w2dc_directory_title'),  // adapted for WPML
 										),
 									 	array(
 											'type' => 'textbox',
 											'name' => w2dc_get_wpml_dependent_option_name('w2dc_sticky_label'), // adapted for WPML
-											'label' => __('Sticky listing label', 'W2DC'),
+											'label' => esc_html__('Sticky listing label', 'w2dc'),
 									 		'description' => w2dc_get_wpml_dependent_option_description(),
 											'default' => w2dc_get_wpml_dependent_option('w2dc_sticky_label'),  // adapted for WPML
 										),
 									 	array(
 											'type' => 'textbox',
 											'name' => w2dc_get_wpml_dependent_option_name('w2dc_featured_label'), // adapted for WPML
-											'label' => __('Featured listing label', 'W2DC'),
+											'label' => esc_html__('Featured listing label', 'w2dc'),
 									 		'description' => w2dc_get_wpml_dependent_option_description(),
 											'default' => w2dc_get_wpml_dependent_option('w2dc_featured_label'),  // adapted for WPML
 										),
 										array(
-											'type' => 'notebox',
-											'name' => 'slugs_warning',
-											'label' => __('Notice about slugs:', 'W2DC'),
-											'description' => sprintf(__('You can manage listings, categories, locations and tags slugs in <a href="%s">directories settings</a>', 'W2DC'), admin_url('admin.php?page=w2dc_directories')),
-											'status' => 'warning',
-										),
-										array(
 											'type' => 'radiobutton',
 											'name' => 'w2dc_permalinks_structure',
-											'label' => __('Listings permalinks structure', 'W2DC'),
-											'description' => __('<b>/%postname%/</b> works only when directory page is not front page.<br /><b>/%post_id%/%postname%/</b> will not work when /%post_id%/%postname%/ or /%year%/%postname%/ was enabled for native WP posts.', 'W2DC'),
+											'label' => esc_html__('Listings permalinks structure', 'w2dc'),
+											'description' => wp_kses(__('<b>/%postname%/</b> works only when directory page is not front page.<br /><b>/%post_id%/%postname%/</b> will not work when /%post_id%/%postname%/ or /%year%/%postname%/ was enabled for native WP posts.', 'w2dc'), 'post'),
 											'default' => array(get_option('w2dc_permalinks_structure')),
 											'items' => array(
 													array(
@@ -216,208 +211,208 @@ class w2dc_settings_manager {
 						),
 						'listings' => array(
 							'name' => 'listings',
-							'title' => __('Listings', 'W2DC'),
+							'title' => esc_html__('Listings', 'w2dc'),
 							'icon' => 'font-awesome:w2dc-fa-list-alt',
 							'controls' => array(
 								'listings' => array(
 									'type' => 'section',
-									'title' => __('Listings settings', 'W2DC'),
+									'title' => esc_html__('Listings settings', 'w2dc'),
 									'fields' => array(
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_listings_on_index',
-											'label' => __('Show listings on home page', 'W2DC'),
+											'label' => esc_html__('Show listings on home page', 'w2dc'),
 											'default' => get_option('w2dc_listings_on_index'),
 										),
 										array(
 											'type' => 'textbox',
 											'name' => 'w2dc_listings_number_index',
-											'label' => __('Number of listings on home page', 'W2DC'),
-											'description' => __('Per page', 'W2DC'),
+											'label' => esc_html__('Number of listings on home page', 'w2dc'),
+											'description' => esc_html__('Per page', 'w2dc'),
 											'default' => get_option('w2dc_listings_number_index'),
 											'validation' => 'numeric',
 										),
 										array(
 											'type' => 'textbox',
 											'name' => 'w2dc_listings_number_excerpt',
-											'label' => __('Number of listings on excerpt pages (categories, locations, tags, search results)', 'W2DC'),
-											'description' => __('Per page', 'W2DC'),
+											'label' => esc_html__('Number of listings on excerpt pages (categories, locations, tags, search results)', 'w2dc'),
+											'description' => esc_html__('Per page', 'w2dc'),
 											'default' => get_option('w2dc_listings_number_excerpt'),
 											'validation' => 'numeric',
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_listing_contact_form',
-											'label' => __('Enable contact form on listing page', 'W2DC'),
-											'description' => __('Contact Form 7 or standard form will be displayed on each listing page', 'W2DC'),
+											'label' => esc_html__('Enable contact form on listing page', 'w2dc'),
+											'description' => esc_html__('Contact Form 7 or standard form will be displayed on each listing page', 'w2dc'),
 											'default' => get_option('w2dc_listing_contact_form'),
 										),
 										array(
 											'type' => 'textbox',
 											'name' => w2dc_get_wpml_dependent_option_name('w2dc_listing_contact_form_7'),
-											'label' => __('Contact Form 7 shortcode', 'W2DC'),
-											'description' => __('This will work only when Contact Form 7 plugin enabled, otherwise standard contact form will be displayed.', 'W2DC') . w2dc_get_wpml_dependent_option_description(),
+											'label' => esc_html__('Contact Form 7 shortcode', 'w2dc'),
+											'description' => esc_html__('This will work only when Contact Form 7 plugin enabled, otherwise standard contact form will be displayed.', 'w2dc') . w2dc_get_wpml_dependent_option_description(),
 											'default' => w2dc_get_wpml_dependent_option('w2dc_listing_contact_form_7'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_hide_anonymous_contact_form',
-											'label' => __('Show contact form only for logged in users', 'W2DC'),
+											'label' => esc_html__('Show contact form only for logged in users', 'w2dc'),
 											'default' => get_option('w2dc_hide_anonymous_contact_form'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_custom_contact_email',
-											'label' => __('Allow custom contact emails', 'W2DC'),
-											'description' => __('When enabled users may set up custom contact emails, otherwise messages will be sent directly to authors emails', 'W2DC'),
+											'label' => esc_html__('Allow custom contact emails', 'w2dc'),
+											'description' => esc_html__('When enabled users may set up custom contact emails, otherwise messages will be sent directly to authors emails', 'w2dc'),
 											'default' => get_option('w2dc_custom_contact_email'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_report_form',
-											'label' => __('Enable report form', 'W2DC'),
+											'label' => esc_html__('Enable report form', 'w2dc'),
 											'default' => get_option('w2dc_report_form'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_favourites_list',
-											'label' => __('Enable bookmarks list', 'W2DC'),
+											'label' => esc_html__('Enable bookmarks list', 'w2dc'),
 											'default' => get_option('w2dc_favourites_list'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_print_button',
-											'label' => __('Show print listing button', 'W2DC'),
+											'label' => esc_html__('Show print listing button', 'w2dc'),
 											'default' => get_option('w2dc_print_button'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_pdf_button',
-											'label' => __('Show listing in PDF button', 'W2DC'),
+											'label' => esc_html__('Show listing in PDF button', 'w2dc'),
 											'default' => get_option('w2dc_pdf_button'),
 										),
 										array(
 											'type' => 'radiobutton',
 											'name' => 'w2dc_pdf_page_orientation',
-											'label' => __('PDF page orientation', 'W2DC'),
+											'label' => esc_html__('PDF page orientation', 'w2dc'),
 											'default' => get_option('w2dc_pdf_page_orientation'),
 											'items' => array(
 													array(
 														'value' => 'portrait',
-														'label' => __('Portrait', 'W2DC'),	
+														'label' => esc_html__('Portrait', 'w2dc'),	
 													),
 													array(
 														'value' => 'landscape',
-														'label' => __('Landscape', 'W2DC'),	
+														'label' => esc_html__('Landscape', 'w2dc'),	
 													),
 											),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_change_expiration_date',
-											'label' => __('Allow regular users to change listings expiration dates', 'W2DC'),
+											'label' => esc_html__('Allow regular users to change listings expiration dates', 'w2dc'),
 											'default' => get_option('w2dc_change_expiration_date'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_hide_comments_number_on_index',
-											'label' => __('Hide comments (reviews) number on index and excerpt pages', 'W2DC'),
+											'label' => esc_html__('Hide comments (reviews) number on index and excerpt pages', 'w2dc'),
 											'default' => get_option('w2dc_hide_comments_number_on_index'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_hide_listing_title',
-											'label' => __('Hide listing title', 'W2DC'),
-											'description' => __('Hides title on a single listing page.', 'W2DC'),
+											'label' => esc_html__('Hide listing title', 'w2dc'),
+											'description' => esc_html__('Hides title on a single listing page.', 'w2dc'),
 											'default' => get_option('w2dc_hide_listing_title'),
 										),
 										array(
 											'type' => 'toggle',
+											'name' => 'w2dc_enable_stats',
+											'label' => esc_html__('Enable statistics functionality', 'w2dc'),
+											'default' => get_option('w2dc_enable_stats'),
+										),
+										array(
+											'type' => 'toggle',
 											'name' => 'w2dc_hide_views_counter',
-											'label' => __('Hide listings views counter', 'W2DC'),
+											'label' => esc_html__('Hide listings views counter', 'w2dc'),
 											'default' => get_option('w2dc_hide_views_counter'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_hide_listings_creation_date',
-											'label' => __('Hide listings creation date', 'W2DC'),
+											'label' => esc_html__('Hide listings creation date', 'w2dc'),
 											'default' => get_option('w2dc_hide_listings_creation_date'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_hide_author_link',
-											'label' => __('Hide author information', 'W2DC'),
-											'description' => __('Author name and possible link to author website will be hidden on single listing pages.', 'W2DC'),
+											'label' => esc_html__('Hide author information', 'w2dc'),
+											'description' => esc_html__('Author name and possible link to author website will be hidden on single listing pages.', 'w2dc'),
 											'default' => get_option('w2dc_hide_author_link'),
 										),
 										array(
 											'type' => 'radiobutton',
 											'name' => 'w2dc_listings_comments_mode',
-											'label' => __('Listings comments (reviews) mode', 'W2DC'),
+											'label' => esc_html__('Listings comments (reviews) mode', 'w2dc'),
 											'default' => array(get_option('w2dc_listings_comments_mode')),
 											'items' => array(
 													array(
 														'value' => 'enabled',
-														'label' => __('Always enabled', 'W2DC'),	
+														'label' => esc_html__('Always enabled', 'w2dc'),	
 													),
 													array(
 														'value' => 'disabled',
-														'label' => __('Always disabled', 'W2DC'),	
+														'label' => esc_html__('Always disabled', 'w2dc'),	
 													),
 													array(
 														'value' => 'wp_settings',
-														'label' => __('As configured in WP settings', 'W2DC'),	
+														'label' => esc_html__('As configured in WP settings', 'w2dc'),	
 													),
 											),
 										),
 										array(
 											'type' => 'sorter',
 											'name' => 'w2dc_listings_tabs_order',
-											'label' => __('Listing tabs order', 'W2DC'),
+											'label' => esc_html__('Listing tabs order', 'w2dc'),
 									 		'items' => $listings_tabs,
 											'default' => get_option('w2dc_listings_tabs_order'),
-										),
-										array(
-											'type' => 'toggle',
-											'name' => 'w2dc_enable_stats',
-											'label' => __('Enable statistics functionality', 'W2DC'),
-											'default' => get_option('w2dc_enable_stats'),
 										),
 									),
 								),
 								'breadcrumbs' => array(
 									'type' => 'section',
-									'title' => __('Breadcrumbs settings', 'W2DC'),
+									'title' => esc_html__('Breadcrumbs settings', 'w2dc'),
 									'fields' => array(
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_enable_breadcrumbs',
-											'label' => __('Enable breadcrumbs', 'W2DC'),
+											'label' => esc_html__('Enable breadcrumbs', 'w2dc'),
 											'default' => get_option('w2dc_enable_breadcrumbs'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_hide_home_link_breadcrumb',
-											'label' => __('Hide home link in breadcrumbs', 'W2DC'),
+											'label' => esc_html__('Hide home link in breadcrumbs', 'w2dc'),
 											'default' => get_option('w2dc_hide_home_link_breadcrumb'),
 										),
 										array(
 											'type' => 'radiobutton',
 											'name' => 'w2dc_breadcrumbs_mode',
-											'label' => __('Breadcrumbs mode on single listing page', 'W2DC'),
+											'label' => esc_html__('Breadcrumbs mode on single listing page', 'w2dc'),
 											'default' => array(get_option('w2dc_breadcrumbs_mode')),
 											'items' => array(
 													array(
 														'value' => 'title',
-														'label' => __('%listing title%', 'W2DC'),	
+														'label' => esc_html__('%listing title%', 'w2dc'),	
 													),
 													array(
 														'value' => 'category',
-														'label' => __('%category% » %listing title%', 'W2DC'),	
+														'label' => esc_html__('%category% » %listing title%', 'w2dc'),	
 													),
 													array(
 														'value' => 'location',
-														'label' => __('%location% » %listing title%', 'W2DC'),	
+														'label' => esc_html__('%location% » %listing title%', 'w2dc'),	
 													),
 											),
 										),
@@ -425,62 +420,62 @@ class w2dc_settings_manager {
 								),
 								'logos' => array(
 									'type' => 'section',
-									'title' => __('Listings logos & images', 'W2DC'),
+									'title' => esc_html__('Listings logos & images', 'w2dc'),
 									'fields' => array(
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_images_submit_required',
-											'label' => __('Images required', 'W2DC'),
+											'label' => esc_html__('Images required', 'w2dc'),
 											'default' => get_option('w2dc_images_submit_required'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_enable_lightbox_gallery',
-											'label' => __('Enable lightbox on images gallery', 'W2DC'),
+											'label' => esc_html__('Enable lightbox on images gallery', 'w2dc'),
 											'default' => get_option('w2dc_enable_lightbox_gallery'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_auto_slides_gallery',
-											'label' => __('Enable automatic rotating slideshow on images gallery', 'W2DC'),
+											'label' => esc_html__('Enable automatic rotating slideshow on images gallery', 'w2dc'),
 											'default' => get_option('w2dc_auto_slides_gallery'),
 										),
 										array(
 											'type' => 'textbox',
 											'name' => 'w2dc_auto_slides_gallery_delay',
-											'label' => __('The delay in rotation (in ms)', 'W2DC'),
+											'label' => esc_html__('The delay in rotation (in ms)', 'w2dc'),
 											'default' => get_option('w2dc_auto_slides_gallery_delay'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_exclude_logo_from_listing',
-											'label' => __('Exclude logo image from images gallery on single listing page', 'W2DC'),
+											'label' => esc_html__('Exclude logo image from images gallery on single listing page', 'w2dc'),
 											'default' => get_option('w2dc_exclude_logo_from_listing'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_enable_nologo',
-											'label' => __('Enable default logo image', 'W2DC'),
+											'label' => esc_html__('Enable default logo image', 'w2dc'),
 											'default' => get_option('w2dc_enable_nologo'),
 										),
 										array(
 											'type' => 'upload',
 											'name' => 'w2dc_nologo_url',
-											'label' => __('Default logo image', 'W2DC'),
-									 		'description' => __('This image will appear when listing owner did not upload own logo.', 'W2DC'),
+											'label' => esc_html__('Default logo image', 'w2dc'),
+									 		'description' => esc_html__('This image will appear when listing owner did not upload own logo.', 'w2dc'),
 											'default' => get_option('w2dc_nologo_url'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_100_single_logo_width',
-											'label' => __('Enable 100% width of images gallery', 'W2DC'),
+											'label' => esc_html__('Enable 100% width of images gallery', 'w2dc'),
 											'default' => get_option('w2dc_100_single_logo_width'),
 										),
 										array(
 											'type' => 'slider',
 											'name' => 'w2dc_single_logo_width',
-											'label' => __('Images gallery width (in pixels)', 'W2DC'),
-											'description' => __('This option needed only when 100% width of images gallery is switched off'),
+											'label' => esc_html__('Images gallery width (in pixels)', 'w2dc'),
+											'description' => esc_html__('This option needed only when 100% width of images gallery is switched off'),
 											'min' => 100,
 											'max' => 800,
 											'default' => get_option('w2dc_single_logo_width'),
@@ -488,8 +483,8 @@ class w2dc_settings_manager {
 										array(
 											'type' => 'slider',
 											'name' => 'w2dc_single_logo_height',
-											'label' => __('Images gallery height (in pixels)', 'W2DC'),
-											'description' => __('Set to 0 to fit full height'),
+											'label' => esc_html__('Images gallery height (in pixels)', 'w2dc'),
+											'description' => esc_html__('Set to 0 to fit full height'),
 											'min' => 0,
 											'max' => 800,
 											'default' => get_option('w2dc_single_logo_height'),
@@ -497,64 +492,64 @@ class w2dc_settings_manager {
 										array(
 											'type' => 'radiobutton',
 											'name' => 'w2dc_big_slide_bg_mode',
-											'label' => __('Do crop images gallery', 'W2DC'),
+											'label' => esc_html__('Do crop images gallery', 'w2dc'),
 											'default' => array(get_option('w2dc_big_slide_bg_mode')),
 											'items' => array(
 													array(
 														'value' => 'cover',
-														'label' => __('Cut off image to fit width and height of main slide', 'W2DC'),	
+														'label' => esc_html__('Cut off image to fit width and height of main slide', 'w2dc'),	
 													),
 													array(
 														'value' => 'contain',
-														'label' => __('Full image inside main slide', 'W2DC'),	
+														'label' => esc_html__('Full image inside main slide', 'w2dc'),	
 													),
 											),
-											'description' => __('Works when gallery height is limited (not set to 0)', 'W2DC'),
+											'description' => esc_html__('Works when gallery height is limited (not set to 0)', 'w2dc'),
 										),
 									),
 								),
 								'excerpts' => array(
 									'type' => 'section',
-									'title' => __('Description & Excerpt settings', 'W2DC'),
+									'title' => esc_html__('Description & Excerpt settings', 'w2dc'),
 									'fields' => array(
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_enable_description',
-											'label' => __('Enable description field', 'W2DC'),
+											'label' => esc_html__('Enable description field', 'w2dc'),
 											'default' => get_option('w2dc_enable_description'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_enable_html_description',
-											'label' => __('Enable HTML and shortcodes in description field', 'W2DC'),
+											'label' => esc_html__('Enable HTML and shortcodes in description field', 'w2dc'),
 											'default' => get_option('w2dc_enable_html_description'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_enable_summary',
-											'label' => __('Enable summary field', 'W2DC'),
+											'label' => esc_html__('Enable summary field', 'w2dc'),
 											'default' => get_option('w2dc_enable_summary'),
 										),
 										array(
 											'type' => 'textbox',
 											'name' => 'w2dc_excerpt_length',
-											'label' => __('Excerpt max length', 'W2DC'),
-											'description' => __('Insert the number of words you want to show in the listings excerpts', 'W2DC'),
+											'label' => esc_html__('Excerpt max length', 'w2dc'),
+											'description' => esc_html__('Insert the number of words you want to show in the listings excerpts', 'w2dc'),
 											'default' => get_option('w2dc_excerpt_length'),
 											'validation' => 'numeric',
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_cropped_content_as_excerpt',
-											'label' => __('Use cropped content as excerpt', 'W2DC'),
-											'description' => __('When excerpt field is empty - use cropped main content', 'W2DC'),
+											'label' => esc_html__('Use cropped content as excerpt', 'w2dc'),
+											'description' => esc_html__('When excerpt field is empty - use cropped main content', 'w2dc'),
 											'default' => get_option('w2dc_cropped_content_as_excerpt'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_strip_excerpt',
-											'label' => __('Strip HTML from excerpt', 'W2DC'),
-											'description' => __('Check the box if you want to strip HTML from the excerpt content only', 'W2DC'),
+											'label' => esc_html__('Strip HTML from excerpt', 'w2dc'),
+											'description' => esc_html__('Check the box if you want to strip HTML from the excerpt content only', 'w2dc'),
 											'default' => get_option('w2dc_strip_excerpt'),
 										),
 									),
@@ -563,79 +558,79 @@ class w2dc_settings_manager {
 						),
 						'pages_views' => array(
 							'name' => 'pages_views',
-							'title' => __('Pages & Views', 'W2DC'),
+							'title' => esc_html__('Pages & Views', 'w2dc'),
 							'icon' => 'font-awesome:w2dc-fa-external-link ',
 							'controls' => array(
 								'excerpt_views' => array(
 									'type' => 'section',
-									'title' => __('Excerpt views', 'W2DC'),
+									'title' => esc_html__('Excerpt views', 'w2dc'),
 									'fields' => array(
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_show_listings_count',
-											'label' => __('Show listings number', 'W2DC'),
+											'label' => esc_html__('Show listings number', 'w2dc'),
 											'default' => get_option('w2dc_show_listings_count'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_views_switcher',
-											'label' => __('Enable views switcher', 'W2DC'),
+											'label' => esc_html__('Enable views switcher', 'w2dc'),
 											'default' => get_option('w2dc_views_switcher'),
 										),
 										array(
 											'type' => 'radiobutton',
 											'name' => 'w2dc_views_switcher_default',
-											'label' => __('Listings view by default', 'W2DC'),
-											'description' => __('Selected view will be stored in cookies', 'W2DC'),
+											'label' => esc_html__('Listings view by default', 'w2dc'),
+											'description' => esc_html__('Selected view will be stored in cookies', 'w2dc'),
 											'default' => array(get_option('w2dc_views_switcher_default')),
 											'items' => array(
 													array(
 														'value' => 'list',
-														'label' => __('List view', 'W2DC'),
+														'label' => esc_html__('List view', 'w2dc'),
 													),
 													array(
 														'value' => 'grid',
-														'label' => __('Grid view', 'W2DC'),
+														'label' => esc_html__('Grid view', 'w2dc'),
 													),
 											),
 										),
 										array(
 											'type' => 'radiobutton',
 											'name' => 'w2dc_listing_title_mode',
-											'label' => __('Listing title mode', 'W2DC'),
-											'description' => __('How to display listing title', 'W2DC'),
+											'label' => esc_html__('Listing title mode', 'w2dc'),
+											'description' => esc_html__('How to display listing title', 'w2dc'),
 											'default' => array(get_option('w2dc_listing_title_mode')),
 											'items' => array(
 													array(
 														'value' => 'inside',
-														'label' => __('On listing logo', 'W2DC'),
+														'label' => esc_html__('On listing logo', 'w2dc'),
 													),
 													array(
 														'value' => 'outside',
-														'label' => __('Outside listing logo', 'W2DC'),
+														'label' => esc_html__('Outside listing logo', 'w2dc'),
 													),
 											),
 										),
 										array(
 											'type' => 'radiobutton',
 											'name' => 'w2dc_listing_logo_bg_mode',
-											'label' => __('Logo image mode', 'W2DC'),
+											'label' => esc_html__('Logo image mode', 'w2dc'),
 											'default' => array(get_option('w2dc_listing_logo_bg_mode')),
 											'items' => array(
 													array(
 														'value' => 'cover',
-														'label' => __('Cut off image to fit width and height listing logo', 'W2DC'),	
+														'label' => esc_html__('Cut off image to fit width and height listing logo', 'w2dc'),	
 													),
 													array(
 														'value' => 'contain',
-														'label' => __('Full image inside listing logo', 'W2DC'),	
+														'label' => esc_html__('Full image inside listing logo', 'w2dc'),	
 													),
 											),
 										),
 										array(
 											'type' => 'slider',
 											'name' => 'w2dc_views_switcher_grid_columns',
-											'label' => __('Number of columns for listings Grid View', 'W2DC'),
+											'label' => esc_html__('Number of columns for listings Grid View', 'w2dc'),
 											'min' => 1,
 											'max' => 4,
 											'default' => get_option('w2dc_views_switcher_grid_columns'),
@@ -643,7 +638,7 @@ class w2dc_settings_manager {
 										array(
 											'type' => 'slider',
 											'name' => 'w2dc_mobile_listings_grid_columns',
-											'label' => __('Number of columns for mobile devices', 'W2DC'),
+											'label' => esc_html__('Number of columns for mobile devices', 'w2dc'),
 											'min' => 1,
 											'max' => 2,
 											'default' => get_option('w2dc_mobile_listings_grid_columns'),
@@ -651,37 +646,37 @@ class w2dc_settings_manager {
 										array(
 											'type' => 'radiobutton',
 											'name' => 'w2dc_grid_view_logo_ratio',
-											'label' => __('Aspect ratio of logo in Grid View', 'W2DC'),
+											'label' => esc_html__('Aspect ratio of logo in Grid View', 'w2dc'),
 											'default' => array(get_option('w2dc_grid_view_logo_ratio')),
 											'items' => array(
 													array(
 														'value' => '100',
-														'label' => __('1:1 (square)', 'W2DC'),
+														'label' => esc_html__('1:1 (square)', 'w2dc'),
 													),
 													array(
 														'value' => '75',
-														'label' => __('4:3', 'W2DC'),
+														'label' => esc_html__('4:3', 'w2dc'),
 													),
 													array(
 														'value' => '56.25',
-														'label' => __('16:9', 'W2DC'),
+														'label' => esc_html__('16:9', 'w2dc'),
 													),
 													array(
 														'value' => '50',
-														'label' => __('2:1', 'W2DC'),
+														'label' => esc_html__('2:1', 'w2dc'),
 													),
 											),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_wrap_logo_list_view',
-											'label' => __('Wrap logo image by text content in List View', 'W2DC'),
+											'label' => esc_html__('Wrap logo image by text content in List View', 'w2dc'),
 											'default' => get_option('w2dc_wrap_logo_list_view'),
 										),
 										array(
 											'type' => 'slider',
 											'name' => 'w2dc_listing_thumb_width',
-											'label' => __('Listing thumbnail logo width (in pixels) in List View', 'W2DC'),
+											'label' => esc_html__('Listing thumbnail logo width (in pixels) in List View', 'w2dc'),
 											'min' => '70',
 											'max' => '640',
 											'default' => '290',
@@ -690,18 +685,18 @@ class w2dc_settings_manager {
 								),
 								'categories' => array(
 									'type' => 'section',
-									'title' => __('Categories settings', 'W2DC'),
+									'title' => esc_html__('Categories settings', 'w2dc'),
 									'fields' => array(
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_show_categories_index',
-											'label' => __('Show categories list on index and excerpt pages', 'W2DC'),
+											'label' => esc_html__('Show categories list on index and excerpt pages', 'w2dc'),
 											'default' => get_option('w2dc_show_categories_index'),
 										),
 										array(
 											'type' => 'slider',
 											'name' => 'w2dc_categories_nesting_level',
-											'label' => __('Categories depth level', 'W2DC'),
+											'label' => esc_html__('Categories depth level', 'w2dc'),
 											'min' => 1,
 											'max' => 2,
 											'default' => get_option('w2dc_categories_nesting_level'),
@@ -709,7 +704,7 @@ class w2dc_settings_manager {
 										array(
 											'type' => 'slider',
 											'name' => 'w2dc_categories_columns',
-											'label' => __('Categories columns number', 'W2DC'),
+											'label' => esc_html__('Categories columns number', 'w2dc'),
 											'min' => 1,
 											'max' => 4,
 											'default' => get_option('w2dc_categories_columns'),
@@ -717,33 +712,33 @@ class w2dc_settings_manager {
 										array(
 											'type' => 'textbox',
 											'name' => 'w2dc_subcategories_items',
-											'label' => __('Show subcategories items number', 'W2DC'),
-											'description' => __('Leave 0 to show all subcategories', 'W2DC'),
+											'label' => esc_html__('Show subcategories items number', 'w2dc'),
+											'description' => esc_html__('Leave 0 to show all subcategories', 'w2dc'),
 											'default' => get_option('w2dc_subcategories_items'),
 											'validation' => 'numeric',
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_show_category_count',
-											'label' => __('Show category listings count', 'W2DC'),
+											'label' => esc_html__('Show category listings count', 'w2dc'),
 											'default' => get_option('w2dc_show_category_count'),
 										),
 										array(
 											'type' => 'select',
 											'name' => 'w2dc_categories_order',
-											'label' => __('Order by', 'W2DC'),
+											'label' => esc_html__('Order by', 'w2dc'),
 											'items' => array(
 												array(
 													'value' => 'default',
-													'label' => __('Default (drag & drop in categories tree)', 'W2DC'),
+													'label' => esc_html__('Default (drag & drop in categories tree)', 'w2dc'),
 												),
 												array(
 													'value' => 'name',
-													'label' => __('Alphabetically', 'W2DC'),
+													'label' => esc_html__('Alphabetically', 'w2dc'),
 												),
 												array(
 													'value' => 'count',
-													'label' => __('Count', 'W2DC'),
+													'label' => esc_html__('Count', 'w2dc'),
 												),
 											),
 											'default' => array(get_option('w2dc_categories_order')),
@@ -752,18 +747,18 @@ class w2dc_settings_manager {
 								),
 								'locations' => array(
 									'type' => 'section',
-									'title' => __('Locations settings', 'W2DC'),
+									'title' => esc_html__('Locations settings', 'w2dc'),
 									'fields' => array(
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_show_locations_index',
-											'label' => __('Show locations list on index and excerpt pages', 'W2DC'),
+											'label' => esc_html__('Show locations list on index and excerpt pages', 'w2dc'),
 											'default' => get_option('w2dc_show_locations_index'),
 										),
 										array(
 											'type' => 'slider',
 											'name' => 'w2dc_locations_nesting_level',
-											'label' => __('Locations depth level', 'W2DC'),
+											'label' => esc_html__('Locations depth level', 'w2dc'),
 											'min' => 1,
 											'max' => 2,
 											'default' => get_option('w2dc_locations_nesting_level'),
@@ -771,7 +766,7 @@ class w2dc_settings_manager {
 										array(
 											'type' => 'slider',
 											'name' => 'w2dc_locations_columns',
-											'label' => __('Locations columns number', 'W2DC'),
+											'label' => esc_html__('Locations columns number', 'w2dc'),
 											'min' => 1,
 											'max' => 4,
 											'default' => get_option('w2dc_locations_columns'),
@@ -779,33 +774,33 @@ class w2dc_settings_manager {
 										array(
 											'type' => 'textbox',
 											'name' => 'w2dc_sublocations_items',
-											'label' => __('Show sublocations items number', 'W2DC'),
-											'description' => __('Leave 0 to show all sublocations', 'W2DC'),
+											'label' => esc_html__('Show sublocations items number', 'w2dc'),
+											'description' => esc_html__('Leave 0 to show all sublocations', 'w2dc'),
 											'default' => get_option('w2dc_sublocations_items'),
 											'validation' => 'numeric',
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_show_location_count',
-											'label' => __('Show location listings count', 'W2DC'),
+											'label' => esc_html__('Show location listings count', 'w2dc'),
 											'default' => get_option('w2dc_show_locations_count'),
 										),
 										array(
 											'type' => 'select',
 											'name' => 'w2dc_locations_order',
-											'label' => __('Order by', 'W2DC'),
+											'label' => esc_html__('Order by', 'w2dc'),
 											'items' => array(
 												array(
 													'value' => 'default',
-													'label' => __('Default (drag & drop in locations tree)', 'W2DC'),
+													'label' => esc_html__('Default (drag & drop in locations tree)', 'w2dc'),
 												),
 												array(
 													'value' => 'name',
-													'label' => __('Alphabetically', 'W2DC'),
+													'label' => esc_html__('Alphabetically', 'w2dc'),
 												),
 												array(
 													'value' => 'count',
-													'label' => __('Count', 'W2DC'),
+													'label' => esc_html__('Count', 'w2dc'),
 												),
 											),
 											'default' => array(get_option('w2dc_locations_order')),
@@ -814,51 +809,51 @@ class w2dc_settings_manager {
 								),
 								'sorting' => array(
 									'type' => 'section',
-									'title' => __('Sorting settings', 'W2DC'),
+									'title' => esc_html__('Sorting settings', 'w2dc'),
 									'fields' => array(
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_show_orderby_links',
-											'label' => __('Show "order by" options', 'W2DC'),
+											'label' => esc_html__('Show "order by" options', 'w2dc'),
 											'default' => get_option('w2dc_show_orderby_links'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_orderby_date',
-											'label' => __('Allow sorting by date', 'W2DC'),
+											'label' => esc_html__('Allow sorting by date', 'w2dc'),
 											'default' => get_option('w2dc_orderby_date'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_orderby_title',
-											'label' => __('Allow sorting by title', 'W2DC'),
+											'label' => esc_html__('Allow sorting by title', 'w2dc'),
 											'default' => get_option('w2dc_orderby_title'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_orderby_distance',
-											'label' => __('Allow sorting by distance when search by radius', 'W2DC'),
+											'label' => esc_html__('Allow sorting by distance when search by radius', 'w2dc'),
 											'default' => get_option('w2dc_orderby_distance'),
 										),
 										array(
 											'type' => 'select',
 											'name' => 'w2dc_default_orderby',
-											'label' => __('Default order by', 'W2DC'),
+											'label' => esc_html__('Default order by', 'w2dc'),
 											'items' => $ordering_items,
 											'default' => get_option('w2dc_default_orderby'),
 										),
 										array(
 											'type' => 'select',
 											'name' => 'w2dc_default_order',
-											'label' => __('Default order direction', 'W2DC'),
+											'label' => esc_html__('Default order direction', 'w2dc'),
 											'items' => array(
 												array(
 													'value' => 'ASC',
-													'label' => __('Ascending', 'W2DC'),
+													'label' => esc_html__('Ascending', 'w2dc'),
 												),
 												array(
 													'value' => 'DESC',
-													'label' => __('Descending', 'W2DC'),
+													'label' => esc_html__('Descending', 'w2dc'),
 												),
 											),
 											'default' => get_option('w2dc_default_order'),
@@ -866,14 +861,14 @@ class w2dc_settings_manager {
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_orderby_exclude_null',
-											'label' => __('Exclude listings with empty values from sorted results', 'W2DC'),
+											'label' => esc_html__('Exclude listings with empty values from sorted results', 'w2dc'),
 											'default' => get_option('w2dc_orderby_exclude_null'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_orderby_sticky_featured',
-											'label' => __('Sticky and featured listings always will be on top', 'W2DC'),
-											'description' => __('When switched off - sticky and featured listings will be on top only when listings were sorted by date.', 'W2DC'),
+											'label' => esc_html__('Sticky and featured listings always will be on top', 'w2dc'),
+											'description' => esc_html__('When switched off - sticky and featured listings will be on top only when listings were sorted by date.', 'w2dc'),
 											'default' => get_option('w2dc_orderby_sticky_featured'),
 										),
 									),
@@ -882,39 +877,39 @@ class w2dc_settings_manager {
 						),
 						'search' => array(
 							'name' => 'search',
-							'title' => __('Search settings', 'W2DC'),
+							'title' => esc_html__('Search settings', 'w2dc'),
 							'icon' => 'font-awesome:w2dc-fa-search',
 							'controls' => array(
 								'search' => array(
 									'type' => 'section',
-									'title' => __('Search settings', 'W2DC'),
+									'title' => esc_html__('Search settings', 'w2dc'),
 									'fields' => array(
 										array(
 											'type' => 'select',
 											'name' => 'w2dc_search_form_id',
-											'label' => __('Search form', 'W2DC'),
-											'description' => esc_html__("Manage search forms and settings", "W2DC") . " " . "<a href='" . admin_url("edit.php?post_type=wcsearch_form") . "'>" . esc_html__("here", "W2DC") . "</a>",
+											'label' => esc_html__('Search form', 'w2dc'),
+											'description' => esc_html__("Manage search forms and settings", "w2dc") . " " . "<a href='" . admin_url("edit.php?post_type=wcsearch_form") . "'>" . esc_html__("here", "w2dc") . "</a>",
 											'items' => $w2dc_search_forms,
 											'default' => get_option('w2dc_search_form_id'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_main_search',
-											'label' => __('Display search form in main part of a page', 'W2DC'),
+											'label' => esc_html__('Display search form in main part of a page', 'w2dc'),
 											'default' => get_option('w2dc_main_search'),
 										),
 										array(
 											'type' => 'radiobutton',
 											'name' => 'w2dc_miles_kilometers_in_search',
-											'label' => __('Dimension in radius search', 'W2DC'),
+											'label' => esc_html__('Dimension in radius search', 'w2dc'),
 											'items' => array(
 												array(
 													'value' => 'miles',
-													'label' => __('miles', 'W2DC'),
+													'label' => esc_html__('miles', 'w2dc'),
 												),
 												array(
 													'value' => 'kilometers',
-													'label' => __('kilometers', 'W2DC'),
+													'label' => esc_html__('kilometers', 'w2dc'),
 												),
 											),
 											'default' => array(get_option('w2dc_miles_kilometers_in_search')),
@@ -925,29 +920,29 @@ class w2dc_settings_manager {
 						),
 						'maps' => array(
 							'name' => 'maps',
-							'title' => __('Maps & Addresses', 'W2DC'),
+							'title' => esc_html__('Maps & Addresses', 'w2dc'),
 							'icon' => 'font-awesome:w2dc-fa-map-marker',
 							'controls' => array(
 								'map_type' => array(
 									'type' => 'section',
-									'title' => __('Map type', 'W2DC'),
+									'title' => esc_html__('Map type', 'w2dc'),
 									'fields' => array(
 										array(
 											'type' => 'radiobutton',
 											'name' => 'w2dc_map_type',
-											'label' => __('Select map engine', 'W2DC'),
+											'label' => esc_html__('Select map engine', 'w2dc'),
 											'items' => array(
 												array(
 													'value' => 'none',
-													'label' =>__('No maps', 'W2DC'),
+													'label' =>esc_html__('No maps', 'w2dc'),
 												),
 												array(
 													'value' => 'google',
-													'label' =>__('Google Maps', 'W2DC'),
+													'label' =>esc_html__('Google Maps', 'w2dc'),
 												),
 												array(
 													'value' => 'mapbox',
-													'label' =>__('MapBox (OpenStreetMap)', 'W2DC'),
+													'label' =>esc_html__('MapBox (OpenStreetMap)', 'w2dc'),
 												),
 											),
 											'default' => array(
@@ -958,7 +953,7 @@ class w2dc_settings_manager {
 								),
 								'google_setting' => array(
 									'type' => 'section',
-									'title' => __('Google Maps Settings', 'W2DC'),
+									'title' => esc_html__('Google Maps Settings', 'w2dc'),
 									'name' => 'section_google_setting',
 									'dependency' => array(
 										'field'    => 'w2dc_map_type',
@@ -968,40 +963,40 @@ class w2dc_settings_manager {
 										array(
 											'type' => 'textbox',
 											'name' => 'w2dc_google_api_key',
-											'label' => __('Google browser API key*', 'W2DC'),
-											'description' => sprintf(__('get your Google API key <a href="%s" target="_blank">here</a>, following APIs must be enabled in the console: Directions API, Geocoding API, Maps JavaScript API and Static Maps API.', 'W2DC'), 'https://console.developers.google.com/flows/enableapi?apiid=maps_backend,geocoding_backend,directions_backend,static_maps_backend&keyType=CLIENT_SIDE&reusekey=true'),
+											'label' => esc_html__('Google browser API key*', 'w2dc'),
+											'description' => sprintf(wp_kses(__('get your Google API key <a href="%s" target="_blank">here</a>, following APIs must be enabled in the console: Directions API, Geocoding API, Maps JavaScript API, Maps Static API and Places API.', 'w2dc'), 'post'), 'https://console.developers.google.com/flows/enableapi?apiid=maps-backend.googleapis.com,geocoding-backend.googleapis.com,directions-backend.googleapis.com,static-maps-backend.googleapis.com,places-backend.googleapis.com&keyType=CLIENT_SIDE&reusekey=true'),
 											'default' => get_option('w2dc_google_api_key'),
 										),
 										array(
 											'type' => 'textbox',
 											'name' => 'w2dc_google_api_key_server',
-											'label' => __('Google server API key*', 'W2DC'),
-											'description' => sprintf(__('get your Google API key <a href="%s" target="_blank">here</a>, following APIs must be enabled in the console: Geocoding API and Places API.', 'W2DC'), 'https://console.developers.google.com/flows/enableapi?apiid=geocoding_backend,places_backend&keyType=CLIENT_SIDE&reusekey=true') . ' ' . sprintf(__('Then check geolocation <a href="%s">response</a>.', 'W2DC'), admin_url('admin.php?page=w2dc_debug')),
+											'label' => esc_html__('Google server API key*', 'w2dc'),
+											'description' => sprintf(wp_kses(__('get your Google API key <a href="%s" target="_blank">here</a>, following APIs must be enabled in the console: Geocoding API and Places API.', 'w2dc'), 'post'), 'https://console.developers.google.com/flows/enableapi?apiid=geocoding-backend.googleapis.com,places-backend.googleapis.com&keyType=CLIENT_SIDE&reusekey=true') . ' ' . sprintf(__('Then check geolocation <a href="%s">response</a>.', 'w2dc'), admin_url('admin.php?page=w2dc_debug')),
 											'default' => get_option('w2dc_google_api_key_server'),
 										),
 										array(
 											'type' => 'radiobutton',
 											'name' => 'w2dc_directions_functionality',
-											'label' => __('Directions functionality', 'W2DC'),
+											'label' => esc_html__('Directions functionality', 'w2dc'),
 											'items' => array(
 												array(
 													'value' => 'builtin',
-													'label' =>__('Built-in routing', 'W2DC'),
+													'label' =>esc_html__('Built-in routing', 'w2dc'),
 												),
 												array(
 													'value' => 'google',
-													'label' =>__('Link to Google Maps', 'W2DC'),
+													'label' =>esc_html__('Link to Google Maps', 'w2dc'),
 												),
 											),
 											'default' => array(
 													get_option('w2dc_directions_functionality')
 											),
-											'description' => __("On a single listing page", "W2DC"),
+											'description' => esc_html__("On a single listing page", "w2dc"),
 										),
 										array(
 											'type' => 'select',
 											'name' => 'w2dc_google_map_style',
-											'label' => __('Google Maps style', 'W2DC'),
+											'label' => esc_html__('Google Maps style', 'w2dc'),
 									 		'items' => $google_map_styles,
 											'default' => array(get_option('w2dc_google_map_style')),
 										),
@@ -1009,7 +1004,7 @@ class w2dc_settings_manager {
 								),
 								'mapbox_settings' => array(
 									'type' => 'section',
-									'title' => __('MapBox Settings', 'W2DC'),
+									'title' => esc_html__('MapBox Settings', 'w2dc'),
 									'name' => 'section_mapbox_setting',
 									'dependency' => array(
 										'field'    => 'w2dc_map_type',
@@ -1019,61 +1014,61 @@ class w2dc_settings_manager {
 										array(
 											'type' => 'textbox',
 											'name' => 'w2dc_mapbox_api_key',
-											'label' => __('MapBox Access Token', 'W2DC'),
-											'description' => sprintf(__('get your MapBox Access Token <a href="%s" target="_blank">here</a>', 'W2DC'), 'https://www.mapbox.com/account/'),
+											'label' => esc_html__('MapBox Access Token', 'w2dc'),
+											'description' => sprintf(wp_kses(__('get your MapBox Access Token <a href="%s" target="_blank">here</a>', 'w2dc'), 'post'), 'https://www.mapbox.com/account/'),
 											'default' => get_option('w2dc_mapbox_api_key'),
 										),
 										array(
 											'type' => 'select',
 											'name' => 'w2dc_mapbox_map_style',
-											'label' => __('MapBox Maps style', 'W2DC'),
+											'label' => esc_html__('MapBox Maps style', 'w2dc'),
 									 		'items' => $mapbox_map_styles,
 											'default' => array(get_option('w2dc_mapbox_map_style')),
 										),
 										array(
 											'type' => 'textbox',
 											'name' => 'w2dc_mapbox_map_style_custom',
-											'label' => __('MapBox Custom Map Style', 'W2DC'),
-											'description' => __('Will be used instead of native styles. Example mapbox://styles/shamalli/cjhrfxqxu3zki2rmkka3a3hkp'),
+											'label' => esc_html__('MapBox Custom Map Style', 'w2dc'),
+											'description' => esc_html__('Will be used instead of native styles. Example mapbox://styles/shamalli/cjhrfxqxu3zki2rmkka3a3hkp'),
 											'default' => get_option('w2dc_mapbox_map_style_custom'),
 										),
 									),
 								),
 								'maps' => array(
 									'type' => 'section',
-									'title' => __('General Maps settings', 'W2DC'),
+									'title' => esc_html__('General Maps settings', 'w2dc'),
 									'fields' => array(
 									 	array(
 											'type' => 'toggle',
 											'name' => 'w2dc_map_on_index',
-											'label' => __('Show map on home page', 'W2DC'),
+											'label' => esc_html__('Show map on home page', 'w2dc'),
 											'default' => get_option('w2dc_map_on_index'),
 										),
 									 	array(
 											'type' => 'toggle',
 											'name' => 'w2dc_map_on_excerpt',
-											'label' => __('Show map on excerpt pages', 'W2DC'),
-									 		'description' => __('Search results, categories, locations and tags pages', 'W2DC'),
+											'label' => esc_html__('Show map on excerpt pages', 'w2dc'),
+									 		'description' => esc_html__('Search results, categories, locations and tags pages', 'w2dc'),
 											'default' => get_option('w2dc_map_on_excerpt'),
 										),
 									 	array(
 											'type' => 'toggle',
 											'name' => 'w2dc_map_on_single',
-											'label' => __('Show map on single listing', 'W2DC'),
+											'label' => esc_html__('Show map on single listing', 'w2dc'),
 											'default' => get_option('w2dc_map_on_single'),
 										),
 										array(
 											'type' => 'radiobutton',
 											'name' => 'w2dc_map_markers_is_limit',
-											'label' => __('How many map markers to display on the map', 'W2DC'),
+											'label' => esc_html__('How many map markers to display on the map', 'w2dc'),
 											'items' => array(
 												array(
 													'value' => 1,
-													'label' =>__('The only map markers of visible listings will be displayed', 'W2DC'),
+													'label' =>esc_html__('The only map markers of visible listings will be displayed', 'w2dc'),
 												),
 												array(
 													'value' => 0,
-													'label' =>__('Display all map markers (lots of markers on one page may slow down page loading)', 'W2DC'),
+													'label' =>esc_html__('Display all map markers (lots of markers on one page may slow down page loading)', 'w2dc'),
 												),
 											),
 											'default' => array(
@@ -1083,13 +1078,13 @@ class w2dc_settings_manager {
 									 	array(
 											'type' => 'toggle',
 											'name' => 'w2dc_show_directions',
-											'label' => __('Show directions panel on a single listing page', 'W2DC'),
+											'label' => esc_html__('Show directions panel on a single listing page', 'w2dc'),
 											'default' => get_option('w2dc_show_directions'),
 										),
 									 	array(
 											'type' => 'slider',
 											'name' => 'w2dc_default_map_zoom',
-											'label' => __('Default map zoom level (for submission page)', 'W2DC'),
+											'label' => esc_html__('Default map zoom level (for submission page)', 'w2dc'),
 									 		'min' => 1,
 									 		'max' => 19,
 											'default' => get_option('w2dc_default_map_zoom'),
@@ -1097,39 +1092,39 @@ class w2dc_settings_manager {
 										array(
 											'type' => 'textbox',
 											'name' => 'w2dc_default_map_height',
-											'label' => __('Default map height (in pixels)', 'W2DC'),
+											'label' => esc_html__('Default map height (in pixels)', 'w2dc'),
 											'default' => get_option('w2dc_default_map_height'),
 											'validation' => 'numeric',
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_enable_radius_search_circle',
-											'label' => __('Show circle during radius search', 'W2DC'),
+											'label' => esc_html__('Show circle during radius search', 'w2dc'),
 											'default' => get_option('w2dc_enable_radius_search_circle'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_enable_clusters',
-											'label' => __('Enable clusters of map markers', 'W2DC'),
+											'label' => esc_html__('Enable clusters of map markers', 'w2dc'),
 											'default' => get_option('w2dc_enable_clusters'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_map_markers_required',
-											'label' => __('Make map markers mandatory during submission of listings', 'W2DC'),
+											'label' => esc_html__('Make map markers mandatory during submission of listings', 'w2dc'),
 											'default' => get_option('w2dc_map_markers_required'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_enable_geolocation',
-											'label' => __('Enable automatic user Geolocation', 'W2DC'),
+											'label' => esc_html__('Enable automatic user Geolocation', 'w2dc'),
 											'default' => get_option('w2dc_enable_geolocation'),
-											'description' => __("Requires https", "W2DC"),
+											'description' => esc_html__("Requires https", "w2dc"),
 										),
 										array(
 											'type' => 'select',
 											'name' => 'w2dc_start_zoom',
-											'label' => __('Default zoom level', 'W2DC'),
+											'label' => esc_html__('Default zoom level', 'w2dc'),
 											'items' => $map_zooms,
 											'default' => array(
 												get_option('w2dc_start_zoom')
@@ -1138,165 +1133,165 @@ class w2dc_settings_manager {
 										array(
 											'type' => 'select',
 											'name' => 'w2dc_map_min_zoom',
-											'label' => __('The farest zoom level', 'W2DC'),
+											'label' => esc_html__('The farest zoom level', 'w2dc'),
 											'items' => $map_zooms,
 											'default' => array(
 												get_option('w2dc_map_min_zoom')
 											),
-											'description' => __("How far we can zoom out: 1 - the farest (whole world)", "W2DC"),
+											'description' => esc_html__("How far we can zoom out: 1 - the farest (whole world)", "w2dc"),
 										),
 										array(
 											'type' => 'select',
 											'name' => 'w2dc_map_max_zoom',
-											'label' => __('The closest zoom level', 'W2DC'),
+											'label' => esc_html__('The closest zoom level', 'w2dc'),
 											'items' => $map_zooms,
 											'default' => array(
 												get_option('w2dc_map_max_zoom')
 											),
-											'description' => __("How close we can zoom in: 19 - the closest", "W2DC"),
+											'description' => esc_html__("How close we can zoom in: 19 - the closest", "w2dc"),
 										),
 									),
 								),
 								'maps_controls' => array(
 									'type' => 'section',
-									'title' => __('Maps controls settings', 'W2DC'),
+									'title' => esc_html__('Maps controls settings', 'w2dc'),
 									'fields' => array(
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_enable_draw_panel',
-											'label' => __('Enable Draw Panel', 'W2DC'),
-											'description' => __('Very important: MySQL version must be 5.6.1 and higher or MySQL server variable "thread stack" must be 256K and higher. Ask your hoster about it if "Draw Area" does not work.', 'W2DC'),
+											'label' => esc_html__('Enable Draw Panel', 'w2dc'),
+											'description' => esc_html__('Very important: MySQL version must be 5.6.1 and higher or MySQL server variable "thread stack" must be 256K and higher. Ask your hoster about it if "Draw Area" does not work.', 'w2dc'),
 											'default' => get_option('w2dc_enable_draw_panel'),
 										),
 									 	array(
 											'type' => 'toggle',
 											'name' => 'w2dc_search_on_map',
-											'label' => __('Show search form and listings sidebar on the map', 'W2DC'),
+											'label' => esc_html__('Show search form and listings sidebar on the map', 'w2dc'),
 											'default' => get_option('w2dc_search_on_map'),
 										),
 										array(
 											'type' => 'select',
 											'name' => 'w2dc_search_map_form_id',
-											'label' => __('Select search form', 'W2DC'),
+											'label' => esc_html__('Select search form', 'w2dc'),
 											'items' => $w2dc_search_forms,
 											'default' => get_option('w2dc_search_map_form_id'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_enable_full_screen',
-											'label' => __('Enable full screen button', 'W2DC'),
+											'label' => esc_html__('Enable full screen button', 'w2dc'),
 											'default' => get_option('w2dc_enable_full_screen'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_enable_wheel_zoom',
-											'label' => __('Enable zoom by mouse wheel', 'W2DC'),
-											'description' => __('For desktops', 'W2DC'),
+											'label' => esc_html__('Enable zoom by mouse wheel', 'w2dc'),
+											'description' => esc_html__('For desktops', 'w2dc'),
 											'default' => get_option('w2dc_enable_wheel_zoom'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_enable_dragging_touchscreens',
-											'label' => __('Enable map dragging on touch screen devices', 'W2DC'),
+											'label' => esc_html__('Enable map dragging on touch screen devices', 'w2dc'),
 											'default' => get_option('w2dc_enable_dragging_touchscreens'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_center_map_onclick',
-											'label' => __('Center map on marker click', 'W2DC'),
+											'label' => esc_html__('Center map on marker click', 'w2dc'),
 											'default' => get_option('w2dc_center_map_onclick'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_hide_search_on_map_mobile',
-											'label' => __('Hide compact search form on the map for mobile devices', 'W2DC'),
-											'description' => __('This setting for all maps', 'W2DC'),
+											'label' => esc_html__('Hide compact search form on the map for mobile devices', 'w2dc'),
+											'description' => esc_html__('This setting for all maps', 'w2dc'),
 											'default' => get_option('w2dc_hide_search_on_map_mobile'),
 										),
 									),
 								),
 								'addresses' => array(
 									'type' => 'section',
-									'title' => __('Addresses settings', 'W2DC'),
+									'title' => esc_html__('Addresses settings', 'w2dc'),
 									'fields' => array(
 										array(
 											'type' => 'textbox',
 											'name' => 'w2dc_default_geocoding_location',
-											'label' => __('Default country/state for correct geocoding', 'W2DC'),
-											'description' => __('This value needed when you build local directory, all your listings place in one local area - country or state. This hidden string will be automatically added to the address for correct geocoding when users create/edit listings and when they search by address.', 'W2DC'),
+											'label' => esc_html__('Default country/state for correct geocoding', 'w2dc'),
+											'description' => esc_html__('This value needed when you build local directory, all your listings place in one local area - country or state. This hidden string will be automatically added to the address for correct geocoding when users create/edit listings and when they search by address.', 'w2dc'),
 											'default' => get_option('w2dc_default_geocoding_location'),
 										),
 										array(
 											'type' => 'sorter',
 											'name' => 'w2dc_addresses_order',
-											'label' => __('Address format', 'W2DC'),
+											'label' => esc_html__('Address format', 'w2dc'),
 									 		'items' => array(
-									 			array('value' => 'location', 'label' => __('Selected location', 'W2DC')),
-									 			array('value' => 'line_1', 'label' => __('Address Line 1', 'W2DC')),
-									 			array('value' => 'line_2', 'label' => __('Address Line 2', 'W2DC')),
-									 			array('value' => 'zip', 'label' => __('Zip code or postal index', 'W2DC')),
-									 			array('value' => 'space1', 'label' => __('-- Space ( ) --', 'W2DC')),
-									 			array('value' => 'space2', 'label' => __('-- Space ( ) --', 'W2DC')),
-									 			array('value' => 'space3', 'label' => __('-- Space ( ) --', 'W2DC')),
-									 			array('value' => 'comma1', 'label' => __('-- Comma (,) --', 'W2DC')),
-									 			array('value' => 'comma2', 'label' => __('-- Comma (,) --', 'W2DC')),
-									 			array('value' => 'comma3', 'label' => __('-- Comma (,) --', 'W2DC')),
-									 			array('value' => 'break1', 'label' => __('-- Line Break --', 'W2DC')),
-									 			array('value' => 'break2', 'label' => __('-- Line Break --', 'W2DC')),
-									 			array('value' => 'break3', 'label' => __('-- Line Break --', 'W2DC')),
+									 			array('value' => 'location', 'label' => esc_html__('Selected location', 'w2dc')),
+									 			array('value' => 'line_1', 'label' => esc_html__('Address Line 1', 'w2dc')),
+									 			array('value' => 'line_2', 'label' => esc_html__('Address Line 2', 'w2dc')),
+									 			array('value' => 'zip', 'label' => esc_html__('Zip code or postal index', 'w2dc')),
+									 			array('value' => 'space1', 'label' => esc_html__('-- Space ( ) --', 'w2dc')),
+									 			array('value' => 'space2', 'label' => esc_html__('-- Space ( ) --', 'w2dc')),
+									 			array('value' => 'space3', 'label' => esc_html__('-- Space ( ) --', 'w2dc')),
+									 			array('value' => 'comma1', 'label' => esc_html__('-- Comma (,) --', 'w2dc')),
+									 			array('value' => 'comma2', 'label' => esc_html__('-- Comma (,) --', 'w2dc')),
+									 			array('value' => 'comma3', 'label' => esc_html__('-- Comma (,) --', 'w2dc')),
+									 			array('value' => 'break1', 'label' => esc_html__('-- Line Break --', 'w2dc')),
+									 			array('value' => 'break2', 'label' => esc_html__('-- Line Break --', 'w2dc')),
+									 			array('value' => 'break3', 'label' => esc_html__('-- Line Break --', 'w2dc')),
 									 		),
-											'description' => __('Order address elements as you wish, commas and spaces help to build address line.'),
+											'description' => esc_html__('Order address elements as you wish, commas and spaces help to build address line.'),
 											'default' => get_option('w2dc_addresses_order'),
 										),
 										array(
 											'type' => 'select',
 											'name' => 'w2dc_address_autocomplete_code',
-											'label' => __('Restriction of address fields for one specific country (autocomplete submission and search fields)', 'W2DC'),
+											'label' => esc_html__('Restriction of address fields for one specific country (autocomplete submission and search fields)', 'w2dc'),
 									 		'items' => $country_codes,
 											'default' => get_option('w2dc_address_autocomplete_code'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_enable_address_line_1',
-											'label' => __('Enable address line 1 field', 'W2DC'),
+											'label' => esc_html__('Enable address line 1 field', 'w2dc'),
 											'default' => get_option('w2dc_enable_address_line_1'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_enable_address_line_2',
-											'label' => __('Enable address line 2 field', 'W2DC'),
+											'label' => esc_html__('Enable address line 2 field', 'w2dc'),
 											'default' => get_option('w2dc_enable_address_line_2'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_enable_postal_index',
-											'label' => __('Enable zip code', 'W2DC'),
+											'label' => esc_html__('Enable zip code', 'w2dc'),
 											'default' => get_option('w2dc_enable_postal_index'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_enable_additional_info',
-											'label' => __('Enable additional info field', 'W2DC'),
+											'label' => esc_html__('Enable additional info field', 'w2dc'),
 											'default' => get_option('w2dc_enable_additional_info'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_enable_manual_coords',
-											'label' => __('Enable manual coordinates fields', 'W2DC'),
+											'label' => esc_html__('Enable manual coordinates fields', 'w2dc'),
 											'default' => get_option('w2dc_enable_manual_coords'),
 										),
 										array(
 											'type' => 'radiobutton',
 											'name' => 'w2dc_zip_or_postal_text',
-											'label' => __('Use Zip or Postal code label', 'W2DC'),
+											'label' => esc_html__('Use Zip or Postal code label', 'w2dc'),
 											'items' => array(
 												array(
 													'value' => 'zip',
-													'label' =>__('Zip code', 'W2DC'),
+													'label' =>esc_html__('Zip code', 'w2dc'),
 												),
 												array(
 													'value' => 'postal',
-													'label' =>__('Postal code', 'W2DC'),
+													'label' =>esc_html__('Postal code', 'w2dc'),
 												),
 											),
 											'default' => get_option('w2dc_zip_or_postal_text'),
@@ -1305,20 +1300,20 @@ class w2dc_settings_manager {
 								),
 								'markers' => array(
 									'type' => 'section',
-									'title' => __('Map markers & InfoWindow settings', 'W2DC'),
+									'title' => esc_html__('Map markers & InfoWindow settings', 'w2dc'),
 									'fields' => array(
 										array(
 											'type' => 'radiobutton',
 											'name' => 'w2dc_map_markers_type',
-											'label' => __('Type of Map Markers', 'W2DC'),
+											'label' => esc_html__('Type of Map Markers', 'w2dc'),
 											'items' => array(
 												array(
 													'value' => 'icons',
-													'label' =>__('Font Awesome icons (recommended)', 'W2DC'),
+													'label' =>esc_html__('Font Awesome icons (recommended)', 'w2dc'),
 												),
 												array(
 													'value' => 'images',
-													'label' =>__('PNG images', 'W2DC'),
+													'label' =>esc_html__('PNG images', 'w2dc'),
 												),
 											),
 											'default' => array(
@@ -1328,9 +1323,9 @@ class w2dc_settings_manager {
 										array(
 											'type' => 'color',
 											'name' => 'w2dc_default_marker_color',
-											'label' => __('Default Map Marker color', 'W2DC'),
+											'label' => esc_html__('Default Map Marker color', 'w2dc'),
 											'default' => get_option('w2dc_default_marker_color'),
-											'description' => __('For Font Awesome icons.', 'W2DC'),
+											'description' => esc_html__('For Font Awesome icons.', 'w2dc'),
 											'dependency' => array(
 												'field'    => 'w2dc_map_markers_type',
 												'function' => 'w2dc_map_markers_icons_setting',
@@ -1339,8 +1334,8 @@ class w2dc_settings_manager {
 										array(
 											'type' => 'fontawesome',
 											'name' => 'w2dc_default_marker_icon',
-											'label' => __('Default Map Marker icon'),
-											'description' => __('For Font Awesome icons.', 'W2DC'),
+											'label' => esc_html__('Default Map Marker icon'),
+											'description' => esc_html__('For Font Awesome icons.', 'w2dc'),
 											'default' => array(
 												get_option('w2dc_default_marker_icon')
 											),
@@ -1352,8 +1347,8 @@ class w2dc_settings_manager {
 										array(
 											'type' => 'slider',
 											'name' => 'w2dc_map_marker_size',
-											'label' => __('Map marker size (in pixels)', 'W2DC'),
-											'description' => __('For Font Awesome images.', 'W2DC'),
+											'label' => esc_html__('Map marker size (in pixels)', 'w2dc'),
+											'description' => esc_html__('For Font Awesome icons.', 'w2dc'),
 											'default' => get_option('w2dc_map_marker_size'),
 									 		'min' => 30,
 									 		'max' => 70,
@@ -1365,8 +1360,8 @@ class w2dc_settings_manager {
 										array(
 											'type' => 'slider',
 											'name' => 'w2dc_map_marker_width',
-											'label' => __('Map marker width (in pixels)', 'W2DC'),
-											'description' => __('For PNG images.', 'W2DC'),
+											'label' => esc_html__('Map marker width (in pixels)', 'w2dc'),
+											'description' => esc_html__('For PNG images.', 'w2dc'),
 											'default' => get_option('w2dc_map_marker_width'),
 									 		'min' => 10,
 									 		'max' => 64,
@@ -1378,8 +1373,8 @@ class w2dc_settings_manager {
 									 	array(
 											'type' => 'slider',
 											'name' => 'w2dc_map_marker_height',
-											'label' => __('Map marker height (in pixels)', 'W2DC'),
-									 		'description' => __('For PNG images.', 'W2DC'),
+											'label' => esc_html__('Map marker height (in pixels)', 'w2dc'),
+									 		'description' => esc_html__('For PNG images.', 'w2dc'),
 											'default' => get_option('w2dc_map_marker_height'),
 									 		'min' => 10,
 									 		'max' => 64,
@@ -1391,8 +1386,8 @@ class w2dc_settings_manager {
 									 	array(
 											'type' => 'slider',
 											'name' => 'w2dc_map_marker_anchor_x',
-											'label' => __('Map marker anchor horizontal position (in pixels)', 'W2DC'),
-									 		'description' => __('For PNG images.', 'W2DC'),
+											'label' => esc_html__('Map marker anchor horizontal position (in pixels)', 'w2dc'),
+									 		'description' => esc_html__('For PNG images.', 'w2dc'),
 											'default' => get_option('w2dc_map_marker_anchor_x'),
 									 		'min' => 0,
 									 		'max' => 64,
@@ -1404,8 +1399,8 @@ class w2dc_settings_manager {
 									 	array(
 											'type' => 'slider',
 											'name' => 'w2dc_map_marker_anchor_y',
-											'label' => __('Map marker anchor vertical position (in pixels)', 'W2DC'),
-									 		'description' => __('For PNG images.', 'W2DC'),
+											'label' => esc_html__('Map marker anchor vertical position (in pixels)', 'w2dc'),
+									 		'description' => esc_html__('For PNG images.', 'w2dc'),
 											'default' => get_option('w2dc_map_marker_anchor_y'),
 									 		'min' => 0,
 									 		'max' => 64,
@@ -1417,7 +1412,7 @@ class w2dc_settings_manager {
 									 	array(
 											'type' => 'slider',
 											'name' => 'w2dc_map_infowindow_width',
-											'label' => __('Map InfoWindow width (in pixels)', 'W2DC'),
+											'label' => esc_html__('Map InfoWindow width (in pixels)', 'w2dc'),
 											'default' => get_option('w2dc_map_infowindow_width'),
 									 		'min' => 100,
 									 		'max' => 600,
@@ -1426,7 +1421,7 @@ class w2dc_settings_manager {
 										array(
 											'type' => 'slider',
 											'name' => 'w2dc_map_infowindow_offset',
-											'label' => __('Map InfoWindow vertical position above marker (in pixels)', 'W2DC'),
+											'label' => esc_html__('Map InfoWindow vertical position above marker (in pixels)', 'w2dc'),
 											'default' => get_option('w2dc_map_infowindow_offset'),
 									 		'min' => 30,
 									 		'max' => 120,
@@ -1438,7 +1433,7 @@ class w2dc_settings_manager {
 										array(
 											'type' => 'slider',
 											'name' => 'w2dc_map_infowindow_logo_width',
-											'label' => __('Map InfoWindow logo width (in pixels)', 'W2DC'),
+											'label' => esc_html__('Map InfoWindow logo width (in pixels)', 'w2dc'),
 											'default' => get_option('w2dc_map_infowindow_logo_width'),
 									 		'min' => 40,
 									 		'max' => 300,
@@ -1450,38 +1445,38 @@ class w2dc_settings_manager {
 						),
 						'notifications' => array(
 							'name' => 'notifications',
-							'title' => __('Email notifications', 'W2DC'),
+							'title' => esc_html__('Email notifications', 'w2dc'),
 							'icon' => 'font-awesome:w2dc-fa-envelope',
 							'controls' => array(
 								'notifications' => array(
 									'type' => 'section',
-									'title' => __('Email notifications', 'W2DC'),
+									'title' => esc_html__('Email notifications', 'w2dc'),
 									'fields' => array(
 										array(
 											'type' => 'textbox',
 											'name' => 'w2dc_admin_notifications_email',
-											'label' => __('This email will be used for notifications to admin and in "From" field. Required to send emails.', 'W2DC'), // . "<a href='" . . "'>" .  . "</a>",
+											'label' => esc_html__('This email will be used for notifications to admin and in "From" field. Required to send emails.', 'w2dc'),
 											'default' => get_option('w2dc_admin_notifications_email'),
 										),
 										array(
 											'type' => 'textbox',
 											'name' => 'w2dc_send_expiration_notification_days',
-											'label' => __('Days before pre-expiration notification will be sent', 'W2DC'),
+											'label' => esc_html__('Days before pre-expiration notification will be sent', 'w2dc'),
 											'default' => get_option('w2dc_send_expiration_notification_days'),
 										),
 									 	array(
 											'type' => 'textarea',
 											'name' => 'w2dc_preexpiration_notification',
-											'label' => __('Pre-expiration notification text', 'W2DC'),
+											'label' => esc_html__('Pre-expiration notification text', 'w2dc'),
 											'default' => get_option('w2dc_preexpiration_notification'),
-									 		'description' => __('Tags allowed: ', 'W2DC') . '[listing], [days], [link]',
+									 		'description' => esc_html__('Tags allowed: ', 'w2dc') . '[listing], [days], [link]',
 										),
 									 	array(
 											'type' => 'textarea',
 											'name' => 'w2dc_expiration_notification',
-											'label' => __('Expiration notification text', 'W2DC'),
+											'label' => esc_html__('Expiration notification text', 'w2dc'),
 											'default' => get_option('w2dc_expiration_notification'),
-									 		'description' => __('Tags allowed: ', 'W2DC') . '[listing], [link]',
+									 		'description' => esc_html__('Tags allowed: ', 'w2dc') . '[listing], [link]',
 										),
 									),
 								),
@@ -1489,107 +1484,107 @@ class w2dc_settings_manager {
 						),
 						'advanced' => array(
 							'name' => 'advanced',
-							'title' => __('Advanced settings', 'W2DC'),
+							'title' => esc_html__('Advanced settings', 'w2dc'),
 							'icon' => 'font-awesome:w2dc-fa-gear',
 							'controls' => array(
 								'js_css' => array(
 									'type' => 'section',
-									'title' => __('JavaScript & CSS', 'W2DC'),
-									'description' => __('Do not touch these settings if you do not know what they mean. It may cause lots of problems.', 'W2DC'),
+									'title' => esc_html__('JavaScript & CSS', 'w2dc'),
+									'description' => esc_html__('Do not touch these settings if you do not know what they mean. It may cause lots of problems.', 'w2dc'),
 									'fields' => array(
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_force_include_js_css',
-											'label' => __('Include directory JS and CSS files on all pages', 'W2DC'),
+											'label' => esc_html__('Include directory JS and CSS files on all pages', 'w2dc'),
 											'default' => get_option('w2dc_force_include_js_css'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_images_lightbox',
-											'label' => __('Include lightbox slideshow library', 'W2DC'),
-											'description' =>  __('Some themes and 3rd party plugins include own lightbox library - this may cause conflicts.', 'W2DC'),
+											'label' => esc_html__('Include lightbox slideshow library', 'w2dc'),
+											'description' =>  esc_html__('Some themes and 3rd party plugins include own lightbox library - this may cause conflicts.', 'w2dc'),
 											'default' => get_option('w2dc_images_lightbox'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_notinclude_jqueryui_css',
-											'label' => __('Do not include jQuery UI CSS', 'W2DC'),
-									 		'description' =>  __('Some themes and 3rd party plugins include own jQuery UI CSS - this may cause conflicts in styles.', 'W2DC'),
+											'label' => esc_html__('Do not include jQuery UI CSS', 'w2dc'),
+									 		'description' =>  esc_html__('Some themes and 3rd party plugins include own jQuery UI CSS - this may cause conflicts in styles.', 'w2dc'),
 											'default' => get_option('w2dc_notinclude_jqueryui_css'),
 										),
 									),
 								),
 								'miscellaneous' => array(
 									'type' => 'section',
-									'title' => __('Miscellaneous', 'W2DC'),
+									'title' => esc_html__('Miscellaneous', 'w2dc'),
 									'fields' => array(
 									 	array(
 											'type' => 'toggle',
 											'name' => 'w2dc_imitate_mode',
-											'label' => __('Enable imitation mode', 'W2DC'),
+											'label' => esc_html__('Enable imitation mode', 'w2dc'),
 											'default' => get_option('w2dc_imitate_mode'),
-									 		'description' => __("Some themes require imitation mode to get working listings/categories/locations/tags pages.", "W2DC"),
+									 		'description' => esc_html__("Some themes require imitation mode to get working listings/categories/locations/tags pages.", "w2dc"),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_overwrite_page_title',
-											'label' => __('Overwrite WordPress page title by directory page title', 'W2DC'),
-									 		'description' =>  __('Some themes do not allow this or may cause issues.', 'W2DC'),
+											'label' => esc_html__('Overwrite WordPress page title by directory page title', 'w2dc'),
+									 		'description' =>  esc_html__('Some themes do not allow this or may cause issues.', 'w2dc'),
 											'default' => get_option('w2dc_overwrite_page_title'),
 										),
 									 	array(
 											'type' => 'toggle',
 											'name' => 'w2dc_prevent_users_see_other_media',
-											'label' => __('Prevent users to see media items of another users', 'W2DC'),
+											'label' => esc_html__('Prevent users to see media items of another users', 'w2dc'),
 											'default' => get_option('w2dc_prevent_users_see_other_media'),
 										),
 									 	array(
 											'type' => 'toggle',
 											'name' => 'w2dc_address_autocomplete',
-											'label' => __('Enable autocomplete on addresses fields', 'W2DC'),
+											'label' => esc_html__('Enable autocomplete on addresses fields', 'w2dc'),
 											'default' => get_option('w2dc_address_autocomplete'),
-									 		'description' => __("Requires enabled maps", "W2DC"),
+									 		'description' => esc_html__("Requires enabled maps", "w2dc"),
 										),
 									 	array(
 											'type' => 'toggle',
 											'name' => 'w2dc_address_geocode',
-											'label' => __('Enable "Get my location" button on addresses fields', 'W2DC'),
+											'label' => esc_html__('Enable "Get my location" button on addresses fields', 'w2dc'),
 											'default' => get_option('w2dc_address_geocode'),
-									 		'description' => __("Requires https", "W2DC"),
+									 		'description' => esc_html__("Requires https", "w2dc"),
 										),
 									),
 								),
 								'recaptcha' => array(
 									'type' => 'section',
-									'title' => __('reCaptcha settings', 'W2DC'),
+									'title' => esc_html__('reCaptcha settings', 'w2dc'),
 									'fields' => array(
 									 	array(
 											'type' => 'toggle',
 											'name' => 'w2dc_enable_recaptcha',
-											'label' => __('Enable reCaptcha', 'W2DC'),
+											'label' => esc_html__('Enable reCaptcha', 'w2dc'),
 											'default' => get_option('w2dc_enable_recaptcha'),
 										),
 									 	array(
 											'type' => 'radiobutton',
 											'name' => 'w2dc_recaptcha_version',
-											'label' => __('reCaptcha version', 'W2DC'),
+											'label' => esc_html__('reCaptcha version', 'w2dc'),
 											'default' => get_option('w2dc_recaptcha_version'),
 									 		'items' => array(
-												array('value' => 'v2', 'label' => __('reCaptcha v2', 'W2DC')),
-												array('value' => 'v3', 'label' => __('reCaptcha v3', 'W2DC')),
+												array('value' => 'v2', 'label' => esc_html__('reCaptcha v2', 'w2dc')),
+												array('value' => 'v3', 'label' => esc_html__('reCaptcha v3', 'w2dc')),
 											),
 										),
 									 	array(
 											'type' => 'textbox',
 											'name' => 'w2dc_recaptcha_public_key',
-											'label' => __('reCaptcha site key', 'W2DC'),
-											'description' => sprintf(__('get your reCAPTCHA API Keys <a href="%s" target="_blank">here</a>', 'W2DC'), 'http://www.google.com/recaptcha'),
+											'label' => esc_html__('reCaptcha site key', 'w2dc'),
+											'description' => sprintf(wp_kses(__('get your reCAPTCHA API Keys <a href="%s" target="_blank">here</a>', 'w2dc'), 'post'), 'http://www.google.com/recaptcha'),
 											'default' => get_option('w2dc_recaptcha_public_key'),
 										),
 									 	array(
 											'type' => 'textbox',
 											'name' => 'w2dc_recaptcha_private_key',
-											'label' => __('reCaptcha secret key', 'W2DC'),
+											'label' => esc_html__('reCaptcha secret key', 'w2dc'),
 											'default' => get_option('w2dc_recaptcha_private_key'),
 										),
 									),
@@ -1598,51 +1593,51 @@ class w2dc_settings_manager {
 						),
 						'customization' => array(
 							'name' => 'customization',
-							'title' => __('Customization', 'W2DC'),
+							'title' => esc_html__('Customization', 'w2dc'),
 							'icon' => 'font-awesome:w2dc-fa-check',
 							'controls' => array(
 								'color_schemas' => array(
 									'type' => 'section',
-									'title' => __('Color palettes', 'W2DC'),
+									'title' => esc_html__('Color palettes', 'w2dc'),
 									'fields' => array(
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_compare_palettes',
-											'label' => __('Compare palettes at the frontend', 'W2DC'),
-									 		'description' =>  __('Do not forget to switch off this setting when comparison will be completed.', 'W2DC'),
+											'label' => esc_html__('Compare palettes at the frontend', 'w2dc'),
+									 		'description' =>  esc_html__('Do not forget to switch off this setting when comparison will be completed.', 'w2dc'),
 											'default' => get_option('w2dc_compare_palettes'),
 										),
 										array(
 											'type' => 'select',
 											'name' => 'w2dc_color_scheme',
-											'label' => __('Color palette', 'W2DC'),
+											'label' => esc_html__('Color palette', 'w2dc'),
 											'items' => array(
-												array('value' => 'default', 'label' => __('Default', 'W2DC')),
-												array('value' => 'orange', 'label' => __('Orange', 'W2DC')),
-												array('value' => 'red', 'label' => __('Red', 'W2DC')),
-												array('value' => 'yellow', 'label' => __('Yellow', 'W2DC')),
-												array('value' => 'green', 'label' => __('Green', 'W2DC')),
-												array('value' => 'gray', 'label' => __('Gray', 'W2DC')),
-												array('value' => 'blue', 'label' => __('Blue', 'W2DC')),
+												array('value' => 'default', 'label' => esc_html__('Default', 'w2dc')),
+												array('value' => 'orange', 'label' => esc_html__('Orange', 'w2dc')),
+												array('value' => 'red', 'label' => esc_html__('Red', 'w2dc')),
+												array('value' => 'yellow', 'label' => esc_html__('Yellow', 'w2dc')),
+												array('value' => 'green', 'label' => esc_html__('Green', 'w2dc')),
+												array('value' => 'gray', 'label' => esc_html__('Gray', 'w2dc')),
+												array('value' => 'blue', 'label' => esc_html__('Blue', 'w2dc')),
 											),
 											'default' => array(get_option('w2dc_color_scheme')),
 										),
 										array(
 											'type' => 'notebox',
-											'description' => esc_attr__("Don't forget to clear cache of your browser and on server (when used) after customization changes were made.", 'W2DC'),
+											'description' => esc_html__("Don't forget to clear cache of your browser and on server (when used) after customization changes were made.", 'w2dc'),
 											'status' => 'warning',
 										),
 									),
 								),
 								'main_colors' => array(
 									'type' => 'section',
-									'title' => __('Main colors', 'W2DC'),
+									'title' => esc_html__('Main colors', 'w2dc'),
 									'fields' => array(
 										array(
 												'type' => 'color',
 												'name' => 'w2dc_primary_color',
-												'label' => __('Primary color', 'W2DC'),
-												'description' =>  __('The color of categories, tags labels, map info window caption, pagination elements', 'W2DC'),
+												'label' => esc_html__('Primary color', 'w2dc'),
+												'description' =>  esc_html__('The color of categories, tags labels, map info window caption, pagination elements', 'w2dc'),
 												'default' => get_option('w2dc_primary_color'),
 												'binding' => array(
 														'field' => 'w2dc_color_scheme',
@@ -1652,7 +1647,7 @@ class w2dc_settings_manager {
 										array(
 												'type' => 'color',
 												'name' => 'w2dc_secondary_color',
-												'label' => __('Secondary color', 'W2DC'),
+												'label' => esc_html__('Secondary color', 'w2dc'),
 												'default' => get_option('w2dc_secondary_color'),
 												'binding' => array(
 														'field' => 'w2dc_color_scheme',
@@ -1663,12 +1658,12 @@ class w2dc_settings_manager {
 								),
 								'links_colors' => array(
 									'type' => 'section',
-									'title' => __('Links & buttons', 'W2DC'),
+									'title' => esc_html__('Links & buttons', 'w2dc'),
 									'fields' => array(
 										array(
 											'type' => 'color',
 											'name' => 'w2dc_links_color',
-											'label' => __('Links color', 'W2DC'),
+											'label' => esc_html__('Links color', 'w2dc'),
 											'default' => get_option('w2dc_links_color'),
 											'binding' => array(
 												'field' => 'w2dc_color_scheme',
@@ -1678,7 +1673,7 @@ class w2dc_settings_manager {
 										array(
 											'type' => 'color',
 											'name' => 'w2dc_links_hover_color',
-											'label' => __('Links hover color', 'W2DC'),
+											'label' => esc_html__('Links hover color', 'w2dc'),
 											'default' => get_option('w2dc_links_hover_color'),
 											'binding' => array(
 												'field' => 'w2dc_color_scheme',
@@ -1688,7 +1683,7 @@ class w2dc_settings_manager {
 										array(
 											'type' => 'color',
 											'name' => 'w2dc_button_1_color',
-											'label' => __('Button primary color', 'W2DC'),
+											'label' => esc_html__('Button primary color', 'w2dc'),
 											'default' => get_option('w2dc_button_1_color'),
 											'binding' => array(
 												'field' => 'w2dc_color_scheme',
@@ -1698,7 +1693,7 @@ class w2dc_settings_manager {
 										array(
 											'type' => 'color',
 											'name' => 'w2dc_button_2_color',
-											'label' => __('Button secondary color', 'W2DC'),
+											'label' => esc_html__('Button secondary color', 'w2dc'),
 											'default' => get_option('w2dc_button_2_color'),
 											'binding' => array(
 												'field' => 'w2dc_color_scheme',
@@ -1708,7 +1703,7 @@ class w2dc_settings_manager {
 										array(
 											'type' => 'color',
 											'name' => 'w2dc_button_text_color',
-											'label' => __('Button text color', 'W2DC'),
+											'label' => esc_html__('Button text color', 'w2dc'),
 											'default' => get_option('w2dc_button_text_color'),
 											'binding' => array(
 												'field' => 'w2dc_color_scheme',
@@ -1718,58 +1713,58 @@ class w2dc_settings_manager {
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_button_gradient',
-											'label' => __('Use gradient on buttons', 'W2DC'),
-											'description' => __('This will remove all icons from buttons'),
+											'label' => esc_html__('Use gradient on buttons', 'w2dc'),
+											'description' => esc_html__('This will remove all icons from buttons'),
 											'default' => get_option('w2dc_button_gradient'),
 										),
 									),
 								),
 								'terms_colors' => array(
 									'type' => 'section',
-									'title' => __('Categories & Locations tables', 'W2DC'),
+									'title' => esc_html__('Categories & Locations tables', 'w2dc'),
 									'fields' => array(
 										array(
 											'type' => 'color',
 											'name' => 'w2dc_terms_links_color',
-											'label' => __('Terms links color', 'W2DC'),
+											'label' => esc_html__('Terms links color', 'w2dc'),
 											'default' => get_option('w2dc_terms_links_color'),
 										),
 										array(
 											'type' => 'color',
 											'name' => 'w2dc_terms_links_hover_color',
-											'label' => __('Terms links hover color', 'W2DC'),
+											'label' => esc_html__('Terms links hover color', 'w2dc'),
 											'default' => get_option('w2dc_terms_links_hover_color'),
 										),
 										array(
 											'type' => 'color',
 											'name' => 'w2dc_terms_bg_color',
-											'label' => __('Terms background color', 'W2DC'),
+											'label' => esc_html__('Terms background color', 'w2dc'),
 											'default' => get_option('w2dc_terms_bg_color'),
 										),
 										array(
 											'type' => 'color',
 											'name' => 'w2dc_terms_heading_bg_color',
-											'label' => __('Terms heading background color', 'W2DC'),
+											'label' => esc_html__('Terms heading background color', 'w2dc'),
 											'default' => get_option('w2dc_terms_heading_bg_color'),
 										),
 									),
 								),
 								'misc_colors' => array(
 									'type' => 'section',
-									'title' => __('Misc settings', 'W2DC'),
+									'title' => esc_html__('Misc settings', 'w2dc'),
 									'fields' => array(
 										array(
 											'type' => 'select',
 											'name' => 'w2dc_logo_animation_effect',
-											'label' => __('Logo hover effect on excerpt pages', 'W2DC'),
+											'label' => esc_html__('Logo hover effect on excerpt pages', 'w2dc'),
 											'items' => array(
 													array(
 															'value' => 0,
-															'label' => __('Disabled', 'W2DC')
+															'label' => esc_html__('Disabled', 'w2dc')
 													),
 													array(
 															'value' => 1,
-															'label' => __('Enabled', 'W2DC')
+															'label' => esc_html__('Enabled', 'w2dc')
 													),
 											),
 											'default' => array(get_option('w2dc_logo_animation_effect')),
@@ -1777,7 +1772,7 @@ class w2dc_settings_manager {
 										array(
 											'type' => 'slider',
 											'name' => 'w2dc_listings_bottom_margin',
-											'label' => __('Bottom margin between listings (in pixels)', 'W2DC'),
+											'label' => esc_html__('Bottom margin between listings (in pixels)', 'w2dc'),
 											'min' => '0',
 											'max' => '120',
 											'default' => get_option('w2dc_listings_bottom_margin'),
@@ -1785,7 +1780,7 @@ class w2dc_settings_manager {
 										array(
 											'type' => 'slider',
 											'name' => 'w2dc_listing_title_font',
-											'label' => __('Listing title font size (in pixels)', 'W2DC'),
+											'label' => esc_html__('Listing title font size (in pixels)', 'w2dc'),
 											'min' => '7',
 											'max' => '40',
 											'default' => get_option('w2dc_listing_title_font'),
@@ -1793,8 +1788,8 @@ class w2dc_settings_manager {
 										array(
 											'type' => 'radioimage',
 											'name' => 'w2dc_jquery_ui_schemas',
-											'label' => esc_html__('jQuery UI Style', 'W2DC'),
-									 		'description' =>  esc_html__('Controls the color of calendar, dialogs, search dropdowns and slider UI widgets', 'W2DC') . (get_option('w2dc_notinclude_jqueryui_css') ? ' <strong>' . esc_html__('Warning: You have enabled not to include jQuery UI CSS on Advanced settings tab. Selected style will not be applied.', 'W2DC') . '</strong>' : ''),
+											'label' => esc_html__('jQuery UI Style', 'w2dc'),
+									 		'description' =>  esc_html__('Controls the color of calendar, dialogs, search dropdowns and slider UI widgets', 'w2dc') . (get_option('w2dc_notinclude_jqueryui_css') ? ' <strong>' . esc_html__('Warning: You have enabled not to include jQuery UI CSS on Advanced settings tab. Selected style will not be applied.', 'w2dc') . '</strong>' : ''),
 									 		'items' => array(
 									 			array(
 									 				'value' => 'blitzer',
@@ -1869,31 +1864,31 @@ class w2dc_settings_manager {
 						),
 						'social_sharing' => array(
 							'name' => 'social_sharing',
-							'title' => __('Social Sharing', 'W2DC'),
+							'title' => esc_html__('Social Sharing', 'w2dc'),
 							'icon' => 'font-awesome:w2dc-fa-facebook ',
 							'controls' => array(
 								'social_sharing' => array(
 									'type' => 'section',
-									'title' => __('Listings Social Sharing Buttons', 'W2DC'),
+									'title' => esc_html__('Listings Social Sharing Buttons', 'w2dc'),
 									'fields' => array(
 										array(
 											'type' => 'radioimage',
 											'name' => 'w2dc_share_buttons_style',
-											'label' => __('Buttons style', 'W2DC'),
+											'label' => esc_html__('Buttons style', 'w2dc'),
 									 		'items' => array(
 									 			array(
 									 				'value' => 'arbenta',
-									 				'label' =>__('Arbenta', 'W2DC'),
+									 				'label' =>esc_html__('Arbenta', 'w2dc'),
 									 				'img' => W2DC_RESOURCES_URL . 'images/social/arbenta/facebook.png'
 									 			),
 									 			array(
 									 				'value' => 'flat',
-													'label' =>__('Flat', 'W2DC'),
+													'label' =>esc_html__('Flat', 'w2dc'),
 									 				'img' => W2DC_RESOURCES_URL . 'images/social/flat/facebook.png'
 									 			),
 									 			array(
 									 				'value' => 'somacro',
-													'label' =>__('Somacro', 'W2DC'),
+													'label' =>esc_html__('Somacro', 'w2dc'),
 									 				'img' => W2DC_RESOURCES_URL . 'images/social/somacro/facebook.png'
 									 			),
 									 		),
@@ -1902,32 +1897,32 @@ class w2dc_settings_manager {
 										array(
 											'type' => 'sorter',
 											'name' => 'w2dc_share_buttons',
-											'label' => __('Include and order buttons', 'W2DC'),
+											'label' => esc_html__('Include and order buttons', 'w2dc'),
 									 		'items' => $w2dc_social_services,
 											'default' => get_option('w2dc_share_buttons'),
 										),
 										array(
 											'type' => 'toggle',
 											'name' => 'w2dc_share_counter',
-											'label' => __('Enable counter', 'W2DC'),
+											'label' => esc_html__('Enable counter', 'w2dc'),
 											'default' => get_option('w2dc_share_counter'),
 										),
 										array(
 											'type' => 'radiobutton',
 											'name' => 'w2dc_share_buttons_place',
-											'label' => __('Where to place buttons on a listing page', 'W2DC'),
+											'label' => esc_html__('Where to place buttons on a listing page', 'w2dc'),
 											'items' => array(
 												array(
 													'value' => 'title',
-													'label' =>__('After title', 'W2DC'),
+													'label' =>esc_html__('After title', 'w2dc'),
 												),
 												array(
 													'value' => 'before_content',
-													'label' =>__('Before text content', 'W2DC'),
+													'label' =>esc_html__('Before text content', 'w2dc'),
 												),
 												array(
 													'value' => 'after_content',
-													'label' =>__('After text content', 'W2DC'),
+													'label' =>esc_html__('After text content', 'w2dc'),
 												),
 											),
 											'default' => array(
@@ -1937,7 +1932,7 @@ class w2dc_settings_manager {
 										array(
 											'type' => 'slider',
 											'name' => 'w2dc_share_buttons_width',
-											'label' => __('Social buttons width (in pixels)', 'W2DC'),
+											'label' => esc_html__('Social buttons width (in pixels)', 'w2dc'),
 											'default' => get_option('w2dc_share_buttons_width'),
 									 		'min' => 24,
 									 		'max' => 64,
@@ -1948,13 +1943,12 @@ class w2dc_settings_manager {
 						),
 					)
 				),
-				//'menu_page' => 'w2dc_settings',
 				'use_auto_group_naming' => true,
 				'use_util_menu' => false,
 				'minimum_role' => $capability,
 				'layout' => 'fixed',
-				'page_title' => __('Directory settings', 'W2DC'),
-				'menu_label' => __('Directory settings', 'W2DC'),
+				'page_title' => esc_html__('Directory settings', 'w2dc'),
+				'menu_label' => esc_html__('Directory settings', 'w2dc'),
 		);
 		
 		// adapted for WPML /////////////////////////////////////////////////////////////////////////
@@ -1962,13 +1956,13 @@ class w2dc_settings_manager {
 		if (function_exists('wpml_object_id_filter') && $sitepress) {
 			$theme_options['template']['menus']['advanced']['controls']['wpml'] = array(
 				'type' => 'section',
-				'title' => __('WPML Settings', 'W2DC'),
+				'title' => esc_html__('WPML Settings', 'w2dc'),
 				'fields' => array(
 					array(
 						'type' => 'toggle',
 						'name' => 'w2dc_map_language_from_wpml',
-						'label' => __('Force WPML language on maps', 'W2DC'),
-						'description' => __("Ignore the browser's language setting and force it to display information in a particular WPML language", 'W2DC'),
+						'label' => esc_html__('Force WPML language on maps', 'w2dc'),
+						'description' => esc_html__("Ignore the browser's language setting and force it to display information in a particular WPML language", 'w2dc'),
 						'default' => get_option('w2dc_map_language_from_wpml'),
 					),
 				),
@@ -1977,7 +1971,7 @@ class w2dc_settings_manager {
 		
 		$theme_options = apply_filters('w2dc_build_settings', $theme_options);
 
-		$VP_W2DC_Option = new VP_W2DC_Option($theme_options);
+		$W2DC_VP_Option = new W2DC_VP_Option($theme_options);
 	}
 
 	public function save_option($opts, $old_opts, $status) {
@@ -2052,7 +2046,7 @@ function w2dc_get_wpml_dependent_option($option) {
 }
 function w2dc_get_wpml_dependent_option_description() {
 	global $sitepress;
-	return ((function_exists('wpml_object_id_filter') && $sitepress) ? sprintf(__('%s This is multilingual option, each language may have own value.', 'W2DC'), '<br /><img src="'.W2DC_RESOURCES_URL . 'images/multilang.png" /><br />') : '');
+	return ((function_exists('wpml_object_id_filter') && $sitepress) ? sprintf(esc_html__('%s This is multilingual option, each language may have own value.', 'w2dc'), '<br /><img src="'.W2DC_RESOURCES_URL . 'images/multilang.png" /><br />') : '');
 }
 
 
@@ -2061,27 +2055,27 @@ function w2dc_google_type_setting($value) {
 		return true;
 	}
 }
-VP_W2DC_Security::instance()->whitelist_function('w2dc_google_type_setting');
+W2DC_VP_Security::instance()->whitelist_function('w2dc_google_type_setting');
 
 function w2dc_mapbox_type_setting($value) {
 	if ($value == 'mapbox') {
 		return true;
 	}
 }
-VP_W2DC_Security::instance()->whitelist_function('w2dc_mapbox_type_setting');
+W2DC_VP_Security::instance()->whitelist_function('w2dc_mapbox_type_setting');
 
 function w2dc_map_markers_icons_setting($value) {
 	if ($value == 'icons') {
 		return true;
 	}
 }
-VP_W2DC_Security::instance()->whitelist_function('w2dc_map_markers_icons_setting');
+W2DC_VP_Security::instance()->whitelist_function('w2dc_map_markers_icons_setting');
 
 function w2dc_map_markers_images_setting($value) {
 	if ($value == 'images') {
 		return true;
 	}
 }
-VP_W2DC_Security::instance()->whitelist_function('w2dc_map_markers_images_setting');
+W2DC_VP_Security::instance()->whitelist_function('w2dc_map_markers_images_setting');
 
 ?>

@@ -1,14 +1,16 @@
 <?php
 
-global $w2rr_review_title_widget_params;
-$w2rr_review_title_widget_params = array(
-		array(
-				'type' => 'textfield',
-				'param_name' => 'review',
-				'heading' => esc_html__('Review ID', 'W2RR'),
-				'description' => esc_html__('Leave empty if you place it on single review page', 'W2RR'),
-		),
-);
+add_action('init', function() {
+	global $w2rr_review_title_widget_params;
+	$w2rr_review_title_widget_params = array(
+			array(
+					'type' => 'textfield',
+					'param_name' => 'review',
+					'heading' => esc_html__('Review ID', 'w2rr'),
+					'description' => esc_html__('Leave empty if you place it on single review page', 'w2rr'),
+			),
+	);
+}, 0);
 
 class w2rr_review_title_widget extends w2rr_widget {
 
@@ -17,7 +19,7 @@ class w2rr_review_title_widget extends w2rr_widget {
 
 		parent::__construct(
 				'w2rr_review_title_shortcode_widget',
-				esc_html__('Review title', 'W2RR')
+				esc_html__('Review title', 'w2rr')
 		);
 
 		$this->convertParams($w2rr_review_title_widget_params);

@@ -3,12 +3,12 @@
 Plugin Name: Ratings & Reviews plugin
 Plugin URI: https://www.salephpscripts.com/wordpress-ratings-reviews/
 Description: Build Ratings & Reviews site in some minutes. The plugin combines flexibility of WordPress and functionality of ratings system.
-Version: 1.3.3
+Version: 1.3.4
 Author: salephpscripts.com
 Author URI: https://www.salephpscripts.com
 */
 
-define('W2RR_VERSION', '1.3.3');
+define('W2RR_VERSION', '1.3.4');
 
 define('W2RR_PATH', plugin_dir_path(__FILE__));
 define('W2RR_URL', plugins_url('/', __FILE__));
@@ -50,7 +50,6 @@ include_once W2RR_PATH . 'classes/ordering.php';
 include_once W2RR_PATH . 'classes/media_manager.php';
 include_once W2RR_PATH . 'classes/upload_image.php';
 include_once W2RR_PATH . 'classes/wc/wc_hooks.php';
-include_once W2RR_PATH . 'classes/wc/wc_multiratings.php';
 include_once W2RR_PATH . 'classes/w2dc_hooks.php';
 include_once W2RR_PATH . 'classes/demo_data.php';
 include_once W2RR_PATH . 'classes/frontend_controller.php';
@@ -207,7 +206,7 @@ class w2rr_plugin {
 			$this->action = $_REQUEST['w2rr_action'];
 		}
 
-		add_action('plugins_loaded', array($this, 'load_textdomains'));
+		add_action('init', array($this, 'load_textdomains'));
 
 		foreach ($w2rr_shortcodes AS $shortcode=>$function) {
 			add_shortcode($shortcode, array($this, 'renderShortcode'));
@@ -261,7 +260,8 @@ class w2rr_plugin {
 	}
 
 	public function load_textdomains() {
-		load_plugin_textdomain('W2RR', '', dirname(plugin_basename( __FILE__ )) . '/languages');
+		
+		load_plugin_textdomain('w2rr', '', dirname(plugin_basename( __FILE__ )) . '/languages');
 	}
 	
 	public function loadClasses() {
@@ -324,7 +324,6 @@ class w2rr_plugin {
 					'edit_attachment',
 			);
 			
-			//var_dump(current_filter());
 			if (isset($this->_frontend_controllers[$shortcode]) && !in_array(current_filter(), $filters_where_not_to_display)) {
 				$shortcode_controllers = $this->_frontend_controllers[$shortcode];
 				foreach ($shortcode_controllers AS $key=>&$controller) {
@@ -568,19 +567,19 @@ class w2rr_plugin {
 		
 		$args = array(
 			'labels' => array(
-				'name' => esc_html__('Ratings & reviews', 'W2RR'),
-				'singular_name' => esc_html__('Review', 'W2RR'),
-				'add_new' => esc_html__('Create new review', 'W2RR'),
-				'add_new_item' => esc_html__('Create new review', 'W2RR'),
-				'edit_item' => esc_html__('Edit review', 'W2RR'),
-				'new_item' => esc_html__('New review', 'W2RR'),
-				'view_item' => esc_html__('View review', 'W2RR'),
-				'search_items' => esc_html__('Search reviews', 'W2RR'),
-				'not_found' =>  esc_html__('No reviews found', 'W2RR'),
-				'not_found_in_trash' => esc_html__('No reviews found in trash', 'W2RR')
+				'name' => esc_html__('Ratings & reviews', 'w2rr'),
+				'singular_name' => esc_html__('Review', 'w2rr'),
+				'add_new' => esc_html__('Create new review', 'w2rr'),
+				'add_new_item' => esc_html__('Create new review', 'w2rr'),
+				'edit_item' => esc_html__('Edit review', 'w2rr'),
+				'new_item' => esc_html__('New review', 'w2rr'),
+				'view_item' => esc_html__('View review', 'w2rr'),
+				'search_items' => esc_html__('Search reviews', 'w2rr'),
+				'not_found' =>  esc_html__('No reviews found', 'w2rr'),
+				'not_found_in_trash' => esc_html__('No reviews found in trash', 'w2rr')
 			),
 			'has_archive' => true,
-			'description' => esc_html__('Ratings & reviews', 'W2RR'),
+			'description' => esc_html__('Ratings & reviews', 'w2rr'),
 			'public' => true,
 			'exclude_from_search' => false, // this must be false otherwise it breaks pagination for custom taxonomies
 			'supports' => array('title', 'author', 'comments'),
@@ -602,27 +601,33 @@ class w2rr_plugin {
 			
 			wp_enqueue_script('jquery', false, array(), false, false);
 
-			wp_register_style('w2rr_bootstrap', W2RR_RESOURCES_URL . 'css/bootstrap.css', array(), W2RR_VERSION);
-			wp_register_style('w2rr_frontend', W2RR_RESOURCES_URL . 'css/frontend.css', array(), W2RR_VERSION);
+			wp_register_style('w2rr-bootstrap', W2RR_RESOURCES_URL . 'css/bootstrap.css', array(), W2RR_VERSION);
+			wp_register_style('w2rr-frontend', W2RR_RESOURCES_URL . 'css/frontend.css', array(), W2RR_VERSION);
 
 			if (function_exists('is_rtl') && is_rtl()) {
-				wp_register_style('w2rr_frontend_rtl', W2RR_RESOURCES_URL . 'css/frontend-rtl.css', array(), W2RR_VERSION);
+				wp_register_style('w2rr-frontend-rtl', W2RR_RESOURCES_URL . 'css/frontend-rtl.css', array(), W2RR_VERSION);
 			}
 
-			wp_register_style('w2rr_font_awesome', W2RR_RESOURCES_URL . 'css/font-awesome.css', array(), W2RR_VERSION);
+			wp_register_style('w2rr-font-awesome', W2RR_RESOURCES_URL . 'css/font-awesome.css', array(), W2RR_VERSION);
 
-			wp_register_script('w2rr_js_functions', W2RR_RESOURCES_URL . 'js/js_functions.js', array('jquery'), W2RR_VERSION, true);
+			wp_register_script('w2rr-js-functions', W2RR_RESOURCES_URL . 'js/js_functions.js', array('jquery'), W2RR_VERSION, true);
 
-			wp_register_style('w2rr_media_styles', W2RR_RESOURCES_URL . 'lightbox/css/lightbox.min.css', array(), W2RR_VERSION);
+			wp_register_style('w2rr-media-styles', W2RR_RESOURCES_URL . 'lightbox/css/lightbox.min.css', array(), W2RR_VERSION);
 			wp_register_script('w2rr_media_scripts_lightbox', W2RR_RESOURCES_URL . 'lightbox/js/lightbox.js', array('jquery'), false, true);
 			
-			wp_register_style('w2rr_reviews_slider', W2RR_RESOURCES_URL . 'css/bxslider/jquery.bxslider.css', array(), W2RR_VERSION);
-			wp_enqueue_style('w2rr_reviews_slider');
+			if (!get_option('w2rr_single_review_is_on_page')) {
+				// jQuery UI version 1.10.4
+				wp_register_style('w2rr-jquery-ui-style', W2RR_RESOURCES_URL . 'css/jquery-ui/themes/redmond/jquery-ui.css');
+				wp_enqueue_style('w2rr-jquery-ui-style');
+			}
+			
+			wp_register_style('w2rr-reviews-slider', W2RR_RESOURCES_URL . 'css/bxslider/jquery.bxslider.css', array(), W2RR_VERSION);
+			wp_enqueue_style('w2rr-reviews-slider');
 
-			wp_enqueue_style('w2rr_bootstrap');
-			wp_enqueue_style('w2rr_font_awesome');
-			wp_enqueue_style('w2rr_frontend');
-			wp_enqueue_style('w2rr_frontend_rtl');
+			wp_enqueue_style('w2rr-bootstrap');
+			wp_enqueue_style('w2rr-font-awesome');
+			wp_enqueue_style('w2rr-frontend');
+			wp_enqueue_style('w2rr-frontend-rtl');
 			
 			// Include dynamic-css file only when we are not in palettes comparison mode
 			if (!isset($_COOKIE['w2rr_compare_palettes']) || !get_option('w2rr_compare_palettes')) {
@@ -642,20 +647,31 @@ class w2rr_plugin {
 
 			wp_enqueue_script('jquery-ui-dialog');
 			
-			wp_enqueue_script('w2rr_js_functions');
+			wp_enqueue_script('w2rr-js-functions');
 
 			if (get_option('w2rr_images_lightbox') && get_option('w2rr_enable_lightbox_gallery')) {
-				wp_enqueue_style('w2rr_media_styles');
+				wp_enqueue_style('w2rr-media-styles');
 				wp_enqueue_script('w2rr_media_scripts_lightbox');
 			}
 			
 			if (get_option('w2rr_enable_recaptcha') && get_option('w2rr_recaptcha_public_key') && get_option('w2rr_recaptcha_private_key')) {
+				
+				// adapted for WPML
+				global $sitepress;
+				$lang = ($sitepress && get_option('w2rr_recaptcha_language_from_wpml')) ? ICL_LANGUAGE_CODE : apply_filters('w2rr_recaptcha_language', '');
+				
 				if (get_option('w2rr_recaptcha_version') == 'v2') {
-					wp_register_script('w2rr_recaptcha', '//google.com/recaptcha/api.js');
+					if ($lang) {
+						$lang = '?hl=' . $lang;
+					}
+					wp_register_script('w2rr-recaptcha', '//google.com/recaptcha/api.js'.$lang);
 				} elseif (get_option('w2rr_recaptcha_version') == 'v3') {
-					wp_register_script('w2rr_recaptcha', '//google.com/recaptcha/api.js?render='.get_option('w2rr_recaptcha_public_key'));
+					if ($lang) {
+						$lang = '&lang=' . $lang;
+					}
+					wp_register_script('w2rr-recaptcha', '//google.com/recaptcha/api.js?render='.get_option('w2rr-recaptcha_public_key').$lang);
 				}
-				wp_enqueue_script('w2rr_recaptcha');
+				wp_enqueue_script('w2rr-recaptcha');
 			}
 
 			$w2rr_enqueued = true;
@@ -665,9 +681,9 @@ class w2rr_plugin {
 	public function enqueue_scripts_styles_custom($load_scripts_styles = false) {
 		if ((($this->frontend_controllers || $load_scripts_styles)) || get_option('w2rr_force_include_js_css')) {
 			if ($frontend_custom = w2rr_isResource('css/frontend-custom.css')) {
-				wp_register_style('w2rr_frontend-custom', $frontend_custom, array(), W2RR_VERSION);
+				wp_register_style('w2rr-frontend-custom', $frontend_custom, array(), W2RR_VERSION);
 				
-				wp_enqueue_style('w2rr_frontend-custom');
+				wp_enqueue_style('w2rr-frontend-custom');
 			}
 		}
 	}
@@ -690,11 +706,11 @@ class w2rr_plugin {
 						'ajaxurl' => $ajaxurl,
 						'ajax_load' => (int)get_option('w2rr_ajax_load'),
 						'is_rtl' => is_rtl(),
-						'leave_comment' => esc_html__('Leave a comment', 'W2RR'),
-						'leave_reply' => esc_html__('Leave a reply to', 'W2RR'),
-						'cancel_reply' => esc_html__('Cancel reply', 'W2RR'),
-						'more' => esc_html__('More', 'W2RR'),
-						'less' => esc_html__('Less', 'W2RR'),
+						'leave_comment' => esc_html__('Leave a comment', 'w2rr'),
+						'leave_reply' => esc_html__('Leave a reply to', 'w2rr'),
+						'cancel_reply' => esc_html__('Cancel reply', 'w2rr'),
+						'more' => esc_html__('More', 'w2rr'),
+						'less' => esc_html__('Less', 'w2rr'),
 						'recaptcha_public_key' => ((get_option('w2rr_enable_recaptcha') && get_option('w2rr_recaptcha_public_key') && get_option('w2rr_recaptcha_private_key')) ? get_option('w2rr_recaptcha_public_key') : ''),
 						'lang' => (($sitepress && get_option('w2rr_map_language_from_wpml')) ? ICL_LANGUAGE_CODE : ''),
 						'desktop_screen_width' => 992,
@@ -727,7 +743,7 @@ class w2rr_plugin {
 			$dynamic_css = ob_get_contents();
 			ob_get_clean();
 			
-			wp_add_inline_style('w2rr_frontend', $dynamic_css);
+			wp_add_inline_style('w2rr-frontend', $dynamic_css);
 		}
 	}
 	
@@ -742,8 +758,8 @@ class w2rr_plugin {
 	public function plugin_row_meta($links, $file) {
 		if (dirname(plugin_basename(__FILE__) == $file)) {
 			$row_meta = array(
-					'docs' => '<a href="https://www.salephpscripts.com/wordpress-ratings-reviews/demo/documentation/">' . esc_html__("Documentation", "W2RR") . '</a>',
-					'codecanoyn' => '<a href="https://www.salephpscripts.com/ratings-reviews/#changelog">' . esc_html__("Changelog", "W2RR") . '</a>',
+					'docs' => '<a href="https://www.salephpscripts.com/wordpress-ratings-reviews/demo/documentation/">' . esc_html__("Documentation", "w2rr") . '</a>',
+					'codecanoyn' => '<a href="https://www.salephpscripts.com/ratings-reviews/#changelog">' . esc_html__("Changelog", "w2rr") . '</a>',
 			);
 	
 			return array_merge($links, $row_meta);
@@ -754,7 +770,7 @@ class w2rr_plugin {
 	
 	public function plugin_action_links($links) {
 		$action_links = array(
-				'settings' => '<a href="' . admin_url('admin.php?page=w2rr_settings') . '">' . esc_html__("Settings", "W2RR") . '</a>',
+				'settings' => '<a href="' . admin_url('admin.php?page=w2rr_settings') . '">' . esc_html__("Settings", "w2rr") . '</a>',
 		);
 	
 		return array_merge($action_links, $links);

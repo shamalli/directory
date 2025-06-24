@@ -18,7 +18,7 @@ var photo = null;
 if ( FLBuilderSettingsConfig.attachments[ data.value ] ) {
 	photo = FLBuilderSettingsConfig.attachments[ data.value ];
 	photo.isAttachment = true;
-} else if ( ! _.isEmpty( data.value ) ) {
+} else if ( typeof data.value !== 'undefined' && '' !== data.value && false !== data.value ) {
 	if ( data.settings[ data.rootName + '_src' ] ) {
 		photo = {
 			id: data.value,
@@ -53,6 +53,17 @@ var show = '';
 
 if ( field.show ) {
 	show = "data-show='" + JSON.stringify( field.show ) + "'";
+}
+
+if ( photo && photo.url && photo.url.endsWith( '.svg' ) ) {
+	photo.sizes = {
+		full: {
+			url: url,
+			filename: url.split( '/' ).pop(),
+			height: '',
+			width: ''
+		}
+	}
 }
 
 #>

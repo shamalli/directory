@@ -8,7 +8,7 @@
 			<div class="w2rr-ratings-overall-wrapper">
 				<?php foreach ($total_counts AS $rating=>$counts): ?>
 				<div class="w2rr-ratings-overall">
-					<span class="w2rr-ratings-overall-stars"><?php echo esc_html($rating); ?> <?php echo _n('Star ', 'Stars', $rating, 'W2RR'); ?></span>
+					<span class="w2rr-ratings-overall-stars"><?php echo esc_html($rating); ?> <?php echo _n('Star ', 'Stars', $rating, 'w2rr'); ?></span>
 					<div class="w2rr-rating">
 						<div class="w2rr-progress">
 							<div class="w2rr-progress-bar" role="progressbar" style="width: <?php echo $target_post->avg_rating->get_percents_counts($counts); ?>%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>

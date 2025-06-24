@@ -39,6 +39,17 @@ class WPBT_Extras {
 	}
 
 	/**
+	 * Initialize Extras.
+	 *
+	 * @return void
+	 */
+	public function init() {
+		$this->load_hooks();
+		$this->skip_autoupdate_email();
+		$this->remove_auto_installed_plugins();
+	}
+
+	/**
 	 * Load hooks.
 	 *
 	 * @return void
@@ -93,15 +104,15 @@ class WPBT_Extras {
 		);
 
 		add_settings_field(
-			'hide_report_a_bug',
+			'remove_auto_installed_plugins',
 			null,
 			array( 'WPBT_Settings', 'checkbox_setting' ),
 			'wp_beta_tester_extras',
 			'wp_beta_tester_email',
 			array(
-				'id'    => 'hide_report_a_bug',
-				'title' => esc_html__( 'Hide Report a Bug feature.', 'wordpress-beta-tester' ),
-				'class' => ! apply_filters( 'wpbt_hide_report_a_bug', false ) || isset( self::$options['hide_report_a_bug'] ) ? '' : 'hidden',
+				'id'          => 'remove_auto_installed_plugins',
+				'title'       => esc_html__( 'Delete auto-installed plugins.', 'wordpress-beta-tester' ),
+				'description' => esc_html__( 'Akismet is automatically installed with beta testing offers.', 'wordpress-beta-tester' ),
 			)
 		);
 	}
@@ -187,31 +198,28 @@ class WPBT_Extras {
 		// Disable update emails on success.
 		add_filter(
 			'auto_core_update_send_email',
-			function ( $true, $type ) {
-				$true = 'success' === $type ? false : $true;
+			static function ( $send, $type ) {
+				$send = 'success' === $type ? false : $send;
 
-				return $true;
+				return $send;
 			},
 			10,
 			2
 		);
+	}
 
-		// Disable sending debug email if no failures.
-		add_filter(
-			'automatic_updates_debug_email',
-			function ( $email, $failures ) {
-				$empty_email = array(
-					'to'      => null,
-					'subject' => null,
-					'body'    => null,
-					'headers' => null,
-				);
-				$email       = 0 === $failures ? $empty_email : $email;
+	/**
+	 * Remove auto-installed plugins installed with every beta testing offer.
+	 *
+	 * @return void
+	 */
+	public function remove_auto_installed_plugins() {
+		if ( ! isset( self::$options['remove_auto_installed_plugins'] ) ) {
+			return;
+		}
 
-				return $email;
-			},
-			10,
-			2
-		);
+		// Needed as sometimes `delete_plugins()` not ready.
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+		add_action( 'init', fn() => delete_plugins( array( 'akismet/akismet.php' ) ) );
 	}
 }

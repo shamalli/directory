@@ -61,7 +61,7 @@ abstract class Task {
 	protected $task_list;
 
 	/**
-	 * Duration to milisecond mapping.
+	 * Duration to millisecond mapping.
 	 *
 	 * @var string
 	 */
@@ -175,6 +175,15 @@ abstract class Task {
 	 */
 	public function get_additional_data() {
 		return null;
+	}
+
+	/**
+	 * Badge.
+	 *
+	 * @return string
+	 */
+	public function get_badge() {
+		return '';
 	}
 
 	/**
@@ -385,11 +394,12 @@ abstract class Task {
 	 * Track task completion if task is viewable.
 	 */
 	public function possibly_track_completion() {
-		if ( ! $this->is_complete() ) {
+		if ( $this->has_previously_completed() ) {
 			return;
 		}
 
-		if ( $this->has_previously_completed() ) {
+		// Expensive check.
+		if ( ! $this->is_complete() ) {
 			return;
 		}
 
@@ -453,6 +463,15 @@ abstract class Task {
 	}
 
 	/**
+	 * If a task is always accessible, relevant for when a task list is hidden but a task can still be viewed.
+	 *
+	 * @return bool
+	 */
+	public function is_always_accessible() {
+		return false;
+	}
+
+	/**
 	 * Check if the task has been visited.
 	 *
 	 * @return bool
@@ -486,6 +505,7 @@ abstract class Task {
 			'id'              => $this->get_id(),
 			'parentId'        => $this->get_parent_id(),
 			'title'           => $this->get_title(),
+			'badge'           => $this->get_badge(),
 			'canView'         => $this->can_view(),
 			'content'         => $this->get_content(),
 			'additionalInfo'  => $this->get_additional_info(),
@@ -593,5 +613,4 @@ abstract class Task {
 		}
 		return $result;
 	}
-
 }

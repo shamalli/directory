@@ -1,14 +1,16 @@
 <?php
 /**
  * Plugin Name:  WP Crontrol
- * Plugin URI:   https://wordpress.org/plugins/wp-crontrol/
- * Description:  WP Crontrol enables you to view and control what's happening in the WP-Cron system.
- * Author:       John Blackbourn & crontributors
- * Author URI:   https://github.com/johnbillion/wp-crontrol/graphs/contributors
- * Version:      1.15.3
+ * Plugin URI:   https://wp-crontrol.com
+ * Description:  Take control of the cron events on your WordPress website.
+ * Author:       John Blackbourn
+ * Author URI:   https://wp-crontrol.com
+ * Version:      1.19.0
  * Text Domain:  wp-crontrol
  * Domain Path:  /languages/
- * Requires PHP: 5.6
+ * Requires at least: 6.3
+ * Requires PHP: 7.4
+ * License URI:  https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * License:      GPL v2 or later
  *
  * LICENSE
@@ -25,21 +27,24 @@
  * GNU General Public License for more details.
  *
  * @package    wp-crontrol
- * @author     John Blackbourn <john@johnblackbourn.com> & Edward Dale <scompt@scompt.com>
- * @copyright  Copyright 2008 Edward Dale, 2012-2023 John Blackbourn
+ * @author     John Blackbourn & Edward Dale
+ * @copyright  Copyright 2008 Edward Dale, 2012-2025 John Blackbourn
  * @license    https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt GPL 2.0
- * @link       https://wordpress.org/plugins/wp-crontrol/
+ * @link       https://github.com/johnbillion/wp-crontrol/
  */
 
 namespace Crontrol;
 
 const PLUGIN_FILE = __FILE__;
+const WP_CRONTROL_VERSION = '1.19.0';
 
 if ( ! defined( 'ABSPATH' ) ) {
+	header( 'HTTP/1.1 403 Forbidden' );
 	exit;
 }
 
-if ( ! version_compare( PHP_VERSION, '5.6', '>=' ) ) {
+// @phpstan-ignore booleanNot.alwaysFalse
+if ( ! version_compare( PHP_VERSION, '7.4', '>=' ) ) {
 	return;
 }
 

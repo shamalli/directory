@@ -2,7 +2,7 @@
 
 <h2><?php esc_html_e('CSV Import'); ?></h2>
 
-<p class="description"><?php esc_html_e('On this second step collate CSV headers of columns with existing items fields', 'W2RR'); ?></p>
+<p class="description"><?php esc_html_e('On this second step collate CSV headers of columns with existing items fields', 'w2rr'); ?></p>
 
 <form method="POST" action="">
 	<input type="hidden" name="action" value="import_collate">
@@ -13,16 +13,16 @@
 	<input type="hidden" name="values_separator" value="<?php echo esc_attr($values_separator); ?>">
 	<?php wp_nonce_field(W2RR_PATH, 'w2rr_csv_import_nonce');?>
 	
-	<h3><?php esc_html_e('Map CSV columns', 'W2RR'); ?></h3>
+	<h3><?php esc_html_e('Map CSV columns', 'w2rr'); ?></h3>
 	<table class="form-table">
 		<tbody>
 			<tr>
 				<th scope="row">
-					<strong><?php esc_html_e('Column name', 'W2RR'); ?></strong>
+					<strong><?php esc_html_e('Column name', 'w2rr'); ?></strong>
 					<hr />
 				</th>
 				<td>
-					<strong><?php esc_html_e('Map to field', 'W2RR'); ?></strong>
+					<strong><?php esc_html_e('Map to field', 'w2rr'); ?></strong>
 					<hr />
 				</td>
 			</tr>
@@ -33,7 +33,7 @@
 				</th>
 				<td>
 					<select name="fields[]">
-						<option value=""><?php esc_html_e('- Select field -', 'W2RR'); ?></option>
+						<option value=""><?php esc_html_e('- Select field -', 'w2rr'); ?></option>
 						<?php foreach ($collation_fields AS $key=>$field): ?>
 						<option value="<?php echo esc_attr($key); ?>" <?php if ($collated_fields) selected($collated_fields[$i], $key, true); ?>><?php echo esc_html($field); ?></option>
 						<?php endforeach; ?>
@@ -44,12 +44,12 @@
 		</tbody>
 	</table>
 
-	<h3><?php esc_html_e('Import settings', 'W2RR'); ?></h3>
+	<h3><?php esc_html_e('Import settings', 'w2rr'); ?></h3>
 	<table class="form-table">
 		<tbody>
 			<tr>
 				<th scope="row">
-					<label><?php esc_html_e('Author', 'W2RR'); ?></label>
+					<label><?php esc_html_e('Author', 'w2rr'); ?></label>
 				</th>
 				<td>
 					<select name="author">
@@ -65,9 +65,9 @@
 	
 	<?php w2rr_renderTemplate('csv_manager/import_instructions.tpl.php'); ?>
 	
-	<?php submit_button(esc_html__('Import', 'W2RR'), 'primary', 'submit', false); ?>
+	<?php submit_button(esc_html__('Import', 'w2rr'), 'primary', 'submit', false); ?>
 	&nbsp;&nbsp;&nbsp;
-	<?php submit_button(esc_html__('Test import', 'W2RR'), 'secondary', 'tsubmit', false); ?>
+	<?php submit_button(esc_html__('Test import', 'w2rr'), 'secondary', 'tsubmit', false); ?>
 </form>
 
 <?php w2rr_renderTemplate('admin_footer.tpl.php'); ?>

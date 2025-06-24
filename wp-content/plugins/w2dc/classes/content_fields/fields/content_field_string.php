@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+// @codingStandardsIgnoreFile
 
 class w2dc_content_field_string extends w2dc_content_field {
 	public $max_length = 255;
@@ -19,12 +21,12 @@ class w2dc_content_field_string extends w2dc_content_field {
 
 		if (w2dc_getValue($_POST, 'submit') && wp_verify_nonce($_POST['w2dc_configure_content_fields_nonce'], W2DC_PATH)) {
 			$validation = new w2dc_form_validation();
-			$validation->set_rules('max_length', __('Max length', 'W2DC'), 'required|is_natural_no_zero');
-			$validation->set_rules('regex', __('PHP RegEx template', 'W2DC'));
+			$validation->set_rules('max_length', esc_html__('Max length', 'w2dc'), 'required|is_natural_no_zero');
+			$validation->set_rules('regex', esc_html__('PHP RegEx template', 'w2dc'));
 			if ($validation->run()) {
 				$result = $validation->result_array();
 				if ($wpdb->update($wpdb->w2dc_content_fields, array('options' => serialize(array('max_length' => $result['max_length'], 'regex' => $result['regex']))), array('id' => $this->id), null, array('%d'))) {
-					w2dc_addMessage(__('Field configuration was updated successfully!', 'W2DC'));
+					w2dc_addMessage(esc_html__('Field configuration was updated successfully!', 'w2dc'));
 				}
 				
 				$w2dc_instance->content_fields_manager->showContentFieldsTable();
@@ -63,8 +65,8 @@ class w2dc_content_field_string extends w2dc_content_field {
 		$field_index = 'w2dc-field-input-' . $this->id;
 		
 		if (isset($_POST[$field_index]) && $_POST[$field_index] && $this->regex)
-			if (@!preg_match('/^' . $this->regex . '$/', $_POST[$field_index]))
-				$errors[] = sprintf(__("Field %s doesn't match template!", 'W2DC'), $this->name);
+			if (!preg_match('/^' . $this->regex . '$/', $_POST[$field_index]))
+				$errors[] = sprintf(esc_html__("Field %s doesn't match template!", 'w2dc'), $this->name);
 
 		$validation = new w2dc_form_validation();
 		$rules = 'max_length[' . $this->max_length . ']';
@@ -100,26 +102,29 @@ class w2dc_content_field_string extends w2dc_content_field {
 		w2dc_renderTemplate($template, array('content_field' => $this, 'listing' => $listing, 'group' => $group, 'css_classes' => $css_classes));
 	}
 	
-	public function orderParams() {
-		$order_params = array('orderby' => 'meta_value', 'meta_key' => '_content_field_' . $this->id);
-		if (get_option('w2dc_orderby_exclude_null'))
-			$order_params['meta_query'] = array(
+	public function orderParams($order_args) {
+		$order_args['orderby'] = 'meta_value_num';
+		$order_args['meta_key'] = '_content_field_' . $this->id;
+		
+		if (get_option('w2dc_orderby_exclude_null')) {
+			$order_args['meta_query'][] = array(
 				array(
 					'key' => '_content_field_' . $this->id,
 					'value'   => array(''),
 					'compare' => 'NOT IN'
 				)
 			);
-		return $order_params;
+		}
+		return $order_args;
 	}
 
 	public function validateCsvValues($value, &$errors) {
 		if (!is_string($value))
-			$errors[] = sprintf(__('Field %s must be a string!', 'W2DC'), $this->name);
-		elseif ($this->regex && @!preg_match('/^' . $this->regex . '$/', $value))
-			$errors[] = sprintf(__("Field %s doesn't match template!", 'W2DC'), $this->name);
+			$errors[] = sprintf(esc_html__('Field %s must be a string!', 'w2dc'), $this->name);
+		elseif ($this->regex && !preg_match('/^' . $this->regex . '$/', $value))
+			$errors[] = sprintf(esc_html__("Field %s doesn't match template!", 'w2dc'), $this->name);
 		elseif (strlen($value) > $this->max_length)
-			$errors[] = sprintf(__('The %s field can not exceed %s characters in length.', 'W2DC'), $this->name, $this->max_length);
+			$errors[] = sprintf(esc_html__('The %s field can not exceed %s characters in length.', 'w2dc'), $this->name, $this->max_length);
 		else
 			return $value;
 	}

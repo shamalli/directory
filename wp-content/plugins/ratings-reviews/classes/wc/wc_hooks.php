@@ -77,8 +77,8 @@ function w2rr_wc_product_get_rating_html($html, $rating, $count) {
 	if (w2rr_is_wc()) {
 		$target_post = w2rr_getTargetPost(get_post());
 		
-		if ($target_post/*  && $target_post->avg_rating->ratings */) {
-			$html = $target_post->renderAvgRating(array('show_avg' => true, 'active' => false), true);
+		if ($target_post) {
+			$html = $target_post->renderAvgRating(array('show_avg' => true, 'active' => false, 'stars_size' => 20), true);
 		}
 	}
 	
@@ -121,7 +121,7 @@ function w2rr_wc_product_get_average_rating($value, $wc_product) {
 	if (w2rr_is_wc()) {
 		$target_post = w2rr_getTargetPost($wc_product->get_id());
 
-		if ($target_post /* && $target_post->avg_rating->ratings */) {
+		if ($target_post) {
 			$value = $target_post->getAvgRating();
 		}
 	}
@@ -290,11 +290,11 @@ function w2rr_wc_comments_open_metabox($target_post) {
 	if ($target_post->post->post_type == 'product' && get_option('woocommerce_enable_reviews', null) !== null) {
 		echo "<p>";
 		if (get_option('woocommerce_enable_reviews') == 'yes') {
-			esc_html_e('Reviews always enabled by WooCommerce settings.', 'W2RR');
+			esc_html_e('Reviews always enabled by WooCommerce settings.', 'w2rr');
 		} elseif (get_option('woocommerce_enable_reviews') == 'no') {
-			esc_html_e('Reviews always disabled by WooCommerce settings.', 'W2RR');
+			esc_html_e('Reviews always disabled by WooCommerce settings.', 'w2rr');
 		}
-		echo " <a href='".admin_url('admin.php?page=wc-settings&tab=products')."'>" . esc_html__('Change it in WC settings.', 'W2RR') . "</a>";
+		echo " <a href='".admin_url('admin.php?page=wc-settings&tab=products')."'>" . esc_html__('Change it in WC settings.', 'w2rr') . "</a>";
 		
 		echo "</p>";
 	}
@@ -445,7 +445,7 @@ function w2rr_wc_account_menu_items($items) {
 		if ($w2rr_instance->dashboard_page_id) {
 			$offset = 1;
 			$items = array_slice($items, 0, $offset, true) +
-					array('ratings-reviews' => esc_html__('Reviews', 'W2RR')) +
+					array('ratings-reviews' => esc_html__('Reviews', 'w2rr')) +
 					array_slice($items, $offset, NULL, true);
 		}
 	}
@@ -463,18 +463,6 @@ function w2rr_wc_account_endpoint_content() {
 	
 	echo $dashboard->display();
 }
-/* add_filter('woocommerce_get_endpoint_url', 'w2rr_wc_account_dashboard_menu_url', 10, 2);
-function w2rr_wc_account_dashboard_menu_url($url, $endpoint) {
-	global $w2rr_instance;
-
-	if (w2rr_is_wc()) {
-		if ($w2rr_instance->dashboard_page_id && $endpoint == 'ratings-reviews') {
-			return get_permalink($w2rr_instance->dashboard_page_id);
-		}
-	}
-
-	return $url;
-} */
 
 
 add_action('w2rr_slider_caption', 'w2rr_wc_slider_caption', 10, 2);

@@ -1,6 +1,6 @@
 <?php
 
-class VP_W2RR_Control_Field_RadioButton extends VP_W2RR_Control_FieldMulti
+class W2RR_VP_Control_Field_RadioButton extends W2RR_VP_Control_FieldMulti
 {
 
 	public function __construct()
@@ -24,7 +24,7 @@ class VP_W2RR_Control_Field_RadioButton extends VP_W2RR_Control_FieldMulti
 	{
 		$this->_setup_data();
 		$this->add_data('is_compact', $is_compact);
-		return VP_W2RR_View::instance()->load('control/radiobutton', $this->get_data());
+		return W2RR_VP_View::instance()->load('control/radiobutton', $this->get_data());
 	}
 
 }

@@ -3,7 +3,7 @@
 /**
  * The smallest unit of an item, the field it self.
  */
-abstract class VP_W2DC_Control_FieldMulti extends VP_W2DC_Control_Field
+abstract class W2DC_VP_Control_FieldMulti extends W2DC_VP_Control_Field
 {
 
 	protected $_items = array();
@@ -15,7 +15,7 @@ abstract class VP_W2DC_Control_FieldMulti extends VP_W2DC_Control_Field
 	/**
 	 * Basic self setup of the object
 	 * @param  SimpleXMLElement $simpleXML SimpleXML object representation of the field
-	 * @return VP_W2DC_Control_FieldMulti Field object
+	 * @return W2DC_VP_Control_FieldMulti Field object
 	 */
 	protected function _basic_make($arr)
 	{
@@ -46,7 +46,7 @@ abstract class VP_W2DC_Control_FieldMulti extends VP_W2DC_Control_Field
 			}
 			if(is_array($arr['items'])) foreach ($arr['items'] as $item)
 			{
-				$the_item = new VP_W2DC_Control_Field_Item_Generic();
+				$the_item = new W2DC_VP_Control_Field_Item_Generic();
 				$the_item->value($item['value'])
 					 	 ->label($item['label']);
 				if( isset( $item['img'] ) )
@@ -57,7 +57,7 @@ abstract class VP_W2DC_Control_FieldMulti extends VP_W2DC_Control_Field
 		if (isset($arr['default']))
 		{
 			$arr['default'] = (array) $arr['default'];
-			if(!VP_W2DC_Util_Reflection::is_multiselectable($this))
+			if(!W2DC_VP_Util_Reflection::is_multiselectable($this))
 			{
 				$arr['default'] = (array) reset($arr['default']);
 			}
@@ -77,11 +77,11 @@ abstract class VP_W2DC_Control_FieldMulti extends VP_W2DC_Control_Field
 			switch ($def)
 			{
 				case '{{all}}':
-					if(VP_W2DC_Util_Reflection::is_multiselectable($this))
+					if(W2DC_VP_Util_Reflection::is_multiselectable($this))
 						$defaults = array_merge($defaults, array_keys($items));
 					break;
 				case '{{first}}':
-					$first = VP_W2DC_Util_Array::first($items);
+					$first = W2DC_VP_Util_Array::first($items);
 					if(!is_null($first))
 						$defaults[] = $first->value;
 					break;
@@ -113,8 +113,8 @@ abstract class VP_W2DC_Control_FieldMulti extends VP_W2DC_Control_Field
 	 * @param mixed $_default default value of the field
 	 */
 	public function set_default($_default) {
-		if(is_array($_default) and !VP_W2DC_Util_Reflection::is_multiselectable($this))
-			$_default = VP_W2DC_Util_Array::first($_default);
+		if(is_array($_default) and !W2DC_VP_Util_Reflection::is_multiselectable($this))
+			$_default = W2DC_VP_Util_Array::first($_default);
 		$this->_default = $_default;
 		return $this;
 	}
@@ -126,7 +126,7 @@ abstract class VP_W2DC_Control_FieldMulti extends VP_W2DC_Control_Field
 
 	/**
 	 * Add single item
-	 * @param VP_W2DC_Control_Field_Item_ $opt Single item item
+	 * @param W2DC_VP_Control_Field_Item_ $opt Single item item
 	 */
 	public function add_item($opt)
 	{
@@ -157,7 +157,7 @@ abstract class VP_W2DC_Control_FieldMulti extends VP_W2DC_Control_Field
 		{
 			foreach ($_items as $item)
 			{
-				$the_item = new VP_W2DC_Control_Field_Item_Generic();
+				$the_item = new W2DC_VP_Control_Field_Item_Generic();
 				$the_item->value($item['value'])
 					 	 ->label($item['label']);
 				$this->add_item($the_item);

@@ -1,7 +1,12 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <?php w2dc_renderTemplate('admin_header.tpl.php'); ?>
 
 <h2>
-	<?php _e('Configure opening hours field', 'W2DC'); ?>
+	<?php esc_html_e('Configure opening hours field', 'w2dc'); ?>
 </h2>
 
 <form method="POST" action="">
@@ -10,7 +15,7 @@
 		<tbody>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Time convention', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Time convention', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<label>
@@ -19,7 +24,7 @@
 							type="radio"
 							value="12"
 							<?php if ($content_field->hours_clock == 12) echo 'checked'; ?> />
-						<?php _e('12-hour clock', 'W2DC')?>
+						<?php esc_html_e('12-hour clock', 'w2dc')?>
 					</label>
 					&nbsp;&nbsp;
 					<label>
@@ -28,14 +33,14 @@
 							type="radio"
 							value="24"
 							<?php if ($content_field->hours_clock == 24) echo 'checked'; ?> />
-						<?php _e('24-hour clock', 'W2DC')?>
+						<?php esc_html_e('24-hour clock', 'w2dc')?>
 					</label>
 				</td>
 			</tr>
 		</tbody>
 	</table>
 	
-	<?php submit_button(__('Save changes', 'W2DC')); ?>
+	<?php submit_button(esc_html__('Save changes', 'w2dc')); ?>
 </form>
 
 <?php w2dc_renderTemplate('admin_footer.tpl.php'); ?>

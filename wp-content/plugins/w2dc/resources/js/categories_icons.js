@@ -260,7 +260,7 @@
 		$(document).on('focus', '.marker_color', function(){
 			var parent = $(this).parent();
             $(this).wpColorPicker()
-            parent.find('.wp-color-result').click();
+            parent.find('.wp-color-result').trigger('click');
         }); 
 		$(document).on("click", ".save_color", function() {
 			var category_marker_color_input = $(this).parents(".w2dc-content").find(".marker_color");

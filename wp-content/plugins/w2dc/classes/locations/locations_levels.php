@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+// @codingStandardsIgnoreFile
 
 class w2dc_locations_levels {
 	public $levels_array = array();
@@ -109,7 +111,7 @@ class w2dc_locations_levels {
 		
 		$insert_update_args = apply_filters('w2dc_locations_level_create_edit_args', $insert_update_args, $array);
 	
-		if ($wpdb->update($wpdb->w2dc_locations_levels, $insert_update_args,	array('id' => $level_id), null, array('%d')) !== false) {
+		if ($wpdb->update($wpdb->w2dc_locations_levels, $insert_update_args, array('id' => $level_id), null, array('%d')) !== false) {
 			do_action('w2dc_update_locations_level', $level_id, $insert_update_args);
 			
 			$this->getLevelsFromDB();
@@ -151,17 +153,17 @@ class w2dc_manage_locations_levels_table extends WP_List_Table {
 
 	public function __construct() {
 		parent::__construct(array(
-				'singular' => __('locations level', 'W2DC'),
-				'plural' => __('locations levels', 'W2DC'),
+				'singular' => esc_html__('locations level', 'w2dc'),
+				'plural' => esc_html__('locations levels', 'w2dc'),
 				'ajax' => false
 		));
 	}
 
 	public function get_columns() {
 		$columns = array(
-				'locations_level_name' => __('Name', 'W2DC'),
-				'in_address_line' => __('In address line', 'W2DC'),
-				'allow_add_term' => __('Allow add location', 'W2DC'),
+				'locations_level_name' => esc_html__('Name', 'w2dc'),
+				'in_address_line' => esc_html__('In address line', 'w2dc'),
+				'allow_add_term' => esc_html__('Allow add location', 'w2dc'),
 		);
 
 		return $columns;
@@ -188,8 +190,8 @@ class w2dc_manage_locations_levels_table extends WP_List_Table {
 
 	public function column_locations_level_name($item) {
 		$actions = array(
-				'edit' => sprintf('<a href="?page=%s&action=%s&level_id=%d">' . __('Edit', 'W2DC') . '</a>', $_GET['page'], 'edit', $item['id']),
-				'delete' => sprintf('<a href="?page=%s&action=%s&level_id=%d">' . __('Delete', 'W2DC') . '</a>', $_GET['page'], 'delete', $item['id']),
+				'edit' => sprintf('<a href="?page=%s&action=%s&level_id=%d">' . esc_html__('Edit', 'w2dc') . '</a>', $_GET['page'], 'edit', $item['id']),
+				'delete' => sprintf('<a href="?page=%s&action=%s&level_id=%d">' . esc_html__('Delete', 'w2dc') . '</a>', $_GET['page'], 'delete', $item['id']),
 		);
 		return sprintf('%1$s %2$s', sprintf('<a href="?page=%s&action=%s&level_id=%d">' . $item['locations_level_name'] . '</a>', $_GET['page'], 'edit', $item['id']), $this->row_actions($actions));
 	}
@@ -216,7 +218,7 @@ class w2dc_manage_locations_levels_table extends WP_List_Table {
 	}
 
 	function no_items() {
-		__('No locations levels found', 'W2DC');
+		esc_html__('No locations levels found', 'w2dc');
 	}
 }
 

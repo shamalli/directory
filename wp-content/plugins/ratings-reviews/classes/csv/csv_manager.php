@@ -18,6 +18,7 @@ class w2rr_csv_manager {
 	public $columns_separator;
 	public $values_separator;
 	public $selected_user;
+	public $users = array();
 	public $users_logins = array();
 	public $users_emails = array();
 	public $users_ids = array();
@@ -47,8 +48,8 @@ class w2rr_csv_manager {
 		}
 
 		$this->menu_page_hook = add_submenu_page('w2rr_settings',
-			esc_html__('CSV Import/Export', 'W2RR'),
-			esc_html__('CSV Import/Export', 'W2RR'),
+			esc_html__('CSV Import/Export', 'w2rr'),
+			esc_html__('CSV Import/Export', 'w2rr'),
 			$capability,
 			'w2rr_csv_import',
 			array($this, 'w2rr_csv_import')
@@ -108,14 +109,14 @@ class w2rr_csv_manager {
 			$errors = false;
 
 			$validation = new w2rr_form_validation();
-			$validation->set_rules('columns_separator', esc_html__('Columns separator', 'W2RR'), 'required');
-			$validation->set_rules('values_separator', esc_html__('categories separator', 'W2RR'), 'required');
+			$validation->set_rules('columns_separator', esc_html__('Columns separator', 'w2rr'), 'required');
+			$validation->set_rules('values_separator', esc_html__('categories separator', 'w2rr'), 'required');
 
 			// GoBack button places on import results page
 			if (w2rr_getValue($_POST, 'goback')) {
-				$validation->set_rules('csv_file_name', esc_html__('CSV file name', 'W2RR'), 'required');
-				$validation->set_rules('images_dir', esc_html__('Images directory', 'W2RR'));
-				$validation->set_rules('fields[]', esc_html__('Import fields', 'W2RR'));
+				$validation->set_rules('csv_file_name', esc_html__('CSV file name', 'w2rr'), 'required');
+				$validation->set_rules('images_dir', esc_html__('Images directory', 'w2rr'));
+				$validation->set_rules('fields[]', esc_html__('Import fields', 'w2rr'));
 				$this->import_export_helper->validateSettings($validation);
 			}
 
@@ -136,29 +137,29 @@ class w2rr_csv_manager {
 					$csv_file_name = $this->csv_file_name;
 
 					if (!is_file($csv_file_name)) {
-						w2rr_addMessage(esc_attr__("CSV temp file doesn't exist", 'W2RR'));
+						w2rr_addMessage(esc_attr__("CSV temp file doesn't exist", 'w2rr'));
 						return $this->csvImportSettings($validation->result_array());
 					}
 
 					if ($this->images_dir && !is_dir($this->images_dir)) {
-						w2rr_addMessage(esc_attr__("Images temp directory doesn't exist", 'W2RR'));
+						w2rr_addMessage(esc_attr__("Images temp directory doesn't exist", 'w2rr'));
 						return $this->csvImportSettings($validation->result_array());
 					}
 				} else {
 					$csv_file = $_FILES['csv_file'];
 
 					if ($csv_file['error'] || !is_uploaded_file($csv_file['tmp_name'])) {
-						w2rr_addMessage(esc_html__('There was a problem trying to upload CSV file', 'W2RR'), 'error');
+						w2rr_addMessage(esc_html__('There was a problem trying to upload CSV file', 'w2rr'), 'error');
 						return $this->csvImportSettings($validation->result_array());
 					}
 	
 					if (strtolower(pathinfo($csv_file['name'], PATHINFO_EXTENSION)) != 'csv' && $csv_file['type'] != 'text/csv') {
-						w2rr_addMessage(esc_html__('This is not CSV file', 'W2RR'), 'error');
+						w2rr_addMessage(esc_html__('This is not CSV file', 'w2rr'), 'error');
 						return $this->csvImportSettings($validation->result_array());
 					}
 					
 					if (function_exists('mb_detect_encoding') && !mb_detect_encoding(file_get_contents($csv_file['tmp_name']), 'UTF-8', true)) {
-						w2rr_addMessage(esc_html__("CSV file must be in UTF-8", 'W2RR'), 'error');
+						w2rr_addMessage(esc_html__("CSV file must be in UTF-8", 'w2rr'), 'error');
 						return $this->csvImportSettings($validation->result_array());
 					}
 					
@@ -170,12 +171,12 @@ class w2rr_csv_manager {
 						$images_file = $_FILES['images_file'];
 						
 						if ($images_file['error'] || !is_uploaded_file($images_file['tmp_name'])) {
-							w2rr_addMessage(esc_html__('There was a problem trying to upload ZIP images file', 'W2RR'), 'error');
+							w2rr_addMessage(esc_html__('There was a problem trying to upload ZIP images file', 'w2rr'), 'error');
 							return $this->csvImportSettings($validation->result_array());
 						}
 	
 						if (!$this->extractImages($images_file['tmp_name'])) {
-							w2rr_addMessage(esc_html__('There was a problem trying to unpack ZIP images file', 'W2RR'), 'error');
+							w2rr_addMessage(esc_html__('There was a problem trying to unpack ZIP images file', 'w2rr'), 'error');
 							return $this->csvImportSettings($validation->result_array());
 						}
 					}
@@ -224,12 +225,12 @@ class w2rr_csv_manager {
 			$errors = false;
 
 			$validation = new w2rr_form_validation();
-			$validation->set_rules('import_type', esc_html__('Import type', 'W2RR'), 'required');
-			$validation->set_rules('csv_file_name', esc_html__('CSV file name', 'W2RR'), 'required');
-			$validation->set_rules('images_dir', esc_html__('Images directory', 'W2RR'));
-			$validation->set_rules('columns_separator', esc_html__('Columns separator', 'W2RR'), 'required');
-			$validation->set_rules('values_separator', esc_html__('categories separator', 'W2RR'), 'required');
-			$validation->set_rules('fields[]', esc_html__('Import fields', 'W2RR'));
+			$validation->set_rules('import_type', esc_html__('Import type', 'w2rr'), 'required');
+			$validation->set_rules('csv_file_name', esc_html__('CSV file name', 'w2rr'), 'required');
+			$validation->set_rules('images_dir', esc_html__('Images directory', 'w2rr'));
+			$validation->set_rules('columns_separator', esc_html__('Columns separator', 'w2rr'), 'required');
+			$validation->set_rules('values_separator', esc_html__('categories separator', 'w2rr'), 'required');
+			$validation->set_rules('fields[]', esc_html__('Import fields', 'w2rr'));
 			$this->import_export_helper->validateSettings($validation);
 				
 			if ($validation->run()) {
@@ -246,23 +247,23 @@ class w2rr_csv_manager {
 				$this->collated_fields = $validation->result_array('fields[]');
 				
 				if (!is_file($this->csv_file_name)) {
-					$this->log['errors'][] = esc_attr__("CSV temp file doesn't exist", 'W2RR');
+					$this->log['errors'][] = esc_attr__("CSV temp file doesn't exist", 'w2rr');
 				}
 
 				if ($this->images_dir && !is_dir($this->images_dir)) {
-					$this->log['errors'][] = esc_attr__("Images temp directory doesn't exist", 'W2RR');
+					$this->log['errors'][] = esc_attr__("Images temp directory doesn't exist", 'w2rr');
 				}
 				
 				$this->import_export_helper->checkFields();
 
 				$this->extractCsv($this->csv_file_name);
 				
-				echo "<h2>" . esc_html__('CSV Import', 'W2RR') . "</h2>";
+				echo "<h2>" . esc_html__('CSV Import', 'w2rr') . "</h2>";
 				if (!$this->log['errors']) {
 					ob_implicit_flush(true);
 					w2rr_renderTemplate('admin_header.tpl.php');
 					
-					echo "<h3>" . esc_html__('Import results', 'W2RR') . "</h3>";
+					echo "<h3>" . esc_html__('Import results', 'w2rr') . "</h3>";
 				
 					$this->processCSV();
 	
@@ -272,7 +273,7 @@ class w2rr_csv_manager {
 							$this->removeImagesDir($this->images_dir);
 					}
 				} else {
-					echo "<h3>" . esc_html__('Error messages', 'W2RR') . "</h3>";
+					echo "<h3>" . esc_html__('Error messages', 'w2rr') . "</h3>";
 					
 					foreach ($this->log['errors'] AS $error) {
 						echo '<p>'.$error.'</p>';
@@ -302,8 +303,7 @@ class w2rr_csv_manager {
 	}
 	
 	public function extractCsv($csv_file) {
-		ini_set('auto_detect_line_endings', true);
-
+		
 		if ($fp = fopen($csv_file, 'r')) {
 			$n = 0;
 			
@@ -319,9 +319,9 @@ class w2rr_csv_manager {
 							$column = trim($column);
 					} else {
 						if (count($line_columns) > count($this->header_columns))
-							$this->log['errors'][] = sprintf(esc_html__('Line %d has too many columns', 'W2RR'), $n+1);
+							$this->log['errors'][] = sprintf(esc_html__('Line %d has too many columns', 'w2rr'), $n+1);
 						elseif (count($line_columns) < count($this->header_columns))
-							$this->log['errors'][] = sprintf(esc_html__('Line %d has less columns than header line', 'W2RR'), $n+1);
+							$this->log['errors'][] = sprintf(esc_html__('Line %d has less columns than header line', 'w2rr'), $n+1);
 						else
 							$this->rows[] = $line_columns;
 					}
@@ -330,7 +330,7 @@ class w2rr_csv_manager {
 			}
 			fclose($fp);
 		} else {
-			$this->log['errors'][] = esc_html__("Can't open CSV file", 'W2RR');
+			$this->log['errors'][] = esc_html__("Can't open CSV file", 'w2rr');
 			return false;
 		}
 	}
@@ -366,16 +366,16 @@ class w2rr_csv_manager {
 			$this->users_ids[] = $user->ID;
 		}
 		
-		printf(esc_html__('Import started, number of available rows in file: %d', 'W2RR'), count($this->rows));
+		printf(esc_html__('Import started, number of available rows in file: %d', 'w2rr'), count($this->rows));
 		echo "<br />";
 		if ($this->test_mode) {
-			esc_html_e('Test mode enabled', 'W2RR');
+			esc_html_e('Test mode enabled', 'w2rr');
 			echo "<br />";
 		}
 		
 		$this->import_export_helper->processCSVImport();
 		
-		printf(esc_html__('Import finished, number of errors: %d, total rejected lines: %d', 'W2RR'), count($this->log['errors']), $this->import_export_helper->total_rejected_lines);
+		printf(esc_html__('Import finished, number of errors: %d, total rejected lines: %d', 'w2rr'), count($this->log['errors']), $this->import_export_helper->total_rejected_lines);
 		echo "<br />";
 		echo "<br />";
 	}
@@ -455,7 +455,7 @@ class w2rr_csv_manager {
 						
 						$this->insertAttachment($post_id, $image_file_name, $image, $image_title, $filepath, $_thumbnail_id_inserted);
 					} else {
-						$error = sprintf(esc_html__("There isn't specified image file \"%s\" inside ZIP file. Or temp folder wasn't created: \"%s\"", 'W2RR'), $image_file_name, $this->images_dir);
+						$error = sprintf(esc_html__("There isn't specified image file \"%s\" inside ZIP file. Or temp folder wasn't created: \"%s\"", 'w2rr'), $image_file_name, $this->images_dir);
 						$error_on_line = $this->setErrorOnLine($error);
 					}
 				}
@@ -506,11 +506,11 @@ class w2rr_csv_manager {
 					$_thumbnail_id_inserted = true;
 				}
 			} else {
-				$error = sprintf(esc_html__('Image file "%s" could not be inserted.', 'W2RR'), $image_file_name);
+				$error = sprintf(esc_html__('Image file "%s" could not be inserted.', 'w2rr'), $image_file_name);
 				$error_on_line = $this->setErrorOnLine($error);
 			}
 		} else {
-			$error = sprintf(esc_html__("Image file \"%s\" wasn't attached. Full path: \"%s\". Error: %s", 'W2RR'), $image_file_name, $filepath, $image['error']);
+			$error = sprintf(esc_html__("Image file \"%s\" wasn't attached. Full path: \"%s\". Error: %s", 'w2rr'), $image_file_name, $filepath, $image['error']);
 			$error_on_line = $this->setErrorOnLine($error);
 		}
 	}
@@ -520,8 +520,8 @@ class w2rr_csv_manager {
 		$offset = 0;
 		
 		$validation = new w2rr_form_validation();
-		$validation->set_rules('number', esc_html__('Reviews number', 'W2RR'), 'integer');
-		$validation->set_rules('offset', esc_html__('Reviews offset', 'W2RR'), 'integer');
+		$validation->set_rules('number', esc_html__('Reviews number', 'w2rr'), 'integer');
+		$validation->set_rules('offset', esc_html__('Reviews offset', 'w2rr'), 'integer');
 		if ($validation->run()) {
 			if ($validation->result_array('number')) {
 				$number = $validation->result_array('number');

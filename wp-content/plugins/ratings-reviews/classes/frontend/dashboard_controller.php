@@ -5,6 +5,7 @@ class w2rr_dashboard_controller extends w2rr_frontend_controller {
 	public $referer;
 	public $active_tab;
 	public $subtemplate;
+	public $user;
 
 	public function init($args = array()) {
 		global $w2rr_instance, $sitepress;
@@ -99,15 +100,15 @@ class w2rr_dashboard_controller extends w2rr_frontend_controller {
 						if (isset($_POST['submit'])) {
 							$errors = array();
 							
-							if (!isset($_POST['post_title']) || !trim($_POST['post_title']) || $_POST['post_title'] == esc_html__('Auto Draft', 'W2RR')) {
-								$errors[] = esc_html__('Review title field required', 'W2RR');
-								$post_title = esc_html__('Auto Draft', 'W2RR');
+							if (!isset($_POST['post_title']) || !trim($_POST['post_title']) || $_POST['post_title'] == esc_html__('Auto Draft', 'w2rr')) {
+								$errors[] = esc_html__('Review title field required', 'w2rr');
+								$post_title = esc_html__('Auto Draft', 'w2rr');
 							} else {
 								$post_title = trim($_POST['post_title']);
 							}
 							
 							if (empty($_POST['post_content']) && get_option('w2rr_enable_description')) {
-								$errors[] = esc_html__('Review description field required!', 'W2RR');
+								$errors[] = esc_html__('Review description field required!', 'w2rr');
 								$post_content = '';
 							} else {
 								$post_content = $_POST['post_content'];
@@ -153,9 +154,9 @@ class w2rr_dashboard_controller extends w2rr_frontend_controller {
 									}
 								}
 								if (get_option('w2rr_edit_reviews_moderation')) {
-									$message = esc_attr__("Review was saved successfully! Now it's awaiting moderators approval.", 'W2RR');
+									$message = esc_attr__("Review was saved successfully! Now it's awaiting moderators approval.", 'w2rr');
 								} else {
-									$message = esc_html__('Review was saved successfully! Now you can manage it in your dashboard.', 'W2RR');
+									$message = esc_html__('Review was saved successfully! Now you can manage it in your dashboard.', 'w2rr');
 								}
 							
 								$postarr = array(
@@ -184,7 +185,7 @@ class w2rr_dashboard_controller extends w2rr_frontend_controller {
 										if ($review->post->post_status == 'publish' && $post_status == 'pending') {
 											$author = wp_get_current_user();
 							
-											$subject = esc_html__('Notification about review modification (do not reply)', 'W2RR');
+											$subject = esc_html__('Notification about review modification (do not reply)', 'w2rr');
 											$body = str_replace('[user]', $author->display_name,
 													str_replace('[review]', $review->title(),
 													str_replace('[link]', admin_url('post.php?post='.$review->post->ID.'&action=edit'),
@@ -211,7 +212,7 @@ class w2rr_dashboard_controller extends w2rr_frontend_controller {
 							$review = w2rr_getReview($review_id);
 						}
 					} else {
-						wp_die('You are not able to manage this review', 'W2RR');
+						wp_die('You are not able to manage this review', 'w2rr');
 					}
 					
 					if (get_option("w2rr_reviews_images_number") > 0) {
@@ -229,19 +230,19 @@ class w2rr_dashboard_controller extends w2rr_frontend_controller {
 						$delete = apply_filters('w2rr_delete_or_trash_review', true, $review_id); // true - delete, false - move to trash
 						if ($delete) {
 							if (wp_delete_post($review_id, true) !== FALSE) {
-								w2rr_addMessage(esc_html__('Review was deleted successfully!', 'W2RR'));
+								w2rr_addMessage(esc_html__('Review was deleted successfully!', 'w2rr'));
 								wp_redirect(w2rr_dashboardUrl());
 								die();
 							} else {
-								w2rr_addMessage(esc_html__('An error has occurred and review was not deleted', 'W2RR'), 'error');
+								w2rr_addMessage(esc_html__('An error has occurred and review was not deleted', 'w2rr'), 'error');
 							}
 						} else {
 							if (wp_trash_post($review_id) !== FALSE) {
-								w2rr_addMessage(esc_html__('Review was moved to trash!', 'W2RR'));
+								w2rr_addMessage(esc_html__('Review was moved to trash!', 'w2rr'));
 								wp_redirect(w2rr_dashboardUrl());
 								die();
 							} else {
-								w2rr_addMessage(esc_html__('An error has occurred and review was not moved to trash', 'W2RR'), 'error');
+								w2rr_addMessage(esc_html__('An error has occurred and review was not moved to trash', 'w2rr'), 'error');
 							}
 						}
 					}
@@ -250,7 +251,7 @@ class w2rr_dashboard_controller extends w2rr_frontend_controller {
 					$this->subtemplate = 'dashboard/delete.tpl.php';
 					$this->active_tab = 'reviews';
 				} else {
-					wp_die('You are not able to manage this review', 'W2RR');
+					wp_die('You are not able to manage this review', 'w2rr');
 				}
 			} elseif ($w2rr_instance->action == 'view_review_stats' && $review_id) {
 				if (get_option('w2rr_enable_stats') && w2rr_current_user_can_edit_review($review_id) && ($review = w2rr_getReview($review_id))) {
@@ -260,7 +261,7 @@ class w2rr_dashboard_controller extends w2rr_frontend_controller {
 					$this->subtemplate = 'dashboard/view_stats.tpl.php';
 					$this->active_tab = 'reviews';
 				} else {
-					wp_die('You are not able to manage this review', 'W2RR');
+					wp_die('You are not able to manage this review', 'w2rr');
 				}
 			} elseif ($w2rr_instance->action == 'profile') {
 				if (get_option('w2rr_allow_edit_profile')) {
@@ -287,7 +288,7 @@ class w2rr_dashboard_controller extends w2rr_frontend_controller {
 							$delete_role = false;
 							$blog_prefix = $wpdb->get_blog_prefix();
 							if ($user_id != $current_user->ID) {
-								$cap = $wpdb->get_var("SELECT meta_value FROM {$wpdb->usermeta} WHERE user_id = '{$user_id}' AND meta_key = '{$blog_prefix}capabilities' AND meta_value = 'a:0:{}'");
+								$cap = $wpdb->get_var($wpdb->prepare("SELECT meta_value FROM {$wpdb->usermeta} WHERE user_id = %d AND meta_key = '{$blog_prefix}capabilities' AND meta_value = 'a:0:{}'", $user_id));
 								if (!is_network_admin() && null == $cap && $_POST['role'] == '') {
 									$_POST['role'] = 'contributor';
 									$delete_role = true;
@@ -308,12 +309,12 @@ class w2rr_dashboard_controller extends w2rr_frontend_controller {
 							}
 							
 							if (!is_wp_error($errors)) {
-								w2rr_addMessage(esc_html__('Your profile was successfully updated!', 'W2RR'));
+								w2rr_addMessage(esc_html__('Your profile was successfully updated!', 'w2rr'));
 								wp_redirect(w2rr_dashboardUrl(array('w2rr_action' => 'profile')));
 								die();
 							}
 						} else {
-							wp_die('You are not able to manage profile', 'W2RR');
+							wp_die('You are not able to manage profile', 'w2rr');
 						}
 					}
 	
@@ -350,7 +351,7 @@ class w2rr_dashboard_controller extends w2rr_frontend_controller {
 					$this->subtemplate = 'dashboard/profile.tpl.php';
 					$this->active_tab = 'profile';
 				} else {
-					wp_die('You are not able to manage profile', 'W2RR');
+					wp_die('You are not able to manage profile', 'w2rr');
 				}
 			// adapted for WPML
 			}  elseif (function_exists('wpml_object_id_filter') && $sitepress && get_option('w2rr_enable_frontend_translations') && $w2rr_instance->action == 'add_translation' && isset($_GET['review_id']) && isset($_GET['to_lang'])) {
@@ -368,11 +369,11 @@ class w2rr_dashboard_controller extends w2rr_frontend_controller {
 					// WPML has special option sync_post_status, that controls post_status duplication
 					if ($new_review_id = $iclTranslationManagement->make_duplicate($master_post_id, $lang_code)) {
 						$iclTranslationManagement->reset_duplicate_flag($new_review_id);
-						w2rr_addMessage(esc_html__('Translation was successfully created!', 'W2RR'));
+						w2rr_addMessage(esc_html__('Translation was successfully created!', 'w2rr'));
 						do_action('wpml_switch_language', $lang_code);
 						wp_redirect(add_query_arg(array('w2rr_action' => 'edit_review', 'review_id' => $new_review_id), get_permalink(apply_filters('wpml_object_id', $w2rr_instance->dashboard_page_id, 'page', true, $lang_code))));
 					} else {
-						w2rr_addMessage(esc_html__('Translation was not created!', 'W2RR'), 'error');
+						w2rr_addMessage(esc_html__('Translation was not created!', 'w2rr'), 'error');
 						wp_redirect(w2rr_dashboardUrl());
 					}
 					die();

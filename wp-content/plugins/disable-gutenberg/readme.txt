@@ -3,21 +3,21 @@
 Plugin Name: Disable Gutenberg
 Plugin URI: https://perishablepress.com/disable-gutenberg/
 Description: Disables Gutenberg Block Editor and restores the Classic Editor and original Edit Post screen. Provides options to enable on specific post types, user roles, and more.
-Tags: editor, classic editor, block editor, gutenberg
+Tags: classic editor, block editor, editor, gutenberg
 Author: Jeff Starr
 Author URI: https://plugin-planet.com/
 Donate link: https://monzillamedia.com/donate.html
 Contributors: specialk
 Requires at least: 4.9
-Tested up to: 6.2
-Stable tag: 2.9
-Version: 2.9
+Tested up to: 6.8
+Stable tag: 3.2.3
+Version:    3.2.3
 Requires PHP: 5.6.20
 Text Domain: disable-gutenberg
 Domain Path: /languages
 License: GPL v2 or later
 
-Disable Gutenberg Block Editor and restore the Classic Editor and original Edit Post screen (TinyMCE, meta boxes, etc.). Selectively disable for posts, pages, roles, post types, and theme templates. Hide the Gutenberg nag, menu item, and more.
+Disable Gutenberg Block Editor and restore the Classic Editor and original Edit Post screen (TinyMCE, meta boxes, etc.).
 
 
 
@@ -82,7 +82,7 @@ _Automatically replaces Gutenberg with the Classic Editor._
 
 > Works great with Google AMP and the WordPress [AMP plugin](https://wordpress.org/plugins/amp/).
 
-Disable Gutenberg is developed and maintained by [Jeff Starr](https://twitter.com/perishable), 15-year [WordPress developer](https://plugin-planet.com/) and [book author](https://books.perishablepress.com/).
+Disable Gutenberg is developed and maintained by [Jeff Starr](https://x.com/perishable), 15-year [WordPress developer](https://plugin-planet.com/) and [book author](https://books.perishablepress.com/).
 
 _Super light & fast plugin, super easy on server resources!_
 
@@ -115,6 +115,7 @@ And/or purchase one of my premium WordPress plugins:
 * [Blackhole Pro](https://plugin-planet.com/blackhole-pro/) - Automatically block bad bots
 * [Banhammer Pro](https://plugin-planet.com/banhammer-pro/) - Monitor traffic and ban the bad guys
 * [GA Google Analytics Pro](https://plugin-planet.com/ga-google-analytics-pro/) - Connect WordPress to Google Analytics
+* [Head Meta Pro](https://plugin-planet.com/head-meta-pro/) - Ultimate Meta Tags for WordPress
 * [Simple Ajax Chat Pro](https://plugin-planet.com/simple-ajax-chat-pro/) - Unlimited chat rooms
 * [USP Pro](https://plugin-planet.com/usp-pro/) - Unlimited front-end forms
 
@@ -287,6 +288,11 @@ Either route will get you there.
 The default Gutenberg/Block styles are disabled by default when DG plugin is active. To enable/disable the styles, visit the plugin setting, "Enable Frontend".
 
 
+**Does this work with full site editing and block themes?**
+
+No, because block themes rely on blocks. [See Block themes article](https://wordpress.org/support/article/block-themes/) for more information.
+
+
 **Got a question?**
 
 Send any questions or feedback via my [contact form](https://plugin-planet.com/support/#contact)
@@ -300,196 +306,12 @@ Thank you to everyone for using Disable Gutenberg and for all the [awesome 5-sta
 If you have any feedback or suggestions to make this plugin the absolute best it can be, and/or would like to help with development, please reach me via the [contact form](https://plugin-planet.com/support/#contact) at Plugin Planet.
 
 
-**2.9 (2023/02/26)**
+**3.2.3 (2025/03/24)**
 
-* Removes non-UI CPTs from CPT options
-* Improves logic when calling `get_current_screen()`
-* Tests on WordPress 6.1 + 6.2 (beta)
-* Tests on PHP 8.1 and 8.2
+* Removes `load_i18n()` function
+* Adds uninstall option `disable-gutenberg-dismiss-notice`
+* Generates new language template
+* Tests on WordPress 6.8
 
-**2.8.1 (2022/11/02)**
 
-* Disables new `classic-theme-styles` stylesheet
-* Tests on WordPress 6.1
-
-**2.8 (2022/09/25)**
-
-* Adds "Show Support" link to plugin settings
-* Adds custom footer text to plugin settings
-* Improves plugin documentation
-* Updates translation template
-* Tests on WordPress 6.1
-
-**2.7 (2022/05/15)**
-
-* Disable block widgets option now enabled by default
-* Disables new global `theme.json` styles on front end
-* Disables new hidden SVG block content on front end
-* Fixes bug with `disable_gutenberg_disable_post_type()`
-* Tests on WordPress 6.0
-
-**2.6 (2022/01/10)**
-
-* Improves loading of translations
-* Improves clarity on settings page
-* Removes Edit Links when Gutenberg is disabled
-* Updates some links to external resources
-* Generates new default translation template
-* Tests on WordPress 5.9
-
-**2.5.1 (2021/07/25)**
-
-* Fixes bug with not remembering editor
-* Tweaks details on plugin settings page
-* Improves readme.txt/documentation
-* Further tests on WordPress 5.8
-
-**2.5 (2021/07/13)**
-
-* Adds option to disable block widgets and use classic widgets
-* Generates new default translation template
-* Tests on WordPress 5.8
-
-**2.4 (2021/02/08)**
-
-* Tests on PHP 7.4 and 8.0
-* Tests on WordPress 5.7
-
-**2.3 (2020/11/09)**
-
-* Updates plugin script to account for changes in jQuery UI
-* Tests on PHP 7.4 and 8.0
-* Tests on WordPress 5.6
-
-**2.2 (2020/08/02)**
-
-* Improves targeted loading of plugin scripts
-* Refines plugin setting page styles
-* Refines readme/documentation
-* Tests on WordPress 5.5
-
-**2.1 (2020/03/13)**
-
-* Bumps version number
-* Tests on WordPress 5.4
-
-**2.0 (2019/10/26)**
-
-* Updates styles for plugin settings page
-* Fixes bug with front-end script loading
-* Fixes bug with disable for page templates
-* Generates new default translation template
-* Tests on WordPress 5.3
-
-**1.9 (2019/09/02)**
-
-* Updates check for existing Gutenberg plugin
-* Improves logic of `disable_gutenberg_remove()`
-* Updates hooks in `disable_gutenberg_hooks()`
-* Updates some links to https
-* Tests on WordPress 5.3 (alpha)
-
-**1.8.1 (2019/04/29)**
-
-* Fixes PHP Notice: "Trying to get property ID of non-object"
-* Tests on WordPress 5.2
-
-**1.8 (2019/04/28)**
-
-* Bumps [minimum PHP version](https://codex.wordpress.org/Template:Server_requirements) to 5.6.20
-* Fixes bug with block stylesheets and whitelisted posts
-* Updates default translation template
-* Tests on WordPress 5.2
-
-**1.7 (2019/03/06)**
-
-* Fixes bug with empty titles reverting to Gutenberg
-* Removes requirement for custom fields for post types
-* Resolves error when using as mu-plugin (thanks [Dave Lavoie](https://ep4.com/))
-* Adds enable/disable support for `wp-block-library-theme`
-* Tweaks plugin settings screen UI
-* Generates new default translation template
-* Tests on WordPress 5.1 and 5.2 (alpha)
-
-**1.6 (2019/02/02)**
-
-* Just a version bump for compat with WP 5.1
-* Full update coming soon :)
-
-**1.5.2 (2018/12/11)**
-
-* Changes default option for the menu and edit links
-* Adds option to disable frontend Gutenberg styles
-* Updates default translation template
-
-**1.5.1 (2018/12/10)**
-
-* Fixes possible false negative with whitelist settings
-* Tests on WordPress 5.0
-
-**1.5 (2018/12/10)**
-
-* Increases minimum required WP version to 4.9
-* Increases minimum required PHP version to 5.2.4
-* Adds whitelist options for post IDs, slugs, titles
-* Adds filter hook `disable_gutenberg_submenu_types`
-* Adds option to enable Custom Fields Meta Box for ACF
-* Adds "Block Editor" link to each post on Posts screen
-* Adds option to disable "Add New (Classic)" menu link and "Classic Editor" edit link
-* Improves Privacy Policy admin notice (thanks to Classic Editor plugin for the idea)
-* Hides "Edit (Classic)" on Posts screen for posts where Gutenberg is disabled
-* Removes `$current_screen` global where not needed
-* Improves logic of `page_row_actions`
-* Removes `disable_gutenberg_replace()`
-* Improves logic in `classic-editor.php`
-* Removes `/classic-editor/` library
-* Refactors settings JavaScript file
-* Hides the "More Tools" options by default
-* Fine-tunes verbiage on plugin settings page
-* Adds homepage link to Plugins screen
-* Updates default translation template
-* Tests on WordPress 5.0
-
-**1.4 (2018/11/09)**
-
-* Refactored for changes in Gutenberg plugin
-* Checks for Classic Editor plugin is active
-* Restores "Edit Classic" feature for WP 5.0+
-* Further tests on WP 4.9.8 and 5.0 beta
-
-**1.3.1 (2018/10/29)**
-
-* Rolls back new "Edit Classic" feature introduced in 1.3
-* Further tests on WP 5.0 beta
-
-**1.3 (2018/10/27)**
-
-* Refactored for WordPress 5.0 (Gutenberg merged into core)
-* Ensures functionality on pre-5.0 WP versions
-* Adds WP menu item: "Add New (Classic)"
-* Adds post link to "Edit (Classic)"
-* Tests on WordPress 5.0 (beta)
-
-**1.2 (2018/08/14)**
-
-* Adds `rel="noopener noreferrer"` to all [blank-target links](https://perishablepress.com/wordpress-blank-target-vulnerability/)
-* Adds options to disable Gutenberg for specific post templates and post IDs
-* Adds option to hide/remove the Gutenberg plugin menu item
-* Adds Classic Editor replacement for WP 5.0 (in progress)
-* Fixes object-related PHP warning in enqueue script
-* Updates GDPR blurb and donate link
-* Tweaks CSS on plugin settings page
-* Adds "rate this" link to settings page
-* Generates default translation template
-* Further tests on WP versions 4.9 and 5.0 (alpha)
-
-**1.1 (2018/05/06)**
-
-* Removes unused .otf font file
-* Adds option to disable "Try Gutenberg" nag (admin notice)
-* Adds option to hide the plugin's menu item
-* Further testing on WP 5.0 (alpha)
-
-**1.0 (2018/04/16)**
-
-* Initial release
+Full changelog @ [https://plugin-planet.com/wp/changelog/disable-gutenberg.txt](https://plugin-planet.com/wp/changelog/disable-gutenberg.txt)

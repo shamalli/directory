@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+// @codingStandardsIgnoreFile
 
 class w2dc_content_field_checkbox extends w2dc_content_field_select {
 	public $how_display_items = 'checked';
@@ -15,10 +17,10 @@ class w2dc_content_field_checkbox extends w2dc_content_field_select {
 	
 		if (w2dc_getValue($_POST, 'submit') && wp_verify_nonce($_POST['w2dc_configure_content_fields_nonce'], W2DC_PATH)) {
 			$validation = new w2dc_form_validation();
-			$validation->set_rules('selection_items[]', __('Selection items', 'W2DC'), 'required');
-			$validation->set_rules('icon_images[]', __('Icon images', 'W2DC'));
-			$validation->set_rules('how_display_items', __('How to display items', 'W2DC'), 'required');
-			$validation->set_rules('columns_number', __('Columns number', 'W2DC'), 'required|integer');
+			$validation->set_rules('selection_items[]', esc_html__('Selection items', 'w2dc'), 'required');
+			$validation->set_rules('icon_images[]', esc_html__('Icon images', 'w2dc'));
+			$validation->set_rules('how_display_items', esc_html__('How to display items', 'w2dc'), 'required');
+			$validation->set_rules('columns_number', esc_html__('Columns number', 'w2dc'), 'required|integer');
 			if ($validation->run()) {
 				$result = $validation->result_array();
 	
@@ -33,7 +35,7 @@ class w2dc_content_field_checkbox extends w2dc_content_field_select {
 					$wpdb->update($wpdb->w2dc_content_fields, array('options' => serialize($insert_update_args)), array('id' => $this->id), null, array('%d'));
 				}
 	
-				w2dc_addMessage(__('Field configuration was updated successfully!', 'W2DC'));
+				w2dc_addMessage(esc_html__('Field configuration was updated successfully!', 'w2dc'));
 	
 				do_action('w2dc_update_selection_items', $result['selection_items[]'], $this);
 	
@@ -91,12 +93,12 @@ class w2dc_content_field_checkbox extends w2dc_content_field_select {
 		elseif ($selected_items_array = $validation->result_array($field_index)) {
 			foreach ($selected_items_array AS $selected_item) {
 				if (!in_array($selected_item, array_keys($this->selection_items)))
-					$errors[] = sprintf(__("This selection option index \"%d\" doesn't exist", 'W2DC'), $selected_item);
+					$errors[] = sprintf(esc_html__("This selection option index \"%d\" doesn't exist", 'w2dc'), $selected_item);
 			}
 	
 			return $selected_items_array;
 		} elseif ($this->canBeRequired() && $this->is_required)
-			$errors[] = sprintf(__('At least one option must be selected in "%s" content field', 'W2DC'), $this->name);
+			$errors[] = sprintf(esc_html__('At least one option must be selected in "%s" content field', 'w2dc'), $this->name);
 	}
 	
 	public function saveValue($post_id, $validation_results) {
@@ -144,7 +146,7 @@ class w2dc_content_field_checkbox extends w2dc_content_field_select {
 				}
 
 				if (!in_array($selected_item, $this->selection_items))
-					$errors[] = sprintf(__("This selection option \"%s\" doesn't exist", 'W2DC'), $selected_item);
+					$errors[] = sprintf(esc_html__("This selection option \"%s\" doesn't exist", 'w2dc'), $selected_item);
 				else
 					$output[] = array_search($selected_item, $this->selection_items);
 			}

@@ -1,6 +1,6 @@
 <?php
 
-class VP_W2DC_Control_Field_Color extends VP_W2DC_Control_Field
+class W2DC_VP_Control_Field_Color extends W2DC_VP_Control_Field
 {
 
 	private $_format;
@@ -31,7 +31,7 @@ class VP_W2DC_Control_Field_Color extends VP_W2DC_Control_Field
 		$opt = array(
 			'format'   => $this->get_format(),
 		);
-		$this->add_data('opt', VP_W2DC_Util_Text::make_opt($opt));
+		$this->add_data('opt', W2DC_VP_Util_Text::make_opt($opt));
 		$this->add_data('opt_raw', $opt);
 		parent::_setup_data();
 	}
@@ -40,7 +40,7 @@ class VP_W2DC_Control_Field_Color extends VP_W2DC_Control_Field
 	{
 		$this->_setup_data();
 		$this->add_data('is_compact', $is_compact);
-		return VP_W2DC_View::instance()->load('control/color', $this->get_data());
+		return W2DC_VP_View::instance()->load('control/color', $this->get_data());
 	}
 
 	/**

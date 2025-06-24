@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 #
 #
 # Parsedown
@@ -121,9 +123,6 @@ class Parsedown
                     }
 
                     break;
-
-                # ~~~ javascript
-                # var message = 'Hello!';
 
                 case 'fenced code':
 

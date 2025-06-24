@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+// @codingStandardsIgnoreFile
 
 class w2dc_content_field_select extends w2dc_content_field {
 	public $selection_items = array();
@@ -26,7 +28,7 @@ class w2dc_content_field_select extends w2dc_content_field {
 
 		if (w2dc_getValue($_POST, 'submit') && wp_verify_nonce($_POST['w2dc_configure_content_fields_nonce'], W2DC_PATH)) {
 			$validation = new w2dc_form_validation();
-			$validation->set_rules('selection_items[]', __('Selection items', 'W2DC'), 'required');
+			$validation->set_rules('selection_items[]', esc_html__('Selection items', 'w2dc'), 'required');
 			if ($validation->run()) {
 				$result = $validation->result_array();
 				
@@ -38,7 +40,7 @@ class w2dc_content_field_select extends w2dc_content_field {
 					$wpdb->update($wpdb->w2dc_content_fields, array('options' => serialize($insert_update_args)), array('id' => $this->id), null, array('%d'));
 				}
 
-				w2dc_addMessage(__('Field configuration was updated successfully!', 'W2DC'));
+				w2dc_addMessage(esc_html__('Field configuration was updated successfully!', 'w2dc'));
 				
 				do_action('w2dc_update_selection_items', $result['selection_items[]'], $this);
 				
@@ -82,7 +84,7 @@ class w2dc_content_field_select extends w2dc_content_field {
 			$errors[] = $validation->error_array();
 		elseif ($selected_item = $validation->result_array($field_index)) {
 			if (!in_array($selected_item, array_keys($this->selection_items)))
-				$errors[] = sprintf(__("This selection option index \"%d\" doesn't exist", 'W2DC'), $selected_item);
+				$errors[] = sprintf(esc_html__("This selection option index \"%d\" doesn't exist", 'w2dc'), $selected_item);
 
 			return $selected_item;
 		}
@@ -115,7 +117,7 @@ class w2dc_content_field_select extends w2dc_content_field {
 				return $value;
 				
 			if (!in_array($value, $this->selection_items))
-				$errors[] = sprintf(__("This selection option \"%s\" doesn't exist", 'W2DC'), $value);
+				$errors[] = sprintf(esc_html__("This selection option \"%s\" doesn't exist", 'w2dc'), $value);
 			else
 				return array_search($value, $this->selection_items);
 		} else 

@@ -1,6 +1,11 @@
-<?php if(!$is_compact) echo VP_W2RR_View::instance()->load('control/template_control_head', $head_info); ?>
+<?php
 
-<input type="text" name="<?php echo $name; ?>" class="vp-input slideinput vp-js-tipsy" original-title="Range between <?php echo $opt_raw['min']; ?> and <?php echo $opt_raw['max']; ?>" value="<?php echo $value; ?>" />
-<div class="vp-js-slider slidebar" id="<?php echo $name; ?>" data-vp-opt="<?php echo $opt; ?>"></div>
+// @codingStandardsIgnoreFile
 
-<?php if(!$is_compact) echo VP_W2RR_View::instance()->load('control/template_control_foot'); ?>
+?>
+<?php if(!$is_compact) echo W2RR_VP_View::instance()->load('control/template_control_head', $head_info); ?>
+
+<input type="text" name="<?php w2rr_esc_e($name); ?>" class="vp-input slideinput vp-js-tipsy" original-title="Range between <?php w2rr_esc_e($opt_raw['min']); ?> and <?php w2rr_esc_e($opt_raw['max']); ?>" value="<?php w2rr_esc_e($value); ?>" />
+<div class="vp-js-slider slidebar" id="<?php w2rr_esc_e($name); ?>" data-vp-opt="<?php w2rr_esc_e($opt); ?>"></div>
+
+<?php if(!$is_compact) echo W2RR_VP_View::instance()->load('control/template_control_foot'); ?>

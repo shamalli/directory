@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+// @codingStandardsIgnoreFile
 
 class w2dc_content_field_content extends w2dc_content_field {
 	protected $can_be_ordered = false;
@@ -15,7 +17,7 @@ class w2dc_content_field_content extends w2dc_content_field {
 	public function validateValues(&$errors, $data) {
 		$listing = w2dc_getCurrentListingInAdmin();
 		if (post_type_supports(W2DC_POST_TYPE, 'editor') && $this->is_required && (!isset($data['post_content']) || !$data['post_content']))
-			$errors[] = __('Listing content is required', 'W2DC');
+			$errors[] = esc_html__('Listing content is required', 'w2dc');
 		else
 			return $listing->post->post_content;
 	}
@@ -56,7 +58,7 @@ class w2dc_content_field_content extends w2dc_content_field {
 		
 		// this resets posts data back to the page's global $post,
 		// that is why it should be commented to avoid $post mismatch in comments plugins
-		//wp_reset_postdata();
+		// --------------- wp_reset_postdata();
 	}
 	
 	public function renderOutputForMap($location, $listing) {

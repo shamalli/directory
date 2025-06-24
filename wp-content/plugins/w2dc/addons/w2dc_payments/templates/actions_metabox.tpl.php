@@ -11,17 +11,17 @@
 			   	topPosition = (window.screen.height / 2) - ((window_height / 2) + 50);
 			})(jQuery);
 		</script>
-		<input type="button" onclick="window.open('<?php echo esc_url(add_query_arg('invoice_id', $invoice->post->ID, w2dc_directoryUrl(array('w2dc_action' => 'printinvoice')))); ?>', 'print_window', 'height='+window_height+',width='+window_width+',left='+leftPosition+',top='+topPosition+',menubar=yes,scrollbars=yes');" class="button button-primary" value="<?php esc_attr_e('Print invoice', 'W2DC'); ?>" />
+		<input type="button" onclick="window.open('<?php echo esc_url(add_query_arg('invoice_id', $invoice->post->ID, w2dc_directoryUrl(array('w2dc_action' => 'printinvoice')))); ?>', 'print_window', 'height='+window_height+',width='+window_width+',left='+leftPosition+',top='+topPosition+',menubar=yes,scrollbars=yes');" class="button button-primary" value="<?php esc_attr_e('Print invoice', 'w2dc'); ?>" />
 	</div>
 
 	<?php if ($invoice->item_object->getItem()): ?>
 	<div class="misc-pub-section">
-		<a class="button button-secondary" href="<?php echo esc_url(add_query_arg('invoice_action', 'reset_gateway', w2dc_get_edit_invoice_link($invoice->post->ID))); ?>"><?php _e('Reset gateway', 'W2DC'); ?></a>
+		<a class="button button-secondary" href="<?php echo esc_url(add_query_arg('invoice_action', 'reset_gateway', w2dc_get_edit_invoice_link($invoice->post->ID))); ?>"><?php esc_html_e('Reset gateway', 'w2dc'); ?></a>
 	</div>
 
 	<?php if (current_user_can('edit_others_posts') && $invoice->status != 'paid'): ?>
 	<div class="misc-pub-section">
-		<a class="button button-secondary" href="<?php echo esc_url(add_query_arg('invoice_action', 'set_paid', w2dc_get_edit_invoice_link($invoice->post->ID))); ?>"><?php _e('Set as paid', 'W2DC'); ?></a>
+		<a class="button button-secondary" href="<?php echo esc_url(add_query_arg('invoice_action', 'set_paid', w2dc_get_edit_invoice_link($invoice->post->ID))); ?>"><?php esc_html_e('Set as paid', 'w2dc'); ?></a>
 	</div>
 	<?php endif; ?>
 	<?php endif; ?>

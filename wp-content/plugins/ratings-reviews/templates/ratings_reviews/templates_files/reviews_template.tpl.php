@@ -21,7 +21,7 @@
 
 	w2rr_setFrontendController(W2RR_REVIEWS_SHORTCODE, $reviews_controller);
 ?>
-	<h3><?php echo $reviews_controller->query->found_posts; ?> <?php echo _n('Review', 'Reviews', $reviews_controller->query->found_posts, 'W2RR'); ?></h3>
+	<h3><?php echo $reviews_controller->query->found_posts; ?> <?php echo _n('Review', 'Reviews', $reviews_controller->query->found_posts, 'w2rr'); ?></h3>
 	
 <?php
 	w2rr_renderTemplate('ratings_reviews/reviews_block_header.tpl.php', array('target_post' => $target_post));

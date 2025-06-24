@@ -1,10 +1,15 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <div class="wcsearch-search-input wcsearch-search-input-two-selects <?php echo $search_model->openedClosedClass(); ?>" <?php echo $search_model->getOptionsString(); ?>>
 	<label class="wcsearch-search-input-label"><?php echo esc_html($title); ?></label>
 	<div class="wcsearch-search-inputs-wrapper">
 		<?php
 		$min_value = '';
 		$max_value = '';
-		if ($values && ($_values = explode('-', $values))) {
+		if ($values && ($_values = explode('-', $values)) && count($_values) == 2) {
 			$min_value = $_values[0];
 			$max_value = $_values[1];
 		}

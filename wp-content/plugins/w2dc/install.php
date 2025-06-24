@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+// @codingStandardsIgnoreFile
 
 function w2dc_install_directory() {
 	global $wpdb;
@@ -253,7 +255,6 @@ function w2dc_install_directory() {
 		add_option('w2dc_change_expiration_date', 0);
 		add_option('w2dc_categories_columns', 2);
 		add_option('w2dc_google_map_style', 'default');
-		add_option('w2dc_main_search', 1);
 		add_option('w2dc_hide_comments_number_on_index', 0);
 		add_option('w2dc_hide_listings_creation_date', 1);
 		add_option('w2dc_hide_author_link', 1);
@@ -345,7 +346,6 @@ function w2dc_install_directory() {
 		add_option('w2dc_auto_slides_gallery', 0);
 		add_option('w2dc_auto_slides_gallery_delay', 3000);
 		add_option('w2dc_ajax_load', 1);
-		add_option('w2dc_ajax_initial_load', 0);
 		add_option('w2dc_show_more_button', 1);
 		add_option('w2dc_map_markers_type', 'icons');
 		add_option('w2dc_default_marker_color', '#428bca');
@@ -356,7 +356,7 @@ function w2dc_install_directory() {
 		add_option('w2dc_map_markers_is_limit', 1);
 		add_option('w2dc_address_autocomplete_code', "0");
 		add_option('w2dc_show_listings_count', 1);
-		add_option('w2dc_custom_contact_email', 0);
+		add_option('w2dc_custom_contact_email', 1);
 		add_option('w2dc_admin_notifications_email', get_option('admin_email'));
 		add_option('w2dc_prevent_users_see_other_media', 1);
 		add_option('w2dc_hide_empty_locations', 0);
@@ -390,6 +390,7 @@ function w2dc_install_directory() {
 		add_option('w2dc_categories_order', 'default');
 		add_option('w2dc_locations_order', 'default');
 		add_option("w2dc_search_form_id", '');
+		add_option('w2dc_main_search', 0);
 		add_option("w2dc_search_map_form_id", '');
 		add_option("w2dc_terms_links_color", "#FFFFFF");
 		add_option("w2dc_terms_links_hover_color", "#FFFFFF");
@@ -467,7 +468,6 @@ function w2dc_install_directory() {
 				'2.0.6',
 				'2.0.8',
 				'2.0.10',
-				'2.0.11',
 				'2.0.15',
 				'2.1.2',
 				'2.1.3',
@@ -1003,7 +1003,7 @@ function w2dc_upgrade_to_1_12_5() {
 function w2dc_upgrade_to_1_12_7() {
 	add_option('w2dc_address_autocomplete_code', "0");
 	add_option('w2dc_show_listings_count', 1);
-	add_option('w2dc_custom_contact_email', 0);
+	add_option('w2dc_custom_contact_email', 1);
 	
 	global $wpdb;
 	$results = $wpdb->get_results("SELECT * FROM {$wpdb->w2dc_locations_relationships}", ARRAY_A);
@@ -1146,7 +1146,7 @@ function w2dc_upgrade_to_1_14_9() {
 			}
 		}
 
-		$wpdb->query("UPDATE {$wpdb->w2dc_levels} SET `active_interval`='{$interval}', `active_period`='{$period}', `eternal_active_period`='{$eternal}' WHERE `id`={$id}");
+		$wpdb->query($wpdb->prepare("UPDATE {$wpdb->w2dc_levels} SET `active_interval`=%d, `active_period`=%d, `eternal_active_period`=%d WHERE `id`=%d", $interval, $period, $eternal, $id));
 	}
 	
 	$wpdb->query("ALTER TABLE {$wpdb->w2dc_levels} DROP `active_years`");
@@ -1210,13 +1210,6 @@ function w2dc_upgrade_to_2_0_0() {
 	if (get_option('w2dc_fsubmit_edit_status') == 3) {
 		update_option('w2dc_fsubmit_edit_moderation', 0);
 	}
-	
-	if (($widgets_array = get_option('widget_w2dc_search_widget')) && is_array($widgets_array)) {
-		foreach ($widgets_array AS &$widget) {
-			$widget['columns'] = 1;
-		}
-		update_option('widget_w2dc_search_widget', $widgets_array);
-	}
 }
 
 function w2dc_upgrade_to_2_0_5() {
@@ -1257,12 +1250,6 @@ function w2dc_upgrade_to_2_0_8() {
 
 function w2dc_upgrade_to_2_0_10() {
 	add_option('w2dc_listing_title_mode', 'inside');
-}
-
-function w2dc_upgrade_to_2_0_11() {
-	global $wpdb;
-	
-	//$wpdb->query("UPDATE {$wpdb->w2dc_content_fields} SET `is_search_configuration_page`=1 WHERE `type` IN ('string','textarea')");
 }
 
 function w2dc_upgrade_to_2_0_15() {
@@ -1502,7 +1489,7 @@ function w2dc_install_create_search_forms() {
 			'_use_overlay' => (get_option("w2dc_search_overlay") ? 1 : 0),
 			'_on_shop_page' => '',
 			'_auto_submit' => '1',
-			'_use_border' => '1',
+			'_use_border' => '0',
 			'_scroll_to' => (get_option("w2dc_auto_scroll_on_search") ? 'products' : ''),
 			'_sticky_scroll' => '',
 			'_sticky_scroll_toppadding' => '',
@@ -1514,8 +1501,10 @@ function w2dc_install_create_search_forms() {
 		update_post_meta($post_id, $field_name, $field_value);
 	}
 	add_option("w2dc_search_form_id", $post_id);
+	add_option('w2dc_main_search', 1);
 	$vpt_option = get_option('vpt_option');
 	$vpt_option['w2dc_search_form_id'] = $post_id;
+	$vpt_option['w2dc_main_search'] = 1;
 	update_option('vpt_option', $vpt_option);
 	
 	// create default search form on Map

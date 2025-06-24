@@ -1,6 +1,6 @@
 <?php
 
-class VP_W2RR_Control_Field_Date extends VP_W2RR_Control_Field
+class W2RR_VP_Control_Field_Date extends W2RR_VP_Control_Field
 {
 
 	private $_min_date;
@@ -35,7 +35,7 @@ class VP_W2RR_Control_Field_Date extends VP_W2RR_Control_Field
 			'dateFormat' => $this->get_format(),
 			'value'      => $this->get_value()
 		);
-		$this->add_data('opt', VP_W2RR_Util_Text::make_opt($opt));
+		$this->add_data('opt', W2RR_VP_Util_Text::make_opt($opt));
 		parent::_setup_data();
 	}
 
@@ -44,7 +44,7 @@ class VP_W2RR_Control_Field_Date extends VP_W2RR_Control_Field
 		// Setup Data
 		$this->_setup_data();
 		$this->add_data('is_compact', $is_compact);
-		return VP_W2RR_View::instance()->load('control/date', $this->get_data());
+		return W2RR_VP_View::instance()->load('control/date', $this->get_data());
 	}
 
 	/**

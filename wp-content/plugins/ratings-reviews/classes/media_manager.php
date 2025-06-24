@@ -81,7 +81,7 @@ class w2rr_media_manager {
 			foreach ($reals as $real)
 			$num_posts[$type] = (isset($num_posts[$type])) ? $num_posts[$type] + $_num_posts[$real] : $_num_posts[$real];
 		$class = (empty($_GET['post_mime_type']) && !$detached && !isset($_GET['status'])) ? ' class="current"' : '';
-		$views['all'] = "<a href='upload.php'$class>" . sprintf(esc_html__('All (%s)', 'W2RR'), '<span class="count">' . number_format_i18n($_total_posts) . '</span>') . '</a>';
+		$views['all'] = "<a href='upload.php'$class>" . sprintf(esc_html__('All (%s)', 'w2rr'), '<span class="count">' . number_format_i18n($_total_posts) . '</span>') . '</a>';
 		foreach ($post_mime_types as $mime_type => $label) {
 			$class = '';
 			if (!wp_match_mime_types($mime_type, $avail_post_mime_types))
@@ -91,7 +91,7 @@ class w2rr_media_manager {
 			if (!empty( $num_posts[$mime_type]))
 				$views[$mime_type] = "<a href='upload.php?post_mime_type=$mime_type'$class>" . sprintf(translate_nooped_plural($label[2], $num_posts[$mime_type]), $num_posts[$mime_type]) . '</a>';
 		}
-		$views['detached'] = '<a href="upload.php?detached=1"' . ($detached ? ' class="current"' : '') . '>' . sprintf(esc_html__( 'Unattached (%s)', 'W2RR'), '<span class="count">' . $total_orphans . '</span>') . '</a>';
+		$views['detached'] = '<a href="upload.php?detached=1"' . ($detached ? ' class="current"' : '') . '>' . sprintf(esc_html__( 'Unattached (%s)', 'w2rr'), '<span class="count">' . $total_orphans . '</span>') . '</a>';
 		return $views;
 	}
 
@@ -187,15 +187,15 @@ class w2rr_media_manager {
 							} else // wp_handle_upload returned some kind of error. the return does contain error details, so you can use it here if you want.
 								$result['error_msg'] = 'There was a problem with your upload: ' . $uploaded_file['error'];
 						} else // wrong file type
-							$result['error_msg'] = esc_html__('Please upload only image files (jpg, gif or png).', 'W2RR');
+							$result['error_msg'] = esc_html__('Please upload only image files (jpg, gif or png).', 'w2rr');
 					} else
-						$result['error_msg'] = esc_html__('Number of images exceed limit.', 'W2RR');
+						$result['error_msg'] = esc_html__('Number of images exceed limit.', 'w2rr');
 				} else
-					$result['error_msg'] = esc_html__('You do not have permissions to edit this post!', 'W2RR');
+					$result['error_msg'] = esc_html__('You do not have permissions to edit this post!', 'w2rr');
 			} else
-				$result['error_msg'] = esc_html__('Wrong post ID.', 'W2RR');
+				$result['error_msg'] = esc_html__('Wrong post ID.', 'w2rr');
 		} else // no file was passed
-			$result['error_msg'] = esc_html__('Choose image to upload first!', 'W2RR');
+			$result['error_msg'] = esc_html__('Choose image to upload first!', 'w2rr');
 		
 		echo json_encode($result);
 		die();
@@ -233,15 +233,15 @@ class w2rr_media_manager {
 		if ($this->params['images_number'] || $this->params['videos_number']) {
 			$validation = new w2rr_form_validation();
 			if ($this->params['images_number']) {
-				$validation->set_rules('attached_image_id[]', esc_html__('Attached images ID', 'W2RR'));
-				$validation->set_rules('attached_image_title[]', esc_html__('Attached images caption', 'W2RR'));
-				$validation->set_rules('attached_images_order', esc_html__('Attached images order', 'W2RR'));
+				$validation->set_rules('attached_image_id[]', esc_html__('Attached images ID', 'w2rr'));
+				$validation->set_rules('attached_image_title[]', esc_html__('Attached images caption', 'w2rr'));
+				$validation->set_rules('attached_images_order', esc_html__('Attached images order', 'w2rr'));
 				if ($this->params['logo_enabled']) {
-					$validation->set_rules('attached_image_as_logo', esc_html__('Logo image selection', 'W2RR'));
+					$validation->set_rules('attached_image_as_logo', esc_html__('Logo image selection', 'w2rr'));
 				}
 			}
 			if ($this->params['videos_number']) {
-				$validation->set_rules('attached_video_id[]', esc_html__('Attached video ID', 'W2RR'));
+				$validation->set_rules('attached_video_id[]', esc_html__('Attached video ID', 'w2rr'));
 			}
 	
 			if (!$validation->run())
@@ -328,7 +328,7 @@ class w2rr_media_manager {
 	
 	public function admin_enqueue_scripts_styles() {
 		if (get_option('w2rr_images_lightbox') || is_admin()) {
-			wp_enqueue_style('w2rr_media_styles');
+			wp_enqueue_style('w2rr-media-styles');
 			wp_enqueue_script('w2rr_media_scripts_lightbox');
 		}
 		

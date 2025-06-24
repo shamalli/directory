@@ -1,8 +1,13 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <div class="wcsearch-search-input wcsearch-search-inputs <?php echo $search_model->openedClosedClass(); ?>" <?php echo $search_model->getOptionsString(); ?>>
 	<?php
 	$min_value = '';
 	$max_value = '';
-	if ($values && ($_values = explode('-', $values))) {
+	if ($values && ($_values = explode('-', $values)) && count($_values) == 2) {
 		$min_value = $_values[0];
 		$max_value = $_values[1];
 	} 

@@ -4,6 +4,7 @@
 // released under the MIT license
 
 (function($) {
+	"use strict";
     
     function maybeCall(thing, ctx) {
         return (typeof thing == 'function') ? (thing.call(ctx)) : thing;
@@ -209,8 +210,7 @@
     };
     
     // Overwrite this method to provide options on a per-element basis.
-    // For example, you could store the gravity in a 'tipsy-gravity' attribute:
-    // return $.extend({}, options, {gravity: $(ele).attr('tipsy-gravity') || 'n' });
+    // For example, you could store the gravity in a 'tipsy-gravity' attribute: return $.extend({}, options, {gravity: $(ele).attr('tipsy-gravity') || 'n' });
     // (remember - do not modify 'options' in place!)
     $.fn.tipsy.elementOptions = function(ele, options) {
         return $.metadata ? $.extend({}, options, $(ele).metadata()) : options;

@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+// @codingStandardsIgnoreFile
 
 class w2dc_levels_manager {
 	public function __construct() {
@@ -13,16 +15,16 @@ class w2dc_levels_manager {
 		}
 
 		add_submenu_page('w2dc_settings',
-			__('Listings levels', 'W2DC'),
-			__('Listings levels', 'W2DC'),
+			esc_html__('Listings levels', 'w2dc'),
+			esc_html__('Listings levels', 'w2dc'),
 			$capability,
 			'w2dc_levels',
 			array($this, 'w2dc_manage_levels_page')
 		);
 
 		add_submenu_page('w2dc_settings',
-			__('Listings upgrade', 'W2DC'),
-			__('Listings upgrade', 'W2DC'),
+			esc_html__('Listings upgrade', 'w2dc'),
+			esc_html__('Listings upgrade', 'w2dc'),
 			$capability,
 			'w2dc_manage_upgrades',
 			array($this, 'w2dc_manage_upgrades_page')
@@ -50,7 +52,7 @@ class w2dc_levels_manager {
 
 		if (isset($_POST['levels_order']) && $_POST['levels_order']) {
 			if ($levels->saveOrder($_POST['levels_order']))
-				w2dc_addMessage(__('Levels order was updated!', 'W2DC'), 'updated');
+				w2dc_addMessage(esc_html__('Levels order was updated!', 'w2dc'), 'updated');
 		}
 		
 		$levels_table = new w2dc_manage_levels_table();
@@ -64,54 +66,53 @@ class w2dc_levels_manager {
 
 		$levels = $w2dc_instance->levels;
 		
-		if (!$level = $levels->getLevelById($level_id))
+		if (!$level = $levels->getLevelById($level_id)) {
 			$level = new w2dc_level();
+		}
 
 		if (w2dc_getValue($_POST, 'submit') && wp_verify_nonce($_POST['w2dc_levels_nonce'], W2DC_PATH)) {
 			$validation = new w2dc_form_validation();
-			$validation->set_rules('name', __('Level name', 'W2DC'), 'required');
-			$validation->set_rules('who_can_view', __('User roles to view listings', 'W2DC'));
-			$validation->set_rules('who_can_submit', __('User roles to submit listings', 'W2DC'));
-			$validation->set_rules('active_interval', __('active interval', 'W2DC'), 'is_natural');
-			$validation->set_rules('active_period', __('active period', 'W2DC'));
-			$validation->set_rules('eternal_active_period', __('eternal active period', 'W2DC'), 'is_checked');
-			$validation->set_rules('change_level_id', __('change level ID', 'W2DC'), 'is_natural');
-			$validation->set_rules('listings_in_package', __('listings in package', 'W2DC'), 'is_natural');
-			$validation->set_rules('description', __('Level description', 'W2DC'));
-			$validation->set_rules('raiseup_enabled', __('Ability to raise up listings', 'W2DC'), 'is_checked');
-			$validation->set_rules('sticky', __('Sticky listings', 'W2DC'), 'is_checked');
-			$validation->set_rules('listings_own_page', __('Listings own pages', 'W2DC'), 'is_checked');
-			$validation->set_rules('nofollow', __('Nofollow attribute', 'W2DC'), 'is_checked');
-			$validation->set_rules('featured', __('Featured listings', 'W2DC'), 'is_checked');
-			$validation->set_rules('categories_number', __('Categories number available', 'W2DC'), 'is_natural');
-			$validation->set_rules('unlimited_categories', __('Unlimited categories number', 'W2DC'), 'is_checked');
-			$validation->set_rules('tags_number', __('Tags number available', 'W2DC'), 'is_natural');
-			$validation->set_rules('unlimited_tags', __('Unlimited tags number', 'W2DC'), 'is_natural');
-			$validation->set_rules('tags_categories', __('Unlimited categories number', 'W2DC'), 'is_checked');
-			$validation->set_rules('map', __('Enable map', 'W2DC'), 'is_checked');
-			$validation->set_rules('logo_enabled', __('Enable listing logo', 'W2DC'), 'is_checked');
-			$validation->set_rules('images_number', __('Images number available', 'W2DC'), 'is_natural');
-			$validation->set_rules('videos_number', __('Videos number available', 'W2DC'), 'is_natural');
-			$validation->set_rules('categories', __('Assigned categories', 'W2DC'));
-			$validation->set_rules('locations', __('Assigned locations', 'W2DC'));
-			$validation->set_rules('content_fields', __('Assigned content fields', 'W2DC'));
-			$validation->set_rules('locations_number', __('Locations number', 'W2DC'), 'is_natural');
-			$validation->set_rules('map_markers', __('Custom markers on map', 'W2DC'), 'is_checked');
+			$validation->set_rules('name', esc_html__('Level name', 'w2dc'), 'required');
+			$validation->set_rules('who_can_view', esc_html__('User roles to view listings', 'w2dc'));
+			$validation->set_rules('who_can_submit', esc_html__('User roles to submit listings', 'w2dc'));
+			$validation->set_rules('active_interval', esc_html__('active interval', 'w2dc'), 'is_natural');
+			$validation->set_rules('active_period', esc_html__('active period', 'w2dc'));
+			$validation->set_rules('eternal_active_period', esc_html__('eternal active period', 'w2dc'), 'is_checked');
+			$validation->set_rules('change_level_id', esc_html__('change level ID', 'w2dc'), 'is_natural');
+			$validation->set_rules('listings_in_package', esc_html__('listings in package', 'w2dc'), 'is_natural');
+			$validation->set_rules('description', esc_html__('Level description', 'w2dc'));
+			$validation->set_rules('raiseup_enabled', esc_html__('Ability to raise up listings', 'w2dc'), 'is_checked');
+			$validation->set_rules('sticky', esc_html__('Sticky listings', 'w2dc'), 'is_checked');
+			$validation->set_rules('listings_own_page', esc_html__('Listings own pages', 'w2dc'), 'is_checked');
+			$validation->set_rules('nofollow', esc_html__('Nofollow attribute', 'w2dc'), 'is_checked');
+			$validation->set_rules('featured', esc_html__('Featured listings', 'w2dc'), 'is_checked');
+			$validation->set_rules('categories_number', esc_html__('Categories number available', 'w2dc'), 'is_natural');
+			$validation->set_rules('unlimited_categories', esc_html__('Unlimited categories number', 'w2dc'), 'is_checked');
+			$validation->set_rules('tags_number', esc_html__('Tags number available', 'w2dc'), 'is_natural');
+			$validation->set_rules('unlimited_tags', esc_html__('Unlimited tags number', 'w2dc'), 'is_natural');
+			$validation->set_rules('tags_categories', esc_html__('Unlimited categories number', 'w2dc'), 'is_checked');
+			$validation->set_rules('map', esc_html__('Enable map', 'w2dc'), 'is_checked');
+			$validation->set_rules('logo_enabled', esc_html__('Enable listing logo', 'w2dc'), 'is_checked');
+			$validation->set_rules('images_number', esc_html__('Images number available', 'w2dc'), 'is_natural');
+			$validation->set_rules('videos_number', esc_html__('Videos number available', 'w2dc'), 'is_natural');
+			$validation->set_rules('categories', esc_html__('Assigned categories', 'w2dc'));
+			$validation->set_rules('locations', esc_html__('Assigned locations', 'w2dc'));
+			$validation->set_rules('content_fields', esc_html__('Assigned content fields', 'w2dc'));
+			$validation->set_rules('locations_number', esc_html__('Locations number', 'w2dc'), 'is_natural');
+			$validation->set_rules('map_markers', esc_html__('Custom markers on map', 'w2dc'), 'is_checked');
 			apply_filters('w2dc_level_validation', $validation);
 		
 			if ($validation->run()) {
 				if ($level->id) {
 					if ($levels->saveLevelFromArray($level_id, $validation->result_array())) {
-						w2dc_addMessage(__('Level was updated successfully!', 'W2DC'));
+						w2dc_addMessage(esc_html__('Level was updated successfully!', 'w2dc'));
 					}
 				} else {
 					if ($levels->createLevelFromArray($validation->result_array())) {
-						w2dc_addMessage(__('Level was created succcessfully!', 'W2DC'));
+						w2dc_addMessage(esc_html__('Level was created succcessfully!', 'w2dc'));
 					}
 				}
 				$this->showLevelsTable();
-				//wp_redirect(admin_url('admin.php?page=w2dc_levels'));
-				//die();
 			} else {
 				$level->buildLevelFromArray($validation->result_array());
 				w2dc_addMessage($validation->error_array(), 'error');
@@ -132,13 +133,11 @@ class w2dc_levels_manager {
 		if ($level = $levels->getLevelById($level_id)) {
 			if (w2dc_getValue($_POST, 'submit')) {
 				if ($levels->deleteLevel($level_id))
-					w2dc_addMessage(__('Level was deleted successfully!', 'W2DC'));
+					w2dc_addMessage(esc_html__('Level was deleted successfully!', 'w2dc'));
 
 				$this->showLevelsTable();
-				//wp_redirect(admin_url('admin.php?page=w2dc_levels'));
-				//die();
 			} else
-				w2dc_renderTemplate('delete_question.tpl.php', array('heading' => __('Delete level', 'W2DC'), 'question' => sprintf(__('Are you sure you want delete "%s" level with all listings inside?', 'W2DC'), $level->name), 'item_name' => $level->name));
+				w2dc_renderTemplate('delete_question.tpl.php', array('heading' => esc_html__('Delete level', 'w2dc'), 'question' => sprintf(esc_html__('Are you sure you want delete "%s" level with all listings inside?', 'w2dc'), $level->name), 'item_name' => $level->name));
 		} else 
 			$this->showLevelsTable();
 	}
@@ -164,7 +163,7 @@ class w2dc_levels_manager {
 				}
 				$level1->saveUpgradeMeta($results[$level1->id]);
 			}
-			w2dc_addMessage(__('Listings upgrade settings were updated successfully!', 'W2DC'));
+			w2dc_addMessage(esc_html__('Listings upgrade settings were updated successfully!', 'w2dc'));
 		}
 		
 		w2dc_renderTemplate('levels/upgrade_levels_table.tpl.php', array('levels' => $levels));
@@ -191,22 +190,22 @@ class w2dc_manage_levels_table extends WP_List_Table {
 
 	public function __construct() {
 		parent::__construct(array(
-				'singular' => __('level', 'W2DC'),
-				'plural' => __('levels', 'W2DC'),
+				'singular' => esc_html__('level', 'w2dc'),
+				'plural' => esc_html__('levels', 'w2dc'),
 				'ajax' => false
 		));
 	}
 
 	public function get_columns($levels = array()) {
 		$columns = array(
-				'id' => __('ID', 'W2DC'),
-				'level_name' => __('Name', 'W2DC'),
-				'active_period' => __('Active period', 'W2DC'),
-				'sticky' => __('Sticky', 'W2DC'),
-				'featured' => __('Featured', 'W2DC'),
-				'categories_number' => __('Categories number', 'W2DC'),
-				'map' => __('Map', 'W2DC'),
-				'locations_number' => __('Locations number', 'W2DC'),
+				'id' => esc_html__('ID', 'w2dc'),
+				'level_name' => esc_html__('Name', 'w2dc'),
+				'active_period' => esc_html__('Active period', 'w2dc'),
+				'sticky' => esc_html__('Sticky', 'w2dc'),
+				'featured' => esc_html__('Featured', 'w2dc'),
+				'categories_number' => esc_html__('Categories number', 'w2dc'),
+				'map' => esc_html__('Map', 'w2dc'),
+				'locations_number' => esc_html__('Locations number', 'w2dc'),
 		);
 		$columns = apply_filters('w2dc_level_table_header', $columns, $levels);
 
@@ -228,7 +227,7 @@ class w2dc_manage_levels_table extends WP_List_Table {
 					'locations_number' => $level->locations_number,
 			);
 			if ($level->unlimited_categories)
-				$items_array[$id]['categories_number'] = __('Unlimited', 'W2DC');
+				$items_array[$id]['categories_number'] = esc_html__('Unlimited', 'w2dc');
 
 			$items_array[$id] = apply_filters('w2dc_level_table_row', $items_array[$id], $level);
 		}
@@ -243,8 +242,8 @@ class w2dc_manage_levels_table extends WP_List_Table {
 	
 	public function column_level_name($item) {
 		$actions = array(
-				'edit' => sprintf('<a href="?page=%s&action=%s&level_id=%d">' . __('Edit', 'W2DC') . '</a>', $_GET['page'], 'edit', $item['id']),
-				'delete' => sprintf('<a href="?page=%s&action=%s&level_id=%d">' . __('Delete', 'W2DC') . '</a>', $_GET['page'], 'delete', $item['id']),
+				'edit' => sprintf('<a href="?page=%s&action=%s&level_id=%d">' . esc_html__('Edit', 'w2dc') . '</a>', $_GET['page'], 'edit', $item['id']),
+				'delete' => sprintf('<a href="?page=%s&action=%s&level_id=%d">' . esc_html__('Delete', 'w2dc') . '</a>', $_GET['page'], 'delete', $item['id']),
 				);
 		return sprintf('%1$s %2$s', sprintf('<a href="?page=%s&action=%s&level_id=%d">' . $item['level_name'] . '</a><input type="hidden" class="level_weight_id" value="%d" />', $_GET['page'], 'edit', $item['id'], $item['id']), $this->row_actions($actions));
 	}
@@ -272,7 +271,7 @@ class w2dc_manage_levels_table extends WP_List_Table {
 	
 	public function column_categories_number($item) {
 		if ($item['unlimited_categories'])
-			return __('Unlimited', 'W2DC');
+			return esc_html__('Unlimited', 'w2dc');
 		else
 			return $item['categories_number'];
 	}
@@ -285,7 +284,7 @@ class w2dc_manage_levels_table extends WP_List_Table {
 	}
 	
 	function no_items() {
-		__('No levels found.', 'W2DC');
+		esc_html__('No levels found.', 'w2dc');
 	}
 }
 
@@ -293,22 +292,22 @@ class w2dc_choose_levels_table extends WP_List_Table {
 
 	public function __construct() {
 		parent::__construct(array(
-				'singular' => __('level', 'W2DC'),
-				'plural' => __('levels', 'W2DC'),
+				'singular' => esc_html__('level', 'w2dc'),
+				'plural' => esc_html__('levels', 'w2dc'),
 				'ajax' => false
 		));
 	}
 
 	public function get_columns($levels = array()) {
 		$columns = array(
-				'id' => __('ID', 'W2DC'),
-				'level_name' => __('Name', 'W2DC'),
-				'active_period' => __('Active period', 'W2DC'),
-				'sticky' => __('Sticky', 'W2DC'),
-				'featured' => __('Featured', 'W2DC'),
-				'categories_number' => __('Categories number', 'W2DC'),
-				'locations_number' => __('Locations number', 'W2DC'),
-				'map' => __('Map', 'W2DC'),
+				'id' => esc_html__('ID', 'w2dc'),
+				'level_name' => esc_html__('Name', 'w2dc'),
+				'active_period' => esc_html__('Active period', 'w2dc'),
+				'sticky' => esc_html__('Sticky', 'w2dc'),
+				'featured' => esc_html__('Featured', 'w2dc'),
+				'categories_number' => esc_html__('Categories number', 'w2dc'),
+				'locations_number' => esc_html__('Locations number', 'w2dc'),
+				'map' => esc_html__('Map', 'w2dc'),
 				'create' => ''
 		);
 		$columns = apply_filters('w2dc_level_table_header', $columns, $levels);
@@ -331,7 +330,7 @@ class w2dc_choose_levels_table extends WP_List_Table {
 					'map' => $level->map,
 			);
 			if ($level->unlimited_categories)
-				$items_array[$id]['categories_number'] = __('Unlimited', 'W2DC');
+				$items_array[$id]['categories_number'] = esc_html__('Unlimited', 'w2dc');
 
 			$items_array[$id] = apply_filters('w2dc_level_table_row', $items_array[$id], $level);
 		}
@@ -387,7 +386,7 @@ class w2dc_choose_levels_table extends WP_List_Table {
 
 	public function column_categories_number($item) {
 		if ($item['unlimited_categories'])
-			return __('Unlimited', 'W2DC');
+			return esc_html__('Unlimited', 'w2dc');
 		else
 			return $item['categories_number'];
 	}
@@ -400,7 +399,7 @@ class w2dc_choose_levels_table extends WP_List_Table {
 	}
 	
 	function no_items() {
-		esc_attr__("No levels found. Can't create new listings.", 'W2DC');
+		esc_html__("No levels found. Can't create new listings.", 'w2dc');
 	}
 }
 

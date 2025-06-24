@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 function w2dc_tax_dropdowns_menu_init($params) {
 	$attrs = array_merge(array(
 			'uID' => 0,
@@ -34,7 +36,6 @@ function w2dc_tax_dropdowns_menu_init($params) {
 				wp_list_filter(
 						get_categories(array(
 								'taxonomy' => $tax,
-								//'pad_counts' => true,
 								'hide_empty' => $hide_empty,
 						)),
 						array('parent' => 0)
@@ -43,7 +44,6 @@ function w2dc_tax_dropdowns_menu_init($params) {
 		$terms = array_merge(
 				get_categories(array(
 						'taxonomy' => $tax,
-						//'pad_counts' => true,
 						'hide_empty' => $hide_empty,
 						'parent' => 0,
 				)), array());
@@ -61,9 +61,9 @@ function w2dc_tax_dropdowns_menu_init($params) {
 		if (empty($terms) && !empty($exact_terms)) {
 			if ($count) {
 				// there is a wp bug with pad_counts in get_terms function - so we use this construction
-				$terms = wp_list_filter(get_categories(array('taxonomy' => $tax, 'include' => $exact_terms, /* 'pad_counts' => true, */ 'hide_empty' => $hide_empty)));
+				$terms = wp_list_filter(get_categories(array('taxonomy' => $tax, 'include' => $exact_terms, 'hide_empty' => $hide_empty)));
 			} else {
-				$terms = get_categories(array('taxonomy' => $tax, 'include' => $exact_terms, /* 'pad_counts' => true, */ 'hide_empty' => $hide_empty));
+				$terms = get_categories(array('taxonomy' => $tax, 'include' => $exact_terms, 'hide_empty' => $hide_empty));
 			}
 		}
 		
@@ -95,7 +95,7 @@ function w2dc_tax_dropdowns_menu_init($params) {
 		echo '<select class="w2dc-form-control w2dc-selectmenu-' . $tax . '" data-id="' . $uID . '" data-placeholder="' . esc_attr($placeholder) . '" ' . $autocomplete_data . ' data-default-icon="' . w2dc_getDefaultTermIconUrl($tax) . '">';
 		foreach ($terms AS $term) {
 			if ($count) {
-				$term_count = 'data-count="' . w2dc_getTermCount($term->term_id, $directory_id) . ' ' . _n("result", "results", w2dc_getTermCount($term->term_id, $directory_id), "W2DC") . '"';
+				$term_count = 'data-count="' . w2dc_getTermCount($term->term_id, $directory_id) . ' ' . _n("result", "results", w2dc_getTermCount($term->term_id, $directory_id), "w2dc") . '"';
 			} else {
 				$term_count = '';
 			}
@@ -126,7 +126,6 @@ function _w2dc_tax_dropdowns_menu($tax, $parent = 0, $depth = 2, $current_level 
 		$terms = wp_list_filter(
 				get_categories(array(
 						'taxonomy' => $tax,
-						//'pad_counts' => true,
 						'hide_empty' => $hide_empty,
 				)),
 				array('parent' => $parent)
@@ -134,7 +133,6 @@ function _w2dc_tax_dropdowns_menu($tax, $parent = 0, $depth = 2, $current_level 
 	} else {
 		$terms = get_categories(array(
 				'taxonomy' => $tax,
-				//'pad_counts' => true,
 				'hide_empty' => $hide_empty,
 				'parent' => $parent,
 		));
@@ -157,7 +155,7 @@ function _w2dc_tax_dropdowns_menu($tax, $parent = 0, $depth = 2, $current_level 
 				
 				$term_count = '';
 				if ($count) {
-					$term_count = 'data-count="' . w2dc_getTermCount($term->term_id, $directory_id) . ' ' . _n("result", "results", w2dc_getTermCount($term->term_id, $directory_id), "W2DC") . '"';
+					$term_count = 'data-count="' . w2dc_getTermCount($term->term_id, $directory_id) . ' ' . _n("result", "results", w2dc_getTermCount($term->term_id, $directory_id), "w2dc") . '"';
 				}
 				
 				$selected = '';
@@ -232,7 +230,7 @@ function w2dc_tax_dropdowns_init($args) {
 			// there is a wp bug with pad_counts in get_terms function - so we use this construction
 			$terms = wp_list_filter(get_categories(array('taxonomy' => $tax, 'pad_counts' => true, 'hide_empty' => $hide_empty)), array('parent' => $term_id));
 		} else {
-			$terms = get_categories(array('taxonomy' => $tax, /* 'pad_counts' => true, */ 'hide_empty' => $hide_empty, 'parent' => $term_id));
+			$terms = get_categories(array('taxonomy' => $tax, 'hide_empty' => $hide_empty, 'parent' => $term_id));
 		}
 
 		if (!empty($terms)) {
@@ -246,9 +244,9 @@ function w2dc_tax_dropdowns_init($args) {
 			if (empty($terms) && !empty($exact_terms)) {
 				if ($count) {
 					// there is a wp bug with pad_counts in get_terms function - so we use this construction
-					$terms = wp_list_filter(get_categories(array('taxonomy' => $tax, 'include' => $exact_terms, /* 'pad_counts' => true, */ 'hide_empty' => $hide_empty)));
+					$terms = wp_list_filter(get_categories(array('taxonomy' => $tax, 'include' => $exact_terms, 'hide_empty' => $hide_empty)));
 				} else {
-					$terms = get_categories(array('taxonomy' => $tax, 'include' => $exact_terms, /* 'pad_counts' => true, */ 'hide_empty' => $hide_empty));
+					$terms = get_categories(array('taxonomy' => $tax, 'include' => $exact_terms, 'hide_empty' => $hide_empty));
 				}
 			}
 
@@ -270,7 +268,7 @@ function w2dc_tax_dropdowns_init($args) {
 					echo '<div class="w2dc-col-md-12">';
 					}
 						echo '<select id="chainlist_' . $level_num . '_' . $uID . '" class="w2dc-form-control w2dc-selectmenu">';
-						echo '<option value="">- ' . ((isset($titles[$key])) ? $titles[$key] : __('Select term', 'W2DC')) . ' -</option>';
+						echo '<option value="">- ' . ((isset($titles[$key])) ? $titles[$key] : esc_html__('Select term', 'w2dc')) . ' -</option>';
 						foreach ($terms AS $term) {
 							if ($count)
 								$term_count = " (" . w2dc_getTermCount($term->term_id, $directory_id) . ")";
@@ -291,7 +289,7 @@ function w2dc_tax_dropdowns_init($args) {
 						echo '</select>';
 						
 						if (!empty($allow_add_term[$key])) {
-							echo '<a class="w2dc-add-term-link" data-tax="' . $tax . '" data-parent="' . $term_id . '" data-uid="' . $uID . '" data-nonce="' . wp_create_nonce('w2dc_add_term_nonce') . '" data-exact-terms="' . implode(',', $exact_terms) . '" href="javascript:void(0);">' . sprintf(esc_html__('Add %s', 'W2DC'), $label_name) . '</a>';
+							echo '<a class="w2dc-add-term-link" data-tax="' . $tax . '" data-parent="' . $term_id . '" data-uid="' . $uID . '" data-nonce="' . wp_create_nonce('w2dc_add_term_nonce') . '" data-exact-terms="' . implode(',', $exact_terms) . '" href="javascript:void(0);">' . sprintf(esc_html__('Add %s', 'w2dc'), $label_name) . '</a>';
 						}
 					echo '</div>';
 				echo '</div>';
@@ -305,7 +303,7 @@ function w2dc_tax_dropdowns_init($args) {
 				if (!empty($allow_add_term[$key])) {
 					echo '<div id="wrap_chainlist_' . $level_num . '_' .$uID . '" class="w2dc-row w2dc-form-group w2dc-location-input w2dc-location-chainlist">';
 						echo '<div class="w2dc-col-md-10 w2dc-col-md-offset-2">';
-						echo '<a class="w2dc-add-term-link" data-tax="' . $tax . '" data-parent="' . $term_id . '" data-uid="' . $uID . '" data-nonce="' . wp_create_nonce('w2dc_add_term_nonce') . '" data-exact-terms="' . implode(',', $exact_terms) . '" href="javascript:void(0);">' . sprintf(esc_html__('Add %s', 'W2DC'), $label_name) . '</a>';
+						echo '<a class="w2dc-add-term-link" data-tax="' . $tax . '" data-parent="' . $term_id . '" data-uid="' . $uID . '" data-nonce="' . wp_create_nonce('w2dc_add_term_nonce') . '" data-exact-terms="' . implode(',', $exact_terms) . '" href="javascript:void(0);">' . sprintf(esc_html__('Add %s', 'w2dc'), $label_name) . '</a>';
 						echo '</div>';
 					echo '</div>';
 				}
@@ -321,11 +319,11 @@ function w2dc_tax_dropdowns_updateterms() {
 	$tax = w2dc_getValue($_POST, 'tax');
 	$count = w2dc_getValue($_POST, 'count');
 	$hide_empty = w2dc_getValue($_POST, 'hide_empty');
-	$exact_terms = array_filter(explode(',', w2dc_getValue($_POST, 'exact_terms')));
+	$exact_terms = array_filter(w2dc_parse_slugs_ids_list(w2dc_getValue($_POST, 'exact_terms')));
 	if (!$label = w2dc_getValue($_POST, 'label'))
 		$label = '';
 	if (!$title = w2dc_getValue($_POST, 'title'))
-		$title = __('Select term', 'W2DC');
+		$title = esc_html__('Select term', 'w2dc');
 	$allow_add_term = w2dc_getValue($_POST, 'allow_add_term');
 	$uID = w2dc_getValue($_POST, 'uID');
 	$directory_id = w2dc_getValue($_POST, 'directory_id', false);
@@ -338,9 +336,9 @@ function w2dc_tax_dropdowns_updateterms() {
 
 	if ($count == 'cs_count_1') {
 		// there is a wp bug with pad_counts in get_terms function - so we use this construction
-		$terms = wp_list_filter(get_categories(array('taxonomy' => $tax, /* 'pad_counts' => true, */ 'hide_empty' => $hide_empty)), array('parent' => $parentid));
+		$terms = wp_list_filter(get_categories(array('taxonomy' => $tax, 'hide_empty' => $hide_empty)), array('parent' => $parentid));
 	} else {
-		$terms = get_categories(array('taxonomy' => $tax, /* 'pad_counts' => true, */ 'hide_empty' => $hide_empty, 'parent' => $parentid));
+		$terms = get_categories(array('taxonomy' => $tax, 'hide_empty' => $hide_empty, 'parent' => $parentid));
 	}
 	if (!empty($terms)) {
 		foreach ($terms AS $id=>$term) {
@@ -384,7 +382,7 @@ function w2dc_tax_dropdowns_updateterms() {
 					echo '</select>';
 					
 					if ($allow_add_term) {
-						echo '<a class="w2dc-add-term-link" data-tax="' . $tax . '" data-parent="' . $parentid . '" data-uid="' . $uID . '" data-nonce="' . wp_create_nonce('w2dc_add_term_nonce') . '" data-exact-terms="' . implode(',', $exact_terms) . '" href="javascript:void(0);">' . sprintf(esc_html__('Add %s', 'W2DC'), $label) . '</a>';
+						echo '<a class="w2dc-add-term-link" data-tax="' . $tax . '" data-parent="' . $parentid . '" data-uid="' . $uID . '" data-nonce="' . wp_create_nonce('w2dc_add_term_nonce') . '" data-exact-terms="' . implode(',', $exact_terms) . '" href="javascript:void(0);">' . sprintf(esc_html__('Add %s', 'w2dc'), $label) . '</a>';
 					}
 				echo '</div>';
 			echo '</div>';
@@ -393,7 +391,7 @@ function w2dc_tax_dropdowns_updateterms() {
 		if ($allow_add_term) {
 			echo '<div id="wrap_chainlist_' . $next_level . '_' . $uID . '" class="w2dc-row w2dc-form-group w2dc-location-input w2dc-location-chainlist">';
 				echo '<div class="w2dc-col-md-10 w2dc-col-md-offset-2">';
-				echo '<a class="w2dc-add-term-link" data-tax="' . $tax . '" data-parent="' . $parentid . '" data-uid="' . $uID . '" data-nonce="' . wp_create_nonce('w2dc_add_term_nonce') . '" data-exact-terms="' . implode(',', $exact_terms) . '" href="javascript:void(0);">' . sprintf(esc_html__('Add %s', 'W2DC'), $label) . '</a>';
+				echo '<a class="w2dc-add-term-link" data-tax="' . $tax . '" data-parent="' . $parentid . '" data-uid="' . $uID . '" data-nonce="' . wp_create_nonce('w2dc_add_term_nonce') . '" data-exact-terms="' . implode(',', $exact_terms) . '" href="javascript:void(0);">' . sprintf(esc_html__('Add %s', 'w2dc'), $label) . '</a>';
 				echo '</div>';
 			echo '</div>';
 		}
@@ -412,8 +410,10 @@ function w2dc_renderOptionsTerms($tax, $parent, $selected_terms, $level = 0) {
 	return $terms;
 }
 function w2dc_termsSelectList($name, $tax = 'category', $selected_terms = array()) {
-	echo '<select multiple="multiple" name="' . $name . '[]" class="selected_terms_list w2dc-form-control w2dc-form-group" style="height: 300px">';
-	echo '<option value="" ' . ((!$selected_terms) ? 'selected' : '') . '>' . __('- Select All -', 'W2DC') . '</option>';
+	$height = 300;
+	
+	echo '<select multiple="multiple" name="' . $name . '[]" class="selected_terms_list w2dc-form-control w2dc-form-group" style="height: ' . $height . 'px">';
+	echo '<option value="" ' . ((!$selected_terms) ? 'selected' : '') . '>' . esc_html__('- Select All -', 'w2dc') . '</option>';
 
 	w2dc_renderOptionsTerms($tax, 0, $selected_terms);
 
@@ -423,7 +423,7 @@ function w2dc_termsSelectList($name, $tax = 'category', $selected_terms = array(
 function w2dc_recaptcha() {
 	if (get_option('w2dc_enable_recaptcha') && get_option('w2dc_recaptcha_public_key') && get_option('w2dc_recaptcha_private_key')) {
 		if (get_option('w2dc_recaptcha_version') == 'v2') {
-			return '<div class="g-recaptcha" data-sitekey="'.get_option('w2dc_recaptcha_public_key').'"></div>';
+			return '<div class="g-recaptcha" data-sitekey="'.esc_attr(get_option('w2dc_recaptcha_public_key')).'"></div>';
 		} elseif (get_option('w2dc_recaptcha_version') == 'v3') {
 			ob_start();
 			?>
@@ -503,18 +503,18 @@ function w2dc_orderLinks($base_url, $defaults = array(), $return = false, $short
 
 	$ordering = array();
 	if (get_option('w2dc_orderby_date')) {
-		$ordering['post_date']['DESC'] = __('Newest first', 'W2DC');
-		$ordering['post_date']['ASC'] = __('Oldest first', 'W2DC');
+		$ordering['post_date']['DESC'] = esc_html__('Newest first', 'w2dc');
+		$ordering['post_date']['ASC'] = esc_html__('Oldest first', 'w2dc');
 	}
 	if (get_option('w2dc_orderby_title')) {
-		$ordering['title']['ASC'] = __('From A to Z', 'W2DC');
-		$ordering['title']['DESC'] = __('From Z to A', 'W2DC');
+		$ordering['title']['ASC'] = esc_html__('From A to Z', 'w2dc');
+		$ordering['title']['DESC'] = esc_html__('From Z to A', 'w2dc');
 	}
 
 	$exact_categories = array();
 	if (!empty($defaults['categories'])) {
 		if (!is_array($defaults['categories'])) {
-			$exact_categories = array_filter(explode(',', $defaults['categories']));
+			$exact_categories = array_filter(w2dc_parse_slugs_ids_list($defaults['categories']));
 		} else {
 			$exact_categories = array_filter($defaults['categories']);
 		}
@@ -522,6 +522,7 @@ function w2dc_orderLinks($base_url, $defaults = array(), $return = false, $short
 	if ($current_category = w2dc_isCategory()) {
 		$exact_categories[] = $current_category->term_id;
 	}
+	// add ordering links from content fields
 	$content_fields = $w2dc_instance->content_fields->getOrderingContentFieldsByDirectory();
 	foreach ($content_fields AS $content_field) {
 		if ($exact_categories && $content_field->categories) {
@@ -545,7 +546,7 @@ function w2dc_order_by_distance_html($ordering_links, $base_url, $defaults) {
 	global $w2dc_radius_params;
 	
 	if ($w2dc_radius_params && get_option('w2dc_orderby_distance')) {
-		$ordering_links->addLinks(array('distance' => array('ASC' => esc_html__('Distance', 'W2DC'))));
+		$ordering_links->addLinks(array('distance' => array('ASC' => esc_html__('Distance', 'w2dc'))));
 	}
 	
 	return $ordering_links;
@@ -555,7 +556,7 @@ function w2dc_order_by_distance_html($ordering_links, $base_url, $defaults) {
 function w2dc_orderingItems() {
 	global $w2dc_instance;
 
-	$ordering = array('post_date' => __('Date', 'W2DC'), 'title' => __('Title', 'W2DC'), 'rand' => __('Random', 'W2DC'));
+	$ordering = array('post_date' => esc_html__('Date', 'w2dc'), 'title' => esc_html__('Title', 'w2dc'), 'rand' => esc_html__('Random', 'w2dc'));
 	$content_fields = $w2dc_instance->content_fields->getOrderingContentFields();
 	foreach ($content_fields AS $content_field) {
 		$ordering[$content_field->slug] = $content_field->name;
@@ -617,12 +618,22 @@ function w2dc_displayLocationsTable($location_id = 0) {
 	$locations_view->display();
 }
 
-function w2dc_terms_checklist($post_id) {
-	if ($terms = get_categories(array('taxonomy' => W2DC_CATEGORIES_TAX, 'pad_counts' => true, 'hide_empty' => false, 'parent' => 0))) {
+function w2dc_terms_checklist($post_id, $exact_categories = array()) {
+
+	$terms = get_categories(array(
+				'taxonomy' => W2DC_CATEGORIES_TAX,
+				'pad_counts' => true,
+				'hide_empty' => false,
+				'parent' => 0,
+				'include' => $exact_categories,
+	));
+	
+	if ($terms) {
 		$checked_categories_ids = array();
 		$checked_categories = wp_get_object_terms($post_id, W2DC_CATEGORIES_TAX);
-		foreach ($checked_categories AS $term)
+		foreach ($checked_categories AS $term) {
 			$checked_categories_ids[] = $term->term_id;
+		}
 
 		echo '<ul id="w2dc-categorychecklist" class="w2dc-categorychecklist">';
 		foreach ($terms AS $term) {
@@ -638,15 +649,25 @@ function w2dc_terms_checklist($post_id) {
 				
 			echo '<li id="' . W2DC_CATEGORIES_TAX . '-' . $term->term_id . '" class="' . $classes . '">';
 			echo '<label class="selectit"><input type="checkbox" ' . $checked . ' id="in-' . W2DC_CATEGORIES_TAX . '-' . $term->term_id . '" name="tax_input[' . W2DC_CATEGORIES_TAX . '][]" value="' . $term->term_id . '"> ' . $term->name . '</label>';
-			echo _w2dc_terms_checklist($term->term_id, $checked_categories_ids);
+			echo _w2dc_terms_checklist($term->term_id, $exact_categories, $checked_categories_ids);
 			echo '</li>';
 		}
 		echo '</ul>';
 	}
 }
-function _w2dc_terms_checklist($parent = 0, $checked_categories_ids = array()) {
+function _w2dc_terms_checklist($parent = 0, $exact_categories = array(), $checked_categories_ids = array()) {
+
 	$html = '';
-	if ($terms = get_categories(array('taxonomy' => W2DC_CATEGORIES_TAX, 'pad_counts' => true, 'hide_empty' => false, 'parent' => $parent))) {
+
+	$terms = get_categories(array(
+			'taxonomy' => W2DC_CATEGORIES_TAX,
+			'pad_counts' => true,
+			'hide_empty' => false,
+			'parent' => $parent,
+			'include' => $exact_categories,
+	));
+
+	if ($terms) {
 		$html .= '<ul class="children">';
 		foreach ($terms AS $term) {
 			$checked = '';
@@ -661,7 +682,7 @@ function _w2dc_terms_checklist($parent = 0, $checked_categories_ids = array()) {
 
 			$html .= '<li id="' . W2DC_CATEGORIES_TAX . '-' . $term->term_id . '" class="' . $classes . '">';
 			$html .= '<label class="selectit"><input type="checkbox" ' . $checked . ' id="in-' . W2DC_CATEGORIES_TAX . '-' . $term->term_id . '" name="tax_input[' . W2DC_CATEGORIES_TAX . '][]" value="' . $term->term_id . '"> ' . $term->name . '</label>';
-			$html .= _w2dc_terms_checklist($term->term_id, $checked_categories_ids);
+			$html .= _w2dc_terms_checklist($term->term_id, $exact_categories, $checked_categories_ids);
 			$html .= '</li>';
 		}
 		$html .= '</ul>';
@@ -683,10 +704,10 @@ function w2dc_tags_selectbox($listing) {
 		array(
 			'tags_number' => $listing->level->tags_number,
 			'unlimited_tags' => $listing->level->unlimited_tags,
-			'tags_limit_message' => sprintf(esc_attr__('You can not enter more than %d tag(s)', 'W2DC'), $listing->level->tags_number),
+			'tags_limit_message' => sprintf(esc_attr__('You can not enter more than %d tag(s)', 'w2dc'), $listing->level->tags_number),
 		)
 	);
-	wp_add_inline_script('w2dc_js_functions', $tags_data, 'before');
+	wp_add_inline_script('w2dc-js-functions', $tags_data, 'before');
 
 	echo '<select name="' . W2DC_TAGS_TAX . '[]" multiple="multiple" class="w2dc-tokenizer">';
 	foreach ($terms AS $term) {
@@ -763,10 +784,10 @@ if (!function_exists('w2dc_renderPaginator')) {
 					echo '<div class="w2dc-pagination-wrapper">';
 					echo '<ul class="w2dc-pagination">';
 					if ($total_pages > 10 && $current_page > 10)
-						echo '<li class="w2dc-inactive previous_line"><a href="' . get_pagenum_link($previous_line_page) . '" title="' . esc_attr__('Previous Line', 'W2DC') . '" data-page=' . $previous_line_page . ' data-controller-hash=' . $hash . '><<</a></li>' ;
+						echo '<li class="w2dc-inactive previous_line"><a href="' . get_pagenum_link($previous_line_page) . '" title="' . esc_attr__('Previous Line', 'w2dc') . '" data-page=' . $previous_line_page . ' data-controller-hash=' . $hash . '><<</a></li>' ;
 			
 					if ($total_pages > 3 && $current_page > 1)
-						echo '<li class="w2dc-inactive previous"><a href="' . get_pagenum_link($previous_page) . '" title="' . esc_attr__('Previous Page', 'W2DC') . '" data-page=' . $previous_page . ' data-controller-hash=' . $hash . '><</i></a></li>' ;
+						echo '<li class="w2dc-inactive previous"><a href="' . get_pagenum_link($previous_page) . '" title="' . esc_attr__('Previous Page', 'w2dc') . '" data-page=' . $previous_page . ' data-controller-hash=' . $hash . '><</i></a></li>' ;
 			
 					$count = ($current_line-1)*10;
 					$end = ($total_pages < $current_line*10) ? $total_pages : $current_line*10;
@@ -779,10 +800,10 @@ if (!function_exists('w2dc_renderPaginator')) {
 					}
 			
 					if ($total_pages > 3 && $current_page < $total_pages)
-						echo '<li class="w2dc-inactive next"><a href="' . get_pagenum_link($next_page) . '" title="' . esc_attr__('Next Page', 'W2DC') . '" data-page=' . $next_page . ' data-controller-hash=' . $hash . '>></i></a></li>' ;
+						echo '<li class="w2dc-inactive next"><a href="' . get_pagenum_link($next_page) . '" title="' . esc_attr__('Next Page', 'w2dc') . '" data-page=' . $next_page . ' data-controller-hash=' . $hash . '>></i></a></li>' ;
 			
 					if ($total_pages > 10 && $current_line < $total_lines)
-						echo '<li class="w2dc-inactive next_line"><a href="' . get_pagenum_link($next_line_page) . '" title="' . esc_attr__('Next Line', 'W2DC') . '" data-page=' . $next_line_page . ' data-controller-hash=' . $hash . '>>></a></li>' ;
+						echo '<li class="w2dc-inactive next_line"><a href="' . get_pagenum_link($next_line_page) . '" title="' . esc_attr__('Next Line', 'w2dc') . '" data-page=' . $next_line_page . ' data-controller-hash=' . $hash . '>>></a></li>' ;
 			
 					echo '</ul>';
 					echo '</div>';
@@ -792,7 +813,7 @@ if (!function_exists('w2dc_renderPaginator')) {
 					} else {
 						$scrolling_paginator_class = '';
 					}
-					echo '<div class="w2dc-row"><button class="w2dc-btn w2dc-btn-primary w2dc-btn-block w2dc-show-more-button ' . $scrolling_paginator_class . '" data-controller-hash="' . $hash . '">' . sprintf(__('Show more %s', 'W2DC'), $directory->plural) . '</button></div>';
+					echo '<div class="w2dc-row"><button class="w2dc-btn w2dc-btn-primary w2dc-btn-block w2dc-show-more-button ' . $scrolling_paginator_class . '" data-controller-hash="' . $hash . '">' . sprintf(esc_html__('Show more %s', 'w2dc'), $directory->plural) . '</button></div>';
 				}
 			}
 		}
@@ -832,14 +853,6 @@ function w2dc_renderSharingButton($post_id, $post_url, $button) {
 			break;
 			case 'twitter':
 				$share_url = 'http://twitter.com/share?url=' . $post_url . '&amp;text=' . $post_title;
-				/* if (get_option('w2dc_share_counter')) {
-					$response = wp_remote_get('https://urls.api.twitter.com/1/urls/count.json?url=' . $post_url);
-					if (!is_wp_error($response)) {
-						$body = wp_remote_retrieve_body($response);
-						$json = json_decode($body);
-						$share_counter = (isset($json->count)) ? intval($json->count) : 0;
-					}
-				} */
 			break;
 			case 'google':
 				$share_url = 'https://plus.google.com/share?url=' . $post_url;
@@ -936,7 +949,6 @@ function w2dc_renderSharingButton($post_id, $post_url, $button) {
 				}
 			break;
 			case 'whatsapp':
-				//$share_url = 'https://wa.me/?text=' . $post_url;
 				$share_url = 'whatsapp://send?text=' . $post_url;
 			break;
 			case 'telegram':
@@ -951,7 +963,7 @@ function w2dc_renderSharingButton($post_id, $post_url, $button) {
 		}
 
 		if ($share_url !== false) {
-			echo '<a href="'.$share_url.'" data-toggle="w2dc-tooltip" data-placement="top" title="'.sprintf(__('Share on %s', 'W2DC'),  $w2dc_social_services[$button]['label']).'" target="_blank"><img src="'.W2DC_RESOURCES_URL.'images/social/'.get_option('w2dc_share_buttons_style').'/'.$button.'.png" /></a>';
+			echo '<a href="'.$share_url.'" data-toggle="w2dc-tooltip" data-placement="top" title="'.sprintf(esc_html__('Share on %s', 'w2dc'),  $w2dc_social_services[$button]['label']).'" target="_blank"><img src="'.W2DC_RESOURCES_URL.'images/social/'.get_option('w2dc_share_buttons_style').'/'.$button.'.png" alt="" /></a>';
 			if (get_option('w2dc_share_counter') && $share_counter !== false)
 				echo '<span class="w2dc-share-count">'.number_format($share_counter).'</span>';
 		}
@@ -969,26 +981,26 @@ function w2dc_hintMessage($message, $placement = 'auto', $return = false) {
 
 function w2dc_levelPriceString($level) {
 	$price = apply_filters('w2dc_submitlisting_level_price', null, $level);
-	if ($price === 0) {
-		return '<span class="w2dc-price w2dc-payments-free">' .__('FREE', 'W2DC') . '</span>';
+	if ($price === 0 || $price === "") {
+		return '<span class="w2dc-price w2dc-payments-free">' .esc_html__('FREE', 'w2dc') . '</span>';
 	} elseif (!is_null($price)) {
 		if (!$level->eternal_active_period) {
 			if ($level->active_period == 'day' && $level->active_interval == 1)
-				$price .= '/<span class="w2dc-price-period">' . __('daily', 'W2DC') . '</span>';
+				$price .= '/<span class="w2dc-price-period">' . esc_html__('daily', 'w2dc') . '</span>';
 			elseif ($level->active_period == 'day' && $level->active_interval > 1)
-				$price .= '/<span class="w2dc-price-period">' . $level->active_interval . ' ' . _n('day', 'days', $level->active_interval, 'W2DC') . '</span>';
+				$price .= '/<span class="w2dc-price-period">' . $level->active_interval . ' ' . _n('day', 'days', $level->active_interval, 'w2dc') . '</span>';
 			elseif ($level->active_period == 'week' && $level->active_interval == 1)
-				$price .= '/<span class="w2dc-price-period">' . __('weekly', 'W2DC') . '</span>';
+				$price .= '/<span class="w2dc-price-period">' . esc_html__('weekly', 'w2dc') . '</span>';
 			elseif ($level->active_period == 'week' && $level->active_interval > 1)
-				$price .= '/<span class="w2dc-price-period">' . $level->active_interval . ' ' . _n('week', 'weeks', $level->active_interval, 'W2DC') . '</span>';
+				$price .= '/<span class="w2dc-price-period">' . $level->active_interval . ' ' . _n('week', 'weeks', $level->active_interval, 'w2dc') . '</span>';
 			elseif ($level->active_period == 'month' && $level->active_interval == 1)
-				$price .= '/<span class="w2dc-price-period">' . __('monthly', 'W2DC') . '</span>';
+				$price .= '/<span class="w2dc-price-period">' . esc_html__('monthly', 'w2dc') . '</span>';
 			elseif ($level->active_period == 'month' && $level->active_interval > 1)
-				$price .= '/<span class="w2dc-price-period">' . $level->active_interval . ' ' . _n('month', 'months', $level->active_interval, 'W2DC') . '</span>';
+				$price .= '/<span class="w2dc-price-period">' . $level->active_interval . ' ' . _n('month', 'months', $level->active_interval, 'w2dc') . '</span>';
 			elseif ($level->active_period == 'year' && $level->active_interval == 1)
-				$price .= '/<span class="w2dc-price-period">' . __('annually', 'W2DC') . '</span>';
+				$price .= '/<span class="w2dc-price-period">' . esc_html__('annually', 'w2dc') . '</span>';
 			elseif ($level->active_period == 'year' && $level->active_interval > 1)
-				$price .= '/<span class="w2dc-price-period">' . $level->active_interval . ' ' . _n('year', 'years', $level->active_interval, 'W2DC') . '</span>';
+				$price .= '/<span class="w2dc-price-period">' . $level->active_interval . ' ' . _n('year', 'years', $level->active_interval, 'w2dc') . '</span>';
 		}
 		return '<span class="w2dc-price">' . $price . '</span>';
 	}
@@ -998,13 +1010,13 @@ function w2dc_get_distance($location) {
 	global $w2dc_order_by_distance;
 	
 	if (get_option('w2dc_miles_kilometers_in_search') == 'miles') {
-		$dimention = esc_html__('mi', 'W2DC');
+		$dimention = esc_html__('mi', 'w2dc');
 	} else {
-		$dimention = esc_html__('km', 'W2DC');
+		$dimention = esc_html__('km', 'w2dc');
 	}
 	
 	if (isset($w2dc_order_by_distance[$location->id])) {
-		return ' <span class="w2dc-orderby-distance w2dc-badge" title="' . esc_attr__('Distance from center', 'W2DC') . '">' . round($w2dc_order_by_distance[$location->id], 1) . ' ' . $dimention . '</span> ';
+		return ' <span class="w2dc-orderby-distance w2dc-badge" title="' . esc_attr__('Distance from center', 'w2dc') . '">' . round($w2dc_order_by_distance[$location->id], 1) . ' ' . $dimention . '</span> ';
 	}
 }
 

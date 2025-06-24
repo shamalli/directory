@@ -25,7 +25,7 @@ class w2dc_invoice {
 	}
 	
 	public function init() {
-		@$meta = unserialize(preg_replace_callback('!s:(\d+):"(.*?)";!', array($this, 'replace_meta'), $this->post->post_content));
+		$meta = unserialize(preg_replace_callback('!s:(\d+):"(.*?)";!', array($this, 'replace_meta'), $this->post->post_content));
 		$this->item = $meta['item'];
 		$this->price = floatval($meta['price']);
 		$this->status = $meta['status'];
@@ -65,7 +65,7 @@ class w2dc_invoice {
 				if (get_option('w2dc_invoice_paid_notification')) {
 					$author = get_userdata($this->post->post_author);
 
-					$subject = __('Invoice paid', 'W2DC');
+					$subject = esc_html__('Invoice paid', 'w2dc');
 				
 					$body = str_replace('[author]', $author->display_name,
 							str_replace('[invoice]', $this->post->post_title,
@@ -116,9 +116,9 @@ class w2dc_invoice {
 	public function taxesString() {
 		if (get_option('w2dc_enable_taxes') && get_option('w2dc_tax_rate') && get_option('w2dc_tax_name'))
 			if (get_option('w2dc_taxes_mode') == 'include')
-				return '(' . __('including', 'W2DC') . ' ' . get_option('w2dc_tax_rate') . '% ' . get_option('w2dc_tax_name') . ')';
+				return '(' . esc_html__('including', 'w2dc') . ' ' . get_option('w2dc_tax_rate') . '% ' . get_option('w2dc_tax_name') . ')';
 			elseif (get_option('w2dc_taxes_mode') == 'exclude')
-				return '(' . __('excluding', 'W2DC') . ' ' . get_option('w2dc_tax_rate') . '% ' . get_option('w2dc_tax_name') . ')';
+				return '(' . esc_html__('excluding', 'w2dc') . ' ' . get_option('w2dc_tax_rate') . '% ' . get_option('w2dc_tax_name') . ')';
 	}
 	
 	public function taxesPrice($format_price =  true) {
@@ -200,16 +200,16 @@ function getInvoiceByID($invoice_id) {
 function gatewayName($gateway) {
 	switch ($gateway) {
 		case 'paypal':
-			return __('PayPal', 'W2DC');
+			return esc_html__('PayPal', 'w2dc');
 			break;
 		case 'paypal_subscription':
-			return __('PayPal subscription', 'W2DC');
+			return esc_html__('PayPal subscription', 'w2dc');
 			break;
 		case 'bank_transfer':
-			return __('Bank transfer', 'W2DC');
+			return esc_html__('Bank transfer', 'w2dc');
 			break;
 		case 'stripe':
-			return __('Stripe', 'W2DC');
+			return esc_html__('Stripe', 'w2dc');
 			break;
 	}
 }
@@ -221,7 +221,7 @@ function w2dc_create_invoice($item, $title, $is_subscription, $price, $item_id, 
 			'price' => $price,
 			'status' => 'unpaid',
 			'gateway' => '',
-			'log' => array(time() => __('Invoice created', 'W2DC'))
+			'log' => array(time() => esc_html__('Invoice created', 'w2dc'))
 	);
 
 	$new_invoice_args = array(
@@ -239,13 +239,13 @@ function w2dc_create_invoice($item, $title, $is_subscription, $price, $item_id, 
 		if ($invoice = getInvoiceByID($invoice_id)) {
 			$author = get_userdata($invoice->post->post_author);
 		
-			$subject = __('New Invoice', 'W2DC');
+			$subject = esc_html__('New Invoice', 'w2dc');
 			
 			$payment_link = apply_filters('w2dc_get_edit_invoice_link', get_edit_post_link($invoice_id), $invoice_id);
 
 			$billing_info = '';
 			if ($billing_info = $invoice->billingInfo()) {
-				$billing_info =  __('Bill To', 'W2DC') . ': ' . $billing_info;
+				$billing_info =  esc_html__('Bill To', 'w2dc') . ': ' . $billing_info;
 
 				$breaks = array("<br />", "<br>", "<br/>");
 				$billing_info = str_ireplace($breaks, "\r\n", $billing_info);

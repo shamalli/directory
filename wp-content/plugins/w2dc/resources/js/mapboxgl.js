@@ -13,13 +13,15 @@ var w2dc_draw_features = [];
 			    style: w2dc_maps_objects.map_style
 			});
 			if (w2dc_js_objects.is_rtl) {
-				mapboxgl.setRTLTextPlugin('https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.1.0/mapbox-gl-rtl-text.js');
+				mapboxgl.setRTLTextPlugin('https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.10.1/mapbox-gl-rtl-text.js');
 			}
-			var options = {};
-			if (w2dc_js_objects.lang) {
-				options = { defaultLanguage:  w2dc_js_objects.lang}; 
+			if (typeof MapboxLanguage != "undefined") {
+				var options = {};
+				if (w2dc_js_objects.lang) {
+					options = { defaultLanguage:  w2dc_js_objects.lang}; 
+				}
+				w2dc_map_backend.addControl(new MapboxLanguage(options));
 			}
-			w2dc_map_backend.addControl(new MapboxLanguage(options))
 			var navigationControl = new mapboxgl.NavigationControl({
 		        showCompass: false,
 		        showZoom: true,
@@ -149,6 +151,25 @@ var w2dc_draw_features = [];
 			w2dc_ajax_loader_target_hide("w2dc-map-canvas");
 		}
 	}
+	
+	function w2dc_validateLatitude(lat) {
+		if ($.isNumeric(lat)) {
+			if (lat >= -90 && lat <= 90) {
+				return lat;
+			} else {
+				alert("Invalid latitude value: must be between -90 and 90");
+			}
+		}
+	}
+	function w2dc_validateLongitude(lng) {
+		if ($.isNumeric(lng)) {
+			if (lng >= -180 && lng <= 180) {
+				return lng;
+			} else {
+				alert("Invalid longitude value: must be between -180 and 180");
+			}
+		}
+	}
 
 	window.w2dc_geocodeAddress_backend = function(i) {
 		if ($(".w2dc-location-in-metabox:eq("+i+")").length) {
@@ -163,7 +184,7 @@ var w2dc_draw_features = [];
 			if ($(".w2dc-manual-coords:eq("+i+")").is(":checked") && $(".w2dc-map-coords-1:eq("+i+")").val()!='' && $(".w2dc-map-coords-2:eq("+i+")").val()!='' && ($(".w2dc-map-coords-1:eq("+i+")").val()!=0 || $(".w2dc-map-coords-2:eq("+i+")").val()!=0)) {
 				var map_coords_1 = $(".w2dc-map-coords-1:eq("+i+")").val();
 				var map_coords_2 = $(".w2dc-map-coords-2:eq("+i+")").val();
-				if ($.isNumeric(map_coords_1) && $.isNumeric(map_coords_2)) {
+				if (w2dc_validateLatitude(map_coords_1) && w2dc_validateLongitude(map_coords_2)) {
 					var point = new mapboxgl.LngLat(map_coords_2, map_coords_1);
 					w2dc_coords_array_1.push(map_coords_1);
 					w2dc_coords_array_2.push(map_coords_2);
@@ -388,15 +409,17 @@ var w2dc_draw_features = [];
 	}
 	
 	window.w2dc_geocodeAddress = function(address, callback, address_autocomplete_code) {
-		if (typeof address_autocomplete_code != 'undefined' && address_autocomplete_code != '0')
-			var country = '&country='+address_autocomplete_code;
-		else
+		var code = address_autocomplete_code;
+		if (!code || code === "0") {
 			var country = '';
+		} else {
+			var country = '&country='+address_autocomplete_code;
+		}
 
 		$.get("https://api.mapbox.com/geocoding/v5/mapbox.places/"+address+".json?access_token="+w2dc_maps_objects.mapbox_api_key+country, function(data) {
 			if (data.features.length) {
-				// data.features[0].geometry.coordinates[0] - longitude
-				// data.features[0].geometry.coordinates[1] - latitude
+				// ------------- data.features[0].geometry.coordinates[0] - longitude
+				// ------------- data.features[0].geometry.coordinates[1] - latitude
 				callback(true, data.features[0].geometry.coordinates[1], data.features[0].geometry.coordinates[0]);
 			} else {
 				callback(false, 0, 0);
@@ -423,10 +446,12 @@ var w2dc_draw_features = [];
 	}
 
 	window.w2dc_autocompleteService = function(term, address_autocomplete_code, common_array, response, callback) {
-		if (address_autocomplete_code != '0')
-			var country = '&country='+address_autocomplete_code;
-		else
+		var code = address_autocomplete_code;
+		if (!code || code === "0") {
 			var country = '';
+		} else {
+			var country = '&country='+address_autocomplete_code;
+		}
 		
 		if (w2dc_js_objects.lang)
 			var language = '&language='+w2dc_js_objects.lang;
@@ -659,7 +684,7 @@ var w2dc_draw_features = [];
 				w2dc_setMapCenter(map_id, [start_longitude, start_latitude]);
 	    	}
 			
-			if (typeof map_attrs.ajax_loading != 'undefined' && map_attrs.ajax_loading == 1) {
+			if (typeof map_attrs.ajax_map_loading != 'undefined' && map_attrs.ajax_map_loading == 1) {
 				// use closures here
 				w2dc_setMapAjaxListener(w2dc_maps[map_id], map_id);
 			}
@@ -693,7 +718,7 @@ var w2dc_draw_features = [];
 				}
 			}
 			if (passed) {
-				$(this).parent('.w2dc-listing-figcaption-option').show();
+				$(this).parent('.w2dc-listing-logo-caption-option-marker').show();
 			} else {
 				$(this).css({'cursor': 'auto'});
 				if ($(this).hasClass('w2dc-btn')) {
@@ -732,13 +757,14 @@ var w2dc_draw_features = [];
 		$('body').on('click', '.w2dc-show-on-map', function() {
 			var location_id = $(this).data("location-id");
 			var do_scroll_to_map = $(this).data("scroll-to-map");
+			var location_obj;
 
 			for (var map_id in w2dc_maps) {
 				if (typeof w2dc_global_locations_array[map_id] != 'undefined') {
 					for (var i=0; i<w2dc_global_locations_array[map_id].length; i++) {
 						if (typeof w2dc_global_locations_array[map_id][i] == 'object') {
 							if (location_id == w2dc_global_locations_array[map_id][i].id) {
-								var location_obj = w2dc_global_locations_array[map_id][i];
+								location_obj = w2dc_global_locations_array[map_id][i];
 								var side_offset = 0;
 								if ($("#w2dc-map-wrapper-"+map_id).hasClass("w2dc-map-sidebar-open")) {
 									if (w2dc_js_objects.is_rtl) {
@@ -746,6 +772,10 @@ var w2dc_draw_features = [];
 									} else {
 										side_offset = -200;
 									}
+								}
+								var map_attrs = w2dc_maps_attrs[map_id];
+								if (typeof map_attrs.start_zoom != 'undefined' && map_attrs.start_zoom > 0) {
+									w2dc_setMapZoom(map_id, map_attrs.start_zoom);
 								}
 								w2dc_maps[map_id].panToWithOffset(location_obj.marker.getLngLat(), side_offset, -100);
 								w2dc_setInfoWindow(location_obj, location_obj.marker, map_id, 'bottom', 'onbuttonclick');
@@ -756,6 +786,14 @@ var w2dc_draw_features = [];
 							}
 						}
 					}
+				}
+			}
+			
+			if (!location_obj) {
+				var lat = $(this).data("coordinate-lat");
+				var lng = $(this).data("coordinate-lng");
+				if (lat && lng) {
+					window.open("https://www.openstreetmap.org/?mlat="+lat+"&mlon="+lng, "_blank");
 				}
 			}
 		});
@@ -826,11 +864,13 @@ var w2dc_draw_features = [];
 						mapboxgl.setRTLTextPlugin('https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.1.0/mapbox-gl-rtl-text.js');
 					}
 				}
-				var options = {};
-				if (w2dc_js_objects.lang) {
-					options = { defaultLanguage:  w2dc_js_objects.lang}; 
+				if (typeof MapboxLanguage != "undefined") {
+					var options = {};
+					if (w2dc_js_objects.lang) {
+						options = { defaultLanguage:  w2dc_js_objects.lang}; 
+					}
+					map.addControl(new MapboxLanguage(options));
 				}
-				map.addControl(new MapboxLanguage(options));
 				
 				if (!enable_wheel_zoom) {
 					map.scrollZoom.disable();
@@ -1037,11 +1077,11 @@ var w2dc_draw_features = [];
 							$(editButton).find('.w2dc-map-edit-label').text(w2dc_maps_objects.edit_area_button);
 							editButton.editing_state = 0;
 		
-							// remove ajax_loading and set drawing_state
+							// remove ajax_map_loading and set drawing_state
 							var map_attrs_array;
 							if (map_attrs_array = w2dc_get_map_markers_attrs_array(map_id)) {
 								map_attrs_array.map_attrs.drawing_state = 1;
-								delete map_attrs_array.map_attrs.ajax_loading;
+								delete map_attrs_array.map_attrs.ajax_map_loading;
 							}
 			
 							w2dc_maps[map_id].getCanvas().style.cursor = 'crosshair';
@@ -1068,12 +1108,12 @@ var w2dc_draw_features = [];
 							$(drawButton).removeClass('w2dc-btn-active');
 							w2dc_disableDrawingMode(map_id);
 
-							// repair ajax_loading and set drawing_state
+							// repair ajax_map_loading and set drawing_state
 							var map_attrs_array;
 							if (map_attrs_array = w2dc_get_map_markers_attrs_array(map_id)) {
 								map_attrs_array.map_attrs.drawing_state = 0;
-								if (typeof w2dc_get_original_map_markers_attrs_array(map_id).map_attrs.ajax_loading != 'undefined' && w2dc_get_original_map_markers_attrs_array(map_id).map_attrs.ajax_loading == 1) {
-									map_attrs_array.map_attrs.ajax_loading = 1;
+								if (typeof w2dc_get_original_map_markers_attrs_array(map_id).map_attrs.ajax_map_loading != 'undefined' && w2dc_get_original_map_markers_attrs_array(map_id).map_attrs.ajax_map_loading == 1) {
+									map_attrs_array.map_attrs.ajax_map_loading = 1;
 								}
 							}
 						}
@@ -1221,6 +1261,11 @@ var w2dc_draw_features = [];
 									var markers_array = w2dc_map_markers_attrs_array[i].markers_array;
 									w2dc_setMapZoomCenter(map_id, map_attrs, markers_array);
 						    	}
+								
+								if (typeof w2dc_controller_args_array[map_id].geo_poly != 'undefined') {
+									w2dc_controller_args_array[map_id].geo_poly = [];
+								}
+								
 								break;
 							}
 						}
@@ -1247,7 +1292,7 @@ var w2dc_draw_features = [];
 									    w2dc_setMapCenter(map_id, w2dc_buildPoint(start_latitude, start_longitude));
 							    	},
 							    	function(e) {
-								   		//alert(e.message);
+							    		
 								    },
 								   	{timeout: 10000}
 							    );
@@ -1318,15 +1363,23 @@ var w2dc_draw_features = [];
 	}
 
 	function w2dc_setMapAjaxListener(map, map_id) {
+		
+		function makeAjaxMarkersListenerCallback(map, map_id) {
+			return function() {
+				w2dc_setAjaxMarkers(map, map_id);
+			}
+		}
+		
+		var ajaxMarkersListenerCallback = makeAjaxMarkersListenerCallback(map, map_id);
 
 		map.on('load', function() {
-			w2dc_setAjaxMarkers(map, map_id);
+			ajaxMarkersListenerCallback();
 		});
 		map.on('moveend', function() {
-			w2dc_setAjaxMarkers(map, map_id);
+			ajaxMarkersListenerCallback();
 		});
 		map.on('zoomend', function() {
-			w2dc_setAjaxMarkers(map, map_id);
+			ajaxMarkersListenerCallback();
 		});
 	}
 	function w2dc_geocodeStartAddress(map_attrs, map_id, zoom_level) {
@@ -1339,7 +1392,7 @@ var w2dc_draw_features = [];
 				w2dc_setMapZoom(map_id, zoom_level);
 			    w2dc_setMapCenter(map_id, [start_longitude, start_latitude]);
 			    
-			    if (typeof map_attrs.ajax_loading != 'undefined' && map_attrs.ajax_loading == 1) {
+			    if (typeof map_attrs.ajax_map_loading != 'undefined' && map_attrs.ajax_map_loading == 1) {
 				    // use closures here
 				    w2dc_setMapAjaxListener(w2dc_maps[map_id], map_id);
 			    }
@@ -1374,14 +1427,15 @@ var w2dc_draw_features = [];
 									w2dc_map_markers_attrs_array[j].map_attrs.start_latitude = start_latitude;
 									w2dc_map_markers_attrs_array[j].map_attrs.start_longitude = start_longitude;
 									
-									var post_params = w2dc_collectAJAXParams({ hash: map_id, from_set_ajax: 1 });
+									var post_params = w2dc_collectAJAXParams({ hash: map_id, from_ajax_map: 1 });
+									post_params.ajax_action = 'ajax_markers';
 									w2dc_startAJAXSearchOnMap(map_id, post_params);
 								}
 				    		}
 				    	}
 		    		}, 
 		    		function(e) {
-		    			//alert(e.message);
+		    			
 			    	},
 			    	{timeout: 10000}
 		    	);
@@ -1419,12 +1473,14 @@ var w2dc_draw_features = [];
 			return false;
 		}
 		
-		wcsearch_insert_param_in_uri('swLat', south_west.lat);
-		wcsearch_insert_param_in_uri('swLng', south_west.lng);
-		wcsearch_insert_param_in_uri('neLat', north_east.lat);
-		wcsearch_insert_param_in_uri('neLng', north_east.lng);
+		wcsearch_insert_param_in_uri(
+				['swLat', south_west.lat],
+				['swLng', south_west.lng],
+				['neLat', north_east.lat],
+				['neLng', north_east.lng]
+		);
 		
-		function inBoundingBox(bl/*bottom left*/, tr/*top right*/, p) {
+		function inBoundingBox(bl, tr, p) {
 			// in case longitude 180 is inside the box
 			function isLongInRange(bl, tr, p) {
 				if (tr.lng < bl.lng) {
@@ -1459,7 +1515,6 @@ var w2dc_draw_features = [];
 			    	&&
 			    	140 > Math.abs(Math.floor(worldCoordinate_new.y) - Math.floor(worldCoordinate_old.y)))
 		    ) {
-		    	//debugger;
 		    	return false;
 		    }
 		}
@@ -1474,7 +1529,12 @@ var w2dc_draw_features = [];
 			}
 		}
 		
-		var post_params = w2dc_collectAJAXParams({ hash: map_id, from_set_ajax: 1 });
+		var post_params = w2dc_collectAJAXParams({ hash: map_id, from_ajax_map: 1 });
+		post_params.ajax_action = 'ajax_markers';
+
+		// set to first page after collection
+		post_params.paged = 1;
+		
 		post_params.swLat = south_west.lat;
 		post_params.swLng = south_west.lng;
 		post_params.neLat = north_east.lat;
@@ -1708,8 +1768,7 @@ var w2dc_draw_features = [];
 			var attrs_array = w2dc_get_map_markers_attrs_array(map_id);
 			if (attrs_array.center_map_onclick) {
 				var map_attrs = attrs_array.map_attrs;
-				if (typeof map_attrs.ajax_loading == 'undefined' || map_attrs.ajax_loading == 0) {
-					//w2dc_maps[map_id].panTo(marker.getLngLat());
+				if (typeof map_attrs.ajax_map_loading == 'undefined' || map_attrs.ajax_map_loading == 0) {
 					w2dc_maps[map_id].panToWithOffset(marker.getLngLat(), 0, -100);
 					w2dc_setInfoWindow(location, marker, map_id, 'bottom', 'onmarkerclick');
 				}
@@ -1796,7 +1855,7 @@ var w2dc_draw_features = [];
 	    			w2dc_showInfoWindow(new_location_objs, marker, map_id, anchor, 'onbuttonclick');
 	    		},
 	    		complete: function() {
-					//w2dc_ajax_loader_target_hide("w2dc-map-canvas-"+map_id);
+	    			
 				}
 			});
 		}
@@ -1864,12 +1923,21 @@ var w2dc_draw_features = [];
 			}
 			windowHtml = $(windowHtml)[0].outerHTML;
 		}
+	    
+	    var infowindow_width;
+		var map_width = $('#w2dc-map-canvas-'+map_id).width();
+		if (map_width < w2dc_maps_objects.infowindow_width) {
+			infowindow_width = map_width;
+		} else {
+			infowindow_width = w2dc_maps_objects.infowindow_width;
+		}
 
 		var options = {
 				offset: {'bottom': [0,-30]},
 				closeOnClick: false,
 				anchor: anchor,
-				maxWidth: w2dc_maps_objects.infowindow_width
+				className: 'w2dc-mapboxgl-popup-container',
+				maxWidth: infowindow_width+'px'
 		};
 		
 		if (typeof map_attrs.close_infowindow_out_click != 'undefined' && map_attrs.close_infowindow_out_click) {
@@ -1877,16 +1945,13 @@ var w2dc_draw_features = [];
 		}
 		
 		var popup = new mapboxgl.Popup(options)
-		.setHTML(windowHtml)
-		.addTo(w2dc_maps[map_id]);
+		.addTo(w2dc_maps[map_id])
+		.setHTML(windowHtml);
 
 		marker.setPopup(popup);
-		// This is needed workaround, otherwise it will not open infoWindow on "On map" button click due to popup.addTo(w2dc_maps[map_id])
-		if (event == 'onmarkerclick') {
-			marker.addTo(w2dc_maps[map_id]);
-		}
 		
 		w2dc_infoWindows[map_id] = popup;
+		w2dc_infoWindows[map_id].marker = marker;
 		w2dc_infoWindows[map_id].location = locations;
 	}
 
@@ -2104,7 +2169,7 @@ var w2dc_draw_features = [];
 					});
 			    },
 			    function(e) {
-			    	//alert(e.message);
+			    	
 		    	},
 			    {enableHighAccuracy: true, timeout: 10000, maximumAge: 0}
 		    );
@@ -2113,6 +2178,6 @@ var w2dc_draw_features = [];
 	}
 })(jQuery);
 
-// supercluster.js
+// supercluster.js --------------------------------------------------------------------------------------------------------
 //https://unpkg.com/supercluster@3.0.2/dist/supercluster.min.js
 !function(t){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=t();else if("function"==typeof define&&define.amd)define([],t);else{("undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:this).supercluster=t()}}(function(){return function t(n,o,e){function r(s,u){if(!o[s]){if(!n[s]){var a="function"==typeof require&&require;if(!u&&a)return a(s,!0);if(i)return i(s,!0);var h=new Error("Cannot find module '"+s+"'");throw h.code="MODULE_NOT_FOUND",h}var p=o[s]={exports:{}};n[s][0].call(p.exports,function(t){var o=n[s][1][t];return r(o||t)},p,p.exports,t,n,o,e)}return o[s].exports}for(var i="function"==typeof require&&require,s=0;s<e.length;s++)r(e[s]);return r}({1:[function(t,n,o){"use strict";function e(t){return new r(t)}function r(t){this.options=h(Object.create(this.options),t),this.trees=new Array(this.options.maxZoom+1)}function i(t){return{type:"Feature",properties:s(t),geometry:{type:"Point",coordinates:[function(t){return 360*(t-.5)}(t.x),function(t){var n=(180-360*t)*Math.PI/180;return 360*Math.atan(Math.exp(n))/Math.PI-90}(t.y)]}}}function s(t){var n=t.numPoints,o=n>=1e4?Math.round(n/1e3)+"k":n>=1e3?Math.round(n/100)/10+"k":n;return h(h({},t.properties),{cluster:!0,cluster_id:t.id,point_count:n,point_count_abbreviated:o})}function u(t){return t/360+.5}function a(t){var n=Math.sin(t*Math.PI/180),o=.5-.25*Math.log((1+n)/(1-n))/Math.PI;return o<0?0:o>1?1:o}function h(t,n){for(var o in n)t[o]=n[o];return t}function p(t){return t.x}function f(t){return t.y}var c=t("kdbush");n.exports=e,n.exports.default=e,r.prototype={options:{minZoom:0,maxZoom:16,radius:40,extent:512,nodeSize:64,log:!1,reduce:null,initial:function(){return{}},map:function(t){return t}},load:function(t){var n=this.options.log;n&&console.time("total time");var o="prepare "+t.length+" points";n&&console.time(o),this.points=t;for(var e=[],r=0;r<t.length;r++)t[r].geometry&&e.push(function(t,n){var o=t.geometry.coordinates;return{x:u(o[0]),y:a(o[1]),zoom:1/0,id:n,parentId:-1}}(t[r],r));this.trees[this.options.maxZoom+1]=c(e,p,f,this.options.nodeSize,Float32Array),n&&console.timeEnd(o);for(var i=this.options.maxZoom;i>=this.options.minZoom;i--){var s=+Date.now();e=this._cluster(e,i),this.trees[i]=c(e,p,f,this.options.nodeSize,Float32Array),n&&console.log("z%d: %d clusters in %dms",i,e.length,+Date.now()-s)}return n&&console.timeEnd("total time"),this},getClusters:function(t,n){if(t[0]>t[2]){var o=this.getClusters([t[0],t[1],180,t[3]],n),e=this.getClusters([-180,t[1],t[2],t[3]],n);return o.concat(e)}for(var r=this.trees[this._limitZoom(n)],s=r.range(u(t[0]),a(t[3]),u(t[2]),a(t[1])),h=[],p=0;p<s.length;p++){var f=r.points[s[p]];h.push(f.numPoints?i(f):this.points[f.id])}return h},getChildren:function(t){var n=t>>5,o=t%32,e="No cluster with the specified id.",r=this.trees[o];if(!r)throw new Error(e);var s=r.points[n];if(!s)throw new Error(e);for(var u=this.options.radius/(this.options.extent*Math.pow(2,o-1)),a=r.within(s.x,s.y,u),h=[],p=0;p<a.length;p++){var f=r.points[a[p]];f.parentId===t&&h.push(f.numPoints?i(f):this.points[f.id])}if(0===h.length)throw new Error(e);return h},getLeaves:function(t,n,o){n=n||10,o=o||0;var e=[];return this._appendLeaves(e,t,n,o,0),e},getTile:function(t,n,o){var e=this.trees[this._limitZoom(t)],r=Math.pow(2,t),i=this.options.extent,s=this.options.radius/i,u=(o-s)/r,a=(o+1+s)/r,h={features:[]};return this._addTileFeatures(e.range((n-s)/r,u,(n+1+s)/r,a),e.points,n,o,r,h),0===n&&this._addTileFeatures(e.range(1-s/r,u,1,a),e.points,r,o,r,h),n===r-1&&this._addTileFeatures(e.range(0,u,s/r,a),e.points,-1,o,r,h),h.features.length?h:null},getClusterExpansionZoom:function(t){for(var n=t%32-1;n<this.options.maxZoom;){var o=this.getChildren(t);if(n++,1!==o.length)break;t=o[0].properties.cluster_id}return n},_appendLeaves:function(t,n,o,e,r){for(var i=this.getChildren(n),s=0;s<i.length;s++){var u=i[s].properties;if(u&&u.cluster?r+u.point_count<=e?r+=u.point_count:r=this._appendLeaves(t,u.cluster_id,o,e,r):r<e?r++:t.push(i[s]),t.length===o)break}return r},_addTileFeatures:function(t,n,o,e,r,i){for(var u=0;u<t.length;u++){var a=n[t[u]];i.features.push({type:1,geometry:[[Math.round(this.options.extent*(a.x*r-o)),Math.round(this.options.extent*(a.y*r-e))]],tags:a.numPoints?s(a):this.points[a.id].properties})}},_limitZoom:function(t){return Math.max(this.options.minZoom,Math.min(t,this.options.maxZoom+1))},_cluster:function(t,n){for(var o=[],e=this.options.radius/(this.options.extent*Math.pow(2,n)),r=0;r<t.length;r++){var i=t[r];if(!(i.zoom<=n)){i.zoom=n;var s=this.trees[n+1],u=s.within(i.x,i.y,e),a=i.numPoints||1,h=i.x*a,p=i.y*a,f=null;this.options.reduce&&(f=this.options.initial(),this._accumulate(f,i));for(var c=(r<<5)+(n+1),l=0;l<u.length;l++){var d=s.points[u[l]];if(!(d.zoom<=n)){d.zoom=n;var m=d.numPoints||1;h+=d.x*m,p+=d.y*m,a+=m,d.parentId=c,this.options.reduce&&this._accumulate(f,d)}}1===a?o.push(i):(i.parentId=c,o.push(function(t,n,o,e,r){return{x:t,y:n,zoom:1/0,id:o,parentId:-1,numPoints:e,properties:r}}(h/a,p/a,c,a,f)))}}return o},_accumulate:function(t,n){var o=n.numPoints?n.properties:this.options.map(this.points[n.id].properties);this.options.reduce(t,o)}}},{kdbush:2}],2:[function(t,n,o){"use strict";function e(t,n,o,e,i){n=n||function(t){return t[0]},o=o||function(t){return t[1]},i=i||Array,this.nodeSize=e||64,this.points=t,this.ids=new i(t.length),this.coords=new i(2*t.length);for(var s=0;s<t.length;s++)this.ids[s]=s,this.coords[2*s]=n(t[s]),this.coords[2*s+1]=o(t[s]);r(this.ids,this.coords,this.nodeSize,0,this.ids.length-1,0)}var r=t("./sort"),i=t("./range"),s=t("./within");n.exports=function(t,n,o,r,i){return new e(t,n,o,r,i)},e.prototype={range:function(t,n,o,e){return i(this.ids,this.coords,t,n,o,e,this.nodeSize)},within:function(t,n,o){return s(this.ids,this.coords,t,n,o,this.nodeSize)}}},{"./range":3,"./sort":4,"./within":5}],3:[function(t,n,o){"use strict";n.exports=function(t,n,o,e,r,i,s){for(var u,a,h=[0,t.length-1,0],p=[];h.length;){var f=h.pop(),c=h.pop(),l=h.pop();if(c-l<=s)for(var d=l;d<=c;d++)u=n[2*d],a=n[2*d+1],u>=o&&u<=r&&a>=e&&a<=i&&p.push(t[d]);else{var m=Math.floor((l+c)/2);u=n[2*m],a=n[2*m+1],u>=o&&u<=r&&a>=e&&a<=i&&p.push(t[m]);var v=(f+1)%2;(0===f?o<=u:e<=a)&&(h.push(l),h.push(m-1),h.push(v)),(0===f?r>=u:i>=a)&&(h.push(m+1),h.push(c),h.push(v))}}return p}},{}],4:[function(t,n,o){"use strict";function e(t,n,o,i,s,u){if(!(s-i<=o)){var a=Math.floor((i+s)/2);r(t,n,a,i,s,u%2),e(t,n,o,i,a-1,u+1),e(t,n,o,a+1,s,u+1)}}function r(t,n,o,e,s,u){for(;s>e;){if(s-e>600){var a=s-e+1,h=o-e+1,p=Math.log(a),f=.5*Math.exp(2*p/3),c=.5*Math.sqrt(p*f*(a-f)/a)*(h-a/2<0?-1:1);r(t,n,o,Math.max(e,Math.floor(o-h*f/a+c)),Math.min(s,Math.floor(o+(a-h)*f/a+c)),u)}var l=n[2*o+u],d=e,m=s;for(i(t,n,e,o),n[2*s+u]>l&&i(t,n,e,s);d<m;){for(i(t,n,d,m),d++,m--;n[2*d+u]<l;)d++;for(;n[2*m+u]>l;)m--}n[2*e+u]===l?i(t,n,e,m):i(t,n,++m,s),m<=o&&(e=m+1),o<=m&&(s=m-1)}}function i(t,n,o,e){s(t,o,e),s(n,2*o,2*e),s(n,2*o+1,2*e+1)}function s(t,n,o){var e=t[n];t[n]=t[o],t[o]=e}n.exports=e},{}],5:[function(t,n,o){"use strict";function e(t,n,o,e){var r=t-o,i=n-e;return r*r+i*i}n.exports=function(t,n,o,r,i,s){for(var u=[0,t.length-1,0],a=[],h=i*i;u.length;){var p=u.pop(),f=u.pop(),c=u.pop();if(f-c<=s)for(var l=c;l<=f;l++)e(n[2*l],n[2*l+1],o,r)<=h&&a.push(t[l]);else{var d=Math.floor((c+f)/2),m=n[2*d],v=n[2*d+1];e(m,v,o,r)<=h&&a.push(t[d]);var g=(p+1)%2;(0===p?o-i<=m:r-i<=v)&&(u.push(c),u.push(d-1),u.push(g)),(0===p?o+i>=m:r+i>=v)&&(u.push(d+1),u.push(f),u.push(g))}}return a}},{}]},{},[1])(1)});

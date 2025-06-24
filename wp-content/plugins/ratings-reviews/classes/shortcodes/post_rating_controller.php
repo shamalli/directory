@@ -28,7 +28,7 @@ class w2rr_post_rating_controller extends w2rr_frontend_controller {
 
 	public function display() {
 		if ($this->target_post) {
-			return $this->target_post->renderStars(true) /* . " <span>" . $this->target_post->avg_rating->avg_value . "</span>" */;
+			return $this->target_post->renderStars(true);
 		}
 	}
 }

@@ -1,3 +1,8 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <div class="wcsearch-search-input wcsearch-search-input-tax-select <?php echo $search_model->openedClosedClass(); ?>" <?php echo $search_model->getOptionsString(); ?>>
 	<label class="wcsearch-search-input-label"><?php echo esc_html($title); ?></label>
 	

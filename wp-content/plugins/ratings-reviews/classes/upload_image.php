@@ -98,11 +98,11 @@ class w2rr_upload_image {
 					} else // wp_handle_upload returned some kind of error. the return does contain error details, so you can use it here if you want.
 						$result['error_msg'] = 'There was a problem with your upload: ' . $uploaded_file['error'];
 				}  else // wrong file type
-					$result['error_msg'] = esc_html__('Please upload only image files (jpg, gif or png).', 'W2RR');
+					$result['error_msg'] = esc_html__('Please upload only image files (jpg, gif or png).', 'w2rr');
 			} else
-				$result['error_msg'] = esc_html__('You do not have permissions to edit this post!', 'W2RR');
+				$result['error_msg'] = esc_html__('You do not have permissions to edit this post!', 'w2rr');
 		} else // no file was passed
-			$result['error_msg'] = esc_html__('Choose image to upload first!', 'W2RR');
+			$result['error_msg'] = esc_html__('Choose image to upload first!', 'w2rr');
 		
 		echo json_encode($result);
 		die();

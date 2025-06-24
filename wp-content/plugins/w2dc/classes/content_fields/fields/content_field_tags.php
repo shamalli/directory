@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+// @codingStandardsIgnoreFile
 
 class w2dc_content_field_tags extends w2dc_content_field {
 	protected $can_be_required = false;
@@ -24,7 +26,7 @@ class w2dc_content_field_tags extends w2dc_content_field {
 	}
 	
 	public function renderOutputForMap($location, $listing) {
-		return w2dc_renderTemplate('content_fields/fields/tags_output.tpl.php', array('content_field' => $this, 'listing' => $listing), true);
+		return w2dc_renderTemplate('content_fields/fields/tags_output_map.tpl.php', array('content_field' => $this, 'listing' => $listing), true);
 	}
 }
 ?>

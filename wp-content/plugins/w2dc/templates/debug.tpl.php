@@ -1,16 +1,22 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <?php w2dc_renderTemplate('admin_header.tpl.php'); ?>
 
 <h2>
-	<?php _e('Directory Debug', 'W2DC'); ?>
+	<?php esc_html_e('Directory Debug', 'w2dc'); ?>
 </h2>
 
-<textarea style="width: 100%; height: 700px">
+<textarea class="w2dc-debug-textarea">
 geolocation response = <?php var_dump($geolocation_response); ?>
 
 
 <?php var_dump($w2dc_instance->updater); ?>
 <?php if (isset($w2dc_instance->updater)): ?>
 license keys = <?php $w2dc_instance->updater->getDownload_url(true); ?>
+remote version = <?php echo $w2dc_instance->updater->getRemote_version(); ?>
 <?php endif; ?>
 
 SERVER_ADDR IP = <?php echo $_SERVER['SERVER_ADDR']; ?>

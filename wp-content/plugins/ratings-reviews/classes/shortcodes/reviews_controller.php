@@ -43,7 +43,6 @@ class w2rr_reviews_controller extends w2rr_frontend_controller {
 				'target_post_type' => '', // all reviews of posts of certain post type
 				'terms' => '',
 				'tax' => '',
-				'author' => 0,
 				'paged' => $paged,
 				'include_get_params' => 1,
 				'template' => 'ratings_reviews/reviews_block.tpl.php',
@@ -76,7 +75,7 @@ class w2rr_reviews_controller extends w2rr_frontend_controller {
 			if (is_array($shortcode_atts['posts'])) {
 				$exact_posts_ids = $shortcode_atts['posts'];
 			} else {
-				$exact_posts_ids = explode(',', $shortcode_atts['posts']);
+				$exact_posts_ids = wp_parse_id_list($shortcode_atts['posts']);
 			}
 		}
 		
@@ -154,7 +153,7 @@ class w2rr_reviews_controller extends w2rr_frontend_controller {
 					'compare' => 'IN'
 			);
 		}
-		if ($shortcode_atts['author']) {
+		if (!empty($shortcode_atts['author'])) {
 			$args['author'] = $shortcode_atts['author'];
 		}
 
@@ -171,17 +170,16 @@ class w2rr_reviews_controller extends w2rr_frontend_controller {
 
 		if (!empty($this->args['post__in'])) {
 			if (is_string($this->args['post__in'])) {
-				$args = array_merge($args, array('post__in' => explode(',', $this->args['post__in'])));
+				$args = array_merge($args, array('post__in' => wp_parse_id_list($this->args['post__in'])));
 			} elseif (is_array($this->args['post__in'])) {
 				$args['post__in'] = $this->args['post__in'];
 			}
 		}
 		if (!empty($this->args['post__not_in'])) {
-			$args = array_merge($args, array('post__not_in' => explode(',', $this->args['post__not_in'])));
+			$args = array_merge($args, array('post__not_in' => wp_parse_id_list($this->args['post__not_in'])));
 		}
 		
 		$this->query = new WP_Query($args);
-		//var_dump($this->query->request);
 		
 		$this->getItems();
 		
@@ -248,7 +246,7 @@ class w2rr_reviews_controller extends w2rr_frontend_controller {
 				if (get_option('w2rr_paginator_button') == 'paginator') {
 					w2rr_renderPaginator($this->query, $this->hash, $this);
 				} elseif (get_option('w2rr_paginator_button') == 'more_reviews') { ?>
-					<div class="w2rr-row"><button class="w2rr-btn w2rr-btn-primary w2rr-btn-block w2rr-show-more-button" data-controller-hash="<?php echo $this->hash; ?>"><?php esc_html_e('Show more reviews', 'W2RR'); ?></button></div> <?php 
+					<div class="w2rr-row"><button class="w2rr-btn w2rr-btn-primary w2rr-btn-block w2rr-show-more-button" data-controller-hash="<?php w2rr_esc_e($this->hash); ?>"><?php esc_html_e('Show more reviews', 'w2rr'); ?></button></div> <?php 
 				}
 			}
 		}

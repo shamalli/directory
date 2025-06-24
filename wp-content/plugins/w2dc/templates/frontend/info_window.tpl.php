@@ -1,3 +1,8 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <div class="w2dc-map-info-window">
 	<div class="w2dc-map-info-window-inner">
 		<div class="w2dc-map-info-window-inner-item">
@@ -44,12 +49,12 @@
 				$button_class = 'w2dc-map-info-window-buttons';
 			}
 			?>
-			<div class="<?php echo $button_class; ?> w2dc-clearfix">
+			<div class="<?php w2dc_esc_e($button_class); ?> w2dc-clearfix">
 				<?php if ($show_summary_button): ?>
-				<a href="javascript:void(0);" class="w2dc-btn w2dc-btn-primary w2dc-scroll-to-listing w2dc-info-window-summary-button" onClick="w2dc_scrollToListing(&quot;post-<?php echo esc_attr($listing->post->ID); ?>&quot;, &quot;<?php echo esc_attr($map_id); ?>&quot;);" data-listing-id="<?php echo esc_attr($listing->post->ID); ?>"><?php esc_html_e('« Summary', 'W2DC'); ?></a>
+				<a href="javascript:void(0);" class="w2dc-btn w2dc-btn-primary w2dc-scroll-to-listing w2dc-info-window-summary-button" onClick="w2dc_scrollToListing(&quot;post-<?php echo esc_attr($listing->post->ID); ?>&quot;, &quot;<?php echo esc_attr($map_id); ?>&quot;);" data-listing-id="<?php echo esc_attr($listing->post->ID); ?>"><?php esc_html_e('« Summary', 'w2dc'); ?></a>
 				<?php endif; ?>
 				<?php if ($listing->level->listings_own_page && $show_readmore_button): ?>
-				<a href="<?php echo apply_filters("w2dc_info_window_readmore_button", get_permalink($listing->post->ID)); ?>" class="w2dc-btn w2dc-btn-primary w2dc-scroll-to-listing w2dc-info-window-readmore-button"><?php esc_html_e('Read more »', 'W2DC'); ?></a>
+				<a href="<?php echo apply_filters("w2dc_info_window_readmore_button", get_permalink($listing->post->ID)); ?>" class="w2dc-btn w2dc-btn-primary w2dc-scroll-to-listing w2dc-info-window-readmore-button"><?php esc_html_e('Read more »', 'w2dc'); ?></a>
 				<?php endif; ?>
 			</div>
 			<?php else: ?>
@@ -60,6 +65,6 @@
 	
 	<?php if (w2dc_getMapEngine() == 'google'): ?>
 	<?php $tongue_pos = round(get_option('w2dc_map_infowindow_width')/2); ?>
-	<div style="position: absolute; left: <?php echo $tongue_pos-10; ?>px;"><div style="position: absolute; overflow: hidden; left: -6px; top: -1px; width: 16px; height: 30px;"><div class="w2dc-map-info-window-tongue" style="position: absolute; left: 6px; transform: skewX(22.6deg); transform-origin: 0px 0px 0px;  -webkit-transform: skewX(22.6deg); -webkit-transform-origin: 0px 0px 0px; height: 24px; width: 10px; box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.6);"></div></div><div style="position: absolute; overflow: hidden; top: -1px; left: 10px; width: 16px; height: 30px;"><div class="w2dc-map-info-window-tongue" style="position: absolute; left: 0px; transform: skewX(-22.6deg); transform-origin: 10px 0px 0px; -webkit-transform: skewX(-22.6deg); -webkit-transform-origin: 10px 0px 0px; height: 24px; width: 10px; box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.6);"></div></div></div>
+	<div style="position: absolute; left: <?php w2dc_esc_e($tongue_pos-10); ?>px;"><div style="position: absolute; overflow: hidden; left: -6px; top: -1px; width: 16px; height: 30px;"><div class="w2dc-map-info-window-tongue" style="position: absolute; left: 6px; transform: skewX(22.6deg); transform-origin: 0px 0px 0px;  -webkit-transform: skewX(22.6deg); -webkit-transform-origin: 0px 0px 0px; height: 24px; width: 10px; box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.6);"></div></div><div style="position: absolute; overflow: hidden; top: -1px; left: 10px; width: 16px; height: 30px;"><div class="w2dc-map-info-window-tongue" style="position: absolute; left: 0px; transform: skewX(-22.6deg); transform-origin: 10px 0px 0px; -webkit-transform: skewX(-22.6deg); -webkit-transform-origin: 10px 0px 0px; height: 24px; width: 10px; box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.6);"></div></div></div>
 	<?php endif; ?>
 </div>

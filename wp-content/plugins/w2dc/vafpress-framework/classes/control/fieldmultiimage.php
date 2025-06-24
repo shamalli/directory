@@ -3,7 +3,7 @@
 /**
  * The smallest unit of an item, the field it self.
  */
-abstract class VP_W2DC_Control_FieldMultiImage extends VP_W2DC_Control_FieldMulti
+abstract class W2DC_VP_Control_FieldMultiImage extends W2DC_VP_Control_FieldMulti
 {
 
 	protected $_item_max_height;
@@ -13,7 +13,7 @@ abstract class VP_W2DC_Control_FieldMultiImage extends VP_W2DC_Control_FieldMult
 	/**
 	 * Basic self setup of the object
 	 * @param  SimpleXMLElement $simpleXML SimpleXML object representation of the field
-	 * @return VP_W2DC_Control_FieldMultiImage Field object
+	 * @return W2DC_VP_Control_FieldMultiImage Field object
 	 */
 	protected function _basic_make($arr)
 	{
@@ -35,7 +35,7 @@ abstract class VP_W2DC_Control_FieldMultiImage extends VP_W2DC_Control_FieldMult
 	public function add_items_from_array($_items){
 		foreach ($_items as $item)
 		{
-			$the_item = new VP_W2DC_Control_Field_Item_Generic();
+			$the_item = new W2DC_VP_Control_Field_Item_Generic();
 			$the_item->value($item['value'])
 				 	 ->label($item['label'])
 				 	 ->img($item['img']);

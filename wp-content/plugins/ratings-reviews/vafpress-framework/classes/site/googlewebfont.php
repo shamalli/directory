@@ -5,7 +5,7 @@
  * add the fonts with the weight and style
  * 
  */
-class VP_W2RR_Site_GoogleWebFont
+class W2RR_VP_Site_GoogleWebFont
 {
 	private $_fonts = array();
 

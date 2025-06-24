@@ -140,6 +140,12 @@ function cptui_tools() {
 	}
 
 	echo '<div class="wrap">';
+	/**
+	 * Fires immediately after wrap div started on all of the cptui admin pages.
+	 *
+	 * @since 1.14.0
+	 */
+	do_action( 'cptui_inside_wrap' );
 
 	/**
 	 * Fires right inside the wrap div for the import/export pages.
@@ -391,7 +397,9 @@ function cptui_render_posttypes_taxonomies_section() {
 					$cptui_post_types = cptui_get_post_type_data();
 					if ( ! empty( $cptui_post_types ) ) {
 						foreach ( $cptui_post_types as $type => $values ) {
-							$cptui_post_types[ $type ]['description'] = wp_slash( html_entity_decode( $values['description'] ) );
+							if ( ! empty( $values['description'] ) ) {
+								$cptui_post_types[ $type ]['description'] = wp_slash( html_entity_decode( $values['description'] ) );
+							}
 						}
 						$content = wp_json_encode( $cptui_post_types );
 					} else {
@@ -433,7 +441,9 @@ function cptui_render_posttypes_taxonomies_section() {
 					$cptui_taxonomies = cptui_get_taxonomy_data();
 					if ( ! empty( $cptui_taxonomies ) ) {
 						foreach ( $cptui_taxonomies as $tax => $values ) {
-							$cptui_taxonomies[ $tax ]['description'] = wp_slash( html_entity_decode( $values['description'] ) );
+							if ( ! empty( $values['description'] ) ) {
+								$cptui_taxonomies[ $tax ]['description'] = wp_slash( html_entity_decode( $values['description'] ) );
+							}
 						}
 						$content = wp_json_encode( $cptui_taxonomies );
 					} else {

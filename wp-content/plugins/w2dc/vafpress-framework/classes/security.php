@@ -1,11 +1,11 @@
 <?php
 
-class VP_W2DC_Security
+class W2DC_VP_Security
 {
 
 	/**
 	 * Singleton instance of the class
-	 * @var VP_W2DC_Security
+	 * @var W2DC_VP_Security
 	 */
 	private static $_instance;
 

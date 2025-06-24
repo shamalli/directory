@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+// @codingStandardsIgnoreFile
 
 class w2dc_categories_manager {
 	
@@ -43,7 +45,7 @@ class w2dc_categories_manager {
 			add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts_styles'));
 
 			add_meta_box(W2DC_CATEGORIES_TAX,
-					__('Listing categories', 'W2DC'),
+					esc_html__('Listing categories', 'w2dc'),
 					'post_categories_meta_box',
 					W2DC_POST_TYPE,
 					'normal',
@@ -73,7 +75,7 @@ class w2dc_categories_manager {
 			!count($postarr['tax_input'][W2DC_CATEGORIES_TAX])
 			)
 		)
-			$errors[] = __('Select at least one category!', 'W2DC');
+			$errors[] = esc_html__('Select at least one category!', 'w2dc');
 
 		if (isset($postarr['tax_input'][W2DC_CATEGORIES_TAX]) && is_array($postarr['tax_input'][W2DC_CATEGORIES_TAX])) {
 			if (!$level->unlimited_categories) {
@@ -82,7 +84,7 @@ class w2dc_categories_manager {
 			}
 
 			if ($level->categories && array_diff($postarr['tax_input'][W2DC_CATEGORIES_TAX], $level->categories)) {
-				$errors[] = __('Sorry, you can not choose some categories for this level!', 'W2DC');
+				$errors[] = esc_html__('Sorry, you can not choose some categories for this level!', 'w2dc');
 			}
 
 			$post_categories_ids = $postarr['tax_input'][W2DC_CATEGORIES_TAX];
@@ -120,7 +122,7 @@ class w2dc_categories_manager {
 	public function tags_taxonomy_columns($original_columns) {
 		$new_columns = $original_columns;
 		array_splice($new_columns, 1);
-		$new_columns['w2dc_tags_id'] = __('Tag ID', 'W2DC');
+		$new_columns['w2dc_tags_id'] = esc_html__('Tag ID', 'w2dc');
 		return array_merge($new_columns, $original_columns);
 	}
 	
@@ -134,14 +136,14 @@ class w2dc_categories_manager {
 	public function taxonomy_columns($original_columns) {
 		$new_columns = $original_columns;
 		array_splice($new_columns, 1);
-		$new_columns['w2dc_category_id'] = __('Category ID', 'W2DC');
-		$new_columns['w2dc_category_image'] = __('Image', 'W2DC');
-		$new_columns['w2dc_category_icon'] = __('Icon', 'W2DC');
+		$new_columns['w2dc_category_id'] = esc_html__('Category ID', 'w2dc');
+		$new_columns['w2dc_category_image'] = esc_html__('Image', 'w2dc');
+		$new_columns['w2dc_category_icon'] = esc_html__('Icon', 'w2dc');
 		if (get_option('w2dc_map_markers_type') == 'icons') {
-			$new_columns['w2dc_marker_category_icon'] = __('Marker Icon', 'W2DC');
-			$new_columns['w2dc_marker_category_color'] = __('Marker Color', 'W2DC');
+			$new_columns['w2dc_marker_category_icon'] = esc_html__('Marker Icon', 'w2dc');
+			$new_columns['w2dc_marker_category_color'] = esc_html__('Marker Color', 'w2dc');
 		} elseif (get_option('w2dc_map_markers_type') == 'images') {
-			$new_columns['w2dc_marker_category_image'] = __('Marker Image', 'W2DC');
+			$new_columns['w2dc_marker_category_image'] = esc_html__('Marker Image', 'w2dc');
 		}
 		if (isset($original_columns['description']))
 			unset($original_columns['description']);
@@ -154,7 +156,7 @@ class w2dc_categories_manager {
 		}
 		if ($column_name == 'w2dc_category_image') {
 			$url = $this->get_featured_image_url($term_id);
-			return $row . '<a href="' . get_edit_term_link($term_id, W2DC_CATEGORIES_TAX, W2DC_POST_TYPE) . '">' . ($url ? '<img src="' . $url . '" width="100" /><br />' : '') . __("Select image", "W2DC") . '</a>';
+			return $row . '<a href="' . get_edit_term_link($term_id, W2DC_CATEGORIES_TAX, W2DC_POST_TYPE) . '">' . ($url ? '<img src="' . $url . '" width="100" /><br />' : '') . esc_html__("Select image", "w2dc") . '</a>';
 		}
 		if ($column_name == 'w2dc_category_icon') {
 			return $row . $this->choose_icon_link($term_id);
@@ -205,7 +207,7 @@ class w2dc_categories_manager {
 				if (is_file(W2DC_CATEGORIES_ICONS_PATH . $icon_file)) {
 					$icons[$category_id] = $icon_file;
 					update_option('w2dc_categories_icons', $icons);
-					echo $category_id;
+					w2dc_esc_e($category_id);
 				}
 			} else {
 				if (isset($icons[$category_id])) {
@@ -242,7 +244,7 @@ class w2dc_categories_manager {
 				$image_name = $_POST['image_name'];
 				$markers_images[$category_id] = $image_name;
 				update_option('w2dc_categories_marker_images', $markers_images);
-				echo $category_id;
+				w2dc_esc_e($category_id);
 			} else {
 				if (isset($markers_images[$category_id])) {
 					unset($markers_images[$category_id]);
@@ -299,7 +301,7 @@ class w2dc_categories_manager {
 				if (in_array($icon_name, w2dc_get_fa_icons_names())) {
 					$markers_icons[$category_id] = $icon_name;
 					update_option('w2dc_categories_marker_icons', $markers_icons);
-					echo $category_id;
+					w2dc_esc_e($category_id);
 				}
 			} else {
 				if (isset($markers_icons[$category_id])) {
@@ -333,7 +335,7 @@ class w2dc_categories_manager {
 				$color = sanitize_hex_color($_POST['color']);
 				$markers_colors[$category_id] = $color;
 				update_option('w2dc_categories_marker_colors', $markers_colors);
-				echo $category_id;
+				w2dc_esc_e($category_id);
 			} else {
 				if (isset($markers_colors[$category_id])) {
 					unset($markers_colors[$category_id]);
@@ -382,15 +384,15 @@ class w2dc_categories_manager {
 	}
 	
 	public function admin_enqueue_category_edit_scripts() {
-		wp_enqueue_script('w2dc_categories_edit_scripts');
+		wp_enqueue_script('w2dc-categories-edit-scripts');
 		wp_localize_script(
-				'w2dc_categories_edit_scripts',
+				'w2dc-categories-edit-scripts',
 				'categories_icons',
 				array(
 						'categories_icons_url' => W2DC_CATEGORIES_ICONS_URL,
 						'categories_markers_images_png_url' => W2DC_MAP_ICONS_URL . 'icons/',
-						'ajax_dialog_title' => __('Select category icon', 'W2DC'),
-						'ajax_marker_dialog_title' => __('Select marker', 'W2DC'),
+						'ajax_dialog_title' => esc_html__('Select category icon', 'w2dc'),
+						'ajax_marker_dialog_title' => esc_html__('Select marker', 'w2dc'),
 				)
 		);
 		wp_enqueue_style('wp-color-picker');
@@ -399,7 +401,7 @@ class w2dc_categories_manager {
 	}
 	
 	public function admin_enqueue_scripts_styles() {
-		wp_enqueue_script('w2dc_categories_scripts');
+		wp_enqueue_script('w2dc-categories-scripts');
 
 		if ($listing = w2dc_getCurrentListingInAdmin()) {
 			if ($listing->level->unlimited_categories)
@@ -408,13 +410,13 @@ class w2dc_categories_manager {
 				$categories_number = $listing->level->categories_number;
 
 			wp_localize_script(
-					'w2dc_categories_scripts',
+					'w2dc-categories-scripts',
 					'level_categories',
 					array(
 							'level_categories_array' => $listing->level->categories,
 							'level_categories_number' => $categories_number,
-							'level_categories_notice_disallowed' => __('Sorry, you can not choose this category for this level!', 'W2DC'),
-							'level_categories_notice_number' => sprintf(__('Sorry, you can not choose more than %d categories!', 'W2DC'), $categories_number)
+							'level_categories_notice_disallowed' => esc_html__('Sorry, you can not choose this category for this level!', 'w2dc'),
+							'level_categories_notice_number' => sprintf(esc_html__('Sorry, you can not choose more than %d categories!', 'w2dc'), $categories_number)
 					)
 			);
 		}

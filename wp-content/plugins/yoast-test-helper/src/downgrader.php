@@ -54,11 +54,12 @@ class Downgrader implements Integration {
 		if ( ! \check_admin_referer( 'yoast_rollback_control' ) ) {
 			return;
 		}
-		if ( ! isset( $_POST['target_version'] ) ) {
+		if ( ! isset( $_POST['target_version'] ) || ! \is_string( $_POST['target_version'] ) ) {
 			return;
 		}
 
-		$target_version = \filter_var( \wp_unslash( $_POST['target_version'] ) );
+		$target_version = \sanitize_text_field( \wp_unslash( $_POST['target_version'] ) );
+
 		try {
 			$this->downgrade( $target_version );
 			\do_action(
@@ -150,7 +151,7 @@ class Downgrader implements Integration {
 				$adapter->remove_version( $version );
 				$adapter->commit_transaction();
 			} catch ( Exception $e ) {
-				$this->adapter->rollback_transaction();
+				$adapter->rollback_transaction();
 
 				throw new Exception(
 					\sprintf(
@@ -187,7 +188,7 @@ class Downgrader implements Integration {
 			throw new Exception( \__( 'Could not install the requested version.', 'yoast-test-helper' ) );
 		}
 
-		$downgrade_version = function( $option ) use ( $target_version ) {
+		$downgrade_version = static function( $option ) use ( $target_version ) {
 			$option['version'] = \sanitize_text_field( $target_version );
 			return $option;
 		};

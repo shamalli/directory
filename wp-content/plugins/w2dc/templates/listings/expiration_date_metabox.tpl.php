@@ -11,15 +11,15 @@
 </script>
 
 <?php if (!get_option('w2dc_change_expiration_date') && current_user_can('manage_options')): ?>
-<p><?php _e("Regular users can not change expiration date. This option is available only for admins.", 'W2DC'); ?></p>
+<p><?php esc_html_e("Regular users can not change expiration date. This option is available only for admins.", 'w2dc'); ?></p>
 <?php endif; ?>
 
-<p><?php _e("Set new expiration date and time of the listing.<br />Be careful: If you'll set past date - listing will expire in some minutes.", 'W2DC'); ?></p>
+<p><?php echo wp_kses(__("Set new expiration date and time of the listing.<br />Be careful: If you'll set past date - listing will expire in some minutes.", 'w2dc'), 'post'); ?></p>
 
 <div class="w2dc-content">
 	<div class="w2dc-field w2dc-form-group w2dc-form-horizontal">
 		<label class="w2dc-col-md-1 w2dc-control-label">
-			<?php _e('Date:', 'W2DC'); ?>
+			<?php esc_html_e('Date:', 'w2dc'); ?>
 		</label>
 		<div class="w2dc-col-md-3">
 			<div class="w2dc-has-feedback">
@@ -27,7 +27,7 @@
 				<span class="w2dc-glyphicon w2dc-glyphicon-calendar w2dc-form-control-feedback"></span>
 			</div>
 		</div>
-		<label class="w2dc-col-md-1 w2dc-control-label"><?php _e('Time:', 'W2DC'); ?></label>
+		<label class="w2dc-col-md-1 w2dc-control-label"><?php esc_html_e('Time:', 'w2dc'); ?></label>
 		<div class="w2dc-col-md-3">
 			<?php $hour = date('H', intval($listing->expiration_date)); ?>
 			<?php $minute = date('i', intval($listing->expiration_date)); ?>

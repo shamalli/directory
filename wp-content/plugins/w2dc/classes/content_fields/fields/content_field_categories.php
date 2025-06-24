@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+// @codingStandardsIgnoreFile
 
 class w2dc_content_field_categories extends w2dc_content_field {
 	protected $can_be_required = true;

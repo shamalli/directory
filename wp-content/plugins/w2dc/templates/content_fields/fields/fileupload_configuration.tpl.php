@@ -1,7 +1,12 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <?php w2dc_renderTemplate('admin_header.tpl.php'); ?>
 
 <h2>
-	<?php _e('Configure website field', 'W2DC'); ?>
+	<?php esc_html_e('Configure website field', 'w2dc'); ?>
 </h2>
 
 <form method="POST" action="">
@@ -10,7 +15,7 @@
 		<tbody>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Enable file title field', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Enable file title field', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<input
@@ -23,7 +28,7 @@
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Use default file title text when empty', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Use default file title text when empty', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<input
@@ -36,7 +41,7 @@
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Default file title text', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Default file title text', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<input
@@ -48,7 +53,7 @@
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Allowed file types', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Allowed file types', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<?php foreach ($content_field->get_mime_types() AS $type=>$label): ?>
@@ -57,7 +62,7 @@
 							name="allowed_mime_types[]"
 							type="checkbox"
 							class="regular-text"
-							value="<?php echo $type; ?>"
+							value="<?php w2dc_esc_e($type); ?>"
 							<?php if (in_array($type, $content_field->allowed_mime_types)) echo 'checked'; ?> /> <?php echo esc_html($label['label']); ?> (<?php echo esc_html($type); ?>) <br />
 					</label>
 					<?php endforeach; ?>
@@ -66,7 +71,7 @@
 		</tbody>
 	</table>
 	
-	<?php submit_button(__('Save changes', 'W2DC')); ?>
+	<?php submit_button(esc_html__('Save changes', 'w2dc')); ?>
 </form>
 
 <?php w2dc_renderTemplate('admin_footer.tpl.php'); ?>

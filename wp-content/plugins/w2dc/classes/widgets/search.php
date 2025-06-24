@@ -1,32 +1,36 @@
 <?php
 
-global $w2dc_search_widget_params;
-$w2dc_search_widget_params = array(
-		array(
-				'type' => 'dropdown',
-				'param_name' => 'custom_home',
-				'value' => array(__('No', 'W2DC') => '0', __('Yes', 'W2DC') => '1'),
-				'heading' => __('Is it on custom home page?', 'W2DC'),
-		),
-		array(
-				'type' => 'directory',
-				'param_name' => 'directory',
-				'heading' => __("Search by directory", "W2DC"),
-				'dependency' => array('element' => 'custom_home', 'value' => '0'),
-		),
-		array(
-				'type' => 'textfield',
-				'param_name' => 'uid',
-				'heading' => __("uID", "W2DC"),
-				'description' => __("Enter unique string to connect search form with another elements on the page", "W2DC"),
-				'dependency' => array('element' => 'custom_home', 'value' => '0'),
-		),
-		array(
-				'type' => 'formid',
-				'param_name' => 'form_id',
-				'heading' => esc_html__("Select search form", "W2DC"),
-		),
-);
+// @codingStandardsIgnoreFile
+
+add_action('init', function() {
+	global $w2dc_search_widget_params;
+	$w2dc_search_widget_params = array(
+			array(
+					'type' => 'dropdown',
+					'param_name' => 'custom_home',
+					'value' => array(esc_html__('No', 'w2dc') => '0', esc_html__('Yes', 'w2dc') => '1'),
+					'heading' => esc_html__('Is it on custom home page?', 'w2dc'),
+			),
+			array(
+					'type' => 'directory',
+					'param_name' => 'directory',
+					'heading' => esc_html__("Search by directory", "w2dc"),
+					'dependency' => array('element' => 'custom_home', 'value' => '0'),
+			),
+			array(
+					'type' => 'textfield',
+					'param_name' => 'uid',
+					'heading' => esc_html__("uID", "w2dc"),
+					'description' => esc_html__("Enter unique string to connect search form with another elements on the page", "w2dc"),
+					'dependency' => array('element' => 'custom_home', 'value' => '0'),
+			),
+			array(
+					'type' => 'formid',
+					'param_name' => 'form_id',
+					'heading' => esc_html__("Select search form", "w2dc"),
+			),
+	);
+}, 0);
 
 class w2dc_search_widget extends w2dc_widget {
 
@@ -35,7 +39,7 @@ class w2dc_search_widget extends w2dc_widget {
 
 		parent::__construct(
 				'w2dc_search_widget',
-				__('Directory - Search', 'W2DC')
+				esc_html__('Directory widget - Search', 'w2dc')
 		);
 
 		$this->convertParams($w2dc_search_widget_params);

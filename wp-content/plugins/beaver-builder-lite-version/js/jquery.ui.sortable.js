@@ -1,9 +1,21 @@
 /**************************************************
+ * This file has been modified to support Beaver Builder.
+ * The following methods have been changed:
+
+ * _cacheMargins:
+ * 		The _cacheMargins method has been modified
+ * 		to fix an issue that was causing a helper
+ * 		position bug in the builder.
  *
- * The _cacheMargins method of this version has 
- * been customized to fix an issue that was causing 
- * a helper position bug in the builder.
+ * refreshPositions:
+ * _intersectsWith:
+ * _intersectsWithPointer:
+ * _intersectsWithSides:
+ * 		These methods have been modified to add
+ * 		support for BB's iframe UI.
  *
+ * _mouseDrag:
+ * 		Use client X and Y for helper position if touch.
  **************************************************/
 
 /*!
@@ -263,7 +275,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 		}
 
 		//Prepare scrolling
-		if(this.scrollParent[0] !== document && this.scrollParent[0].tagName !== "HTML") {
+		if(this.scrollParent[0] !== window.parent.document && this.scrollParent[0].tagName !== "HTML") {
 			this.overflowOffset = this.scrollParent.offset();
 		}
 
@@ -355,10 +367,18 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 		//Set the helper position
 		if(!this.options.axis || this.options.axis !== "y") {
-			this.helper[0].style.left = this.position.left+"px";
+			if (this._touchMoved) {
+				this.helper[0].style.left = event.originalEvent.clientX+"px";
+			} else {
+				this.helper[0].style.left = this.position.left+"px";
+			}
 		}
 		if(!this.options.axis || this.options.axis !== "x") {
-			this.helper[0].style.top = this.position.top+"px";
+			if (this._touchMoved) {
+				this.helper[0].style.top = event.originalEvent.clientY+"px";
+			} else {
+				this.helper[0].style.top = this.position.top+"px";
+			}
 		}
 
 		//Rearrange
@@ -542,9 +562,12 @@ $.widget("ui.sortable", $.ui.mouse, {
 	/* Be careful with the following core functions */
 	_intersectsWith: function(item) {
 
+		var frame = this.options.frame ? this.options.frame : null;
+		var frameScrollTop = frame && ! this._touchMoved ? frame.contents().scrollTop() : 0;
+
 		var x1 = this.positionAbs.left,
 			x2 = x1 + this.helperProportions.width,
-			y1 = this.positionAbs.top,
+			y1 = this.positionAbs.top + frameScrollTop,
 			y2 = y1 + this.helperProportions.height,
 			l = item.left,
 			r = l + item.width,
@@ -573,7 +596,10 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 	_intersectsWithPointer: function(item) {
 
-		var isOverElementHeight = (this.options.axis === "x") || isOverAxis(this.positionAbs.top + this.offset.click.top, item.top, item.height),
+		var frame = this.options.frame ? this.options.frame : null;
+		var frameScrollTop = frame && ! this._touchMoved ? frame.contents().scrollTop() : 0;
+
+		var isOverElementHeight = (this.options.axis === "x") || isOverAxis(this.positionAbs.top + this.offset.click.top + frameScrollTop, item.top, item.height),
 			isOverElementWidth = (this.options.axis === "y") || isOverAxis(this.positionAbs.left + this.offset.click.left, item.left, item.width),
 			isOverElement = isOverElementHeight && isOverElementWidth,
 			verticalDirection = this._getDragVerticalDirection(),
@@ -591,7 +617,10 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 	_intersectsWithSides: function(item) {
 
-		var isOverBottomHalf = isOverAxis(this.positionAbs.top + this.offset.click.top, item.top + (item.height/2), item.height),
+		var frame = this.options.frame ? this.options.frame : null;
+		var frameScrollTop = frame && ! this._touchMoved ? frame.contents().scrollTop() : 0;
+
+		var isOverBottomHalf = isOverAxis(this.positionAbs.top + this.offset.click.top + frameScrollTop, item.top + (item.height/2), item.height),
 			isOverRightHalf = isOverAxis(this.positionAbs.left + this.offset.click.left, item.left + (item.width/2), item.width),
 			verticalDirection = this._getDragVerticalDirection(),
 			horizontalDirection = this._getDragHorizontalDirection();
@@ -638,13 +667,13 @@ $.widget("ui.sortable", $.ui.mouse, {
 				for ( j = cur.length - 1; j >= 0; j--){
 					inst = $.data(cur[j], this.widgetFullName);
 					if(inst && inst !== this && !inst.options.disabled) {
-						queries.push([$.isFunction(inst.options.items) ? inst.options.items.call(inst.element) : $(inst.options.items, inst.element).not(".ui-sortable-helper").not(".ui-sortable-placeholder"), inst]);
+						queries.push([typeof inst.options.items === 'function' ? inst.options.items.call(inst.element) : $(inst.options.items, inst.element).not(".ui-sortable-helper").not(".ui-sortable-placeholder"), inst]);
 					}
 				}
 			}
 		}
 
-		queries.push([$.isFunction(this.options.items) ? this.options.items.call(this.element, null, { options: this.options, item: this.currentItem }) : $(this.options.items, this.element).not(".ui-sortable-helper").not(".ui-sortable-placeholder"), this]);
+		queries.push([typeof this.options.items === 'function' ? this.options.items.call(this.element, null, { options: this.options, item: this.currentItem }) : $(this.options.items, this.element).not(".ui-sortable-helper").not(".ui-sortable-placeholder"), this]);
 
 		function addItems() {
 			items.push( this );
@@ -679,7 +708,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 		var i, j, cur, inst, targetData, _queries, item, queriesLength,
 			items = this.items,
-			queries = [[$.isFunction(this.options.items) ? this.options.items.call(this.element[0], event, { item: this.currentItem }) : $(this.options.items, this.element), this]],
+			queries = [[typeof this.options.items === 'function' ? this.options.items.call(this.element[0], event, { item: this.currentItem }) : $(this.options.items, this.element), this]],
 			connectWith = this._connectWith();
 
 		if(connectWith && this.ready) { //Shouldn't be run the first time through due to massive slow-down
@@ -688,7 +717,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 				for (j = cur.length - 1; j >= 0; j--){
 					inst = $.data(cur[j], this.widgetFullName);
 					if(inst && inst !== this && !inst.options.disabled) {
-						queries.push([$.isFunction(inst.options.items) ? inst.options.items.call(inst.element[0], event, { item: this.currentItem }) : $(inst.options.items, inst.element), inst]);
+						queries.push([typeof inst.options.items === 'function' ? inst.options.items.call(inst.element[0], event, { item: this.currentItem }) : $(inst.options.items, inst.element), inst]);
 						this.containers.push(inst);
 					}
 				}
@@ -722,6 +751,8 @@ $.widget("ui.sortable", $.ui.mouse, {
 			this.offset.parent = this._getParentOffset();
 		}
 
+		var frame = this.options.frame ? this.options.frame : null;
+		var frameOffset = frame && ! this._touchMoved ? frame.offset() : null;
 		var i, item, t, p;
 
 		for (i = this.items.length - 1; i >= 0; i--){
@@ -740,8 +771,14 @@ $.widget("ui.sortable", $.ui.mouse, {
 			}
 
 			p = t.offset();
-			item.left = p.left;
-			item.top = p.top;
+
+			if (item.item[0].ownerDocument === document) {
+				item.left = p.left + (frameOffset ? frameOffset.left : 0);
+				item.top = p.top + (frameOffset ? frameOffset.top : 0);
+			} else {
+				item.left = p.left;
+				item.top = p.top;
+			}
 		}
 
 		if(this.options.custom && this.options.custom.refreshContainers) {
@@ -749,8 +786,15 @@ $.widget("ui.sortable", $.ui.mouse, {
 		} else {
 			for (i = this.containers.length - 1; i >= 0; i--){
 				p = this.containers[i].element.offset();
-				this.containers[i].containerCache.left = p.left;
-				this.containers[i].containerCache.top = p.top;
+
+				if (this.containers[i].element[0].ownerDocument === document) {
+					this.containers[i].containerCache.left = p.left + (frameOffset ? frameOffset.left : 0);
+					this.containers[i].containerCache.top = p.top + (frameOffset ? frameOffset.top : 0);
+				} else {
+					this.containers[i].containerCache.left = p.left;
+					this.containers[i].containerCache.top = p.top;
+				}
+
 				this.containers[i].containerCache.width	= this.containers[i].element.outerWidth();
 				this.containers[i].containerCache.height = this.containers[i].element.outerHeight();
 			}
@@ -919,7 +963,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 	_createHelper: function(event) {
 
 		var o = this.options,
-			helper = $.isFunction(o.helper) ? $(o.helper.apply(this.element[0], [event, this.currentItem])) : (o.helper === "clone" ? this.currentItem.clone() : this.currentItem);
+			helper = typeof o.helper === 'function' ? $(o.helper.apply(this.element[0], [event, this.currentItem])) : (o.helper === "clone" ? this.currentItem.clone() : this.currentItem);
 
 		//Add the helper to the DOM if that didn't happen already
 		if(!helper.parents("body").length) {
@@ -945,7 +989,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 		if (typeof obj === "string") {
 			obj = obj.split(" ");
 		}
-		if ($.isArray(obj)) {
+		if (Array.isArray(obj)) {
 			obj = {left: +obj[0], top: +obj[1] || 0};
 		}
 		if ("left" in obj) {

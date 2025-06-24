@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 add_filter("wcsearch_query_args_validate", "wcsearch_query_args_validate_orderby");
 function wcsearch_query_args_validate_orderby($args) {
 	

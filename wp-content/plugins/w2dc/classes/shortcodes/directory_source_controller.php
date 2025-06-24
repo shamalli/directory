@@ -14,7 +14,7 @@ function w2dc_render_source_shortcode($args, $shortcode_content) {
 		
 		$post_content = str_replace(array("[" , "]"), array("[[" , "]]"), $post_content);
 
-		$out = '<div class="w2dc-source-shortcode" style="padding: 20px 0;">' . $post_content . '</div>';
+		$out = '<div class="w2dc-source-shortcode">' . $post_content . '</div>';
 
 		$out = str_replace('<p>[[webdirectory-source]]</p>', '', $out);
 		$out = str_replace('<p>[[webdirectory-demo-links]]</p>', '', $out);

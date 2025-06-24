@@ -1,3 +1,8 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 		<div class="w2dc-content w2dc-favourites-page">
 			<?php do_action('w2dc_favourites_page_header'); ?>
 			

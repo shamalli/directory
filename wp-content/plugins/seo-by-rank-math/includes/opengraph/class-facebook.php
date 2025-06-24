@@ -12,7 +12,7 @@ namespace RankMath\OpenGraph;
 
 use RankMath\Helper;
 use RankMath\Paper\Paper;
-use MyThemeShop\Helpers\Str;
+use RankMath\Helpers\Str;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -222,7 +222,7 @@ class Facebook extends OpenGraph {
 	 * Output the site name straight from the blog info.
 	 */
 	public function site_name() {
-		$this->tag( 'og:site_name', get_bloginfo( 'name' ) );
+		$this->tag( 'og:site_name', Helper::get_settings( 'titles.website_name', get_bloginfo( 'name' ) ) );
 	}
 
 	/**
@@ -342,6 +342,6 @@ class Facebook extends OpenGraph {
 	 * @return bool
 	 */
 	private function is_product() {
-		return function_exists( 'is_woocommerce' ) && is_product();
+		return function_exists( 'is_woocommerce' ) && function_exists( 'is_product' ) && is_product();
 	}
 }

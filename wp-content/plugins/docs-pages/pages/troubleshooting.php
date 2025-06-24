@@ -7,7 +7,7 @@ return array(
 	<div class="w2dc-docs w2dc-docs-side">
 		<h2 id="troubleshooting">Troubleshooting</h2>
 		
-		<i class="fa fa-star"></i> Before troubleshooting clear cache of your browser and cache on your site, if any caching system is used.
+		<i class="fa fa-star"></i> Before troubleshooting clear cache of your browser and cache on your site, if any caching system is used. Temporarily disable all caching plugins and systems.
 		
 		Most of issues with the directory plugin are caused by wrong configuration in directory settings, so the best solution is to look through directory settings and set up them correctly. Another issues can be easily fixed by following below instructions.
 		
@@ -59,6 +59,16 @@ return array(
 		
 		<i class="fa fa-exclamation-triangle"></i> To test server API key you can visit debug page and check geolocation response. Debug page is placed on your site by similar URL <strong>http://www.yoursite.com/wp-admin/admin.php?page=w2dc_debug</strong>
 		
+		<iframe width="912" height="600" src="https://www.youtube.com/embed/0G5Hmo8gG-w" title="Troubleshooting Google API keys" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+		
+		<hr />
+		
+		<h3 id="styles_problems">The page does not load plugin styles and scripts, errors in JS console</h3>
+		
+		This could be when using shortcodes in page builders like Divi builder or Oxygen builder, or built-in theme elements which can process shortcodes. Plugin shortcode was processed, but too late, so the page does not load required styles and scripts at the top of the page. 
+		
+		You have to enable <em>"Include directory JS and CSS files on all pages"</em> option at the <a href="[base_url]/documentation/settings/advanced/">Advanced settings tab</a>.
+		
 		<hr />
 		
 		<h3 id="emails_problems">Problems with emails sending</h3>
@@ -77,7 +87,7 @@ return array(
 		<hr />
 		
 		<h3 id="webdirectory_page">How to remove \'web-2-0-directory\' slug from URL?</h3>
-		By default new page with <strong>&#091;webdirectory&#093;</strong> shortcode has a URL like http://www.yoursite.com/web-2-0-directory/. In order to remove \'web-2-0-directory\' part from address - select this page as homepage in WordPress Settings -> Reading settings.
+		By default new page with <strong>&#091;webdirectory&#093;</strong> shortcode has a URL like http://www.yoursite.com/web-2-0-directory/. In order to remove \'web-2-0-directory\' part from address - select this page as home page in WordPress Settings -> Reading settings.
 		
 		<hr />
 		
@@ -102,7 +112,7 @@ return array(
 		<strong>Answer:</strong> Double check everything you\'ve made step by step. Special attention to the name of translation files and paths where you place them.
 		There is no problem at the plugin\'s side. The plugin uses translation files in exactly the same way any other WordPress plugin does.
 		
-		<strong>Question:</strong> I have translated all strings from the W2DC.po file, but it still shows some untranslated texts at the frontend, like address, phone, website, country, e.t.c.
+		<strong>Question:</strong> I have translated all strings from the w2dc.pot file, but it still shows some untranslated texts at the frontend, like address, phone, website, country, e.t.c.
 		
 		<strong>Answer:</strong> These are names of content fields. It is user-generated content, you should translate these strings at the admin dashboard at the directory management pages (Directory Admin -> Content fields, Directory Admin -> Locations levels, Directory Admin -> Listings levels)
 		
@@ -123,7 +133,7 @@ return array(
 		<hr />
 		
 		<h3 id="javascript_errors">Errors in javascript console of the browser</h3>
-		Javascript errors could break different parts of functionality of the plugin: images gallery, radius slider, content fields, search forms and so on. To see errors open browser console by pressing F12 and refresh the page.
+		Javascript errors could break different parts of functionality of the plugin: images gallery, radius slider, content fields, search forms and so on. To see errors <strong>open browser console by pressing F12 and refresh the page</strong>.
 		Usually javascript errors could be caused by 3rd party plugins or installed theme. Sometimes another plugin or your theme tries to "format" the output of directory plugin, this also can give odd behaviour due to unnecessary tags in page markup, like paragraphs, divs or spans tags. The only way to fix this - to look through plugins/theme settings and find an option to disable "formatting".
 		
 		<img src="[base_url]/wp-content/uploads/javascript_errors.png" />

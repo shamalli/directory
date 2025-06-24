@@ -1,5 +1,7 @@
 <?php 
 
+// @codingStandardsIgnoreFile
+
 /**
  *  [webdirectory-term-title] shortcode
  *

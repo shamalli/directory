@@ -1,3 +1,9 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
+
 <?php wcsearch_renderTemplate('admin_header.tpl.php'); ?>
 
 <?php 
@@ -8,66 +14,15 @@ global $wcsearch_model_options;
 	(function($) {
 		"use strict";
 
-		var wcsearch_element_loading = false;
+	var wcsearch_element_loading = false;
 
-	/**
-	* 
-	* contains all options of all model objects in one JSON array, following format example:
-	* 
-	* array(
-	* 	'keywords' => array(
-	* 		array(
-	* 			"type" => "select",
-	* 			"name" => "autocomplete",
-	* 			"title" => "Autocomplete",
-	* 			"options" => array(
-	* 				0 => "No",
-	* 				1 => "Yes"
-	* 			),
-	* 			"value" => 1
-	* 		)
-	* 	)
-	* )
-	**/
 	var wcsearch_model_options = <?php echo json_encode($wcsearch_model_options); ?>;
 
-	/**
-	* 
-	* contains placeholders and objects in one JSON array, following format example:
-	* 
-	* array(
-	* 	'placeholders' => array(
-	* 		"0" => array(
-	* 				"columns": 1,
-	* 				"rows": 1,
-	* 				"input": ""
-	* 		),
-	* 		"1" => array(
-	* 				"columns": 2,
-	* 				"rows": 1,
-	* 				"input": array(
-	* 					"type" => "keywords",
-	* 				),
-	* 		),
-	* 		"2" => array(
-	* 				"columns": 1,
-	* 				"rows": 2,
-	* 				"input": array(
-	* 					"type" => "tax",
-	* 					"tax" => "product_cat",
-	* 					"options" => array(
-							"mode" => "autocomplete",
-	* 					)
-	* 				)
-	* 		)
-	* 	)
-	* );
-	**/
 	var wcsearch_model = <?php echo json_encode($wcsearch_model); ?>;
 
 	var wcsearch_model_column;
 
-	var wcsearch_model_columns_counter = <?php echo esc_attr($search_form_data['columns_num']); ?>;
+	var wcsearch_model_columns_counter = <?php echo (($search_form_data['columns_num']) ? esc_attr($search_form_data['columns_num']) : 1); ?>;
 
 	$(document).on("mouseenter", ".wcsearch-checkbox, .wcsearch-radio, .wcsearch-search-term-button", function() {
 		$(this).find(".wcsearch-model-options-link").show();
@@ -157,7 +112,7 @@ global $wcsearch_model_options;
 
 			var extend_button = $("<span/>")
 			.addClass("wcsearch-search-model-extend-button")
-			.attr("title", "<?php esc_html_e("wider/narrower", "WCSEARCH"); ?>")
+			.attr("title", "<?php esc_html_e("wider/narrower", "wcsearch"); ?>")
 			.on("click", function() {
 				var input = placeholder.find(".wcsearch-search-model-input");
 
@@ -242,7 +197,7 @@ global $wcsearch_model_options;
 			});
 			buttons_panel.append(extend_button[0]);
 			
-			var delete_button = $('<span class="wcsearch-search-model-delete-button" title="<?php esc_html_e("delete", "WCSEARCH"); ?>"></span>')
+			var delete_button = $('<span class="wcsearch-search-model-delete-button" title="<?php esc_html_e("delete", "wcsearch"); ?>"></span>')
 			.on("click", function() {
 				var input = placeholder.find(".wcsearch-search-model-input");
 				if (input.length) {
@@ -266,7 +221,7 @@ global $wcsearch_model_options;
 			var bottom_buttons_panel = $("<div/>").addClass("wcsearch-search-model-bottom-buttons-panel");
 			var down_button = $("<span/>")
 			.addClass("wcsearch-search-model-down-button")
-			.attr("title", "<?php esc_html_e("add row", "WCSEARCH"); ?>")
+			.attr("title", "<?php esc_html_e("add row", "wcsearch"); ?>")
 			.on("click", function() {
 				var rows_number = placeholder.attr("data-grid-row-end");
 				if (!rows_number || rows_number == 'auto') {
@@ -281,7 +236,7 @@ global $wcsearch_model_options;
 			
 			var up_button = $("<span/>")
 			.addClass("wcsearch-search-model-up-button")
-			.attr("title", "<?php esc_html_e("remove row", "WCSEARCH"); ?>")
+			.attr("title", "<?php esc_html_e("remove row", "wcsearch"); ?>")
 			.on("click", function() {
 				var rows_number = placeholder.attr("data-grid-row-end");
 				if (rows_number > 1) {
@@ -296,7 +251,7 @@ global $wcsearch_model_options;
 			var top_buttons_panel = $("<div/>").addClass("wcsearch-search-model-top-buttons-panel");
 			var add_button = $("<span/>")
 			.addClass("wcsearch-search-model-add-button")
-			.attr("title", "<?php esc_html_e("add placeholder here", "WCSEARCH"); ?>")
+			.attr("title", "<?php esc_html_e("add placeholder here", "wcsearch"); ?>")
 			.on("click", function() {
 				wcsearch_add_placeholder_to_model(placeholder);
 
@@ -530,18 +485,18 @@ global $wcsearch_model_options;
 				options_form.attr('data-tax', tax);
 
 				if (term_id) {
-					var heading = $("<h4/>").html('<a href="javascript:void(0);"><?php esc_html_e("Element:", "WCSEARCH"); ?> '+field_name+'</a>');
+					var heading = $("<h4/>").html('<a href="javascript:void(0);"><?php esc_html_e("Element:", "wcsearch"); ?> '+field_name+'</a>');
 					heading.on("click", function() {
 						placeholder.trigger("click");
 					});
 					options_form.append(heading);
-					options_form.append('<h4><?php esc_html_e("Item:", "WCSEARCH"); ?> '+term_name+'</h4>');
+					options_form.append('<h4><?php esc_html_e("Item:", "wcsearch"); ?> '+term_name+'</h4>');
 					
 					var options = [
 							{
 								type: "color",
 								name: "color",
-								title: "<?php esc_html_e("Item color", "WCSEARCH"); ?>"
+								title: "<?php esc_html_e("Item color", "wcsearch"); ?>"
 							}
 					];
 				} else {
@@ -583,28 +538,7 @@ global $wcsearch_model_options;
 						var title = $("<div/>").addClass("wcsearch-search-model-options-column-title").html(option.title);
 						var name = option.name;
 						var multi_button = '';
-						/*if (typeof option.multi != "undefined" && option.multi) {
-							name = name + '[]';
-							multi_button = $("<span/>").addClass("wcsearch-search-model-options-multi-button wcsearch-fa wcsearch-fa-plus");
-							multi_button.attr("title", "<?php esc_html_e("Add", "WCSEARCH"); ?> " + option.title);
-							multi_button.on("click", function(e) {
-								var row_old = $(this).parents(".wcsearch-search-model-options-row");
-								var row_new = $("<div/>").addClass("wcsearch-search-model-options-row");
-								var column_one_empty = $("<div/>").addClass("wcsearch-search-model-options-column-one");
-								var title_empty = $("<div/>").addClass("wcsearch-search-model-options-column-title");
-								column_one_empty.append(title_empty);
-								var column_two_copy = row_old.find(".wcsearch-search-model-options-column-two").clone();
-								row_new.append(column_one_empty);
-								row_new.append(column_two_copy);
-
-								row_new.insertAfter(row_old);
-								
-								//options_form.append(row_new);
-								console.log($(this));
-								console.log(column_two_copy);
-							});
-							title.append(multi_button);
-						}*/
+						
 						column_one.append(title);
 						if (typeof option.description != "undefined") {
 							column_one.append('<div class="wcsearch-search-model-options-column-description">'+option.description+'</div>');
@@ -646,6 +580,25 @@ global $wcsearch_model_options;
 							};
 							funcs_to_call.push(fn_to_call);
 						}
+
+						function create_select_with_terms(options, name, css_class) {
+							var sel = $("<select />", {
+								name: name + "[]",
+								class: css_class + " wcsearch-search-model-tax-terms wcsearch-search-model-options-input",
+								multiple: "multiple"
+							});
+
+							$(options).each(function() {
+								var opt = $("<option />").attr('value', this.value).text(this.option);
+								if (this.selected) {
+									opt.attr('selected', this.selected);
+								}
+								sel.append(opt);
+							});
+
+							return sel;
+						}
+						
 						if (option.type == "exact_terms") {
 
 							var tax = input.data("tax");
@@ -668,15 +621,13 @@ global $wcsearch_model_options;
 												{
 													"action": "wcsearch_get_tax_options",
 													"tax": tax,
-													"items": items,
-													"field_name": tax_field_name,
-													"field_class": tax_field_class
+													"items": items
 												},
 												function(response_from_the_action_function) {
-													if (response_from_the_action_function != 0 && response_from_the_action_function.html) {
+													if (response_from_the_action_function != 0 && response_from_the_action_function) {
 														$(".wcsearch-exact-terms").remove();
-														
-														field.after(response_from_the_action_function.html)
+
+														field.after(create_select_with_terms(response_from_the_action_function, tax_field_name, tax_field_class));
 													}
 												},
 												'json'
@@ -700,13 +651,11 @@ global $wcsearch_model_options;
 											{
 												"action": "wcsearch_get_tax_options",
 												"tax": tax,
-												"items": items,
-												"field_name": tax_field_name,
-												"field_class": tax_field_class
+												"items": items
 											},
 											function(response_from_the_action_function) {
-												if (response_from_the_action_function != 0 && response_from_the_action_function.html) {
-													field.after(response_from_the_action_function.html);
+												if (response_from_the_action_function != 0 && response_from_the_action_function) {
+													field.after(create_select_with_terms(response_from_the_action_function, tax_field_name, tax_field_class));
 
 													field.parents("form").find(".wcsearch-search-model-options-button").trigger("click");
 												}
@@ -735,15 +684,13 @@ global $wcsearch_model_options;
 											{
 												"action": "wcsearch_get_tax_options",
 												"tax": index,
-												"items": items,
-												"field_name": tax_field_name,
-												"field_class": tax_field_class
+												"items": items
 											},
 											function(response_from_the_action_function) {
-												if (response_from_the_action_function != 0 && response_from_the_action_function.html) {
+												if (response_from_the_action_function != 0 && response_from_the_action_function) {
 													$(".wcsearch-tax-dependency").remove();
 													
-													field.after(response_from_the_action_function.html)
+													field.after(create_select_with_terms(response_from_the_action_function, tax_field_name, tax_field_class));
 												}
 											},
 											'json'
@@ -765,13 +712,11 @@ global $wcsearch_model_options;
 										{
 											"action": "wcsearch_get_tax_options",
 											"tax": tax,
-											"items": items,
-											"field_name": tax_field_name,
-											"field_class": tax_field_class
+											"items": items
 										},
 										function(response_from_the_action_function) {
-											if (response_from_the_action_function != 0 && response_from_the_action_function.html) {
-												field.after(response_from_the_action_function.html)
+											if (response_from_the_action_function != 0 && response_from_the_action_function) {
+												field.after(create_select_with_terms(response_from_the_action_function, tax_field_name, tax_field_class));
 											}
 										},
 										'json'
@@ -787,7 +732,7 @@ global $wcsearch_model_options;
 
 				if (options.length) {
 					// Apply button, hidden by default
-					var apply_button = $('<button class="wcsearch-search-model-options-button wcsearch-btn wcsearch-btn-primary"><?php esc_html_e("Apply changes", "WCSEARCH"); ?></button>');
+					var apply_button = $('<button class="wcsearch-search-model-options-button wcsearch-btn wcsearch-btn-primary"><?php esc_html_e("Apply changes", "wcsearch"); ?></button>');
 					apply_button.on("click", function(e) {
 						e.preventDefault();
 
@@ -806,7 +751,6 @@ global $wcsearch_model_options;
 							$.each(input.data(), function(option_name, option_value) {
 								post_params.push({ name: option_name, value: input.attr("data-"+option_name) });
 							});
-							//post_params.push({ name: "selected_term_id", value: term_id });
 						}
 
 						post_params.push({ name: "action", value: "wcsearch_get_search_model" });
@@ -941,9 +885,7 @@ global $wcsearch_model_options;
 				}
 				$.each(input.data(), function(option_name, option_value) {
 					// Assign values with their structure
-					//if (typeof option_value != "object") {
-						p_obj.input[option_name] = input.attr("data-"+option_name);
-					//}
+					p_obj.input[option_name] = input.attr("data-"+option_name);
 				});
 				if (input.attr("data-values") !== false) {
 					p_obj.input.values = input.attr("data-values");
@@ -1174,7 +1116,7 @@ global $wcsearch_model_options;
 		$(".wcsearch-search-tab-content[data-tab="+tab+"]").show();
 
 		if (!$(".wcsearch-search-tab-content[data-tab="+tab+"]").html()) {
-			$(".wcsearch-search-tab-content[data-tab="+tab+"]").html("<?php esc_attr_e('Select element, please.', 'WCSEARCH'); ?>");
+			$(".wcsearch-search-tab-content[data-tab="+tab+"]").html("<?php esc_attr_e('Select element on the search form', 'wcsearch'); ?>");
 		}
 
 		$(".wcsearch-search-tab-title").removeClass("wcsearch-search-tab-active");
@@ -1260,7 +1202,7 @@ global $wcsearch_model_options;
 				wcsearch_model_columns_counter = 1;
 			}
 
-			$(this).text("<?php esc_html_e('Add column', 'WCSEARCH'); ?>" + " (" + wcsearch_model_columns_counter + ")");
+			$(this).text("<?php esc_html_e('Add column', 'wcsearch'); ?>" + " (" + wcsearch_model_columns_counter + ")");
 
 			wcsearch_model_update_columns();
 			wcsearch_model_update_placeholders();
@@ -1329,17 +1271,17 @@ global $wcsearch_model_options;
 
 		wcsearch_apply_color($(".wcsearch-seach-model-bg-color"), wcsearch_apply_bg_color);
 		<?php if ($search_form_data['bg_color']): ?>
-		wcsearch_apply_bg_color("<?php echo $search_form_data['bg_color']; ?>");
+		wcsearch_apply_bg_color("<?php wcsearch_esc_e($search_form_data['bg_color']); ?>");
 		<?php endif; ?>
 		
 		wcsearch_apply_color($(".wcsearch-seach-model-text-color"), wcsearch_apply_text_color);
-		wcsearch_apply_text_color("<?php echo $search_form_data['text_color']; ?>");
+		wcsearch_apply_text_color("<?php wcsearch_esc_e($search_form_data['text_color']); ?>");
 		
 		wcsearch_apply_color($(".wcsearch-seach-model-elements-color"), wcsearch_apply_elements_color);
-		wcsearch_apply_elements_color("<?php echo $search_form_data['elements_color']; ?>");
+		wcsearch_apply_elements_color("<?php wcsearch_esc_e($search_form_data['elements_color']); ?>");
 
 		<?php if ($search_form_data['bg_color']): ?>
-		wcsearch_set_bg_transparency(<?php echo $search_form_data['bg_transparency']; ?>);
+		wcsearch_set_bg_transparency(<?php wcsearch_esc_e($search_form_data['bg_transparency']); ?>);
 		<?php endif; ?>
 
 		$(".wcsearch-search-tab-title").on("click", function(e) {
@@ -1371,7 +1313,7 @@ global $wcsearch_model_options;
 			$(".wcsearch-search-model-used-by select").data("current_val", $(".wcsearch-search-model-used-by select").val());
 		}
 		$("body").on("change", ".wcsearch-search-model-used-by select", function() {
-			if (!confirm("<?php esc_attr_e("All inputs will be droped and empty form saved. Continue?", "WCSEARCH"); ?>")) {
+			if (!confirm("<?php esc_attr_e("All inputs will be droped and empty form saved. Continue?", "wcsearch"); ?>")) {
 				$(this).val($(this).data("current_val"));
 				
 				return false;
@@ -1388,28 +1330,28 @@ global $wcsearch_model_options;
 	<div class="wcsearch-search-model-sidebar">
 		<div class="wcsearch-search-model-top-buttons">
 			<input type="hidden" name="post_status" value="publish" />
-			<input type="submit" class="wcsearch-btn wcsearch-btn-primary wcsearch-submit-model" value="<?php esc_attr_e('Save form', 'WCSEARCH'); ?>" name="submit" />
+			<input type="submit" class="wcsearch-btn wcsearch-btn-primary wcsearch-submit-model" value="<?php esc_attr_e('Save form', 'wcsearch'); ?>" name="submit" />
 			<?php if (wcsearch_is_woo_active() && $search_form_data['used_by'] == 'wc'): ?>
-			<a target="_blank" href="<?php echo add_query_arg('wcsearch_test_form', $search_form_model->id, wc_get_page_permalink( 'shop' )); ?>" class="wcsearch-btn wcsearch-btn-primary"><?php esc_attr_e('Test form', 'WCSEARCH'); ?></a>
+			<a target="_blank" href="<?php echo add_query_arg('wcsearch_test_form', $search_form_model->id, wc_get_page_permalink( 'shop' )); ?>" class="wcsearch-btn wcsearch-btn-primary"><?php esc_attr_e('Test form', 'wcsearch'); ?></a>
 			<?php endif; ?>
 		</div>
 		<div class="wcsearch-search-tabs">
 			<div class="wcsearch-search-tab-titles-wrapper">
 				<div class="wcsearch-search-tab-title wcsearch-search-tab-active" data-tab="elements">
-					<a href="#elements"><?php esc_html_e('Elements', 'WCSEARCH'); ?></a>
+					<a href="#elements"><?php esc_html_e('Elements', 'wcsearch'); ?></a>
 				</div>
 				<div class="wcsearch-search-tab-title" data-tab="form">
-					<a href="#form"><?php esc_html_e('Form', 'WCSEARCH'); ?></a>
+					<a href="#form"><?php esc_html_e('Form', 'wcsearch'); ?></a>
 				</div>
 				<div class="wcsearch-search-tab-title" data-tab="options">
-					<a href="#elements"><?php esc_html_e('Options', 'WCSEARCH'); ?></a>
+					<a href="#elements"><?php esc_html_e('Options', 'wcsearch'); ?></a>
 				</div>
 			</div>
 			<div class="wcsearch-search-tab-content wcsearch-search-tab-elements" data-tab="elements">
 				<?php if (($all_plugins = wcsearch_is_standalone_plugin()) && is_array($all_plugins) && count($all_plugins) > 1): ?>
 				<div class="wcsearch-search-model-options-row wcsearch-search-model-used-by">
 					<div class="wcsearch-search-model-options-column">
-						<?php esc_html_e('This search form is used by', 'WCSEARCH'); ?>
+						<?php esc_html_e('This search form is used by', 'wcsearch'); ?>
 						<select class="wcsearch-form-control" name="used_by" autocomplete="off">
 							<?php foreach ($all_plugins AS $plugin_slug=>$plugin_name): ?>
 							<option value="<?php echo esc_attr($plugin_slug); ?>" <?php selected($search_form_data['used_by'], $plugin_slug); ?>><?php echo esc_html($plugin_name); ?></option>
@@ -1426,13 +1368,13 @@ global $wcsearch_model_options;
 					<?php $search_form_model->buildFieldsButtons(wcsearch_get_model_fields($search_form_data['used_by'])); ?>
 				</div>
 			</div>
-			<div class="wcsearch-search-tab-content wcsearch-search-tab-form" data-tab="form" style="display: none;">
+			<div class="wcsearch-search-tab-content wcsearch-search-tab-form wcsearch-display-none" data-tab="form">
 				<div class="wcsearch-search-model-form-panel">
 					<?php if (wcsearch_is_woo_active() && $search_form_data['used_by'] == 'wc'): ?>
 					<div class="wcsearch-search-model-options-row">
 						<div class="wcsearch-search-model-options-column-one">
 							<label for="on_shop_page" class="wcsearch-search-model-options-column-title">
-								<?php esc_html_e('On the shop page', 'WCSEARCH'); ?>
+								<?php esc_html_e('On the shop page', 'wcsearch'); ?>
 							</label>
 						</div>
 						<div class="wcsearch-search-model-options-column-two">
@@ -1443,10 +1385,10 @@ global $wcsearch_model_options;
 					<div class="wcsearch-search-model-options-row">
 						<div class="wcsearch-search-model-options-column-one">
 							<label for="auto_submit" class="wcsearch-search-model-options-column-title">
-								<?php esc_html_e('Auto-submit', 'WCSEARCH'); ?>
+								<?php esc_html_e('Auto-submit', 'wcsearch'); ?>
 							</label>
 							<div class="wcsearch-search-model-options-column-description">
-								<?php esc_html_e('No search button required', 'WCSEARCH'); ?>
+								<?php esc_html_e('No submit button required', 'wcsearch'); ?>
 							</div>
 						</div>
 						<div class="wcsearch-search-model-options-column-two">
@@ -1456,10 +1398,10 @@ global $wcsearch_model_options;
 					<div class="wcsearch-search-model-options-row">
 						<div class="wcsearch-search-model-options-column-one">
 							<label for="use_ajax" class="wcsearch-search-model-options-column-title">
-								<?php esc_html_e('Use AJAX', 'WCSEARCH'); ?>
+								<?php esc_html_e('Use AJAX', 'wcsearch'); ?>
 							</label>
 							<div class="wcsearch-search-model-options-column-description">
-								<?php esc_html_e('or enter target URL', 'WCSEARCH'); ?>
+								<?php esc_html_e('or enter target URL', 'wcsearch'); ?>
 							</div>
 						</div>
 						<div class="wcsearch-search-model-options-column-two">
@@ -1469,20 +1411,20 @@ global $wcsearch_model_options;
 					<div class="wcsearch-search-model-options-row">
 						<div class="wcsearch-search-model-options-column-one">
 							<label for="target_url" class="wcsearch-search-model-options-column-title">
-								<?php esc_html_e('Target URL', 'WCSEARCH'); ?>
+								<?php esc_html_e('Target URL', 'wcsearch'); ?>
 							</label>
 							<div class="wcsearch-search-model-options-column-description">
-								<?php esc_html_e('Submit form to this URL', 'WCSEARCH'); ?>
+								<?php esc_html_e('Submit form to this URL and display results', 'wcsearch'); ?>
 							</div>
 						</div>
 						<div class="wcsearch-search-model-options-column-two">
-							<input type="text" id="target_url" name="target_url" class="wcsearch-seach-target-url" value="<?php echo $search_form_data['target_url']; ?>" autocomplete="off" />
+							<input type="text" id="target_url" name="target_url" class="wcsearch-seach-target-url" value="<?php wcsearch_esc_e($search_form_data['target_url']); ?>" autocomplete="off" />
 						</div>
 					</div>
 					<div class="wcsearch-search-model-options-row">
 						<div class="wcsearch-search-model-options-column-one">
 							<div  class="wcsearch-search-model-options-column-title">
-								<?php esc_html_e('Background color', 'WCSEARCH'); ?>
+								<?php esc_html_e('Background color', 'wcsearch'); ?>
 							</div>
 						</div>
 						<div class="wcsearch-search-model-options-column-two">
@@ -1492,7 +1434,7 @@ global $wcsearch_model_options;
 					<div class="wcsearch-search-model-options-row">
 						<div class="wcsearch-search-model-options-column-one">
 							<div class="wcsearch-search-model-options-column-title">
-								<?php esc_html_e('Text color', 'WCSEARCH'); ?>
+								<?php esc_html_e('Text color', 'wcsearch'); ?>
 							</div>
 						</div>
 						<div class="wcsearch-search-model-options-column-two">
@@ -1502,7 +1444,7 @@ global $wcsearch_model_options;
 					<div class="wcsearch-search-model-options-row">
 						<div class="wcsearch-search-model-options-column-one">
 							<div  class="wcsearch-search-model-options-column-title">
-								<?php esc_html_e('Elements color', 'WCSEARCH'); ?>
+								<?php esc_html_e('Elements color', 'wcsearch'); ?>
 							</div>
 						</div>
 						<div class="wcsearch-search-model-options-column-two">
@@ -1513,7 +1455,7 @@ global $wcsearch_model_options;
 					<div class="wcsearch-search-model-options-row">
 						<div class="wcsearch-search-model-options-column-one">
 							<label for="use_overlay" class="wcsearch-search-model-options-column-title">
-								<?php esc_html_e('Show overlay', 'WCSEARCH'); ?>
+								<?php esc_html_e('Show overlay', 'wcsearch'); ?>
 							</label>
 						</div>
 						<div class="wcsearch-search-model-options-column-two">
@@ -1523,7 +1465,7 @@ global $wcsearch_model_options;
 					<div class="wcsearch-search-model-options-row">
 						<div class="wcsearch-search-model-options-column-one">
 							<div  class="wcsearch-search-model-options-column-title">
-								<?php esc_html_e('Overlay transparency', 'WCSEARCH'); ?>
+								<?php esc_html_e('Overlay transparency', 'wcsearch'); ?>
 							</div>
 						</div>
 						<div class="wcsearch-search-model-options-column-two">
@@ -1533,7 +1475,7 @@ global $wcsearch_model_options;
 					<div class="wcsearch-search-model-options-row">
 						<div class="wcsearch-search-model-options-column-one">
 							<label for="use_border" class="wcsearch-search-model-options-column-title">
-								<?php esc_html_e('Use border', 'WCSEARCH'); ?>
+								<?php esc_html_e('Use border', 'wcsearch'); ?>
 							</label>
 						</div>
 						<div class="wcsearch-search-model-options-column-two">
@@ -1543,7 +1485,7 @@ global $wcsearch_model_options;
 					<div class="wcsearch-search-model-options-row">
 						<div class="wcsearch-search-model-options-column-one">
 							<label for="scroll_to" class="wcsearch-search-model-options-column-title">
-								<?php esc_html_e('Scroll to results after submit', 'WCSEARCH'); ?>
+								<?php esc_html_e('Scroll to results after submit', 'wcsearch'); ?>
 							</label>
 						</div>
 						<div class="wcsearch-search-model-options-column-two">
@@ -1553,7 +1495,7 @@ global $wcsearch_model_options;
 					<div class="wcsearch-search-model-options-row">
 						<div class="wcsearch-search-model-options-column-one">
 							<label for="sticky_scroll" class="wcsearch-search-model-options-column-title">
-								<?php esc_html_e('Sticky scroll', 'WCSEARCH'); ?>
+								<?php esc_html_e('Sticky scroll', 'wcsearch'); ?>
 							</label>
 						</div>
 						<div class="wcsearch-search-model-options-column-two">
@@ -1563,31 +1505,32 @@ global $wcsearch_model_options;
 					<div class="wcsearch-search-model-options-row">
 						<div class="wcsearch-search-model-options-column-one">
 							<label for="sticky_scroll_toppadding" class="wcsearch-search-model-options-column-title">
-								<?php esc_html_e('Sticky scroll top padding', 'WCSEARCH'); ?>
+								<?php esc_html_e('Sticky scroll top padding', 'wcsearch'); ?>
 							</label>
 						</div>
 						<div class="wcsearch-search-model-options-column-two">
-							<input type="text" id="sticky_scroll_toppadding" name="sticky_scroll_toppadding" class="wcsearch-seach-sticky-scroll-toppadding" value="<?php echo $search_form_data['sticky_scroll_toppadding']; ?>" autocomplete="off" />
+							<input type="text" id="sticky_scroll_toppadding" name="sticky_scroll_toppadding" class="wcsearch-seach-sticky-scroll-toppadding" value="<?php wcsearch_esc_e($search_form_data['sticky_scroll_toppadding']); ?>" autocomplete="off" />
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="wcsearch-search-tab-content wcsearch-search-tab-options" data-tab="options" style="display: none;">
+			<div class="wcsearch-search-tab-content wcsearch-search-tab-options wcsearch-display-none" data-tab="options">
+				<?php esc_html_e('Select element on the search form', 'wcsearch'); ?>
 			</div>
 		</div>
 		<div class="wcsearch-search-model-bottom-buttons">
 			<input type="hidden" name="post_status" value="publish" />
-			<input type="submit" class="wcsearch-btn wcsearch-btn-primary wcsearch-submit-model" value="<?php esc_attr_e('Save form', 'WCSEARCH'); ?>" name="submit" />
+			<input type="submit" class="wcsearch-btn wcsearch-btn-primary wcsearch-submit-model" value="<?php esc_attr_e('Save form', 'wcsearch'); ?>" name="submit" />
 			<?php if (wcsearch_is_woo_active() && $search_form_data['used_by'] == 'wc'): ?>
-			<a target="_blank" href="<?php echo add_query_arg('wcsearch_test_form', $search_form_model->id, wc_get_page_permalink( 'shop' )); ?>" class="wcsearch-btn wcsearch-btn-primary"><?php esc_attr_e('Test form', 'WCSEARCH'); ?></a>
+			<a target="_blank" href="<?php echo add_query_arg('wcsearch_test_form', $search_form_model->id, wc_get_page_permalink( 'shop' )); ?>" class="wcsearch-btn wcsearch-btn-primary"><?php esc_attr_e('Test form', 'wcsearch'); ?></a>
 			<?php endif; ?>
 		</div>
 	</div>
 		
 	<div class="wcsearch-search-model">
 		<div class="wcsearch-search-model-top-buttons">
-			<button class="wcsearch-search-model-add-column-btn wcsearch-btn wcsearch-btn-primary"><?php esc_html_e('Add column', 'WCSEARCH'); ?> (<?php echo esc_attr($search_form_data['columns_num']); ?>)</button>
-			<button class="wcsearch-search-model-add-placeholder-btn wcsearch-btn wcsearch-btn-primary"><?php esc_html_e('Add placeholder', 'WCSEARCH'); ?></button>
+			<button class="wcsearch-search-model-add-column-btn wcsearch-btn wcsearch-btn-primary"><?php esc_html_e('Add column', 'wcsearch'); ?> (<?php echo esc_attr($search_form_data['columns_num']); ?>)</button>
+			<button class="wcsearch-search-model-add-placeholder-btn wcsearch-btn wcsearch-btn-primary"><?php esc_html_e('Add placeholder', 'wcsearch'); ?></button>
 		</div>
 		
 		<div class="wcsearch-search-model-column wcsearch-search-model-column-<?php echo esc_attr($search_form_data['columns_num']); ?>">

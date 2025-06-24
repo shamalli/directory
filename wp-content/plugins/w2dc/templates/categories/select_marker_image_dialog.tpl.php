@@ -1,4 +1,9 @@
-		<input type="button" id="reset_png_image" class="w2dc-btn w2dc-btn-primary" value="<?php esc_attr_e('Reset image', 'W2DC'); ?>" />
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
+		<input type="button" id="reset_png_image" class="w2dc-btn w2dc-btn-primary" value="<?php esc_attr_e('Reset image', 'w2dc'); ?>" />
 
 		<table width="100%" cellpadding="0" cellspacing="0">
 			<tr>
@@ -8,9 +13,9 @@
 				<?php $columns = 1; ?>
 				<td align="left" valign="top" width="<?php echo 100/$columns; ?>%">
 					<div class="w2dc-icons-theme-block">
-						<div class="w2dc-icons-theme-name"><?php echo $theme; ?></div>
+						<div class="w2dc-icons-theme-name"><?php w2dc_esc_e($theme); ?></div>
 						<?php foreach ($dir AS $image): ?>
-							<div class="w2dc-png-image" icon_file="<?php echo $theme . '/' . $image; ?>"><img src="<?php echo W2DC_MAP_ICONS_URL . 'icons/' . $theme . '/' . $image; ?>" title="<?php echo $theme . '/' . $image; ?>" /></div>
+							<div class="w2dc-png-image" icon_file="<?php w2dc_esc_e($theme . '/' . $image); ?>"><img src="<?php echo W2DC_MAP_ICONS_URL . 'icons/' . $theme . '/' . $image; ?>" title="<?php w2dc_esc_e($theme . '/' . $image); ?>" /></div>
 						<?php endforeach;?>
 					</div>
 					<div class="w2dc-clearfix"></div>

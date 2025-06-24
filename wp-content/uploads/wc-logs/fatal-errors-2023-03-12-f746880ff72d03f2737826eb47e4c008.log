@@ -1,4 +1,0 @@
-2023-03-12T12:11:29+00:00 CRITICAL Out of memory (allocated 54525952) (tried to allocate 32768 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\members\inc\class-widget-login.php on line 250
-
-2023-03-12T12:19:29+00:00 CRITICAL Out of memory (allocated 25165824) (tried to allocate 32768 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\woocommerce-subscriptions-master\includes\gateways\paypal\includes\admin\class-wcs-paypal-admin.php on line 189
-

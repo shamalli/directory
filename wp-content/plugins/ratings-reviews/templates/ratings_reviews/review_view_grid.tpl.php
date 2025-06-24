@@ -37,11 +37,11 @@
 		
 		<?php if (get_option('w2rr_enable_pros_cons')): ?>
 		<?php if ($review->pros): ?>
-		<h4 class="w2rr-pros-title"><?php esc_html_e('Pros', 'W2RR')?></h4>
+		<h4 class="w2rr-pros-title"><?php esc_html_e('Pros', 'w2rr')?></h4>
 		<p class="w2rr-pros-description"><?php echo esc_html($review->pros); ?></p>
 		<?php endif; ?>
 		<?php if ($review->cons): ?>
-		<h4 class="w2rr-cons-title"><?php esc_html_e('Cons', 'W2RR')?></h4>
+		<h4 class="w2rr-cons-title"><?php esc_html_e('Cons', 'w2rr')?></h4>
 		<p class="w2rr-cons-description"><?php echo esc_html($review->cons); ?></p>
 		<?php endif; ?>
 		<?php endif; ?>
@@ -49,7 +49,7 @@
 	<div class="w2rr-review-footer">
 		<div class="w2rr-review-comments">
 			<?php if ($review->post->comment_count): ?>
-			<a href="<?php echo $review->url()?>#comments" onClick="w2rr_show_review(<?php echo esc_attr($review->post->ID); ?>, '<?php echo esc_html($review->title()); ?>')"><?php echo $review->post->comment_count; ?> <?php echo _n('Comment', 'Comments', $review->post->comment_count, 'W2RR'); ?></a>
+			<a href="<?php echo $review->url()?>#comments" onClick="w2rr_show_review(<?php echo esc_attr($review->post->ID); ?>, '<?php echo esc_html($review->title()); ?>')"><?php echo $review->post->comment_count; ?> <?php echo _n('Comment', 'Comments', $review->post->comment_count, 'w2rr'); ?></a>
 			<?php endif; ?>
 		</div>
 		<?php if (get_option("w2rr_reviews_votes")): ?>

@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 abstract class wcsearch_widget extends WP_Widget {
 	protected $fields = array();
 
@@ -8,7 +10,7 @@ abstract class wcsearch_widget extends WP_Widget {
 		
 		parent::__construct($id_base, $name, $options);
 		
-		$this->addField("textfield", "title", esc_html__("Title", "WCSEARCH"));
+		$this->addField("textfield", "title", esc_html__("Title", "wcsearch"));
 
 		// enqueue scripts and styles only for directory widgets and when "Show only on directory pages" setting is OFF or this setting does not exist for this widget
 		add_action('wp_enqueue_scripts', array($this, 'wp_enqueue_scripts'));
@@ -254,7 +256,7 @@ abstract class wcsearch_widget extends WP_Widget {
 		$this->renderDependency($field);
 		$this->renderLabel($field, $id);
 		echo "<select id=\"{$name}" . "\" name=\"{$name}" . "\" " . "class=\"widefat wcsearch-widget-select-control\"" . ">";
-		echo "<option value=\"0\" " . selected($value, 0) . ">" . esc_html__('- Select Form -', 'WCSEARCH') . "</option>";
+		echo "<option value=\"0\" " . selected($value, 0) . ">" . esc_html__('- Select Form -', 'wcsearch') . "</option>";
 		foreach (wcsearch_get_search_forms_posts() AS $id=>$title) {
 			echo "<option value=\"{$id}\" " . (($value == $id) ? "selected=\"selected\"" : "") . ">{$title}</option>";
 		}

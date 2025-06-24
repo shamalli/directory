@@ -16,6 +16,7 @@ final class FLBuilderRevisions {
 	static public function init() {
 		add_filter( 'fl_builder_ui_js_config', __CLASS__ . '::ui_js_config' );
 		add_filter( 'fl_builder_main_menu', __CLASS__ . '::main_menu_config' );
+		add_action( 'template_redirect', __CLASS__ . '::clean_revisions_for_post' );
 	}
 
 	/**
@@ -26,6 +27,14 @@ final class FLBuilderRevisions {
 	 * @return array
 	 */
 	static public function ui_js_config( $config ) {
+		if ( isset( $_GET['norevisions'] ) ) {
+			$config['revisions']       = array(
+				'posts'   => array(),
+				'authors' => array(),
+			);
+			$config['revisions_count'] = 0;
+			return $config;
+		}
 		$config['revisions']       = self::get_config( $config['postId'] );
 		$config['revisions_count'] = isset( $config['revisions']['posts'] ) && is_array( $config['revisions']['posts'] ) ? count( $config['revisions']['posts'] ) : 0;
 		return $config;
@@ -39,11 +48,34 @@ final class FLBuilderRevisions {
 	 * @return array
 	 */
 	static public function get_config( $post_id ) {
-		$revisions    = wp_get_post_revisions( $post_id, array(
+		global $wp_version;
+
+		$revisions = wp_get_post_revisions( $post_id, array(
 			'numberposts' => apply_filters( 'fl_builder_revisions_number', 25 ),
 		) );
-		$current_time = current_time( 'timestamp' );
-		$config       = array(
+
+		if ( version_compare( $wp_version, '5.3.0', '<' ) ) {
+			$tz = get_option( 'timezone_string' );
+
+			if ( empty( $tz ) ) {
+				$offset  = (float) get_option( 'gmt_offset' );
+				$hours   = (int) $offset;
+				$minutes = ( $offset - $hours );
+
+				$sign     = ( $offset < 0 ) ? '-' : '+';
+				$abs_hour = abs( $hours );
+				$abs_mins = abs( $minutes * 60 );
+				$tz       = sprintf( '%s%02d:%02d', $sign, $abs_hour, $abs_mins );
+			}
+
+			$local_time = new DateTimeImmutable( 'now', new DateTimeZone( $tz ) );
+		} else {
+			$local_time = current_datetime();
+		}
+
+		$current_time = $local_time->getTimestamp() + $local_time->getOffset();
+
+		$config = array(
 			'posts'   => array(),
 			'authors' => array(),
 		);
@@ -73,7 +105,7 @@ final class FLBuilderRevisions {
 					'id'     => $revision->ID,
 					'author' => $revision->post_author,
 					'date'   => array(
-						'published' => date( 'F j', $timestamp ),
+						'published' => gmdate( 'F j', $timestamp ),
 						'diff'      => human_time_diff( $timestamp, $current_time ),
 					),
 				);
@@ -145,6 +177,25 @@ final class FLBuilderRevisions {
 			'config'   => FLBuilderUISettingsForms::get_node_js_config(),
 			'settings' => $settings,
 		);
+	}
+
+	/**
+	 * @since 2.6.1
+	 */
+	static public function clean_revisions_for_post() {
+		if ( FLBuilderModel::is_builder_active() && isset( $_GET['norevisions'] ) && isset( $_GET['delete'] ) ) {
+			global $post;
+			if ( ! get_post_meta( $post->ID, '_fl_builder_enabled', true ) ) {
+				return false;
+			}
+			$revisions = wp_get_post_revisions( $post->ID, array(
+				'numberposts' => -1,
+				'fields'      => 'ids',
+			) );
+			foreach ( (array) $revisions as $revision_id ) {
+				wp_delete_post_revision( $revision_id );
+			}
+		}
 	}
 }
 

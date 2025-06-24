@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 /**
  * Paypal Subscription Class
  *
@@ -41,11 +43,11 @@ class w2dc_paypal_subscription extends w2dc_payment_gateway
     }
     
 	public function name() {
-    	return __('PayPal subscription', 'W2DC');
+    	return esc_html__('PayPal subscription', 'w2dc');
     }
 
     public function description() {
-    	return __('Regular automatic payments from your PayPal account.', 'W2DC');
+    	return esc_html__('Regular automatic payments from your PayPal account.', 'w2dc');
     }
     
     public function buy_button()
@@ -80,7 +82,7 @@ class w2dc_paypal_subscription extends w2dc_payment_gateway
     public function submitPayment($invoice) {
     	if (!($period = $this->calcRecurringPeriod($invoice))) {
     		$invoice->setGateway('');
-    		w2dc_addMessage(__('This item is not allowed to be paid as subscription or it is not possible to pay for recurring cycle of this item using selected payment gateway.', 'W2DC'), 'error');
+    		w2dc_addMessage(esc_html__('This item is not allowed to be paid as subscription or it is not possible to pay for recurring cycle of this item using selected payment gateway.', 'w2dc'), 'error');
     		wp_redirect(w2dc_get_edit_invoice_link($invoice->post->ID));
     		die();
     	}
@@ -207,10 +209,10 @@ function w2dc_handle_ipn_paypal_subscription($wp) {
 												foreach ($paypal->ipnData AS $key=>$value) {
 													$transaction_data[] = $key . ' = ' . esc_attr($value);
 												}
-												$invoice->logMessage(sprintf(__('Recurring payment was successfully completed. Transaction data:  %s', 'W2DC'), implode('; ', $transaction_data)));
+												$invoice->logMessage(sprintf(esc_html__('Recurring payment was successfully completed. Transaction data:  %s', 'w2dc'), implode('; ', $transaction_data)));
 											}
 										} else {
-											$invoice->logMessage(sprintf(__('Payment status: %s', 'W2DC'),  $paypal->ipnData['payment_status']));
+											$invoice->logMessage(sprintf(esc_html__('Payment status: %s', 'w2dc'),  $paypal->ipnData['payment_status']));
 										}
 									}
 								}
@@ -218,7 +220,7 @@ function w2dc_handle_ipn_paypal_subscription($wp) {
 							break;
 						case 'subscr_cancel':
 						case 'subscr_eot':
-							$invoice->logMessage(__('Subscription canceled', 'W2DC'));
+							$invoice->logMessage(esc_html__('Subscription canceled', 'w2dc'));
 							break;
 					}
 				}
@@ -232,16 +234,6 @@ function w2dc_handle_ipn_paypal_subscription($wp) {
 	}
 }
 add_action('parse_request', 'w2dc_handle_ipn_paypal_subscription');
-
-
-// Paypal does not allow you to active your IPN in Paypal if a given URL has GET arguments, so we have to use permalinks
-
-
-/* function w2dc_handle_ipn_paypal_subscription_rewrite_rules($wp_rewrite) {
-	$new_rules = array('ipn_token/'.ipn_token().'/gateway/paypal_subscription' => 'index.php?ipn_token='.ipn_token().'&gateway=paypal_subscription');
-	$wp_rewrite->rules = $new_rules + $wp_rewrite->rules;
-}
-add_action('generate_rewrite_rules', 'w2dc_handle_ipn_paypal_subscription_rewrite_rules'); */
 
 function w2dc_handle_ipn_paypal_subscription_rewrite_rules($rules) {
 	return array('ipn_token/'.ipn_token().'/gateway/paypal_subscription' => 'index.php?ipn_token='.ipn_token().'&gateway=paypal_subscription') + $rules;

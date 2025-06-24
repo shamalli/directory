@@ -37,7 +37,7 @@ class w2dc_term_description_controller extends w2dc_frontend_controller {
 
 				echo '<div class="w2dc-content">';
 					echo '<div class="archive-meta">';
-						echo $term_description;
+						w2dc_esc_e($term_description);
 					echo '</div>';
 				echo '</div>';
 				

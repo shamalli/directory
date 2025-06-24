@@ -8,6 +8,10 @@ var defaults = {
 	stops: [ 0, 100 ],
 };
 
+if ( typeof data.field.defaults !== 'undefined' ) {
+	defaults = jQuery.extend( true, defaults, data.field.defaults );
+}
+
 var value = '' === data.value ? defaults : jQuery.extend( true, defaults, data.value );
 
 var type = wp.template( 'fl-builder-field-select' )( {
@@ -55,7 +59,7 @@ var color0 = wp.template( 'fl-builder-field-color' )( {
 	value: value.colors[ 0 ],
 	field: {
 		className: 'fl-gradient-picker-color',
-		show_reset: false,
+		show_reset: true,
 		show_alpha: true,
 	},
 } );
@@ -73,7 +77,7 @@ var color1 = wp.template( 'fl-builder-field-color' )( {
 	value: value.colors[ 1 ],
 	field: {
 		className: 'fl-gradient-picker-color',
-		show_reset: false,
+		show_reset: true,
 		show_alpha: true,
 	},
 } );

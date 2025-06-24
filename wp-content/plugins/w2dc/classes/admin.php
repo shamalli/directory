@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 class w2dc_admin {
 
 	public function __construct() {
@@ -54,7 +56,7 @@ class w2dc_admin {
 		add_action('wp_ajax_nopriv_w2dc_generate_color_palette', array($this, 'generate_color_palette'));
 		add_action('wp_ajax_w2dc_get_jqueryui_theme', array($this, 'get_jqueryui_theme'));
 		add_action('wp_ajax_nopriv_w2dc_get_jqueryui_theme', array($this, 'get_jqueryui_theme'));
-		add_action('vp_w2dc_option_before_ajax_save', array($this, 'remove_colorpicker_cookie'));
+		add_action('w2dc_vp_option_before_ajax_save', array($this, 'remove_colorpicker_cookie'));
 		add_action('wp_footer', array($this, 'render_palette_picker'));
 		
 		add_action('admin_notices', array($this, 'renderAdminMessages'));
@@ -78,8 +80,8 @@ class w2dc_admin {
 
 	public function addChooseLevelPage() {
 		add_submenu_page('options.php',
-			__('Choose level of new listing', 'W2DC'),
-			__('Choose level of new listing', 'W2DC'),
+			esc_html__('Choose level of new listing', 'w2dc'),
+			esc_html__('Choose level of new listing', 'w2dc'),
 			'publish_posts',
 			'w2dc_choose_level',
 			array($this, 'chooseLevelsPage')
@@ -127,8 +129,8 @@ class w2dc_admin {
 			$capability = 'manage_options';
 		}
 
-		add_menu_page(__("Directory settings", "W2DC"),
-			__('Directory Admin', 'W2DC'),
+		add_menu_page(esc_html__("Directory settings", "w2dc"),
+			esc_html__('Directory Admin', 'w2dc'),
 			$capability,
 			'w2dc_settings',
 			'',
@@ -136,24 +138,24 @@ class w2dc_admin {
 		);
 		add_submenu_page(
 			'w2dc_settings',
-			__("Directory settings", "W2DC"),
-			__("Directory settings", "W2DC"),
+			esc_html__("Directory settings", "w2dc"),
+			esc_html__("Directory settings", "w2dc"),
 			$capability,
 			'w2dc_settings'
 		);
 
 		add_submenu_page(
-			'',
-			__("Directory Debug", "W2DC"),
-			__("Directory Debug", "W2DC"),
+			'w2dc_debug',
+			esc_html__("Directory Debug", "w2dc"),
+			esc_html__("Directory Debug", "w2dc"),
 			$capability,
 			'w2dc_debug',
 			array($this, 'debug')
 		);
 		add_submenu_page(
-			'',
-			__("Directory Reset", "W2DC"),
-			__("Directory Reset", "W2DC"),
+			'w2dc_reset',
+			esc_html__("Directory Reset", "w2dc"),
+			esc_html__("Directory Reset", "w2dc"),
 			'manage_options',
 			'w2dc_reset',
 			array($this, 'reset')
@@ -164,9 +166,9 @@ class w2dc_admin {
 		global $w2dc_instance, $wpdb;
 		
 		$w2dc_locationGeoname = new w2dc_locationGeoname();
-		$geolocation_response = $w2dc_locationGeoname->geocodeRequest('1600 Amphitheatre Parkway Mountain View, CA 94043', 'test');
+		$geolocation_response = $w2dc_locationGeoname->geocodeRequest('Amphitheatre Parkway Mountain View, CA 94043', 'test');
 
-		$settings = $wpdb->get_results("SELECT option_name, option_value FROM {$wpdb->options} WHERE option_name LIKE 'w2dc_%'", ARRAY_A);
+		$settings = $wpdb->get_results($wpdb->prepare("SELECT option_name, option_value FROM {$wpdb->options} WHERE option_name LIKE %s", $wpdb->esc_like('w2dc_') . '%'), ARRAY_A);
 
 		w2dc_renderTemplate('debug.tpl.php', array(
 			'rewrite_rules' => get_option('rewrite_rules'),
@@ -187,7 +189,7 @@ class w2dc_admin {
 			}
 		}
 		if (isset($_GET['reset']) && ($_GET['reset'] == 'settings' || $_GET['reset'] == 'settings_tables')) {
-			if ($wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE 'w2dc_%'") !== false) {
+			if ($wpdb->query($wpdb->prepare("DELETE FROM $wpdb->options WHERE option_name LIKE %s", $wpdb->esc_like('w2dc_') . '%')) !== false) {
 				delete_option('vpt_option');
 				w2dc_save_dynamic_css();
 				w2dc_addMessage('All directory settings were deleted!');
@@ -207,7 +209,8 @@ class w2dc_admin {
 	}
 	
 	public function hideMetaBoxes() {
-		global $post, $pagenow;
+		global $post;
+		global $pagenow;
 
 		if (($pagenow == 'post-new.php' && isset($_GET['post_type']) && $_GET['post_type'] == W2DC_POST_TYPE) || ($pagenow == 'post.php' && $post && $post->post_type == W2DC_POST_TYPE)) {
 			$user_id = get_current_user_id();
@@ -256,31 +259,31 @@ class w2dc_admin {
 		$options['template']['menus']['general']['controls'] = array_merge(
 				array('addons' => array(
 					'type' => 'section',
-					'title' => __('Addons', 'W2DC'),
-					'description' => __('Refresh this page after switch on/off any addon.', 'W2DC'),
+					'title' => esc_html__('Addons', 'w2dc'),
+					'description' => esc_html__('Refresh this page after switch on/off any addon.', 'w2dc'),
 					'fields' => array(
 						// remove in free version
 					 	array(
 							'type' => 'toggle',
 							'name' => 'w2dc_fsubmit_addon',
-							'label' => __('Frontend submission & dashboard addon', 'W2DC'),
-					 		'description' => __('Allow users to submit new listings at the frontend side of your site, also provides users dashboard functionality.', 'W2DC'),
+							'label' => esc_html__('Frontend submission & dashboard addon', 'w2dc'),
+					 		'description' => esc_html__('Allow users to submit new listings at the frontend side of your site, also provides users dashboard functionality.', 'w2dc'),
 							'default' => get_option('w2dc_fsubmit_addon'),
 						),
 						// remove in free version
 					 	array(
 							'type' => 'toggle',
 							'name' => 'w2dc_payments_addon',
-							'label' => __('Payments addon', 'W2DC'),
-					 		'description' => __('This is built-in payments and invoices management functionality. Do not enable if you want to use WooCommerce payments system for listings!', 'W2DC'),
+							'label' => esc_html__('Payments addon', 'w2dc'),
+					 		'description' => esc_html__('This is built-in payments and invoices management functionality. Do not enable if you want to use WooCommerce payments system for listings!', 'w2dc'),
 							'default' => get_option('w2dc_payments_addon'),
 						),
 						
 					 	array(
 							'type' => 'toggle',
 							'name' => 'w2dc_ratings_addon',
-							'label' => __('Ratings & Comments addon', 'W2DC'),
-					 		'description' => __('Ability to place ratings and comments for listings.', 'W2DC'),
+							'label' => esc_html__('Ratings & Comments addon', 'w2dc'),
+					 		'description' => esc_html__('Ability to place ratings and comments for listings.', 'w2dc'),
 							'default' => get_option('w2dc_ratings_addon'),
 						),
 					),
@@ -315,36 +318,34 @@ class w2dc_admin {
 			else
 				add_action('admin_head', array($this, 'enqueue_global_vars'));
 			
-			wp_register_style('w2dc_bootstrap', W2DC_RESOURCES_URL . 'css/bootstrap.css', array(), W2DC_VERSION_TAG);
-			wp_register_style('w2dc_admin', W2DC_RESOURCES_URL . 'css/admin.css', array(), W2DC_VERSION_TAG);
+			wp_register_style('w2dc-bootstrap', W2DC_RESOURCES_URL . 'css/bootstrap.css', array(), W2DC_VERSION_TAG);
+			wp_register_style('w2dc-admin', W2DC_RESOURCES_URL . 'css/admin.css', array(), W2DC_VERSION_TAG);
 			if (function_exists('is_rtl') && is_rtl()) {
-				wp_register_style('w2dc_admin_rtl', W2DC_RESOURCES_URL . 'css/admin-rtl.css', array(), W2DC_VERSION_TAG);
+				wp_register_style('w2dc-admin-rtl', W2DC_RESOURCES_URL . 'css/admin-rtl.css', array(), W2DC_VERSION_TAG);
 			}
 			
 			if ($admin_custom = w2dc_isResource('css/admin-custom.css')) {
-				wp_register_style('w2dc_admin-custom', $admin_custom, array(), W2DC_VERSION_TAG);
+				wp_register_style('w2dc-admin-custom', $admin_custom, array(), W2DC_VERSION_TAG);
 			}
 		}
 		
 		if (w2dc_isDirectoryPageInAdmin()) {
-			// some plugins decide to disable this thing
-			//wp_enqueue_script('jquery-migrate');
 			
 			add_action('wp_print_scripts', array($w2dc_instance, 'dequeue_maps_googleapis'), 1000);
 
-			wp_register_style('w2dc_font_awesome', W2DC_RESOURCES_URL . 'css/font-awesome.css', array(), W2DC_VERSION_TAG);
-			wp_register_script('w2dc_js_functions', W2DC_RESOURCES_URL . 'js/js_functions.js', array('jquery'), false, true);
+			wp_register_style('w2dc-font-awesome', W2DC_RESOURCES_URL . 'css/font-awesome.css', array(), W2DC_VERSION_TAG);
+			wp_register_script('w2dc-js-functions', W2DC_RESOURCES_URL . 'js/js_functions.js', array('jquery'), false, true);
 
-			wp_register_script('w2dc_categories_edit_scripts', W2DC_RESOURCES_URL . 'js/categories_icons.js', array('jquery'));
-			wp_register_script('w2dc_categories_scripts', W2DC_RESOURCES_URL . 'js/manage_categories.js', array('jquery'));
+			wp_register_script('w2dc-categories-edit-scripts', W2DC_RESOURCES_URL . 'js/categories_icons.js', array('jquery'));
+			wp_register_script('w2dc-categories-scripts', W2DC_RESOURCES_URL . 'js/manage_categories.js', array('jquery'));
 			
-			wp_register_script('w2dc_locations_edit_scripts', W2DC_RESOURCES_URL . 'js/locations_icons.js', array('jquery'));
+			wp_register_script('w2dc-locations-edit-scripts', W2DC_RESOURCES_URL . 'js/locations_icons.js', array('jquery'));
 			
 			wp_register_style('w2dc-media-styles', W2DC_RESOURCES_URL . 'lightbox/css/lightbox.min.css', array(), W2DC_VERSION_TAG);
-			wp_register_script('w2dc_media_scripts_lightbox', W2DC_RESOURCES_URL . 'lightbox/js/lightbox.js', array('jquery'));
+			wp_register_script('w2dc-media-scripts-lightbox', W2DC_RESOURCES_URL . 'lightbox/js/lightbox.js', array('jquery'));
 			
 			wp_localize_script(
-				'w2dc_js_functions',
+				'w2dc-js-functions',
 				'w2dc_maps_callback',
 				array(
 						'callback' => 'w2dc_load_maps_api_backend'
@@ -355,38 +356,45 @@ class w2dc_admin {
 			wp_enqueue_script('jquery-ui-autocomplete');
 		}
 		
-		wp_enqueue_style('w2dc_bootstrap');
-		wp_enqueue_style('w2dc_font_awesome');
-		wp_enqueue_style('w2dc_admin');
-		wp_enqueue_style('w2dc_admin_rtl');
+		wp_enqueue_style('w2dc-bootstrap');
+		wp_enqueue_style('w2dc-font-awesome');
+		wp_enqueue_style('w2dc-admin');
+		wp_enqueue_style('w2dc-admin-rtl');
 		wp_enqueue_script('jquery-ui-dialog');
-		wp_enqueue_script('w2dc_js_functions');
-		wp_enqueue_style('w2dc_admin-custom');
+		wp_enqueue_script('w2dc-js-functions');
+		wp_enqueue_style('w2dc-admin-custom');
 		
 		if (w2dc_isDirectoryPageInAdmin() && w2dc_is_maps_used()) {
 			if (w2dc_getMapEngine() == 'mapbox') {
-				wp_register_script('w2dc_mapbox_gl', 'https://api.tiles.mapbox.com/mapbox-gl-js/' . W2DC_MAPBOX_VERSION . '/mapbox-gl.js');
-				wp_enqueue_script('w2dc_mapbox_gl');
-				wp_register_style('w2dc_mapbox_gl', 'https://api.tiles.mapbox.com/mapbox-gl-js/' . W2DC_MAPBOX_VERSION . '/mapbox-gl.css');
-				wp_enqueue_style('w2dc_mapbox_gl');
-				wp_register_script('w2dc_mapbox', W2DC_RESOURCES_URL . 'js/mapboxgl.js', array('jquery'), W2DC_VERSION_TAG, true);
-				wp_enqueue_script('w2dc_mapbox');
+				wp_register_script('mapbox-gl', 'https://api.tiles.mapbox.com/mapbox-gl-js/' . W2DC_MAPBOX_VERSION . '/mapbox-gl.js');
+				wp_enqueue_script('mapbox-gl');
+				wp_register_style('mapbox-gl', 'https://api.tiles.mapbox.com/mapbox-gl-js/' . W2DC_MAPBOX_VERSION . '/mapbox-gl.css');
+				wp_enqueue_style('mapbox-gl');
+				wp_register_script('w2dc-mapbox', W2DC_RESOURCES_URL . 'js/mapboxgl.js', array('jquery'), W2DC_VERSION_TAG, true);
+				wp_enqueue_script('w2dc-mapbox');
+	
+				wp_register_script('mapbox-draw', 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.4.3/mapbox-gl-draw.js');
+				wp_enqueue_script('mapbox-draw');
+				wp_register_style('mapbox-draw', 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.4.3/mapbox-gl-draw.css');
+				wp_enqueue_style('mapbox-draw');
 					
-				wp_register_script('w2dc_mapbox_draw', 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.js');
-				wp_enqueue_script('w2dc_mapbox_draw');
-				wp_register_style('w2dc_mapbox_draw', 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.css');
-				wp_enqueue_style('w2dc_mapbox_draw');
+				wp_register_script('mapbox-directions', 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.1/mapbox-gl-directions.js');
+				wp_enqueue_script('mapbox-directions');
+				wp_register_style('mapbox-directions', 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.1/mapbox-gl-directions.css');
+				wp_enqueue_style('mapbox-directions');
 					
-				wp_register_script('w2dc_mapbox_directions', 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v3.1.3/mapbox-gl-directions.js');
-				wp_enqueue_script('w2dc_mapbox_directions');
-				wp_register_style('w2dc_mapbox_directions', 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v3.1.3/mapbox-gl-directions.css');
-				wp_enqueue_style('w2dc_mapbox_directions');
-				
-				wp_register_script('w2dc_mapbox_language', 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-language/v0.10.1/mapbox-gl-language.js');
-				wp_enqueue_script('w2dc_mapbox_language');
+				if (in_array(get_option('w2dc_mapbox_map_style'), array(
+						'mapbox://styles/mapbox/streets-v11',
+						'mapbox://styles/mapbox/outdoors-v11',
+						'mapbox://styles/mapbox/light-v10',
+						'mapbox://styles/mapbox/dark-v10',
+				))) {
+					wp_register_script('mapbox-language', 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-language/v1.0.0/mapbox-gl-language.js');
+					wp_enqueue_script('mapbox-language');
+				}
 			} else {
-				wp_register_script('w2dc_google_maps', W2DC_RESOURCES_URL . 'js/google_maps.js', array('jquery'), W2DC_VERSION_TAG, true);
-				wp_enqueue_script('w2dc_google_maps');
+				wp_register_script('w2dc-google-maps', W2DC_RESOURCES_URL . 'js/google_maps.js', array('jquery'), W2DC_VERSION_TAG, true);
+				wp_enqueue_script('w2dc-google-maps');
 			}
 		}
 	}
@@ -411,7 +419,7 @@ class w2dc_admin {
 						'lang' => (($sitepress && get_option('w2dc_map_language_from_wpml')) ? ICL_LANGUAGE_CODE : apply_filters('w2dc_map_language', '')),
 						'fields_in_categories' => array(),
 						'is_admin' => (int)is_admin(),
-						'cancel_button' => __('Cancel', 'W2DC'),
+						'cancel_button' => esc_html__('Cancel', 'w2dc'),
 				)
 		) . ';
 ';
@@ -434,8 +442,8 @@ class w2dc_admin {
 						'address_autocomplete' => (int)get_option('w2dc_address_autocomplete'),
 						'address_autocomplete_code' => get_option('w2dc_address_autocomplete_code'),
 						'enable_my_location_button' => (int)get_option('w2dc_address_geocode'),
-						'my_location_button' => __('My Location', 'W2DC'),
-						'my_location_button_error' => __('GeoLocation service does not work on your device!', 'W2DC'),
+						'my_location_button' => esc_html__('My Location', 'w2dc'),
+						'my_location_button_error' => esc_html__('GeoLocation service does not work on your device!', 'w2dc'),
 						'default_latitude' => apply_filters('w2dc_default_latitude', 34),
 						'default_longitude' => apply_filters('w2dc_default_longitude', 0),
 				)

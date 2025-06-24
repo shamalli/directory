@@ -1,5 +1,7 @@
 <?php 
 
+// @codingStandardsIgnoreFile
+
 if (!function_exists('w2dc_getValue')) {
 	function w2dc_getValue($target, $key, $default = false) {
 		$target = is_object($target) ? (array) $target : $target;
@@ -14,10 +16,28 @@ if (!function_exists('w2dc_getValue')) {
 		
 		if (is_string($value) && !is_serialized($value)) {
 			$value = sanitize_text_field($value);
+		} elseif (is_array($value)) {
+			$value = array_map("sanitize_text_field", $value);
 		}
 		
 		return $value;
 	}
+}
+
+function w2dc_esc_($content, $domain = false) {
+
+	$allowed_html = 'post';
+
+	if ($domain) {
+		return wp_kses(__($content, $domain), $allowed_html);
+	} else {
+		return wp_kses($content, $allowed_html);
+	}
+}
+
+function w2dc_esc_e($content, $domain = false) {
+
+	echo w2dc_esc_($content, $domain);
 }
 
 add_filter('wp_redirect', 'w2dc_redirect_with_messages');
@@ -198,7 +218,9 @@ function w2dc_getCustomResourceDirURL($dir) {
  * 
  */
 function w2dc_isTemplate($template) {
-	if ($template) {
+	
+	// check if it is real template file
+	if ($template && (strlen($template) != strlen(str_replace('.tpl.php', '', $template)))) {
 		$custom_template = str_replace('.tpl.php', '', $template) . '-custom.tpl.php';
 		$templates = array(
 				$custom_template,
@@ -267,39 +289,12 @@ function w2dc_getCurrentListingInAdmin() {
 	return $w2dc_instance->current_listing;
 }
 
-function w2dc_getAllDirectoryPages() {
+function w2dc_getPagesWithShortcode($shortcode) {
 	global $wpdb;
 	
-	$flat_index_pages = $wpdb->get_results("SELECT ID AS id, post_name AS slug FROM {$wpdb->posts} WHERE (post_content LIKE '%[" . W2DC_MAIN_SHORTCODE . "]%') AND post_status = 'publish' AND post_type = 'page'", ARRAY_A);
-	$custom_index_pages = $wpdb->get_results("SELECT ID AS id, post_name AS slug FROM {$wpdb->posts} WHERE (post_content LIKE '%[" . W2DC_MAIN_SHORTCODE . " %') AND post_status = 'publish' AND post_type = 'page'", ARRAY_A);
-	$index_pages = array_merge($flat_index_pages, $custom_index_pages);
-	
-	// adapted for WPML
-	global $sitepress;
-	if (function_exists('wpml_object_id_filter') && $sitepress) {
-		foreach ($index_pages AS $key=>&$cpage) {
-			if ($tpage = apply_filters('wpml_object_id', $cpage['id'], 'page')) {
-				$cpage['id'] = $tpage;
-				$cpage['slug'] = get_post($cpage['id'])->post_name;
-			} else {
-				unset($index_pages[$key]);
-			}
-		}
-	}
-	
-	$index_pages = array_unique($index_pages, SORT_REGULAR);
-	
-	$index_pages = apply_filters("w2dc_get_all_directory_pages", $index_pages);
-	
-	return $index_pages;
-}
-
-function w2dc_getAllListingPages() {
-	global $wpdb, $w2dc_instance;
-	
-	$flat_listing_pages = $wpdb->get_results("SELECT ID AS id FROM {$wpdb->posts} WHERE (post_content LIKE '%[" . W2DC_LISTING_SHORTCODE . "]%' OR post_content LIKE '%[webdirectory-listing]%') AND post_status = 'publish' AND post_type = 'page'", ARRAY_A);
-	$custom_listing_pages = $wpdb->get_results("SELECT ID AS id FROM {$wpdb->posts} WHERE (post_content LIKE '%[" . W2DC_LISTING_SHORTCODE . " %' OR post_content LIKE '%[webdirectory-listing %') AND post_status = 'publish' AND post_type = 'page'", ARRAY_A);
-	$pages = array_merge($flat_listing_pages, $custom_listing_pages);
+	$flat_pages = $wpdb->get_results($wpdb->prepare("SELECT ID AS id, post_name AS slug FROM {$wpdb->posts} WHERE (post_content LIKE %s) AND post_status = 'publish' AND post_type = 'page'", "%[" . $wpdb->esc_like($shortcode) . "]%"), ARRAY_A);
+	$custom_pages = $wpdb->get_results($wpdb->prepare("SELECT ID AS id, post_name AS slug FROM {$wpdb->posts} WHERE (post_content LIKE %s) AND post_status = 'publish' AND post_type = 'page'", "%[" . $wpdb->esc_like($shortcode) . " %"), ARRAY_A);
+	$pages = array_merge($flat_pages, $custom_pages);
 	
 	// adapted for WPML
 	global $sitepress;
@@ -307,6 +302,7 @@ function w2dc_getAllListingPages() {
 		foreach ($pages AS $key=>&$cpage) {
 			if ($tpage = apply_filters('wpml_object_id', $cpage['id'], 'page')) {
 				$cpage['id'] = $tpage;
+				$cpage['slug'] = get_post($cpage['id'])->post_name;
 			} else {
 				unset($pages[$key]);
 			}
@@ -314,6 +310,23 @@ function w2dc_getAllListingPages() {
 	}
 	
 	$pages = array_unique($pages, SORT_REGULAR);
+	
+	return $pages;
+}
+
+function w2dc_getAllDirectoryPages() {
+	
+	$index_pages = w2dc_getPagesWithShortcode(W2DC_MAIN_SHORTCODE);
+	
+	$index_pages = apply_filters("w2dc_get_all_directory_pages", $index_pages);
+	
+	return $index_pages;
+}
+
+function w2dc_getAllListingPages() {
+	global $w2dc_instance;
+	
+	$pages = w2dc_getPagesWithShortcode(W2DC_LISTING_SHORTCODE);
 	
 	$listing_pages = array();
 	
@@ -324,18 +337,16 @@ function w2dc_getAllListingPages() {
 		if (preg_match_all('/'.$pattern.'/s', get_post($page_id)->post_content, $matches) && array_key_exists(2, $matches)) {
 			foreach ($matches[2] AS $key=>$shortcode) {
 				if (in_array($shortcode, $shortcodes)) {
+					
 					if (($attrs = shortcode_parse_atts($matches[3][$key]))) {
-						if (isset($attrs['directory']) && is_numeric($attrs['directory']) && ($directory = $w2dc_instance->directories->getDirectoryById($attrs['directory']))) {
-							$listing_pages[$directory->id] = $page_id;
-							break;
-						} elseif (!isset($attrs['id'])) {
-							$listing_pages[$w2dc_instance->directories->getDefaultDirectory()->id] = $page_id;
+						if (isset($attrs['directory']) && is_numeric($attrs['directory'])) {
+							$listing_pages[$attrs['directory']] = $page_id;
 							break;
 						}
-					} else {
-						$listing_pages[$w2dc_instance->directories->getDefaultDirectory()->id] = $page_id;
-						break;
 					}
+					
+					$listing_pages[$w2dc_instance->directories->getDefaultDirectory()->id] = $page_id;
+					break;
 				}
 			}
 		}
@@ -373,28 +384,98 @@ function w2dc_isListingElementsOnPage() {
 	return apply_filters("w2dc_is_listing_elements_on_page", false);
 }
 
-function w2dc_isCustomHomePage() {
+function w2dc_getAllCategoryPages() {
 	global $w2dc_instance;
-	
-	$home_page = get_post($w2dc_instance->index_page_id);
-	
-	if ($home_page) {
-		$content = get_the_content(null, false, $w2dc_instance->index_page_id);
-	
-		$pattern = get_shortcode_regex(array('webdirectory'));
-		if (preg_match_all('/'.$pattern.'/s', $content, $matches) && array_key_exists(2, $matches)) {
+
+	$pages = w2dc_getPagesWithShortcode(W2DC_CATEGORY_PAGE_SHORTCODE);
+
+	$category_pages = array();
+
+	$shortcodes = array(W2DC_CATEGORY_PAGE_SHORTCODE);
+	foreach ($pages AS $page_id) {
+		$page_id = $page_id['id'];
+		$pattern = get_shortcode_regex($shortcodes);
+		if (preg_match_all('/'.$pattern.'/s', get_post($page_id)->post_content, $matches) && array_key_exists(2, $matches)) {
 			foreach ($matches[2] AS $key=>$shortcode) {
-				if ($shortcode == 'webdirectory') {
-					if (!($attrs = shortcode_parse_atts($matches[3][$key]))) {
-						$attrs = array();
+				if (in_array($shortcode, $shortcodes)) {
+					
+					if ($attrs = shortcode_parse_atts($matches[3][$key])) {
+						if (isset($attrs['category_id']) && is_numeric($attrs['category_id'])) {
+							$category_pages[$attrs['category_id']] = $page_id;
+							break;
+						}
 					}
 					
-					if (!empty($attrs['custom_home'])) {
-						return true;
+					$category_pages[] = $page_id;
+					break;
+				}
+			}
+		}
+	}
+
+	$category_pages = apply_filters("w2dc_get_all_category_pages", $category_pages);
+
+	return $category_pages;
+}
+
+function w2dc_isCategoryElementsOnPage() {
+	global $w2dc_instance;
+
+	$shortcodes = array(
+			'webdirectory-category-listings',
+			'webdirectory-category-map',
+			'webdirectory-category-search',
+	);
+	$category_page = get_post($w2dc_instance->category_page_id);
+
+	$pattern = get_shortcode_regex($shortcodes);
+	if (preg_match_all('/'.$pattern.'/s', $category_page->post_content, $matches) && array_key_exists(2, $matches)) {
+		foreach ($matches[2] AS $key=>$_shortcode) {
+			if (in_array($_shortcode, $shortcodes)) {
+				return true;
+			}
+		}
+	}
+
+	return apply_filters("w2dc_is_category_elements_on_page", false);
+}
+
+function w2dc_getCustomCategoryPages() {
+	global $w2dc_instance;
+	
+	$custom_category_pages = $w2dc_instance->category_pages_all;
+	if (isset($custom_category_pages[0])) {
+		unset($custom_category_pages[0]);
+	}
+	if (!$custom_category_pages) {
+		return false;
+	}
+	
+	return $custom_category_pages;
+}
+
+function w2dc_getShortcodeAttsOnPage($shortcode, $page_id) {
+	global $w2dc_instance;
+
+	$home_page = get_post($page_id);
+
+	if ($home_page) {
+		$content = get_the_content(null, false, $page_id);
+
+		$pattern = get_shortcode_regex(array($shortcode));
+		if (preg_match_all('/'.$pattern.'/s', $content, $matches) && array_key_exists(2, $matches)) {
+			foreach ($matches[2] AS $key=>$_shortcode) {
+				if ($_shortcode == $shortcode) {
+					if ($attrs = shortcode_parse_atts($matches[3][$key])) {
+						return $attrs;
+					} else {
+						return array();
 					}
 				}
 			}
 		}
+		
+		return apply_filters("w2dc_get_shortcode_atts_on_page", array(), $shortcode, $page_id);
 	}
 }
 
@@ -511,6 +592,33 @@ function w2dc_getListingPage() {
 	return $curr_listing_page;
 }
 
+function w2dc_getCategoryPage() {
+	global $w2dc_instance;
+	
+	$category_id = null;
+	$page_id = null;
+	$curr_category_page = array('slug' => '', 'id' => 0, 'url' => '');
+	
+	// have to find out what category is using, but manually here
+	if ($category = w2dc_isCategory()) {
+		$category_id = $category->term_id;
+	}
+	
+	if (!empty($category_id) && isset($w2dc_instance->category_pages_all[$category_id])) {
+		$page_id = $w2dc_instance->category_pages_all[$category_id];
+	} elseif (isset($w2dc_instance->category_pages_all[0])) {
+		$page_id = $w2dc_instance->category_pages_all[0];
+	}
+
+	if ($page_id) {
+		$curr_category_page['id'] = $page_id;
+		$curr_category_page['url'] = get_permalink($page_id);
+		$curr_category_page['slug'] = get_post($page_id)->post_name;
+	}
+	
+	return $curr_category_page;
+}
+
 function w2dc_directoryUrl($path = '', $directory = null) {
 	global $w2dc_instance;
 	
@@ -529,25 +637,29 @@ function w2dc_directoryUrl($path = '', $directory = null) {
 		}
 	}
 
-	if (!is_array($path)) {
-		if ($path) {
-			$path = rtrim($path, '/') . '/';
+	if ($directory_page_url) {
+		if (!is_array($path)) {
+			if ($path) {
+				$path = rtrim($path, '/') . '/';
+			}
+			// found that on some instances of WP "native" trailing slashes may be missing
+			$url = rtrim($directory_page_url, '/') . '/' . $path;
+		} else {
+			$url = add_query_arg($path, $directory_page_url);
 		}
-		// found that on some instances of WP "native" trailing slashes may be missing
-		$url = rtrim($directory_page_url, '/') . '/' . $path;
+	
+		// adapted for WPML
+		global $sitepress;
+		if (function_exists('wpml_object_id_filter') && $sitepress) {
+			$url = $sitepress->convert_url($url);
+		}
+		
+		$url = w2dc_add_homepage_id($url);
+		
+		return utf8_uri_encode($url);
 	} else {
-		$url = add_query_arg($path, $directory_page_url);
+		return site_url();
 	}
-
-	// adapted for WPML
-	global $sitepress;
-	if (function_exists('wpml_object_id_filter') && $sitepress) {
-		$url = $sitepress->convert_url($url);
-	}
-	
-	$url = w2dc_add_homepage_id($url);
-	
-	return utf8_uri_encode($url);
 }
 
 function w2dc_templatePageUri($slug_array, $page_url) {
@@ -618,9 +730,7 @@ function w2dc_get_term_parents($id, $tax, $breadcrumbs = false, $return_array = 
 
 	$url = get_term_link($parent->slug, $tax);
 	if ($breadcrumbs && !is_wp_error($url)) {
-		//$chain[] = '<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="' . $url . '" title="' . esc_attr(sprintf(__('View all listings in %s', 'W2DC'), $name)) . '"><span itemprop="name">' . $name . '</span><meta itemprop="position" content="' . (count($chain)+1) . '" /></a></li>';
-		//$chain[] = '<a itemprop="item" href="' . $url . '" title="' . esc_attr(sprintf(__('View all listings in %s', 'W2DC'), $name)) . '">' . $name . '</a>';
-		$chain[] = new w2dc_breadcrumb($name, $url, esc_attr(sprintf(__('View all listings in %s', 'W2DC'), $name)));
+		$chain[] = new w2dc_breadcrumb($name, $url, sprintf(esc_html__('View all listings in %s', 'w2dc'), $name));
 	} else {
 		$chain[] = $name;
 	}
@@ -687,8 +797,34 @@ function w2dc_checkQuickList($is_listing_id = null)
 	return $favourites_array;
 }
 
-function w2dc_getDatePickerFormat() {
+function w2dc_formatDateTime($timestamp) {
+	return date_i18n(w2dc_getDateFormat() . ' ' . w2dc_getTimeFormat(), intval($timestamp));
+}
+
+function w2dc_getTimeFormat() {
+	$wp_time_format = get_option('time_format');
+	
+	if (!$wp_time_format) {
+		$wp_time_format = "H:i";
+	}
+	
+	return $wp_time_format;
+}
+
+function w2dc_getDateFormat() {
 	$wp_date_format = get_option('date_format');
+	
+	if (!$wp_date_format) {
+		$wp_date_format = "d/m/Y";
+	}
+	
+	return $wp_date_format;
+}
+
+function w2dc_getDatePickerFormat() {
+	
+	$wp_date_format = w2dc_getDateFormat();
+	
 	return str_replace(
 			array('S',  'd', 'j',  'l',  'm', 'n',  'F',  'Y'),
 			array('',  'dd', 'd', 'DD', 'mm', 'm', 'MM', 'yy'),
@@ -767,7 +903,7 @@ function w2dc_crop_content($post_id, $limit = 35, $strip_html = true, $has_link 
 	}
 	
 	if (!$readmore_text) {
-		$readmore_text = __('&#91;...&#93;', 'W2DC');
+		$readmore_text = esc_html__('&#91;...&#93;', 'w2dc');
 	}
 
 	$raw_content = str_replace(']]>', ']]&gt;', $raw_content);
@@ -783,7 +919,7 @@ function w2dc_crop_content($post_id, $limit = 35, $strip_html = true, $has_link 
 	}
 	
 	if ($has_link) {
-		$readmore = ' <a href="'.get_permalink($post_id).'" '.(($nofollow) ? 'rel="nofollow"' : '').' class="w2dc-excerpt-link">'.$readmore_text.'</a>';
+		$readmore = ' <a href="'.get_permalink($post_id).'" '.(($nofollow) ? 'rel="nofollow"' : '').' class="w2dc-excerpt-link" title="' . esc_html__("read more", "w2dc") . '" aria-label="' . esc_html__("read more", "w2dc") . '">'.$readmore_text.'</a>';
 	} else {
 		$readmore = ' ' . $readmore_text;
 	}
@@ -813,8 +949,6 @@ function w2dc_remove_shortcodes($m) {
 }
 
 function w2dc_is_anyone_in_taxonomy($tax) {
-	//global $wpdb;
-	//return $wpdb->get_var('SELECT COUNT(*) FROM ' . $wpdb->term_taxonomy . ' WHERE `taxonomy`="' . $tax . '"');
 	
 	return count(get_categories(array('taxonomy' => $tax, 'hide_empty' => false, 'parent' => 0, 'number' => 1)));
 }
@@ -857,7 +991,7 @@ function w2dc_comments_system($listing) {
 }
 
 function w2dc_comments_label($listing) {
-	$label =  _n('Comment', 'Comments', $listing->post->comment_count, 'W2DC') . ' (' . $listing->post->comment_count . ')';
+	$label =  _n('Comment', 'Comments', $listing->post->comment_count, 'w2dc') . ' (' . $listing->post->comment_count . ')';
 	
 	$label = apply_filters('w2dc_comments_label', $label, $listing);
 	
@@ -865,7 +999,7 @@ function w2dc_comments_label($listing) {
 }
 
 function w2dc_comments_reply_label($listing) {
-	$label =  sprintf(_n('%d reply', '%d replies', $listing->post->comment_count, 'W2DC'), $listing->post->comment_count);
+	$label =  sprintf(_n('%d reply', '%d replies', $listing->post->comment_count, 'w2dc'), $listing->post->comment_count);
 	
 	$label = apply_filters('w2dc_comments_reply_label', $label, $listing);
 	
@@ -890,7 +1024,6 @@ function w2dc_get_term_by_path($term_path, $full_match = true, $output = OBJECT)
 		foreach ( (array) $term_paths as $pathdir )
 			$full_path .= ( $pathdir != '' ? '/' : '' ) . sanitize_title( $pathdir );
 	
-		//$terms = get_terms( array(W2DC_CATEGORIES_TAX, W2DC_LOCATIONS_TAX, W2DC_TAGS_TAX), array('get' => 'all', 'slug' => $leaf_path) );
 		$terms = array();
 		if ($term = get_term_by('slug', $leaf_path, W2DC_CATEGORIES_TAX))
 			$terms[] = $term;
@@ -1984,7 +2117,7 @@ function w2dc_wpmlTranslationCompleteNotice() {
 
 	if (function_exists('wpml_object_id_filter') && $sitepress && defined('WPML_ST_VERSION')) {
 		echo '<p class="description">';
-		_e('After save do not forget to set completed translation status for this string on String Translation page.', 'W2DC');
+		esc_html_e('After save do not forget to set completed translation status for this string on String Translation page.', 'w2dc');
 		echo '</p>';
 	}
 }
@@ -2059,6 +2192,9 @@ function w2dc_getShortcodeController() {
 	(
 			($shortcode_controller = $w2dc_instance->getShortcodeProperty(W2DC_MAIN_SHORTCODE)) ||
 			($shortcode_controller = $w2dc_instance->getShortcodeProperty(W2DC_LISTING_SHORTCODE)) ||
+			($shortcode_controller = $w2dc_instance->getShortcodeProperty(W2DC_CATEGORY_PAGE_SHORTCODE)) ||
+			($shortcode_controller = $w2dc_instance->getShortcodeProperty(W2DC_LOCATION_PAGE_SHORTCODE)) ||
+			($shortcode_controller = $w2dc_instance->getShortcodeProperty(W2DC_TAG_PAGE_SHORTCODE)) ||
 			($shortcode_controller = apply_filters('w2dc_get_shortcode_controller', false))
 	)
 	) {
@@ -2125,8 +2261,8 @@ function w2dc_getCurrentCategory() {
 	$category = w2dc_isCategory();
 	
 	if (!$category) {
-		if ($categories = w2dc_getValue($_REQUEST, 'categories')) {
-			if (is_array($categories) || ($categories = array_filter(explode(',', $categories), 'trim'))) {
+		if (($categories = wcsearch_get_query_string('categories')) || ($categories = w2dc_getValue($_REQUEST, 'categories'))) {
+			if (is_array($categories) || ($categories = w2dc_parse_slugs_ids_list($categories))) {
 				$category_id = array_shift($categories);
 				if ($category_term = get_term($category_id, W2DC_CATEGORIES_TAX)) {
 					$category = $category_term;
@@ -2211,7 +2347,8 @@ function w2dc_isDirectoryPageInAdmin() {
 								'w2dc_raise_up',
 								'w2dc_upgrade',
 								'w2dc_upgrade_bulk',
-								'w2dc_process_claim'
+								'w2dc_process_claim',
+								'w2dc_debug',
 						)
 				))
 		) ||
@@ -2254,7 +2391,7 @@ function w2dc_isCategoriesEditPageInAdmin() {
 	}
 }
 
-function w2dc_locate_template() {
+function w2dc_directory_locate_template() {
 	
 	$templates = array();
 	
@@ -2262,6 +2399,7 @@ function w2dc_locate_template() {
 		$templates[] = 'w2dc-listing-' . $listing->directory->id . '.php';
 		$templates[] = 'w2dc-listing.php';
 	}
+	
 	if (w2dc_isCategory()) {
 		$templates[] = 'w2dc-category.php';
 	}
@@ -2273,6 +2411,8 @@ function w2dc_locate_template() {
 	}
 	
 	$templates[] = 'page.php';
+	
+	$templates = apply_filters("w2dc_locate_template", $templates);
 		
 	return locate_template($templates);
 }
@@ -2378,17 +2518,27 @@ function w2dc_getMapBoxStyleForStatic() {
 }
 
 function w2dc_getMapBoxStyles() {
+	
 	$styles = array(
-			'Streets' => 'mapbox://styles/mapbox/streets-v10',
-			'OutDoors' => 'mapbox://styles/mapbox/outdoors-v10',
-			'Light' => 'mapbox://styles/mapbox/light-v9',
-			'Dark' => 'mapbox://styles/mapbox/dark-v9',
-			'Satellite' => 'mapbox://styles/mapbox/satellite-v9',
-			'Satellite streets' => 'mapbox://styles/mapbox/satellite-streets-v10',
-			'Navigation preview day' => 'mapbox://styles/mapbox/navigation-preview-day-v2',
-			'Navigation preview night' => 'mapbox://styles/mapbox/navigation-preview-night-v2',
-			'Navigation guidance day' => 'mapbox://styles/mapbox/navigation-guidance-day-v2',
-			'Navigation guidance night' => 'mapbox://styles/mapbox/navigation-guidance-night-v2',
+			'Standard'								=> 'mapbox://styles/mapbox/standard',
+			'Streets v12'							=> 'mapbox://styles/mapbox/streets-v12',
+			'Streets v11 (language compatible)'		=> 'mapbox://styles/mapbox/streets-v11',
+			'OutDoors v12'							=> 'mapbox://styles/mapbox/outdoors-v12',
+			'OutDoors v11 (language compatible)'	=> 'mapbox://styles/mapbox/outdoors-v11',
+			'Light v11'								=> 'mapbox://styles/mapbox/light-v11',
+			'Light v10 (language compatible)'		=> 'mapbox://styles/mapbox/light-v10',
+			'Dark v11'								=> 'mapbox://styles/mapbox/dark-v11',
+			'Dark v10 (language compatible)'		=> 'mapbox://styles/mapbox/dark-v10',
+			'Satellite v9'							=> 'mapbox://styles/mapbox/satellite-v9',
+			'Satellite streets v12'					=> 'mapbox://styles/mapbox/satellite-streets-v12',
+			'Navigation day'						=> 'mapbox://styles/mapbox/navigation-day-v1',
+			'Navigation night'						=> 'mapbox://styles/mapbox/navigation-night-v1',
+			'Navigation preview day'				=> 'mapbox://styles/mapbox/navigation-preview-day-v2',
+			'Navigation preview night'				=> 'mapbox://styles/mapbox/navigation-preview-night-v2',
+			'Navigation guidance day'				=> 'mapbox://styles/mapbox/navigation-guidance-day-v2',
+			'Navigation guidance night'				=> 'mapbox://styles/mapbox/navigation-guidance-night-v2',
+			'Traffic day v2'						=> 'mapbox://styles/mapbox/traffic-day-v2',
+			'Traffic night v2'						=> 'mapbox://styles/mapbox/traffic-night-v2',
 	);
 	
 	$styles = apply_filters('w2dc_mapbox_maps_styles', $styles);
@@ -2519,10 +2669,10 @@ function w2dc_updateTermCount($term_id) {
 		$term_directories_count[$directory->id] = array();
 	}
 	
-	$listings_by_taxonomy_term = $wpdb->get_col("SELECT tr.object_id FROM {$wpdb->term_relationships} AS tr LEFT JOIN {$wpdb->term_taxonomy} AS tt ON tr.term_taxonomy_id=tt.term_taxonomy_id LEFT JOIN {$wpdb->posts} AS p ON tr.object_id=p.ID WHERE tt.term_id = " . $term->term_id . " AND p.post_status = 'publish' AND p.post_type='" . W2DC_POST_TYPE  . "'");
+	$listings_by_taxonomy_term = $wpdb->get_col($wpdb->prepare("SELECT tr.object_id FROM {$wpdb->term_relationships} AS tr LEFT JOIN {$wpdb->term_taxonomy} AS tt ON tr.term_taxonomy_id=tt.term_taxonomy_id LEFT JOIN {$wpdb->posts} AS p ON tr.object_id=p.ID WHERE tt.term_id = %d AND p.post_status = 'publish' AND p.post_type=%s", $term->term_id, W2DC_POST_TYPE));
 	
 	foreach ($listings_by_taxonomy_term AS $listing_id) {
-		if (!($directory_id = $wpdb->get_var("SELECT meta_value FROM {$wpdb->postmeta} WHERE `meta_key` = '_directory_id' AND `post_id` = " . $listing_id))) {
+		if (!($directory_id = $wpdb->get_var($wpdb->prepare("SELECT meta_value FROM {$wpdb->postmeta} WHERE `meta_key` = '_directory_id' AND `post_id` = %d", $listing_id)))) {
 			$directory_id = $default_directory_id;
 		}
 				
@@ -2602,6 +2752,15 @@ function w2dc_isListingPayment($listing_id) {
 function w2dc_update_scheduled_events_time() {
 	
 	update_option("w2dc_scheduled_events_time", time());
+}
+
+function w2dc_parse_slugs_ids_list($items) {
+	
+	if (!is_array($items)) {
+		$items = explode(',', $items);
+	}
+	
+	return array_filter($items, 'trim');
 }
 
 ?>

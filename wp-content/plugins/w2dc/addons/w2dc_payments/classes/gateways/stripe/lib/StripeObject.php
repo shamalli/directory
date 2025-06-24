@@ -1,5 +1,8 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
+
 namespace Stripe;
 
 use ArrayAccess;

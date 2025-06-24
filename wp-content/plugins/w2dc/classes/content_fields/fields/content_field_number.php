@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+// @codingStandardsIgnoreFile
 
 class w2dc_content_field_number extends w2dc_content_field {
 	public $is_integer = false;
@@ -11,10 +13,11 @@ class w2dc_content_field_number extends w2dc_content_field {
 	protected $can_be_searched = true;
 	
 	public function isNotEmpty($listing) {
-		if ($this->value)
+		if (is_numeric($this->value)) {
 			return true;
-		else
+		} else {
 			return false;
+		}
 	}
 
 	public function configure() {
@@ -22,15 +25,15 @@ class w2dc_content_field_number extends w2dc_content_field {
 
 		if (w2dc_getValue($_POST, 'submit') && wp_verify_nonce($_POST['w2dc_configure_content_fields_nonce'], W2DC_PATH)) {
 			$validation = new w2dc_form_validation();
-			$validation->set_rules('is_integer', __('Is integer or decimal', 'W2DC'), 'required|natural');
-			$validation->set_rules('decimal_separator', __('Decimal separator',  'W2DC'), 'required|max_length[1]');
-			$validation->set_rules('thousands_separator', __('Thousands separator', 'W2DC'), 'max_length[1]');
-			$validation->set_rules('min', __('Min', 'W2DC'), 'numeric');
-			$validation->set_rules('max', __('Max', 'W2DC'), 'numeric');
+			$validation->set_rules('is_integer', esc_html__('Is integer or decimal', 'w2dc'), 'required|natural');
+			$validation->set_rules('decimal_separator', esc_html__('Decimal separator',  'w2dc'), 'required|max_length[1]');
+			$validation->set_rules('thousands_separator', esc_html__('Thousands separator', 'w2dc'), 'max_length[1]');
+			$validation->set_rules('min', esc_html__('Min', 'w2dc'), 'numeric');
+			$validation->set_rules('max', esc_html__('Max', 'w2dc'), 'numeric');
 			if ($validation->run()) {
 				$result = $validation->result_array();
 				if ($wpdb->update($wpdb->w2dc_content_fields, array('options' => serialize(array('is_integer' => $result['is_integer'], 'decimal_separator' => $result['decimal_separator'], 'thousands_separator' => $result['thousands_separator'], 'min' => $result['min'], 'max' => $result['max']))), array('id' => $this->id), null, array('%d')))
-					w2dc_addMessage(__('Field configuration was updated successfully!', 'W2DC'));
+					w2dc_addMessage(esc_html__('Field configuration was updated successfully!', 'w2dc'));
 				
 				$w2dc_instance->content_fields_manager->showContentFieldsTable();
 			} else {
@@ -130,28 +133,31 @@ class w2dc_content_field_number extends w2dc_content_field {
 		return number_format($value, $decimals, $this->decimal_separator, $this->thousands_separator);
 	}
 	
-	public function orderParams() {
-		$order_params = array('orderby' => 'meta_value_num', 'meta_key' => '_content_field_' . $this->id);
-		if (get_option('w2dc_orderby_exclude_null'))
-			$order_params['meta_query'] = array(
+	public function orderParams($order_args) {
+		$order_args['orderby'] = 'meta_value_num';
+		$order_args['meta_key'] = '_content_field_' . $this->id;
+		
+		if (get_option('w2dc_orderby_exclude_null')) {
+			$order_args['meta_query'][] = array(
 				array(
 					'key' => '_content_field_' . $this->id,
 					'value'   => array(''),
 					'compare' => 'NOT IN'
 				)
 			);
-		return $order_params;
+		}
+		return $order_args;
 	}
 	
 	public function validateCsvValues($value, &$errors) {
 		if (!is_numeric($value))
-			$errors[] = sprintf(__('The %s field must contain only numbers.', 'W2DC'), $this->name);
+			$errors[] = sprintf(esc_html__('The %s field must contain only numbers.', 'w2dc'), $this->name);
 		elseif ($this->is_integer && !ctype_digit($value))
-			$errors[] = sprintf(__('The %s field must contain an integer.', 'W2DC'), $this->name);
+			$errors[] = sprintf(esc_html__('The %s field must contain an integer.', 'w2dc'), $this->name);
 		elseif (is_numeric($this->min) && $value < $this->min)
-			$errors[] = sprintf(__('The %s field must contain a number greater than %s.', 'W2DC'), $this->name, $this->min);
+			$errors[] = sprintf(esc_html__('The %s field must contain a number greater than %s.', 'w2dc'), $this->name, $this->min);
 		elseif (is_numeric($this->max) && $value > $this->max)
-			$errors[] = sprintf(__('The %s field must contain a number less than %s.', 'W2DC'), $this->name, $this->max);
+			$errors[] = sprintf(esc_html__('The %s field must contain a number less than %s.', 'w2dc'), $this->name, $this->max);
 
 		return $value;
 	}
@@ -170,7 +176,7 @@ class w2dc_content_field_number extends w2dc_content_field {
 						'type' => 'textfield',
 						'param_name' => $this->slug,
 						'heading' => $this->name,
-						'description' => esc_html__("Example: 1-10, 5-, -5", "W2DC")
+						'description' => esc_html__("Example: 1-10, 5-, -5", "w2dc")
 				),
 		);
 	}

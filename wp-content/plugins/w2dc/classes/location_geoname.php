@@ -38,7 +38,7 @@ class w2dc_locationGeoname {
 			if (get_option('w2dc_mapbox_api_key')) {
 				// example:   https://docs.mapbox.com/playground/geocoding/
 				// API docs:  https://docs.mapbox.com/api/search/geocoding/
-				$fullUrl = sprintf("https://api.mapbox.com/geocoding/v5/mapbox.places/%s.json?language=en&access_token=%s%s", urlencode($query), get_option('w2dc_mapbox_api_key'), $country);
+				$fullUrl = sprintf("https://api.mapbox.com/search/geocode/v6/forward?q=%s?language=en&access_token=%s%s", urlencode($query), get_option('w2dc_mapbox_api_key'), $country);
 			}
 			
 			return $fullUrl;
@@ -59,36 +59,36 @@ class w2dc_locationGeoname {
 					} elseif ($return == 'geoname') {
 						$geocoded_name = array();
 						foreach ($ret["results"][0]["address_components"] AS $component) {
-							if (@$component["types"][0] == "sublocality") {
+							if ($component["types"][0] == "sublocality") {
 								$town = $component["long_name"];
 								$geocoded_name[] = $town;
 							}
-							if (@$component["types"][0] == "locality") {
+							if ($component["types"][0] == "locality") {
 								$city = $component["long_name"];
 								$geocoded_name[] = $city;
 							}
 							if ($use_districts)
-								if (@$component["types"][0] == "administrative_area_level_3") {
+								if ($component["types"][0] == "administrative_area_level_3") {
 									$district = $component["long_name"];
 									$geocoded_name[] = $district;
 								}
 							if ($use_provinces)
-								if (@$component["types"][0] == "administrative_area_level_2") {
+								if ($component["types"][0] == "administrative_area_level_2") {
 									$province = $component["long_name"];
 									$geocoded_name[] = $province;
 								}
-							if (@$component["types"][0] == "administrative_area_level_1") {
+							if ($component["types"][0] == "administrative_area_level_1") {
 								$state = $component["long_name"];
 								$geocoded_name[] = $state;
 							}
-							if (@$component["types"][0] == "country") {
+							if ($component["types"][0] == "country") {
 								$country = $component["long_name"];
 								$geocoded_name[] = $country;
 							}
 						}
 						return implode(', ', $geocoded_name);
 					} elseif ($return == 'address') {
-						return @$ret["results"][0]["formatted_address"];
+						return $ret["results"][0]["formatted_address"];
 					}
 				} elseif (!empty($ret['error_message'])) {
 					$this->last_error = $ret['error_message'];
@@ -102,7 +102,7 @@ class w2dc_locationGeoname {
 					if ($return == 'coordinates') {
 						return array($ret["features"][0]["geometry"]["coordinates"][0], $ret["features"][0]["geometry"]["coordinates"][1], $ret["features"][0]["id"]);
 					} elseif ($return == 'geoname' && $return == 'address') {
-						return @$ret["features"][0]["place_name"];
+						return $ret["features"][0]["place_name"];
 					}
 				} elseif (!empty($ret['message'])) {
 					$this->last_status = 403;

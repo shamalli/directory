@@ -1,6 +1,6 @@
 <?php
 
-class VP_W2DC_Control_Field_Sorter extends VP_W2DC_Control_FieldMulti implements VP_W2DC_MultiSelectable
+class W2DC_VP_Control_Field_Sorter extends W2DC_VP_Control_FieldMulti implements W2DC_VP_MultiSelectable
 {
 
 	private $_max_selection;
@@ -28,7 +28,7 @@ class VP_W2DC_Control_Field_Sorter extends VP_W2DC_Control_FieldMulti implements
 		$opt = array(
 			'maximumSelectionSize' => $this->get_max_selection(),
 		);
-		$this->add_data('opt', VP_W2DC_Util_Text::make_opt($opt));
+		$this->add_data('opt', W2DC_VP_Util_Text::make_opt($opt));
 		$this->add_data('opt_raw', $opt);
 		parent::_setup_data();
 	}
@@ -37,7 +37,7 @@ class VP_W2DC_Control_Field_Sorter extends VP_W2DC_Control_FieldMulti implements
 	{
 		$this->_setup_data();
 		$this->add_data('is_compact', $is_compact);
-		return VP_W2DC_View::instance()->load('control/sorter', $this->get_data());
+		return W2DC_VP_View::instance()->load('control/sorter', $this->get_data());
 	}
 
 	public function get_max_selection() {

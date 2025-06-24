@@ -23,6 +23,38 @@ return array(
 		),
 		array(
 			'type' => 'dropdown',
+			'param_name' => 'title_tag',
+			'value' => array(
+				'h1' => 'h1',
+				'h2' => 'h2',
+				'h3' => 'h3',
+				'h4' => 'h4',
+				'h5' => 'h5',
+				'h6' => 'h6',
+				'p' => 'p',
+			),
+			'std' => 'h2',
+			'heading' => esc_html__( 'Widget title tag', 'js_composer' ),
+			'description' => esc_html__( 'Select widget title tag.', 'js_composer' ),
+		),
+		array(
+			'type' => 'dropdown',
+			'param_name' => 'section_title_tag',
+			'value' => array(
+				'h1' => 'h1',
+				'h2' => 'h2',
+				'h3' => 'h3',
+				'h4' => 'h4',
+				'h5' => 'h5',
+				'h6' => 'h6',
+				'p' => 'p',
+			),
+			'std' => 'h4',
+			'heading' => esc_html__( 'Section title tag', 'js_composer' ),
+			'description' => esc_html__( 'Select section title tag.', 'js_composer' ),
+		),
+		array(
+			'type' => 'dropdown',
 			'param_name' => 'style',
 			'value' => array(
 				esc_html__( 'Classic', 'js_composer' ) => 'classic',
@@ -195,7 +227,7 @@ return array(
 			'type' => 'el_id',
 			'heading' => esc_html__( 'Element ID', 'js_composer' ),
 			'param_name' => 'el_id',
-			'description' => sprintf( esc_html__( 'Enter element ID (Note: make sure it is unique and valid according to %sw3c specification%s).', 'js_composer' ), '<a href="https://www.w3schools.com/tags/att_global_id.asp" target="_blank">', '</a>' ),
+			'description' => sprintf( esc_html__( 'Enter element ID (Note: make sure it is unique and valid according to %1$sw3c specification%2$s).', 'js_composer' ), '<a href="https://www.w3schools.com/tags/att_global_id.asp" target="_blank">', '</a>' ),
 		),
 		array(
 			'type' => 'textfield',
@@ -226,6 +258,6 @@ return array(
 [vc_tta_section title="' . sprintf( '%s %d', esc_html__( 'Section', 'js_composer' ), 2 ) . '"][/vc_tta_section]
 	',
 	'admin_enqueue_js' => array(
-		vc_asset_url( 'lib/vc_tabs/vc-tabs.min.js' ),
+		vc_asset_url( 'lib/vc/vc_tabs/vc-tabs.min.js' ),
 	),
 );

@@ -1,11 +1,14 @@
 <?php
 /**
  * Plugin Name: WPBakery Page Builder
- * Plugin URI: http://wpbakery.com
+ * Plugin URI: https://wpbakery.com
  * Description: Drag and drop page builder for WordPress. Take full control over your WordPress site, build any layout you can imagine – no programming knowledge required.
- * Version: 6.6.0
+ * Version: 7.7.2
  * Author: Michael M - WPBakery.com
- * Author URI: http://wpbakery.com
+ * Author URI: https://wpbakery.com
+ * Text Domain: js_composer
+ * Domain Path: /locale/
+ * Requires at least: 4.9
  *
  * @package WPBakery Page Builder
  */
@@ -18,10 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Current WPBakery Page Builder version
  */
 if ( ! defined( 'WPB_VC_VERSION' ) ) {
-	/**
-	 *
-	 */
-	define( 'WPB_VC_VERSION', '6.6.0' );
+	define( 'WPB_VC_VERSION', '7.7.2' );
 }
 
 $dir = dirname( __FILE__ );

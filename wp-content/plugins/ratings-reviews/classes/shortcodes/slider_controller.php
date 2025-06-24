@@ -41,13 +41,13 @@ class w2rr_slider_controller extends w2rr_frontend_controller {
 
 		if (!empty($this->args['post__in'])) {
 			if (is_string($this->args['post__in'])) {
-				$args = array_merge($args, array('post__in' => explode(',', $this->args['post__in'])));
+				$args = array_merge($args, array('post__in' => wp_parse_id_list($this->args['post__in'])));
 			} elseif (is_array($this->args['post__in'])) {
 				$args['post__in'] = $this->args['post__in'];
 			}
 		}
 		if (!empty($this->args['post__not_in'])) {
-			$args = array_merge($args, array('post__not_in' => explode(',', $this->args['post__not_in'])));
+			$args = array_merge($args, array('post__not_in' => wp_parse_id_list($this->args['post__not_in'])));
 		}
 		
 		$args['with_images'] = 1;

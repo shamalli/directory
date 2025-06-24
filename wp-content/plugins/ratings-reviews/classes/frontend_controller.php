@@ -7,6 +7,7 @@ class w2rr_frontend_controller {
 	public $page_title;
 	public $template;
 	public $is_review;
+	public $review;
 	public $reviews = array();
 	public $paginator;
 	public $breadcrumbs = array();
@@ -60,7 +61,7 @@ class w2rr_frontend_controller {
 		
 		$breadcrumbs_process = $this->breadcrumbs;
 		if (!get_option('w2rr_hide_home_link_breadcrumb')) {
-			array_unshift($breadcrumbs_process, new w2rr_breadcrumb(esc_html__('Home', 'W2RR'), home_url()));
+			array_unshift($breadcrumbs_process, new w2rr_breadcrumb(esc_html__('Home', 'w2rr'), home_url()));
 		}
 		
 		foreach ($breadcrumbs_process AS $key=>$breadcrumb) {
@@ -94,7 +95,7 @@ class w2rr_frontend_controller {
 			}
 
 			if (!get_option('w2rr_hide_home_link_breadcrumb')) {
-				array_unshift($breadcrumbs_process, new w2rr_breadcrumb(esc_html__('Home', 'W2RR'), home_url()));
+				array_unshift($breadcrumbs_process, new w2rr_breadcrumb(esc_html__('Home', 'w2rr'), home_url()));
 			}
 			
 			$counter = 0;

@@ -57,7 +57,7 @@ return array(
 		<tr><td><strong>carousel_slide_width</strong></td><td>Slide width (in pixels).</td><td class="td-center">250</td></tr>
 		<tr><td><strong>carousel_slide_height</strong></td><td>Slide height(in pixels).</td><td class="td-center">300</td></tr>
 		<tr><td><strong>carousel_full_width</strong></td><td>Carousel width (in pixels). With empty field carousel will take all possible width.</td><td class="td-center"></td></tr>
-		<tr><td><strong>ajax_initial_load</strong></td><td>Load listings only after the page was completely loaded.</td><td class="td-center">by setting*</td></tr>
+		<tr><td><strong>ajax_initial_load</strong></td><td>Load listings only after the page was completely loaded.</td><td class="td-center">0</td></tr>
 		<tr><td><strong>author</strong></td><td>Enter exact ID of author or word "related" to get assigned listings of current author (works only on listing page or WordPress author page).</td><td class="td-center"></td></tr>
 		<tr><td><strong>address</strong></td><td>Display listings near this address, recommended to set "radius" attribute.</td><td class="td-center"></td></tr>
 		<tr><td><strong>radius</strong></td><td>Display listings near provided address within this radius in miles or kilometers - according to dimension parameter from directory settings.</td><td class="td-center"></td></tr>
@@ -72,6 +72,7 @@ return array(
 		<tr><td><strong>related_directory</strong></td><td>Get listings of the same directory.</td><td class="td-center">0</td></tr>
 		<tr><td><strong>levels</strong></td><td>Comma separated string of levels IDs. Here you may filter which listings to display by its levels.</td><td class="td-center"></td></tr>
 		<tr><td><strong>post__in</strong></td><td>Comma separated string of listings IDs. Possible to display exact listings.</td><td class="td-center"></td></tr>
+		<tr><td><strong>start_listings</strong></td><td>Comma separated string of listings IDs. Display these listings by default, then directory searches as always.</td><td class="td-center"></td></tr>
 		<tr><td><strong>field_<em>SLUG</em></td><td colspan="2">Possible to filter by content fields values like on the search form. Filters depend on fields types:
 		<ul>
 			<li><strong>Text string and Textarea</strong> - filter in the following format: <strong>field_<em>SLUG</em>="string"</strong></li>
@@ -116,7 +117,7 @@ return array(
 		<tr><td><strong>map_style</strong></td><td>Google Maps style. Whole list in directory settings.</td><td class="td-center">default</td></tr>
 		<tr><td><strong>show_summary_button</strong></td><td>Show "Summary" button in info window.</td><td class="td-center">0</td></tr>
 		<tr><td><strong>show_readmore_button</strong></td><td>Show "Read more" button in info window.</td><td class="td-center">1</td></tr>
-		<tr><td><strong>ajax_loading</strong></td><td>When map contains lots of markers - this may slow down map markers loading. Select AJAX to speed up loading. Requires Starting Address or Starting Point coordinates Latitude and Longitude.</td><td class="td-center">0</td></tr>
+		<tr><td><strong>ajax_map_loading</strong></td><td>When map contains lots of markers - this may slow down map markers loading. Select AJAX to speed up loading. Requires Starting Address or Starting Point coordinates Latitude and Longitude.</td><td class="td-center">0</td></tr>
 		<tr><td><strong>ajax_markers_loading</strong></td><td>Maps info window AJAX loading. This may additionally speed up loading.</td><td class="td-center">0</td></tr>
 		<tr><td><strong>start_address</strong></td><td>When map markers load by AJAX - it should have starting point and starting zoom. Enter start address or select latitude and longitude. Example: 1600 Amphitheatre Pkwy, Mountain View, CA 94043, USA.</td><td class="td-center"></td></tr>
 		<tr><td><strong>start_latitude</strong></td><td>Starting point latitude.</td><td class="td-center"></td></tr>
@@ -130,26 +131,13 @@ return array(
 		<tr><td><strong>center_map_onclick</strong></td><td>Center map on marker click.</td><td class="td-center">0</td></tr>
 		<tr><td><strong>categories</strong></td><td>Categories to show on a map. Comma separated string of categories IDs or slugs - use only IDs or only slugs.</td><td class="td-center"></td></tr>
 		<tr><td><strong>locations</strong></td><td>Locations to show on a map. Comma separated string of locations IDs or slugs - use only IDs or only slugs.</td><td class="td-center"></td></tr>
+		<tr><td><strong>tags</strong></td><td>Tags to show on a map. Comma separated string of tags IDs or slugs - use only IDs or only slugs.</td><td class="td-center"></td></tr>
 		<tr><td><strong>search_on_map</strong></td><td>Show search form and listings panel on the map.</td><td class="td-center">0</td></tr>
+		<tr><td><strong>search_on_map_id</strong></td><td>ID of a search form built in <a href="[base_url]/documentation/search/">Search Forms</a> section.</td><td class="td-center"></td></tr>
 		<tr><td><strong>search_on_map_open</strong></td><td>Search form open by default.</td><td class="td-center">0</td></tr>
-		<tr><td><strong>show_keywords_search</strong></td><td>Show keywords search on the search form.</td><td class="td-center">1</td></tr>
-		<tr><td><strong>keywords_ajax_search</strong></td><td>Enable listings autosuggestions by keywords.</td><td class="td-center">1</td></tr>
-		<tr><td><strong>what_search</strong></td><td>Default keywords on the search form.</td><td class="td-center"></td></tr>
-		<tr><td><strong>keywords_placeholder</strong></td><td>Keywords placeholder.</td><td class="td-center"></td></tr>
-		<tr><td><strong>show_categories_search</strong></td><td>Show categories search on the search form.</td><td class="td-center">1</td></tr>
-		<tr><td><strong>categories_search_level</strong></td><td>Categories search depth level on the search form (1,2,3).</td><td class="td-center">1</td></tr>
-		<tr><td><strong>category</strong></td><td>Select certain category ID on the search form.</td><td class="td-center">0</td></tr>
-		<tr><td><strong>exact_categories</strong></td><td>List of categories on the search form. Comma separated string of categories slugs or IDs.</td><td class="td-center"></td></tr>
-		<tr><td><strong>address</strong></td><td>Default address, recommended to set default radius.</td><td class="td-center"></td></tr>
-		<tr><td><strong>address_placeholder</strong></td><td>Address placeholder.</td><td class="td-center"></td></tr>
-		<tr><td><strong>show_radius_search</strong></td><td>Show radius slider on the search form.</td><td class="td-center">1</td></tr>
-		<tr><td><strong>radius</strong></td><td>Display listings near provided address within this radius in miles or kilometers - according to dimension parameter from directory settings.</td><td class="td-center"></td></tr>
-		<tr><td><strong>show_address_search</strong></td><td>Show address search on the search form.</td><td class="td-center">1</td></tr>
-		<tr><td><strong>show_locations_search</strong></td><td>Show locations search on the search form.</td><td class="td-center">1</td></tr>
-		<tr><td><strong>locations_search_level</strong></td><td>Locations search depth level on the search form (1,2,3).</td><td class="td-center">1</td></tr>
-		<tr><td><strong>location</strong></td><td>Select certain location ID on the search form.</td><td class="td-center">0</td></tr>
-		<tr><td><strong>exact_locations</strong></td><td>List of locations on the search form. Comma separated string of locations slugs or IDs.</td><td class="td-center"></td></tr>
-		<tr><td><strong>+</strong></td><td colspan="2">parameters from <strong>&#091;webdirectory-listings&#093;</strong> shortcode, such as: sticky_featured, author, related_directory, related_categories, related_locations, related_tags, levels, post_in, include_categories_children and special content fields filters.</td></tr>
+		<tr><td><strong>search_on_map_right</strong></td><td>Show search form on the right side of the map. On left by default.</td><td class="td-center">0</td></tr>
+		<tr><td><strong>search_on_map_listings</strong></td><td>Where to show listings panel near the map: "sidebar", "bottom" or "none".</td><td class="td-center">sidebar</td></tr>
+		<tr><td><strong>+</strong></td><td colspan="2">parameters from <strong>&#091;webdirectory-listings&#093;</strong> shortcode, such as: sticky_featured, author, related_directory, related_categories, related_locations, related_tags, levels, post_in, start_listings, include_categories_children and special content fields filters.</td></tr>
 		</table>
 		
 		<a href="[base_url]/shortcodes/search-ajax-map-listings/" target="_blank" rel="noopener noreferrer">Search + AJAX Map + Listings</a>
@@ -294,7 +282,7 @@ return array(
 		<tr><td><strong>order_by_rand</strong></td><td>Set to order listings randomly.</td><td class="td-center">0</td></tr>
 		<tr><td><strong>auto_slides</strong></td><td>Enable automatic rotating slideshow.</td><td class="td-center">0</td></tr>
 		<tr><td><strong>auto_slides_delay</strong></td><td>The delay in rotation (in ms).</td><td class="td-center">3000</td></tr>
-		<tr><td><strong>+</strong></td><td colspan="2">Parameters from <strong>&#091;webdirectory-listings&#093;</strong> shortcode, such as: sticky_featured, order_by, order, address, radius, categories, locations, author, related_directory, related_categories, related_locations, related_tags, levels, post_in, include_categories_children and special content fields filters.</td></tr>
+		<tr><td><strong>+</strong></td><td colspan="2">Parameters from <strong>&#091;webdirectory-listings&#093;</strong> shortcode, such as: sticky_featured, order_by, order, address, radius, categories, locations, author, related_directory, related_categories, related_locations, related_tags, levels, post_in, start_listings, include_categories_children and special content fields filters.</td></tr>
 		</table>
 		
 		<a href="[base_url]/shortcodes/webdirectory-slider/" target="_blank" rel="noopener noreferrer">Example</a>
@@ -359,7 +347,7 @@ return array(
 		<table>
 		<tr><th>Parameter</th><th class="th-description"></th><th>Default</th></tr>
 		<tr><td><strong>listing</strong></td><td>ID of a listing. When empty it displays content field of current listing.</td><td class="td-center"></td></tr>
-		<tr><td><strong>id</strong></td><td>ID of a content field.</td><td class="td-center"></td></tr>
+		<tr><td><strong>content_field_id</strong></td><td>ID of a content field.</td><td class="td-center"></td></tr>
 		<tr><td><strong>classes</strong></td><td>CSS classes to add in wrapper div of a content field.</td><td class="td-center"></td></tr>
 		</table>
 		
@@ -370,7 +358,7 @@ return array(
 		<table>
 		<tr><th>Parameter</th><th class="th-description"></th><th>Default</th></tr>
 		<tr><td><strong>listing</strong></td><td>ID of a listing. When empty it displays content fields group of current listing.</td><td class="td-center"></td></tr>
-		<tr><td><strong>id</strong></td><td>ID of a content fields group.</td><td class="td-center"></td></tr>
+		<tr><td><strong>content_fields_group_id</strong></td><td>ID of a content fields group.</td><td class="td-center"></td></tr>
 		<tr><td><strong>classes</strong></td><td>CSS classes to add in wrapper div of a content fields group.</td><td class="td-center"></td></tr>
 		</table>
 		

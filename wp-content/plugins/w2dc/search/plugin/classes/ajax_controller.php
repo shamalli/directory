@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+// @codingStandardsIgnoreFile
 
 class wcsearch_ajax_controller {
 
@@ -79,14 +81,14 @@ class wcsearch_ajax_controller {
 						$target = apply_filters('wcsearch_listing_title_search_target', '');
 					}
 					
-					$title = '<strong><a href="' . esc_url($permalink) . '" ' . $target . ' title="' . esc_attr__("open product", "WCSEARCH") . '" ' . (($nofollow) ? 'rel="nofollow"' : '') . '>' . esc_html($name) . '</a></strong>';
+					$title = '<strong><a href="' . esc_url($permalink) . '" ' . $target . ' title="' . esc_attr__("open product", "wcsearch") . '" ' . (($nofollow) ? 'rel="nofollow"' : '') . '>' . esc_html($name) . '</a></strong>';
 				} else {
 					$title = '<strong>' . esc_html($name) . '</strong>';
 				}
 	
 				$listing_json_field = array();
 				$listing_json_field['title'] = $title;
-				$listing_json_field['name'] = $name;
+				$listing_json_field['name'] = htmlspecialchars_decode($name); // htmlspecialchars_decode() needed due to &amp; symbols
 				$listing_json_field['url'] = $permalink;
 				$listing_json_field['icon'] = $image;
 				$listing_json_field['sublabel'] = wc_price($product->get_price());
@@ -114,7 +116,7 @@ class wcsearch_ajax_controller {
 		$hide_empty = wcsearch_getValue($_POST, 'hide_empty');
 		
 		$exact_terms = wcsearch_getValue($_POST, 'exact_terms');
-		$exact_terms = array_filter(explode(",", $exact_terms));
+		$exact_terms = wcsearch_parse_slugs_ids_list($exact_terms);
 		
 		$args = array(
 				'uID' => $uID,
@@ -156,28 +158,28 @@ class wcsearch_ajax_controller {
 		if ($counters = wcsearch_getValue($_REQUEST, 'counters')) {
 			if (is_array($counters)) {
 				
-				$used_by = wcsearch_getValue($_REQUEST, 'used_by');
+				$used_by = esc_attr(wcsearch_getValue($_REQUEST, 'used_by'));
 				
 				$counters = array_unique($counters, SORT_REGULAR);
 				
 				foreach ($counters AS $counter) {
 					if (isset($counter['termid'])) {
-						$counter_term_id = $counter['termid'];
-						$counter_term_tax = $counter['tax'];
-						$counter_term_mode = wcsearch_getValue($counter, 'termmode', 'checkboxes');
+						$counter_term_id = esc_attr($counter['termid']);
+						$counter_term_tax = esc_attr($counter['tax']);
+						$counter_term_mode = esc_attr(wcsearch_getValue($counter, 'termmode', 'checkboxes'));
 						$counter_number = false;
 						$counter_tags[] = array('counter_term_id' => $counter_term_id, 'counter_term_tax' => $counter_term_tax, 'counter_item' => wcsearch_get_count(array('term' => wcsearch_wrapper_get_term($counter_term_id, $counter_term_tax), 'mode' => $counter_term_mode), $counter_number), 'counter_number' => $counter_number, 'used_by' => $used_by);
 					} elseif (isset($counter['price'])) {
-						$counter_price = $counter['price'];
+						$counter_price = esc_attr($counter['price']);
 						$counter_tags[] = array('counter_price' => $counter_price, 'counter_item' => wcsearch_get_count(array('price' => $counter_price, 'used_by' => $used_by)));
 					} elseif (isset($counter['option'])) {
-						$counter_option = $counter['option'];
+						$counter_option = esc_attr($counter['option']);
 						$counter_tags[] = array('counter_option' => $counter_option, 'counter_item' => wcsearch_get_count(array('option' => $counter_option, 'used_by' => $used_by)));
 					} elseif (isset($counter['hours'])) {
-						$counter_hours = $counter['hours'];
+						$counter_hours = esc_attr($counter['hours']);
 						$counter_tags[] = array('counter_hours' => $counter_hours, 'counter_item' => wcsearch_get_count(array('hours' => $counter_hours, 'used_by' => $used_by)));
 					} elseif (isset($counter['ratings'])) {
-						$counter_ratings = $counter['ratings'];
+						$counter_ratings = esc_attr($counter['ratings']);
 						$counter_tags[] = array('counter_ratings' => $counter_ratings, 'counter_item' => wcsearch_get_count(array('ratings' => $counter_ratings, 'used_by' => $used_by)));
 					}
 				}
@@ -192,12 +194,9 @@ class wcsearch_ajax_controller {
 	
 	public function get_tax_options() {
 		
-		$html = '';
+		$options = array();
 		
 		if ($tax = wcsearch_getValue($_REQUEST, 'tax')) {
-			
-			$field_name = wcsearch_getValue($_REQUEST, 'field_name');
-			$field_class = wcsearch_getValue($_REQUEST, 'field_class');
 			
 			if ($items = wcsearch_getValue($_REQUEST, 'items', array())) {
 				$items = explode(',', $items);
@@ -223,23 +222,22 @@ class wcsearch_ajax_controller {
 			
 			$terms = wcsearch_wrapper_get_categories($categories_options);
 			
-			$html = '<select name="' . $field_name . '[]" class="' . $field_class . ' wcsearch-search-model-tax-terms wcsearch-search-model-options-input" multiple="multiple">';
 			foreach ($terms AS $term) {
 				if (in_array($term->term_id, $items) || in_array($term->slug, $items)) {
-					$selected = "selected='selected'";
+					$selected = true;
 				} else {
-					$selected = '';
+					$selected = false;
 				}
-				$html .= '<option value="' . esc_attr($term->term_id) . '" ' . $selected . '>' . $term->name . '</option>';
+					
+				$options[] = array('value' => $term->term_id, "option" => $term->name, "selected" => ($selected ? "selected" : ""));
 				
-				$html .= $this->_get_tax_options($term, 1);
+				if ($_opts = $this->_get_tax_options($term, 1)) {
+					$options = $options + $_opts;
+				}
 			}
-			
-			$html .= '<select>';
 		}
 		
-		$json = json_encode(array('html' => $html));
-		echo $json;
+		echo json_encode($options);
 		
 		die();
 	}
@@ -271,19 +269,23 @@ class wcsearch_ajax_controller {
 			
 		$terms = wcsearch_wrapper_get_categories($categories_options);
 		
-		$html = '';
+		$options = array();
 		foreach ($terms AS $term) {
 			if (in_array($term->term_id, $items) || in_array($term->slug, $items)) {
-				$selected = "selected='selected'";
+				$selected = true;
 			} else {
-				$selected = '';
+				$selected = false;
 			}
-			$html .= '<option value="' . esc_attr($term->term_id) . '" ' . $selected . '>' . str_repeat("- ", $level) . $term->name . '</option>';
-		
-			$html .= $this->_get_tax_options($term, $level+1);
+			
+			$options[] = array('value' => $term->term_id, "option" => str_repeat("- ", $level) . $term->name, "selected" => ($selected ? "selected" : ""));
+			
+			if ($_opts = $this->_get_tax_options($term, $level+1)) {
+				$options = $options + $_opts;
+			}
 		}
 		
-		return $html;
+		return $options;
 	}
 }
+
 ?>

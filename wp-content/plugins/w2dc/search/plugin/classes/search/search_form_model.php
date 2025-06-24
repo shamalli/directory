@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 class wcsearch_search_form_model {
 	public $id;
 	public $used_by = 'wc';
@@ -84,7 +86,7 @@ class wcsearch_search_form_model {
 					$dependent_search_class = 'wcsearch-search-placeholder-dependency-view';
 					
 					$tax_name = $field_model->params['dependency_tax'];
-					$query_items = array_filter(explode(",", wcsearch_get_query_string($tax_name)));
+					$query_items = wcsearch_parse_slugs_ids_list(wcsearch_get_query_string($tax_name));
 					
 					if (!$query_items) {
 						$dependent_search_class .= ' wcsearch-search-placeholder-dependency-view-closed';
@@ -182,8 +184,6 @@ function wcsearch_getModelOptions($type, $params) {
 			$params['values'] = $default_query[$params['slug']];
 		}
 	}
-	
-	//var_dump($params);
 
 	return $params;
 }
@@ -260,10 +260,10 @@ class wcsearch_search_form_model_field {
 					// set default placeholder
 					if (!empty($this->params['new_field'])) {
 						if (isset($this->params['placeholder'])) {
-							$this->params['placeholder'] = sprintf(esc_html__('Select %s', 'WCSEARCH'), $taxonomy->labels->singular_name);
+							$this->params['placeholder'] = sprintf(esc_html__('Select %s', 'wcsearch'), $taxonomy->labels->singular_name);
 						}
 						if (isset($this->params['placeholders'])) {
-							$this->params['placeholders'] = sprintf(esc_html__('Select %s', 'WCSEARCH'), $taxonomy->labels->singular_name);
+							$this->params['placeholders'] = sprintf(esc_html__('Select %s', 'wcsearch'), $taxonomy->labels->singular_name);
 						}
 					}
 					
@@ -432,7 +432,7 @@ class wcsearch_search_form_model_field {
 					$search_fields = wcsearch_get_model_fields($this->params['used_by']);
 					foreach ($search_fields AS $search_field) {
 						if ($search_field['type'] == 'string' && $search_field['slug'] == $this->params['slug']) {
-							$this->params['placeholder'] = sprintf(esc_html__('Enter %s', 'WCSEARCH'), $search_field['name']);
+							$this->params['placeholder'] = sprintf(esc_html__('Enter %s', 'wcsearch'), $search_field['name']);
 							
 							break;
 						}
@@ -581,11 +581,11 @@ class wcsearch_search_form_model_field {
 			case "ratings":
 				
 				$options = array(
-						'5' => esc_html("5 stars", "WCSEARCH"),
-						'4' => esc_html("4 stars", "WCSEARCH"),
-						'3' => esc_html("3 stars", "WCSEARCH"),
-						'2' => esc_html("2 stars", "WCSEARCH"),
-						'1' => esc_html("1 stars", "WCSEARCH"),
+						'5' => esc_html("5 stars", "wcsearch"),
+						'4' => esc_html("4 stars", "wcsearch"),
+						'3' => esc_html("3 stars", "wcsearch"),
+						'2' => esc_html("2 stars", "wcsearch"),
+						'1' => esc_html("1 stars", "wcsearch"),
 				);
 				
 				return wcsearch_renderTemplate($template_path . "ratings.tpl.php",
@@ -610,13 +610,12 @@ class wcsearch_search_form_model_field {
 		
 		$options['used_by'] = $this->used_by;
 		
-		$data = "id='" . $this->id . "'";
+		$data = "id='" . esc_attr($this->id) . "'";
 		
 		foreach ($options AS $name=>$value) {
 			
 			if (is_array($value)) {
 				$value = implode(',', $value);
-				//$value = json_encode($value);
 			}
 			
 			$data .= ' data-'.$name.'="' . esc_attr($value) . '" ';

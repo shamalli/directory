@@ -1,10 +1,12 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 /**
  * Config files loader
  */
 
-class VP_W2RR_Util_Config
+class W2RR_VP_Util_Config
 {
 
 	private static $_instance;
@@ -35,9 +37,9 @@ class VP_W2RR_Util_Config
 		}
 		else
 		{
-			if(is_file(VP_W2RR_CONFIG_DIR . '/'. $config_name . '.php'))
+			if(is_file(W2RR_VP_CONFIG_DIR . '/'. $config_name . '.php'))
 			{
-				$config     = require VP_W2RR_CONFIG_DIR . '/'. $config_name . '.php';
+				$config     = require W2RR_VP_CONFIG_DIR . '/'. $config_name . '.php';
 			}
 			else
 			{

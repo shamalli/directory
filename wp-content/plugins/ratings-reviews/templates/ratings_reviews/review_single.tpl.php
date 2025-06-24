@@ -35,7 +35,7 @@
 						<?php if (w2rr_comments_open()): ?>
 						<div class="w2rr-single-review-comments">
 							<div class="w2rr-single-review-comments-label">
-								<?php echo $review->post->comment_count; ?> <?php echo _n('Comment', 'Comments', $review->post->comment_count, 'W2RR'); ?>
+								<?php echo $review->post->comment_count; ?> <?php echo _n('Comment', 'Comments', $review->post->comment_count, 'w2rr'); ?>
 							</div>
 							<?php w2rr_renderTemplate('ratings_reviews/single_parts/comments.tpl.php', array('post' => $review->post)); ?>
 						</div>

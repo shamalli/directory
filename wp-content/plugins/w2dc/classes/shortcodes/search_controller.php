@@ -19,7 +19,7 @@ class w2dc_search_controller extends w2dc_frontend_controller {
 				'uid' => null,
 		), $args);
 
-		// $w2dc_instance->getShortcodeProperty(W2DC_MAIN_SHORTCODE) gives recursion in frontend_controller.php 
+		// ---------------- $w2dc_instance->getShortcodeProperty(W2DC_MAIN_SHORTCODE) gives recursion in frontend_controller.php 
 		if (!$this->args['custom_home'] && $this->args['uid']) {
 			$this->hash = md5($this->args['uid']);
 		} elseif ($this->args['custom_home'] && ($shortcode_controller = $w2dc_instance->getShortcodeProperty(W2DC_MAIN_SHORTCODE))) {

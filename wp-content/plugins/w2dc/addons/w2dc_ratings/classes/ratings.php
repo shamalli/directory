@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 class w2dc_avg_rating {
 	public $ratings = array();
 	public $ratings_count = 0;

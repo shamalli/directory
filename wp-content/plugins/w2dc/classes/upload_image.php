@@ -98,11 +98,11 @@ class w2dc_upload_image {
 					} else // wp_handle_upload returned some kind of error. the return does contain error details, so you can use it here if you want.
 						$result['error_msg'] = 'There was a problem with your upload: ' . $uploaded_file['error'];
 				}  else // wrong file type
-					$result['error_msg'] = esc_html__('Please upload only image files (jpg, gif or png).', 'W2DC');
+					$result['error_msg'] = esc_html__('Please upload only image files (jpg, gif or png).', 'w2dc');
 			} else
-				$result['error_msg'] = esc_html__('You do not have permissions to edit this post!', 'W2DC');
+				$result['error_msg'] = esc_html__('You do not have permissions to edit this post!', 'w2dc');
 		} else // no file was passed
-			$result['error_msg'] = esc_html__('Choose image to upload first!', 'W2DC');
+			$result['error_msg'] = esc_html__('Choose image to upload first!', 'w2dc');
 		
 		echo json_encode($result);
 		die();
@@ -110,9 +110,9 @@ class w2dc_upload_image {
 	
 	public function enqueue_scripts_styles() {
 		wp_enqueue_script('jquery-ui-widget');
-		wp_register_script('w2dc_fileupload', W2DC_RESOURCES_URL . 'js/jquery.fileupload.js', array('jquery'), false, true);
-		wp_register_script('w2dc_fileupload_iframe', W2DC_RESOURCES_URL . 'js/jquery.iframe-transport.js', array('jquery'), false, true);
-		wp_enqueue_script('w2dc_fileupload');
-		wp_enqueue_script('w2dc_fileupload_iframe');
+		wp_register_script('w2dc-fileupload', W2DC_RESOURCES_URL . 'js/jquery.fileupload.js', array('jquery'), false, true);
+		wp_register_script('w2dc-fileupload-iframe', W2DC_RESOURCES_URL . 'js/jquery.iframe-transport.js', array('jquery'), false, true);
+		wp_enqueue_script('w2dc-fileupload');
+		wp_enqueue_script('w2dc-fileupload-iframe');
 	}
 }

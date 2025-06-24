@@ -1,6 +1,11 @@
-<?php if(!$is_compact) echo VP_W2DC_View::instance()->load('control/template_control_head', $head_info); ?>
+<?php
 
-<textarea class="vp-input" name="<?php echo $name; ?>" style="display: none;"><?php echo $value; ?></textarea>
-<div class="vp-js-codeeditor" data-vp-opt="<?php echo $opt; ?>"></div>
+// @codingStandardsIgnoreFile
 
-<?php if(!$is_compact) echo VP_W2DC_View::instance()->load('control/template_control_foot'); ?>
+?>
+<?php if(!$is_compact) echo W2DC_VP_View::instance()->load('control/template_control_head', $head_info); ?>
+
+<textarea class="vp-input" name="<?php w2dc_esc_e($name); ?>" class="w2dc-display-none"><?php w2dc_esc_e($value); ?></textarea>
+<div class="vp-js-codeeditor" data-vp-opt="<?php w2dc_esc_e($opt); ?>"></div>
+
+<?php if(!$is_compact) echo W2DC_VP_View::instance()->load('control/template_control_foot'); ?>

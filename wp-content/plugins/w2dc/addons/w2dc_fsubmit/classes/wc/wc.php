@@ -10,20 +10,14 @@ function w2dc_load_wc_hooks() {
 		function woo_plugin_settings($options) {
 			$options['template']['menus']['advanced']['controls']['woocommerce'] = array(
 				'type' => 'section',
-				'title' => __('Woocommerce', 'W2DC'),
+				'title' => esc_html__('Woocommerce', 'w2dc'),
 				'fields' => array(
 					array(
 						'type' => 'toggle',
 						'name' => 'w2dc_woocommerce_functionality',
-						'label' => __('WooCommerce payments for the directory', 'W2DC'),
+						'label' => esc_html__('WooCommerce payments for the directory', 'w2dc'),
 						'default' => get_option('w2dc_woocommerce_functionality'),
 					),
-					/* array(
-						'type' => 'toggle',
-						'name' => 'w2dc_payments_free_for_admins',
-						'label' => __('Any services are Free for administrators', 'W2DC'),
-						'default' => get_option('w2dc_payments_free_for_admins'),
-					), */
 				)
 			);
 			
@@ -31,7 +25,7 @@ function w2dc_load_wc_hooks() {
 				$options['template']['menus']['advanced']['controls']['woocommerce']['fields'][] = array(
 						'type' => 'toggle',
 						'name' => 'w2dc_woocommerce_enabled_subscriptions',
-						'label' => __('On checkout page subscription enabled by default', 'W2DC'),
+						'label' => esc_html__('On checkout page subscription enabled by default', 'w2dc'),
 						'default' => get_option('w2dc_woocommerce_enabled_subscriptions'),
 				);
 						
@@ -40,7 +34,7 @@ function w2dc_load_wc_hooks() {
 			return $options;
 		}
 		
-		add_action('vp_w2dc_option_after_ajax_save', 'woo_save_option', 11, 3);
+		add_action('w2dc_vp_option_after_ajax_save', 'woo_save_option', 11, 3);
 		function woo_save_option($opts, $old_opts, $status) {
 			global $w2dc_instance;
 		
@@ -89,10 +83,8 @@ function w2dc_load_wc_hooks() {
 	if (w2dc_isWooActive()) {
 		
 		include_once W2DC_FSUBMIT_PATH . 'classes/wc/listing_single_product.php';
-		
-		global $w2dc_instance;
 	
-		$w2dc_instance->listing_single_product = new w2dc_listing_single_product;
+		$listing_single_product = new w2dc_listing_single_product;
 	
 		// Remove listings products from the Shop
 		add_action('woocommerce_product_query', 'w2dc_exclude_products_from_shop');
@@ -111,7 +103,7 @@ function w2dc_load_wc_hooks() {
 		
 		function w2dc_format_price($price) {
 			if ($price == 0) {
-				$out = '<span class="w2dc-payments-free">' . __('FREE', 'W2DC') . '</span>';
+				$out = '<span class="w2dc-payments-free">' . esc_html__('FREE', 'w2dc') . '</span>';
 			} else {
 				$out = wc_price($price);
 			}
@@ -135,7 +127,7 @@ function w2dc_load_wc_hooks() {
 			if (isset($w2dc_instance->dashboard_page_url) && $w2dc_instance->dashboard_page_url) {
 				$offset = 1;
 				$items = array_slice($items, 0, $offset, true) +
-				array('directory_dashboard' => esc_html__('Listings dashboard', 'W2DC')) +
+				array('directory_dashboard' => esc_html__('Listings dashboard', 'w2dc')) +
 				array_slice($items, $offset, NULL, true);
 			}
 			
@@ -156,21 +148,23 @@ function w2dc_load_wc_hooks() {
 	
 		add_action('woocommerce_account_dashboard', 'w2dc_account_dashboard_content');
 		function w2dc_account_dashboard_content() {
-			global $w2dc_instance, $w2dc_fsubmit_instance;
+			global $w2dc_instance;
+			global $w2dc_fsubmit_instance;
 	
+			// @codingStandardsIgnoreFile
 			?>
 			<?php if (!empty($w2dc_instance->submit_pages_all)): ?>
 			<p>
-				<?php _e("You can submit directory listings.", "W2DC"); ?>
+				<?php esc_html_e("You can submit directory listings.", "w2dc"); ?>
 				<br />
 				<?php
 				if ($w2dc_instance->directories->isMultiDirectory()) {
 					foreach ($w2dc_instance->directories->directories_array AS $directory) {
-						echo '<a href="' . w2dc_submitUrl(array('directory' => $directory->id)) . '" rel="nofollow">' . sprintf(__('Submit new %s', 'W2DC'), $directory->single) . '</a><br />';
+						echo '<a href="' . w2dc_submitUrl(array('directory' => $directory->id)) . '" rel="nofollow">' . sprintf(esc_html__('Submit new %s', 'w2dc'), $directory->single) . '</a><br />';
 					}
 				} else {
 					$directory = $w2dc_instance->directories->getDefaultDirectory();
-					echo '<a href="' . w2dc_submitUrl(array('directory' => $directory->id)) . '" rel="nofollow">' . sprintf(__('Submit new %s', 'W2DC'), $directory->single) . '</a>';
+					echo '<a href="' . w2dc_submitUrl(array('directory' => $directory->id)) . '" rel="nofollow">' . sprintf(esc_html__('Submit new %s', 'w2dc'), $directory->single) . '</a>';
 				}
 				?>
 			</p>
@@ -218,7 +212,7 @@ function w2dc_load_wc_hooks() {
 	
 			$orders = array();
 			foreach ($results AS $row) {
-				if (($post = get_post($row['order_id'])) && $post->post_status == 'publish') {
+				if (($post = get_post($row['order_id'])) && (in_array($post->post_status, array('wc-pending', 'wc-processing')))) {
 					$order = wc_get_order($row['order_id']);
 					if (is_object($order) && stripos(get_class($order), 'order') !== false) {
 						$orders[] = $order;
@@ -276,7 +270,7 @@ function w2dc_load_wc_hooks() {
 				$orders_query = new WP_Query($args);
 				wp_reset_postdata();
 	
-				echo '<li><a href="' . $orders_url . '">' . __('My orders', 'W2DC'). ' (' . $orders_query->found_posts . ')</a></li>';
+				echo '<li><a href="' . $orders_url . '">' . esc_html__('My orders', 'w2dc'). ' (' . $orders_query->found_posts . ')</a></li>';
 			}
 		}
 	
@@ -288,17 +282,17 @@ function w2dc_load_wc_hooks() {
 			if ($listing->post->post_author == get_current_user_id() && ($listing->status == 'unpaid' || $listing->status == 'expired')) {
 				if (($order = w2dc_get_last_order_of_listing($listing->post->ID)) && !$order->is_paid() && $order->get_status() != 'trash') {
 					if ($w2dc_instance->listings_packages->can_user_create_listing_in_level($listing->level->id)) {
-						$title = esc_attr(strip_tags($w2dc_instance->listings_packages->available_listings_descr($listing->level->id, __('renew', 'W2DC'))));
-						echo '<br /><a href="' . w2dc_dashboardUrl(array('apply_listing_payment' => $listing->post->ID)) . '" title="' . $title . '">' . __('apply payment', 'W2DC') . '</a>';
+						$title = esc_attr(strip_tags($w2dc_instance->listings_packages->available_listings_descr($listing->level->id, esc_html__('renew', 'w2dc'))));
+						echo '<br /><a href="' . w2dc_dashboardUrl(array('apply_listing_payment' => $listing->post->ID)) . '" title="' . $title . '">' . esc_html__('apply payment', 'w2dc') . '</a>';
 					} else {
 						$order_url = $order->get_checkout_payment_url();
 	
-						echo '<br /><a href="' . $order_url . '">' . __('pay order', 'W2DC') . '</a>';
+						echo '<br /><a href="' . $order_url . '">' . esc_html__('pay order', 'w2dc') . '</a>';
 					}
 				} else {
 					if ($w2dc_instance->listings_packages->can_user_create_listing_in_level($listing->level->id)) {
-						$title = esc_attr(strip_tags($w2dc_instance->listings_packages->available_listings_descr($listing->level->id, __('renew', 'W2DC'))));
-						echo '<br /><a href="' . w2dc_dashboardUrl(array('apply_listing_payment' => $listing->post->ID)) . '" title="' . $title . '">' . __('apply payment', 'W2DC') . '</a>';
+						$title = esc_attr(strip_tags($w2dc_instance->listings_packages->available_listings_descr($listing->level->id, esc_html__('renew', 'w2dc'))));
+						echo '<br /><a href="' . w2dc_dashboardUrl(array('apply_listing_payment' => $listing->post->ID)) . '" title="' . $title . '">' . esc_html__('apply payment', 'w2dc') . '</a>';
 					}
 				}
 			}
@@ -317,9 +311,9 @@ function w2dc_load_wc_hooks() {
 							$listing->processActivate(false, false);
 							$w2dc_instance->listings_packages->process_listing_creation_for_user($listing->level->id);
 							if ($listing->status == 'unpaid')
-								w2dc_addMessage(__("Listing was successfully activated.", "W2DC"));
+								w2dc_addMessage(esc_html__("Listing was successfully activated.", "w2dc"));
 							elseif ($listing->status == 'expired')
-								w2dc_addMessage(__("Listing was successfully renewed and activated.", "W2DC"));
+								w2dc_addMessage(esc_html__("Listing was successfully renewed and activated.", "w2dc"));
 							
 							wp_redirect(remove_query_arg('apply_listing_payment'));
 							die();
@@ -331,11 +325,14 @@ function w2dc_load_wc_hooks() {
 		
 		add_action('w2dc_listing_info_metabox_html', 'w2dc_last_order_listing_link');
 		function w2dc_last_order_listing_link($listing) {
-			if ($order = w2dc_get_last_order_of_listing($listing->post->ID)) {
+			if ($orders = w2dc_get_all_orders_of_listing($listing->post->ID)) {
+				$orders = array_reverse($orders);
 				?>
 				<div class="misc-pub-section">
-					<?php _e('WC order', 'W2DC'); ?>:
-					<?php echo "<a href=". get_edit_post_link($order->get_id()) . ">" . sprintf(__("Order #%d details", "W2DC"), $order->get_id()) . "</a>"; ?>
+					<?php esc_html_e('WC orders', 'w2dc'); ?>:
+					<?php foreach ($orders AS $order): ?>
+					<?php echo "<br /><a href=". $order->get_edit_order_url() . ">" . sprintf(esc_html__("Order #%d details", "w2dc"), $order->get_id()) . "</a> - " . $order->get_status(); ?>
+					<?php endforeach; ?>
 				</div>
 				<?php
 			}

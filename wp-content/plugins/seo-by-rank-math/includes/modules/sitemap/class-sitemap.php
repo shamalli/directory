@@ -13,6 +13,7 @@ namespace RankMath\Sitemap;
 use RankMath\Helper;
 use RankMath\Helpers\Sitepress;
 use RankMath\Traits\Hooker;
+use RankMath\Sitemap\Html\Sitemap as Html_Sitemap;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -25,6 +26,13 @@ defined( 'ABSPATH' ) || exit;
 class Sitemap {
 
 	use Hooker;
+
+	/**
+	 * Sitemap Index object.
+	 *
+	 * @var Sitemap_Index
+	 */
+	public $index;
 
 	/**
 	 * The Constructor.
@@ -43,9 +51,9 @@ class Sitemap {
 		$this->index = new Sitemap_Index();
 		$this->index->hooks();
 		new Redirect_Core_Sitemaps();
+		new Html_Sitemap();
 
 		add_action( 'rank_math/sitemap/hit_index', [ __CLASS__, 'hit_index' ] );
-		add_action( 'rank_math/sitemap/ping_search_engines', [ __CLASS__, 'ping_google_bing' ] );
 
 		$this->filter( 'rank_math/admin/notice/new_post_type', 'new_post_type_notice', 10, 2 );
 
@@ -141,46 +149,7 @@ class Sitemap {
 	 * Hit sitemap index to pre-generate the cache.
 	 */
 	public static function hit_index() {
-		wp_remote_get( Router::get_base_url( 'sitemap_index.xml' ) );
-	}
-
-	/**
-	 * Ping Google & Bing about sitemap changes.
-	 *
-	 * @param string|null $url Optional sitemap URL. Falls back to sitemap index URL.
-	 */
-	public static function ping_google_bing( $url = null ) {
-		if ( ! self::can_ping() ) {
-			return;
-		}
-
-		if ( empty( $url ) ) {
-			$url = rawurlencode( Router::get_base_url( 'sitemap_index.xml' ) );
-		}
-
-		wp_remote_get( 'http://www.google.com/webmasters/tools/ping?sitemap=' . $url, [ 'blocking' => false ] );
-
-		if ( Router::get_base_url( 'geo-sitemap.xml' ) !== $url ) {
-			wp_remote_get( 'http://www.google.com/ping?sitemap=' . $url, [ 'blocking' => false ] );
-			wp_remote_get( 'http://www.bing.com/ping?sitemap=' . $url, [ 'blocking' => false ] );
-		}
-	}
-
-	/**
-	 * Check if we can ping search engines.
-	 *
-	 * @return bool
-	 */
-	public static function can_ping() {
-		if ( false === Helper::get_settings( 'sitemap.ping_search_engines' ) ) {
-			return false;
-		}
-
-		if ( '0' === get_option( 'blog_public' ) ) {
-			return false;
-		}
-
-		return true;
+		wp_remote_get( Router::get_base_url( self::get_sitemap_index_slug() . '.xml' ) );
 	}
 
 	/**
@@ -222,7 +191,7 @@ class Sitemap {
 	 * @param  string|array $post_types Post type or array of types.
 	 * @param  boolean      $return_all Flag to return array of values.
 	 * @return string|array|false
-	 * 
+	 *
 	 * @copyright Copyright (C) 2008-2019, Yoast BV
 	 * The following code is a derivative work of the code from the Yoast(https://github.com/Yoast/wordpress-seo/), which is licensed under GPL v3.
 	 */
@@ -251,12 +220,17 @@ class Sitemap {
 
 			if ( ! empty( $post_type_names ) ) {
 				$sql = "
-				SELECT post_type, MAX(post_modified_gmt) AS date
-				FROM $wpdb->posts
-				WHERE post_status IN ('publish','inherit')
-					AND post_type IN ('" . implode( "','", $post_type_names ) . "')
-				GROUP BY post_type
-				ORDER BY post_modified_gmt DESC";
+				SELECT post_type, MAX( GREATEST( p.post_modified_gmt, p.post_date_gmt ) ) AS date
+				FROM $wpdb->posts as p
+				LEFT JOIN {$wpdb->postmeta} AS pm ON ( p.ID = pm.post_id AND pm.meta_key = 'rank_math_robots')
+				WHERE (
+					( pm.meta_key = 'rank_math_robots' AND pm.meta_value NOT LIKE '%noindex%' ) OR
+				    pm.post_id IS NULL
+				)
+				AND p.post_status IN ( 'publish','inherit' )
+					AND p.post_type IN ('" . implode( "','", $post_type_names ) . "')
+				GROUP BY p.post_type
+				ORDER BY p.post_modified_gmt DESC";
 
 				foreach ( $wpdb->get_results( $sql ) as $obj ) { // phpcs:ignore
 					$post_type_dates[ $obj->post_type ] = $obj->date;
@@ -335,5 +309,19 @@ class Sitemap {
 			Helper::redirect( preg_replace( '/' . preg_quote( $current_page ) . '\.xml$/', '.xml', Helper::get_current_page_url() ) );
 			die();
 		}
+	}
+
+	/**
+	 * Get the sitemap index slug.
+	 */
+	public static function get_sitemap_index_slug() {
+		/**
+		 * Filter: 'rank_math/sitemap/index_slug' - Modify the sitemap index slug.
+		 *
+		 * @param string $slug Sitemap index slug.
+		 *
+		 * @return string
+		 */
+		return apply_filters( 'rank_math/sitemap/index/slug', 'sitemap_index' );
 	}
 }

@@ -7,7 +7,7 @@ class w2rr_post_ratings_overall_elementor_widget extends w2rr_elementor_widget {
 	}
 
 	public function get_title() {
-		return __('Post rating overall bars', 'W2RR');
+		return esc_html__('Post rating overall bars', 'w2rr');
 	}
 
 	public function get_icon() {
@@ -23,7 +23,7 @@ class w2rr_post_ratings_overall_elementor_widget extends w2rr_elementor_widget {
 		$this->start_controls_section(
 				'content_section',
 				array(
-						'label' => esc_html__('Post rating overall bars', 'W2RR'),
+						'label' => esc_html__('Post rating overall bars', 'w2rr'),
 						'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
 				)
 		);

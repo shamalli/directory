@@ -1,6 +1,6 @@
 <?php
 
-class VP_W2DC_Option_Control_Field_Restore extends VP_W2DC_Control_Field
+class W2DC_VP_Option_Control_Field_Restore extends W2DC_VP_Control_Field
 {
 
 	public function __construct()
@@ -21,7 +21,7 @@ class VP_W2DC_Option_Control_Field_Restore extends VP_W2DC_Control_Field
 	public function render()
 	{
 		$this->_setup_data();
-		return VP_W2DC_View::instance()->load('option/restore', $this->get_data());
+		return W2DC_VP_View::instance()->load('option/restore', $this->get_data());
 	}
 
 }

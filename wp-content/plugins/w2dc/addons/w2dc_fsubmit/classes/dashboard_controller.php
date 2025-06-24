@@ -1,14 +1,29 @@
 <?php 
 
+// @codingStandardsIgnoreFile
+
 class w2dc_dashboard_controller extends w2dc_frontend_controller {
 	
 	public $referer;
 	public $listings_count;
 	public $active_tab;
 	public $subtemplate;
+	
+	public $user;
+	
+	public $invoices;
+	public $invoices_query;
+	public $invoice;
+	public $paypal;
+	public $paypal_subscription;
+	public $bank_transfer;
+	public $stripe;
+	
 
 	public function init($args = array()) {
-		global $w2dc_instance, $w2dc_fsubmit_instance, $sitepress;
+		global $w2dc_instance;
+		global $w2dc_fsubmit_instance;
+		global $sitepress;
 		
 		parent::init($args);
 		
@@ -16,14 +31,17 @@ class w2dc_dashboard_controller extends w2dc_frontend_controller {
 				'listing_info' => 1,
 				'use_wrapper' => 1,
 				'directories' => '',
+				'categories' => array(), // exact categories to display in select list
 		), $args);
 		
 		$this->args = $shortcode_atts;
 		
 		$this->add_template_args(array('listing_info' => $this->args['listing_info']));
 		
+		$this->add_template_args(array('categories' => $this->args['categories']));
+		
 		if ($this->args['directories']) {
-			$this->add_template_args(array('directories' => explode(',', $this->args['directories'])));
+			$this->add_template_args(array('directories' => wp_parse_id_list($this->args['directories'])));
 		}
 		
 		$preview = w2dc_getValue($_POST, 'w2dc_preview');
@@ -61,14 +79,13 @@ class w2dc_dashboard_controller extends w2dc_frontend_controller {
 			
 			$args = array(
 					'post_type' => W2DC_POST_TYPE,
-					//'author' => get_current_user_id(),
 					'paged' => $paged,
 					'posts_per_page' => 20,
 					'post_status' => 'any'
 			);
 			
 			if ($this->args['directories']) {
-				if ($directories_ids = array_filter(explode(',', $this->args['directories']), 'trim')) {
+				if ($directories_ids = wp_parse_id_list($this->args['directories'])) {
 					$args = w2dc_set_directory_args($args, $directories_ids);
 				}
 			}
@@ -123,9 +140,9 @@ class w2dc_dashboard_controller extends w2dc_frontend_controller {
 						
 						$errors = array();
 
-						if (!isset($_POST['post_title']) || !trim($_POST['post_title']) || $_POST['post_title'] == __('Auto Draft')) {
-							$errors[] = __('Listing title field required', 'W2DC');
-							$post_title = __('Auto Draft');
+						if (!isset($_POST['post_title']) || !trim($_POST['post_title']) || $_POST['post_title'] == esc_html__('Auto Draft', 'w2dc')) {
+							$errors[] = esc_html__('Listing title field required', 'w2dc');
+							$post_title = esc_html__('Auto Draft', 'w2dc');
 						} else
 							$post_title = trim($_POST['post_title']);
 
@@ -163,7 +180,7 @@ class w2dc_dashboard_controller extends w2dc_frontend_controller {
 						
 						if (get_option('w2dc_listing_contact_form') && get_option('w2dc_custom_contact_email')) {
 							$w2dc_form_validation = new w2dc_form_validation();
-							$w2dc_form_validation->set_rules('contact_email', __('Contact email', 'W2DC'), 'valid_email');
+							$w2dc_form_validation->set_rules('contact_email', esc_html__('Contact email', 'w2dc'), 'valid_email');
 						
 							if (!$w2dc_form_validation->run()) {
 								$errors[] = $w2dc_form_validation->error_array();
@@ -191,9 +208,6 @@ class w2dc_dashboard_controller extends w2dc_frontend_controller {
 							if (!$listing->level->eternal_active_period && $listing->status != 'expired') {
 								if (get_option('w2dc_change_expiration_date') || current_user_can('manage_options')) {
 									$w2dc_instance->listings_manager->changeExpirationDate();
-								} else {
-									$expiration_date = w2dc_calcExpirationDate(current_time('timestamp'), $listing->level);
-									add_post_meta($listing->post->ID, '_expiration_date', $expiration_date);
 								}
 							}
 
@@ -215,9 +229,9 @@ class w2dc_dashboard_controller extends w2dc_frontend_controller {
 								}
 							}
 							if (get_option('w2dc_fsubmit_edit_moderation')) {
-								$success_message = esc_attr__("Listing was saved successfully! Now it's awaiting moderators approval.", 'W2DC');
+								$success_message = esc_html__("Listing was saved successfully! Now it's awaiting moderators approval.", 'w2dc');
 							} else {
-								$success_message = __('Listing was saved successfully!', 'W2DC');
+								$success_message = esc_html__('Listing was saved successfully!', 'w2dc');
 							}
 
 							$postarr = array(
@@ -241,7 +255,7 @@ class w2dc_dashboard_controller extends w2dc_frontend_controller {
 									if ($listing->post->post_status == 'publish' && $post_status == 'pending') {
 										$author = wp_get_current_user();
 	
-										$subject = __('Notification about listing modification (do not reply)', 'W2DC');
+										$subject = esc_html__('Notification about listing modification (do not reply)', 'w2dc');
 										$body = str_replace('[user]', $author->display_name,
 												str_replace('[listing]', $listing->title(),
 												str_replace('[link]', admin_url('post.php?post='.$listing->post->ID.'&action=edit'),
@@ -252,7 +266,7 @@ class w2dc_dashboard_controller extends w2dc_frontend_controller {
 								}	
 								
 								if ($preview) {
-									$preview_message = sprintf(__('The listing is in preview mode. Continue edition or save the listing in dashboard.', 'W2DC'), add_query_arg(array('w2dc_preview' => true, 'referer' => $this->referer), w2dc_get_edit_listing_link($listing->post->ID)));
+									$preview_message = sprintf(esc_html__('The listing is in preview mode. Continue edition or save the listing in dashboard.', 'w2dc'), add_query_arg(array('w2dc_preview' => true, 'referer' => $this->referer), w2dc_get_edit_listing_link($listing->post->ID)));
 									w2dc_addMessage($preview_message);
 									
 									$listing_link = get_permalink($listing->post->ID);
@@ -312,31 +326,27 @@ class w2dc_dashboard_controller extends w2dc_frontend_controller {
 					$this->action = 'show';
 					if (isset($_GET['raiseup_action']) && $_GET['raiseup_action'] == 'raiseup') {
 						if ($listing->processRaiseUp())
-							w2dc_addMessage(__('Listing was raised up successfully!', 'W2DC'));
-						/* else
-							w2dc_addMessage(__('An error has occurred and listing was not raised up', 'W2DC'), 'error'); */
+							w2dc_addMessage(esc_html__('Listing was raised up successfully!', 'w2dc'));
 						$this->action = $_GET['raiseup_action'];
 						$this->referer = $_GET['referer'];
 					}
 					$this->template = array(W2DC_FSUBMIT_TEMPLATES_PATH, 'dashboard.tpl.php');
 					$this->subtemplate = array(W2DC_FSUBMIT_TEMPLATES_PATH, 'raise_up.tpl.php');
 				} else
-					wp_die('You are not able to manage this listing', 'W2DC');
+					wp_die('You are not able to manage this listing', 'w2dc');
 			} elseif ($w2dc_instance->action == 'renew_listing' && $listing_id) {
 				if (w2dc_current_user_can_edit_listing($listing_id) && ($listing = w2dc_getListing($listing_id))) {
 					$this->action = 'show';
 					if (isset($_GET['renew_action']) && $_GET['renew_action'] == 'renew') {
 						if ($listing->processActivate(true, false))
-							w2dc_addMessage(__('Listing was renewed successfully!', 'W2DC'));
-						/* else
-							w2dc_addMessage(__('An error has occurred and listing was not renewed', 'W2DC'), 'error'); */
+							w2dc_addMessage(esc_html__('Listing was renewed successfully!', 'w2dc'));
 						$this->action = $_GET['renew_action'];
 						$this->referer = $_GET['referer'];
 					}
 					$this->template = array(W2DC_FSUBMIT_TEMPLATES_PATH, 'dashboard.tpl.php');
 					$this->subtemplate = array(W2DC_FSUBMIT_TEMPLATES_PATH, 'renew.tpl.php');
 				} else
-					wp_die('You are not able to manage this listing', 'W2DC');
+					wp_die('You are not able to manage this listing', 'w2dc');
 			} elseif ($w2dc_instance->action == 'delete_listing' && $listing_id) {
 				if (w2dc_current_user_can_delete_listing($listing_id) && ($listing = w2dc_getListing($listing_id))) {
 					if (isset($_GET['delete_action']) && $_GET['delete_action'] == 'delete') {
@@ -345,46 +355,46 @@ class w2dc_dashboard_controller extends w2dc_frontend_controller {
 							if (wp_delete_post($listing_id, true) !== FALSE) {
 								$w2dc_instance->listings_manager->delete_listing_data($listing_id);
 	
-								w2dc_addMessage(__('Listing was deleted successfully!', 'W2DC'));
+								w2dc_addMessage(esc_html__('Listing was deleted successfully!', 'w2dc'));
 								wp_redirect(w2dc_dashboardUrl());
 								die();
 							} else {
-								w2dc_addMessage(__('An error has occurred and listing was not deleted', 'W2DC'), 'error');
+								w2dc_addMessage(esc_html__('An error has occurred and listing was not deleted', 'w2dc'), 'error');
 							}
 						} else {
 							if (wp_trash_post($listing_id) !== FALSE) {
-								w2dc_addMessage(__('Listing was moved to trash!', 'W2DC'));
+								w2dc_addMessage(esc_html__('Listing was moved to trash!', 'w2dc'));
 								wp_redirect(w2dc_dashboardUrl());
 								die();
 							} else {
-								w2dc_addMessage(__('An error has occurred and listing was not moved to trash', 'W2DC'), 'error');
+								w2dc_addMessage(esc_html__('An error has occurred and listing was not moved to trash', 'w2dc'), 'error');
 							}
 						}
 					}
 					$this->template = array(W2DC_FSUBMIT_TEMPLATES_PATH, 'dashboard.tpl.php');
 					$this->subtemplate = array(W2DC_FSUBMIT_TEMPLATES_PATH, 'delete.tpl.php');
 				} else
-					wp_die('You are not able to manage this listing', 'W2DC');
+					wp_die('You are not able to manage this listing', 'w2dc');
 			} elseif ($w2dc_instance->action == 'upgrade_listing' && $listing_id) {
-				if (w2dc_current_user_can_edit_listing($listing_id) && ($listing = w2dc_getListing($listing_id)) /* && $listing->status == 'active' */) {
+				if (w2dc_current_user_can_edit_listing($listing_id) && ($listing = w2dc_getListing($listing_id))) {
 					$this->action = 'show';
 					if (isset($_GET['upgrade_action']) && $_GET['upgrade_action'] == 'upgrade') {
 						$w2dc_form_validation = new w2dc_form_validation();
-						$w2dc_form_validation->set_rules('new_level_id', __('New level ID', 'W2DC'), 'required|integer');
+						$w2dc_form_validation->set_rules('new_level_id', esc_html__('New level ID', 'w2dc'), 'required|integer');
 
 						if ($w2dc_form_validation->run()) {
 							if ($listing->changeLevel($w2dc_form_validation->result_array('new_level_id')))
-								w2dc_addMessage(__('Listing level was changed successfully!', 'W2DC'));
+								w2dc_addMessage(esc_html__('Listing level was changed successfully!', 'w2dc'));
 							$this->action = $_GET['upgrade_action'];
 						} else
-							w2dc_addMessage(__('New level must be selected!', 'W2DC'), 'error');
+							w2dc_addMessage(esc_html__('New level must be selected!', 'w2dc'), 'error');
 
 						$this->referer = $_GET['referer'];
 					}
 					$this->template = array(W2DC_FSUBMIT_TEMPLATES_PATH, 'dashboard.tpl.php');
 					$this->subtemplate = array(W2DC_FSUBMIT_TEMPLATES_PATH, 'upgrade.tpl.php');
 				} else
-					wp_die('You are not able to manage this listing', 'W2DC');
+					wp_die('You are not able to manage this listing', 'w2dc');
 			} elseif ($w2dc_instance->action == 'view_stats' && $listing_id) {
 				if (get_option('w2dc_enable_stats') && w2dc_current_user_can_edit_listing($listing_id) && ($listing = w2dc_getListing($listing_id))) {
 					add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts_styles'));
@@ -392,7 +402,7 @@ class w2dc_dashboard_controller extends w2dc_frontend_controller {
 					$this->template = array(W2DC_FSUBMIT_TEMPLATES_PATH, 'dashboard.tpl.php');
 					$this->subtemplate = array(W2DC_FSUBMIT_TEMPLATES_PATH, 'view_stats.tpl.php');
 				} else
-					wp_die('You are not able to manage this listing', 'W2DC');
+					wp_die('You are not able to manage this listing', 'w2dc');
 			} elseif ($w2dc_instance->action == 'profile') {
 				if (get_option('w2dc_allow_edit_profile')) {
 					$user_id = get_current_user_id();
@@ -412,14 +422,19 @@ class w2dc_dashboard_controller extends w2dc_frontend_controller {
 								$user = get_userdata($user_id);
 							
 								// Update the email address in signups, if present.
-								if ($user->user_login && isset($_POST['email']) && is_email($_POST['email']) && $wpdb->get_var($wpdb->prepare("SELECT user_login FROM {$wpdb->signups} WHERE user_login = %s", $user->user_login)))
+								if ($user->user_login && isset($_POST['email']) && is_email($_POST['email']) && $wpdb->get_var($wpdb->prepare("SELECT user_login FROM {$wpdb->signups} WHERE user_login = %s", $user->user_login))) // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 									$wpdb->query($wpdb->prepare("UPDATE {$wpdb->signups} SET user_email = %s WHERE user_login = %s", $_POST['email'], $user->user_login));
+									$wpdb->update(
+											$wpdb->signups,
+											array('user_email' => $_POST['email']),
+											array('user_login' => $user->user_login)
+									);
 							
 								// We must delete the user from the current blog if WP added them after editing.
 								$delete_role = false;
 								$blog_prefix = $wpdb->get_blog_prefix();
 								if ($user_id != $current_user->ID) {
-									$cap = $wpdb->get_var("SELECT meta_value FROM {$wpdb->usermeta} WHERE user_id = '{$user_id}' AND meta_key = '{$blog_prefix}capabilities' AND meta_value = 'a:0:{}'");
+									$cap = $wpdb->get_var($wpdb->prepare("SELECT meta_value FROM {$wpdb->usermeta} WHERE user_id = %d AND meta_key = '{$blog_prefix}capabilities' AND meta_value = 'a:0:{}'", $user_id)); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 									if (!is_network_admin() && null == $cap && $_POST['role'] == '') {
 										$_POST['role'] = 'contributor';
 										$delete_role = true;
@@ -432,12 +447,12 @@ class w2dc_dashboard_controller extends w2dc_frontend_controller {
 							}
 							
 							if (!is_wp_error($errors)) {
-								w2dc_addMessage(__('Your profile was successfully updated!', 'W2DC'));
+								w2dc_addMessage(esc_html__('Your profile was successfully updated!', 'w2dc'));
 								wp_redirect(w2dc_dashboardUrl(array('w2dc_action' => 'profile')));
 								die();
 							}
 						} else
-							wp_die('You are not able to manage profile', 'W2DC');
+							wp_die('You are not able to manage profile', 'w2dc');
 					}
 	
 					$this->user = get_user_to_edit($user_id);
@@ -473,7 +488,7 @@ class w2dc_dashboard_controller extends w2dc_frontend_controller {
 					$this->subtemplate = array(W2DC_FSUBMIT_TEMPLATES_PATH, 'profile.tpl.php');
 					$this->active_tab = 'profile';
 				} else
-					wp_die('You are not able to manage profile', 'W2DC');
+					wp_die('You are not able to manage profile', 'w2dc');
 			} elseif ($w2dc_instance->action == 'claim_listing' && $listing_id) {
 				if (($listing = w2dc_getListing($listing_id)) && $listing->is_claimable) {
 					$claimer_id = get_current_user_id();
@@ -481,7 +496,7 @@ class w2dc_dashboard_controller extends w2dc_frontend_controller {
 						$this->action = 'show';
 						if (isset($_GET['claim_action']) && $_GET['claim_action'] == 'claim') {
 							if (isset($_POST['claim_message']) && $_POST['claim_message'])
-								$claimer_message = $_POST['claim_message'];
+								$claimer_message = esc_html($_POST['claim_message']);
 							else
 								$claimer_message = '';
 							if ($listing->claim->updateRecord($claimer_id, $claimer_message, 'pending')) {
@@ -491,7 +506,7 @@ class w2dc_dashboard_controller extends w2dc_frontend_controller {
 										$author = get_userdata($listing->post->post_author);
 										$claimer = get_userdata($claimer_id);
 
-										$subject = __('Claim notification', 'W2DC');
+										$subject = esc_html__('Claim notification', 'w2dc');
 		
 										$body = str_replace('[author]', $author->display_name,
 												str_replace('[listing]', $listing->post->post_title,
@@ -504,14 +519,14 @@ class w2dc_dashboard_controller extends w2dc_frontend_controller {
 		
 										w2dc_mail($claim_email, $subject, $body);
 									}
-									w2dc_addMessage(__('Listing was claimed successfully!', 'W2DC'));
+									w2dc_addMessage(esc_html__('Listing was claimed successfully!', 'w2dc'));
 									
 									wp_redirect($listing->url());
 									die();
 								} else {
 									// Automatically process claim without approval
 									$listing->claim->approve();
-									w2dc_addMessage(__('Listing claim was approved successfully!', 'W2DC'));
+									w2dc_addMessage(esc_html__('Listing claim was approved successfully!', 'w2dc'));
 								}
 							}
 
@@ -520,18 +535,18 @@ class w2dc_dashboard_controller extends w2dc_frontend_controller {
 						
 						if ($this->action == 'show') {
 							if (get_option('w2dc_claim_approval')) {
-								w2dc_addMessage(__('The notification about claim for this listing will be sent to the current listing owner.', 'W2DC'));
-								w2dc_addMessage(__("After approval you will become owner of this listing, you'll receive email notification.", 'W2DC'));
+								w2dc_addMessage(esc_html__('The notification about claim for this listing will be sent to the current listing owner.', 'w2dc'));
+								w2dc_addMessage(esc_html__("After approval you will become owner of this listing, you'll receive email notification.", 'w2dc'));
 							}
 							if (get_option('w2dc_after_claim') == 'expired') {
-								w2dc_addMessage(__('After approval listing status become expired.', 'W2DC') . ((get_option('w2dc_payments_addon')) ? apply_filters('w2dc_renew_option', __(' The price for renewal', 'W2DC'), $w2dc_instance->current_listing) : ''));
+								w2dc_addMessage(esc_html__('After approval listing status become expired.', 'w2dc') . ((get_option('w2dc_payments_addon')) ? apply_filters('w2dc_renew_option', esc_html__(' The price for renewal', 'w2dc'), $w2dc_instance->current_listing) : ''));
 							}
 						}
 						
 						$this->template = array(W2DC_FSUBMIT_TEMPLATES_PATH, 'dashboard.tpl.php');
 						$this->subtemplate = array(W2DC_FSUBMIT_TEMPLATES_PATH, 'claim.tpl.php');
 					} else
-						wp_die('This is your own listing', 'W2DC');
+						wp_die('This is your own listing', 'w2dc');
 				}
 			} elseif ($w2dc_instance->action == 'process_claim' && $listing_id) {
 				if (w2dc_current_user_can_edit_listing($listing_id) && ($listing = w2dc_getListing($listing_id)) && $listing->claim->isClaimed()) {
@@ -542,7 +557,7 @@ class w2dc_dashboard_controller extends w2dc_frontend_controller {
 							if (get_option('w2dc_claim_approval_notification')) {
 								$claimer = get_userdata($listing->claim->claimer_id);
 
-								$subject = __('Approval of claim notification', 'W2DC');
+								$subject = esc_html__('Approval of claim notification', 'w2dc');
 							
 								$body = str_replace('[claimer]', $claimer->display_name,
 										str_replace('[listing]', $listing->post->post_title,
@@ -551,13 +566,13 @@ class w2dc_dashboard_controller extends w2dc_frontend_controller {
 							
 								w2dc_mail($claimer->user_email, $subject, $body);
 							}
-							w2dc_addMessage(__('Listing claim was approved successfully!', 'W2DC'));
+							w2dc_addMessage(esc_html__('Listing claim was approved successfully!', 'w2dc'));
 						} elseif ($_GET['claim_action'] == 'decline') {
 							$listing->claim->deleteRecord();
 							if (get_option('w2dc_claim_decline_notification')) {
 								$claimer = get_userdata($listing->claim->claimer_id);
 
-								$subject = __('Claim decline notification', 'W2DC');
+								$subject = esc_html__('Claim decline notification', 'w2dc');
 									
 								$body = str_replace('[claimer]', $claimer->display_name,
 										str_replace('[listing]', $listing->post->post_title,
@@ -566,7 +581,7 @@ class w2dc_dashboard_controller extends w2dc_frontend_controller {
 								w2dc_mail($claimer->user_email, $subject, $body);
 							}
 							update_post_meta($listing->post->ID, '_is_claimable', true);
-							w2dc_addMessage(__('Listing claim was declined!', 'W2DC'));
+							w2dc_addMessage(esc_html__('Listing claim was declined!', 'w2dc'));
 						}
 						$this->action = 'processed';
 						$this->referer = $_GET['referer'];
@@ -575,7 +590,7 @@ class w2dc_dashboard_controller extends w2dc_frontend_controller {
 					$this->template = array(W2DC_FSUBMIT_TEMPLATES_PATH, 'dashboard.tpl.php');
 					$this->subtemplate = array(W2DC_FSUBMIT_TEMPLATES_PATH, 'claim_process.tpl.php');
 				} else
-					wp_die('You are not able to manage this listing', 'W2DC');
+					wp_die('You are not able to manage this listing', 'w2dc');
 			// adapted for WPML
 			}  elseif (function_exists('wpml_object_id_filter') && $sitepress && get_option('w2dc_enable_frontend_translations') && $w2dc_instance->action == 'add_translation' && isset($_GET['listing_id']) && isset($_GET['to_lang'])) {
 				$master_post_id = $_GET['listing_id'];
@@ -592,11 +607,11 @@ class w2dc_dashboard_controller extends w2dc_frontend_controller {
 					// WPML has special option sync_post_status, that controls post_status duplication
 					if ($new_listing_id = $iclTranslationManagement->make_duplicate($master_post_id, $lang_code)) {
 						$iclTranslationManagement->reset_duplicate_flag($new_listing_id);
-						w2dc_addMessage(__('Translation was successfully created!', 'W2DC'));
+						w2dc_addMessage(esc_html__('Translation was successfully created!', 'w2dc'));
 						do_action('wpml_switch_language', $lang_code);
 						wp_redirect(add_query_arg(array('w2dc_action' => 'edit_listing', 'listing_id' => $new_listing_id), get_permalink(apply_filters('wpml_object_id', $w2dc_instance->dashboard_page_id, 'page', true, $lang_code))));
 					} else {
-						w2dc_addMessage(__('Translation was not created!', 'W2DC'), 'error');
+						w2dc_addMessage(esc_html__('Translation was not created!', 'w2dc'), 'error');
 						wp_redirect(w2dc_dashboardUrl());
 					}
 					die();
@@ -629,7 +644,7 @@ class w2dc_dashboard_controller extends w2dc_frontend_controller {
 		$claimed_posts = '';
 		$claimed_posts_ids = array();
 
-		$results = $wpdb->get_results("SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key='_claimer_id' AND meta_value='" . get_current_user_id() . "'", ARRAY_A);
+		$results = $wpdb->get_results($wpdb->prepare("SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key='_claimer_id' AND meta_value=%d", get_current_user_id()), ARRAY_A); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 		foreach ($results AS $row)
 			$claimed_posts_ids[] = $row['post_id'];
 		if ($claimed_posts_ids)
@@ -640,8 +655,8 @@ class w2dc_dashboard_controller extends w2dc_frontend_controller {
 	}
 	
 	public function enqueue_scripts_styles() {
-		wp_register_script('w2dc_stats', W2DC_RESOURCES_URL . 'js/chart.min.js');
-		wp_enqueue_script('w2dc_stats');
+		wp_register_script('w2dc-stats', W2DC_RESOURCES_URL . 'js/chart.min.js');
+		wp_enqueue_script('w2dc-stats');
 	}
 }
 

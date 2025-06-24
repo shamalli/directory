@@ -8,7 +8,15 @@
 				<?php if ( ! FLBuilderModel::is_post_user_template( 'row' ) && ! $simple_ui ) : ?>
 				<i class="fl-block-move fas fa-arrows-alt fl-tip" title="<?php _e( 'Move', 'fl-builder' ); ?>"></i>
 				<?php endif; ?>
-				<i class="fl-block-settings fas fa-wrench fl-tip" title="<?php _e( 'Row Settings', 'fl-builder' ); ?>"></i>
+				<span class="fl-builder-has-submenu fl-builder-submenu-hover">
+					<i class="fl-block-settings fas fa-wrench fl-tip" title="<?php _e( 'Row Settings', 'fl-builder' ); ?><# if ( data.nodeLabel && ! FLBuilderConfig.node_labels_disabled ) { #>{{FLBuilderConfig.node_labels_separator}}{{data.nodeLabel}}<# } #>"></i>
+
+					<ul class="fl-builder-submenu">
+						<li><a class="fl-block-settings" href="javascript:void(0);"><?php _e( 'Row Settings', 'fl-builder' ); ?></a></li>
+						<li><a class="fl-row-quick-copy" href="javascript:void(0);"><?php _e( 'Copy Row Settings', 'fl-builder' ); ?></a></li>
+						<li><a class="fl-row-quick-paste <# if ( 'row' === FLBuilderSettingsCopyPaste._getClipboardType() ) { #>fl-quick-paste-active<# } #>" href="javascript:void(0);"><?php _e( 'Paste Row Settings', 'fl-builder' ); ?></a></li>
+					</ul>
+				</span>
 				<?php if ( ! FLBuilderModel::is_post_user_template( 'row' ) && ! $simple_ui ) : ?>
 				<i class="fl-block-copy far fa-clone fl-tip" title="<?php _e( 'Duplicate', 'fl-builder' ); ?>"></i>
 				<?php endif; ?>
@@ -30,8 +38,13 @@
 			</div>
 			<div class="fl-clear"></div>
 		</div>
+
+		<# if ( data.nodeLabel && ! FLBuilderConfig.node_labels_disabled ) { #>
+			<span class="fl-block-label<# if ( data.hasRules ) { #> fl-block-label-has-rules<# } #>">{{data.nodeLabel}}</span>
+		<# } #>
+
 		<# if ( data.hasRules ) { #>
-		<i class="fas fa-eye fl-tip fl-block-has-rules" title="<?php _e( 'This row has visibility rules.', 'fl-builder' ); ?>"></i>
+		<i class="fas fa-eye fl-tip fl-block-has-rules {{data.rulesTypeRow}}" title="<?php _e( 'This row has visibility rules', 'fl-builder' ); ?>: {{data.rulesTextRow}}"></i>
 		<# } #>
 	</div>
 </script>
@@ -52,8 +65,9 @@
 					<# } #>
 				<# } #>
 				<?php endif; ?>
-				<span class="fl-builder-has-submenu">
-					<i class="fl-block-settings fas fa-columns fl-tip" title="<?php _e( 'Edit Column', 'fl-builder' ); ?>"></i>
+
+				<span class="fl-builder-has-submenu fl-builder-submenu-hover">
+					<i class="fl-block-settings fas fa-columns fl-tip" title="<?php _e( 'Edit Column', 'fl-builder' ); ?><# if ( data.nodeLabel && ! FLBuilderConfig.node_labels_disabled ) { #>{{FLBuilderConfig.node_labels_separator}}{{data.nodeLabel}}<# } #>"></i>
 					<?php if ( ! $simple_ui ) : ?>
 					<# if ( ! data.global || ( data.global && FLBuilderConfig.userTemplateType ) ) { #>
 					<ul class="fl-builder-submenu fl-block-col-submenu">
@@ -64,6 +78,8 @@
 						<# if ( data.rowIsFixedWidth ) { #>
 						<li><a class="fl-block-row-reset" href="javascript:void(0);"><?php _e( 'Reset Row Width', 'fl-builder' ); ?></a></li>
 						<# } #>
+						<li><a class="fl-col-quick-copy" href="javascript:void(0);"><?php _e( 'Copy Column Settings', 'fl-builder' ); ?></a></li>
+						<li><a class="fl-col-quick-paste <# if ( 'column' === FLBuilderSettingsCopyPaste._getClipboardType() ) { #>fl-quick-paste-active<# } #>" href="javascript:void(0);"><?php _e( 'Paste Column Settings', 'fl-builder' ); ?></a></li>
 						<# if ( data.hasParentCol ) { #>
 						<li class="fl-builder-submenu-sep"><div></div></li>
 						<# if ( 'column' != FLBuilderConfig.userTemplateType ) { #>
@@ -84,6 +100,11 @@
 			</div>
 			<div class="fl-clear"></div>
 		</div>
+
+		<# if ( data.nodeLabel && ! FLBuilderConfig.node_labels_disabled ) { #>
+			<span class="fl-block-label<# if ( data.hasRules ) { #> fl-block-label-has-rules<# } #>">{{data.nodeLabel}}</span>
+		<# } #>
+
 		<# if ( data.hasRules ) { #>
 		<i class="fas fa-eye fl-tip fl-block-has-rules" title="<?php _e( 'This column has visibility rules.', 'fl-builder' ); ?>"></i>
 		<# } #>
@@ -143,12 +164,22 @@
 				<?php if ( ! FLBuilderModel::is_post_user_template( 'module' ) && ! $simple_ui ) : ?>
 				<i class="fl-block-move fas fa-arrows-alt fl-tip" title="<?php _e( 'Move', 'fl-builder' ); ?>"></i>
 				<?php endif; ?>
-				<?php /* translators: %s: module name */ ?>
-				<i class="fl-block-settings fas fa-wrench fl-tip" title="<?php printf( __( '%s Settings', 'fl-builder' ), '{{data.moduleName}}' ); ?>"></i>
+				<span class="fl-builder-has-submenu fl-builder-submenu-hover">
+					<?php /* translators: %s: module name */ ?>
+					<i class="fl-block-settings fas fa-wrench fl-tip" title="<?php printf( __( '%s Settings', 'fl-builder' ), '{{data.moduleName}}' ); ?><# if ( data.nodeLabel && ! FLBuilderConfig.node_labels_disabled ) { #>{{FLBuilderConfig.node_labels_separator}}{{data.nodeLabel}}<# } #>"></i>
+					<ul class="fl-builder-submenu">
+						<?php /* translators: %s: module name */ ?>
+						<li><a class="fl-block-settings" href="javascript:void(0);"><?php printf( __( '%s Settings', 'fl-builder' ), '{{data.moduleName}}' ); ?></a></li>
+						<?php /* translators: %s: module name */ ?>
+						<li><a class="fl-module-quick-copy" href="javascript:void(0);"><?php printf( __( 'Copy %s Settings', 'fl-builder' ), '{{data.moduleName}}' ); ?></a></li>
+						<?php /* translators: %s: module name */ ?>
+						<li><a class="fl-module-quick-paste <# if ( data.moduleType === FLBuilderSettingsCopyPaste._getClipboardType() ) { #>fl-quick-paste-active<# } #>" href="javascript:void(0);"><?php printf( __( 'Paste %s Settings', 'fl-builder' ), '{{data.moduleName}}' ); ?></a></li>
+					</ul>
+				</span>
 				<?php if ( ! FLBuilderModel::is_post_user_template( 'module' ) && ! $simple_ui ) : ?>
 				<i class="fl-block-copy far fa-clone fl-tip" title="<?php _e( 'Duplicate', 'fl-builder' ); ?>"></i>
-				<span class="fl-builder-has-submenu">
-					<i class="fl-block-col-settings fas fa-columns fl-tip" title="<?php _e( 'Edit Column', 'fl-builder' ); ?>"></i>
+				<span class="fl-builder-has-submenu fl-builder-submenu-hover">
+					<i class="fl-block-col-settings fas fa-columns fl-tip" title="<?php _e( 'Edit Column', 'fl-builder' ); ?><# if ( data.colNodeLabel ) { #> - {{data.colNodeLabel}}<# } #>"></i>
 					<# if ( ! data.isRootCol ) { #>
 					<ul class="fl-builder-submenu fl-block-col-submenu">
 						<li><a class="fl-block-col-edit" href="javascript:void(0);"><?php _e( 'Column Settings', 'fl-builder' ); ?></a></li>
@@ -163,6 +194,8 @@
 						<# if ( data.rowIsFixedWidth ) { #>
 						<li><a class="fl-block-row-reset" href="javascript:void(0);"><?php _e( 'Reset Row Width', 'fl-builder' ); ?></a></li>
 						<# } #>
+						<li><a class="fl-col-quick-copy" href="javascript:void(0);"><?php _e( 'Copy Column Settings', 'fl-builder' ); ?></a></li>
+						<li><a class="fl-col-quick-paste <# if ( 'column' === FLBuilderSettingsCopyPaste._getClipboardType() ) { #>fl-quick-paste-active<# } #>" href="javascript:void(0);"><?php _e( 'Paste Column Settings', 'fl-builder' ); ?></a></li>
 						<# if ( data.hasParentCol ) { #>
 						<li class="fl-builder-submenu-sep"><div></div></li>
 						<# if ( 'column' != FLBuilderConfig.userTemplateType ) { #>
@@ -179,11 +212,17 @@
 			</div>
 			<div class="fl-clear"></div>
 		</div>
-		<# if ( data.colHasRules ) { #>
-		<i class="fas fa-eye fl-tip fl-block-has-rules" title="<?php _e( 'This column has visibility rules.', 'fl-builder' ); ?>"></i>
-		<# } else if ( data.hasRules ) { #>
-		<i class="fas fa-eye fl-tip fl-block-has-rules" title="<?php _e( 'This module has visibility rules.', 'fl-builder' ); ?>"></i>
+
+		<# if ( data.nodeLabel && ! FLBuilderConfig.node_labels_disabled ) { #>
+			<span class="fl-block-label<# if ( data.hasRules ) { #> fl-block-label-has-rules<# } #>">{{data.nodeLabel}}</span>
 		<# } #>
+
+		<# if ( data.colHasRules ) { #>
+		<i class="fas fa-eye fl-tip fl-block-has-rules {{data.rulesTypeCol}}" title="<?php _e( 'This column has visibility rules', 'fl-builder' ); ?>: {{data.rulesTextCol}}"></i>
+		<# } else if ( data.hasRules ) { #>
+		<i class="fas fa-eye fl-tip fl-block-has-rules {{data.rulesTypeModule}}" title="<?php _e( 'This module has visibility rules', 'fl-builder' ); ?>: {{data.rulesTextModule}}"></i>
+		<# } #>
+
 		<?php if ( ! FLBuilderModel::is_post_user_template( 'module' ) && ! $simple_ui ) : ?>
 		<# if ( ! data.groupLoading && ! data.isRootCol ) { #>
 			<# if ( ! data.colFirst || ( data.hasParentCol && data.colFirst && ! data.parentFirst ) ) { #>
@@ -267,10 +306,25 @@
 </script>
 <!-- #tmpl-fl-alert-lightbox -->
 
+<script type="text/html" id="tmpl-fl-pro-lightbox">
+	<span class="dashicons dashicons-no" onclick="FLLightbox.closeParent( this )"></span>
+	<div class="fl-pro-message-badge">
+		<span>PRO</span>
+	</div>
+	<div class="fl-pro-message-title">{{data.feature}} is a Pro Feature</div>
+	<div class="fl-pro-message-content">We're sorry, {{data.feature}} is not available on your plan. Please upgrade to unlock all these awesome features.</div>
+	<div class="fl-pro-message-button">
+		<button class="fl-builder-upgrade-button fl-builder-button">
+			<?php _ex( 'Upgrade', 'Link to learn more about premium Beaver Builder', 'fl-builder' ); ?>
+		</button>
+	</div>
+</script>
+<!-- #tmpl-fl-pro-lightbox -->
+
 <script type="text/html" id="tmpl-fl-crash-lightbox">
 	<div class="fl-lightbox-message">{{{data.message}}}</div>
 	<# if ( data.debug ) { #>
-		<div class="fl-lightbox-message-info">Here is the message reported in your browser’s JavaScript console.<pre>{{{data.debug}}}</pre></div>
+		<div class="fl-lightbox-message-info">Here is the message reported in your browser's JavaScript console.<pre>{{{data.debug}}}</pre></div>
 	<# } #>
 	<div class="fl-lightbox-message-info">{{{data.info}}}</div>
 	<div class="fl-lightbox-footer">
@@ -321,9 +375,13 @@
 			<button class="fl-builder-button fl-builder-button-large" data-mode="medium">
 				<i class="dashicons dashicons-tablet"></i>
 			</button>
+			<button class="fl-builder-button fl-builder-button-large" data-mode="large">
+				<i class="dashicons dashicons-laptop"></i>
+			</button>
 			<button class="fl-builder-button fl-builder-button-large" data-mode="default">
 				<?php _e( 'Exit', 'fl-builder' ); ?>
 			</button>
+			<span class="size"></span>
 		</div>
 		<div class="fl-responsive-preview-content"></div>
 	</div>
@@ -414,7 +472,7 @@
 	}
 	#>
 	<div class="fl-builder--main-menu-panel-view {{viewClasses}}" data-name="{{data.handle}}">
-		<div class="fl-builder--main-menu-panel-view-title">{{{backItem}}}{{data.name}}</div>
+		<div class="fl-builder--main-menu-panel-view-title">{{{backItem}}}{{{data.name}}}</div>
 
 		<div class="fl-builder--menu">
 			<# for (var key in data.items) {
@@ -444,12 +502,12 @@
 						break;
 					case "link":
 						#>
-						<a class="fl-builder--menu-item" href="{{{item.url}}}" data-type="link" target="_blank">{{item.label}} <span class="fl-builder--menu-item-accessory"><i class="fas fa-external-link-alt"></i></span></a>
+						<a class="fl-builder--menu-item" href="{{{item.url}}}" data-type="link" target="_blank">{{{item.label}}} <span class="fl-builder--menu-item-accessory"><i class="fas fa-external-link-alt"></i></span></a>
 						<#
 						break;
 					case "view":
 						#>
-						<button class="fl-builder--menu-item" data-type="view" data-view="{{item.view}}">{{item.label}}<span class="menu-view view-{{item.view}}">{{extra}}</span><span class="fl-builder--menu-item-accessory">&rarr;</span></button>
+						<button class="fl-builder--menu-item" data-type="view" data-view="{{item.view}}">{{{item.label}}}<span class="menu-view view-{{item.view}}">{{extra}}</span><span class="fl-builder--menu-item-accessory">&rarr;</span></button>
 						<#
 						break;
 					case "video":
@@ -768,8 +826,56 @@
 			<#
 		}
 	}
-	if (FLBuilderConfig.lite) { #>
-	<div class="fl-builder--panel-cta"><a href="https://www.wpbeaverbuilder.com/?utm_medium=bb-lite&amp;utm_source=builder-ui&amp;utm_campaign=modules-panel-cta" target="_blank"><i class="fas fa-external-link-alt"></i> <?php _e( 'Get more time-saving features, modules, and expert support.', 'fl-builder' ); ?></a></div>
+	if ( FLBuilderConfig.lite ) {
+
+	#>
+	<div id="fl-builder-blocks-pro" class="fl-builder-blocks-section fl-builder-blocks-pro-closed">
+		<div class="fl-builder-blocks-section-header">
+			<span class="fl-builder-blocks-section-title">Pro</span>
+		</div>
+		<div class="fl-builder-blocks-section-content fl-builder-modules">
+			<#
+
+			var modules = FLBuilderConfig.contentItems.module;
+			var moduleSlugs = [];
+			var proModules = FLBuilderConfig.contentItems.pro;
+
+			for ( var i in modules ) {
+				moduleSlugs.push( modules[i].slug );
+			}
+
+			for( var slug in proModules ) {
+				var module 	= proModules[ slug ];
+
+				if ( jQuery.inArray( slug, moduleSlugs ) >= 0 ) {
+					continue;
+				}
+			#>
+			<span class="fl-builder-block fl-builder-block-module fl-builder-block-disabled" data-type="{{slug}}" onclick="FLBuilder._showProMessage('{{module.name}}')">
+				<span class="fl-builder-block-content">
+					<span class="fl-builder-block-icon">{{{module.icon}}}</span>
+					<span class="fl-builder-block-title">{{module.name}}</span>
+					<span class="fl-builder-pro-badge">PRO</span>
+				</span>
+			</span>
+			<# } #>
+		</div>
+		<div class="fl-builder-blocks-pro-overlay"></div>
+	</div>
+	<button class="fl-builder-button fl-builder-button-silent fl-builder-blocks-pro-expand">
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" height="20px" width="20px">
+			<path d="M5 6l5 5 5-5 2 1-7 7-7-7z"></path>
+		</svg>
+	</button>
+	<div class="fl-builder--panel-cta">
+		<img src="<?php echo FLBuilder::plugin_url(); ?>img/beaver.png" />
+		<a href="https://www.wpbeaverbuilder.com/?utm_medium=bb-lite&amp;utm_source=builder-ui&amp;utm_campaign=modules-panel-cta" target="_blank">
+			<?php _e( 'Get more time-saving features, modules, and expert support.', 'fl-builder' ); ?>
+		</a>
+		<button class="fl-builder-upgrade-button fl-builder-button">
+			<?php _ex( 'Learn More', 'Link to learn more about premium Beaver Builder', 'fl-builder' ); ?>
+		</button>
+	</div>
 	<# } #>
 </script>
 <!-- #tmpl-fl-content-panel-modules-view -->
@@ -802,19 +908,21 @@
 		<# } #>
 
 		<# if (FLBuilderConfig.lite) { #>
-		<div class="fl-builder--panel-cta"><a href="https://www.wpbeaverbuilder.com/?utm_medium=bb-lite&amp;utm_source=builder-ui&amp;utm_campaign=modules-panel-cta" target="_blank"><i class="fas fa-external-link-alt"></i> <?php _e( 'Get more time-saving features, modules, and expert support.', 'fl-builder' ); ?></a></div>
+		<div class="fl-builder--panel-cta">
+			<img src="<?php echo FLBuilder::plugin_url(); ?>img/beaver.png" />
+			<a href="https://www.wpbeaverbuilder.com/?utm_medium=bb-lite&amp;utm_source=builder-ui&amp;utm_campaign=modules-panel-cta" target="_blank">
+				<?php _e( 'Get more time-saving features, modules, and expert support.', 'fl-builder' ); ?>
+			</a>
+			<button class="fl-builder-upgrade-button fl-builder-button">
+				<?php _ex( 'Learn More', 'Link to learn more about premium Beaver Builder', 'fl-builder' ); ?>
+			</button>
+		</div>
 		<# } #>
 	</div>
 </script>
 <!-- #tmpl-fl-content-panel-col-groups-view -->
 
 <script type="text/html" id="tmpl-fl-content-panel-templates-view">
-	<# if (FLBuilderConfig.lite) { #>
-	<div class="fl-builder--panel-message">
-		<p><?php _ex( 'Save and reuse your layouts or kick-start your creativity with dozens of professionally designed templates.', 'Upgrade message that displays in the templates tab in lite installs.', 'fl-builder' ); ?></p>
-		<a class="fl-builder-upgrade-button fl-builder-button" href="{{FLBuilderConfig.upgradeUrl}}" target="_blank"><?php _ex( 'Learn More', 'Link to learn more about premium Beaver Builder', 'fl-builder' ); ?> <i class="fas fa-external-link-alt"></i></a>
-	</div>
-	<# } #>
 	<#
 	var categories;
 	if (!_.isUndefined(data.queryResults)) {
@@ -847,8 +955,12 @@
 							var background = template.image;
 							var id = _.isNumber( template.postId ) ? template.postId : template.id;
 						#>
-						<div class="fl-builder--template-collection-item" data-id="{{id}}" data-type="{{template.type}}">
-							<div class="fl-builder--template-thumbnail" style="background-image:url({{background}})"></div>
+						<div class="fl-builder--template-collection-item" data-id="{{id}}" data-type="{{template.type}}" data-subtype="{{template.subtype}}" data-premium="{{template.premium}}">
+							<div class="fl-builder--template-thumbnail" style="background-image:url({{background}})">
+								<# if ( FLBuilderConfig.lite && template.premium ) { #>
+								<span class="fl-builder-pro-badge">PRO</span>
+								<# } #>
+							</div>
 							<div class="fl-builder--template-name">{{template.name}}</div>
 						</div>
 						<# } #>
@@ -871,6 +983,17 @@
 		}
 		#>
 	</div>
+	<# if (FLBuilderConfig.lite) { #>
+	<div class="fl-builder--panel-cta">
+		<img src="<?php echo FLBuilder::plugin_url(); ?>img/beaver.png" />
+		<a href="https://www.wpbeaverbuilder.com/?utm_medium=bb-lite&amp;utm_source=builder-ui&amp;utm_campaign=modules-panel-cta" target="_blank">
+			<?php _ex( 'Save and reuse your layouts or kick-start your creativity with dozens of professionally designed templates.', 'Upgrade message that displays in the templates tab in lite installs.', 'fl-builder' ); ?>
+		</a>
+		<button class="fl-builder-upgrade-button fl-builder-button">
+			<?php _ex( 'Learn More', 'Link to learn more about premium Beaver Builder', 'fl-builder' ); ?>
+		</button>
+	</div>
+	<# } #>
 </script>
 <!-- #tmpl-fl-content-panel-templates-view -->
 
@@ -906,15 +1029,20 @@
 								image = template.image,
 								id = _.isNumber( template.postId ) ? template.postId : template.id,
 								hasImage = image && !image.endsWith('blank.jpg'),
-								hasImageClass = hasImage ? 'fl-builder-block-has-thumbnail' : '';
+								hasImageClass = hasImage ? 'fl-builder-block-has-thumbnail' : '',
+								isPremium = FLBuilderConfig.lite && template.premium,
+								disabledClass = isPremium ? 'fl-builder-block-disabled' : '';
 						#>
-						<span class="fl-builder-block fl-builder-block-template fl-builder-block-row-template {{hasImageClass}}" data-id="{{id}}" data-type="{{template.type}}">
+						<span onclick="FLBuilder._showProMessage('{{template.name}}')" class="fl-builder-block fl-builder-block-template fl-builder-block-row-template {{hasImageClass}} {{disabledClass}}" data-id="{{id}}" data-type="{{template.type}}">
 							<span class="fl-builder-block-content">
 								<# if (hasImage) { #>
 								<div class="fl-builder-block-thumbnail" style="background-image:url({{image}})"></div>
 								<# } #>
 								<span class="fl-builder-block-title">{{template.name}}</span>
 							</span>
+							<# if ( FLBuilderConfig.lite && template.premium ) { #>
+							<span class="fl-builder-pro-badge">PRO</span>
+							<# } #>
 						</span>
 						<# } #>
 					</div>
@@ -1035,6 +1163,16 @@
 	</div>
 </script>
 <!-- #tmpl-fl-no-revisions-message -->
+
+<script type="text/html" id="tmpl-fl-history-list-item">
+	<div class="fl-history-list-item" data-position="{{data.position}}" data-current="{{data.current}}">
+		<div class="fl-history-list-item-label">
+			{{{data.label}}}
+		</div>
+		<i class="fas fa-check-circle"></i>
+	</div>
+</script>
+<!-- #tmpl-fl-history-list-item -->
 
 <script type="text/html" id="tmpl-fl-keyboard-shortcuts">
 	<div class="fl-builder-ui-keyboard-shortcuts">

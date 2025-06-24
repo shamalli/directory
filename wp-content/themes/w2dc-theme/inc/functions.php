@@ -24,8 +24,10 @@ function wdt_print_breadcrumbs() {
 		(
 				($directory_controller = $w2dc_instance->getShortcodeProperty(W2DC_MAIN_SHORTCODE)) ||
 				($directory_controller = $w2dc_instance->getShortcodeProperty(W2DC_LISTING_SHORTCODE)) ||
-				($directory_controller = $w2dc_instance->getShortcodeProperty('webdirectory-listing')) ||
-				($directory_controller = apply_filters('w2dc_get_directory_controller', false))
+				($directory_controller = $w2dc_instance->getShortcodeProperty(W2DC_CATEGORY_PAGE_SHORTCODE)) ||
+				($directory_controller = $w2dc_instance->getShortcodeProperty(W2DC_LOCATION_PAGE_SHORTCODE)) ||
+				($directory_controller = $w2dc_instance->getShortcodeProperty(W2DC_TAG_PAGE_SHORTCODE)) ||
+				($directory_controller = apply_filters('w2dc_get_shortcode_controller', false))
 		)
 	) {
 		if ($directory_controller->breadcrumbs) {
@@ -232,9 +234,9 @@ function wdt_is_page_header() {
 function wdt_get_page_setting($setting = '') {
 	if (is_singular()) {
 		
-		global $post, $original_post;
-		if ($original_post) {
-			$post_id = $original_post->ID;
+		global $post;
+		if ($post) {
+			$post_id = $post->ID;
 		} else {
 			$post_id = get_the_ID();
 		}

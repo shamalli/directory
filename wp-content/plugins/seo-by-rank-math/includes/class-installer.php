@@ -14,8 +14,8 @@ namespace RankMath;
 
 use RankMath\Traits\Hooker;
 use RankMath\Admin\Watcher;
+use RankMath\Helper;
 use RankMath\Admin\Admin_Helper;
-use MyThemeShop\Helpers\WordPress;
 use RankMath\Role_Manager\Capability_Manager;
 
 defined( 'ABSPATH' ) || exit;
@@ -35,8 +35,7 @@ class Installer {
 		register_deactivation_hook( RANK_MATH_FILE, [ $this, 'deactivation' ] );
 
 		$this->action( 'wp', 'create_cron_jobs' );
-		$this->action( 'wpmu_new_blog', 'activate_blog' );
-		$this->action( 'activate_blog', 'activate_blog' );
+		$this->action( 'wp_initialize_site', 'initialize_site' );
 		$this->filter( 'wpmu_drop_tables', 'on_delete_blog' );
 	}
 
@@ -71,14 +70,10 @@ class Installer {
 	/**
 	 * Fired when a new site is activated with a WPMU environment.
 	 *
-	 * @param int $blog_id ID of the new blog.
+	 * @param WP_Site $site The new site's object.
 	 */
-	public function activate_blog( $blog_id ) {
-		if ( 1 !== did_action( 'wpmu_new_blog' ) ) {
-			return;
-		}
-
-		switch_to_blog( $blog_id );
+	public function initialize_site( $site ) {
+		switch_to_blog( $site->blog_id );
 		$this->activate();
 		restore_current_blog();
 	}
@@ -164,6 +159,7 @@ class Installer {
 		// Activate Watcher.
 		$watcher = new Watcher();
 		$watcher->check_activated_plugin();
+		$watcher->check_search_engine_visibility( ! get_option( 'blog_public' ) );
 
 		$this->clear_rewrite_rules( true );
 		Helper::clear_cache( 'activate' );
@@ -371,7 +367,13 @@ class Installer {
 					'frontend_seo_score_position'         => 'top',
 					'setup_mode'                          => 'advanced',
 					'content_ai_post_types'               => array_keys( $post_types ),
+					'content_ai_country'                  => 'all',
+					'content_ai_tone'                     => 'Formal',
+					'content_ai_audience'                 => 'General Audience',
+					'content_ai_language'                 => Helper::content_ai_default_language(),
 					'analytics_stats'                     => 'on',
+					'toc_block_title'                     => 'Table of Contents',
+					'toc_block_list_style'                => 'ul',
 				]
 			)
 		);
@@ -382,11 +384,15 @@ class Installer {
 	 */
 	private function create_titles_sitemaps_options() {
 		$sitemap = [
-			'items_per_page'         => 200,
-			'include_images'         => 'on',
-			'include_featured_image' => 'off',
-			'ping_search_engines'    => 'on',
-			'exclude_roles'          => $this->get_excluded_roles(),
+			'items_per_page'          => 200,
+			'include_images'          => 'on',
+			'include_featured_image'  => 'off',
+			'exclude_roles'           => $this->get_excluded_roles(),
+			'html_sitemap'            => 'on',
+			'html_sitemap_display'    => 'shortcode',
+			'html_sitemap_sort'       => 'published',
+			'html_sitemap_seo_titles' => 'titles',
+			'authors_sitemap'         => 'on',
 		];
 		$titles  = [
 			'noindex_empty_taxonomies'   => 'on',
@@ -395,6 +401,7 @@ class Installer {
 			'twitter_card_type'          => 'summary_large_image',
 			'knowledgegraph_type'        => class_exists( 'Easy_Digital_Downloads' ) || class_exists( 'WooCommerce' ) ? 'company' : 'person',
 			'knowledgegraph_name'        => get_bloginfo( 'name' ),
+			'website_name'               => get_bloginfo( 'name' ),
 			'local_business_type'        => 'Organization',
 			'local_address_format'       => '{address} {locality}, {region} {postalcode}',
 			'opening_hours'              => $this->get_opening_hours(),
@@ -544,10 +551,15 @@ class Installer {
 			$titles[ 'tax_' . $taxonomy . '_slack_enhanced_sharing' ] = 'on';
 
 			$sitemap[ 'tax_' . $taxonomy . '_sitemap' ] = 'category' === $taxonomy ? 'on' : 'off';
+
+			if ( substr( $taxonomy, 0, 3 ) === 'pa_' ) {
+				$titles[ 'remove_' . $taxonomy . '_snippet_data' ] = 'on';
+			}
 		}
 
 		$titles['remove_product_cat_snippet_data'] = 'on';
 		$titles['remove_product_tag_snippet_data'] = 'on';
+
 	}
 
 	/**
@@ -590,7 +602,8 @@ class Installer {
 		$midnight = strtotime( 'tomorrow midnight' );
 		foreach ( $this->get_cron_jobs() as $job => $recurrence ) {
 			if ( ! wp_next_scheduled( "rank_math/{$job}" ) ) {
-				wp_schedule_event( $midnight, $this->do_filter( "{$job}_recurrence", $recurrence ), "rank_math/{$job}" );
+				$timestamp = 'content-ai/update_prompts' === $job ? $midnight + wp_rand( 60, 86400 ) : $midnight;
+				wp_schedule_event( $timestamp, $this->do_filter( "{$job}_recurrence", $recurrence ), "rank_math/{$job}" );
 			}
 		}
 	}
@@ -611,8 +624,9 @@ class Installer {
 	 */
 	private function get_cron_jobs() {
 		return [
-			'redirection/clean_trashed'    => 'daily',     // Add cron for cleaning trashed redirects.
-			'links/internal_links'         => 'daily',     // Add cron for counting links.
+			'redirection/clean_trashed' => 'daily', // Add cron for cleaning trashed redirects.
+			'links/internal_links'      => 'daily', // Add cron for counting links.
+			'content-ai/update_prompts' => 'daily', // Add cron for updating the prompts data.
 		];
 	}
 
@@ -640,7 +654,7 @@ class Installer {
 	 * @return array
 	 */
 	private function get_excluded_roles() {
-		$roles = WordPress::get_roles();
+		$roles = Helper::get_roles();
 		unset( $roles['administrator'], $roles['editor'], $roles['author'] );
 
 		return $roles;

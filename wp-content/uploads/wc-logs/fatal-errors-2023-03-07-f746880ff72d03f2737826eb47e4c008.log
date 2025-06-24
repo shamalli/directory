@@ -1,4 +1,0 @@
-2023-03-07T14:00:56+00:00 CRITICAL Out of memory (allocated 35651584) (tried to allocate 77824 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\js_composer\include\params\google_fonts\google_fonts.php on line 33
-
-2023-03-07T15:28:57+00:00 CRITICAL Out of memory (allocated 33554432) (tried to allocate 65536 bytes) in C:\xampp\htdocs\wp\wp-content\plugins\ratings-reviews\vafpress-framework\classes\option.php on line 64
-

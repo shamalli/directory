@@ -29,11 +29,11 @@
 
 	<?php if (get_option('w2rr_enable_pros_cons')): ?>
 	<?php if ($review->pros): ?>
-	<h4 class="w2rr-pros-title"><?php esc_html_e('Pros', 'W2RR')?></h4>
+	<h4 class="w2rr-pros-title"><?php esc_html_e('Pros', 'w2rr')?></h4>
 	<p class="w2rr-pros-description"><?php echo esc_html($review->pros); ?></p>
 	<?php endif; ?>
 	<?php if ($review->cons): ?>
-	<h4 class="w2rr-cons-title"><?php esc_html_e('Cons', 'W2RR')?></h4>
+	<h4 class="w2rr-cons-title"><?php esc_html_e('Cons', 'w2rr')?></h4>
 	<p class="w2rr-cons-description"><?php echo esc_html($review->cons); ?></p>
 	<?php endif; ?>
 	<?php endif; ?>

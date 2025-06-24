@@ -135,7 +135,7 @@ jQuery.fn.validationVal = function() {
 };
 
 // hidding plugin
-jQuery.fn.vp_w2dc_slideUp = function(callback){
+jQuery.fn.w2dc_vp_slideUp = function(callback){
 	var $this = this;
 
 	$this.each(function(i){
@@ -149,7 +149,7 @@ jQuery.fn.vp_w2dc_slideUp = function(callback){
 		}
 	});
 };
-jQuery.fn.vp_w2dc_slideDown = function(callback){
+jQuery.fn.w2dc_vp_slideDown = function(callback){
 	var $this = this;
 
 	$this.each(function(i){
@@ -163,7 +163,7 @@ jQuery.fn.vp_w2dc_slideDown = function(callback){
 		}
 	});
 };
-jQuery.fn.vp_w2dc_fadeOut = function(callback){
+jQuery.fn.w2dc_vp_fadeOut = function(callback){
 	var $this = this;
 	if(!$this.hasClass('vp-hide'))
 	{
@@ -173,7 +173,7 @@ jQuery.fn.vp_w2dc_fadeOut = function(callback){
 		});
 	}
 };
-jQuery.fn.vp_w2dc_fadeIn = function(callback){
+jQuery.fn.w2dc_vp_fadeIn = function(callback){
 	var $this = this;
 	if($this.hasClass('vp-hide'))
 	{
@@ -183,7 +183,7 @@ jQuery.fn.vp_w2dc_fadeIn = function(callback){
 		});
 	}
 };
-jQuery.fn.vp_w2dc_toggle = function(callback){
+jQuery.fn.w2dc_vp_toggle = function(callback){
 	var $this = this;
 	if($this.hasClass('vp-hide'))
 	{
@@ -215,12 +215,12 @@ jQuery.fn.vp_w2dc_toggle = function(callback){
 /**
  * vafpress global namespace
  */
-var vp_w2dc = {};
+var w2dc_vp = {};
 
-vp_w2dc.isNumber = function(n) {
+w2dc_vp.isNumber = function(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
 };
-vp_w2dc.parseOpt = function(optString) {
+w2dc_vp.parseOpt = function(optString) {
 	var openIdx, closeIdx, temp, tempArr, opt = {};
 	for (var i = 0; i < optString.length; i++)
 	{
@@ -233,13 +233,13 @@ vp_w2dc.parseOpt = function(optString) {
 			closeIdx = i;
 			temp = optString.substring(openIdx + 1, closeIdx);
 			tempArr = temp.split(':');
-			opt[tempArr[0]] = vp_w2dc.isNumber(tempArr[1]) ? parseFloat(tempArr[1]) : tempArr[1];
+			opt[tempArr[0]] = w2dc_vp.isNumber(tempArr[1]) ? parseFloat(tempArr[1]) : tempArr[1];
 		}
 	}
 	return opt;
 };
 
-vp_w2dc.wp_ext2type = function ( ext ) {
+w2dc_vp.wp_ext2type = function ( ext ) {
 	var ext2type = {
 		image       : ['jpg', 'jpeg', 'bmp',  'gif',  'png'],
 		audio       : ['aac', 'ac3',  'aif',  'aiff', 'm3a',  'm4a',   'm4b',  'mka',  'mp1',  'mp2',  'mp3', 'ogg', 'oga', 'ram', 'wav', 'wma'],
@@ -268,7 +268,7 @@ vp_w2dc.wp_ext2type = function ( ext ) {
 	return result;
 };
 
-vp_w2dc.get_url_extension = function(url){
+w2dc_vp.get_url_extension = function(url){
 	var regex    = new RegExp(/(.*)[\/\\]([^\/\\]+)\.(\w+)/i);
 	var url_info = regex.exec(url);
 	if(url_info)
@@ -281,101 +281,101 @@ vp_w2dc.get_url_extension = function(url){
 	return '';
 };
 
-vp_w2dc.jqid = function(id) {
+w2dc_vp.jqid = function(id) {
 	return '#' + id.replace(/([:\.\[\]])/g,'\\$1');
 };
 
-vp_w2dc.jqidwild = function(id) {
+w2dc_vp.jqidwild = function(id) {
 	id = id.replace(/([:\.\[\]])/g,'\\$1');
 	id = '[id*=' + id + ']';
 	return id;
 };
 
-vp_w2dc.jqname = function(name) {
+w2dc_vp.jqname = function(name) {
 	return '[name="' + name + '"]';
 };
 
-vp_w2dc.jqnamewild = function(name) {
+w2dc_vp.jqnamewild = function(name) {
 	return '[name*="' + name + '"]';
 };
 
-vp_w2dc.thejqid = function(id, thecase) {
+w2dc_vp.thejqid = function(id, thecase) {
 	if(thecase === 'option')
-		return vp_w2dc.jqid(id);
+		return w2dc_vp.jqid(id);
 	if(thecase === 'metabox')
-		return vp_w2dc.jqidwild(id);
+		return w2dc_vp.jqidwild(id);
 	return id;
 };
 
-vp_w2dc.thejqname = function(name, thecase) {
+w2dc_vp.thejqname = function(name, thecase) {
 	if(thecase === 'option')
-		return vp_w2dc.jqname(name);
+		return w2dc_vp.jqname(name);
 	if(thecase === 'metabox')
-		return vp_w2dc.jqnamewild(name);
+		return w2dc_vp.jqnamewild(name);
 	return name;
 };
 
-vp_w2dc.validateAlphabet = function(type, val) {
+w2dc_vp.validateAlphabet = function(type, val) {
 	// ignore array and empty string, since they should be handled by 'required' rule
-	if (val === '' || jQuery.isArray(val) || jQuery.inArray(type, vp_w2dc_wp.alphabet_validatable) == -1) { return true; }
+	if (val === '' || jQuery.isArray(val) || jQuery.inArray(type, w2dc_vp_wp.alphabet_validatable) == -1) { return true; }
 	var regex = new RegExp(/^[A-Z\s]+$/i);
 	return regex.test(val);
 };
 
-vp_w2dc.validateAlphaNumeric = function(type, val) {
+w2dc_vp.validateAlphaNumeric = function(type, val) {
 	// ignore array and empty string, since they should be handled by 'required' rule
-	if (val === '' || jQuery.isArray(val) || jQuery.inArray(type, vp_w2dc_wp.alphanumeric_validatable) == -1) { return true; }
+	if (val === '' || jQuery.isArray(val) || jQuery.inArray(type, w2dc_vp_wp.alphanumeric_validatable) == -1) { return true; }
 
 	var regex = new RegExp(/^[A-Z0-9]+$/i);
 	return regex.test(val);
 };
 
-vp_w2dc.validateNumeric = function(type, val) {
+w2dc_vp.validateNumeric = function(type, val) {
 	// ignore array and empty string, since they should be handled by 'required' rule
-	if (val === '' || jQuery.isArray(val) || jQuery.inArray(type, vp_w2dc_wp.numeric_validatable) == -1) { return true; }
+	if (val === '' || jQuery.isArray(val) || jQuery.inArray(type, w2dc_vp_wp.numeric_validatable) == -1) { return true; }
 
 	var regex = new RegExp(/^[-+]?[0-9]*\.?[0-9]+$/);
 	return regex.test(val);
 };
 
-vp_w2dc.validateEmail = function(type, val) {
+w2dc_vp.validateEmail = function(type, val) {
 	// ignore array and empty string, since they should be handled by 'required' rule
-	if (val === '' || jQuery.isArray(val) || jQuery.inArray(type, vp_w2dc_wp.email_validatable) == -1) { return true; }
+	if (val === '' || jQuery.isArray(val) || jQuery.inArray(type, w2dc_vp_wp.email_validatable) == -1) { return true; }
 
 	var regex = new RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i);
 	return regex.test(val);
 };
 
-vp_w2dc.validateURL = function(type, val) {
+w2dc_vp.validateURL = function(type, val) {
 	// ignore array and empty string, since they should be handled by 'required' rule
-	if (val === '' || jQuery.isArray(val) || jQuery.inArray(type, vp_w2dc_wp.url_validatable) == -1) { return true; }
+	if (val === '' || jQuery.isArray(val) || jQuery.inArray(type, w2dc_vp_wp.url_validatable) == -1) { return true; }
 
 	var regex = new RegExp(/^(ftp|http|https):\/\/[^ "]+$/i);
 	return regex.test(val);
 };
 
-vp_w2dc.validateMaxLength = function(type, val, n) {
+w2dc_vp.validateMaxLength = function(type, val, n) {
 	// ignore array
-	if (jQuery.inArray(type, vp_w2dc_wp.maxlength_validatable) != -1) { return true; }
+	if (jQuery.inArray(type, w2dc_vp_wp.maxlength_validatable) != -1) { return true; }
 
 	return (val.length <= n) ? true : false;
 };
 
-vp_w2dc.validateMinLength = function(type, val, n) {
+w2dc_vp.validateMinLength = function(type, val, n) {
 	// ignore array
-	if (jQuery.inArray(type, vp_w2dc_wp.minlength_validatable) != -1) { return true; }
+	if (jQuery.inArray(type, w2dc_vp_wp.minlength_validatable) != -1) { return true; }
 
 	return (val.length >= n) ? true : false;
 };
 
-vp_w2dc.validateRequired = function(type, val) {
+w2dc_vp.validateRequired = function(type, val) {
 	// only check if it's empty array, if it's not, it will go true anyway..
 	if (jQuery.isArray(val) && jQuery.isEmptyObject(val)) return false;
 	return (val) ? true : false;
 };
 
 // validation function loop
-vp_w2dc.fields_validation_loop = function(fields){
+w2dc_vp.fields_validation_loop = function(fields){
 
 	var msgHTML = '<li class="validation-msg vp-error"></li>',
 		errors  = 0;
@@ -383,7 +383,7 @@ vp_w2dc.fields_validation_loop = function(fields){
 	for (var i = 0; i < fields.length; i++)
 	{
 		var field   = fields[i],
-		    $tr     = jQuery(vp_w2dc.jqid(field.name)),
+		    $tr     = jQuery(w2dc_vp.jqid(field.name)),
 		    $parent = $tr.parents('.vp-meta-group').exists() ? $tr.parents('.vp-meta-group') : $tr.parents('.vp-section');
 
 		// if field is now deleted and not found
@@ -413,38 +413,38 @@ vp_w2dc.fields_validation_loop = function(fields){
 			switch (def)
 			{
 				case 'alphabet':
-					if (!vp_w2dc.validateAlphabet(type, val)) { res = vp_w2dc_wp.val_msg.alphabet.format(); }
+					if (!w2dc_vp.validateAlphabet(type, val)) { res = w2dc_vp_wp.val_msg.alphabet.format(); }
 					break;
 				case 'alphanumeric':
-					if (!vp_w2dc.validateAlphaNumeric(type, val)) { res = vp_w2dc_wp.val_msg.alphanumeric.format(); }
+					if (!w2dc_vp.validateAlphaNumeric(type, val)) { res = w2dc_vp_wp.val_msg.alphanumeric.format(); }
 					break;
 				case 'numeric':
-					if (!vp_w2dc.validateNumeric(type, val)) { res = vp_w2dc_wp.val_msg.numeric.format(); }
+					if (!w2dc_vp.validateNumeric(type, val)) { res = w2dc_vp_wp.val_msg.numeric.format(); }
 					break;
 				case 'email':
-					if (!vp_w2dc.validateEmail(type, val)) { res = vp_w2dc_wp.val_msg.email.format(); }
+					if (!w2dc_vp.validateEmail(type, val)) { res = w2dc_vp_wp.val_msg.email.format(); }
 					break;
 				case 'url':
-					if (!vp_w2dc.validateURL(type, val)) { res = vp_w2dc_wp.val_msg.url.format(); }
+					if (!w2dc_vp.validateURL(type, val)) { res = w2dc_vp_wp.val_msg.url.format(); }
 					break;
 				case 'maxlength':
 					n = rule.substring(q1 + 1, q2);
-					if (!vp_w2dc.validateMaxLength(type, val, n)) { res = vp_w2dc_wp.val_msg.maxlength.format(n); }
+					if (!w2dc_vp.validateMaxLength(type, val, n)) { res = w2dc_vp_wp.val_msg.maxlength.format(n); }
 					break;
 				case 'minlength':
 					n = rule.substring(q1 + 1, q2);
-					if (!vp_w2dc.validateMinLength(type, val, n)) { res= vp_w2dc_wp.val_msg.minlength.format(n); }
+					if (!w2dc_vp.validateMinLength(type, val, n)) { res= w2dc_vp_wp.val_msg.minlength.format(n); }
 					break;
 				case 'maxselected':
 					n = rule.substring(q1 + 1, q2);
-					if (!vp_w2dc.validateMaxLength(type, val, n)) { res = vp_w2dc_wp.val_msg.maxselected.format(n); }
+					if (!w2dc_vp.validateMaxLength(type, val, n)) { res = w2dc_vp_wp.val_msg.maxselected.format(n); }
 					break;
 				case 'minselected':
 					n = rule.substring(q1 + 1, q2);
-					if (!vp_w2dc.validateMinLength(type, val, n)) { res= vp_w2dc_wp.val_msg.minselected.format(n); }
+					if (!w2dc_vp.validateMinLength(type, val, n)) { res= w2dc_vp_wp.val_msg.minselected.format(n); }
 					break;
 				case 'required':
-					if (!vp_w2dc.validateRequired(type, val)) { res = vp_w2dc_wp.val_msg.required.format(); }
+					if (!w2dc_vp.validateRequired(type, val)) { res = w2dc_vp_wp.val_msg.required.format(); }
 					break;
 			}
 
@@ -470,7 +470,7 @@ vp_w2dc.fields_validation_loop = function(fields){
 };
 
 // custom checkbox and radiobutton handler
-vp_w2dc.custom_check_radio_event = function(parent, selector){
+w2dc_vp.custom_check_radio_event = function(parent, selector){
 	jQuery(parent).delegate(selector, "click", function(e){
 		e.preventDefault();
 		var $control = jQuery(this).find('input'),
@@ -481,7 +481,7 @@ vp_w2dc.custom_check_radio_event = function(parent, selector){
 				jQuery(this).removeClass('checked');
 				$control.prop('checked', false);
 			});
-			$control.prop('checked', true).change();
+			$control.prop('checked', true).trigger("change");
 		}
 		else if(type == 'checkbox')
 		{
@@ -503,14 +503,14 @@ vp_w2dc.custom_check_radio_event = function(parent, selector){
 };
 
 // vafpress binding related functions
-vp_w2dc.binding_action =	function(ids, field, func, thecase) {
-	var $source_tr = jQuery(vp_w2dc.jqid(field.source)),
+w2dc_vp.binding_action =	function(ids, field, func, thecase) {
+	var $source_tr = jQuery(w2dc_vp.jqid(field.source)),
 	    $source    = jQuery('[name="' + field.source + '"]'),
 	    values     = [];
 
 	for (var i = 0; i < ids.length; i++)
 	{
-		var val = jQuery(vp_w2dc.thejqname(ids[i], thecase)).validationVal();
+		var val = jQuery(w2dc_vp.thejqname(ids[i], thecase)).validationVal();
 		if (jQuery.isArray(val) && val.length == 0) {
 			val = null;
 		}
@@ -518,7 +518,7 @@ vp_w2dc.binding_action =	function(ids, field, func, thecase) {
 	}
 
 	var data = {
-		action   : 'vp_w2dc_ajax_wrapper',
+		action   : 'w2dc_vp_ajax_wrapper',
 		func     : func,
 		params   : values
 	};
@@ -528,16 +528,16 @@ vp_w2dc.binding_action =	function(ids, field, func, thecase) {
 	    $input  = $source_tr.find('.input');
 
 	if (field.type == 'vp-html') {
-		$loader.vp_w2dc_fadeIn();
+		$loader.w2dc_vp_fadeIn();
 	} else {
-		$input.vp_w2dc_fadeOut(function(){
-			$loader.vp_w2dc_fadeIn();
+		$input.w2dc_vp_fadeOut(function(){
+			$loader.w2dc_vp_fadeIn();
 		});
 	}
 
 	jQuery.post(ajaxurl, data, function(response) {
-		$loader.vp_w2dc_fadeOut(function(){
-			$input.vp_w2dc_fadeIn();
+		$loader.w2dc_vp_fadeOut(function(){
+			$input.w2dc_vp_fadeIn();
 		});
 		if (response.status)
 		{
@@ -550,16 +550,16 @@ vp_w2dc.binding_action =	function(ids, field, func, thecase) {
 					if(response.data !== null)
 					{
 						data = response.data instanceof Array ? response.data : [response.data];
-						$source.val(data).change();
+						$source.val(data).trigger("change");
 					}
 					break;
 				case 'vp-checkbox':
 					if(response.data !== null)
 					{
 						data = response.data instanceof Array ? response.data : [response.data];
-						$source.prop('checked', false).change();
+						$source.prop('checked', false).trigger("change");
 						jQuery.each(data, function(key, value) {
-							$source.filter('[value="'+ value +'"]').prop('checked', true).change();
+							$source.filter('[value="'+ value +'"]').prop('checked', true).trigger("change");
 						});
 					}
 					break;
@@ -567,29 +567,29 @@ vp_w2dc.binding_action =	function(ids, field, func, thecase) {
 					if(response.data !== null)
 					{
 						if(response.data)
-							$source.prop('checked', true).change();
+							$source.prop('checked', true).trigger("change");
 						else
-							$source.prop('checked', false).change();
+							$source.prop('checked', false).trigger("change");
 					}
 					break;
 				case 'vp-checkimage':
 					if(response.data !== null)
 					{
 						data = response.data instanceof Array ? response.data : [response.data];
-						$source.prop('checked', false).change();
+						$source.prop('checked', false).trigger("change");
 						jQuery.each(data, function(key, value) {
-							$source.filter('[value="'+ value +'"]').prop('checked', true).change();
+							$source.filter('[value="'+ value +'"]').prop('checked', true).trigger("change");
 						});
 					}
-					vp_w2dc.init_tipsy();
+					w2dc_vp.init_tipsy();
 					break;
 				case 'vp-radiobutton':
 					if(response.data !== null)
 					{
 						data = response.data instanceof Array ? response.data : [response.data];
-						$source.prop('checked', false).change();
+						$source.prop('checked', false).trigger("change");
 						jQuery.each(data, function(key, value) {
-							$source.filter('[value="'+ value +'"]').prop('checked', true).change();
+							$source.filter('[value="'+ value +'"]').prop('checked', true).trigger("change");
 						});
 					}
 					break;
@@ -597,52 +597,52 @@ vp_w2dc.binding_action =	function(ids, field, func, thecase) {
 					if(response.data !== null)
 					{
 						data = response.data instanceof Array ? response.data : [response.data];
-						$source.prop('checked', false).change();
+						$source.prop('checked', false).trigger("change");
 						jQuery.each(data, function(key, value) {
-							$source.filter('[value="'+ value +'"]').prop('checked', true).change();
+							$source.filter('[value="'+ value +'"]').prop('checked', true).trigger("change");
 						});
 					}
-					vp_w2dc.init_tipsy();
+					w2dc_vp.init_tipsy();
 					break;
 				case 'vp-html':
 					if(response.data !== null)
 					{
-						jQuery(vp_w2dc.jqid(field.source + '_dom')).html(response.data);
-						jQuery(vp_w2dc.jqname(field.source)).val(response.data);
+						jQuery(w2dc_vp.jqid(field.source + '_dom')).html(response.data);
+						jQuery(w2dc_vp.jqname(field.source)).val(response.data);
 					}
 					break;
 				default:
-					$source = jQuery(vp_w2dc.jqname(field.source));
+					$source = jQuery(w2dc_vp.jqname(field.source));
 					$source.val(response.data);
 			}
-			jQuery('[name="' + field.source + '"]:first').keypress().keyup().change().blur();
+			jQuery('[name="' + field.source + '"]:first').keypress().keyup().trigger("change").blur();
 		}
 	}, 'JSON');
 };
 
-vp_w2dc.binding_event = function(ids, idx, field, func, parent, thecase)
+w2dc_vp.binding_event = function(ids, idx, field, func, parent, thecase)
 {
 	var change    = ['vp-select', 'vp-checkbox', 'vp-checkimage', 'vp-radiobutton', 'vp-radioimage', 'vp-multiselect', 'vp-toggle', 'vp-upload'],
 	    typing    = ['vp-textbox', 'vp-slider', 'vp-color', 'vp-date'],
-	    name      = vp_w2dc.thejqname(ids[idx], thecase),
-	    dest_type = jQuery(vp_w2dc.thejqid(ids[idx], thecase)).attr('data-vp-type');
+	    name      = w2dc_vp.thejqname(ids[idx], thecase),
+	    dest_type = jQuery(w2dc_vp.thejqid(ids[idx], thecase)).attr('data-vp-type');
 
 	if(jQuery.inArray(dest_type, change) !== -1 )
 	{
-		jQuery(parent).delegate(name, 'change', function(){vp_w2dc.binding_action(ids, field, func, thecase);});
+		jQuery(parent).delegate(name, 'change', function(){w2dc_vp.binding_action(ids, field, func, thecase);});
 	}
 	else if(jQuery.inArray(dest_type, typing) !== -1 )
 	{
 		jQuery(name).typing({
 			stop: function(event, $elem){
-				vp_w2dc.binding_action(ids, field, func, thecase);
+				w2dc_vp.binding_action(ids, field, func, thecase);
 			},
 			delay: 400
 		});
 	}
 	else
 	{
-		jQuery(parent).delegate(name, 'change', function(){vp_w2dc.binding_action(ids, field, func, thecase);});
+		jQuery(parent).delegate(name, 'change', function(){w2dc_vp.binding_action(ids, field, func, thecase);});
 	}
 };
 
@@ -651,18 +651,18 @@ vp_w2dc.binding_event = function(ids, idx, field, func, parent, thecase)
  */
 
 // vafpress binding related functions
-vp_w2dc.items_binding_action =	function(ids, field, func, thecase) {
-	var $source_tr = jQuery(vp_w2dc.jqid(field.source)),
+w2dc_vp.items_binding_action =	function(ids, field, func, thecase) {
+	var $source_tr = jQuery(w2dc_vp.jqid(field.source)),
 	    $source    = jQuery('[name="' + field.source + '"]'),
 	    values     = [];
 
 	for (var i = 0; i < ids.length; i++)
 	{
-		values.push(jQuery(vp_w2dc.thejqname(ids[i], thecase)).validationVal());
+		values.push(jQuery(w2dc_vp.thejqname(ids[i], thecase)).validationVal());
 	}
 
 	var data = {
-		action   : 'vp_w2dc_ajax_wrapper',
+		action   : 'w2dc_vp_ajax_wrapper',
 		func     : func,
 		params   : values
 	};
@@ -671,13 +671,13 @@ vp_w2dc.items_binding_action =	function(ids, field, func, thecase) {
 	var $loader = $source_tr.find('.vp-js-bind-loader'),
 	    $input  = $source_tr.find('.input');
 
-	$input.vp_w2dc_fadeOut(function(){
-		$loader.vp_w2dc_fadeIn();
+	$input.w2dc_vp_fadeOut(function(){
+		$loader.w2dc_vp_fadeIn();
 	});
 
 	jQuery.post(ajaxurl, data, function(response) {
-		$loader.vp_w2dc_fadeOut(function(){
-			$input.vp_w2dc_fadeIn();
+		$loader.w2dc_vp_fadeOut(function(){
+			$input.w2dc_vp_fadeIn();
 		});
 		if (response.status)
 		{
@@ -699,7 +699,7 @@ vp_w2dc.items_binding_action =	function(ids, field, func, thecase) {
 				case 'vp-checkbox':
 					$source = $input;
 					$source.empty();
-					$source = jQuery(vp_w2dc.jqid(field.source)).find('.input');
+					$source = jQuery(w2dc_vp.jqid(field.source)).find('.input');
 					response.data !== null && jQuery.each(response.data, function(key, value) {
 						$source.append(jQuery('<label><input class="vp-input" type="checkbox" name="' + field.source + '" value="' + value.value + '"><span></span>'+ value.label + '</label>'));
 					});
@@ -707,16 +707,16 @@ vp_w2dc.items_binding_action =	function(ids, field, func, thecase) {
 				case 'vp-checkimage':
 					$source = $input;
 					$source.empty();
-					$source = jQuery(vp_w2dc.jqid(field.source)).find('.input');
+					$source = jQuery(w2dc_vp.jqid(field.source)).find('.input');
 					response.data !== null && jQuery.each(response.data, function(key, value) {
 						$source.append(jQuery('<label><input class="vp-input" type="checkbox" name="' + field.source + '" value="' + value.value + '"><img src="' + value.img + '" alt="' + value.label + '" class="vp-js-tipsy image-item" style="" original-title="' + value.value + '"></label>'));
 					});
-					vp_w2dc.init_tipsy();
+					w2dc_vp.init_tipsy();
 					break;
 				case 'vp-radiobutton':
 					$source = $input;
 					$source.empty();
-					$source = jQuery(vp_w2dc.jqid(field.source)).find('.input');
+					$source = jQuery(w2dc_vp.jqid(field.source)).find('.input');
 					response.data !== null && jQuery.each(response.data, function(key, value) {
 						$source.append(jQuery('<label><input class="vp-input" type="radio" name="' + field.source + '" value="' + value.value + '"><span></span>'+ value.label + '</label>'));
 					});
@@ -724,41 +724,41 @@ vp_w2dc.items_binding_action =	function(ids, field, func, thecase) {
 				case 'vp-radioimage':
 					$source = $input;
 					$source.empty();
-					$source = jQuery(vp_w2dc.jqid(field.source)).find('.input');
+					$source = jQuery(w2dc_vp.jqid(field.source)).find('.input');
 					response.data !== null && jQuery.each(response.data, function(key, value) {
 						$source.append(jQuery('<label><input class="vp-input" type="radio" name="' + field.source + '" value="' + value.value + '"><img src="' + value.img + '" alt="' + value.label + '" class="vp-js-tipsy image-item" style="" original-title="' + value.value + '"></label>'));
 					});
-					vp_w2dc.init_tipsy();
+					w2dc_vp.init_tipsy();
 					break;
 			}
-			jQuery('[name="' + field.source + '"]:first').change().blur();
+			jQuery('[name="' + field.source + '"]:first').trigger("change").blur();
 		}
 	}, 'JSON');
 };
 
-vp_w2dc.items_binding_event = function(ids, idx, field, func, parent, thecase)
+w2dc_vp.items_binding_event = function(ids, idx, field, func, parent, thecase)
 {
 	var change    = ['vp-select', 'vp-checkbox', 'vp-checkimage', 'vp-radiobutton', 'vp-radioimage', 'vp-multiselect', 'vp-toggle', 'vp-upload'],
 	    typing    = ['vp-textbox', 'vp-slider', 'vp-color', 'vp-date'],
-	    name      = vp_w2dc.thejqname(ids[idx], thecase),
-	    dest_type = jQuery(vp_w2dc.thejqid(ids[idx], thecase)).attr('data-vp-type');
+	    name      = w2dc_vp.thejqname(ids[idx], thecase),
+	    dest_type = jQuery(w2dc_vp.thejqid(ids[idx], thecase)).attr('data-vp-type');
 
 	if(jQuery.inArray(dest_type, change) !== -1 )
 	{
-		jQuery(parent).delegate(name, 'change', function(){vp_w2dc.items_binding_action(ids, field, func, thecase);});
+		jQuery(parent).delegate(name, 'change', function(){w2dc_vp.items_binding_action(ids, field, func, thecase);});
 	}
 	else if(jQuery.inArray(dest_type, typing) !== -1 )
 	{
 		jQuery(name).typing({
 			stop: function(event, $elem){
-				vp_w2dc.items_binding_action(ids, field, func, thecase);
+				w2dc_vp.items_binding_action(ids, field, func, thecase);
 			},
 			delay: 400
 		});
 	}
 	else
 	{
-		jQuery(parent).delegate(name, 'change', function(){vp_w2dc.binding_action(ids, field, func, thecase);});
+		jQuery(parent).delegate(name, 'change', function(){w2dc_vp.binding_action(ids, field, func, thecase);});
 	}
 };
 
@@ -767,21 +767,21 @@ vp_w2dc.items_binding_event = function(ids, idx, field, func, parent, thecase)
  */
 
 // vafpress dependencies related functions
-vp_w2dc.dependency_action =	function(ids, field, func) {
+w2dc_vp.dependency_action =	function(ids, field, func) {
 
-	var $source_tr = jQuery(vp_w2dc.jqid(field.source)),
+	var $source_tr = jQuery(w2dc_vp.jqid(field.source)),
 	    $source    = jQuery('[name="' + field.source + '"]'),
 	    values     = [],
 	    targets    = [];
 
 	for (var i = 0; i < ids.length; i++)
 	{
-		targets.push(jQuery(vp_w2dc.jqid(ids[i])));
+		targets.push(jQuery(w2dc_vp.jqid(ids[i])));
 		values.push(jQuery('[name="' + ids[i] + '"]').validationVal());
 	}
 
 	var data = {
-		action   : 'vp_w2dc_ajax_wrapper',
+		action   : 'w2dc_vp_ajax_wrapper',
 		func     : func,
 		params   : values
 	};
@@ -789,13 +789,13 @@ vp_w2dc.dependency_action =	function(ids, field, func) {
 	// get loader
 	jQuery.each(targets, function(idx, val){
 		var $loader = val.find('.vp-js-bind-loader');
-		$loader.vp_w2dc_fadeIn();
+		$loader.w2dc_vp_fadeIn();
 	});
 
 	jQuery.post(ajaxurl, data, function(response) {
 		jQuery.each(targets, function(idx, val){
 			var $loader = val.find('.vp-js-bind-loader');
-			$loader.vp_w2dc_fadeOut();
+			$loader.w2dc_vp_fadeOut();
 		});
 
 		if (response.status)
@@ -803,40 +803,40 @@ vp_w2dc.dependency_action =	function(ids, field, func) {
 			if(response.data)
 			{
 				$source_tr.removeClass('vp-dep-inactive');
-				$source_tr.vp_w2dc_fadeIn();
+				$source_tr.w2dc_vp_fadeIn();
 			}
 			else
 			{
 				$source_tr.addClass('vp-dep-inactive');
-				$source_tr.vp_w2dc_fadeOut();
+				$source_tr.w2dc_vp_fadeOut();
 			}
 		}
 	}, 'JSON');
 };
 
-vp_w2dc.dependency_event = function(ids, idx, field, func, parent){
+w2dc_vp.dependency_event = function(ids, idx, field, func, parent){
 
 	var change    = ['vp-select', 'vp-checkbox', 'vp-checkimage', 'vp-radiobutton', 'vp-radioimage', 'vp-multiselect', 'vp-toggle', 'vp-upload'],
 	    typing    = ['vp-textbox', 'vp-slider', 'vp-color', 'vp-date'],
-	    name      = vp_w2dc.thejqname(ids[idx], 'option'),
-	    dest_type = jQuery(vp_w2dc.thejqid(ids[idx], 'option')).attr('data-vp-type');
+	    name      = w2dc_vp.thejqname(ids[idx], 'option'),
+	    dest_type = jQuery(w2dc_vp.thejqid(ids[idx], 'option')).attr('data-vp-type');
 
 	if(jQuery.inArray(dest_type, change) !== -1 )
 	{
-		jQuery(parent).delegate(name, 'change', function(){vp_w2dc.dependency_action(ids, field, func);});
+		jQuery(parent).delegate(name, 'change', function(){w2dc_vp.dependency_action(ids, field, func);});
 	}
 	else if(jQuery.inArray(dest_type, typing) !== -1 )
 	{
 		jQuery(name).typing({
 			stop: function(event, $elem){
-				vp_w2dc.dependency_action(ids, field, func);
+				w2dc_vp.dependency_action(ids, field, func);
 			},
 			delay: 400
 		});
 	}
 	else
 	{
-		jQuery(parent).delegate(name, 'change', function(){vp_w2dc.binding_action(ids, field, func, thecase);});
+		jQuery(parent).delegate(name, 'change', function(){w2dc_vp.binding_action(ids, field, func, thecase);});
 	}
 };
 
@@ -856,7 +856,7 @@ function theValidate(elem, options, $slider)
 	    val = $this.val();
 	if(val === '')
 		return;
-	if (!vp_w2dc.validateNumeric('vp-textbox', val))
+	if (!w2dc_vp.validateNumeric('vp-textbox', val))
 	{
 		$this.val(options.min);
 		$slider.slider('value', options.min);
@@ -877,14 +877,14 @@ function theValidate(elem, options, $slider)
 	}
 }
 
-vp_w2dc.init_slider = function($elements)
+w2dc_vp.init_slider = function($elements)
 {
 	if (jQuery.fn.slider)
 	{
 		$elements.each(function(i, el) {
 			var $slider = jQuery(this),
 			    options = jQuery(this).getDatas();
-			options = vp_w2dc.parseOpt(options.opt);
+			options = w2dc_vp.parseOpt(options.opt);
 			options.range = 'min';
 			options.slide = function(event, ui) {
 				$slider.prev('.slideinput').val(ui.value);
@@ -910,15 +910,15 @@ vp_w2dc.init_slider = function($elements)
 };
 
 
-vp_w2dc.upload_callback = function() {};
+w2dc_vp.upload_callback = function() {};
 
-if ( vp_w2dc_wp.use_new_media_upload )
+if ( w2dc_vp_wp.use_new_media_upload )
 {
 	var _orig_send_attachment = wp.media.editor.send.attachment,
 	    _orig_send_link       = wp.media.editor.send.link,
 	    _orig_send_to_editor  = window.send_to_editor;
 
-	vp_w2dc.upload_callback = function(e) {
+	w2dc_vp.upload_callback = function(e) {
 		var $this    = jQuery(this),
 		    $input   = $this.parent('.buttons').prev('input'),
 		    $preview = $this.parent('.buttons').siblings('.image').find('img');
@@ -958,7 +958,7 @@ else
 {
 	var _orig_send_to_editor = window.send_to_editor;
 
-	vp_w2dc.upload_callback = function(e) {
+	w2dc_vp.upload_callback = function(e) {
 		var _custom_media = true,
 		       $input     = jQuery(this).parent('.buttons').prev('input'),
 		       $preview   = jQuery(this).parent('.buttons').siblings('.image').find('img');
@@ -986,12 +986,12 @@ function get_url_info(html)
 	if ($el.prop('tagName') == 'A')
 	{
 		imgurl  = jQuery(html).attr('href');
-		ext     = vp_w2dc.get_url_extension(imgurl);
-		type    = vp_w2dc.wp_ext2type(ext);
+		ext     = w2dc_vp.get_url_extension(imgurl);
+		type    = w2dc_vp.wp_ext2type(ext);
 		iconurl = imgurl;
 		if(type !== 'image')
 		{
-			iconurl = vp_w2dc_wp.wp_include_url + 'images/crystal/' + type + '.png' ;
+			iconurl = w2dc_vp_wp.wp_include_url + 'images/crystal/' + type + '.png' ;
 		}
 	}
 	else if($el.prop('tagName') == 'IMG')
@@ -1002,7 +1002,7 @@ function get_url_info(html)
 	return {imgurl: imgurl, iconurl: iconurl};
 }
 
-vp_w2dc.remove_upload_callback = function(e) {
+w2dc_vp.remove_upload_callback = function(e) {
 	var $this    = jQuery(this),
 	    $input   = $this.parent('.buttons').prev('input'),
 	    $preview = $this.parent('.buttons').siblings('.image').find('img');
@@ -1011,10 +1011,10 @@ vp_w2dc.remove_upload_callback = function(e) {
 	$preview.attr('src', '');
 };
 
-jQuery(document).on('click', '.vp-js-upload', vp_w2dc.upload_callback);
-jQuery(document).on('click', '.vp-js-remove-upload', vp_w2dc.remove_upload_callback);
+jQuery(document).on('click', '.vp-js-upload', w2dc_vp.upload_callback);
+jQuery(document).on('click', '.vp-js-remove-upload', w2dc_vp.remove_upload_callback);
 
-vp_w2dc.init_colorpicker = function($elements)
+w2dc_vp.init_colorpicker = function($elements)
 {
 	if (jQuery.fn.colorpicker)
 	{
@@ -1024,7 +1024,7 @@ vp_w2dc.init_colorpicker = function($elements)
 			var $colorpicker  = jQuery(this),
 			    options = jQuery(this).getDatas();
 
-			options = vp_w2dc.parseOpt(options.opt);
+			options = w2dc_vp.parseOpt(options.opt);
 
 			$colorpicker.colorpicker({
 				format: options.format
@@ -1053,7 +1053,7 @@ vp_w2dc.init_colorpicker = function($elements)
 	}
 };
 
-vp_w2dc.init_datepicker = function($elements)
+w2dc_vp.init_datepicker = function($elements)
 {
 	if (jQuery.fn.datepicker)
 	{
@@ -1061,7 +1061,7 @@ vp_w2dc.init_datepicker = function($elements)
 			return;
 		$elements.each(function() {
 			var options = jQuery(this).getDatas();
-			options     = vp_w2dc.parseOpt(options.opt);
+			options     = w2dc_vp.parseOpt(options.opt);
 			options.onSelect = function(){
 				jQuery(this).trigger('keypress');
 				jQuery(this).trigger('keyup');
@@ -1073,52 +1073,52 @@ vp_w2dc.init_datepicker = function($elements)
 	}
 };
 
-vp_w2dc.init_controls = function($parent)
+w2dc_vp.init_controls = function($parent)
 {
 	// init date picker
-	vp_w2dc.init_datepicker($parent.find('.vp-js-datepicker'));
-	vp_w2dc.init_fontawesome_chooser($parent.find('.vp-js-fontawesome'));
-	vp_w2dc.init_select2vp($parent.find('.vp-js-select2vp'));
-	vp_w2dc.init_sorter($parent.find('.vp-js-sorter'));
-	vp_w2dc.init_colorpicker($parent.find('.vp-js-colorpicker'));
-	vp_w2dc.init_slider($parent.find('.vp-js-slider'));
-	vp_w2dc.init_ace_editor($parent.find('.vp-js-codeeditor'));
-	vp_w2dc.init_wpeditor($parent.find('.vp-js-wpeditor'));
+	w2dc_vp.init_datepicker($parent.find('.vp-js-datepicker'));
+	w2dc_vp.init_fontawesome_chooser($parent.find('.vp-js-fontawesome'));
+	w2dc_vp.init_select2vp($parent.find('.vp-js-select2vp'));
+	w2dc_vp.init_sorter($parent.find('.vp-js-sorter'));
+	w2dc_vp.init_colorpicker($parent.find('.vp-js-colorpicker'));
+	w2dc_vp.init_slider($parent.find('.vp-js-slider'));
+	w2dc_vp.init_ace_editor($parent.find('.vp-js-codeeditor'));
+	w2dc_vp.init_wpeditor($parent.find('.vp-js-wpeditor'));
 };
 
 // Fontawesome Chooser
-vp_w2dc.init_fontawesome_chooser = function($elements)
+w2dc_vp.init_fontawesome_chooser = function($elements)
 {
 	if (jQuery.fn.select2vp)
 	{
 		if($elements.length <= 0)
 			return;
-		var format = function vp_w2dc_fontawesome_chooser_format(icon){
-			return '<span class="fontawesome"><i class="w2dc-fa ' + icon.id + '"></i>' + icon.text + '</span>';
+		var format = function w2dc_vp_fontawesome_chooser_format(icon){
+			return '<span class="fontawesome"><i class="w2dc-fa ' + icon.id + '"></i> ' + icon.text + '</span>';
 		};
 		$elements.select2vp({
 			formatResult: format,
 			formatSelection: format,
 			escapeMarkup: function(m) { return m; },
 			allowClear: true,
-			placeholder: vp_w2dc_wp.ctrl_msg.fac_placeholder
+			placeholder: w2dc_vp_wp.ctrl_msg.fac_placeholder
 		});
 	}
 };
 
 // select2vp
-vp_w2dc.init_select2vp = function($elements)
+w2dc_vp.init_select2vp = function($elements)
 {
 	if (jQuery.fn.select2vp)
 	{
 		if($elements.length <= 0)
 			return;
-		$elements.select2vp({allowClear: true, placeholder: vp_w2dc_wp.ctrl_msg.select2vp_placeholder});
+		$elements.select2vp({allowClear: true, placeholder: w2dc_vp_wp.ctrl_msg.select2vp_placeholder});
 	}
 };
 
 // Sorter
-vp_w2dc.init_sorter = function($elements)
+w2dc_vp.init_sorter = function($elements)
 {
 	if (jQuery.fn.select2vpSortable)
 	{
@@ -1128,7 +1128,7 @@ vp_w2dc.init_sorter = function($elements)
 		$elements.each(function(i, el) {
 			var $el     = jQuery(el),
 			    options = $el.getDatas();
-			options = vp_w2dc.parseOpt(options.opt);
+			options = w2dc_vp.parseOpt(options.opt);
 			$el.select2vp(options).select2vpSortable({bindOrder: 'sortableStop'});
 		});
 
@@ -1136,7 +1136,7 @@ vp_w2dc.init_sorter = function($elements)
 };
 
 // Tipsy
-vp_w2dc.init_tipsy = function()
+w2dc_vp.init_tipsy = function()
 {
 	if (jQuery.fn.tipsy)
 	{
@@ -1145,10 +1145,10 @@ vp_w2dc.init_tipsy = function()
 		jQuery('.vp-js-tipsy.image-item').tipsy({ live: true });
 	}
 };
-vp_w2dc.init_tipsy();
+w2dc_vp.init_tipsy();
 
 // Init Sorter
-vp_w2dc.init_ace_editor = function($elements)
+w2dc_vp.init_ace_editor = function($elements)
 {
 	if(window.ace !== 'undefined')
 	{
@@ -1160,7 +1160,7 @@ vp_w2dc.init_ace_editor = function($elements)
 			var textarea = jQuery(this).prev();
 			var options  = jQuery(this).getDatas();
 
-			options      = vp_w2dc.parseOpt(options.opt);
+			options      = w2dc_vp.parseOpt(options.opt);
 
 			// set theme
 			editor.setTheme("ace/theme/" + options.theme);
@@ -1188,7 +1188,7 @@ if(typeof window.KIA_metabox !== 'undefined')
 {
 	KIA_metabox.mediaButtons();
 }
-vp_w2dc.init_wpeditor = function($elements)
+w2dc_vp.init_wpeditor = function($elements)
 {
 	if(typeof window.KIA_metabox !== 'undefined')
 	{
@@ -1197,7 +1197,7 @@ vp_w2dc.init_wpeditor = function($elements)
 		KIA_metabox.runTinyMCE($elements);
 	}
 };
-vp_w2dc.tinyMCE_save = function()
+w2dc_vp.tinyMCE_save = function()
 {
 	if(typeof window.tinyMCE !== 'undefined')
 	{

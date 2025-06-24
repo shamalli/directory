@@ -1,6 +1,7 @@
 <?php
 
-use WPML\FP\apply;
+// @codingStandardsIgnoreFile
+
 class w2dc_csv_import_export_listings {
 	public $csv_manager;
 	public $collation_fields;
@@ -15,35 +16,35 @@ class w2dc_csv_import_export_listings {
 		global $w2dc_instance;
 		
 		$this->csv_manager->collation_fields = array(
-				'post_id' => __('Post ID* (existing listing)', 'W2DC'),
-				'title' => __('Title*', 'W2DC'),
-				'level_id' => __('Level ID*', 'W2DC'),
-				'directory_id' => __('Directory ID', 'W2DC'),
-				'user' => __('Author', 'W2DC'),
-				'status' => __('Status (active, expired, unpaid)', 'W2DC'),
-				'categories_list' => __('Categories', 'W2DC'),
-				'listing_tags' => __('Tags', 'W2DC'),
-				'content' => __('Description', 'W2DC'),
-				'excerpt' => __('Summary', 'W2DC'),
-				'locations_list' => __('Locations (existing or new)', 'W2DC'),
-				'address_line_1' => __('Address line 1', 'W2DC'),
-				'address_line_2' => __('Address line 2', 'W2DC'),
-				'zip' => __('Zip code or postal index', 'W2DC'),
-				'latitude' => __('Latitude', 'W2DC'),
-				'longitude' => __('Longitude', 'W2DC'),
-				'map_icon_file' => __('Map icon file', 'W2DC'),
-				'additional_address_info' => __('Additional info for map marker', 'W2DC'),
-				'images' => __('Images files', 'W2DC'),
-				'videos' => __('YouTube or Vimeo videos', 'W2DC'),
-				'expiration_date' => __('Listing expiration date', 'W2DC'),
-				'contact_email' => __('Listing contact email', 'W2DC'),
-				'claimable' => __('Make listing claimable', 'W2DC'),
+				'post_id' => esc_html__('Post ID* (existing listing)', 'w2dc'),
+				'title' => esc_html__('Title*', 'w2dc'),
+				'level_id' => esc_html__('Level ID*', 'w2dc'),
+				'directory_id' => esc_html__('Directory ID', 'w2dc'),
+				'user' => esc_html__('Author', 'w2dc'),
+				'status' => esc_html__('Status (active, expired, unpaid)', 'w2dc'),
+				'categories_list' => esc_html__('Categories', 'w2dc'),
+				'listing_tags' => esc_html__('Tags', 'w2dc'),
+				'content' => esc_html__('Description', 'w2dc'),
+				'excerpt' => esc_html__('Summary', 'w2dc'),
+				'locations_list' => esc_html__('Locations (existing or new)', 'w2dc'),
+				'address_line_1' => esc_html__('Address line 1', 'w2dc'),
+				'address_line_2' => esc_html__('Address line 2', 'w2dc'),
+				'zip' => esc_html__('Zip code or postal index', 'w2dc'),
+				'latitude' => esc_html__('Latitude', 'w2dc'),
+				'longitude' => esc_html__('Longitude', 'w2dc'),
+				'map_icon_file' => esc_html__('Map icon file', 'w2dc'),
+				'additional_address_info' => esc_html__('Additional info for map marker', 'w2dc'),
+				'images' => esc_html__('Images files', 'w2dc'),
+				'videos' => esc_html__('YouTube or Vimeo videos', 'w2dc'),
+				'expiration_date' => esc_html__('Listing expiration date', 'w2dc'),
+				'contact_email' => esc_html__('Listing contact email', 'w2dc'),
+				'claimable' => esc_html__('Make listing claimable', 'w2dc'),
 		);
 		
 		// adapted for WPML
 		global $sitepress;
 		if (function_exists('wpml_object_id_filter') && $sitepress) {
-			$this->csv_manager->collation_fields['wpml_translation_source_id'] = __('WPML translation source ID', 'W2DC');
+			$this->csv_manager->collation_fields['wpml_translation_source_id'] = esc_html__('WPML translation source ID', 'w2dc');
 		}
 		
 		$this->csv_manager->collation_fields = apply_filters('w2dc_csv_collation_fields_list', $this->csv_manager->collation_fields);
@@ -62,11 +63,11 @@ class w2dc_csv_import_export_listings {
 	}
 	
 	public function validateSettings($validation) {
-		$validation->set_rules('if_term_not_found', __('Category not found', 'W2DC'), 'required');
-		$validation->set_rules('author', __('Listings author', 'W2DC'), 'required|numeric');
-		$validation->set_rules('do_geocode', __('Geocode imported listings', 'W2DC'));
+		$validation->set_rules('if_term_not_found', esc_html__('Category not found', 'w2dc'), 'required');
+		$validation->set_rules('author', esc_html__('Listings author', 'w2dc'), 'required|numeric');
+		$validation->set_rules('do_geocode', esc_html__('Geocode imported listings', 'w2dc'));
 		if (get_option('w2dc_fsubmit_addon') && get_option('w2dc_claim_functionality')) {
-			$validation->set_rules('is_claimable', __('Configure imported listings as claimable', 'W2DC'));
+			$validation->set_rules('is_claimable', esc_html__('Configure imported listings as claimable', 'w2dc'));
 		}
 	}
 	
@@ -94,19 +95,19 @@ class w2dc_csv_import_export_listings {
 	
 	public function checkFields() {
 		if ($this->csv_manager->import_type == 'update_listings' && !in_array('post_id', $this->csv_manager->collated_fields)) {
-			$this->csv_manager->log['errors'][] = esc_attr__("Post ID field wasn't collated", 'W2DC');
+			$this->csv_manager->log['errors'][] = esc_html__("Post ID field wasn't collated", 'w2dc');
 		}
 		if ($this->csv_manager->import_type == 'create_listings' && !in_array('title', $this->csv_manager->collated_fields)) {
-			$this->csv_manager->log['errors'][] = esc_attr__("Title field wasn't collated", 'W2DC');
+			$this->csv_manager->log['errors'][] = esc_html__("Title field wasn't collated", 'w2dc');
 		}
 		if ($this->csv_manager->import_type == 'create_listings' && !in_array('level_id', $this->csv_manager->collated_fields)) {
-			$this->csv_manager->log['errors'][] = esc_attr__("Level ID field wasn't collated", 'W2DC');
+			$this->csv_manager->log['errors'][] = esc_html__("Level ID field wasn't collated", 'w2dc');
 		}
 		if ($this->csv_manager->import_type == 'create_listings' && $this->csv_manager->selected_user != 0 && !get_userdata($this->csv_manager->selected_user)) {
-			$this->csv_manager->log['errors'][] = esc_attr__("There isn't author user you selected", 'W2DC');
+			$this->csv_manager->log['errors'][] = esc_html__("There isn't author user you selected", 'w2dc');
 		}
 		if ($this->csv_manager->import_type == 'create_listings' && $this->csv_manager->selected_user == 0 && !in_array('user', $this->csv_manager->collated_fields)) {
-			$this->csv_manager->log['errors'][] = esc_attr__("Author field wasn't collated and default author wasn't selected", 'W2DC');
+			$this->csv_manager->log['errors'][] = esc_html__("Author field wasn't collated and default author wasn't selected", 'w2dc');
 		}
 	}
 	
@@ -122,7 +123,7 @@ class w2dc_csv_import_export_listings {
 		$this->total_rejected_lines = 0;
 		foreach ($this->csv_manager->rows as $line=>$row) {
 			$n = $line+1;
-			printf(__('Importing line %d...', 'W2DC'), $n);
+			printf(esc_html__('Importing line %d...', 'w2dc'), $n);
 			echo "<br />";
 			$error_on_line = false;
 			$listing_data = array();
@@ -134,14 +135,14 @@ class w2dc_csv_import_export_listings {
 						$listing_data['existing_listing'] = $listing;
 						$listing_data['post_id'] = $value;
 					} else {
-						$error = sprintf(__('Error on line %d: ', 'W2DC') . esc_attr__("Listing with ID \"%d\" doesn't exist", 'W2DC'), $n, $value);
+						$error = sprintf(esc_html__('Error on line %d: ', 'w2dc') . esc_html__("Listing with ID \"%d\" doesn't exist", 'w2dc'), $n, $value);
 						$error_on_line = $this->csv_manager->setErrorOnLine($error);
 					}
 				}
 		
 				if ($field == 'title') {
 					$listing_data['title'] = $value;
-					printf(__('Listing title: %s', 'W2DC'), $value);
+					printf(esc_html__('Listing title: %s', 'w2dc'), $value);
 					echo "<br />";
 				} elseif ($field == 'user') {
 					if (!$this->csv_manager->selected_user) {
@@ -157,7 +158,7 @@ class w2dc_csv_import_export_listings {
 							if (!is_numeric($user_info[0]) && filter_var($user_info[1], FILTER_VALIDATE_EMAIL)) {
 								$listing_data['user_info'] = $user_info;
 							} else {
-								$error = sprintf(__('Error on line %d: ', 'W2DC') . esc_attr__("User \"%s\" doesn't exist and format does not allow to create new user", 'W2DC'), $n, $value);
+								$error = sprintf(esc_html__('Error on line %d: ', 'w2dc') . esc_html__("User \"%s\" doesn't exist and format does not allow to create new user", 'w2dc'), $n, $value);
 								$error_on_line = $this->csv_manager->setErrorOnLine($error);
 							}
 						}
@@ -168,14 +169,14 @@ class w2dc_csv_import_export_listings {
 					if (in_array($value, $levels_ids)) {
 						$listing_data['level_id'] = $value;
 					} else {
-						$error = sprintf(__('Error on line %d: ', 'W2DC') . __('Wrong level ID', 'W2DC'), $n);
+						$error = sprintf(esc_html__('Error on line %d: ', 'w2dc') . esc_html__('Wrong level ID', 'w2dc'), $n);
 						$error_on_line = $this->csv_manager->setErrorOnLine($error);
 					}
 				} elseif ($field == 'directory_id') {
 					if (in_array($value, $directories_ids)) {
 						$listing_data['directory_id'] = $value;
 					} else {
-						$error = sprintf(__('Error on line %d: ', 'W2DC') . __('Wrong directory ID', 'W2DC'), $n);
+						$error = sprintf(esc_html__('Error on line %d: ', 'w2dc') . esc_html__('Wrong directory ID', 'w2dc'), $n);
 						$error_on_line = $this->csv_manager->setErrorOnLine($error);
 					}
 				} elseif ($field == 'content') {
@@ -201,7 +202,7 @@ class w2dc_csv_import_export_listings {
 				} elseif ($field == 'map_icon_file') {
 					$listing_data['map_icon_file'] = array_map('trim', explode($this->csv_manager->values_separator, $value));
 				} elseif ($field == 'additional_address_info') {
-					$listing_data['additional_address_info'] = array_map('trim', explode($this->values_separator, $value));
+					$listing_data['additional_address_info'] = array_map('trim', explode($this->csv_manager->values_separator, $value));
 				} elseif ($field == 'videos') {
 					$listing_data['videos'] = array_filter(array_map('trim', explode($this->csv_manager->values_separator, $value)));
 				} elseif ($field == 'images') {
@@ -216,12 +217,12 @@ class w2dc_csv_import_export_listings {
 								$listing_data['images'][] = $image_url;
 								$this_is_import_by_URL = true;
 							} else {
-								$error = sprintf(__('Error on line %d: ', 'W2DC') . sprintf(esc_attr__("Incorrect image URL %s", 'W2DC'), $image_url), $n);
+								$error = sprintf(esc_html__('Error on line %d: ', 'w2dc') . sprintf(esc_html__("Incorrect image URL %s", 'w2dc'), $image_url), $n);
 								$error_on_line = $this->csv_manager->setErrorOnLine($error);
 							}
 						}
 						if (!$this_is_import_by_URL) {
-							$error = sprintf(__('Error on line %d: ', 'W2DC') . esc_attr__("Images column was specified, but ZIP archive wasn't upload", 'W2DC'), $n);
+							$error = sprintf(esc_html__('Error on line %d: ', 'w2dc') . esc_html__("Images column was specified, but ZIP archive wasn't upload", 'w2dc'), $n);
 							$error_on_line = $this->csv_manager->setErrorOnLine($error);
 						}
 					}
@@ -240,20 +241,20 @@ class w2dc_csv_import_export_listings {
 						$errors = array();
 						$listing_data['content_fields'][$field] = $content_field->validateCsvValues($value, $errors);
 						foreach ($errors AS $_error) {
-							$error = sprintf(__('Error on line %d: ', 'W2DC') . $_error, $n);
+							$error = sprintf(esc_html__('Error on line %d: ', 'w2dc') . $_error, $n);
 							$error_on_line = $this->csv_manager->setErrorOnLine($error);
 						}
 					}
 				} elseif ($field == 'expiration_date') {
 					if (!($timestamp = strtotime($value))) {
-						$error = sprintf(__('Error on line %d: ', 'W2DC') . esc_attr__("Expiration date value is incorrect", 'W2DC'), $n);
+						$error = sprintf(esc_html__('Error on line %d: ', 'w2dc') . esc_html__("Expiration date value is incorrect", 'w2dc'), $n);
 						$error_on_line = $this->csv_manager->setErrorOnLine($error);
 					} else
 						$listing_data['expiration_date'] = $timestamp;
 				} elseif ($field == 'contact_email') {
 					if ($value) {
 						if (!is_email($value)) {
-							$error = sprintf(__('Error on line %d: ', 'W2DC') . esc_attr__("Contact email is incorrect", 'W2DC'), $n);
+							$error = sprintf(esc_html__('Error on line %d: ', 'w2dc') . esc_html__("Contact email is incorrect", 'w2dc'), $n);
 							$error_on_line = $this->csv_manager->setErrorOnLine($error);
 						} else {
 							$listing_data['contact_email'] = $value;
@@ -269,7 +270,7 @@ class w2dc_csv_import_export_listings {
 					} elseif (in_array($value, array("publish", "private", "draft", "pending"))) {
 						$listing_data['post_status'] = $value;
 					} else {
-						$error = sprintf(__('Error on line %d: ', 'W2DC') . esc_attr__("Listing status must be one of the following: active, expired, unpaid or stopped", 'W2DC'), $n);
+						$error = sprintf(esc_html__('Error on line %d: ', 'w2dc') . esc_html__("Listing status must be one of the following: active, expired, unpaid or stopped", 'w2dc'), $n);
 						$error_on_line = $this->csv_manager->setErrorOnLine($error);
 					}
 				}
@@ -375,10 +376,10 @@ class w2dc_csv_import_export_listings {
 							update_post_meta($existing_post_id, '_directory_id', $directory_id);
 						}
 		
-						if (isset($listing_data['level_id'])) {
+						if (isset($listing_data['level_id']) && isset($levels[$listing_data['level_id']])) {
 							$listing_data_level = $levels[$listing_data['level_id']];
-		
-							$wpdb->query($wpdb->prepare("UPDATE {$wpdb->w2dc_levels_relationships} SET level_id=%d WHERE post_id=%d", $listing_data_level->id, $existing_post_id));
+							
+							$wpdb->query($wpdb->prepare("INSERT INTO {$wpdb->w2dc_levels_relationships} (post_id, level_id) VALUES(%d, %d) ON DUPLICATE KEY UPDATE level_id=%d", $existing_post_id, $listing_data_level->id, $listing_data_level->id));
 						} else {
 							$listing_data_level = $listing_data['existing_listing']->level;
 						}
@@ -470,6 +471,7 @@ class w2dc_csv_import_export_listings {
 						do_action('w2dc_csv_update_listing', $existing_post_id, $listing_data);
 					}
 					wp_cache_flush();
+					w2dc_updateAllTermsCount();
 				}
 			} else {
 				$this->total_rejected_lines++;
@@ -496,12 +498,12 @@ class w2dc_csv_import_export_listings {
 									$term_id = intval($newterm['term_id']);
 									$listing_term_id = $term_id;
 								} else {
-									$error = sprintf(__('Error on line %d: ', 'W2DC') . __('Something went wrong with directory location "%s"', 'W2DC'), $line_n, $location_name);
+									$error = sprintf(esc_html__('Error on line %d: ', 'w2dc') . esc_html__('Something went wrong with directory location "%s"', 'w2dc'), $line_n, $location_name);
 									$error_on_line = $this->csv_manager->setErrorOnLine($error);
 								}
 							}
 						} else {
-							$error = sprintf(__('Error on line %d: ', 'W2DC') . esc_attr__("Directory location \"%s\" wasn't found, was skipped", 'W2DC'), $line_n, $location_name);
+							$error = sprintf(esc_html__('Error on line %d: ', 'w2dc') . esc_html__("Directory location \"%s\" wasn't found, was skipped", 'w2dc'), $line_n, $location_name);
 							$error_on_line = $this->csv_manager->setErrorOnLine($error);
 						}
 					}
@@ -511,7 +513,7 @@ class w2dc_csv_import_export_listings {
 			} elseif (get_term($location_item, W2DC_LOCATIONS_TAX)) {
 				$listing_data['locations_ids'][] = $location_item;
 			} else {
-				$error = sprintf(__('Error on line %d: ', 'W2DC') . esc_attr__("Directory location with ID \"%d\" wasn't found", 'W2DC'), $line_n, $location_item);
+				$error = sprintf(esc_html__('Error on line %d: ', 'w2dc') . esc_html__("Directory location with ID \"%d\" wasn't found", 'w2dc'), $line_n, $location_item);
 				$error_on_line = $this->csv_manager->setErrorOnLine($error);
 			}
 		}
@@ -522,7 +524,7 @@ class w2dc_csv_import_export_listings {
 		
 		$results = $wpdb->get_results("SELECT id, location_id, address_line_1, address_line_2, zip_or_postal_index  FROM {$wpdb->w2dc_locations_relationships}", ARRAY_A);
 	
-		printf(esc_html__("Found locations: %s", "W2DC"), count($results));
+		printf(esc_html__("Found locations: %s", "w2dc"), count($results));
 		echo "<br />";
 		
 		foreach ($results AS $row) {
@@ -555,7 +557,7 @@ class w2dc_csv_import_export_listings {
 			}
 			
 			if ($location_string) {
-				printf(__('Geocoding address: %s', 'W2DC'), $location_string);
+				printf(esc_html__('Geocoding address: %s', 'w2dc'), $location_string);
 				echo "<br />";
 				
 				$geoname = new w2dc_locationGeoname ;
@@ -569,7 +571,7 @@ class w2dc_csv_import_export_listings {
 					
 					$wpdb->update($wpdb->w2dc_locations_relationships, $location_data, array('id' => $row['id']));
 				} else {
-					printf(__('Following address can not be geocoded: %s. Status: %s, error: %s', 'W2DC'), $location_string, $geoname->getLastStatus(), $geoname->getLastError());
+					printf(esc_html__('Following address can not be geocoded: %s. Status: %s, error: %s', 'w2dc'), $location_string, $geoname->getLastStatus(), $geoname->getLastError());
 					echo "<br />";
 				}
 			}
@@ -614,7 +616,7 @@ class w2dc_csv_import_export_listings {
 	
 				$location_string = trim($location_string);
 				
-				printf(__('Geocoding address: %s', 'W2DC'), $location_string);
+				printf(esc_html__('Geocoding address: %s', 'w2dc'), $location_string);
 				echo "<br />";
 	
 				$geoname = new w2dc_locationGeoname ;
@@ -624,7 +626,7 @@ class w2dc_csv_import_export_listings {
 					$listing_data['latitude'][$key] = $result[1];
 					$listing_data['place_id'][$key] = $result[2];
 				} else {
-					printf(__('Following address can not be geocoded: %s. Status: %s, error: %s', 'W2DC'), $location_string, $geoname->getLastStatus(), $geoname->getLastError());
+					printf(esc_html__('Following address can not be geocoded: %s. Status: %s, error: %s', 'w2dc'), $location_string, $geoname->getLastStatus(), $geoname->getLastError());
 					echo "<br />";
 				}
 				
@@ -673,11 +675,11 @@ class w2dc_csv_import_export_listings {
 							$term_id = intval($newterm['term_id']);
 							$listing_term_id = $term_id;
 						} else {
-							$error = sprintf(__('Error on line %d: ', 'W2DC') . __('Something went wrong with directory category "%s"', 'W2DC'), $line_n, $category_name);
+							$error = sprintf(esc_html__('Error on line %d: ', 'w2dc') . esc_html__('Something went wrong with directory category "%s"', 'w2dc'), $line_n, $category_name);
 							$error_on_line = $this->csv_manager->setErrorOnLine($error);
 						}
 					} else {
-						$error = sprintf(__('Error on line %d: ', 'W2DC') . esc_attr__("Directory category \"%s\" wasn't found, was skipped", 'W2DC'), $line_n, $category_name);
+						$error = sprintf(esc_html__('Error on line %d: ', 'w2dc') . esc_html__("Directory category \"%s\" wasn't found, was skipped", 'w2dc'), $line_n, $category_name);
 						$error_on_line = $this->csv_manager->setErrorOnLine($error);
 					}
 				}
@@ -702,11 +704,11 @@ class w2dc_csv_import_export_listings {
 					if (!is_wp_error($newterm))
 						$listing_data['tags_ids'][] = intval($newterm['term_id']);
 					else {
-						$error = sprintf(__('Error on line %d: ', 'W2DC') . __('Something went wrong with directory tag "%s"', 'W2DC'), $line_n, $tag_name);
+						$error = sprintf(esc_html__('Error on line %d: ', 'w2dc') . esc_html__('Something went wrong with directory tag "%s"', 'w2dc'), $line_n, $tag_name);
 						$error_on_line = $this->csv_manager->setErrorOnLine($error);
 					}
 				} else {
-					$error = sprintf(__('Error on line %d: ', 'W2DC') . esc_attr__("Directory tag \"%s\" wasn't found, was skipped", 'W2DC'), $line_n, $tag_name);
+					$error = sprintf(esc_html__('Error on line %d: ', 'w2dc') . esc_html__("Directory tag \"%s\" wasn't found, was skipped", 'w2dc'), $line_n, $tag_name);
 					$error_on_line = $this->csv_manager->setErrorOnLine($error);
 				}
 			}
@@ -736,7 +738,7 @@ class w2dc_csv_import_export_listings {
 				elseif (isset($matches_vimeo[5]) && strlen($matches_vimeo[5]) == 9) {
 					$video_id = $matches_vimeo[5];
 				} else {
-					$error = sprintf(__('Error on line %d: ', 'W2DC') . esc_attr__("YouTube or Vimeo video URL is incorrect", 'W2DC'), $line_n);
+					$error = sprintf(esc_html__('Error on line %d: ', 'w2dc') . esc_html__("YouTube or Vimeo video URL is incorrect", 'w2dc'), $line_n);
 					$error_on_line = $this->csv_manager->setErrorOnLine($error);
 				}
 			} else

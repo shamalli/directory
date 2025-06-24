@@ -10,6 +10,8 @@ return array(
 		
 		<img src="[base_url]/wp-content/uploads/webdirectory_shortcode.png" />
 		
+		<iframe width="912" height="600" src="https://www.youtube.com/embed/Rcrf_XupmpY" title="Custom Home page" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+		
 		Two ways to build custom home page:
 	<ol>
 		<li>
@@ -39,7 +41,7 @@ return array(
 		</li>
 		
 		<li>
-		Also the plugin allows to build custom homepage using <a href="[base_url]/documentation/directory-widgets/">directory widgets</a> or third party builders like WPBakery Page Builder, SiteOrigin page builder or <a href="[base_url]/documentation/pages/elementor/">Elementor plugin</a>.</li>
+		Also the plugin allows to build custom home page using <a href="[base_url]/documentation/directory-widgets/">directory widgets</a> or third party builders like WPBakery Page Builder, SiteOrigin page builder or <a href="[base_url]/documentation/pages/elementor/">Elementor plugin</a>.</li>
 		</li>
 	</ol>
 			

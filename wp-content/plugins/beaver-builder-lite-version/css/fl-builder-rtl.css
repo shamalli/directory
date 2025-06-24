@@ -221,6 +221,12 @@ ul.as-selections li {
 	margin: 0 0 0 8px;
 }
 
+/* Border Fields
+------------------------------------------------------ */
+.fl-border-field .fl-shadow-field .fl-color-picker {
+	margin: 0 0 0 8px;
+}
+
 /* Unit Fields
 ------------------------------------------------------ */
 
@@ -254,7 +260,7 @@ body .fl-dimension-field-units > *:first-child > input[type] {
     border-top-left-radius: 0px !important;
     border-bottom-left-radius: 0px !important;
 }
-body .fl-dimension-field-units > *:last-child > * {
+body .fl-dimension-field-units > *:last-child > input {
     border-top-right-radius: 0px !important;
     border-bottom-right-radius: 0px !important;
 	border-top-left-radius: 4px !important;
@@ -316,7 +322,7 @@ body .fl-dimension-field-units > *:last-child > * {
 	margin-left: 0!important;
 	margin-right: 2px!important;
 }
-
+.fl-builder--revision-actions select,
 .fl-builder-settings-fields select {
 	background: url(../img/svg/select-arrow-down-alt2.svg) center left 10px no-repeat #fff!important;
 	padding-left: 30px!important;
@@ -436,10 +442,6 @@ body .fl-dimension-field-units > *:last-child > * {
 .fl-revision-list-item-text {
 	padding-right: 15px;
 	padding-left:0;
-}
-.fl-builder--revision-actions * {
-	margin-right:0;
-	margin-left: 5px;
 }
 .fl-block-col-resize-w {
 	left:auto;

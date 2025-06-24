@@ -30,7 +30,7 @@ function w2rr_vc_init() {
 		vc_add_shortcode_param('tax', 'w2rr_tax_param');
 		function w2rr_tax_param($settings, $value) {
 			
-			$taxes = array(0 => esc_html__("- No tax -", "W2RR"));
+			$taxes = array(0 => esc_html__("- No tax -", "w2rr"));
 			
 			$_taxes = get_taxonomies(array(), 'objects');
 			
@@ -52,7 +52,7 @@ function w2rr_vc_init() {
 		vc_add_shortcode_param('tax', 'w2rr_post_type_param');
 		function w2rr_post_type_param($settings, $value) {
 			
-			$post_types = array(0 => esc_html__("- All -", "W2RR"));
+			$post_types = array(0 => esc_html__("- All -", "w2rr"));
 		
 			$_post_types = w2rr_getWorkingPostTypes();
 			
@@ -74,12 +74,12 @@ function w2rr_vc_init() {
 
 	global $w2rr_reviews_widget_params;
 	$vc_reviews_widget_args = array(
-			'name'                    => esc_html__('Ratings and Reviews', 'W2RR'),
-			'description'             => esc_html__('Reviews widget', 'W2RR'),
+			'name'                    => esc_html__('Ratings and Reviews', 'w2rr'),
+			'description'             => esc_html__('Reviews widget', 'w2rr'),
 			'base'                    => 'webrr-reviews',
 			'icon'                    => 'w2rr-vc-star-icon',
 			'show_settings_on_create' => true,
-			'category'                => esc_html__('Ratings & Reviews Content', 'W2RR'),
+			'category'                => esc_html__('Ratings & Reviews Content', 'w2rr'),
 			'params'                  => $w2rr_reviews_widget_params
 	);
 	vc_map($vc_reviews_widget_args);

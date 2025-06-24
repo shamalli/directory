@@ -31,6 +31,12 @@ class wcsearch_search_form_controller {
 			$this->search_form = new wcsearch_search_form();
 			$this->search_form->getArgByPostId($post_id);
 			
+			// add post_type=product in query to search by WC products on shop pages and do not get missing pages on reload
+			global $wcsearch_instance;
+			if ($wcsearch_instance->form_on_shop_page && $this->search_form->search_form_id == $wcsearch_instance->form_on_shop_page->ID) {
+				$this->search_form->setHiddenField('post_type', 'product');
+			}
+			
 			if (!empty($this->args['params'])) {
 				$params_str = html_entity_decode($this->args['params']);
 				$params_array = wcsearch_get_params_from_string($params_str);

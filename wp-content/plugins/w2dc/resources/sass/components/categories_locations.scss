@@ -21,6 +21,12 @@
 		margin-bottom: 15px;
 	}
 }
+.w2dc-terms-grid .w2dc-categories-column,
+.w2dc-terms-grid .w2dc-locations-column,
+.w2dc-terms-grid .w2dc-category-item,
+.w2dc-terms-grid .w2dc-location-item {
+	border-radius: $terms-grid-border-radius;
+}
 .w2dc-category-item,
 .w2dc-location-item {
 	background-repeat: no-repeat;
@@ -100,8 +106,25 @@
 	float: right;
 }
 .w2dc-categories-sidebar-widget .w2dc-category-count,
-.w2dc-locations-sidebar-widget .w2dc-location-count {
+.w2dc-locations-sidebar-widget .w2dc-location-count,
+.w2dc-terms-grid .w2dc-category-count,
+.w2dc-terms-grid .w2dc-location-count {
 	float: none;
+}
+.w2dc-subcategories .w2dc-category-count,
+.w2dc-sublocations .w2dc-location-count {
+	float: right;
+}
+.w2dc-terms-grid .w2dc-term-label-justify {
+	color: #3c3c3c;
+	font-weight: 600;
+	padding: 8px;
+	background: rgba(255,255,255,0.7);
+	border-radius: $terms-grid-border-radius;
+}
+.w2dc-terms-grid .w2dc-categories-root a,
+.w2dc-terms-grid .w2dc-locations-root a {
+	border-radius: $terms-grid-border-radius;
 }
 .w2dc-term-label-justify {
 	display: inline-block;
@@ -124,33 +147,24 @@
 .w2dc-categories-grid .w2dc-categories-root a,
 .w2dc-locations-grid .w2dc-locations-root a {
 	font-weight: bold;
-	border-radius: 5px;
-}
-.w2dc-categories-grid .w2dc-categories-root,
-.w2dc-locations-grid .w2dc-locations-root {
-	border-radius: 5px;
 }
 .w2dc-categories-grid.w2dc-terms-columns-1 .w2dc-categories-root a,
 .w2dc-locations-grid.w2dc-terms-columns-1 .w2dc-locations-root a {
-	/* padding: 250px 10px; */
 	height: 550px;
 	font-size: 2.2em;
 }
 .w2dc-categories-grid.w2dc-terms-columns-2 .w2dc-categories-root a,
 .w2dc-locations-grid.w2dc-terms-columns-2 .w2dc-locations-root a {
-	/* padding: 150px 10px; */
 	height: 345px;
 	font-size: 2em;
 }
 .w2dc-categories-grid.w2dc-terms-columns-3 .w2dc-categories-root a,
 .w2dc-locations-grid.w2dc-terms-columns-3 .w2dc-locations-root a {
-	/* padding: 100px 10px; */
 	height: 240px;
 	font-size: 1.8em;
 }
 .w2dc-categories-grid.w2dc-terms-columns-4 .w2dc-categories-root a,
 .w2dc-locations-grid.w2dc-terms-columns-4 .w2dc-locations-root a {
-	/* padding: 60px 10px; */
 	height: 155px;
 	font-size: 1.2em;
 }
@@ -188,8 +202,6 @@
 	margin: 0;
 	background-color: $sub-terms-background-color;
 }
-.w2dc-subcategories ul li:before,
-.w2dc-sublocations ul li:before,
 .w2dc-subcategories ul li:before,
 .w2dc-sublocations ul li:before {
 	content: none !important;

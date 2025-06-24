@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 define('W2DC_RATINGS_PATH', plugin_dir_path(__FILE__));
 
 function w2dc_ratings_loadPaths() {
@@ -37,8 +39,8 @@ class w2dc_ratings_plugin {
 
 		add_filter('comment_text', array($this, 'rating_in_comment'), 10000);
 		
-		//add_action('w2dc_listing_pre_logo_wrap_html', array($this, 'render_rating'));
 		add_action('w2dc_listing_title_html', array($this, 'render_rating'), 10, 2);
+		add_action('w2dc_listing_title_location_html', array($this, 'render_rating'), 10, 2);
 		add_filter('w2dc_listing_title_search_html', array($this, 'get_rating_stars'), 10, 2);
 		add_action('w2dc_dashboard_listing_title', array($this, 'render_rating_dashboard'));
 
@@ -93,55 +95,55 @@ class w2dc_ratings_plugin {
 	public function plugin_settings($options) {
 		$options['template']['menus']['ratings'] = array(
 			'name' => 'ratings',
-			'title' => __('Ratings & Comments', 'W2DC'),
+			'title' => esc_html__('Ratings & Comments', 'w2dc'),
 			'icon' => 'font-awesome:w2dc-fa-star',
 			'controls' => array(
 				'ratings' => array(
 					'type' => 'section',
-					'title' => __('Ratings settings', 'W2DC'),
+					'title' => esc_html__('Ratings settings', 'w2dc'),
 					'fields' => array(
 						array(
 							'type' => 'toggle',
 							'name' => 'w2dc_only_registered_users',
-							'label' => __('Only registered users may place ratings', 'W2DC'),
+							'label' => esc_html__('Only registered users may place ratings', 'w2dc'),
 							'default' => get_option('w2dc_only_registered_users'),
 						),
 						array(
 							'type' => 'toggle',
 							'name' => 'w2dc_manage_ratings',
-							'label' => __('Allow users to reset ratings of own listings', 'W2DC'),
+							'label' => esc_html__('Allow users to reset ratings of own listings', 'w2dc'),
 							'default' => get_option('w2dc_manage_ratings'),
 						),
 						array(
 							'type' => 'toggle',
 							'name' => 'w2dc_orderby_rating',
-							'label' => __('Allow sorting by ratings', 'W2DC'),
+							'label' => esc_html__('Allow sorting by ratings', 'w2dc'),
 							'default' => get_option('w2dc_orderby_rating'),
 						),
 					),
 				),
 				'comments' => array(
 					'type' => 'section',
-					'title' => __('Comments mode', 'W2DC'),
+					'title' => esc_html__('Comments mode', 'w2dc'),
 					'fields' => array(
 						array(
 							'type' => 'radiobutton',
 							'name' => 'w2dc_reviews_comments_mode',
-							'label' => __('Comments mode', 'W2DC'),
+							'label' => esc_html__('Comments mode', 'w2dc'),
 							'default' => get_option('w2dc_reviews_comments_mode'),
 							'items' => array(
 									array(
 										'value' => 'disabled',
-										'label' => __('disabled', 'W2DC'),	
+										'label' => esc_html__('disabled', 'w2dc'),	
 									),
 									array(
 										'value' => 'native',
-										'label' => __('comments system of installed theme or another plugin', 'W2DC'),	
+										'label' => esc_html__('comments system of installed theme or another plugin', 'w2dc'),	
 									),
 									array(
 										// include comments_template filter in the init()
 										'value' => 'comments',
-										'label' => __('use simple directory comments', 'W2DC'),	
+										'label' => esc_html__('use simple directory comments', 'w2dc'),	
 									),
 							),
 						),
@@ -177,7 +179,7 @@ class w2dc_ratings_plugin {
 	}
 	
 	public function ratings_options_in_level_validation($validation) {
-		$validation->set_rules('ratings_enabled', __('Ratings', 'W2DC'), 'is_checked');
+		$validation->set_rules('ratings_enabled', esc_html__('Ratings', 'w2dc'), 'is_checked');
 			
 		return $validation;
 	}
@@ -200,7 +202,7 @@ class w2dc_ratings_plugin {
 	public function addRatingsMetabox($post_type) {
 		if ($post_type == W2DC_POST_TYPE && ($level = w2dc_getCurrentListingInAdmin()->level) && $level->ratings_enabled) {
 			add_meta_box('w2dc_ratings',
-					__('Listing ratings', 'W2DC'),
+					esc_html__('Listing ratings', 'w2dc'),
 					array($this, 'listingRatingsMetabox'),
 					W2DC_POST_TYPE,
 					'normal',
@@ -221,7 +223,7 @@ class w2dc_ratings_plugin {
 		if ($listing->level->ratings_enabled) {
 			if (get_option('w2dc_manage_ratings') || current_user_can('edit_others_posts')) {
 				echo '<div class="w2dc-submit-section w2dc-submit-section-ratings">';
-					echo '<h3 class="w2dc-submit-section-label">' . __('Listing ratings', 'W2DC') . '</h3>';
+					echo '<h3 class="w2dc-submit-section-label">' . esc_html__('Listing ratings', 'w2dc') . '</h3>';
 					echo '<div class="w2dc-submit-section-inside">';
 						$this->listingRatingsMetabox($listing->post);
 					echo '</div>';
@@ -243,7 +245,7 @@ class w2dc_ratings_plugin {
 	}
 	
 	public function add_listings_table_columns($columns) {
-		$w2dc_columns['w2dc_rating'] = __('Rating', 'W2DC');
+		$w2dc_columns['w2dc_rating'] = esc_html__('Rating', 'w2dc');
 
 		$comments_index = array_search("comments", array_keys($columns));
 
@@ -441,14 +443,14 @@ class w2dc_ratings_plugin {
 	
 	public function order_by_rating_option($ordering) {
 		if (get_option('w2dc_orderby_rating'))
-			$ordering['rating_order'] = __('Rating', 'W2DC');
+			$ordering['rating_order'] = esc_html__('Rating', 'w2dc');
 		
 		return $ordering;
 	}
 
 	public function order_by_rating_html($ordering, $base_url, $defaults = array()) {
 		if (get_option('w2dc_orderby_rating')) {
-			$ordering->addLinks(array('rating_order' => array('DESC' => __('Best rating', 'W2DC'))));
+			$ordering->addLinks(array('rating_order' => array('DESC' => esc_html__('Best rating', 'w2dc'))));
 		}
 	
 		return $ordering;

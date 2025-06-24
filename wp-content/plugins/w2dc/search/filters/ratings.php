@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 add_filter("w2dc_query_args_validate", "w2dc_query_args_validate_ratings");
 function w2dc_query_args_validate_ratings($args) {
 	
@@ -37,7 +39,7 @@ function w2dc_visible_params_ratings($params, $query_array) {
 			if (in_array($i, $ratings_array)) {
 				$label = $i;
 				$label .= ' ';
-				$label .= _n(esc_html__("star", "W2DC"), esc_html__("stars", "W2DC"), $i);
+				$label .= _n(esc_html__("star", "w2dc"), esc_html__("stars", "w2dc"), $i);
 				
 				if (count($ratings_array) > 1) {
 					$_ratings_array = $ratings_array;

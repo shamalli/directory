@@ -18,12 +18,10 @@ $this->buildAtts( $atts, $content );
 $css = isset( $atts['css'] ) ? $atts['css'] : '';
 $el_class = isset( $atts['el_class'] ) ? $atts['el_class'] : '';
 
-$class_to_filter = 'vc_grid-container vc_clearfix wpb_content_element ' . $this->shortcode;
+$element_class = empty( $this->settings['element_default_class'] ) ? '' : $this->settings['element_default_class'];
+$class_to_filter = 'vc_grid-container vc_clearfix ' . esc_attr( $element_class ) . ' ' . $this->shortcode;
 $class_to_filter .= vc_shortcode_custom_css_class( $css, ' ' ) . $this->getExtraClass( $el_class );
 $css_class = apply_filters( VC_SHORTCODE_CUSTOM_CSS_FILTER_TAG, $class_to_filter, $this->settings['base'], $atts );
-
-wp_enqueue_script( 'lightbox2' );
-wp_enqueue_style( 'lightbox2' );
 
 if ( 'true' === $this->atts['btn_add_icon'] ) {
 	vc_icon_element_fonts_enqueue( $this->atts['btn_i_type'] );
@@ -53,10 +51,14 @@ if ( ! vc_is_page_editable() ) {
 	}
 }
 
+$render = false;
+if ( ! isset( $this->atts['orderby'] ) || 'rand' !== $this->atts['orderby'] ) {
+	$render = true;
+}
 $output = '
-<div class="vc_grid-container-wrapper vc_clearfix"' . ( ! empty( $atts['el_id'] ) ? ' id="' . esc_attr( $atts['el_id'] ) . '"' : '' ) . '>
+<div class="vc_grid-container-wrapper vc_clearfix vc_grid-animation-' . esc_attr( $animation ) . '"' . ( ! empty( $atts['el_id'] ) ? ' id="' . esc_attr( $atts['el_id'] ) . '"' : '' ) . '>
 	<div class="' . esc_attr( $css_class ) . '" data-initial-loading-animation="' . esc_attr( $animation ) . '" data-vc-' . esc_attr( $this->pagable_type ) . '-settings="' . esc_attr( wp_json_encode( $this->grid_settings ) ) . '" data-vc-request="' . esc_attr( apply_filters( 'vc_grid_request_url', admin_url( 'admin-ajax.php' ) ) ) . '" data-vc-post-id="' . esc_attr( get_the_ID() ) . '" data-vc-public-nonce="' . esc_attr( vc_generate_nonce( 'vc-public-nonce' ) ) . '">
-		' . $this->renderItems() . '
+		' . ( $render ? $this->renderItems() : '' ) . '
 	</div>
 </div>';
 

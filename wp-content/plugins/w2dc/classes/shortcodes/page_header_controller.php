@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+// @codingStandardsIgnoreFile
 
 /**
  *  [webdirectory-page-header] shortcode
@@ -72,10 +74,10 @@ class w2dc_page_header_controller extends w2dc_frontend_controller {
 				$title = strip_tags(get_the_archive_title());
 			}
 			elseif (is_search()) {
-				$title = sprintf( __('Search Results for: %s', 'WDT'), get_search_query());
+				$title = sprintf( esc_html__('Search Results for: %s', 'WDT'), get_search_query());
 			}
 			elseif (is_404()) {
-				$title = __('404!', 'WDT');
+				$title = esc_html__('404!', 'WDT');
 			}
 		}
 		

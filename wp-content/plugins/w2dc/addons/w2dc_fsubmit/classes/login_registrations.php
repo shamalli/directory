@@ -99,16 +99,16 @@ class w2dc_login_registrations {
 							exit;
 						}
 					} else {
-						w2dc_addMessage(esc_html__("Anti-bot test wasn't passed!", 'W2DC'), 'error');
+						w2dc_addMessage(esc_html__("Anti-bot test wasn't passed!", 'w2dc'), 'error');
 					}
 				}
 				
 				if (w2dc_getValue($_GET, 'msg') == 'checkemail') {
-					w2dc_addMessage(__('Check your email for the confirmation link.', 'W2DC'));
+					w2dc_addMessage(esc_html__('Check your email for the confirmation link.', 'w2dc'));
 				} elseif (w2dc_getValue($_GET, 'msg') == 'expiredkey') {
-					w2dc_addMessage(__('Your password reset link has expired. Please request a new link below.', 'W2DC'), 'error');
+					w2dc_addMessage(esc_html__('Your password reset link has expired. Please request a new link below.', 'w2dc'), 'error');
 				} else if (w2dc_getValue($_GET, 'msg') == 'invalidkey') {
-					w2dc_addMessage(__('Your password reset link appears to be invalid. Please request a new link below.', 'W2DC'), 'error');
+					w2dc_addMessage(esc_html__('Your password reset link appears to be invalid. Please request a new link below.', 'w2dc'), 'error');
 				}
 				
 				return array(W2DC_FSUBMIT_TEMPLATES_PATH, 'lostpassword_form.tpl.php');
@@ -151,8 +151,8 @@ class w2dc_login_registrations {
 				$errors = new WP_Error();
 				
 				if (isset($_POST['pass1']) && $_POST['pass1'] != $_POST['pass2']) {
-					w2dc_addMessage(__('The passwords do not match.', 'W2DC'), 'error');
-					$errors->add('password_reset_mismatch', __('The passwords do not match.', 'W2DC'));
+					w2dc_addMessage(esc_html__('The passwords do not match.', 'w2dc'), 'error');
+					$errors->add('password_reset_mismatch', esc_html__('The passwords do not match.', 'w2dc'));
 				}
 				
 				do_action( 'validate_password_reset', $errors, $user );
@@ -162,7 +162,7 @@ class w2dc_login_registrations {
 					
 					reset_password($user, $_POST['pass1']);
 					setcookie($rp_cookie, ' ', time() - YEAR_IN_SECONDS, $rp_path, COOKIE_DOMAIN, is_ssl(), true);
-					w2dc_addMessage(__('Your password has been reset.', 'W2DC'));
+					w2dc_addMessage(esc_html__('Your password has been reset.', 'w2dc'));
 					wp_safe_redirect(add_query_arg(array('w2dc_action' => 'login', 'redirect_to' => urlencode($redirect_to)), $current_url));
 					exit;
 				}
@@ -196,7 +196,7 @@ class w2dc_login_registrations {
 						$errors = register_new_user($user_login, $user_email);
 						remove_filter('wp_new_user_notification_email', array($this, 'replace_new_user_notification_email'));
 						if (!is_wp_error($errors)) {
-							w2dc_addMessage(__('Registration complete. Please check your email.', 'W2DC'));
+							w2dc_addMessage(esc_html__('Registration complete. Please check your email.', 'w2dc'));
 							if ($redirect_to) {
 								wp_safe_redirect($redirect_to);
 								exit;
@@ -205,7 +205,7 @@ class w2dc_login_registrations {
 							w2dc_addMessage(strip_tags($errors->get_error_message()), 'error');
 						}
 					} else {
-						w2dc_addMessage(esc_html__("Anti-bot test wasn't passed!", 'W2DC'), 'error');
+						w2dc_addMessage(esc_html__("Anti-bot test wasn't passed!", 'w2dc'), 'error');
 					}
 				}
 				
@@ -213,14 +213,6 @@ class w2dc_login_registrations {
 				
 				break;
 			case 'logout':
-				/* wp_logout();
-				
-				if ( ! empty( $_REQUEST['redirect_to'] ) ) {
-					$redirect_to = $requested_redirect_to = $_REQUEST['redirect_to'];
-				} else {
-					$redirect_to           = home_url();
-					$requested_redirect_to = '';
-				} */
 				
 				$user = wp_get_current_user();
 				
@@ -266,7 +258,7 @@ class w2dc_login_registrations {
 							w2dc_addMessage(strip_tags($user->get_error_message()), 'error');
 						}
 					} else {
-						w2dc_addMessage(esc_html__("Anti-bot test wasn't passed!", 'W2DC'), 'error');
+						w2dc_addMessage(esc_html__("Anti-bot test wasn't passed!", 'w2dc'), 'error');
 					}
 				}
 
@@ -293,10 +285,10 @@ function w2dc_login_form($args = array()) {
 	$defaults = array(
 			'redirect' => $redirect_to, // Default redirect is back to the current page
 			'form_id' => 'loginform',
-			'label_username' => __( 'Username', 'W2DC' ),
-			'label_password' => __( 'Password', 'W2DC' ),
-			'label_remember' => __( 'Remember Me', 'W2DC' ),
-			'label_log_in' => __( 'Log In', 'W2DC' ),
+			'label_username' => esc_html__( 'Username', 'w2dc' ),
+			'label_password' => esc_html__( 'Password', 'w2dc' ),
+			'label_remember' => esc_html__( 'Remember Me', 'w2dc' ),
+			'label_log_in' => esc_html__( 'Log In', 'w2dc' ),
 			'id_username' => 'user_login',
 			'id_password' => 'user_pass',
 			'id_remember' => 'rememberme',
@@ -319,16 +311,17 @@ function w2dc_login_form($args = array()) {
 
 	echo '<div class="w2dc-content">';
 
+	// @codingStandardsIgnoreFile
 	echo '
-		<form name="' . $args['form_id'] . '" id="' . $args['form_id'] . '" action="' . $url . '" method="post" class="w2dc_login_form" role="form">
+		<form name="' . esc_attr($args['form_id']) . '" id="' . esc_attr($args['form_id']) . '" action="' . esc_url($url) . '" method="post" class="w2dc_login_form" role="form">
 			' . apply_filters('login_form_top', '', $args) . '
 			<div class="w2dc-form-group">
 				<label for="' . esc_attr( $args['id_username'] ) . '">' . esc_html( $args['label_username'] ) . '</label>
-				<input type="text" name="log" id="' . esc_attr( $args['id_username'] ) . '" class="w2dc-form-control" value="' . $login . '" />
+				<input type="text" name="log" id="' . esc_attr( $args['id_username'] ) . '" class="w2dc-form-control" value="' . esc_attr($login) . '" />
 			</div>
 			<div class="w2dc-form-group">
 				<label for="' . esc_attr( $args['id_password'] ) . '">' . esc_html( $args['label_password'] ) . '</label>
-				<input type="password" name="pwd" id="' . esc_attr( $args['id_password'] ) . '" class="w2dc-form-control" value="' . $pass . '" />
+				<input type="password" name="pwd" id="' . esc_attr( $args['id_password'] ) . '" class="w2dc-form-control" value="' . esc_attr($pass) . '" />
 			</div>
 			<div class="w2dc-form-group">
 			' . apply_filters( 'login_form_middle', '', $args ) . '
@@ -347,16 +340,17 @@ function w2dc_login_form($args = array()) {
 		</form>';
 
 	do_action('login_form');
-	//do_action('login_footer');
+	
 	echo '<p id="nav">';
 	if (get_option('users_can_register')) {
-		echo '<a href="' . esc_url(wp_registration_url()) . '" rel="nofollow">' . __('Register', 'W2DC') . '</a> | ';
+		echo '<a href="' . esc_url(wp_registration_url()) . '" rel="nofollow">' . esc_html__('Register', 'w2dc') . '</a> | ';
 	}
 
-	echo '<a title="' . esc_attr__('Password Lost and Found', 'W2DC') . '" href="' . esc_url(wp_lostpassword_url()) . '">' . __('Lost your password?', 'W2DC') . '</a>';
+	echo '<a title="' . esc_attr__('Password Lost and Found', 'w2dc') . '" href="' . esc_url(wp_lostpassword_url()) . '">' . esc_html__('Lost your password?', 'w2dc') . '</a>';
 	echo '</p>';
 
 	echo '</div>';
+
 }
 
 function w2dc_resetpassword_form($args = array()) {
@@ -371,9 +365,9 @@ function w2dc_resetpassword_form($args = array()) {
 	$defaults = array(
 			'redirect' => $redirect_to, // Default redirect is back to the current page
 			'form_id' => 'resetpassform',
-			'label_pass1' => __( 'New password', 'W2DC' ),
-			'label_pass2' => __( 'Confirm new password', 'W2DC' ),
-			'label_submit' => __( 'Reset Password', 'W2DC' ),
+			'label_pass1' => esc_html__( 'New password', 'w2dc' ),
+			'label_pass2' => esc_html__( 'Confirm new password', 'w2dc' ),
+			'label_submit' => esc_html__( 'Reset Password', 'w2dc' ),
 			'id_pass1' => 'password1',
 			'id_pass2' => 'password2',
 			'id_submit' => 'wp-submit',
@@ -386,7 +380,7 @@ function w2dc_resetpassword_form($args = array()) {
 	echo '<div class="w2dc-content">';
 
 	echo '
-		<form name="' . $args['form_id'] . '" id="' . $args['form_id'] . '" action="' . $url . '" method="post" class="w2dc_login_form" role="form">
+		<form name="' . esc_attr($args['form_id']) . '" id="' . esc_attr($args['form_id']) . '" action="' . esc_url($url) . '" method="post" class="w2dc_login_form" role="form">
 			<input type="hidden" name="rp_key" value="' . esc_attr( $args['rp_key'] ) . '" />
 			' . apply_filters('resetpassword_form_top', '', $args) . '
 			<div class="w2dc-form-group">
@@ -419,8 +413,8 @@ function w2dc_lostpassword_form($args = array()) {
 	$defaults = array(
 			'redirect' => $redirect_to, // Default redirect is back to the current page
 			'form_id' => 'lostpasswordform',
-			'label_username' => __('Username or Email Address', 'W2DC'),
-			'label_submit' => __('Get New Password', 'W2DC'),
+			'label_username' => esc_html__('Username or Email Address', 'w2dc'),
+			'label_submit' => esc_html__('Get New Password', 'w2dc'),
 			'id_username' => 'user_login',
 			'id_submit' => 'wp-submit',
 	);
@@ -431,7 +425,7 @@ function w2dc_lostpassword_form($args = array()) {
 	echo '<div class="w2dc-content">';
 
 	echo '
-		<form name="' . $args['form_id'] . '" id="' . $args['form_id'] . '" action="' . $url . '" method="post" class="w2dc_login_form" role="form">
+		<form name="' . esc_attr($args['form_id']) . '" id="' . esc_attr($args['form_id']) . '" action="' . esc_url($url) . '" method="post" class="w2dc_login_form" role="form">
 			' . apply_filters('lostpassword_form_top', '', $args) . '
 			<div class="w2dc-form-group">
 				<label for="' . esc_attr($args['id_username']) . '">' . esc_html($args['label_username']) . '</label>
@@ -450,9 +444,9 @@ function w2dc_lostpassword_form($args = array()) {
 		</form>';
 
 	echo '<p id="nav">';
-	echo '<a href="' . esc_url(wp_login_url()) . '" rel="nofollow">' . __('Log in', 'W2DC') . '</a>';
+	echo '<a href="' . esc_url(wp_login_url()) . '" rel="nofollow">' . esc_html__('Log in', 'w2dc') . '</a>';
 	if (get_option('users_can_register')) {
-		echo ' | <a href="' . esc_url(wp_registration_url()) . '" rel="nofollow">' . __('Register', 'W2DC') . '</a>';
+		echo ' | <a href="' . esc_url(wp_registration_url()) . '" rel="nofollow">' . esc_html__('Register', 'w2dc') . '</a>';
 	}
 	echo '</p>';
 
@@ -471,9 +465,9 @@ function w2dc_registration_form($args = array()) {
 	$defaults = array(
 			'redirect' => $redirect_to, // Default redirect is back to the current page
 			'form_id' => 'registerform',
-			'label_username' => __('Username', 'W2DC'),
-			'label_email' => __('Email', 'W2DC'),
-			'label_submit' => __('Register', 'W2DC'),
+			'label_username' => esc_html__('Username', 'w2dc'),
+			'label_email' => esc_html__('Email', 'w2dc'),
+			'label_submit' => esc_html__('Register', 'w2dc'),
 			'id_username' => 'user_login',
 			'id_email' => 'user_email',
 			'id_submit' => 'wp-submit',
@@ -485,7 +479,7 @@ function w2dc_registration_form($args = array()) {
 	echo '<div class="w2dc-content">';
 
 	echo '
-		<form name="' . $args['form_id'] . '" id="' . $args['form_id'] . '" action="' . $url . '" method="post" class="w2dc_login_form" role="form">
+		<form name="' . esc_attr($args['form_id']) . '" id="' . esc_attr($args['form_id']) . '" action="' . esc_url($url) . '" method="post" class="w2dc_login_form" role="form">
 			' . apply_filters('registration_form_top', '', $args) . '
 			<div class="w2dc-form-group">
 				<label for="' . esc_attr( $args['id_username'] ) . '">' . esc_html($args['label_username']) . '</label>
@@ -501,7 +495,7 @@ function w2dc_registration_form($args = array()) {
 		echo '</div>';
 	}
 	echo do_action('register_form') . '
-			<p id="reg_passmail">' . __('Registration confirmation will be emailed to you.', 'W2DC') . '</p>
+			<p id="reg_passmail">' . esc_html__('Registration confirmation will be emailed to you.', 'w2dc') . '</p>
 			<div class="w2dc-form-group">
 				<input type="submit" name="wp-submit" id="' . esc_attr($args['id_submit']) . '" class="w2dc-btn w2dc-btn-primary" value="' . esc_attr($args['label_submit']) . '" />
 				<input type="hidden" name="redirect_to" value="' . esc_url($args['redirect']) . '" />
@@ -510,11 +504,12 @@ function w2dc_registration_form($args = array()) {
 		</form>';
 
 	echo '<p id="nav">';
-	echo '<a href="' . esc_url(wp_login_url()) . '" rel="nofollow">' . __('Log in', 'W2DC') . '</a> | ';
-	echo '<a title="' . esc_attr__('Password Lost and Found', 'W2DC') . '" href="' . esc_url(wp_lostpassword_url()) . '">' . __('Lost your password?', 'W2DC') . '</a>';
+	echo '<a href="' . esc_url(wp_login_url()) . '" rel="nofollow">' . esc_html__('Log in', 'w2dc') . '</a> | ';
+	echo '<a title="' . esc_attr__('Password Lost and Found', 'w2dc') . '" href="' . esc_url(wp_lostpassword_url()) . '">' . esc_html__('Lost your password?', 'w2dc') . '</a>';
 	echo '</p>';
 
 	echo '</div>';
+	
 }
 
 function w2dc_get_login_registration_pages() {

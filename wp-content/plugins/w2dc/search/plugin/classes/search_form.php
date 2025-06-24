@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 /**
  * controller driven objects
  * 
@@ -172,7 +174,7 @@ class wcsearch_search_form {
 	public function getSearchFormStyles() {
 		$form_id =  esc_attr($this->search_form_id);
 		$search_wrapper_id = "#wcsearch-search-wrapper-" . $form_id;
-		$search_form_id = "#wcsearch-search-form-" .$form_id;
+		$search_form_id = "#wcsearch-search-form-" . $form_id;
 		
 		echo "<style type=\"text/css\">";
 		if ($this->args['bg_color']) {
@@ -349,7 +351,7 @@ class wcsearch_search_form {
 				)
 			);
 		} else {
-			echo esc_html__("No placeholders in the form!", "WCSEARCH");
+			echo esc_html__("No placeholders in the form!", "wcsearch");
 		}
 	}
 }

@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 add_filter("wcsearch_query_args_validate", "wcsearch_query_args_validate_ratings");
 function wcsearch_query_args_validate_ratings($args) {
 	
@@ -37,7 +39,7 @@ function wcsearch_visible_params_ratings($params, $query_array) {
 			if (in_array($i, $ratings_array)) {
 				$label = $i;
 				$label .= ' ';
-				$label .= _n(esc_html__("star", "WCSEARCH"), esc_html__("stars", "WCSEARCH"), $i);
+				$label .= _n(esc_html__("star", "wcsearch"), esc_html__("stars", "wcsearch"), $i);
 				
 				if (count($ratings_array) > 1) {
 					$_ratings_array = $ratings_array;

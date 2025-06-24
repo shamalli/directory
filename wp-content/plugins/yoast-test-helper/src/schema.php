@@ -33,8 +33,9 @@ class Schema implements Integration {
 			\add_filter( 'wpseo_debug_json_data', [ $this, 'replace_domain' ] );
 		}
 
-		if ( $this->option->get( 'enable_structured_data_blocks' ) === true ) {
-			\add_filter( 'init', [ $this, 'enable_feature_flag' ] );
+		if ( $this->option->get( 'enable_schema_endpoint' ) === true ) {
+			\add_action( 'template_redirect', [ $this, 'send_json_ld' ] );
+			\add_action( 'init', [ $this, 'init_rewrite' ] );
 		}
 
 		switch ( $this->option->get( 'is_needed_breadcrumb' ) ) {
@@ -61,30 +62,46 @@ class Schema implements Integration {
 	}
 
 	/**
+	 * Registers the schema endpoint if needed.
+	 */
+	public function init_rewrite() {
+		\add_rewrite_endpoint( 'schema', \EP_ALL );
+	}
+
+	/**
+	 * Send the Yoast SEO Schema.
+	 */
+	public function send_json_ld() {
+		global $wp_query;
+
+		if ( ! isset( $wp_query->query_vars['schema'] ) ) {
+			return;
+		}
+
+		\header( 'Content-Type: application/ld+json' );
+		$url = \YoastSEO()->meta->for_current_page()->canonical;
+		if ( ! empty( $url ) ) {
+			\header( 'Link: <' . $url . '>; rel="canonical"' );
+		}
+
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- This is our self generated Schema, no need for escaping.
+		echo WPSEO_Utils::format_json_encode( \YoastSEO()->meta->for_current_page()->schema );
+		exit;
+	}
+
+	/**
 	 * Retrieves the controls.
 	 *
 	 * @return string The HTML to use to render the controls.
 	 */
 	public function get_controls() {
-		$output = Form_Presenter::create_checkbox(
-			'replace_schema_domain',
-			\esc_html__( 'Replace .test domain name with example.com in Schema output.', 'yoast-test-helper' ),
-			$this->option->get( 'replace_schema_domain' )
-		);
-
-		$output .= Form_Presenter::create_checkbox(
-			'enable_structured_data_blocks',
-			\esc_html__( 'Enable the feature flag for the structured data blocks.', 'yoast-test-helper' ),
-			$this->option->get( 'enable_structured_data_blocks' )
-		);
-
 		$select_options = [
 			'none' => \esc_html__( 'Don\'t influence', 'yoast-test-helper' ),
 			'show' => \esc_html__( 'Always include', 'yoast-test-helper' ),
 			'hide' => \esc_html__( 'Never include', 'yoast-test-helper' ),
 		];
 
-		$output .= Form_Presenter::create_select(
+		$output = Form_Presenter::create_select(
 			'is_needed_breadcrumb',
 			\esc_html__( 'Influence the Breadcrumb Graph piece: ', 'yoast-test-helper' ),
 			$select_options,
@@ -98,6 +115,23 @@ class Schema implements Integration {
 			$this->option->get( 'is_needed_webpage' )
 		);
 
+		$output .= Form_Presenter::create_checkbox(
+			'replace_schema_domain',
+			\esc_html__( 'Replace .test domain name with example.com in Schema output.', 'yoast-test-helper' ),
+			$this->option->get( 'replace_schema_domain' )
+		);
+
+		$output .= Form_Presenter::create_checkbox(
+			'enable_schema_endpoint',
+			\sprintf(
+				/* translators: %1$ss is replaced by `<code>/schema/</code>`, %2$s is replaced by `<code>?schema</code>`. */
+				\esc_html__( 'Enable the Schema endpoint for every URL: suffix the URL with %1$s or %2$s to get the Schema for that URL, pretty printed.', 'yoast-test-helper' ),
+				'<code>/schema/</code>',
+				'<code>?schema</code>'
+			),
+			$this->option->get( 'enable_schema_endpoint' )
+		);
+
 		return Form_Presenter::get_html( \__( 'Schema', 'yoast-test-helper' ), 'yoast_seo_test_schema', $output );
 	}
 
@@ -109,14 +143,20 @@ class Schema implements Integration {
 	public function handle_submit() {
 		if ( \check_admin_referer( 'yoast_seo_test_schema' ) !== false ) {
 			$this->option->set( 'replace_schema_domain', isset( $_POST['replace_schema_domain'] ) );
-			$this->option->set( 'enable_structured_data_blocks', isset( $_POST['enable_structured_data_blocks'] ) );
+			$this->option->set( 'enable_schema_endpoint', isset( $_POST['enable_schema_endpoint'] ) );
 		}
 
-		$is_needed_breadcrumb = $this->validate_submit( \filter_input( \INPUT_POST, 'is_needed_breadcrumb' ) );
-		$is_needed_webpage    = $this->validate_submit( \filter_input( \INPUT_POST, 'is_needed_webpage' ) );
+		if ( isset( $_POST['is_needed_breadcrumb'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- validation is done in validate_submit.
+			$validated_is_needed_breadcrumb = $this->validate_submit( $_POST['is_needed_breadcrumb'] );
+			$this->option->set( 'is_needed_breadcrumb', $validated_is_needed_breadcrumb );
+		}
 
-		$this->option->set( 'is_needed_breadcrumb', $is_needed_breadcrumb );
-		$this->option->set( 'is_needed_webpage', $is_needed_webpage );
+		if ( isset( $_POST['is_needed_webpage'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- validation is done in validate_submit.
+			$validated_is_needed_webpage = $this->validate_submit( $_POST['is_needed_webpage'] );
+			$this->option->set( 'is_needed_webpage', $validated_is_needed_webpage );
+		}
 
 		\wp_safe_redirect( \self_admin_url( 'tools.php?page=' . \apply_filters( 'Yoast\WP\Test_Helper\admin_page', '' ) ) );
 	}
@@ -152,17 +192,6 @@ class Schema implements Integration {
 		}
 
 		return $this->array_value_str_replace( $source, $target, $data );
-	}
-
-	/**
-	 * Enables the feature flag for the structured data blocks.
-	 */
-	public function enable_feature_flag() {
-		if ( \defined( 'YOAST_SEO_SCHEMA_BLOCKS' ) ) { // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound -- The prefix matches that of Yoast SEO, where this flag belongs.
-			return;
-		}
-
-		\define( 'YOAST_SEO_SCHEMA_BLOCKS', true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound -- The prefix matches that of Yoast SEO, where this flag belongs.
 	}
 
 	/**

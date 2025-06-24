@@ -97,6 +97,7 @@ class FLPhotoModule extends FLBuilderModule {
 
 		if ( fl_builder_filesystem()->file_exists( $cropped_path['path'] ) ) {
 			fl_builder_filesystem()->unlink( $cropped_path['path'] );
+			do_action( 'fl_builder_cropped_image_deleted', $cropped_path );
 		}
 	}
 
@@ -222,10 +223,14 @@ class FLPhotoModule extends FLBuilderModule {
 					$classes[] = 'wp-image-' . $data->id;
 				}
 
-				if ( isset( $data->sizes ) ) {
+				$is_svg = ! empty( $data->mime ) && 'image/svg+xml' === $data->mime;
 
+				if ( $is_svg ) {
+					$classes[] = 'size-full';
+				}
+
+				if ( isset( $data->sizes ) && ! $is_svg ) {
 					foreach ( $data->sizes as $key => $size ) {
-
 						if ( $size->url == $this->settings->photo_src ) {
 							$classes[] = 'size-' . $key;
 							break;
@@ -249,19 +254,23 @@ class FLPhotoModule extends FLBuilderModule {
 
 			$cropped_path = $this->_get_cropped_path();
 
-			// See if the cropped photo already exists.
 			if ( fl_builder_filesystem()->file_exists( $cropped_path['path'] ) ) {
+				// An existing cropped photo exists.
 				$src = $cropped_path['url'];
-			} elseif ( stristr( $src, FL_BUILDER_DEMO_URL ) && ! stristr( FL_BUILDER_DEMO_URL, $_SERVER['HTTP_HOST'] ) ) {
-				$src = $this->_get_cropped_demo_url();
-			} elseif ( stristr( $src, FL_BUILDER_OLD_DEMO_URL ) ) { // It doesn't, check if this is a OLD demo image.
-				$src = $this->_get_cropped_demo_url();
-			} else { // A cropped photo doesn't exist, try to create one.
+			} else {
 
-				$url = $this->crop();
+				// A cropped photo doesn't exist, check demo sites then try to create one.
+				$post_data    = FLBuilderModel::get_post_data();
+				$editing_node = isset( $post_data['node_id'] );
+				$demo_domain  = FL_BUILDER_DEMO_DOMAIN;
 
-				if ( $url ) {
-					$src = $url;
+				if ( ! $editing_node && stristr( $src, $demo_domain ) && ! stristr( $_SERVER['HTTP_HOST'], $demo_domain ) ) {
+					$src = $this->_get_cropped_demo_url();
+				} elseif ( ! $editing_node && stristr( $src, FL_BUILDER_OLD_DEMO_URL ) ) {
+					$src = $this->_get_cropped_demo_url();
+				} else {
+					$url = $this->crop();
+					$src = $url ? $url : $src;
 				}
 			}
 		}
@@ -307,6 +316,26 @@ class FLPhotoModule extends FLBuilderModule {
 	}
 
 	/**
+	 * @method get_caption
+	 */
+	public function get_caption() {
+		$photo   = $this->get_data();
+		$caption = '';
+
+		if ( $photo && ! empty( $this->settings->show_caption ) && ! empty( $photo->caption ) ) {
+			if ( ! empty( $photo->data_source ) && 'smugmug' === $photo->data_source ) {
+				$caption = esc_html( $photo->caption );
+			} elseif ( isset( $photo->id ) ) {
+				$caption = wp_kses_post( wp_get_attachment_caption( $photo->id ) );
+			} else {
+				$caption = esc_html( $photo->caption );
+			}
+		}
+
+		return $caption;
+	}
+
+	/**
 	 * @method get_attributes
 	 */
 	public function get_attributes() {
@@ -319,7 +348,15 @@ class FLPhotoModule extends FLBuilderModule {
 			}
 		}
 
-		if ( is_object( $photo ) && isset( $photo->sizes ) ) {
+		$is_svg = ! empty( $photo->mime ) && 'image/svg+xml' === $photo->mime;
+
+		if ( $is_svg && isset( $photo->sizes ) ) {
+			if ( isset( $photo->sizes->full->height ) && isset( $photo->sizes->full->width ) ) {
+				$attrs .= 'height="' . $photo->sizes->full->height . '" width="' . $photo->sizes->full->width . '" ';
+			}
+		}
+
+		if ( is_object( $photo ) && isset( $photo->sizes ) && ! $is_svg ) {
 			foreach ( $photo->sizes as $size ) {
 				if ( $size->url == $this->settings->photo_src && isset( $size->width ) && isset( $size->height ) ) {
 					$attrs .= 'height="' . $size->height . '" width="' . $size->width . '" ';
@@ -365,29 +402,57 @@ class FLPhotoModule extends FLBuilderModule {
 		if ( $this->_has_source() && null === $this->_editor ) {
 
 			$url_path  = $this->_get_uncropped_url();
-			$file_path = str_ireplace( home_url(), ABSPATH, $url_path );
+			$file_path = $this->_get_file_path( $url_path );
 
-			if ( fl_builder_filesystem()->file_exists( $file_path ) ) {
+			if ( is_multisite() && ! is_subdomain_install() ) {
+				// take the original url_path and make a cleaner one, then rebuild file_path
+
+				$subsite_path          = get_blog_details()->path;
+				$url_parsed_path       = wp_parse_url( $url_path, PHP_URL_PATH );
+				$url_parsed_path_parts = explode( '/', $url_parsed_path );
+
+				if ( isset( $url_parsed_path_parts[1] ) && "/{$url_parsed_path_parts[1]}/" === $subsite_path ) {
+
+					$path_right_half  = wp_make_link_relative( $url_path );
+					$path_left_half   = str_replace( $path_right_half, '', $url_path );
+					$path_right_half2 = str_replace( $subsite_path, '', $path_right_half );
+
+					// rebuild file_path using a cleaner URL as input
+					$url_path2 = $path_left_half . '/' . $path_right_half2;
+					$file_path = $this->_get_file_path( $url_path2 );
+				}
+			}
+
+			if ( file_exists( $file_path ) ) {
 				$this->_editor = wp_get_image_editor( $file_path );
 			} else {
-				$this->_editor = wp_get_image_editor( $url_path );
+				if ( ! is_wp_error( wp_safe_remote_head( $url_path, array( 'timeout' => 5 ) ) ) ) {
+					$this->_editor = wp_get_image_editor( $url_path );
+				}
 			}
 		}
-
 		return $this->_editor;
+	}
+
+	/**
+	 * Make path filterable.
+	 * @since 2.5
+	 */
+	public static function _get_file_path( $url_path ) {
+		return apply_filters( 'fl_builder_photo_crop_path', str_ireplace( home_url(), ABSPATH, $url_path ), $url_path );
 	}
 
 	/**
 	 * @method _get_cropped_path
 	 * @protected
 	 */
-	protected function _get_cropped_path() {
+	protected function _get_cropped_path( $node = true ) {
 		$crop      = empty( $this->settings->crop ) ? 'none' : $this->settings->crop;
 		$url       = $this->_get_uncropped_url();
 		$cache_dir = FLBuilderModel::get_cache_dir();
-
+		$cache_id  = $node ? sprintf( '-%s-%s', md5( $url ), $this->node ) : '';
 		if ( empty( $url ) ) {
-			$filename = uniqid(); // Return a file that doesn't exist.
+			$filename = FLBuilderModel::uniqid(); // Return a file that doesn't exist.
 		} else {
 
 			if ( stristr( $url, '?' ) ) {
@@ -402,10 +467,16 @@ class FLPhotoModule extends FLBuilderModule {
 				$ext      = $pathinfo['extension'];
 				$name     = wp_basename( $url, ".$ext" );
 				$new_ext  = strtolower( $ext );
-				$filename = "{$name}-{$crop}.{$new_ext}";
+				$filename = "{$name}-{$crop}{$cache_id}.{$new_ext}";
 			} else {
-				$filename = $pathinfo['filename'] . "-{$crop}.png";
+				$filename = $pathinfo['filename'] . "-{$crop}{$cache_id}.png";
 			}
+		}
+
+		// upgrade, remove duplicate file if it exists without the cacheid
+		$oldfile = str_replace( $cache_id, '', $filename );
+		if ( file_exists( $cache_dir['path'] . $oldfile ) ) {
+			fl_builder_filesystem()->unlink( $cache_dir['path'] . $oldfile );
 		}
 
 		return array(
@@ -425,7 +496,7 @@ class FLPhotoModule extends FLBuilderModule {
 		} elseif ( ! empty( $this->settings->photo_src ) ) {
 			$url = $this->settings->photo_src;
 		} else {
-			$url = FL_BUILDER_URL . 'img/pixel.png';
+			$url = apply_filters( 'fl_builder_photo_noimage', FLBuilder::plugin_url() . 'img/pixel.png' );
 		}
 
 		return $url;
@@ -436,8 +507,17 @@ class FLPhotoModule extends FLBuilderModule {
 	 * @protected
 	 */
 	protected function _get_cropped_demo_url() {
-		$info = $this->_get_cropped_path();
+		$info = $this->_get_cropped_path( false );
+		$src  = $this->settings->photo_src;
 
+		// Pull from a demo subsite.
+		if ( stristr( $src, '/uploads/sites/' ) ) {
+			$url_parts  = explode( '/uploads/sites/', $src );
+			$site_parts = explode( '/', $url_parts[1] );
+			return $url_parts[0] . '/uploads/sites/' . $site_parts[0] . '/bb-plugin/cache/' . $info['filename'];
+		}
+
+		// Pull from the demo main site.
 		return FL_BUILDER_DEMO_CACHE_URL . $info['filename'];
 	}
 

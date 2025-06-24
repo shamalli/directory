@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+// @codingStandardsIgnoreFile
 
 class w2dc_content_field_radio extends w2dc_content_field_select {
 	protected $can_be_searched = true;

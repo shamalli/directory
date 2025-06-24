@@ -43,11 +43,9 @@
 }
 .wcsearch-jquery-ui-slider {
 	overflow: visible !important;
-	/* margin-top: 5px; */
 	padding-right: 11px;
 }
 .wcsearch-submit-button-hidden {
-	/* display: none !important; */
 	position: absolute !important;
 	left: -9999px !important;
 }
@@ -65,9 +63,6 @@
 	height: 35px;
 	position: relative;
 }
-/* .wcsearch-single-slider-scale {
-	height: 100% !important
-} */
 .wcsearch-range-slider-scale label,
 .wcsearch-single-slider-scale label {
 	position: absolute;
@@ -82,7 +77,6 @@
 .wcsearch-range-slider-scale label > span,
 .wcsearch-single-slider-scale label > span {
 	display: block;
-	/* font-size: 85%; */
 	white-space: nowrap;
 }
 @media screen and (max-width: $mobile-screen-width) {
@@ -187,7 +181,6 @@
 }
 .wcsearch-search-column-1 .wcsearch-search-placeholder {
 	margin: 40px 0;
-	/* min-height: 52px; */
 }
 .wcsearch-search-column-1 .wcsearch-search-placeholder:first-child {
 	margin-top: 0;
@@ -290,7 +283,6 @@
 	display: block;
 	color: #444444;
 	position: relative;
-	/* min-height: 52px; */
 }
 .wcsearch-search-grid-borders .wcsearch-search-placeholder {
 	border: 2px solid #fcd3a1;
@@ -327,7 +319,7 @@ label.wcsearch-search-input-label {
 }
 .wcsearch-search-input-closed .wcsearch-search-input-label:after,
 .wcsearch-search-input-opened .wcsearch-search-input-label:after {
-	font: normal normal normal 14px/1 FontAwesome;
+	font: normal normal normal 14px/1 FontAwesomeWCSEARCH;
 	color: #777;
 	font-weight: bold;
 	float: right;
@@ -349,9 +341,7 @@ label.wcsearch-search-input-label {
 .wcsearch-search-onsale,
 .wcsearch-search-hours {
 	display: block;
-	/* height: 48px; */
 	color: #444444;
-	/* background-color: rgba(255, 255, 210, 0.2); */
 	text-align: center;
 	font-weight: bold;
 }
@@ -364,16 +354,12 @@ label.wcsearch-search-input-label {
 	text-decoration: underline;
 	padding: 5px 0;
 }
-.wcsearch-search-input-more-filters {
-	/* position: absolute;
-	bottom: 0; */
-}
 .wcsearch-content .wcsearch-search-input-button,
 .wcsearch-content .wcsearch-search-input-button:hover {
 	width: 100%;
 	height: 48px;
 	display: inline-block;
-	background-color: #2393ba;
+	background-color: #3071a9;
 	border-color: #275379;
 }
 .wcsearch-content .wcsearch-search-input-reset-button,
@@ -412,15 +398,11 @@ label.wcsearch-search-input-label {
 .wcsearch-search-input-always-closed {
 	display: none;
 }
-/* .wcsearch-search-placeholder-advanced-view {
-	display: none;
-} */
 .wcsearch-search-placeholder-advanced-view-closed {
 	display: none;
 }
 .wcsearch-search-placeholder-dependency-view-closed {
 	display: none;
-	/* visibility: hidden; */
 }
 .wcsearch-search-placeholder-dependency-view-closed.wcsearch-search-placeholder-dependency-view-shaded {
 	display: block;

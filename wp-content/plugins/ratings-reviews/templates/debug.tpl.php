@@ -1,10 +1,10 @@
 <?php w2rr_renderTemplate('admin_header.tpl.php'); ?>
 
 <h2>
-	<?php esc_html_e('Ratings & Reviews Debug', 'W2RR'); ?>
+	<?php esc_html_e('Ratings & Reviews Debug', 'w2rr'); ?>
 </h2>
 
-<textarea style="width: 100%; height: 700px">
+<textarea class="w2rr-debug-textarea">
 license keys = <?php $w2rr_instance->updater->getDownload_url(true); ?>
 
 <?php

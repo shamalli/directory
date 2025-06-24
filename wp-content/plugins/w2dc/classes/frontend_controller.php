@@ -1,5 +1,7 @@
 <?php 
 
+// @codingStandardsIgnoreFile
+
 class w2dc_frontend_controller {
 	public $args = array();
 	public $query;
@@ -17,7 +19,6 @@ class w2dc_frontend_controller {
 	public $levels_ids;
 	public $do_initial_load = true;
 	public $template_args = array();
-	public $invoices_query;
 	private $global_post;
 
 	public function __construct($args = array()) {
@@ -31,10 +32,10 @@ class w2dc_frontend_controller {
 	}
 	
 	public function init($attrs = array()) {
-		$this->args['logo_animation_effect'] = get_option('w2dc_logo_animation_effect');
 
 		if (!$this->hash) {
-			if (isset($attrs['hash'])) {
+			// check is hash md5 result
+			if (isset($attrs['hash']) && ctype_xdigit($attrs['hash'])) {
 				$this->hash = $attrs['hash'];
 			} else {
 				if (isset($attrs['custom_home']) && $attrs['custom_home']) {
@@ -49,12 +50,11 @@ class w2dc_frontend_controller {
 		
 		if (!empty($attrs['levels'])) {
 			if (!is_array($attrs['levels'])) {
-				$levels = array_filter(explode(',', $attrs['levels']), 'trim');
+				$levels = wp_parse_id_list(esc_attr($attrs['levels']));
 			} else {
 				$levels = $attrs['levels'];
 				
 				// trim levels IDs due to Elementor's " ID" trick with keys order
-				//array_walk($levels, 'trim');
 				$levels = array_map('trim', $levels);
 			}
 			$this->levels_ids = $levels;
@@ -122,19 +122,16 @@ class w2dc_frontend_controller {
 			$args['posts_per_page'] = $original_posts_per_page - $this->query->post_count;
 			$all_posts_ids = get_posts(array_merge($args, array('fields' => 'ids', 'nopaging' => true)));
 			$all_posts_count = count($all_posts_ids);
-			//var_dump($all_posts_count);
 
-			// commented this line, because it gives duplicates on rating_order for example,
-			// when rated listings already have been shown, on the next 'Show more listings' step it just gives empty query - so it does not include post__not_in with shown listings and just gives first query
-			//if ($this->query->found_posts) {
+			if ($ordered_posts_ids) {
 				$args['post__not_in'] = array_map('intval', $ordered_posts_ids);
-				if (!empty($args['post__in']) && is_array($args['post__in'])) {
-					$args['post__in'] = array_diff($args['post__in'], $args['post__not_in']);
-					if (!$args['post__in']) {
-						$args['posts_per_page'] = 0;
-					}
+			}
+			if (!empty($args['post__in']) && is_array($args['post__in'])) {
+				$args['post__in'] = array_diff($args['post__in'], $args['post__not_in']);
+				if (!$args['post__in']) {
+					$args['posts_per_page'] = 0;
 				}
-			//}
+			}
 
 			$unordered_query = new WP_Query($args);
 
@@ -151,16 +148,16 @@ class w2dc_frontend_controller {
 		// also when it has "posts_per_page" parameter with -1 value, exclude them as well
 		if (
 			isset($this->args['existing_listings']) &&
-			(w2dc_getValue($_REQUEST, 'order_by') == 'rand' || $this->getQueryVars('posts_per_page') == -1))
+			(w2dc_getValue($_REQUEST, 'order_by') == 'rand'))
 		{
-			$existing_listings = array_filter(explode(',', $this->args['existing_listings']));
+			$existing_listings = w2dc_parse_slugs_ids_list($this->args['existing_listings']);
 			foreach ($this->query->posts AS $key=>$post) {
 				if (in_array($post->ID, $existing_listings)) {
 					unset($this->query->posts[$key]);
 				}
 			}
 			
-			if ($this->args['perpage'] == 0) {
+			if (empty($this->args['perpage']) || !is_numeric($this->args['perpage'])) {
 				$this->args['perpage'] = count($this->query->posts) ? count($this->query->posts) : 1;
 			}
 			
@@ -182,7 +179,6 @@ class w2dc_frontend_controller {
 				$listing->loadListingForAjaxMap(get_post());
 			} else {
 				$listing->loadListingFromPost(get_post());
-				$listing->logo_animation_effect = (isset($this->args['logo_animation_effect'])) ? $this->args['logo_animation_effect'] : get_option('w2dc_logo_animation_effect');
 			}
 			
 			$this->listings[get_the_ID()] = $listing;
@@ -194,6 +190,7 @@ class w2dc_frontend_controller {
 		$this->back_global_post();
 		
 		remove_filter('posts_join', 'w2dc_join_levels');
+		remove_filter('posts_where', array($this, 'where_levels_ids'));
 		remove_filter('posts_orderby', 'w2dc_orderby_levels', 1);
 		remove_filter('get_meta_sql', 'w2dc_add_null_values');
 	}
@@ -270,7 +267,7 @@ class w2dc_frontend_controller {
 			}
 			
 			if (!get_option('w2dc_hide_home_link_breadcrumb')) {
-				array_unshift($breadcrumbs_process, new w2dc_breadcrumb(esc_html__('Home', 'W2DC'), w2dc_directoryUrl()));
+				array_unshift($breadcrumbs_process, new w2dc_breadcrumb(esc_html__('Home', 'w2dc'), w2dc_directoryUrl()));
 			}
 			
 			$breadcrumbs_process = apply_filters("w2dc_breadcrumbs_process", $breadcrumbs_process, $this);
@@ -294,7 +291,7 @@ class w2dc_frontend_controller {
 				}
 				
 				if ($key+1 < count($breadcrumbs_process)) {
-					echo $separator;
+					w2dc_esc_e($separator);
 				}
 			}
 			echo '</ol>';
@@ -318,7 +315,7 @@ class w2dc_frontend_controller {
 			if (is_object($this->args['directories'])) {
 				return $this->args['directories'];
 			} elseif (is_string($this->args['directories'])) {
-				if ($directories_ids = array_filter(explode(',', $this->args['directories']), 'trim')) {
+				if ($directories_ids = wp_parse_id_list($this->args['directories'])) {
 					if (count($directories_ids) == 1 && ($directory = $w2dc_instance->directories->getDirectoryById($directories_ids[0]))) {
 						return $directory;
 					}
@@ -407,7 +404,7 @@ class w2dc_frontend_controller {
 		}
 	}
 	
-	public function get_pagenum_link($result) {
+	public function getPagenumLink($result) {
 		global $w2dc_global_base_url;
 	
 		if ($w2dc_global_base_url) {
@@ -453,11 +450,23 @@ class w2dc_frontend_controller {
 		return 'LIMIT 0, 1';
 	}
 	
+	public function clearStartListingsArgs() {
+		
+		// clear starting listings, not to save them in the args for any further AJAX requests
+		if (!empty($this->args['start_listings'])) {
+			$this->args['start_listings'] = array();
+			$this->args['post__in'] = 0;
+		}
+	}
+	
 	public function display() {
+		
+		$this->clearStartListingsArgs();
+		
 		$output =  w2dc_renderTemplate($this->template, $this->template_args, true);
 		wp_reset_postdata();
 		
-		remove_filter('get_pagenum_link', array($this, 'get_pagenum_link'));
+		remove_filter('get_pagenum_link', array($this, 'getPagenumLink'));
 	
 		return $output;
 	}
@@ -489,15 +498,6 @@ function w2dc_orderby_levels($orderby = '') {
 	
 	return implode(', ', $orderby_array);
 }
-
-// this filter orders sticky levels by their order num
-/* add_filter("w2dc_orderby_levels", "w2dc_orderby_levels_num", 10, 2);
-function w2dc_orderby_levels_num($orderby_array, $orderby) {
-
-	array_splice($orderby_array, 1, 0, array("w2dc_levels.order_num ASC"));
-	
-	return $orderby_array;
-} */
 
 /**
  * sticky and featured listings in the first order
@@ -592,10 +592,11 @@ function w2dc_order_listings($order_args = array(), $defaults = array()) {
 			// First of all order by _order_date parameter
 			$order_args['orderby'] = 'meta_value_num';
 			$order_args['meta_key'] = '_order_date';
-		} else
-			$order_args = array_merge($order_args, $w2dc_instance->content_fields->getOrderParams($defaults));
+		} else {
+			$order_args = $w2dc_instance->content_fields->getOrderParams($order_args, $defaults);
+		}
 	} else {
-		$order_args = array_merge($order_args, $w2dc_instance->content_fields->getOrderParams($defaults));
+		$order_args = $w2dc_instance->content_fields->getOrderParams($order_args, $defaults);
 	}
 
 	return $order_args;

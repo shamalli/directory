@@ -1,3 +1,8 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <?php $submenus = $menu->get_menus(); ?>
 <?php if (!empty($submenus)): ?>
 	<?php foreach ($submenus as $submenu): ?>

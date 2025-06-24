@@ -1,88 +1,92 @@
 <?php
 
-global $w2dc_levels_table_widget_params;
-$w2dc_levels_table_widget_params = array(
-		array(
-				'type' => 'levels',
-				'param_name' => 'levels',
-				'heading' => __('Listings levels', 'W2DC'),
-				'description' => __('Choose exact levels to display', 'W2DC'),
-				'value' => '',
-		),
-		array(
-				'type' => 'directory',
-				'param_name' => 'directory',
-				'heading' => __("Specific directory", "W2DC"),
-		),
-		array(
-				'type' => 'dropdown',
-				'param_name' => 'columns',
-				'value' => array('1' => '1', '2' => '2', '3' => '3', '4' => '4'),
-				'std' => '3',
-				'heading' => __('Columns', 'W2DC'),
-		),
-		array(
-				'type' => 'dropdown',
-				'param_name' => 'columns_same_height',
-				'value' => array(__('No', 'W2DC') => '0', __('Yes', 'W2DC') => '1'),
-				'heading' => __('Show negative parameters', 'W2DC'),
-				'description' => __('Show parameters those have negation. For example, such row in the table will be shown: Featured Listings - No. In other case this row will be hidden.', 'W2DC'),
-		),
-		array(
-				'type' => 'dropdown',
-				'param_name' => 'show_period',
-				'value' => array(__('Yes', 'W2DC') => '1', __('No', 'W2DC') => '0'),
-				'heading' => __('Show level active period on choose level page', 'W2DC'),
-		),
-		array(
-				'type' => 'dropdown',
-				'param_name' => 'show_sticky',
-				'value' => array(__('Yes', 'W2DC') => '1', __('No', 'W2DC') => '0'),
-				'heading' => __('Show is level sticky on choose level page', 'W2DC'),
-		),
-		array(
-				'type' => 'dropdown',
-				'param_name' => 'show_featured',
-				'value' => array(__('Yes', 'W2DC') => '1', __('No', 'W2DC') => '0'),
-				'heading' => __('Show is level featured on choose level page', 'W2DC'),
-		),
-		array(
-				'type' => 'dropdown',
-				'param_name' => 'show_categories',
-				'value' => array(__('Yes', 'W2DC') => '1', __('No', 'W2DC') => '0'),
-				'heading' => esc_attr__("Show level's categories number on choose level page", 'W2DC'),
-		),
-		array(
-				'type' => 'dropdown',
-				'param_name' => 'show_locations',
-				'value' => array(__('Yes', 'W2DC') => '1', __('No', 'W2DC') => '0'),
-				'heading' => esc_attr__("Show level's locations number on choose level page", 'W2DC'),
-		),
-		array(
-				'type' => 'dropdown',
-				'param_name' => 'show_maps',
-				'value' => array(__('Yes', 'W2DC') => '1', __('No', 'W2DC') => '0'),
-				'heading' => __('Show is level supports maps on choose level page', 'W2DC'),
-		),
-		array(
-				'type' => 'dropdown',
-				'param_name' => 'show_images',
-				'value' => array(__('Yes', 'W2DC') => '1', __('No', 'W2DC') => '0'),
-				'heading' => esc_attr__("Show level's images number on choose level page", 'W2DC'),
-		),
-		array(
-				'type' => 'dropdown',
-				'param_name' => 'show_videos',
-				'value' => array(__('Yes', 'W2DC') => '1', __('No', 'W2DC') => '0'),
-				'heading' => esc_attr__("Show level's videos number on choose level page", 'W2DC'),
-		),
-		array(
-				'type' => 'textarea',
-				'param_name' => 'options',
-				'heading' => __("Options", "W2DC"),
-				'description' => __("Example: 1=option=no;2=option=yes;", "W2DC"),
-		),
-);
+// @codingStandardsIgnoreFile
+
+add_action('init', function() {
+	global $w2dc_levels_table_widget_params;
+	$w2dc_levels_table_widget_params = array(
+			array(
+					'type' => 'levels',
+					'param_name' => 'levels',
+					'heading' => esc_html__('Listings levels', 'w2dc'),
+					'description' => esc_html__('Choose exact levels to display', 'w2dc'),
+					'value' => '',
+			),
+			array(
+					'type' => 'directory',
+					'param_name' => 'directory',
+					'heading' => esc_html__("Specific directory", "w2dc"),
+			),
+			array(
+					'type' => 'dropdown',
+					'param_name' => 'columns',
+					'value' => array('1' => '1', '2' => '2', '3' => '3', '4' => '4'),
+					'std' => '3',
+					'heading' => esc_html__('Columns', 'w2dc'),
+			),
+			array(
+					'type' => 'dropdown',
+					'param_name' => 'columns_same_height',
+					'value' => array(esc_html__('No', 'w2dc') => '0', esc_html__('Yes', 'w2dc') => '1'),
+					'heading' => esc_html__('Show negative parameters', 'w2dc'),
+					'description' => esc_html__('Show parameters those have negation. For example, such row in the table will be shown: Featured Listings - No. In other case this row will be hidden.', 'w2dc'),
+			),
+			array(
+					'type' => 'dropdown',
+					'param_name' => 'show_period',
+					'value' => array(esc_html__('Yes', 'w2dc') => '1', esc_html__('No', 'w2dc') => '0'),
+					'heading' => esc_html__('Show level active period on choose level page', 'w2dc'),
+			),
+			array(
+					'type' => 'dropdown',
+					'param_name' => 'show_sticky',
+					'value' => array(esc_html__('Yes', 'w2dc') => '1', esc_html__('No', 'w2dc') => '0'),
+					'heading' => esc_html__('Show is level sticky on choose level page', 'w2dc'),
+			),
+			array(
+					'type' => 'dropdown',
+					'param_name' => 'show_featured',
+					'value' => array(esc_html__('Yes', 'w2dc') => '1', esc_html__('No', 'w2dc') => '0'),
+					'heading' => esc_html__('Show is level featured on choose level page', 'w2dc'),
+			),
+			array(
+					'type' => 'dropdown',
+					'param_name' => 'show_categories',
+					'value' => array(esc_html__('Yes', 'w2dc') => '1', esc_html__('No', 'w2dc') => '0'),
+					'heading' => esc_html__("Show level's categories number on choose level page", 'w2dc'),
+			),
+			array(
+					'type' => 'dropdown',
+					'param_name' => 'show_locations',
+					'value' => array(esc_html__('Yes', 'w2dc') => '1', esc_html__('No', 'w2dc') => '0'),
+					'heading' => esc_html__("Show level's locations number on choose level page", 'w2dc'),
+			),
+			array(
+					'type' => 'dropdown',
+					'param_name' => 'show_maps',
+					'value' => array(esc_html__('Yes', 'w2dc') => '1', esc_html__('No', 'w2dc') => '0'),
+					'heading' => esc_html__('Show is level supports maps on choose level page', 'w2dc'),
+			),
+			array(
+					'type' => 'dropdown',
+					'param_name' => 'show_images',
+					'value' => array(esc_html__('Yes', 'w2dc') => '1', esc_html__('No', 'w2dc') => '0'),
+					'heading' => esc_html__("Show level's images number on choose level page", 'w2dc'),
+			),
+			array(
+					'type' => 'dropdown',
+					'param_name' => 'show_videos',
+					'value' => array(esc_html__('Yes', 'w2dc') => '1', esc_html__('No', 'w2dc') => '0'),
+					'heading' => esc_html__("Show level's videos number on choose level page", 'w2dc'),
+			),
+			array(
+					'type' => 'textarea',
+					'param_name' => 'options',
+					'heading' => esc_html__("Options", "w2dc"),
+					'description' => esc_html__("Example: 1=option=no;2=option=yes;", "w2dc"),
+			),
+	);
+}, 0);
 
 class w2dc_levels_table_widget extends w2dc_widget {
 
@@ -91,7 +95,7 @@ class w2dc_levels_table_widget extends w2dc_widget {
 
 		parent::__construct(
 				'w2dc_levels_table_widget',
-				__('Directory - Listings levels', 'W2DC')
+				esc_html__('Directory widget - Listings levels', 'w2dc')
 		);
 
 		$this->convertParams($w2dc_levels_table_widget_params);

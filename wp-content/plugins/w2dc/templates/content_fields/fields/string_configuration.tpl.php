@@ -1,7 +1,12 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <?php w2dc_renderTemplate('admin_header.tpl.php'); ?>
 
 <h2>
-	<?php _e('Configure text string field', 'W2DC'); ?>
+	<?php esc_html_e('Configure text string field', 'w2dc'); ?>
 </h2>
 
 <form method="POST" action="">
@@ -10,7 +15,7 @@
 		<tbody>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Max length',  'W2DC'); ?><span class="w2dc-red-asterisk">*</span></label>
+					<label><?php esc_html_e('Max length',  'w2dc'); ?><span class="w2dc-red-asterisk">*</span></label>
 				</th>
 				<td>
 					<input
@@ -22,7 +27,7 @@
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('PHP RegEx template',  'W2DC'); ?></label>
+					<label><?php esc_html_e('PHP RegEx template',  'w2dc'); ?></label>
 				</th>
 				<td>
 					<input
@@ -35,7 +40,7 @@
 		</tbody>
 	</table>
 	
-	<?php submit_button(__('Save changes', 'W2DC')); ?>
+	<?php submit_button(esc_html__('Save changes', 'w2dc')); ?>
 </form>
 
 <?php w2dc_renderTemplate('admin_footer.tpl.php'); ?>

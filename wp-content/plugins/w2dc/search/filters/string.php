@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 add_filter("w2dc_query_args", "w2dc_query_args_string", 10, 2);
 function w2dc_query_args_string($q_args, $args) {
 	

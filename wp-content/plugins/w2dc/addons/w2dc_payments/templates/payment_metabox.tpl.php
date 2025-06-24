@@ -1,3 +1,8 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <?php global $wp_rewrite; ?>
 <?php if (get_option('w2dc_paypal_email') && $wp_rewrite->using_permalinks()): ?>
 <?php if (get_option('w2dc_paypal_single')): ?>

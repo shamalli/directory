@@ -24,7 +24,11 @@ return array(
 		
 			Custom icons files place in the same way as CSS and templates, in your child theme <em>"w2dc-plugin/"</em> folder.
 		
-			<em>w2dc-plugin/resources/images/categories_icons/</em>, <em>w2dc-plugin/resources/images/locations_icons/</em>, <em>w2dc-plugin/resources/images/map_icons/</em> folders for categories icons, locations icons and map markers icons accordingly.</li>
+			<em>w2dc-plugin/resources/images/categories_icons/</em>, <em>w2dc-plugin/resources/images/locations_icons/</em>, <em>w2dc-plugin/resources/images/map_icons/</em> folders for categories icons, locations icons and map markers icons accordingly.
+		
+			This is the structure of folders with custom resources and templates:
+			<img src="[base_url]/wp-content/uploads/custom_files_structure.png" />
+			</li>
 		
 			<li>Inside <em>resources/sass/</em> folder the plugin contains SASS files for the frontend and backend parts including RTL styles.</li>
 		</ul>

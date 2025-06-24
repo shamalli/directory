@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 class w2dc_content_fields_manager {
 	public $menu_page_hook;
 	
@@ -12,9 +14,6 @@ class w2dc_content_fields_manager {
 		add_action('admin_menu', array($this, 'menu'));
 
 		add_action('delete_term_taxonomy', array($this, 'renew_assigned_categories'));
-
-		// adapted for WPML
-		//add_filter('wpml_config_array', array($this, 'wpml_config_array'));
 	}
 
 	public function menu() {
@@ -25,8 +24,8 @@ class w2dc_content_fields_manager {
 		}
 
 		$this->menu_page_hook = add_submenu_page('w2dc_settings',
-			__('Content fields', 'W2DC'),
-			__('Content fields', 'W2DC'),
+			esc_html__('Content fields', 'w2dc'),
+			esc_html__('Content fields', 'w2dc'),
 			$capability,
 			'w2dc_content_fields',
 			array($this, 'w2dc_content_fields')
@@ -63,10 +62,10 @@ class w2dc_content_fields_manager {
 		if (isset($_POST['submit_table'])) {
 			if (isset($_POST['content_fields_order']) && $_POST['content_fields_order']) {
 				if ($content_fields->saveOrder())
-					w2dc_addMessage(__('Content fields order were updated!', 'W2DC'), 'updated');
+					w2dc_addMessage(esc_html__('Content fields order were updated!', 'w2dc'), 'updated');
 			}
 			if ($content_fields->saveGroupsRelations())
-				w2dc_addMessage(__('Content fields relations were updated!', 'W2DC'), 'updated');
+				w2dc_addMessage(esc_html__('Content fields relations were updated!', 'w2dc'), 'updated');
 		}
 
 		$content_fields_table = new w2dc_manage_content_fields_table();
@@ -106,16 +105,14 @@ class w2dc_content_fields_manager {
 				
 				if ($content_field->id) {
 					if ($content_fields->saveContentFieldFromArray($field_id, $vallidation_results)) {
-						w2dc_addMessage(__('Content field was updated successfully!', 'W2DC'));
+						w2dc_addMessage(esc_html__('Content field was updated successfully!', 'w2dc'));
 					}
 				} else {
 					if ($content_fields->createContentFieldFromArray($vallidation_results)) {
-						w2dc_addMessage(__('Content field was created succcessfully!', 'W2DC'));
+						w2dc_addMessage(esc_html__('Content field was created succcessfully!', 'w2dc'));
 					}
 				}
 				$this->showContentFieldsTable();
-				//wp_redirect(admin_url('admin.php?page=w2dc_content_fields'));
-				//die();
 			} else {
 				$content_field->buildContentFieldFromArray($validation->result_array());
 				w2dc_addMessage($validation->error_array(), 'error');
@@ -163,16 +160,14 @@ class w2dc_content_fields_manager {
 			if ($validation->run()) {
 				if ($content_fields_group->id) {
 					if ($content_fields->saveContentFieldsGroupFromArray($group_id, $validation->result_array())) {
-						w2dc_addMessage(__('Content fields group was updated successfully!', 'W2DC'));
+						w2dc_addMessage(esc_html__('Content fields group was updated successfully!', 'w2dc'));
 					}
 				} else {
 					if ($content_fields->createContentFieldsGroupFromArray($validation->result_array())) {
-						w2dc_addMessage(__('Content fields group was created succcessfully!', 'W2DC'));
+						w2dc_addMessage(esc_html__('Content fields group was created succcessfully!', 'w2dc'));
 					}
 				}
 				$this->showContentFieldsTable();
-				//wp_redirect(admin_url('admin.php?page=w2dc_content_fields'));
-				//die();
 			} else {
 				$content_fields->buildContentFieldsGroupFromArray($validation->result_array());
 				w2dc_addMessage($validation->error_array(), 'error');
@@ -194,7 +189,7 @@ class w2dc_content_fields_manager {
 				do_action("w2dc_save_content_field_config");
 			}
 		} else {
-			w2dc_addMessage(esc_attr__("This content field can't be configured", 'W2DC'), 'error');
+			w2dc_addMessage(esc_html__esc_html__("This content field can't be configured", 'w2dc'), 'error');
 			$this->showContentFieldsTable();
 		}
 	}
@@ -207,13 +202,11 @@ class w2dc_content_fields_manager {
 		if (($content_field = $content_fields->getContentFieldById($field_id)) && !$content_field->is_core_field) {
 			if (w2dc_getValue($_POST, 'submit')) {
 				if ($content_fields->deleteContentField($field_id))
-					w2dc_addMessage(__('Content field was deleted successfully!', 'W2DC'));
+					w2dc_addMessage(esc_html__('Content field was deleted successfully!', 'w2dc'));
 	
 				$this->showContentFieldsTable();
-				//wp_redirect(admin_url('admin.php?page=w2dc_content_fields'));
-				//die();
 			} else
-				w2dc_renderTemplate('delete_question.tpl.php', array('heading' => __('Delete content field', 'W2DC'), 'question' => sprintf(__('Are you sure you want delete "%s" content field?', 'W2DC'), $content_field->name), 'item_name' => $content_field->name));
+				w2dc_renderTemplate('delete_question.tpl.php', array('heading' => esc_html__('Delete content field', 'w2dc'), 'question' => sprintf(esc_html__('Are you sure you want delete "%s" content field?', 'w2dc'), $content_field->name), 'item_name' => $content_field->name));
 		} else
 			$this->showContentFieldsTable();
 	}
@@ -225,13 +218,11 @@ class w2dc_content_fields_manager {
 		if ($content_fields_group = $content_fields->getContentFieldsGroupById($group_id)) {
 			if (w2dc_getValue($_POST, 'submit')) {
 				if ($content_fields->deleteContentFieldsGroup($group_id))
-					w2dc_addMessage(__('Content fields group was deleted successfully!', 'W2DC'));
+					w2dc_addMessage(esc_html__('Content fields group was deleted successfully!', 'w2dc'));
 	
 				$this->showContentFieldsTable();
-				//wp_redirect(admin_url('admin.php?page=w2dc_content_fields'));
-				//die();
 			} else
-				w2dc_renderTemplate('delete_question.tpl.php', array('heading' => __('Delete content fields group', 'W2DC'), 'question' => sprintf(__('Are you sure you want delete "%s" content fields group?', 'W2DC'), $content_fields_group->name), 'item_name' => $content_fields_group->name));
+				w2dc_renderTemplate('delete_question.tpl.php', array('heading' => esc_html__('Delete content fields group', 'w2dc'), 'question' => sprintf(esc_html__('Are you sure you want delete "%s" content fields group?', 'w2dc'), $content_fields_group->name), 'item_name' => $content_fields_group->name));
 		} else
 			$this->showContentFieldsTable();
 	}
@@ -248,7 +239,7 @@ class w2dc_content_fields_manager {
 			
 			if ($w2dc_instance->content_fields->getNotCoreContentFields())
 				add_meta_box('w2dc_content_fields',
-						__('Content fields', 'W2DC'),
+						esc_html__('Content fields', 'w2dc'),
 						array($this, 'contentFieldsMetabox'),
 						W2DC_POST_TYPE,
 						'normal',
@@ -286,19 +277,6 @@ class w2dc_content_fields_manager {
 			}
 		}
 	}
-	
-	// adapted for WPML
-	/* public function wpml_config_array($config_all) {
-		global $w2dc_instance;
-		foreach ($w2dc_instance->content_fields->content_fields_array AS $content_field) {
-			$config_all['wpml-config']['custom-fields']['custom-field'][] = array(
-					'value' => '_content_field_' . $content_field->id,
-					'attr' => array('action' => 'copy')
-			);
-		}
-	
-		return $config_all;
-	} */
 }
 
 if( ! class_exists( 'WP_List_Table' ) ) {
@@ -308,21 +286,21 @@ class w2dc_manage_content_fields_table extends WP_List_Table {
 
 	public function __construct() {
 		parent::__construct(array(
-				'singular' => __('content field', 'W2DC'),
-				'plural' => __('content fields', 'W2DC'),
+				'singular' => esc_html__('content field', 'w2dc'),
+				'plural' => esc_html__('content fields', 'w2dc'),
 				'ajax' => false
 		));
 	}
 
 	public function get_columns() {
 		$columns = array(
-				'id' => __('ID', 'W2DC'),
-				'field_name' => __('Name', 'W2DC'),
-				'field_type' => __('Field type', 'W2DC'),
-				'required' => __('Required', 'W2DC'),
-				'icon_image' => __('Icon image', 'W2DC'),
-				'in_pages' => __('Visibility', 'W2DC'),
-				'group_id' => __('Group', 'W2DC'),
+				'id' => esc_html__('ID', 'w2dc'),
+				'field_name' => esc_html__('Name', 'w2dc'),
+				'field_type' => esc_html__('Field type', 'w2dc'),
+				'required' => esc_html__('Required', 'w2dc'),
+				'icon_image' => esc_html__('Icon image', 'w2dc'),
+				'in_pages' => esc_html__('Visibility', 'w2dc'),
+				'group_id' => esc_html__('Group', 'w2dc'),
 		);
 		$columns = apply_filters('w2dc_content_field_table_header', $columns);
 
@@ -375,15 +353,15 @@ class w2dc_manage_content_fields_table extends WP_List_Table {
 	}
 
 	public function column_field_name($item) {
-		$actions['edit'] = sprintf('<a href="?page=%s&action=%s&field_id=%d">' . __('Edit', 'W2DC') . '</a>', $_GET['page'], 'edit', $item['id']);
+		$actions['edit'] = sprintf('<a href="?page=%s&action=%s&field_id=%d">' . esc_html__('Edit', 'w2dc') . '</a>', $_GET['page'], 'edit', $item['id']);
 		if ($item['is_configuration_page']) {
-			$actions['configure'] = sprintf('<a href="?page=%s&action=%s&field_id=%d">' . __('Configure', 'W2DC') . '</a>', $_GET['page'], 'configure', $item['id']);
+			$actions['configure'] = sprintf('<a href="?page=%s&action=%s&field_id=%d">' . esc_html__('Configure', 'w2dc') . '</a>', $_GET['page'], 'configure', $item['id']);
 		}
 		
 		$actions = apply_filters('w2dc_content_fields_column_options', $actions, $item);
 
 		if (!$item['is_core_field'])
-			$actions['delete'] = sprintf('<a href="?page=%s&action=%s&field_id=%d">' . __('Delete', 'W2DC') . '</a>', $_GET['page'], 'delete', $item['id']);
+			$actions['delete'] = sprintf('<a href="?page=%s&action=%s&field_id=%d">' . esc_html__('Delete', 'w2dc') . '</a>', $_GET['page'], 'delete', $item['id']);
 		return sprintf('%1$s %2$s', sprintf('<a href="?page=%s&action=%s&field_id=%d">' . $item['field_name'] . '</a><input type="hidden" class="content_field_weight_id" value="%d" />', $_GET['page'], 'edit', $item['id'], $item['id']), $this->row_actions($actions));
 	}
 
@@ -420,25 +398,25 @@ class w2dc_manage_content_fields_table extends WP_List_Table {
 		
 		$html = array();
 		if ($item['on_exerpt_page'])
-			$html[] = __('On excerpt pages', 'W2DC');
+			$html[] = esc_html__('On excerpt pages', 'w2dc');
 		if ($item['on_listing_page'])
-			$html[] = __('On listing page', 'W2DC');
+			$html[] = esc_html__('On listing page', 'w2dc');
 		if ($item['on_map'])
-			$html[] = __('In map marker InfoWindow', 'W2DC');
+			$html[] = esc_html__('In map marker InfoWindow', 'w2dc');
 		if ($item['on_search_form'])
-			$html_array[] = __('On search form', 'W2DC');
+			$html_array[] = esc_html__('On search form', 'w2dc');
 		
 		if (!$item['is_core_field']) {
 			if (empty($item['categories'])) {
-				$html[] = '<hr /><img src="' . W2DC_RESOURCES_URL . 'images/accept.png" /> ' . __('All Categories', 'W2DC');
+				$html[] = '<hr /><img src="' . W2DC_RESOURCES_URL . 'images/accept.png" /> ' . esc_html__('All Categories', 'w2dc');
 			} else {
-				$html[] = '<hr /><img src="' . W2DC_RESOURCES_URL . 'images/delete.png" /> ' . __('Partial Categories', 'W2DC');
+				$html[] = '<hr /><img src="' . W2DC_RESOURCES_URL . 'images/delete.png" /> ' . esc_html__('Partial Categories', 'w2dc');
 			}
 			
 			if (count($item['levels']) == count($w2dc_instance->levels->levels_array)) {
-				$html[] = '<hr /><img src="' . W2DC_RESOURCES_URL . 'images/accept.png" /> ' . __('All Levels', 'W2DC');
+				$html[] = '<hr /><img src="' . W2DC_RESOURCES_URL . 'images/accept.png" /> ' . esc_html__('All Levels', 'w2dc');
 			} else {
-				$html[] = '<hr /><img src="' . W2DC_RESOURCES_URL . 'images/delete.png" /> ' . __('Partial Levels', 'W2DC');
+				$html[] = '<hr /><img src="' . W2DC_RESOURCES_URL . 'images/delete.png" /> ' . esc_html__('Partial Levels', 'w2dc');
 			}
 		}
 		
@@ -454,7 +432,7 @@ class w2dc_manage_content_fields_table extends WP_List_Table {
 		global $w2dc_instance;
 
 		echo '<select name="group_id_' . $item['id'] . '">';
-		echo '<option value=0>' . __('- no group -', 'W2DC') . '</option>';
+		echo '<option value=0>' . esc_html__('- no group -', 'w2dc') . '</option>';
 		foreach ($w2dc_instance->content_fields->content_fields_groups_array AS $group)
 			echo '<option value=' . $group->id . ' ' . selected($item['group_id'], $group->id) . '>' . $group->name . '</option>';
 		echo '</select>';
@@ -468,7 +446,7 @@ class w2dc_manage_content_fields_table extends WP_List_Table {
 	}
 
 	public function no_items() {
-		__('No content fields found.', 'W2DC');
+		esc_html__('No content fields found.', 'w2dc');
 	}
 }
 
@@ -476,18 +454,18 @@ class w2dc_manage_content_fields_groups_table extends WP_List_Table {
 
 	public function __construct() {
 		parent::__construct(array(
-				'singular' => __('content fields group', 'W2DC'),
-				'plural' => __('content fields groups', 'W2DC'),
+				'singular' => esc_html__('content fields group', 'w2dc'),
+				'plural' => esc_html__('content fields groups', 'w2dc'),
 				'ajax' => false
 		));
 	}
 
 	public function get_columns() {
 		$columns = array(
-				'id' => __('ID', 'W2DC'),
-				'group_name' => __('Name', 'W2DC'),
-				'on_tab' => __('On tab', 'W2DC'),
-				'hide_anonymous' => __('Hide from anonymous', 'W2DC'),
+				'id' => esc_html__('ID', 'w2dc'),
+				'group_name' => esc_html__('Name', 'w2dc'),
+				'on_tab' => esc_html__('On tab', 'w2dc'),
+				'hide_anonymous' => esc_html__('Hide from anonymous', 'w2dc'),
 		);
 		$columns = apply_filters('w2dc_content_field_table_header', $columns);
 
@@ -518,8 +496,8 @@ class w2dc_manage_content_fields_groups_table extends WP_List_Table {
 	}
 	
 	public function column_group_name($item) {
-		$actions['edit'] = sprintf('<a href="?page=%s&action=%s&group_id=%d">' . __('Edit', 'W2DC') . '</a>', $_GET['page'], 'edit_group', $item['id']);
-		$actions['delete'] = sprintf('<a href="?page=%s&action=%s&group_id=%d">' . __('Delete', 'W2DC') . '</a>', $_GET['page'], 'delete_group', $item['id']);
+		$actions['edit'] = sprintf('<a href="?page=%s&action=%s&group_id=%d">' . esc_html__('Edit', 'w2dc') . '</a>', $_GET['page'], 'edit_group', $item['id']);
+		$actions['delete'] = sprintf('<a href="?page=%s&action=%s&group_id=%d">' . esc_html__('Delete', 'w2dc') . '</a>', $_GET['page'], 'delete_group', $item['id']);
 		return sprintf('%1$s %2$s', sprintf('<a href="?page=%s&action=%s&group_id=%d">' . $item['group_name'] . '</a>', $_GET['page'], 'edit_group', $item['id']), $this->row_actions($actions));
 	}
 
@@ -545,7 +523,7 @@ class w2dc_manage_content_fields_groups_table extends WP_List_Table {
 	}
 
 	public function no_items() {
-		__('No content fields groups found.', 'W2DC');
+		esc_html__('No content fields groups found.', 'w2dc');
 	}
 }
 ?>

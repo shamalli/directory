@@ -183,7 +183,7 @@ final class FLBuilderServiceMailChimp extends FLBuilderService {
 
 		if ( is_array( $lists ) && count( $lists ) > 0 ) {
 			foreach ( $lists as $list ) {
-				$options[ $list['id'] ] = $list['name'];
+				$options[ $list['id'] ] = esc_attr( $list['name'] );
 			}
 		}
 
@@ -271,7 +271,7 @@ final class FLBuilderServiceMailChimp extends FLBuilderService {
 				 * Returning true enables double opt-ins; returning false enables single opt-ins.
 				 * The default return value for this filter is false.
 				 * @see fl_builder_mailchimp_double_option
-				 * @link https://kb.wpbeaverbuilder.com/article/117-plugin-filter-reference
+				 * @link https://docs.wpbeaverbuilder.com/beaver-builder/developer/tutorials-guides/common-beaver-builder-filter-examples
 				 */
 				$double = apply_filters( 'fl_builder_mailchimp_double_option', false );
 				$data   = array(

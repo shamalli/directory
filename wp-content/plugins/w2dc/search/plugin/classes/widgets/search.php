@@ -1,13 +1,18 @@
 <?php
 
-global $wcsearch_search_widget_params;
-$wcsearch_search_widget_params = array(
-		array(
-				'type' => 'formid',
-				'param_name' => 'form_id',
-				'heading' => esc_html__("Select search form", "WCSEARCH"),
-		),
-);
+// @codingStandardsIgnoreFile
+
+
+add_action('init', function() {
+	global $wcsearch_search_widget_params;
+	$wcsearch_search_widget_params = array(
+			array(
+					'type' => 'formid',
+					'param_name' => 'form_id',
+					'heading' => esc_html__("Select search form", "wcsearch"),
+			),
+	);
+}, 0);
 
 class wcsearch_search_widget extends wcsearch_widget {
 
@@ -16,7 +21,7 @@ class wcsearch_search_widget extends wcsearch_widget {
 
 		parent::__construct(
 				'wcsearch_search_widget',
-				esc_html__('WC Search Form', 'WCSEARCH')
+				esc_html__('WC Search Form', 'wcsearch')
 		);
 
 		$this->convertParams($wcsearch_search_widget_params);
@@ -25,8 +30,7 @@ class wcsearch_search_widget extends wcsearch_widget {
 	public function render_widget($instance, $args) {
 		global $wcsearch_instance;
 		
-		$search_form_id = $instance['form_id'];
-		if ($search_form_id) {
+		if ($search_form_id = $instance['form_id']) {
 			$title = apply_filters('widget_title', $instance['title']);
 	
 			echo $args['before_widget'];

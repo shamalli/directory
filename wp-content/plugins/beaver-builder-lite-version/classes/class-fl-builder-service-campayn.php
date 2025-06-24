@@ -16,7 +16,7 @@ final class FLBuilderServiceCampayn extends FLBuilderService {
 	public $id = 'campayn';
 
 	/**
-	 * The HTTP protocal
+	 * The HTTP protocol
 	 *
 	 * @since 1.5.8
 	 * @access private
@@ -197,7 +197,7 @@ final class FLBuilderServiceCampayn extends FLBuilderService {
 		);
 
 		foreach ( $lists as $list ) {
-			$options[ $list['id'] ] = $list['list_name'];
+			$options[ $list['id'] ] = esc_attr( $list['list_name'] );
 		}
 
 		FLBuilder::render_settings_field( 'list_id', array(

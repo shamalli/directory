@@ -1,7 +1,7 @@
 <?php
 
 FLBuilder::register_settings_form('col', array(
-	'title' => __( 'Column Settings', 'fl-builder' ),
+	'title' => __( 'Column', 'fl-builder' ),
 	'tabs'  => array(
 		'style'    => array(
 			'title'    => __( 'Style', 'fl-builder' ),
@@ -19,7 +19,7 @@ FLBuilder::register_settings_form('col', array(
 								'%',
 							),
 							'preview'    => array(
-								'type' => 'none',
+								'type' => 'refresh',
 							),
 						),
 						'min_height'        => array(
@@ -60,6 +60,19 @@ FLBuilder::register_settings_form('col', array(
 							),
 							'preview' => array(
 								'type' => 'none',
+							),
+						),
+						'aspect_ratio'      => array(
+							'type'       => 'text',
+							'label'      => __( 'Aspect Ratio', 'fl-builder' ),
+							'default'    => '',
+							'help'       => 'Use the forward slash notation: width/height.',
+							'responsive' => true,
+							'sanitize'   => 'FLBuilderUtils::sanitize_aspect_css',
+							'preview'    => array(
+								'type'     => 'css',
+								'selector' => '.fl-col-content',
+								'property' => 'aspect-ratio',
 							),
 						),
 						'content_alignment' => array(
@@ -143,40 +156,11 @@ FLBuilder::register_settings_form('col', array(
 									'sections' => array( 'bg_gradient' ),
 								),
 								'photo'    => array(
-									'sections' => array( 'bg_photo', 'bg_overlay' ),
+									'sections' => array( 'bg_photo', 'bg_overlay', 'bg_color' ),
 								),
 							),
 							'preview' => array(
 								'type' => 'none',
-							),
-						),
-					),
-				),
-				'bg_color'    => array(
-					'title'  => __( 'Background Color', 'fl-builder' ),
-					'fields' => array(
-						'bg_color' => array(
-							'type'        => 'color',
-							'connections' => array( 'color' ),
-							'label'       => __( 'Color', 'fl-builder' ),
-							'show_reset'  => true,
-							'show_alpha'  => true,
-							'preview'     => array(
-								'type' => 'none',
-							),
-						),
-					),
-				),
-				'bg_gradient' => array(
-					'title'  => __( 'Background Gradient', 'fl-builder' ),
-					'fields' => array(
-						'bg_gradient' => array(
-							'type'    => 'gradient',
-							'label'   => __( 'Gradient', 'fl-builder' ),
-							'preview' => array(
-								'type'     => 'css',
-								'selector' => '> .fl-col-content',
-								'property' => 'background-image',
 							),
 						),
 					),
@@ -228,11 +212,54 @@ FLBuilder::register_settings_form('col', array(
 								'center top'    => __( 'Center Top', 'fl-builder' ),
 								'center center' => __( 'Center', 'fl-builder' ),
 								'center bottom' => __( 'Center Bottom', 'fl-builder' ),
+								'custom_pos'    => __( 'Custom Position', 'fl-builder' ),
+							),
+							'toggle'     => array(
+								'custom_pos' => array(
+									'fields' => array(
+										'bg_x_position',
+										'bg_y_position',
+									),
+								),
 							),
 							'preview'    => array(
 								'type'     => 'css',
 								'selector' => '> .fl-col-content',
 								'property' => 'background-position',
+							),
+						),
+						'bg_x_position' => array(
+							'type'         => 'unit',
+							'label'        => __( 'X Position', 'fl-builder' ),
+							'units'        => array( 'px', '%' ),
+							'default_unit' => '%',
+							'responsive'   => true,
+							'slider'       => array(
+								'min'  => 0,
+								'max'  => 1000,
+								'step' => 10,
+							),
+							'preview'      => array(
+								'type'     => 'css',
+								'selector' => '> .fl-col-content',
+								'property' => 'background-position-x',
+							),
+						),
+						'bg_y_position' => array(
+							'type'         => 'unit',
+							'label'        => __( 'Y Position', 'fl-builder' ),
+							'units'        => array( 'px', '%' ),
+							'default_unit' => '%',
+							'responsive'   => true,
+							'slider'       => array(
+								'min'  => 0,
+								'max'  => 1000,
+								'step' => 10,
+							),
+							'preview'      => array(
+								'type'     => 'css',
+								'selector' => '> .fl-col-content',
+								'property' => 'background-position-y',
 							),
 						),
 						'bg_attachment' => array(
@@ -312,6 +339,34 @@ FLBuilder::register_settings_form('col', array(
 						),
 					),
 				),
+				'bg_color'    => array(
+					'title'  => __( 'Background Color', 'fl-builder' ),
+					'fields' => array(
+						'bg_color' => array(
+							'type'        => 'color',
+							'connections' => array( 'color' ),
+							'label'       => __( 'Color', 'fl-builder' ),
+							'show_reset'  => true,
+							'show_alpha'  => true,
+							'preview'     => array(
+								'type' => 'none',
+							),
+						),
+					),
+				),
+				'bg_gradient' => array(
+					'title'  => __( 'Background Gradient', 'fl-builder' ),
+					'fields' => array(
+						'bg_gradient' => array(
+							'type'       => 'gradient',
+							'label'      => __( 'Gradient', 'fl-builder' ),
+							'responsive' => true,
+							'preview'    => array(
+								'type' => 'refresh',
+							),
+						),
+					),
+				),
 				'border'      => array(
 					'title'  => __( 'Border', 'fl-builder' ),
 					'fields' => array(
@@ -320,8 +375,7 @@ FLBuilder::register_settings_form('col', array(
 							'label'      => __( 'Border', 'fl-builder' ),
 							'responsive' => true,
 							'preview'    => array(
-								'type'     => 'css',
-								'selector' => '.fl-col-content',
+								'type' => 'refresh',
 							),
 						),
 					),
@@ -338,25 +392,37 @@ FLBuilder::register_settings_form('col', array(
 							'type'       => 'dimension',
 							'label'      => __( 'Margins', 'fl-builder' ),
 							'slider'     => true,
+							'default'    => '',
 							'units'      => array(
 								'px',
 								'%',
 							),
 							'preview'    => array(
-								'type'     => 'css',
-								'selector' => '.fl-col-content',
-								'property' => 'margin',
+								'type' => 'refresh',
 							),
 							'responsive' => array(
 								'default_unit' => array(
 									'default'    => $global_settings->column_margins_unit,
+									'large'      => $global_settings->column_margins_large_unit,
 									'medium'     => $global_settings->column_margins_medium_unit,
 									'responsive' => $global_settings->column_margins_responsive_unit,
 								),
+								'default'      => array(
+									'default'    => '',
+									'large'      => '',
+									'medium'     => '',
+									'responsive' => '',
+								),
 								'placeholder'  => array(
-									'default'    => empty( $global_settings->column_margins ) ? '0' : $global_settings->column_margins,
-									'medium'     => empty( $global_settings->column_margins_medium ) ? '0' : $global_settings->column_margins_medium,
-									'responsive' => empty( $global_settings->column_margins_responsive ) ? '0' : $global_settings->column_margins_responsive,
+									'default'    => array(
+										'top'    => empty( $global_settings->column_margins_top ) ? '0' : $global_settings->column_margins_top,
+										'right'  => empty( $global_settings->column_margins_right ) ? '0' : $global_settings->column_margins_right,
+										'bottom' => empty( $global_settings->column_margins_bottom ) ? '0' : $global_settings->column_margins_bottom,
+										'left'   => empty( $global_settings->column_margins_left ) ? '0' : $global_settings->column_margins_left,
+									),
+									'large'      => FLBuilderModel::get_node_spacing_breakpoint_placeholders( 'column', 'margins', 'large' ),
+									'medium'     => FLBuilderModel::get_node_spacing_breakpoint_placeholders( 'column', 'margins', 'medium' ),
+									'responsive' => FLBuilderModel::get_node_spacing_breakpoint_placeholders( 'column', 'margins', 'responsive' ),
 								),
 							),
 						),
@@ -364,26 +430,38 @@ FLBuilder::register_settings_form('col', array(
 							'type'       => 'dimension',
 							'label'      => __( 'Padding', 'fl-builder' ),
 							'slider'     => true,
+							'default'    => '',
 							'units'      => array(
 								'px',
 								'em',
 								'%',
 							),
 							'preview'    => array(
-								'type'     => 'css',
-								'selector' => '.fl-col-content',
-								'property' => 'padding',
+								'type' => 'refresh',
 							),
 							'responsive' => array(
 								'default_unit' => array(
 									'default'    => $global_settings->column_padding_unit,
+									'large'      => $global_settings->column_padding_large_unit,
 									'medium'     => $global_settings->column_padding_medium_unit,
 									'responsive' => $global_settings->column_padding_responsive_unit,
 								),
+								'default'      => array(
+									'default'    => '',
+									'large'      => '',
+									'medium'     => '',
+									'responsive' => '',
+								),
 								'placeholder'  => array(
-									'default'    => empty( $global_settings->column_padding ) ? '0' : $global_settings->column_padding,
-									'medium'     => empty( $global_settings->column_padding_medium ) ? '0' : $global_settings->column_padding_medium,
-									'responsive' => empty( $global_settings->column_padding_responsive ) ? '0' : $global_settings->column_padding_responsive,
+									'default'    => array(
+										'top'    => empty( $global_settings->column_padding_top ) ? '0' : $global_settings->column_padding_top,
+										'right'  => empty( $global_settings->column_padding_right ) ? '0' : $global_settings->column_padding_right,
+										'bottom' => empty( $global_settings->column_padding_bottom ) ? '0' : $global_settings->column_padding_bottom,
+										'left'   => empty( $global_settings->column_padding_left ) ? '0' : $global_settings->column_padding_left,
+									),
+									'large'      => FLBuilderModel::get_node_spacing_breakpoint_placeholders( 'column', 'padding', 'large' ),
+									'medium'     => FLBuilderModel::get_node_spacing_breakpoint_placeholders( 'column', 'padding', 'medium' ),
+									'responsive' => FLBuilderModel::get_node_spacing_breakpoint_placeholders( 'column', 'padding', 'responsive' ),
 								),
 							),
 						),
@@ -393,28 +471,38 @@ FLBuilder::register_settings_form('col', array(
 					'title'  => __( 'Visibility', 'fl-builder' ),
 					'fields' => array(
 						'responsive_display'         => array(
-							'type'    => 'select',
-							'label'   => __( 'Breakpoint', 'fl-builder' ),
-							'options' => array(
-								''               => __( 'All', 'fl-builder' ),
-								'desktop'        => __( 'Large Devices Only', 'fl-builder' ),
-								'desktop-medium' => __( 'Large &amp; Medium Devices Only', 'fl-builder' ),
-								'medium'         => __( 'Medium Devices Only', 'fl-builder' ),
-								'medium-mobile'  => __( 'Medium &amp; Small Devices Only', 'fl-builder' ),
-								'mobile'         => __( 'Small Devices Only', 'fl-builder' ),
+							'type'         => 'button-group',
+							'label'        => __( 'Breakpoint', 'fl-builder' ),
+							'options'      => array(
+								'desktop' => '<i class="dashicons dashicons-desktop"></i>',
+								'large'   => '<i class="dashicons dashicons-laptop"></i>',
+								'medium'  => '<i class="dashicons dashicons-tablet"></i>',
+								'mobile'  => '<i class="dashicons dashicons-smartphone"></i>',
 							),
-							'preview' => array(
+							'tooltip'      => array(
+								'desktop' => __( 'Extra Large', 'fl-builder' ),
+								'large'   => __( 'Large', 'fl-builder' ),
+								'medium'  => __( 'Medium', 'fl-builder' ),
+								'mobile'  => __( 'Mobile', 'fl-builder' ),
+							),
+							'default'      => 'desktop,large,medium,mobile',
+							'multi-select' => array(
+								'min' => 1,
+							),
+							'preview'      => array(
 								'type' => 'none',
 							),
 						),
 						'responsive_order'           => array(
 							'type'    => 'select',
-							'label'   => __( 'Stacking Order', 'fl-builder' ),
-							'help'    => __( 'The order of the columns in this group when they are stacked for small devices.', 'fl-builder' ),
-							'default' => 'default',
+							'label'   => __( 'Reverse Column Order', 'fl-builder' ),
+							'help'    => __( 'The order of the columns in this group when they are stacked for medium and small devices.', 'fl-builder' ),
+							'default' => '',
 							'options' => array(
-								'default'  => __( 'Default', 'fl-builder' ),
-								'reversed' => __( 'Reversed', 'fl-builder' ),
+								''              => __( 'Disabled', 'fl-builder' ),
+								'mobile'        => __( 'Small', 'fl-builder' ),
+								'medium'        => __( 'Medium', 'fl-builder' ),
+								'mobile,medium' => __( 'Small and Medium', 'fl-builder' ),
 							),
 							'preview' => array(
 								'type' => 'none',
@@ -478,6 +566,7 @@ FLBuilder::register_settings_form('col', array(
 								'section' => '&lt;section&gt;',
 								'article' => '&lt;article&gt;',
 								'aside'   => '&lt;aside&gt;',
+								'main'    => '&lt;main&gt;',
 								'header'  => '&lt;header&gt;',
 								'footer'  => '&lt;footer&gt;',
 							) ),
@@ -501,6 +590,33 @@ FLBuilder::register_settings_form('col', array(
 							'preview' => array(
 								'type' => 'none',
 							),
+						),
+						'node_label'        => array(
+							'type'     => 'text',
+							'label'    => __( 'Label', 'fl-builder' ),
+							'help'     => __( 'A label that will applied and used in the UI for easy identification.', 'fl-builder' ),
+							'sanitize' => 'strip_tags',
+							'preview'  => array(
+								'type' => 'none',
+							),
+						),
+					),
+				),
+				'export_import' => array(
+					'title'     => __( 'Export/Import', 'fl-builder' ),
+					'collapsed' => true,
+					'fields'    => array(
+						'export' => array(
+							'type'    => 'raw',
+							'label'   => __( 'Export', 'fl-builder' ),
+							'preview' => 'none',
+							'content' => '<button style="margin-right:10px" class="fl-builder-button fl-builder-button-small col-export-all" title="Copy Settings">Copy Settings</button><button class="fl-builder-button fl-builder-button-small col-export-style" title="Copy Styles">Copy Styles</button>',
+						),
+						'import' => array(
+							'type'    => 'raw',
+							'label'   => __( 'Import', 'fl-builder' ),
+							'preview' => 'none',
+							'content' => '<div class="col-import-wrap"><input type="text" class="col-import-input" placeholder="Paste settings or styles here..." /><button class="fl-builder-button fl-builder-button-small col-import-apply">Import</button></div><div class="col-import-error"></div>',
 						),
 					),
 				),

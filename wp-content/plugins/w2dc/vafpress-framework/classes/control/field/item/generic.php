@@ -3,7 +3,7 @@
 /**
  * Not really a class, jump simple 'struct' storing multiple choice option item.
  */
-class VP_W2DC_Control_Field_Item_Generic
+class W2DC_VP_Control_Field_Item_Generic
 {
 
 	public $img;

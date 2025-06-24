@@ -40,8 +40,6 @@ return array(
 			<img src="[base_url]/wp-content/uploads/imitation_mode_bar_disabled.png" alt="" class="alignnone size-full" />
 			This means that page uses "categories/taxonomy" features, it is not a "page" as when you are using Imitation mode. And we are able to render content of a custom home page.
 			But some themes require imitation mode to get working listings/categories/locations/tags pages.
-		
-			<i class="fa fa-exclamation-triangle"></i> Please note, that <a href="[base_url]/documentation/search-engines-optimization/">Yoast SEO plugin</a> requires Imiatation mode to be <u>switched off</u>.
 			</li>
 		</ul>
 		
@@ -59,7 +57,9 @@ return array(
 		
 		<img src="[base_url]/wp-content/uploads/advanced_recaptcha_settings.png" alt="" class="alignnone size-full" />
 		
-		reCaptcha is used on contact listing owner forms and frontend submission form. You may get your reCAPTCHA API Keys <a href="https://www.google.com/recaptcha" target="_blank" rel="noopener noreferrer">here</a>
+		reCaptcha is used on contact listing owner forms and frontend submission form. You may get your reCAPTCHA API Keys <a href="https://console.cloud.google.com/security/recaptcha" target="_blank" rel="noopener noreferrer">here</a>
+		
+		Please note, when you are using <a href="[base_url]/documentation/contact-forms/">Contact Form 7 plugin</a> - you have to follow CF7 reCaptcha integration and its settings.
 		
 		<strong>What is the difference between reCAPTCHA v2 and v3?</strong>
 		ReCAPTCHA v2 requires the user to click the "I\'m not a robot" checkbox and can serve the user an image recognition challenge. ReCAPTCHA v3 runs in the background and generates a score based on a user\'s behavior. The higher the score, the more likely the user is human. A webmaster has to decide (and program) whether to block, challenge, or do nothing when a user\'s score drops below a certain threshold.

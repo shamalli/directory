@@ -10,6 +10,7 @@ function w2rr_is_w2dc() {
 }
 
 add_action('w2dc_listing_title_html', 'w2rr_w2dc_render_rating', 10, 2);
+add_filter('w2dc_listing_title_location_html', 'w2rr_w2dc_get_rating_stars_location', 10, 2); // in map locations search bar
 add_filter('w2dc_listing_title_search_html', 'w2rr_w2dc_get_rating_stars', 10, 2); // in autocomplete keywords search field
 add_action('w2dc_dashboard_listing_title', 'w2rr_w2dc_render_rating_dashboard');
 
@@ -37,28 +38,28 @@ function w2rr_w2dc_plugin_settings($options) {
 	if (w2rr_is_w2dc()) {
 		$options['template']['menus']['ratings']['controls']['listings'] = array(
 				'type' => 'section',
-				'title' => __('Directory Listings Ratings settings', 'W2RR'),
+				'title' => esc_html__('Directory Listings Ratings settings', 'w2rr'),
 				'fields' => array(
 						array(
 								'type' => 'radiobutton',
 								'name' => 'w2rr_w2dc_ratings',
-								'label' => __('Allow users to place ratings without reviews', 'W2RR'),
+								'label' => esc_html__('Allow users to place ratings without reviews', 'w2rr'),
 								'default' => get_option('w2rr_w2dc_ratings'),
 								'items' => array(
 										array(
 												'value' => 'notallowed',
-												'label' => __('Not allowed', 'W2RR'),
+												'label' => esc_html__('Not allowed', 'w2rr'),
 										),
 										array(
 												'value' => 'registered',
-												'label' => __('Only registered users', 'W2RR'),
+												'label' => esc_html__('Only registered users', 'w2rr'),
 										),
 										array(
 												'value' => 'anybody',
-												'label' => __('Anybody', 'W2RR'),
+												'label' => esc_html__('Anybody', 'w2rr'),
 										),
 								),
-								'description' => esc_html('click on stars', 'W2RR'),
+								'description' => esc_html('click on stars', 'w2rr'),
 						),
 				),
 		);
@@ -82,7 +83,7 @@ function w2rr_w2dc_save_rating($do_save) {
 	return $do_save;
 }
 
-function w2rr_w2dc_render_rating($listing, $meta_tags = false, $active = true, $show_avg = true) {
+function w2rr_w2dc_render_rating($listing, $meta_tags = false, $active = true, $show_avg = true, $stars_size = false) {
 	
 	if (w2rr_is_w2dc()) {
 		if ($target_post = w2rr_getTargetPost($listing->post)) {
@@ -91,10 +92,17 @@ function w2rr_w2dc_render_rating($listing, $meta_tags = false, $active = true, $
 				
 				$active = apply_filters('w2rr_save_rating', $active);
 				
-				$target_post->renderAvgRating(array('show_avg' => true, 'active' => $active, 'noajax' => false));
+				$stars_size = w2rr_get_dynamic_option('w2rr_stars_size');
+				
+				$target_post->renderAvgRating(array('show_avg' => true, 'active' => $active, 'noajax' => false, 'stars_size' => $stars_size));
 			}
 		}
 	}
+}
+
+function w2rr_w2dc_get_rating_stars_location($listing, $meta_tags = false, $active = true, $show_avg = true) {
+	
+	w2rr_w2dc_render_rating($listing, $meta_tags, $active, $show_avg, 20);
 }
 
 function w2rr_w2dc_get_rating_stars($title, $listing) {
@@ -136,7 +144,7 @@ function w2rr_w2dc_render_rating_in_map_window($content_field, $field_slug, $lis
 	if ($field_slug == 'rating') {
 		if (w2rr_is_w2dc()) {
 			if ($target_post = w2rr_getTargetPost($listing->post->ID)) {
-				return $target_post->renderAvgRating(array('active' => false, 'show_avg' => true), true);
+				return $target_post->renderAvgRating(array('active' => false, 'show_avg' => true, 'stars_size' => 20), true);
 			}
 		}
 	}
@@ -189,7 +197,7 @@ function w2rr_w2dc_remove_query_filters() {
 function w2rr_w2dc_order_by_rating_option($ordering) {
 	
 	if (w2rr_is_w2dc()) {
-		$ordering['rating_order'] = __('Rating', 'W2RR');
+		$ordering['rating_order'] = esc_html__('Rating', 'w2rr');
 	}
 
 	return $ordering;
@@ -198,7 +206,7 @@ function w2rr_w2dc_order_by_rating_option($ordering) {
 function w2rr_w2dc_order_by_rating_html($ordering, $base_url, $defaults = array()) {
 	
 	if (w2rr_is_w2dc()) {
-		$ordering->addLinks(array('rating_order' => array('DESC' => __('Best rating', 'W2RR'))));
+		$ordering->addLinks(array('rating_order' => array('DESC' => esc_html__('Best rating', 'w2rr'))));
 	}
 
 	return $ordering;
@@ -227,7 +235,7 @@ function w2rr_w2dc_comments_label($label, $listing) {
 		if ($target_post = w2rr_getTargetPost($listing->post)) {
 			$reviews_counter = $w2rr_instance->reviews_manager->get_reviews_counter($target_post);
 				
-			return _n('Review', 'Reviews', $reviews_counter, 'W2RR') . ' (' . $reviews_counter . ')';
+			return _n('Review', 'Reviews', $reviews_counter, 'w2rr') . ' (' . $reviews_counter . ')';
 		}
 	}
 
@@ -273,11 +281,11 @@ function w2rr_w2dc_comments_open_metabox($target_post) {
 	if (w2rr_is_w2dc() && $target_post->post->post_type == W2DC_POST_TYPE && (get_option('w2dc_listings_comments_mode') == 'enabled' || get_option('w2dc_listings_comments_mode') == 'disabled')) {
 		echo "<p>";
 		if (get_option('w2dc_listings_comments_mode') == 'enabled') {
-			 esc_html_e('Reviews always enabled by W2DC settings.', 'W2RR');
+			 esc_html_e('Reviews always enabled by W2DC settings.', 'w2rr');
 		} elseif (get_option('w2dc_listings_comments_mode') == 'disabled') {
-			esc_html_e('Reviews always disabled by W2DC settings.', 'W2RR');
+			esc_html_e('Reviews always disabled by W2DC settings.', 'w2rr');
 		}
-		echo " <a href='".admin_url('admin.php?page=w2dc_settings#_listings')."'>" . esc_html__('Go to Listings settings tab to change "Listings comments mode" setting.', 'W2RR') . "</a>";
+		echo " <a href='".admin_url('admin.php?page=w2dc_settings#_listings')."'>" . esc_html__('Go to Listings settings tab to change "Listings comments mode" setting.', 'w2rr') . "</a>";
 		
 		echo "</p>";
 	}
@@ -286,7 +294,7 @@ function w2rr_w2dc_comments_open_metabox($target_post) {
 /**
  * Automatically disable W2DC Ratings addon, when 'Directory listings' enabled in working post types
  */
-add_action('vp_w2rr_option_after_ajax_save', 'w2rr_w2dc_check_directory_listings', 11);
+add_action('w2rr_vp_option_after_ajax_save', 'w2rr_w2dc_check_directory_listings', 11);
 function w2rr_w2dc_check_directory_listings() {
 	
 	if (w2rr_is_w2dc()) {

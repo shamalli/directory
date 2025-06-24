@@ -1,6 +1,6 @@
 <?php
 
-class VP_W2RR_Option_Control_Set
+class W2RR_VP_Option_Control_Set
 {
 
 	const SAVE_SUCCESS   = 1;
@@ -26,7 +26,7 @@ class VP_W2RR_Option_Control_Set
 	{
 		// Setup data
 		$data = array('set' => $this);
-		return VP_W2RR_View::instance()->load('option/set', $data);
+		return W2RR_VP_View::instance()->load('option/set', $data);
 	}
 
 	/**
@@ -121,7 +121,7 @@ class VP_W2RR_Option_Control_Set
 				$fields = array();
 				foreach ( $menu->get_controls() as $control )
 				{
-					if( get_class($control) === 'VP_W2RR_Option_Control_Group_Section' )
+					if( get_class($control) === 'W2RR_VP_Option_Control_Group_Section' )
 					{
 						if($include_section)
 						{
@@ -129,7 +129,7 @@ class VP_W2RR_Option_Control_Set
 						}
 						foreach ( $control->get_fields() as $field )
 						{
-							if( VP_W2RR_Util_Reflection::field_type_from_class(get_class($field)) != 'impexp' )
+							if( W2RR_VP_Util_Reflection::field_type_from_class(get_class($field)) != 'impexp' )
 							{
 								$fields[$field->get_name()] = $field;
 							}
@@ -137,7 +137,7 @@ class VP_W2RR_Option_Control_Set
 					}
 					else
 					{
-						if( VP_W2RR_Util_Reflection::field_type_from_class(get_class($control)) != 'impexp' )
+						if( W2RR_VP_Util_Reflection::field_type_from_class(get_class($control)) != 'impexp' )
 						{
 							$fields[$control->get_name()] = $control;
 						}
@@ -173,7 +173,7 @@ class VP_W2RR_Option_Control_Set
 		$types  = array();
 		foreach ($fields as $field)
 		{
-			$type = VP_W2RR_Util_Reflection::field_type_from_class(get_class($field));
+			$type = W2RR_VP_Util_Reflection::field_type_from_class(get_class($field));
 			if(!in_array($type, $types))
 				$types[] = $type;
 		}
@@ -215,7 +215,7 @@ class VP_W2RR_Option_Control_Set
 				}
 				$result = call_user_func_array($func, $values);
 
-				if(VP_W2RR_Util_Reflection::is_multiselectable($field))
+				if(W2RR_VP_Util_Reflection::is_multiselectable($field))
 				{
 					$result = (array) $result;
 				}
@@ -230,7 +230,7 @@ class VP_W2RR_Option_Control_Set
 				$field->set_value($result);
 			}
 
-			if($field instanceof VP_W2RR_Control_FieldMulti)
+			if($field instanceof W2RR_VP_Control_FieldMulti)
 			{
 				$bind = $field->get_items_binding();
 				if(!empty($bind))
@@ -298,7 +298,7 @@ class VP_W2RR_Option_Control_Set
 		{
 			if(array_key_exists($key, $fields))
 			{
-				$is_multi = VP_W2RR_Util_Reflection::is_multiselectable($fields[$key]);
+				$is_multi = W2RR_VP_Util_Reflection::is_multiselectable($fields[$key]);
 				if( $is_multi and !is_array($value) )
 				{
 					$opt_arr[$key] = array($value);
@@ -350,13 +350,13 @@ class VP_W2RR_Option_Control_Set
 	{
 		$opt = $this->get_values();
 
-		do_action('vp_w2rr_option_set_before_save', $opt);
+		do_action('w2rr_vp_option_set_before_save', $opt);
 
 		if(update_option($option_key, $opt))
 		{
 			$result['status']  = true;
 			$result['code']    = self::SAVE_SUCCESS;
-			$result['message'] = __('Saving successful', 'vp_w2rr_textdomain');
+			$result['message'] = esc_html__('Saving successful', 'w2rr');
 			$curr_opt = get_option($option_key, array());
 		}
 		else
@@ -367,17 +367,17 @@ class VP_W2RR_Option_Control_Set
 			{
 				$result['status']  = false;
 				$result['code']    = self::SAVE_FAILED;
-				$result['message'] = __('Saving failed', 'vp_w2rr_textdomain');
+				$result['message'] = esc_html__('Saving failed', 'w2rr');
 			}
 			else
 			{
 				$result['status']  = true;
 				$result['code']    = self::SAVE_NOCHANGES;
-				$result['message'] = __('No changes made', 'vp_w2rr_textdomain');
+				$result['message'] = esc_html__('No changes made', 'w2rr');
 			}
 		}
 
-		do_action('vp_w2rr_option_set_after_save', $curr_opt, $result['status'], $option_key);
+		do_action('w2rr_vp_option_set_after_save', $curr_opt, $result['status'], $option_key);
 
 		return $result;
 	}
@@ -387,7 +387,7 @@ class VP_W2RR_Option_Control_Set
 		$fields = $this->get_fields();
 		foreach ( $fields as $field )
 		{
-			$is_multi = VP_W2RR_Util_Reflection::is_multiselectable($field);
+			$is_multi = W2RR_VP_Util_Reflection::is_multiselectable($field);
 			if( array_key_exists($field->get_name(), $opt) )
 			{
 				if( $is_multi and is_array($opt[$field->get_name()]) )

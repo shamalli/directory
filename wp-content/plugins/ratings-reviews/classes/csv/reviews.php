@@ -13,17 +13,17 @@ class w2rr_csv_import_export_reviews {
 	
 	public function buildCollationColumns() {
 		$this->csv_manager->collation_fields = array(
-				'review_id' => esc_html__('Review ID* (existing review)', 'W2RR'),
-				'post_id' => esc_html__('post ID*', 'W2RR'),
-				'title' => esc_html__('Title*', 'W2RR'),
-				'user' => esc_html__('Author', 'W2RR'),
-				'content' => esc_html__('Description', 'W2RR'),
-				'pros' => esc_html__('Pros', 'W2RR'),
-				'cons' => esc_html__('Cons', 'W2RR'),
-				'images' => esc_html__('Images files', 'W2RR'),
-				'creation_date' => esc_html__('Creation date', 'W2RR'),
-				'ratings' => esc_html__('Rating or multi-ratings', 'W2RR'),
-				'votes' => esc_html__('Votes', 'W2RR'),
+				'review_id' => esc_html__('Review ID* (existing review)', 'w2rr'),
+				'post_id' => esc_html__('post ID*', 'w2rr'),
+				'title' => esc_html__('Title*', 'w2rr'),
+				'user' => esc_html__('Author', 'w2rr'),
+				'content' => esc_html__('Description', 'w2rr'),
+				'pros' => esc_html__('Pros', 'w2rr'),
+				'cons' => esc_html__('Cons', 'w2rr'),
+				'images' => esc_html__('Images files', 'w2rr'),
+				'creation_date' => esc_html__('Creation date', 'w2rr'),
+				'ratings' => esc_html__('Rating or multi-ratings', 'w2rr'),
+				'votes' => esc_html__('Votes', 'w2rr'),
 		);
 		
 		$this->csv_manager->collation_fields = apply_filters('w2rr_csv_collation_fields_list', $this->csv_manager->collation_fields);
@@ -36,7 +36,7 @@ class w2rr_csv_import_export_reviews {
 	}
 	
 	public function validateSettings($validation) {
-		$validation->set_rules('author', esc_html__('Reviews author', 'W2RR'), 'required|numeric');
+		$validation->set_rules('author', esc_html__('Reviews author', 'w2rr'), 'required|numeric');
 	}
 	
 	public function buildSettings($validation) {
@@ -51,16 +51,16 @@ class w2rr_csv_import_export_reviews {
 	
 	public function checkFields() {
 		if ($this->csv_manager->import_type == 'update_reviews' && !in_array('review_id', $this->csv_manager->collated_fields)) {
-			$this->csv_manager->log['errors'][] = esc_attr__("Post ID field wasn't collated", 'W2RR');
+			$this->csv_manager->log['errors'][] = esc_attr__("Post ID field wasn't collated", 'w2rr');
 		}
 		if ($this->csv_manager->import_type == 'create_reviews' && !in_array('title', $this->csv_manager->collated_fields)) {
-			$this->csv_manager->log['errors'][] = esc_attr__("Title field wasn't collated", 'W2RR');
+			$this->csv_manager->log['errors'][] = esc_attr__("Title field wasn't collated", 'w2rr');
 		}
 		if ($this->csv_manager->import_type == 'create_reviews' && $this->csv_manager->selected_user != 0 && !get_userdata($this->csv_manager->selected_user)) {
-			$this->csv_manager->log['errors'][] = esc_attr__("There isn't author user you selected", 'W2RR');
+			$this->csv_manager->log['errors'][] = esc_attr__("There isn't author user you selected", 'w2rr');
 		}
 		if ($this->csv_manager->import_type == 'create_reviews' && $this->csv_manager->selected_user == 0 && !in_array('user', $this->csv_manager->collated_fields)) {
-			$this->csv_manager->log['errors'][] = esc_attr__("Author field wasn't collated and default author wasn't selected", 'W2RR');
+			$this->csv_manager->log['errors'][] = esc_attr__("Author field wasn't collated and default author wasn't selected", 'w2rr');
 		}
 	}
 	
@@ -72,7 +72,7 @@ class w2rr_csv_import_export_reviews {
 		$this->total_rejected_lines = 0;
 		foreach ($this->csv_manager->rows as $line=>$row) {
 			$n = $line+1;
-			printf(esc_html__('Importing line %d...', 'W2RR'), $n);
+			printf(esc_html__('Importing line %d...', 'w2rr'), $n);
 			echo "<br />";
 			$error_on_line = false;
 			$review_data = array();
@@ -84,7 +84,7 @@ class w2rr_csv_import_export_reviews {
 						$review_data['existing_review'] = $review;
 						$review_data['review_id'] = $value;
 					} else {
-						$error = sprintf(__('Error on line %d: ', 'W2RR') . esc_attr__("Review with ID \"%d\" doesn't exist", 'W2RR'), $n, $value);
+						$error = sprintf(__('Error on line %d: ', 'w2rr') . esc_attr__("Review with ID \"%d\" doesn't exist", 'w2rr'), $n, $value);
 						$error_on_line = $this->csv_manager->setErrorOnLine($error);
 					}
 				}
@@ -93,12 +93,12 @@ class w2rr_csv_import_export_reviews {
 					if ($target_post = get_post($value)) {
 						$review_data['post_id'] = $value;
 					} else {
-						$error = sprintf(__('Error on line %d: ', 'W2RR') . esc_attr__("Post with ID \"%d\" doesn't exist", 'W2RR'), $n, $value);
+						$error = sprintf(__('Error on line %d: ', 'w2rr') . esc_attr__("Post with ID \"%d\" doesn't exist", 'w2rr'), $n, $value);
 						$error_on_line = $this->csv_manager->setErrorOnLine($error);
 					}
 				} elseif ($field == 'title') {
 					$review_data['title'] = $value;
-					printf(esc_html__('Review title: %s', 'W2RR'), $value);
+					printf(esc_html__('Review title: %s', 'w2rr'), $value);
 					echo "<br />";
 				} elseif ($field == 'user') {
 					if (!$this->csv_manager->selected_user) {
@@ -114,7 +114,7 @@ class w2rr_csv_import_export_reviews {
 							if (!is_numeric($user_info[0]) && filter_var($user_info[1], FILTER_VALIDATE_EMAIL)) {
 								$review_data['user_info'] = $user_info;
 							} else {
-								$error = sprintf(__('Error on line %d: ', 'W2RR') . esc_attr__("User \"%s\" doesn't exist and format does not allow to create new user", 'W2RR'), $n, $value);
+								$error = sprintf(__('Error on line %d: ', 'w2rr') . esc_attr__("User \"%s\" doesn't exist and format does not allow to create new user", 'w2rr'), $n, $value);
 								$error_on_line = $this->csv_manager->setErrorOnLine($error);
 							}
 						}
@@ -135,18 +135,18 @@ class w2rr_csv_import_export_reviews {
 								$review_data['images'][] = $image_url;
 								$this_is_import_by_URL = true;
 							} else {
-								$error = sprintf(__('Error on line %d: ', 'W2RR') . sprintf(esc_attr__("Incorrect image URL %s", 'W2RR'), $image_url), $n);
+								$error = sprintf(__('Error on line %d: ', 'w2rr') . sprintf(esc_attr__("Incorrect image URL %s", 'w2rr'), $image_url), $n);
 								$error_on_line = $this->csv_manager->setErrorOnLine($error);
 							}
 						}
 						if (!$this_is_import_by_URL) {
-							$error = sprintf(__('Error on line %d: ', 'W2RR') . esc_attr__("Images column was specified, but ZIP archive wasn't upload", 'W2RR'), $n);
+							$error = sprintf(__('Error on line %d: ', 'w2rr') . esc_attr__("Images column was specified, but ZIP archive wasn't upload", 'w2rr'), $n);
 							$error_on_line = $this->csv_manager->setErrorOnLine($error);
 						}
 					}
 				} elseif ($field == 'creation_date') {
 					if (!($timestamp = strtotime($value))) {
-						$error = sprintf(__('Error on line %d: ', 'W2RR') . esc_attr__("Creation date value is incorrect", 'W2RR'), $n);
+						$error = sprintf(__('Error on line %d: ', 'w2rr') . esc_attr__("Creation date value is incorrect", 'w2rr'), $n);
 						$error_on_line = $this->csv_manager->setErrorOnLine($error);
 					} else
 						$review_data['creation_date'] = $timestamp;
@@ -159,7 +159,7 @@ class w2rr_csv_import_export_reviews {
 							if ($ratings) {
 								$review_data['ratings'] = $ratings;
 							} else {
-								$error = sprintf(__('Error on line %d: ', 'W2RR') . esc_attr__("Can not recognize ratings", 'W2RR'), $n);
+								$error = sprintf(__('Error on line %d: ', 'w2rr') . esc_attr__("Can not recognize ratings", 'w2rr'), $n);
 								$error_on_line = $this->csv_manager->setErrorOnLine($error);
 							}
 						}

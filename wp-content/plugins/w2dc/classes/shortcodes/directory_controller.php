@@ -1,5 +1,7 @@
 <?php 
 
+// @codingStandardsIgnoreFile
+
 class w2dc_directory_controller extends w2dc_frontend_controller {
 	public $is_home = false;
 	public $is_search = false;
@@ -8,6 +10,7 @@ class w2dc_directory_controller extends w2dc_frontend_controller {
 	public $is_directory_page = false;
 	public $object_single;
 	public $listing;
+	public $term;
 	public $is_category = false;
 	public $category;
 	public $is_location = false;
@@ -20,12 +23,19 @@ class w2dc_directory_controller extends w2dc_frontend_controller {
 	public function init($shortcode_atts = array(), $shortcode = W2DC_MAIN_SHORTCODE) {
 		global $w2dc_instance;
 		
+		// requrires for is_plugin_active() function at the frontend
+		include_once(ABSPATH . 'wp-admin/includes/plugin.php');
+		
 		parent::init($shortcode_atts);
 		
 		$shortcode_atts['include_get_params'] = 1;
 
-		if (isset($shortcode_atts['hide_listings']) && $shortcode_atts['hide_listings']) {
+		if (!empty($shortcode_atts['hide_listings'])) {
 			$this->do_initial_load = false;
+			
+			// listings will not load, query will not be processed,
+			// make 'hide_listings' = 0 so AJAX can be called later
+			$shortcode_atts['hide_listings'] = 0;
 		}
 		
 		if (isset($shortcode_atts['custom_home']) && $shortcode_atts['custom_home']) {
@@ -36,13 +46,27 @@ class w2dc_directory_controller extends w2dc_frontend_controller {
 		if (empty($shortcode_atts['id'])) {
 			$shortcode_atts['id'] = $w2dc_instance->current_directory->id;
 		}
+		
+		// default search form needed
+		if (empty($shortcode_atts['search_form_id']) && get_option('w2dc_main_search')) {
+			$shortcode_atts['search_form_id'] = get_option('w2dc_search_form_id');
+		} else {
+			$shortcode_atts['search_form_id'] = false;
+		}
 
 		if (get_query_var('page')) {
 			$paged = get_query_var('page');
 		} elseif (get_query_var('paged')) {
 			$paged = get_query_var('paged');
+		} elseif (w2dc_getValue($shortcode_atts, 'paged')) {
+			$paged = w2dc_getValue($shortcode_atts, 'paged');
 		} else {
 			$paged = 1;
+		}
+		
+		// display these listings by default, then directory searches as usual
+		if (!empty($shortcode_atts['start_listings'])) {
+			$shortcode_atts['post__in'] = $shortcode_atts['start_listings'];
 		}
 		
 		$this->is_home = (!empty($shortcode_atts['custom_home']) ? 1 : 0);
@@ -74,78 +98,6 @@ class w2dc_directory_controller extends w2dc_frontend_controller {
 					wp_redirect(w2dc_directoryUrl());
 				}
 				
-				global $wp_rewrite;
-				if ($wp_rewrite->using_permalinks() && ((get_option('w2dc_permalinks_structure') == 'category_slug' || get_option('w2dc_permalinks_structure') == 'location_slug' || get_option('w2dc_permalinks_structure') == 'tag_slug'))) {
-					switch (get_option('w2dc_permalinks_structure')) {
-						case 'category_slug':
-							if ($terms = get_the_terms($this->listing->post->ID, W2DC_CATEGORIES_TAX)) {
-								$term_number = 0;
-								if (count($terms) > 1) {
-									foreach ($terms AS $term) {
-										$term_number++;
-										if ($parents = w2dc_get_term_parents_slugs($term->term_id, W2DC_CATEGORIES_TAX)) {
-											$uri = implode('/', $parents);
-											if ($uri == get_query_var('tax-slugs-w2dc')) {
-												break;
-											}
-										}
-									}
-								}
-								
-								$term = array_shift($terms);
-								$uri = '';
-								if ($parents = w2dc_get_term_parents_slugs($term->term_id, W2DC_CATEGORIES_TAX))
-									$uri = implode('/', $parents);
-								if ($uri != get_query_var('tax-slugs-w2dc')) {
-									$permalink = get_the_permalink($this->listing->post->ID);
-									if ($term_number > 1) {
-										$permalink = add_query_arg('term_number', $term_number, $permalink);
-									}
-									wp_redirect($permalink, 301);
-									die();
-								}
-							}
-							break;
-						case 'location_slug':
-							if ($terms = get_the_terms($this->listing->post->ID, W2DC_LOCATIONS_TAX)) {
-								$term_number = 0;
-								if (count($terms) > 1) {
-									foreach ($terms AS $term) {
-										$term_number++;
-										if ($parents = w2dc_get_term_parents_slugs($term->term_id, W2DC_LOCATIONS_TAX)) {
-											$uri = implode('/', $parents);
-											if ($uri == get_query_var('tax-slugs-w2dc')) {
-												break;
-											}
-										}
-									}
-								}
-								
-								$term = array_shift($terms);
-								$uri = '';
-								if ($parents = w2dc_get_term_parents_slugs($term->term_id, W2DC_LOCATIONS_TAX))
-									$uri = implode('/', $parents);
-								if ($uri != get_query_var('tax-slugs-w2dc')) {
-									$permalink = get_the_permalink($this->listing->post->ID);
-									if ($term_number > 1) {
-										$permalink = add_query_arg('term_number', $term_number, $permalink);
-									}
-									wp_redirect($permalink, 301);
-									die();
-								}
-							}
-							break;
-						case 'tag_slug':
-							if (($terms = get_the_terms($post->ID, W2DC_TAGS_TAX)) && ($term = array_shift($terms))) {
-								if ($term->slug != get_query_var('tax-slugs-w2dc')) {
-									wp_redirect(get_the_permalink($this->listing->post->ID), 301);
-									die();
-								}
-							}
-							break;
-					}
-				}
-				
 				$this->is_single = true;
 				$this->is_listing = true;
 				$this->template = 'frontend/listing_single.tpl.php';
@@ -155,7 +107,7 @@ class w2dc_directory_controller extends w2dc_frontend_controller {
 						$this->listing->increaseClicksStats();
 					}
 				} else {
-					w2dc_addMessage(esc_html__("Sorry, you are not allowed to view this page.", "W2DC"));
+					w2dc_addMessage(esc_html__("Sorry, you are not allowed to view this page.", "w2dc"));
 					$this->template = 'frontend/listing_single_blocked.tpl.php';
 				}
 				
@@ -166,26 +118,45 @@ class w2dc_directory_controller extends w2dc_frontend_controller {
 
 				if (get_option('w2dc_enable_breadcrumbs')) {
 					switch (get_option('w2dc_breadcrumbs_mode')) {
+						
 						case 'category':
 							if ($terms = get_the_terms($this->listing->post->ID, W2DC_CATEGORIES_TAX)) {
-								if (!empty($_GET['term_number']) && isset($terms[$_GET['term_number']-1]) && get_option('w2dc_permalinks_structure') == 'category_slug') {
-									$term = $terms[$_GET['term_number']-1];
-								} else {
-									$term = array_shift($terms);
+								
+								$term = array_shift($terms);
+								
+								if (get_option('w2dc_permalinks_structure') == 'category_slug' && count($terms) > 1) {
+									foreach ($terms AS $_term) {
+										if ($parents = w2dc_get_term_parents_slugs($_term->term_id, W2DC_CATEGORIES_TAX)) {
+											$uri = implode('/', $parents);
+											if ($uri == get_query_var('tax-slugs-w2dc')) {
+												$term = $_term;
+											}
+										}
+									}
 								}
+								
 								$this->addBreadCrumbs(w2dc_get_term_parents($term, W2DC_CATEGORIES_TAX, true, true));
 							}
 							break;
+							
 						case 'location':
 							if ($terms = get_the_terms($this->listing->post->ID, W2DC_LOCATIONS_TAX)) {
-								if (!empty($_GET['term_number']) && isset($terms[$_GET['term_number']-1]) && get_option('w2dc_permalinks_structure') == 'location_slug') {
-									$term = $terms[$_GET['term_number']-1];
-								} else {
-									$term = array_shift($terms);
+							
+								$term = array_shift($terms);
+							
+								if (get_option('w2dc_permalinks_structure') == 'location_slug' && count($terms) > 1) {
+									foreach ($terms AS $_term) {
+										if ($parents = w2dc_get_term_parents_slugs($_term->term_id, W2DC_LOCATIONS_TAX)) {
+											$uri = implode('/', $parents);
+											if ($uri == get_query_var('tax-slugs-w2dc')) {
+												$term = $_term;
+											}
+										}
+									}
 								}
+							
 								$this->addBreadCrumbs(w2dc_get_term_parents($term, W2DC_LOCATIONS_TAX, true, true));
 							}
-							break;
 					}
 					$this->addBreadCrumbs($listing->title());
 				}
@@ -199,19 +170,13 @@ class w2dc_directory_controller extends w2dc_frontend_controller {
 				
 				if (get_option("w2dc_imitate_mode")) {
 					add_filter('language_attributes', array($this, 'add_opengraph_doctype'));
+					
 					// Disable OpenGraph in Jetpack
 					if (get_option('w2dc_share_buttons')) {
 						add_filter('jetpack_enable_open_graph', '__return_false', 99);
 					}
-					add_action('wp_head', array($this, 'save_global_post'), -1001);
-					add_action('wp_head', array($this, 'change_global_post_to_listing'), -1000);
-					add_action('wp_head', array($this, 'back_global_post'), 1000);
+					
 					add_action('wp_head', array($this, 'insert_fb_in_head'), -10);
-					if (function_exists('rel_canonical')) {
-						remove_action('wp_head', 'rel_canonical');
-					}
-					// replace the default WordPress canonical URL function with your own
-					add_action('wp_head', array($this, 'rel_canonical_with_custom_tag_override'));
 				}
 				
 				// process shortcodes on listing single template page when any of [webdirectory-listing-XXXX] shortcodes persist on the page
@@ -226,12 +191,13 @@ class w2dc_directory_controller extends w2dc_frontend_controller {
 		} elseif (get_query_var(W2DC_CATEGORIES_TAX)) {		// categories
 			if ($category_object = w2dc_isCategory()) {
 				$this->is_category = true;
+				$this->term = $category_object;
 				$this->category = $category_object;
 				$this->template = 'frontend/category.tpl.php';
 				$this->page_title = $category_object->name;
 				
-				if (get_option('w2dc_main_search')) {
-					$this->search_form = new w2dc_search_form($this->hash, array('form_id' => get_option('w2dc_search_form_id')));
+				if ($shortcode_atts['search_form_id']) {
+					$this->search_form = new w2dc_search_form($this->hash, array('form_id' => $shortcode_atts['search_form_id']));
 				}
 				
 				$args = apply_filters("w2dc_query_input_args", $shortcode_atts);
@@ -245,7 +211,6 @@ class w2dc_directory_controller extends w2dc_frontend_controller {
 				$query = new w2dc_search_query($args);
 				$this->query = $query->get_query();
 				$this->processQuery();
-				//var_dump($this->query->request);
 				
 				if (w2dc_is_maps_used() && get_option('w2dc_map_on_excerpt')) {
 					$map_args = $this->getDefaultMapArgs($args);
@@ -276,18 +241,26 @@ class w2dc_directory_controller extends w2dc_frontend_controller {
 				if (get_option('w2dc_enable_breadcrumbs')) {
 					$this->addBreadCrumbs(w2dc_get_term_parents($category_object, W2DC_CATEGORIES_TAX, true, true));
 				}
+				
+				// process shortcodes on category template page when any of [webdirectory-category-XXXX] shortcodes persist on the page
+				if ($shortcode == W2DC_CATEGORY_PAGE_SHORTCODE && $w2dc_instance->category_page_id) {
+					if (w2dc_isCategoryElementsOnPage()) {
+						$this->template  = false;
+					}
+				}
 			} else {
 				$this->set404();
 			}
 		} elseif (get_query_var(W2DC_LOCATIONS_TAX)) { // locations
 			if ($location_object = w2dc_isLocation()) {
 				$this->is_location = true;
+				$this->term = $location_object;
 				$this->location = $location_object;
 				$this->template = 'frontend/location.tpl.php';
 				$this->page_title = $location_object->name;
 				
-				if (get_option('w2dc_main_search')) {
-					$this->search_form = new w2dc_search_form($this->hash, array('form_id' => get_option('w2dc_search_form_id')));
+				if ($shortcode_atts['search_form_id']) {
+					$this->search_form = new w2dc_search_form($this->hash, array('form_id' => $shortcode_atts['search_form_id']));
 				}
 				
 				$args = apply_filters("w2dc_query_input_args", $shortcode_atts);
@@ -301,7 +274,6 @@ class w2dc_directory_controller extends w2dc_frontend_controller {
 				$query = new w2dc_search_query($args);
 				$this->query = $query->get_query();
 				$this->processQuery();
-				//var_dump($this->query->request);
 				
 				if (w2dc_is_maps_used() && get_option('w2dc_map_on_excerpt')) {
 					$map_args = $this->getDefaultMapArgs($args);
@@ -338,12 +310,13 @@ class w2dc_directory_controller extends w2dc_frontend_controller {
 		} elseif (get_query_var(W2DC_TAGS_TAX)) {		// tags
 			if ($tag_object = w2dc_isTag()) {
 				$this->is_tag = true;
+				$this->term = $tag_object;
 				$this->tag = $tag_object;
 				$this->template = 'frontend/tag.tpl.php';
 				$this->page_title = $tag_object->name;
 				
-				if (get_option('w2dc_main_search')) {
-					$this->search_form = new w2dc_search_form($this->hash, array('form_id' => get_option('w2dc_search_form_id')));
+				if ($shortcode_atts['search_form_id']) {
+					$this->search_form = new w2dc_search_form($this->hash, array('form_id' => $shortcode_atts['search_form_id']));
 				}
 				
 				$args = apply_filters("w2dc_query_input_args", $shortcode_atts);
@@ -357,7 +330,6 @@ class w2dc_directory_controller extends w2dc_frontend_controller {
 				$query = new w2dc_search_query($args);
 				$this->query = $query->get_query();
 				$this->processQuery();
-				//var_dump($this->query->request);
 				
 				if (w2dc_is_maps_used() && get_option('w2dc_map_on_excerpt')) {
 					$map_args = $this->getDefaultMapArgs($args);
@@ -394,7 +366,7 @@ class w2dc_directory_controller extends w2dc_frontend_controller {
 		} elseif ($w2dc_instance->action == 'myfavourites') {		// favourites
 			$this->is_favourites = true;
 			$this->template = 'frontend/favourites.tpl.php';
-			$this->page_title = __("My bookmarks", "W2DC");
+			$this->page_title = esc_html__("My bookmarks", "w2dc");
 
 			$args = apply_filters("w2dc_query_input_args", $shortcode_atts);
 			
@@ -409,15 +381,15 @@ class w2dc_directory_controller extends w2dc_frontend_controller {
 			$this->processQuery();
 			
 			if (get_option('w2dc_enable_breadcrumbs')) {
-				$this->addBreadCrumbs(esc_html__('My bookmarks', 'W2DC'));
+				$this->addBreadCrumbs(esc_html__('My bookmarks', 'w2dc'));
 			}
 			$this->args['hide_order'] = 1;
 		} elseif (!$w2dc_instance->action && $shortcode == W2DC_MAIN_SHORTCODE && !wcsearch_get_query_string()) {		// index
 			$this->template = 'frontend/index.tpl.php';
 			$this->page_title = get_post($w2dc_instance->index_page_id)->post_title;
 
-			if (get_option('w2dc_main_search')) {
-				$this->search_form = new w2dc_search_form($this->hash, array('form_id' => get_option('w2dc_search_form_id')));
+			if ($shortcode_atts['search_form_id']) {
+				$this->search_form = new w2dc_search_form($this->hash, array('form_id' => $shortcode_atts['search_form_id']));
 			}
 			
 			$args = apply_filters("w2dc_query_input_args", $shortcode_atts);
@@ -432,7 +404,6 @@ class w2dc_directory_controller extends w2dc_frontend_controller {
 				$query = new w2dc_search_query($args);
 				$this->query = $query->get_query();
 				$this->processQuery();
-				//var_dump($this->query->request);
 			}
 			
 			if (get_option('w2dc_map_on_index')) {
@@ -462,10 +433,10 @@ class w2dc_directory_controller extends w2dc_frontend_controller {
 		} elseif ($query_string = wcsearch_get_query_string()) {		// search
 			$this->is_search = true;
 			$this->template = 'frontend/search.tpl.php';
-			$this->page_title = __("Search results", "W2DC");
+			$this->page_title = esc_html__("Search results", "w2dc");
 			
-			if (get_option('w2dc_main_search')) {
-				$this->search_form = new w2dc_search_form($this->hash, array('form_id' => get_option('w2dc_search_form_id')));
+			if ($shortcode_atts['search_form_id']) {
+				$this->search_form = new w2dc_search_form($this->hash, array('form_id' => $shortcode_atts['search_form_id']));
 			}
 			
 			$args = apply_filters("w2dc_query_input_args", $shortcode_atts);
@@ -481,7 +452,7 @@ class w2dc_directory_controller extends w2dc_frontend_controller {
 			$this->processQuery();
 			
 			if (w2dc_is_maps_used() && get_option('w2dc_map_on_excerpt')) {
-				$map_args = $this->getDefaultMapArgs($args);
+				$map_args = $this->getDefaultMapArgs();
 				
 				if (get_option('w2dc_map_markers_is_limit')) {
 					
@@ -531,7 +502,18 @@ class w2dc_directory_controller extends w2dc_frontend_controller {
 		$this->args['show_readmore_button'] = 1;
 		
 		if (get_option("w2dc_imitate_mode")) {
-			add_action('get_header', array($this, 'configure_seo_filters'), 2);
+			
+			if (!is_plugin_active('wordpress-seo/wp-seo.php') && !is_plugin_active('wordpress-seo-premium/wp-seo-premium.php')) {
+				// since WP 4.4, just use the new hook.
+				add_filter('pre_get_document_title', array($this, 'page_title'), 16);
+				add_filter('wp_title', array($this, 'page_title'), 10, 2);
+				
+				if (function_exists('rel_canonical')) {
+					remove_action('wp_head', 'rel_canonical');
+				}
+				// replace the default WordPress canonical URL function with your own
+				add_action('wp_head', array($this, 'rel_canonical_with_custom_tag_override'));
+			}
 			
 			if (get_option('w2dc_overwrite_page_title')) {
 				add_filter('the_title', array($this, 'setThemePageTitle'), 10, 2);
@@ -557,11 +539,12 @@ class w2dc_directory_controller extends w2dc_frontend_controller {
 		apply_filters('w2dc_directory_controller_construct', $this);
 	}
 	
-	public function getDefaultMapArgs($args) {
+	public function getDefaultMapArgs($args = array()) {
 		
 		$map_args = array(
 				'hash' => $this->hash,
 				'query_string' => wcsearch_get_query_string(),
+				'start_address' => '',
 				'start_zoom' => get_option('w2dc_start_zoom'),
 				'min_zoom' => get_option('w2dc_map_min_zoom'),
 				'max_zoom' => get_option('w2dc_map_max_zoom'),
@@ -573,6 +556,8 @@ class w2dc_directory_controller extends w2dc_frontend_controller {
 				'search_on_map_right' => 0,
 				'search_on_map_listings' => 'sidebar',
 		);
+		
+		$map_args = array_merge($map_args, $args);
 		
 		$map_args = apply_filters("w2dc_default_map_args_directory_controller", $map_args);
 		
@@ -611,9 +596,14 @@ class w2dc_directory_controller extends w2dc_frontend_controller {
 	
 		if (
 			!is_admin() &&
-			/* !in_the_loop() && */
 			is_page() &&
-			($w2dc_instance->index_page_id == $id || in_array($id, $w2dc_instance->listing_pages_all))
+			(
+					$w2dc_instance->index_page_id == $id ||
+					in_array($id, $w2dc_instance->listing_pages_all) ||
+					in_array($id, $w2dc_instance->category_pages_all) ||
+					in_array($id, $w2dc_instance->location_pages_all) ||
+					in_array($id, $w2dc_instance->tag_pages_all)
+			)
 		) {
 			return $this->getPageTitle();
 		} else {
@@ -734,37 +724,53 @@ class w2dc_directory_controller extends w2dc_frontend_controller {
 	
 	// rewrite canonical URL
 	public function rel_canonical_with_custom_tag_override() {
-		echo '<link rel="canonical" href="' . get_permalink($this->object_single->post->ID) . '" />
+		
+		if (!is_plugin_active('wordpress-seo/wp-seo.php') && !is_plugin_active('wordpress-seo-premium/wp-seo-premium.php')) {
+			
+			$permalink = false;
+			if ($this->is_single) {
+				$permalink = get_permalink($this->object_single->post->ID);
+			}
+			if ( $this->is_category || $this->is_location || $this->is_tag) {
+				$permalink = get_term_link($this->term);
+			}
+			
+			if ($permalink) {
+				echo '<link rel="canonical" href="' . $permalink . '" />
 ';
+			}
+		}
 	}
 	
 	// Adding the Open Graph in the Language Attributes
 	public function add_opengraph_doctype($output) {
-		return $output . ' xmlns:og="http://opengraphprotocol.org/schema/" xmlns:fb="http://www.facebook.com/2008/fbml"';
-	}
-	
-	// Temporarily change global $post variable in head
-	public function change_global_post_to_listing() {
-		global $post;
-		$post = $this->object_single->post;
+		
+		if (!is_plugin_active('wordpress-seo/wp-seo.php') && !is_plugin_active('wordpress-seo-premium/wp-seo-premium.php')) {
+			return $output . ' xmlns:og="http://opengraphprotocol.org/schema/" xmlns:fb="http://www.facebook.com/2008/fbml"';
+		}
+		
+		return $output;
 	}
 	
 	// Lets add Open Graph Meta Info
 	public function insert_fb_in_head() {
-		echo '<meta property="og:type" content="article" data-w2dc-og-meta="true" />
+		
+		if (!is_plugin_active('wordpress-seo/wp-seo.php') && !is_plugin_active('wordpress-seo-premium/wp-seo-premium.php')) {
+			
+			echo '<meta property="og:type" content="article" data-w2dc-og-meta="true" />
 ';
-		echo '<meta property="og:title" content="' . $this->og_title() . '" />
+			echo '<meta property="og:title" content="' . $this->og_title() . '" />
 ';
-	
-		echo '<meta property="og:description" content="' . $this->og_description() . '" />
+			echo '<meta property="og:description" content="' . $this->og_description() . '" />
 ';
-		echo '<meta property="og:url" content="' . $this->og_url() . '" />
+			echo '<meta property="og:url" content="' . $this->og_url() . '" />
 ';
-		echo '<meta property="og:site_name" content="' . $this->og_site_name() . '" />
+			echo '<meta property="og:site_name" content="' . $this->og_site_name() . '" />
 ';
-		if ($thumbnail_src = $this->og_image()) {
+			if ($thumbnail_src = $this->og_image()) {
 			echo '<meta property="og:image" content="' . esc_attr($thumbnail_src) . '" />
 ';
+			}
 		}
 	
 		add_filter('wpseo_opengraph_title', array($this, 'og_title'), 10, 2);
@@ -799,22 +805,41 @@ class w2dc_directory_controller extends w2dc_frontend_controller {
 	public function og_image() {
 		return $this->object_single->get_logo_url();
 	}
-
-	public function display() {
-		$output =  w2dc_renderTemplate($this->template, $this->template_args, true);
-		wp_reset_postdata();
-
-		return $output;
-	}
 }
 
 add_action('init', 'w2dc_handle_wpcf7');
 function w2dc_handle_wpcf7() {
+	
 	if (defined('WPCF7_VERSION')) {
 		if (get_option('w2dc_listing_contact_form') && defined('WPCF7_VERSION') && w2dc_get_wpml_dependent_option('w2dc_listing_contact_form_7')) {
 			add_filter('wpcf7_mail_components', 'w2dc_wpcf7_handle_email', 10, 2);
 		}
+		
+		/**
+		 * find contact form by its real ID or by hash (since v5.8)
+		 * @param int|string $id_from_attr
+		 * @return int
+		 */
+		function w2dc_wpcf7_get_contact_form_id($id_from_attr) {
 			
+			$wpcf7_id = false;
+			
+			if (function_exists('wpcf7_get_contact_form_by_hash')) {
+				
+				$WPCF7 = wpcf7_get_contact_form_by_hash($id_from_attr);
+				
+				if ($WPCF7) {
+					$wpcf7_id = $WPCF7->id();
+				}
+			}
+			
+			if (!$wpcf7_id && is_numeric($id_from_attr)) {
+				$wpcf7_id = $id_from_attr;
+			}
+			
+			return $wpcf7_id;
+		}
+		
 		function w2dc_wpcf7_handle_email($WPCF7_components, $WPCF7_currentform) {
 			if (isset($_REQUEST['listing_id'])) {
 				$post = get_post($_REQUEST['listing_id']);
@@ -822,19 +847,30 @@ function w2dc_handle_wpcf7() {
 				$mail = $WPCF7_currentform->prop('mail');
 				// DO not touch mail_2
 				if ($mail['recipient'] == $WPCF7_components['recipient']) {
+					
 					if ($post && isset($_POST['_wpcf7']) && preg_match_all('/'.get_shortcode_regex().'/s', w2dc_get_wpml_dependent_option('w2dc_listing_contact_form_7'), $matches)) {
+						
 						foreach ($matches[2] AS $key=>$shortcode) {
+							
 							if ($shortcode == 'contact-form-7') {
+								
 								if ($attrs = shortcode_parse_atts($matches[3][$key])) {
-									if (isset($attrs['id']) && $attrs['id'] == $_POST['_wpcf7']) {
-										$contact_email = null;
-										if (get_option('w2dc_custom_contact_email') && ($listing = w2dc_getListing($post)) && $listing->contact_email) {
-											$contact_email = $listing->contact_email;
-										} elseif (($listing_owner = get_userdata($post->post_author)) && $listing_owner->user_email) {
-											$contact_email = $listing_owner->user_email;
-										}
-										if ($contact_email) {
-											$WPCF7_components['recipient'] .= ','.$contact_email;
+									
+									if (!empty($attrs['id'])) {
+										
+										$id = w2dc_wpcf7_get_contact_form_id($attrs['id']);
+										
+										if ($id == $_POST['_wpcf7']) {
+											
+											$contact_email = null;
+											if (get_option('w2dc_custom_contact_email') && ($listing = w2dc_getListing($post)) && $listing->contact_email) {
+												$contact_email = $listing->contact_email;
+											} elseif (($listing_owner = get_userdata($post->post_author)) && $listing_owner->user_email) {
+												$contact_email = $listing_owner->user_email;
+											}
+											if ($contact_email) {
+												$WPCF7_components['recipient'] .= ','.$contact_email;
+											}
 										}
 									}
 								}
@@ -843,6 +879,7 @@ function w2dc_handle_wpcf7() {
 					}
 				}
 			}
+			
 			return $WPCF7_components;
 		}
 	}

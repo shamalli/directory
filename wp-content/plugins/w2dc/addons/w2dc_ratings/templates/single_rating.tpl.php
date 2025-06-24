@@ -1,3 +1,8 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <div class="w2dc-rating">
 	<div class="w2dc-rating-stars">
 		<label class="w2dc-rating-icon w2dc-fa <?php echo $rating->render_star(5); ?>"></label>

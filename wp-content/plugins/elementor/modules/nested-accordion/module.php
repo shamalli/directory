@@ -1,65 +1,50 @@
 <?php
 namespace Elementor\Modules\NestedAccordion;
 
-use Elementor\Core\Experiments\Manager;
 use Elementor\Plugin;
-use Elementor\Modules\NestedElements\Module as NestedElementsModule;
 use Elementor\Core\Base\Module as BaseModule;
 
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit; // Exit if accessed directly.
 }
 
 class Module extends BaseModule {
 
-	const EXPERIMENT_NAME = 'nested-accordion';
-
 	public static function is_active() {
-		return Plugin::$instance->experiments->is_feature_active( static::EXPERIMENT_NAME );
+		return Plugin::$instance->experiments->is_feature_active( 'nested-elements', true );
 	}
 
 	public function get_name() {
-		return static::EXPERIMENT_NAME;
-	}
-
-	public function get_widgets() {
-		return [
-			'Nested_Accordion',
-		];
-	}
-
-	/**
-	 * Add to the experiments
-	 *
-	 * @return array
-	 */
-	public static function get_experimental_data() {
-		return [
-			'name' => static::EXPERIMENT_NAME,
-			'title' => esc_html__( 'Nested Accordion', 'elementor' ),
-			'description' => sprintf(
-			/* translators: 1: Link opening tag, 2: Link closing tag. */
-				esc_html__( 'Create a rich user experience by layering widgets together inside “Nested” Accordion, etc. %1$sLearn More%2$s', 'elementor' ),
-				'<a href="https://go.elementor.com/widget-nested-accordion" target="_blank">',
-				'</a>'
-			),
-			'hidden' => true,
-			'release_status' => Manager::RELEASE_STATUS_ALPHA,
-			'default' => Manager::STATE_INACTIVE,
-			'dependencies' => [
-				'nested-elements',
-			],
-		];
+		return 'nested-accordion';
 	}
 
 	public function __construct() {
 		parent::__construct();
+
+		add_action( 'elementor/frontend/after_register_styles', [ $this, 'register_styles' ] );
 
 		add_action( 'elementor/editor/before_enqueue_scripts', function () {
 			wp_enqueue_script( $this->get_name(), $this->get_js_assets_url( $this->get_name() ), [
 				'nested-elements',
 			], ELEMENTOR_VERSION, true );
 		} );
+	}
+
+	/**
+	 * Register styles.
+	 *
+	 * At build time, Elementor compiles `/modules/nested-accordion/assets/scss/frontend.scss`
+	 * to `/assets/css/widget-nested-accordion.min.css`.
+	 *
+	 * @return void
+	 */
+	public function register_styles() {
+		wp_register_style(
+			'widget-nested-accordion',
+			$this->get_css_assets_url( 'widget-nested-accordion', null, true, true ),
+			[ 'elementor-frontend' ],
+			ELEMENTOR_VERSION
+		);
 	}
 }

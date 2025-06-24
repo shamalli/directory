@@ -1,7 +1,12 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <?php w2dc_renderTemplate('admin_header.tpl.php'); ?>
 
 <h2>
-	<?php _e('Configure textarea field', 'W2DC'); ?>
+	<?php esc_html_e('Configure textarea field', 'w2dc'); ?>
 </h2>
 
 <form method="POST" action="">
@@ -10,7 +15,7 @@
 		<tbody>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Max length', 'W2DC'); ?><span class="w2dc-red-asterisk">*</span></label>
+					<label><?php esc_html_e('Max length', 'w2dc'); ?><span class="w2dc-red-asterisk">*</span></label>
 				</th>
 				<td>
 					<input
@@ -22,7 +27,7 @@
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('HTML editor enabled', 'W2DC'); ?></label>
+					<label><?php esc_html_e('HTML editor enabled', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<input
@@ -34,7 +39,7 @@
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Run shortcodes', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Run shortcodes', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<input
@@ -47,7 +52,7 @@
 		</tbody>
 	</table>
 	
-	<?php submit_button(__('Save changes', 'W2DC')); ?>
+	<?php submit_button(esc_html__('Save changes', 'w2dc')); ?>
 </form>
 
 <?php w2dc_renderTemplate('admin_footer.tpl.php'); ?>

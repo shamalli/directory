@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 class w2dc_listings_packages {
 	public $listings_numbers = array();
 	
@@ -106,7 +108,7 @@ class w2dc_listings_packages {
 			return false;
 		}
 	?>
-		<h2><?php _e('Directory listings available', 'W2DC'); ?></h3>
+		<h2><?php esc_html_e('Directory listings available', 'w2dc'); ?></h3>
 
 		<table class="form-table">
 		<?php
@@ -115,12 +117,12 @@ class w2dc_listings_packages {
 		foreach ($w2dc_instance->levels->levels_array as $level):
 		?>
 			<tr>
-				<th><label for="listings_number_<?php echo $level->id; ?>"><?php _e('Number of listings of level "'.esc_attr($level->name).'"', 'W2DC'); ?></label></th>
+				<th><label for="listings_number_<?php w2dc_esc_e($level->id); ?>"><?php esc_html_e('Number of listings of level "'.esc_attr($level->name).'"', 'w2dc'); ?></label></th>
 				<td>
-					<input type="text" name="_listings_number_<?php echo $level->id; ?>" id="_listings_number_<?php echo $level->id; ?>" value="<?php echo esc_attr($listings_number[$level->id]['number']); ?>" class="regular-text listings_number" />
+					<input type="text" name="_listings_number_<?php w2dc_esc_e($level->id); ?>" id="_listings_number_<?php w2dc_esc_e($level->id); ?>" value="<?php echo esc_attr($listings_number[$level->id]['number']); ?>" class="regular-text listings_number" />
 					<p>
-						<input type="checkbox" name="_listings_unlimited_<?php echo $level->id; ?>" id="_listings_unlimited_<?php echo $level->id; ?>" <?php checked($listings_number[$level->id]['unlimited'], 1); ?> value="1" />
-						<label for="_listings_unlimited_<?php echo $level->id; ?>"><?php _e('Unlimited', 'W2DC'); ?></label>
+						<input type="checkbox" name="_listings_unlimited_<?php w2dc_esc_e($level->id); ?>" id="_listings_unlimited_<?php w2dc_esc_e($level->id); ?>" <?php checked($listings_number[$level->id]['unlimited'], 1); ?> value="1" />
+						<label for="_listings_unlimited_<?php w2dc_esc_e($level->id); ?>"><?php esc_html_e('Unlimited', 'w2dc'); ?></label>
 					</p>
 				</td>
 			</tr>
@@ -162,19 +164,19 @@ class w2dc_listings_packages {
 		} 
 
 		if ($listings_number[$level_id]['unlimited']) {
-			$number = __("unlimited", "W2DC");
+			$number = esc_html__("unlimited", "w2dc");
 		} elseif ($listings_number[$level_id]['number']) {
 			$number = $listings_number[$level_id]['number'];
 		}
 		if ($number) {
-			$out = sprintf(__("You have <strong>%s</strong> %s to %s from your package.", "W2DC"), $number, _n($directory->single, $directory->plural, $number), $action_string);
+			$out = sprintf(wp_kses(__("You have <strong>%s</strong> %s to %s from your package.", "w2dc"), 'post'), $number, _n($directory->single, $directory->plural, $number), $action_string);
 		}
 		
 		return $out;
 	}
 	
 	public function submitlisting_level_message($level, $directory = false) {
-		$out = $this->available_listings_descr($level->id, __("submit", "W2DC"), $directory);
+		$out = $this->available_listings_descr($level->id, esc_html__("submit", "w2dc"), $directory);
 
 		if ($out) {
 			return '<div class="w2dc-user-package-message">' . $out . '</div>';
@@ -193,7 +195,7 @@ class w2dc_listings_packages {
 	}
 
 	public function renew_html($listing) {
-		$out = $this->available_listings_descr($listing->level->id, __("renew", "W2DC"));
+		$out = $this->available_listings_descr($listing->level->id, esc_html__("renew", "w2dc"));
 		if ($out) {
 			echo "<p>" . $out . "</p>";
 		}
@@ -207,7 +209,7 @@ class w2dc_listings_packages {
 			$this->process_listing_creation_for_user($listing->level->id, $user_id);
 			$continue_invoke_hooks[0] = false;
 			if (!defined('DOING_CRON')) {
-				w2dc_addMessage(__("Listing was renewed successfully.", "W2DC"));
+				w2dc_addMessage(esc_html__("Listing was renewed successfully.", "w2dc"));
 			}
 			$continue_invoke_hooks[0] = false;
 			return false;
@@ -216,7 +218,7 @@ class w2dc_listings_packages {
 	}
 	
 	public function raiseup_html($listing) {
-		$out = $this->available_listings_descr($listing->level->id, __("raise up", "W2DC"));
+		$out = $this->available_listings_descr($listing->level->id, esc_html__("raise up", "w2dc"));
 		if ($out) {
 			echo "<p>" . $out . "</p>";
 		}
@@ -236,7 +238,7 @@ class w2dc_listings_packages {
 		$out = $link_text;
 
 		if ($this->can_user_create_listing_in_level($new_level->id)) {
-			$out .= ' ' . __("(you can upgrade to this level for free)", "W2DC");
+			$out .= ' ' . esc_html__("(you can upgrade to this level for free)", "w2dc");
 		}
 		
 		return $out;

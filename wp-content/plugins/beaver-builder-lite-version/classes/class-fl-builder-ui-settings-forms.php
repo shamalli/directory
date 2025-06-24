@@ -17,15 +17,50 @@ class FLBuilderUISettingsForms {
 	static private $form_templates = array();
 
 	/**
+	 * An array of core fields that are used for style settings.
+	 *
+	 * @since 2.3
+	 * @var int $style_fields
+	 */
+	static private $style_fields = array(
+		'align',
+		'animation',
+		'border',
+		'button-group',
+		'color',
+		'dimension',
+		'font',
+		'gradient',
+		'photo-sizes',
+		'select',
+		'shadow',
+		'shape-transform',
+		'typography',
+		'unit',
+	);
+
+	/**
 	 * @since 2.0
 	 * @return void
 	 */
 	static public function init() {
+		add_action( 'init', __CLASS__ . '::init_style_fields' );
 		add_action( 'wp', __CLASS__ . '::render_settings_config' );
 		add_action( 'wp_enqueue_scripts', __CLASS__ . '::enqueue_settings_config', 11 );
 		add_action( 'wp_footer', __CLASS__ . '::init_js_config', 1 );
 		add_action( 'wp_footer', __CLASS__ . '::render_js_templates', 11 );
 		add_filter( 'fl_builder_ui_js_config', __CLASS__ . '::layout_css_js' );
+		add_filter( 'image_size_names_choose', __CLASS__ . '::inject_all_possible_image_size', 10, 1 );
+	}
+
+	/**
+	 * Allow developers to filter style fields and add their own.
+	 *
+	 * @since 2.3
+	 * @return void
+	 */
+	static public function init_style_fields() {
+		self::$style_fields = apply_filters( 'fl_builder_style_fields', self::$style_fields );
 	}
 
 	/**
@@ -192,7 +227,6 @@ class FLBuilderUISettingsForms {
 		return $defaults;
 	}
 
-
 	/**
 	 * Prepares forms for the JS config.
 	 *
@@ -277,13 +311,18 @@ class FLBuilderUISettingsForms {
 		}
 
 		// Select fields
-		if ( 'select' === $field['type'] ) {
+		if ( 'select' === $field['type'] && isset( $field['options'] ) ) {
 
 			if ( is_string( $field['options'] ) && is_callable( $field['options'] ) ) {
 				$field['options'] = call_user_func( $field['options'] );
 			} else {
 				$field['options'] = (array) $field['options'];
 			}
+		}
+
+		// Mark fields as style fields.
+		if ( ! isset( $field['is_style'] ) ) {
+			$field['is_style'] = in_array( $field['type'], self::$style_fields );
 		}
 	}
 
@@ -497,10 +536,10 @@ class FLBuilderUISettingsForms {
 		$meta           = wp_get_attachment_metadata( $id );
 		$sizes          = array();
 		$possible_sizes = apply_filters( 'image_size_names_choose', array(
-			'thumbnail' => __( 'Thumbnail' ),
-			'medium'    => __( 'Medium' ),
-			'large'     => __( 'Large' ),
-			'full'      => __( 'Full Size' ),
+			'thumbnail' => __( 'Thumbnail', 'fl-builder' ),
+			'medium'    => __( 'Medium', 'fl-builder' ),
+			'large'     => __( 'Large', 'fl-builder' ),
+			'full'      => __( 'Full Size', 'fl-builder' ),
 		) );
 
 		if ( isset( $meta['sizes'] ) ) {
@@ -656,6 +695,10 @@ class FLBuilderUISettingsForms {
 			$tabs = FLBuilderModel::$modules[ $form ]->form;
 		}
 
+		if ( empty( $tabs ) ) {
+			return $response;
+		}
+
 		// Get the form fields.
 		$fields = FLBuilderModel::get_settings_form_fields( $tabs );
 
@@ -746,7 +789,7 @@ class FLBuilderUISettingsForms {
 			foreach ( $data['tabs'] as $name ) {
 				$tab = $tabs[ $name ];
 				if ( FL_BUILDER_DIR . 'includes/loop-settings.php' === $tab['file'] ) {
-					$tab['file'] = FL_BUILDER_DIR . 'includes/ui-loop-settings.php';
+					$tab['file'] = FL_BUILDER_DIR . 'includes/ui-loop-settings-filter.php';
 				}
 				if ( file_exists( $tab['file'] ) ) {
 					ob_start();
@@ -770,7 +813,7 @@ class FLBuilderUISettingsForms {
 	 * @param object $settings The settings data.
 	 * @return array
 	 */
-	static public function render_settings( $form = array(), $settings ) {
+	static public function render_settings( $form, $settings ) {
 		$defaults = array(
 			'class'    => '',
 			'attrs'    => '',
@@ -785,7 +828,7 @@ class FLBuilderUISettingsForms {
 		 * Legacy filter for the config.
 		 * @see fl_builder_settings_form_config
 		 */
-		$form = apply_filters( 'fl_builder_settings_form_config', array_merge( $defaults, $form ) );
+		$form = apply_filters( 'fl_builder_settings_form_config', array_merge( $defaults, (array) $form ) );
 
 		// Setup the class var to be safe in JS.
 		$form['className'] = $form['class'];
@@ -854,7 +897,7 @@ class FLBuilderUISettingsForms {
 		/**
 		 * Use this filter to modify the config array for a field before it is rendered.
 		 * @see fl_builder_render_settings_field
-		 * @link https://kb.wpbeaverbuilder.com/article/117-plugin-filter-reference
+		 * @link https://docs.wpbeaverbuilder.com/beaver-builder/developer/tutorials-guides/common-beaver-builder-filter-examples
 		 * @since 2.0
 		 */
 		$field = apply_filters( 'fl_builder_render_settings_field', $field, $name, $settings ); // Allow field settings filtering first
@@ -943,6 +986,29 @@ class FLBuilderUISettingsForms {
 	 */
 	static public function render_icon_selector() {
 		$icon_sets = FLBuilderIcons::get_sets();
+		$enabled   = FLBuilderModel::get_enabled_icons();
+
+		if ( ! in_array( 'font-awesome-kit', $enabled ) ) {
+			unset( $icon_sets['font-awesome-kit'] );
+		}
+
+		// deal with fa plugin js
+		if ( FLBuilderFontAwesome::is_installed() ) {
+			$kit_enabled = false;
+			$enabled     = FLBuilderModel::get_enabled_icons();
+			$kit_icons   = FLBuilderFontAwesome::get_kit_icons();
+
+			if ( in_array( 'font-awesome-kit', $enabled ) ) {
+				$kit_enabled = true;
+			}
+			if ( $kit_enabled && count( $kit_icons ) > 0 ) {
+				unset( $icon_sets['font-awesome-5-solid'] );
+				unset( $icon_sets['font-awesome-5-regular'] );
+				unset( $icon_sets['font-awesome-5-brands'] );
+				unset( $icon_sets['font-awesome-5-light'] );
+				unset( $icon_sets['font-awesome-5-duotone'] );
+			}
+		}
 
 		ob_start();
 		include FL_BUILDER_DIR . 'includes/icon-selector.php';
@@ -960,6 +1026,28 @@ class FLBuilderUISettingsForms {
 
 		$config['layout_css_js'] = ( ( isset( $settings->css ) && '' !== $settings->css ) || ( isset( $settings->js ) && '' !== $settings->js ) ) ? true : false;
 		return $config;
+	}
+
+	/**
+	 * Inject all possible image sizes to
+	 * image size name choose option
+	 *
+	 * @param array $sizes
+	 * @return array
+	 */
+	static public function inject_all_possible_image_size( $sizes ) {
+		global $_wp_additional_image_sizes;
+
+		$intermediate_sizes = array();
+
+		foreach ( get_intermediate_image_sizes() as $size ) {
+			if ( 'medium_large' == $size ) {
+				continue;
+			}
+			$intermediate_sizes[ $size ] = ucwords( str_replace( array( '_', '-' ), ' ', $size ) );
+		}
+
+		return array_merge( $sizes, $intermediate_sizes );
 	}
 }
 

@@ -1,6 +1,8 @@
 <?php
 
-class VP_W2DC_WP_Util
+// @codingStandardsIgnoreFile
+
+class W2DC_VP_WP_Util
 {
 
 	public static function kses_html($html)

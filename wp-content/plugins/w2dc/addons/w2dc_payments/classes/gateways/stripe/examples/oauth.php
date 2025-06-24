@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 require('../init.php');
 
 \Stripe\Stripe::setApiKey(getenv('STRIPE_SECRET_KEY'));

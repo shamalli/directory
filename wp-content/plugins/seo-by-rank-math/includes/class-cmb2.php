@@ -12,10 +12,10 @@
 
 namespace RankMath;
 
+use RankMath\Helper;
+use RankMath\Helpers\Str;
+use RankMath\Helpers\Param;
 use RankMath\Admin\Admin_Helper;
-use MyThemeShop\Helpers\Str;
-use MyThemeShop\Helpers\Param;
-use MyThemeShop\Helpers\Conditional;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -99,7 +99,7 @@ class CMB2 {
 			$type = 'term';
 		}
 
-		if ( Conditional::is_ajax() && 'add-tag' === Param::post( 'action' ) ) {
+		if ( Helper::is_ajax() && 'add-tag' === Param::post( 'action' ) ) {
 			$type = 'term';
 		}
 
@@ -353,6 +353,26 @@ class CMB2 {
 		}
 
 		return htmlentities( wp_strip_all_tags( $value ) );
+	}
+
+	/**
+	 * Handles sanitization for custom webmaster tags.
+	 * Only <meta> tags are allowed.
+	 *
+	 * @param mixed $value The unsanitized value from the form.
+	 */
+	public static function sanitize_custom_webmaster_tags( $value ) {
+		$sanitized = wp_kses(
+			$value,
+			[
+				'meta' => [
+					'name'    => [],
+					'content' => [],
+				],
+			]
+		);
+
+		return $sanitized;
 	}
 
 	/**

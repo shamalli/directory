@@ -28,7 +28,7 @@ class w2rr_target_post_manager {
 		$w2rr_columns = array();
 		
 		if (in_array($post_type, w2rr_getWorkingPostTypes())) {
-			$w2rr_columns["w2rr_reviews"] = __("Rating & Reviews", "W2RR");
+			$w2rr_columns["w2rr_reviews"] = esc_html__("Rating & Reviews", "w2rr");
 		}
 		
 		return array_slice($columns, 0, 2, true) + $w2rr_columns + array_slice($columns, 2, count($columns)-2, true);
@@ -50,7 +50,7 @@ class w2rr_target_post_manager {
 				
 				$reviews_counter = $w2rr_instance->reviews_manager->get_reviews_counter($target_post);
 				echo '<a href="' . admin_url('edit.php?post_type=w2rr_review&w2rr_target_post='.$post_id) . '">';
-				echo $reviews_counter . ' ' . _n('review', 'reviews', $reviews_counter, 'W2RR');
+				echo $reviews_counter . ' ' . _n('review', 'reviews', $reviews_counter, 'w2rr');
 				echo '</a>';
 				
 				break;
@@ -62,6 +62,7 @@ class w2rr_target_post_manager {
 	 * 
 	 */
 	public function remove_comments_metabox($type, $post) {
+		
 		$post_types = w2rr_getWorkingPostTypes();
 	
 		foreach ($post_types AS $post_type) {
@@ -70,7 +71,7 @@ class w2rr_target_post_manager {
 		}
 		
 		
-		if (in_array($post->ID, w2rr_getSelectedPages())) {
+		if (is_object($post) && in_array($post->ID, w2rr_getSelectedPages())) {
 			remove_meta_box('commentstatusdiv', $type, 'normal');
 			remove_meta_box('commentsdiv', $type, 'normal');
 		}
@@ -84,7 +85,7 @@ class w2rr_target_post_manager {
 	public function addReviewsMetabox($post_type, $post) {
 		if (in_array($post_type, w2rr_getWorkingPostTypes()) && !in_array($post->ID, w2rr_getSelectedPages())) {
 			add_meta_box('w2rrreviews',
-			esc_html__('Reviews', 'W2RR'),
+			esc_html__('Reviews', 'w2rr'),
 			array($this, 'targetPostReviewsMetabox'),
 			$post_type,
 			'normal',

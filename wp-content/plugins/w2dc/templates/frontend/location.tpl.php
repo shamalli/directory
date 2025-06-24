@@ -1,3 +1,8 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 		<div class="w2dc-content w2dc-location-page">
 			<?php do_action('w2dc_location_page_header'); ?>
 			
@@ -22,7 +27,7 @@
 			</header>
 			<?php endif; ?>
 	
-			<?php if (get_option('w2dc_main_search')): ?>
+			<?php if ($frontend_controller->search_form): ?>
 			<?php $frontend_controller->search_form->display(); ?>
 			<?php endif; ?>
 

@@ -1,4 +1,9 @@
-<article class="w2dc-listing-location w2dc-listing-has-location-<?php echo $location->id; ?>" id="post-<?php echo $location->id; ?>" data-location-id="<?php echo $location->id; ?>" style="height: auto;">
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
+<article class="w2dc-listing-location w2dc-listing-has-location-<?php w2dc_esc_e($location->id); ?> w2dc-height-auto" id="post-<?php w2dc_esc_e($location->id); ?>" data-location-id="<?php w2dc_esc_e($location->id); ?>">
 	<div class="w2dc-listing-location-content">
 		<?php
 		if ($listing->logo_image) {
@@ -9,17 +14,17 @@
 	
 		?>
 		<div class="w2dc-map-listing-logo-wrap">
-			<figure class="w2dc-map-listing-logo">
+			<div class="w2dc-map-listing-logo">
 				<div class="w2dc-map-listing-logo-img-wrap">
-					<div style="background-image: url('<?php echo $img_src; ?>');" class="w2dc-map-listing-logo-img">
-						<img src="<?php echo $img_src; ?>" />
+					<div style="background-image: url('<?php w2dc_esc_e($img_src); ?>');" class="w2dc-map-listing-logo-img">
+						<img src="<?php w2dc_esc_e($img_src); ?>" alt="<?php echo esc_attr($listing->title()); ?>" title="<?php echo esc_attr($listing->title()); ?>" />
 					</div>
 				</div>
-			</figure>
+			</div>
 		</div>
 		<div class="w2dc-map-listing-content-wrap">
 			<header class="w2dc-map-listing-header">
-				<h2><?php echo $listing->title(); ?> <?php do_action('w2dc_listing_title_html', $listing, false); ?></h2>
+				<h2><?php echo $listing->title(); ?> <?php do_action('w2dc_listing_title_location_html', $listing, false); ?></h2>
 			</header>
 			<?php $listing->renderMapSidebarContentFields($location); ?>
 		</div>
@@ -32,16 +37,16 @@
 				$buttons_class = 'w2dc-map-info-window-buttons';
 			}
 	?>
-	<div class="<?php echo $buttons_class; ?> w2dc-clearfix">
+	<div class="<?php w2dc_esc_e($buttons_class); ?> w2dc-clearfix">
 		<?php if ($show_directions_button): ?>
 			<?php if (w2dc_getMapEngine() == 'google'): ?>
-			<a href="https://www.google.com/maps/dir/?api=1&destination=<?php echo urlencode($location->latitude.','.$location->longitude); ?>" target="_blank" class="w2dc-btn w2dc-btn-primary"><?php _e('« Directions', 'W2DC'); ?></a>
+			<a href="https://www.google.com/maps/dir/?api=1&destination=<?php echo urlencode($location->latitude.','.$location->longitude); ?>" target="_blank" class="w2dc-btn w2dc-btn-primary"><?php esc_html_e('« Directions', 'w2dc'); ?></a>
 			<?php elseif (w2dc_getMapEngine() == 'mapbox'): ?>
-			<a href="<?php the_permalink($listing->post->ID); ?>#addresses-tab" class="w2dc-btn w2dc-btn-primary w2dc-map-info-window-directions-button"><?php _e('« Directions', 'W2DC'); ?></a>
+			<a href="<?php the_permalink($listing->post->ID); ?>#addresses-tab" class="w2dc-btn w2dc-btn-primary w2dc-map-info-window-directions-button"><?php esc_html_e('« Directions', 'w2dc'); ?></a>
 			<?php endif; ?>
 		<?php endif; ?>
 		<?php if ($show_readmore_button): ?>
-		<a href="javascript:void(0);" data-location-id="<?php echo $location->id; ?>" class="w2dc-btn w2dc-btn-primary w2dc-show-on-map"><?php _e('View on map »', 'W2DC')?></a>
+		<a href="javascript:void(0);" data-location-id="<?php w2dc_esc_e($location->id); ?>" class="w2dc-btn w2dc-btn-primary w2dc-show-on-map"><?php esc_html_e('View on map »', 'w2dc')?></a>
 		<?php endif; ?>
 	</div>
 	<?php endif; ?>

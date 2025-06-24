@@ -11,17 +11,18 @@
 namespace RankMath\Analytics\Workflow;
 
 use Exception;
-use MyThemeShop\Helpers\DB;
+use RankMath\Helpers\DB;
 use RankMath\Traits\Hooker;
 use RankMath\Analytics\DB as AnalyticsDB;
 use RankMath\Analytics\Url_Inspection;
+use RankMath\Google\Console;
 
 use function as_unschedule_all_actions;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Console class.
+ * Inspections class.
  */
 class Inspections {
 
@@ -43,8 +44,11 @@ class Inspections {
 	 * Constructor.
 	 */
 	public function __construct() {
+
+		$this->create_tables();
+
 		// If console is not connected, ignore all, no need to proceed.
-		if ( ! \RankMath\Google\Console::is_console_connected() ) {
+		if ( ! Console::is_console_connected() ) {
 			return;
 		}
 
@@ -114,8 +118,8 @@ class Inspections {
 		}
 
 		// Make sure that collations match the objects table.
-		$objects_coll = \RankMath\Helper::get_table_collation( 'rank_math_analytics_objects' );
-		\RankMath\Helper::check_collation( $table, 'all', $objects_coll );
+		$objects_coll = DB::get_table_collation( 'rank_math_analytics_objects' );
+		DB::check_collation( $table, 'all', $objects_coll );
 	}
 
 	/**
@@ -151,7 +155,7 @@ class Inspections {
 				$time       = strtotime( "+{$delay_days} days", $time );
 			}
 
-			as_schedule_single_action( $time, 'rank_math/analytics/get_inspections_data', [ $object->page ], 'rank_math/analytics/get_inspections_data' );
+			as_schedule_single_action( $time, 'rank_math/analytics/get_inspections_data', [ $object->page ], 'rank-math' );
 		}
 	}
 

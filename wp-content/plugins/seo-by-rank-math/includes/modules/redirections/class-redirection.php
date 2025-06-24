@@ -11,7 +11,8 @@
 namespace RankMath\Redirections;
 
 use RankMath\Helper;
-use MyThemeShop\Helpers\Url;
+use RankMath\Helpers\Url;
+use RankMath\Helpers\Param;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -143,7 +144,7 @@ class Redirection {
 	 * @return int
 	 */
 	public function get_id() {
-		return $this->id;
+		return $this->data['id'];
 	}
 
 	/**
@@ -153,6 +154,15 @@ class Redirection {
 	 */
 	public function set_id( $id ) {
 		$this->data['id'] = $id;
+	}
+
+	/**
+	 * Set item status.
+	 *
+	 * @param string $status Item status.
+	 */
+	public function set_status( $status ) {
+		$this->data['status'] = $status;
 	}
 
 	/**
@@ -197,6 +207,24 @@ class Redirection {
 		}
 
 		return $this->get_id();
+	}
+
+	/**
+	 * Check a newly added redirection for infinite loop.
+	 */
+	public function is_infinite_loop() {
+		$destination = $this->data['url_to'];
+		foreach ( $this->data['sources'] as $source ) {
+			if ( 'exact' !== $source['comparison'] ) {
+				continue;
+			}
+
+			$source_url = home_url( $source['pattern'] );
+			if ( $destination === $source_url ) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -436,7 +464,7 @@ class Redirection {
 			return $this->domain;
 		}
 
-		$this->domain = Url::get_domain( home_url() );
+		$this->domain = Url::get_host( home_url() );
 
 		return $this->domain;
 	}
@@ -452,5 +480,18 @@ class Redirection {
 		$home_dir = ltrim( Helper::get_home_url( '', 'relative' ), '/' );
 
 		return $home_dir ? str_replace( trailingslashit( $home_dir ), '', $url ) : $url;
+	}
+
+	/**
+	 * Get the current URI.
+	 *
+	 * @return string
+	 */
+	public static function get_full_uri() {
+		$uri = str_replace( home_url( '/' ), '', Param::server( 'REQUEST_URI' ) );
+		$uri = urldecode( $uri );
+		$uri = trim( self::strip_subdirectory( $uri ), '/' );
+
+		return $uri;
 	}
 }

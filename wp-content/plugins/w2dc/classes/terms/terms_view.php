@@ -1,5 +1,7 @@
 <?php 
 
+// @codingStandardsIgnoreFile
+
 class w2dc_terms_view {
 	public $attrs;
 	public $depth;
@@ -148,6 +150,8 @@ class w2dc_terms_view {
 		$classes[] = "w2dc-terms-columns-" . $this->columns;
 		if ($this->menu) {
 			$classes[] = "w2dc-terms-menu";
+		} else {
+			$classes[] = "w2dc-terms-grid";
 		}
 		if ($this->grid) {
 			$classes[] = $this->grid_classes;
@@ -262,7 +266,11 @@ class w2dc_terms_view {
 		
 			echo '<div class="w2dc-col-md-' . $this->col_md . '">';
 			echo '<div class="' . $this->column_classes . '">';
-			echo '<div class="' . $this->root_classes . ' ' . $this->item_classes . ' ' . $this->highlightItem($term) . '" ' . $this->renderFeaturedImage($term) . '><a href="' . get_term_link($term) . '" title="' . $term->name . '"><div class="w2dc-term-label"><div class="w2dc-term-label-justify">' . $this->renderIconImage($term) . $term->name . '</div>' . $this->renderTermCount($term) . '</div></a></div>';
+			if ($this->menu) {
+				echo '<div class="' . $this->root_classes . ' ' . $this->item_classes . ' ' . $this->highlightItem($term) . '" ' . $this->renderFeaturedImage($term) . '><a href="' . get_term_link($term) . '" title="' . $term->name . '"><div class="w2dc-term-label"><div class="w2dc-term-label-justify">' . $this->renderIconImage($term) . $term->name . '</div>' . $this->renderTermCount($term) . '</div>' . do_action('w2dc_render_term', $term) . '</a></div>';
+			} else {
+				echo '<div class="' . $this->root_classes . ' ' . $this->item_classes . ' ' . $this->highlightItem($term) . '" ' . $this->renderFeaturedImage($term) . '><a href="' . get_term_link($term) . '" title="' . $term->name . '"><div class="w2dc-term-label"><div class="w2dc-term-label-justify">' . $this->renderIconImage($term) . $term->name . '&nbsp;' . $this->renderTermCount($term) . '</div></div>' . do_action('w2dc_render_term', $term) . '</a></div>';
+			}
 			echo $this->_display($term->term_id, 1);
 			echo '</div>';
 		
@@ -303,8 +311,9 @@ class w2dc_terms_view {
 					if ($this->max_subterms != 0 && $counter > $this->max_subterms) {
 						$html .= '<li class="' . $this->item_classes . ' ' . $this->highlightItem($term) . '"><a href="' . get_term_link(intval($parent), $this->tax) . '">' . $this->view_all_terms . '</a></li>';
 						break;
-					} else
-						$html .= '<li class="' . $this->item_classes . ' ' . $this->highlightItem($term) . '"><a href="' . get_term_link($term) . '" title="' . $term->name . '">' . $icon_image . $term->name . $term_count . '</a></li>';
+					} else {
+						$html .= '<li class="' . $this->item_classes . ' ' . $this->highlightItem($term) . '"><a href="' . get_term_link($term) . '" title="' . $term->name . '">' . $icon_image . $term->name . $term_count . do_action('w2dc_render_term', $term) . '</a></li>';
+					}
 				}
 				$html .= '</ul>';
 				$html .= '</div>';
@@ -318,7 +327,7 @@ class w2dc_terms_view {
 			if ($term = w2dc_getValue($terms, 0)) {
 				echo '<div class="w2dc-col-md-6">';
 					echo '<div class="' . $this->column_classes . '">';
-						echo '<div class="' . $this->root_classes . ' ' . $this->item_classes . '" ' . $this->renderFeaturedImage($term, array(600, 600)) . '><a class="w2dc-grid-item-tall" href="' . get_term_link($term) . '" title="' . $term->name . '"><div class="w2dc-term-label"><div class="w2dc-term-label-justify">' . $this->renderIconImage($term) . $term->name . '</div>' . $this->renderTermCount($term) . '</div></a></div>';
+						echo '<div class="' . $this->root_classes . ' ' . $this->item_classes . '" ' . $this->renderFeaturedImage($term, array(600, 600)) . '><a class="w2dc-grid-item-tall" href="' . get_term_link($term) . '" title="' . $term->name . '"><div class="w2dc-term-label"><div class="w2dc-term-label-justify">' . $this->renderIconImage($term) . $term->name . '&nbsp;' . $this->renderTermCount($term) . '</div></div>' . do_action('w2dc_render_term', $term) . '</a></div>';
 					echo '</div>';
 				echo '</div>';
 			}
@@ -328,7 +337,7 @@ class w2dc_terms_view {
 					echo '<div class="w2dc-row ' . $this->row_classes . '">';
 						echo '<div class="w2dc-col-md-12">';
 							echo '<div class="' . $this->column_classes . '">';
-								echo '<div class="' . $this->root_classes . ' ' . $this->item_classes . '" ' . $this->renderFeaturedImage($term) . '><a class="w2dc-grid-item-normal" href="' . get_term_link($term) . '" title="' . $term->name . '"><div class="w2dc-term-label"><div class="w2dc-term-label-justify">' . $this->renderIconImage($term) . $term->name . '</div>' . $this->renderTermCount($term) . '</div></a></div>';
+								echo '<div class="' . $this->root_classes . ' ' . $this->item_classes . '" ' . $this->renderFeaturedImage($term) . '><a class="w2dc-grid-item-normal" href="' . get_term_link($term) . '" title="' . $term->name . '"><div class="w2dc-term-label"><div class="w2dc-term-label-justify">' . $this->renderIconImage($term) . $term->name . '&nbsp;' . $this->renderTermCount($term) . '</div></div>' . do_action('w2dc_render_term', $term) . '</a></div>';
 							echo '</div>';
 						echo '</div>';
 					echo '</div>';
@@ -338,7 +347,7 @@ class w2dc_terms_view {
 					if ($term = w2dc_getValue($terms, 2)) {
 						echo '<div class="w2dc-col-md-6">';
 							echo '<div class="' . $this->column_classes . '">';
-								echo '<div class="' . $this->root_classes . ' ' . $this->item_classes . '" ' . $this->renderFeaturedImage($term) . '><a class="w2dc-grid-item-normal" href="' . get_term_link($term) . '" title="' . $term->name . '"><div class="w2dc-term-label"><div class="w2dc-term-label-justify">' . $this->renderIconImage($term) . $term->name . '</div>' . $this->renderTermCount($term) . '</div></a></div>';
+								echo '<div class="' . $this->root_classes . ' ' . $this->item_classes . '" ' . $this->renderFeaturedImage($term) . '><a class="w2dc-grid-item-normal" href="' . get_term_link($term) . '" title="' . $term->name . '"><div class="w2dc-term-label"><div class="w2dc-term-label-justify">' . $this->renderIconImage($term) . $term->name . '&nbsp;' . $this->renderTermCount($term) . '</div></div>' . do_action('w2dc_render_term', $term) . '</a></div>';
 							echo '</div>';
 						echo '</div>';
 					}
@@ -346,7 +355,7 @@ class w2dc_terms_view {
 					if ($term = w2dc_getValue($terms, 3)) {
 						echo '<div class="w2dc-col-md-6">';
 							echo '<div class="' . $this->column_classes . '">';
-								echo '<div class="' . $this->root_classes . ' ' . $this->item_classes . '" ' . $this->renderFeaturedImage($term) . '><a class="w2dc-grid-item-normal" href="' . get_term_link($term) . '" title="' . $term->name . '"><div class="w2dc-term-label"><div class="w2dc-term-label-justify">' . $this->renderIconImage($term) . $term->name . '</div>' . $this->renderTermCount($term) . '</div></a></div>';
+								echo '<div class="' . $this->root_classes . ' ' . $this->item_classes . '" ' . $this->renderFeaturedImage($term) . '><a class="w2dc-grid-item-normal" href="' . get_term_link($term) . '" title="' . $term->name . '"><div class="w2dc-term-label"><div class="w2dc-term-label-justify">' . $this->renderIconImage($term) . $term->name . '&nbsp;' . $this->renderTermCount($term) . '</div></div>' . do_action('w2dc_render_term', $term) . '</a></div>';
 							echo '</div>';
 						echo '</div>';
 					}
@@ -362,7 +371,7 @@ class w2dc_terms_view {
 					echo '<div class="w2dc-row ' . $this->row_classes . '">';
 						echo '<div class="w2dc-col-md-12">';
 							echo '<div class="' . $this->column_classes . '">';
-								echo '<div class="' . $this->root_classes . ' ' . $this->item_classes . '" ' . $this->renderFeaturedImage($term) . '><a class="w2dc-grid-item-normal" href="' . get_term_link($term) . '" title="' . $term->name . '"><div class="w2dc-term-label"><div class="w2dc-term-label-justify">' . $this->renderIconImage($term) . $term->name . '</div>' . $this->renderTermCount($term) . '</div></a></div>';
+								echo '<div class="' . $this->root_classes . ' ' . $this->item_classes . '" ' . $this->renderFeaturedImage($term) . '><a class="w2dc-grid-item-normal" href="' . get_term_link($term) . '" title="' . $term->name . '"><div class="w2dc-term-label"><div class="w2dc-term-label-justify">' . $this->renderIconImage($term) . $term->name . '&nbsp;' . $this->renderTermCount($term) . '</div></div>' . do_action('w2dc_render_term', $term) . '</a></div>';
 							echo '</div>';
 						echo '</div>';
 					echo '</div>';
@@ -372,7 +381,7 @@ class w2dc_terms_view {
 					if ($term = w2dc_getValue($terms, 1)) {
 						echo '<div class="w2dc-col-md-6">';
 							echo '<div class="' . $this->column_classes . '">';
-								echo '<div class="' . $this->root_classes . ' ' . $this->item_classes . '" ' . $this->renderFeaturedImage($term) . '><a class="w2dc-grid-item-normal" href="' . get_term_link($term) . '" title="' . $term->name . '"><div class="w2dc-term-label"><div class="w2dc-term-label-justify">' . $this->renderIconImage($term) . $term->name . '</div>' . $this->renderTermCount($term) . '</div></a></div>';
+								echo '<div class="' . $this->root_classes . ' ' . $this->item_classes . '" ' . $this->renderFeaturedImage($term) . '><a class="w2dc-grid-item-normal" href="' . get_term_link($term) . '" title="' . $term->name . '"><div class="w2dc-term-label"><div class="w2dc-term-label-justify">' . $this->renderIconImage($term) . $term->name . '&nbsp;' . $this->renderTermCount($term) . '</div></div>' . do_action('w2dc_render_term', $term) . '</a></div>';
 							echo '</div>';
 						echo '</div>';
 					}
@@ -380,7 +389,7 @@ class w2dc_terms_view {
 					if ($term = w2dc_getValue($terms, 2)) {
 						echo '<div class="w2dc-col-md-6">';
 							echo '<div class="' . $this->column_classes . '">';
-								echo '<div class="' . $this->root_classes . ' ' . $this->item_classes . '" ' . $this->renderFeaturedImage($term) . '><a class="w2dc-grid-item-normal" href="' . get_term_link($term) . '" title="' . $term->name . '"><div class="w2dc-term-label"><div class="w2dc-term-label-justify">' . $this->renderIconImage($term) . $term->name . '</div>' . $this->renderTermCount($term) . '</div></a></div>';
+								echo '<div class="' . $this->root_classes . ' ' . $this->item_classes . '" ' . $this->renderFeaturedImage($term) . '><a class="w2dc-grid-item-normal" href="' . get_term_link($term) . '" title="' . $term->name . '"><div class="w2dc-term-label"><div class="w2dc-term-label-justify">' . $this->renderIconImage($term) . $term->name . '&nbsp;' . $this->renderTermCount($term) . '</div></div>' . do_action('w2dc_render_term', $term) . '</a></div>';
 							echo '</div>';
 						echo '</div>';
 					}
@@ -390,7 +399,7 @@ class w2dc_terms_view {
 			if ($term = w2dc_getValue($terms, 3)) {
 				echo '<div class="w2dc-col-md-6">';
 					echo '<div class="' . $this->column_classes . '">';
-						echo '<div class="' . $this->root_classes . ' ' . $this->item_classes . '" ' . $this->renderFeaturedImage($term, array(600, 600)) . '><a class="w2dc-grid-item-tall" href="' . get_term_link($term) . '" title="' . $term->name . '"><div class="w2dc-term-label"><div class="w2dc-term-label-justify">' . $this->renderIconImage($term) . $term->name . '</div>' . $this->renderTermCount($term) . '</div></a></div>';
+						echo '<div class="' . $this->root_classes . ' ' . $this->item_classes . '" ' . $this->renderFeaturedImage($term, array(600, 600)) . '><a class="w2dc-grid-item-tall" href="' . get_term_link($term) . '" title="' . $term->name . '"><div class="w2dc-term-label"><div class="w2dc-term-label-justify">' . $this->renderIconImage($term) . $term->name . '&nbsp;' . $this->renderTermCount($term) . '</div></div>' . do_action('w2dc_render_term', $term) . '</a></div>';
 					echo '</div>';
 				echo '</div>';
 			}
@@ -402,7 +411,7 @@ class w2dc_terms_view {
 			if ($term = w2dc_getValue($terms, 0)) {
 				echo '<div class="w2dc-col-md-3">';
 					echo '<div class="' . $this->column_classes . '">';
-						echo '<div class="' . $this->root_classes . ' ' . $this->item_classes . '" ' . $this->renderFeaturedImage($term) . '><a class="w2dc-grid-item-normal" href="' . get_term_link($term) . '" title="' . $term->name . '"><div class="w2dc-term-label"><div class="w2dc-term-label-justify">' . $this->renderIconImage($term) . $term->name . '</div>' . $this->renderTermCount($term) . '</div></a></div>';
+						echo '<div class="' . $this->root_classes . ' ' . $this->item_classes . '" ' . $this->renderFeaturedImage($term) . '><a class="w2dc-grid-item-normal" href="' . get_term_link($term) . '" title="' . $term->name . '"><div class="w2dc-term-label"><div class="w2dc-term-label-justify">' . $this->renderIconImage($term) . $term->name . '&nbsp;' . $this->renderTermCount($term) . '</div></div>' . do_action('w2dc_render_term', $term) . '</a></div>';
 					echo '</div>';
 				echo '</div>';
 			}
@@ -410,7 +419,7 @@ class w2dc_terms_view {
 			if ($term = w2dc_getValue($terms, 1)) {
 				echo '<div class="w2dc-col-md-6">';
 					echo '<div class="' . $this->column_classes . '">';
-						echo '<div class="' . $this->root_classes . ' ' . $this->item_classes . '" ' . $this->renderFeaturedImage($term) . '><a class="w2dc-grid-item-normal" href="' . get_term_link($term) . '" title="' . $term->name . '"><div class="w2dc-term-label"><div class="w2dc-term-label-justify">' . $this->renderIconImage($term) . $term->name . '</div>' . $this->renderTermCount($term) . '</div></a></div>';
+						echo '<div class="' . $this->root_classes . ' ' . $this->item_classes . '" ' . $this->renderFeaturedImage($term) . '><a class="w2dc-grid-item-normal" href="' . get_term_link($term) . '" title="' . $term->name . '"><div class="w2dc-term-label"><div class="w2dc-term-label-justify">' . $this->renderIconImage($term) . $term->name . '&nbsp;' . $this->renderTermCount($term) . '</div></div>' . do_action('w2dc_render_term', $term) . '</a></div>';
 					echo '</div>';
 				echo '</div>';
 			}
@@ -418,7 +427,7 @@ class w2dc_terms_view {
 			if ($term = w2dc_getValue($terms, 2)) {
 				echo '<div class="w2dc-col-md-3">';
 					echo '<div class="' . $this->column_classes . '">';
-						echo '<div class="' . $this->root_classes . ' ' . $this->item_classes . '" ' . $this->renderFeaturedImage($term) . '><a class="w2dc-grid-item-normal" href="' . get_term_link($term) . '" title="' . $term->name . '"><div class="w2dc-term-label"><div class="w2dc-term-label-justify">' . $this->renderIconImage($term) . $term->name . '</div>' . $this->renderTermCount($term) . '</div></a></div>';
+						echo '<div class="' . $this->root_classes . ' ' . $this->item_classes . '" ' . $this->renderFeaturedImage($term) . '><a class="w2dc-grid-item-normal" href="' . get_term_link($term) . '" title="' . $term->name . '"><div class="w2dc-term-label"><div class="w2dc-term-label-justify">' . $this->renderIconImage($term) . $term->name . '&nbsp;' . $this->renderTermCount($term) . '</div></div>' . do_action('w2dc_render_term', $term) . '</a></div>';
 					echo '</div>';
 				echo '</div>';
 			}
@@ -428,7 +437,7 @@ class w2dc_terms_view {
 			if ($term = w2dc_getValue($terms, 3)) {
 				echo '<div class="w2dc-col-md-7">';
 					echo '<div class="' . $this->column_classes . '">';
-						echo '<div class="' . $this->root_classes . ' ' . $this->item_classes . '" ' . $this->renderFeaturedImage($term) . '><a class="w2dc-grid-item-normal" href="' . get_term_link($term) . '" title="' . $term->name . '"><div class="w2dc-term-label"><div class="w2dc-term-label-justify">' . $this->renderIconImage($term) . $term->name . '</div>' . $this->renderTermCount($term) . '</div></a></div>';
+						echo '<div class="' . $this->root_classes . ' ' . $this->item_classes . '" ' . $this->renderFeaturedImage($term) . '><a class="w2dc-grid-item-normal" href="' . get_term_link($term) . '" title="' . $term->name . '"><div class="w2dc-term-label"><div class="w2dc-term-label-justify">' . $this->renderIconImage($term) . $term->name . '&nbsp;' . $this->renderTermCount($term) . '</div></div>' . do_action('w2dc_render_term', $term) . '</a></div>';
 					echo '</div>';
 				echo '</div>';
 			}
@@ -436,7 +445,7 @@ class w2dc_terms_view {
 			if ($term = w2dc_getValue($terms, 4)) {
 				echo '<div class="w2dc-col-md-5">';
 					echo '<div class="' . $this->column_classes . '">';
-						echo '<div class="' . $this->root_classes . ' ' . $this->item_classes . '" ' . $this->renderFeaturedImage($term) . '><a class="w2dc-grid-item-normal" href="' . get_term_link($term) . '" title="' . $term->name . '"><div class="w2dc-term-label"><div class="w2dc-term-label-justify">' . $this->renderIconImage($term) . $term->name . '</div>' . $this->renderTermCount($term) . '</div></a></div>';
+						echo '<div class="' . $this->root_classes . ' ' . $this->item_classes . '" ' . $this->renderFeaturedImage($term) . '><a class="w2dc-grid-item-normal" href="' . get_term_link($term) . '" title="' . $term->name . '"><div class="w2dc-term-label"><div class="w2dc-term-label-justify">' . $this->renderIconImage($term) . $term->name . '&nbsp;' . $this->renderTermCount($term) . '</div></div>' . do_action('w2dc_render_term', $term) . '</a></div>';
 					echo '</div>';
 				echo '</div>';
 			}
@@ -459,7 +468,7 @@ class w2dc_categories_view extends w2dc_terms_view {
 	public function __construct($params) {
 		parent::__construct($params);
 		
-		$this->view_all_terms = __("View all subcategories ->", "W2DC");
+		$this->view_all_terms = esc_html__("View all subcategories ->", "w2dc");
 	}
 	
 	public function getTermIconFile($term_id) {
@@ -488,7 +497,7 @@ class w2dc_locations_view extends w2dc_terms_view {
 	public function __construct($params) {
 		parent::__construct($params);
 		
-		$this->view_all_terms = __("View all sublocations ->", "W2DC");
+		$this->view_all_terms = esc_html__("View all sublocations ->", "w2dc");
 	}
 	
 	public function getTermIconFile($term_id) {

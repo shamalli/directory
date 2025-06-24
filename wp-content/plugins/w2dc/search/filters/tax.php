@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 add_filter("w2dc_query_args_validate", "w2dc_query_args_validate_tax");
 function w2dc_query_args_validate_tax($args) {
 

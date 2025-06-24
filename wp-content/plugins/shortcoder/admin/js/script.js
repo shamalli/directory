@@ -30,6 +30,8 @@ $(document).ready(function(){
 
         $('.sc_params_list').appendTo('body');
 
+        $('.sc_title_shortcut').val($('input[name="post_title"]').val());
+
     }
 
     var set_sc_preview_text = function(name){
@@ -103,7 +105,7 @@ $(document).ready(function(){
             wp.CodeMirror.defineMode('sc_mode', function(config, parserConfig){
                 var sc_overlay = {
                     token: function(stream, state){
-                        if(stream.match(/\$\$[a-z0-9A-Z:_\-]+\$\$/)){
+                        if(stream.match(/\$\$[a-z0-9A-Z:_ \-]+\$\$/)){
                             return 'number sc_param';
                         }
                         if(stream.match(/%%.*?%%/)){
@@ -216,10 +218,15 @@ $(document).ready(function(){
 
         var $cf_box = $('.sc_cf_box');
         var $cf_info = $('.sc_cf_info');
+        var default_val = $('.sc_cf_default').val().trim();
         var param_val = $cf_box.val().trim();
 
+        if(default_val != ''){
+            default_val = ':' + default_val;
+        }
+
         if( param_val != '' && $cf_box[0].checkValidity() ){
-            insert_in_editor('$$custom_field:' + param_val + '$$');
+            insert_in_editor('$$custom_field:' + param_val + default_val + '$$');
             $cf_info.removeClass('red');
             close_params_list();
         }else{
@@ -248,7 +255,7 @@ $(document).ready(function(){
     });
 
     $('.sc_changelog .dismiss_btn').on('click', function(){
-        var url = SC_VARS.ajax_url + '?action=sc_admin_ajax&do=close_changelog';
+        var url = SC_VARS.ajax_url + '?action=sc_admin_ajax&do=close_changelog&_wpnonce=' + SC_VARS.nonce;
         $.get(url, function( data ){
             if(data.search( /done/g ) == -1){
                 $( '.sc_changelog article' ).html('Failed to close window. <a href="' + url + '" target="_blank">Please click here to close</a>');
@@ -267,6 +274,14 @@ $(document).ready(function(){
         });
     });
 
+    $('.sc_title_shortcut').on('keyup paste', function(e){
+        $('input[name="post_title"]').val($(this).val());
+    });
+
+    $('input[name="post_title"]').on('keyup paste', function(e){
+        $('.sc_title_shortcut').val($(this).val());
+    });
+
     $('.cfe_amt').on('click', function(){
         var $btn = $(this).closest('.cfe_form').find('.cfe_btn');
         $btn.attr('href', $btn.data('link') + $(this).val());
@@ -274,19 +289,25 @@ $(document).ready(function(){
 
     $('.subscribe_btn').click(function(e){
         e.preventDefault();
-        var action = $(this).parent().data('action');
-        $.ajax({
-            type: 'get',
-            url: action,
-            cache: false,
-            dataType: 'jsonp',
-            data: {
-                'EMAIL': $('.subscribe_email_box').val()
-            },
-            success : function(data) {
-            }
-        });
-        $('.subscribe_confirm').show();
+
+        var form = $('<form>', {
+            action: 'https://www.aakashweb.com/apps/subscription/',
+            method: 'POST',
+            target: '_blank'
+        }).append($('<input>', {
+            type: 'hidden',
+            name: 'email',
+            value: $('.subscribe_email_box').val()
+        })).append($('<input>', {
+            type: 'hidden',
+            name: 'l',
+            value: '6aacb87c-0434-4ac1-b53c-22d7790ec4ac'
+        }));
+
+        $('body').append(form);
+        form.submit();
+        form.remove();
+
     });
 
     init();

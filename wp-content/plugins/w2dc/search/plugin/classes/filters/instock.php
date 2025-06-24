@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 add_filter("wcsearch_query_args_validate", "wcsearch_query_args_validate_instock");
 function wcsearch_query_args_validate_instock($args) {
 	if (!empty($args['instock'])) {
@@ -32,7 +34,7 @@ function wcsearch_query_args_instock($q_args, $args) {
 add_filter("wcsearch_visible_params", "wcsearch_visible_params_instock", 10, 2);
 function wcsearch_visible_params_instock($params, $query_array) {
 	if (!empty($query_array['instock'])) {
-		$label = esc_html__("In stock", "WCSEARCH");
+		$label = esc_html__("In stock", "wcsearch");
 		
 		unset($query_array['instock']);
 		$query_string = http_build_query($query_array);

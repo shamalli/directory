@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 /**
  * Thanks to Simple Taxonomy Ordering plugin
  * https://wordpress.org/plugins/simple-taxonomy-ordering/

@@ -15,6 +15,12 @@ class w2dc_page_title_controller extends w2dc_frontend_controller {
 			$this->page_title = $controllers[0]->page_title;
 		} elseif ($controllers = w2dc_getFrontendControllers(W2DC_LISTING_SHORTCODE)) {
 			$this->page_title = $controllers[0]->page_title;
+		} elseif ($controllers = w2dc_getFrontendControllers(W2DC_CATEGORY_PAGE_SHORTCODE)) {
+			$this->page_title = $controllers[0]->page_title;
+		} elseif ($controllers = w2dc_getFrontendControllers(W2DC_LOCATION_PAGE_SHORTCODE)) {
+			$this->page_title = $controllers[0]->page_title;
+		} elseif ($controllers = w2dc_getFrontendControllers(W2DC_TAG_PAGE_SHORTCODE)) {
+			$this->page_title = $controllers[0]->page_title;
 		}
 
 		apply_filters('w2dc_page_title_controller_construct', $this);

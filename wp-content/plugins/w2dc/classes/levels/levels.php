@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+// @codingStandardsIgnoreFile
 
 class w2dc_levels {
 	public $levels_array = array();
@@ -165,17 +167,6 @@ class w2dc_levels {
 	
 		$wpdb->delete($wpdb->w2dc_levels, array('id' => $level_id));
 
-		// Renew levels' upgrade meta
-		/* $this->getLevelsFromDB();
-		$results = array();
-		foreach ($this->levels_array AS $level1) {
-			foreach ($this->levels_array AS $level2) {
-				$results[$level1->id][$level2->id]['disabled'] = $level1->upgrade_meta[$level2->id]['disabled'];
-				$results[$level1->id][$level2->id]['raiseup'] = $level1->upgrade_meta[$level2->id]['raiseup'];
-			}
-			$level1->saveUpgradeMeta($results[$level1->id]);
-		} */
-
 		$this->getLevelsFromDB();
 		return true;
 	}
@@ -190,8 +181,8 @@ class w2dc_levels {
 class w2dc_level {
 	public $id;
 	public $order_num;
-	public $name;
-	public $description;
+	public $name = '';
+	public $description = '';
 	public $who_can_view = array();
 	public $who_can_submit = array();
 	public $active_interval;
@@ -333,16 +324,16 @@ class w2dc_level {
 	
 	public function getActivePeriodString() {
 		if ($this->eternal_active_period) {
-			return __('Never expire', 'W2DC');
+			return esc_html__('Never expire', 'w2dc');
 		} else {
 			if ($this->active_period == 'day')
-				return $this->active_interval . ' ' . _n('day', 'days', $this->active_interval, 'W2DC');
+				return $this->active_interval . ' ' . _n('day', 'days', $this->active_interval, 'w2dc');
 			elseif ($this->active_period == 'week')
-				return $this->active_interval . ' ' . _n('week', 'weeks', $this->active_interval, 'W2DC');
+				return $this->active_interval . ' ' . _n('week', 'weeks', $this->active_interval, 'w2dc');
 			elseif ($this->active_period == 'month')
-				return $this->active_interval . ' ' . _n('month', 'months', $this->active_interval, 'W2DC');
+				return $this->active_interval . ' ' . _n('month', 'months', $this->active_interval, 'w2dc');
 			elseif ($this->active_period == 'year')
-				return $this->active_interval . ' ' . _n('year', 'years', $this->active_interval, 'W2DC');
+				return $this->active_interval . ' ' . _n('year', 'years', $this->active_interval, 'w2dc');
 		}
 	}
 	

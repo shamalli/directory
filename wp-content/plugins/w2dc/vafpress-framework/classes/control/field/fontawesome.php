@@ -1,6 +1,6 @@
 <?php
 
-class VP_W2DC_Control_Field_Fontawesome extends VP_W2DC_Control_FieldMulti
+class W2DC_VP_Control_Field_Fontawesome extends W2DC_VP_Control_FieldMulti
 {
 
 	public function __construct()
@@ -16,7 +16,7 @@ class VP_W2DC_Control_Field_Fontawesome extends VP_W2DC_Control_FieldMulti
 			$instance = new $class_name;
 		$arr['items']['data'][] = array(
 			'source' => 'function',
-			'value' => 'vp_w2dc_get_fontawesome_icons',
+			'value' => 'w2dc_vp_get_fontawesome_icons',
 		);
 
 		$instance->_basic_make($arr);
@@ -28,7 +28,7 @@ class VP_W2DC_Control_Field_Fontawesome extends VP_W2DC_Control_FieldMulti
 	{
 		$this->_setup_data();
 		$this->add_data('is_compact', $is_compact);
-		return VP_W2DC_View::instance()->load('control/fontawesome', $this->get_data());
+		return W2DC_VP_View::instance()->load('control/fontawesome', $this->get_data());
 	}
 
 }

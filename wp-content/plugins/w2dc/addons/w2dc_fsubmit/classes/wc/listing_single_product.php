@@ -1,15 +1,15 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 add_action('init', 'w2dc_register_listing_single_product_type');
 function w2dc_register_listing_single_product_type() {
+	
 	class WC_Product_Listing_Single extends WC_Product {
-
 		public $level_id = null;
 		public $raiseup_price = 0;
 
 		public function __construct($product) {
-			
-			$this->product_type = 'listing_single';
 
 			parent::__construct($product);
 
@@ -20,8 +20,12 @@ function w2dc_register_listing_single_product_type() {
 				$this->raiseup_price = get_post_meta($this->id, '_raiseup_price', true);
 		}
 		
+		public function get_type() {
+			return 'listing_single';
+		}
+		
 		public function get_name($context = 'view') {
-			return __("Directory listing", "W2DC");
+			return esc_html__("Directory listing", "w2dc");
 		}
 		
 		public function get_virtual($context = 'view') {
@@ -106,7 +110,7 @@ class w2dc_listing_single_product {
 	}
 	
 	public function add_listing_single_product($types){
-		$types['listing_single'] = __('Directory listing', 'W2DC');
+		$types['listing_single'] = esc_html__('Directory listing', 'w2dc');
 	
 		return $types;
 	}
@@ -142,7 +146,7 @@ class w2dc_listing_single_product {
 		$tabs['advanced']['class'][] = 'hide_if_listing_single';
 	
 		$tabs['listings'] = array(
-				'label'	=> __('Listings level', 'W2DC'),
+				'label'	=> esc_html__('Listings level', 'w2dc'),
 				'target' => 'listing_single_product_data',
 				'class'	=> array('show_if_listing_single', 'show_if_listing_single', 'advanced_options'),
 		);
@@ -150,7 +154,7 @@ class w2dc_listing_single_product {
 	}
 
 	public function add_raiseup_price() {
-		woocommerce_wp_text_input(array('id' => '_raiseup_price', 'label' => __('Listings raise up price', 'W2DC') . ' (' . get_woocommerce_currency_symbol() . ')', 'data_type' => 'price', 'wrapper_class' => 'show_if_listing_single'));
+		woocommerce_wp_text_input(array('id' => '_raiseup_price', 'label' => esc_html__('Listings raise up price', 'w2dc') . ' (' . get_woocommerce_currency_symbol() . ')', 'data_type' => 'price', 'wrapper_class' => 'show_if_listing_single'));
 	}
 	
 	public function new_product_tab_content() {
@@ -161,9 +165,9 @@ class w2dc_listing_single_product {
 						<?php
 						$options = array();
 						foreach ($w2dc_instance->levels->levels_array as $level)
-							$options[$level->id] = __('Single listing of level "'.esc_attr($level->name).'"', 'W2DC');
+							$options[$level->id] = esc_html__('Single listing of level "'.esc_attr($level->name).'"', 'w2dc');
 	
-						woocommerce_wp_radio(array('id' => '_listings_level', 'options' => $options, 'label' => __('Choose the level of listing for this product type', 'W2DC')));
+						woocommerce_wp_radio(array('id' => '_listings_level', 'options' => $options, 'label' => esc_html__('Choose the level of listing for this product type', 'w2dc')));
 						?>
 					</div>
 			</div>
@@ -194,7 +198,7 @@ class w2dc_listing_single_product {
 		global $w2dc_instance;
 
 		if ($w2dc_instance->listings_packages->can_user_create_listing_in_level($listing->level->id)) {
-			return $link_text .' - ' . __('FREE', 'W2DC');
+			return $link_text .' - ' . esc_html__('FREE', 'w2dc');
 		} else {
 			if ($product = $this->get_product_by_level_id($listing->level->id)) {
 				return $link_text .' - ' . w2dc_format_price(w2dc_recalcPrice($product->get_price()));
@@ -217,14 +221,14 @@ class w2dc_listing_single_product {
 	}
 	
 	public function levels_price_table_header($columns) {
-		$w2dc_columns['price'] = __('Price', 'W2DC');
+		$w2dc_columns['price'] = esc_html__('Price', 'w2dc');
 	
 		return array_slice($columns, 0, 2, true) + $w2dc_columns + array_slice($columns, 2, count($columns)-2, true);
 	}
 	
 	public function levels_price_table_row($items_array, $level) {
 		if (!($product = $this->get_product_by_level_id($level->id)) || (get_option('w2dc_payments_free_for_admins') && current_user_can('manage_options'))) {
-			$w2dc_columns['price'] = '<span class="w2dc-payments-free">' . __('FREE', 'W2DC') . '</span>';
+			$w2dc_columns['price'] = '<span class="w2dc-payments-free">' . esc_html__('FREE', 'w2dc') . '</span>';
 		} else {
 			$w2dc_columns['price'] = $product->get_price_html();
 		}
@@ -301,42 +305,42 @@ class w2dc_listing_single_product {
 	
 	public function print_listing_meta($listing, $action) {
 		if (is_user_logged_in() && w2dc_current_user_can_edit_listing($listing->post->ID))
-			$listing_link = '<a href="' . w2dc_get_edit_listing_link($listing->post->ID) . '" title="' . esc_attr('edit listing', 'W2DC') . '">' . $listing->title() . '</a>';
+			$listing_link = '<a href="' . w2dc_get_edit_listing_link($listing->post->ID) . '" title="' . esc_attr('edit listing', 'w2dc') . '">' . $listing->title() . '</a>';
 		else
 			$listing_link = $listing->title();
 		?>
 		<p>
-			<?php echo __('Directory listing:', 'W2DC') . '&nbsp;' . $listing_link; ?>
+			<?php echo esc_html__('Directory listing:', 'w2dc') . '&nbsp;' . $listing_link; ?>
 			<br />
 			<?php if ($action == 'activation'):
-				_e('Order for listing activation', 'W2DC'); ?>
+				esc_html_e('Order for listing activation', 'w2dc'); ?>
 				<br />
 			<?php endif; ?>
 			<?php if ($action == 'renew'):
-				_e('Order for listing renewal', 'W2DC'); ?>
+				esc_html_e('Order for listing renewal', 'w2dc'); ?>
 				<br />
 			<?php endif; ?>
 			<?php if ($action == 'raiseup'):
-				_e('Order for listing raise up', 'W2DC'); ?>
+				esc_html_e('Order for listing raise up', 'w2dc'); ?>
 				<br />
 			<?php endif; ?>
 			<?php if ($action == 'upgrade'):
-				_e('Order for listing upgrade', 'W2DC'); ?>
+				esc_html_e('Order for listing upgrade', 'w2dc'); ?>
 				<br />
 			<?php endif; ?>
-			<?php _e('Status:', 'W2DC');
+			<?php esc_html_e('Status:', 'w2dc');
 			if ($listing->status == 'active')
-				echo ' <span class="w2dc-badge w2dc-listing-status-active">' . __('active', 'W2DC') . '</span>';
+				echo ' <span class="w2dc-badge w2dc-listing-status-active">' . esc_html__('active', 'w2dc') . '</span>';
 			elseif ($listing->status == 'expired')
-				echo ' <span class="w2dc-badge w2dc-listing-status-expired">' . __('expired', 'W2DC') . '</span>';
+				echo ' <span class="w2dc-badge w2dc-listing-status-expired">' . esc_html__('expired', 'w2dc') . '</span>';
 			elseif ($listing->status == 'unpaid')
-				echo ' <span class="w2dc-badge w2dc-listing-status-unpaid">' . __('unpaid', 'W2DC') . '</span>';
+				echo ' <span class="w2dc-badge w2dc-listing-status-unpaid">' . esc_html__('unpaid', 'w2dc') . '</span>';
 			elseif ($listing->status == 'stopped')
-				echo ' <span class="w2dc-badge w2dc-listing-status-stopped">' . __('stopped', 'W2DC') . '</span>';
+				echo ' <span class="w2dc-badge w2dc-listing-status-stopped">' . esc_html__('stopped', 'w2dc') . '</span>';
 			?>
 			<br />
-			<?php _e('Expiration Date:', 'W2DC'); ?>&nbsp;
-			<?php if ($listing->level->eternal_active_period) _e('Eternal active period', 'W2DC'); else echo date_i18n(get_option('date_format') . ' ' . get_option('time_format'), intval($listing->expiration_date)); ?>
+			<?php esc_html_e('Expiration Date:', 'w2dc'); ?>&nbsp;
+			<?php if ($listing->level->eternal_active_period) esc_html_e('Eternal active period', 'w2dc'); else echo w2dc_formatDateTime($listing->expiration_date); ?>
 		</p>
 		<?php 
 	}
@@ -478,17 +482,17 @@ class w2dc_listing_single_product {
 			if ($listing) {
 				if (count($w2dc_instance->levels->levels_array) > 1) {
 					$item_data[] = array(
-							'name' => __('Listing level', 'W2DC'),
+							'name' => esc_html__('Listing level', 'w2dc'),
 							'value' => $listing->level->name
 					);
 				}
 				$item_data[] = array(
-						'name' => __('Listing name', 'W2DC'),
+						'name' => esc_html__('Listing name', 'w2dc'),
 						'value' => $listing->title()
 				);
 				if (isset($cart_item['_w2dc_action'])) {
 					$item_data[] = array(
-							'name' => __('Listing action', 'W2DC'),
+							'name' => esc_html__('Listing action', 'w2dc'),
 							'value' => $cart_item['_w2dc_action']
 					);
 				}
@@ -511,7 +515,7 @@ class w2dc_listing_single_product {
 					$last_subscription = w2dc_get_last_subscription_of_listing($listing->post->ID);
 					if ($cart_item['_w2dc_action'] == 'renew' && $last_subscription && $last_subscription->get_status() == 'active') {
 						echo '<div class="w2dc-enable-subsciption-option">';
-						echo '<strong>' . __('subscription enabled', 'W2DC') . '</strong>';
+						echo '<strong>' . esc_html__('subscription enabled', 'w2dc') . '</strong>';
 						echo '</div>';
 					} else {
 						$checked = (get_option('w2dc_woocommerce_enabled_subscriptions')) ? 1 : 0;
@@ -532,7 +536,7 @@ class w2dc_listing_single_product {
 									})
 								})(jQuery);
 						</script>';
-						echo '<label><input type="checkbox" name="w2dc_enable_subscription_checkbox[' . $listing->post->ID . ']" value="1" ' . checked($checked, 1, false) . ' class="w2dc_wc_subscription_checkbox_' . $listing->post->ID . '" />&nbsp;' . __('enable subscription', 'W2DC') . '</label>';
+						echo '<label><input type="checkbox" name="w2dc_enable_subscription_checkbox[' . $listing->post->ID . ']" value="1" ' . checked($checked, 1, false) . ' class="w2dc_wc_subscription_checkbox_' . $listing->post->ID . '" />&nbsp;' . esc_html__('enable subscription', 'w2dc') . '</label>';
 						echo '<input type="hidden" name="w2dc_enable_subscription[' . $listing->post->ID . ']" value="' . $checked . '"  class="w2dc_enable_subscription_' . $listing->post->ID . '" />';
 						echo '</div>';
 					}
@@ -677,7 +681,7 @@ class w2dc_listing_single_product {
 				wc_add_order_item_meta($order_item_id, '_w2dc_action', $action);
 				
 				if (!defined('DOING_CRON')) {
-					w2dc_addMessage(__('Complete the order on WooCommerce Orders page.', 'W2DC'));
+					w2dc_addMessage(sprintf(wp_kses(__('Complete the order on <a href="%s">WooCommerce Orders page</a>.', 'w2dc'), 'post'), $order->get_edit_order_url()));
 				}
 			}
 		}
@@ -703,7 +707,11 @@ class w2dc_listing_single_product {
 				global $wpdb;
 					
 				// wp_update_post() can fall into inifinite loop on certain occasions
-				$wpdb->query("UPDATE {$wpdb->posts} SET post_status='pending' WHERE ID={$listing->post->ID}");
+				$wpdb->update(
+						$wpdb->posts,
+						array('post_status' => 'pending'),
+						array('ID' => $listing->post->ID)
+				);
 			}
 			$this->create_listing_single_order($listing->post->ID, $listing->level->id, 'activation');
 		}
@@ -796,19 +804,10 @@ class w2dc_listing_single_product {
 								case "activation":
 									$listing->processActivate(false);
 
-									/* if (class_exists('WC_Subscriptions') && wc_get_order_item_meta($item_id, '_w2dc_do_subscription')) {
-										$this->create_subscription($order_id);
-									} */
 									break;
 								case "renew":
 									$listing->processActivate(false);
 									
-									/* if (class_exists('WC_Subscriptions')) {
-										$last_subscription = w2dc_get_last_subscription_of_listing($listing->post->ID);
-										if (wc_get_order_item_meta($item_id, '_w2dc_do_subscription') && (!$last_subscription || $last_subscription->get_status() != 'active')) {
-											$this->create_subscription($order_id);
-										}
-									} */
 									break;
 								case "raiseup":
 									$listing->processRaiseUp(false);
@@ -857,13 +856,13 @@ class w2dc_listing_single_product {
 				$last_subscription = w2dc_get_last_subscription_of_listing($listing->post->ID);
 
 				if ($listing->status == 'active' && (!$last_subscription || $last_subscription->get_status() == 'trash')) {
-					$order = w2dc_get_last_order_of_listing($listing->post->ID, array('activation'/* , 'upgrade' */));
+					$order = w2dc_get_last_order_of_listing($listing->post->ID, array('activation'));
 					if ($order && $order->is_paid() && $order->get_status() == 'completed') {
-						$subscription_link = strip_tags(__('add subscription', 'W2DC'));
+						$subscription_link = strip_tags(esc_html__('add subscription', 'w2dc'));
 						echo '<a href="' . w2dc_dashboardUrl(array('add_subscription' => '1', 'listing_id' => $listing->post->ID)) . '" class="w2dc-btn w2dc-btn-primary w2dc-btn-sm w2dc-dashboard-subscription-btn" title="' . esc_attr($subscription_link) . '"><span class="w2dc-glyphicon w2dc-glyphicon-repeat"></span></a>';
 					}
 				} elseif ($last_subscription && ($subscription_url = $last_subscription->get_view_order_url())) {
-					$subscription_link = strip_tags(__('view subscription', 'W2DC'));
+					$subscription_link = strip_tags(esc_html__('view subscription', 'w2dc'));
 					echo '<a href="' . $subscription_url . '" class="w2dc-btn w2dc-btn-primary w2dc-btn-sm w2dc-dashboard-subscription-btn" title="' . esc_attr($subscription_link) . '"><span class="w2dc-glyphicon w2dc-glyphicon-repeat"></span></a>';
 				}
 			}
@@ -877,17 +876,17 @@ class w2dc_listing_single_product {
 					$last_subscription = w2dc_get_last_subscription_of_listing($listing->post->ID);
 				
 					if (!$last_subscription || $last_subscription->get_status() == 'trash') {
-						$order = w2dc_get_last_order_of_listing($listing_id, array('activation'/* , 'upgrade' */));
+						$order = w2dc_get_last_order_of_listing($listing_id, array('activation'));
 						if ($order && $order->is_paid() && $order->get_status() == 'completed') {
 							$this->cancel_subscriptions($listing);
 
 							$this->create_subscription($order->get_id());
-							w2dc_addMessage(__('Subscription was created sucessfully!', 'W2DC'));
+							w2dc_addMessage(esc_html__('Subscription was created sucessfully!', 'w2dc'));
 							wp_redirect(w2dc_dashboardUrl());
 							die();
 						}
 					} else {
-						w2dc_addMessage(sprintf(__('Subscription for this listing already exists. You can manage it <a href="%s">here</a>', 'W2DC'), $last_subscription->get_view_order_url()));
+						w2dc_addMessage(sprintf(wp_kses(__('Subscription for this listing already exists. You can manage it <a href="%s">here</a>', 'w2dc'), 'post'), $last_subscription->get_view_order_url()));
 					}
 				}
 			}

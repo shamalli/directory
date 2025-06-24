@@ -314,6 +314,21 @@
 		_codeDisabled: false,
 
 		/**
+		 * Misc data container
+		 * @since 2.6
+		 * @access private
+		 */
+		_sandbox: {},
+
+		/**
+		 * Flag whether to clear preview or not
+		 * @access private
+		 */
+		_publishAndRemain: false,
+
+		_shapesEdited: false,
+
+		/**
 		 * Initializes the builder interface.
 		 *
 		 * @since 1.0
@@ -322,6 +337,8 @@
 		 */
 		_init: function()
 		{
+			FLBuilder.UIIFrame.init();
+
 			FLBuilder._initJQueryReadyFix();
 			FLBuilder._initGlobalErrorHandling();
 			FLBuilder._initPostLock();
@@ -333,12 +350,15 @@
 			FLBuilder._initDropTargets();
 			FLBuilder._initSortables();
 			FLBuilder._initStrings();
+			FLBuilder._initSanityChecks();
 			FLBuilder._initTipTips();
 			FLBuilder._initTinyMCE();
 			FLBuilder._bindEvents();
 			FLBuilder._bindOverlayEvents();
 			FLBuilder._setupEmptyLayout();
 			FLBuilder._highlightEmptyCols();
+			FLBuilder._checkEnv();
+			FLBuilder._initColorScheme();
 
 			FLBuilder.addHook('didInitUI', FLBuilder._showTourOrTemplates.bind(FLBuilder) );
 			FLBuilder.addHook('endEditingSession', FLBuilder._doStats.bind(this) );
@@ -376,6 +396,14 @@
 			};
 		},
 
+		_initSanityChecks: function() {
+			if ( FLBuilderConfig.uploadPath && typeof FLBuilderLayout === 'undefined' ) {
+				url = '<a href="' + FLBuilderConfig.uploadUrl + '">wp-admin -> Settings -> Media</a>';
+				FLBuilder.alert( '<strong>Critcal Error</strong><p style="font-size:15px;">Please go to ' + url + ' and make sure uploads folder settings is blank</p>');
+				$('.fl-builder-alert-close', window.parent.document).hide()
+			}
+		},
+
 		/**
 		 * Try to prevent errors from third party plugins
 		 * from breaking the builder.
@@ -408,7 +436,7 @@
 		{
 			if(typeof wp.heartbeat != 'undefined') {
 
-				wp.heartbeat.interval(30);
+				wp.heartbeat.interval(120);
 
 				wp.heartbeat.enqueue('fl_builder_post_lock', {
 					post_id: FLBuilderConfig.postId
@@ -426,11 +454,14 @@
 		 */
 		_initClassNames: function()
 		{
-			$('html').addClass('fl-builder-edit');
-			$('body').addClass('fl-builder');
+			var html = $( 'html' ).add( 'html', window.parent.document ),
+				body = $( 'body' ).add( 'body', window.parent.document );
 
-			if(FLBuilderConfig.simpleUi) {
-				$('body').addClass('fl-builder-simple');
+			html.addClass( 'fl-builder-edit' );
+			body.addClass( 'fl-builder' );
+
+			if ( FLBuilderConfig.simpleUi ) {
+				body.addClass( 'fl-builder-simple' );
 			}
 
 			FLBuilder._contentClass = '.fl-builder-content-' + FLBuilderConfig.postId;
@@ -475,7 +506,8 @@
 		 */
 		_initScrollbars: function()
 		{
-			var scrollers = $('.fl-nanoscroller').nanoScroller({
+			var scrollers = $('.fl-nanoscroller', window.parent.document).nanoScroller({
+				documentContext: window.parent.document,
 				alwaysVisible: true,
 				preventPageScrolling: true,
 				paneClass: 'fl-nanoscroller-pane',
@@ -507,7 +539,9 @@
 		_initSortables: function()
 		{
 			var defaults = {
-				appendTo: 'body',
+				frame: null,
+				appendTo: FLBuilder._contentClass,
+				scroll: true,
 				cursor: 'move',
 				cursorAt: {
 					left: 85,
@@ -525,6 +559,13 @@
 			rowConnections 	  = '',
 			columnConnections = '',
 			moduleConnections = '';
+
+			// Adjust defaults for the iFrame UI.
+			if ( FLBuilder.UIIFrame.isEnabled() ) {
+				defaults.frame = $( '#fl-builder-ui-iframe', window.parent.document );
+				defaults.appendTo = $( 'body', window.parent.document );
+				defaults.scroll = false;
+			}
 
 			// Module Connections.
 			if ( 'row' == FLBuilderConfig.userTemplateType )  {
@@ -570,21 +611,21 @@
 			}
 
 			// Row layouts from the builder panel.
-			$('.fl-builder-rows').sortable($.extend({}, defaults, {
+			$('.fl-builder-rows', window.parent.document).sortable($.extend({}, defaults, {
 				connectWith: rowConnections,
 				items: '.fl-builder-block-row',
 				stop: FLBuilder._rowDragStop
 			}));
 
 			// Row templates from the builder panel.
-			$('.fl-builder-row-templates').sortable($.extend({}, defaults, {
+			$('.fl-builder-row-templates', window.parent.document).sortable($.extend({}, defaults, {
 				connectWith: FLBuilder._contentClass + ' .fl-row-drop-target',
-				items: '.fl-builder-block-row-template',
+				items: '.fl-builder-block-row-template:not(.fl-builder-block-disabled)',
 				stop: FLBuilder._nodeTemplateDragStop
 			}));
 
 			// Saved rows from the builder panel.
-			$('.fl-builder-saved-rows').sortable($.extend({}, defaults, {
+			$('.fl-builder-saved-rows', window.parent.document).sortable($.extend({}, defaults, {
 				cancel: '.fl-builder-node-template-actions, .fl-builder-node-template-edit, .fl-builder-node-template-delete',
 				connectWith: FLBuilder._contentClass + ' .fl-row-drop-target',
 				items: '.fl-builder-block-saved-row',
@@ -592,7 +633,7 @@
 			}));
 
 			// Saved columns from the builder panel.
-			$('.fl-builder-saved-columns').sortable($.extend({}, defaults, {
+			$('.fl-builder-saved-columns', window.parent.document).sortable($.extend({}, defaults, {
 				cancel: '.fl-builder-node-template-actions, .fl-builder-node-template-edit, .fl-builder-node-template-delete',
 				connectWith: columnConnections,
 				items: '.fl-builder-block-saved-column',
@@ -600,21 +641,21 @@
 			}));
 
 			// Modules from the builder panel.
-			$('.fl-builder-modules, .fl-builder-widgets').sortable($.extend({}, defaults, {
+			$('.fl-builder-modules, .fl-builder-widgets', window.parent.document).sortable($.extend({}, defaults, {
 				connectWith: moduleConnections,
-				items: '.fl-builder-block-module',
+				items: '.fl-builder-block-module:not(.fl-builder-block-disabled)',
 				stop: FLBuilder._moduleDragStop
 			}));
 
 			// Module templates from the builder panel.
-			$('.fl-builder-module-templates').sortable($.extend({}, defaults, {
+			$('.fl-builder-module-templates', window.parent.document).sortable($.extend({}, defaults, {
 				connectWith: moduleConnections,
 				items: '.fl-builder-block-module-template',
 				stop: FLBuilder._nodeTemplateDragStop
 			}));
 
 			// Saved modules from the builder panel.
-			$('.fl-builder-saved-modules').sortable($.extend({}, defaults, {
+			$('.fl-builder-saved-modules', window.parent.document).sortable($.extend({}, defaults, {
 				cancel: '.fl-builder-node-template-actions, .fl-builder-node-template-edit, .fl-builder-node-template-delete',
 				connectWith: moduleConnections,
 				items: '.fl-builder-block-saved-module',
@@ -622,7 +663,7 @@
 			}));
 
 			// Rows
-			$('.fl-row-sortable-proxy').sortable($.extend({}, defaults, {
+			$('.fl-row-sortable-proxy', window.parent.document).sortable($.extend({}, defaults, {
 				connectWith: FLBuilder._contentClass + ' .fl-row-drop-target',
 				helper: FLBuilder._rowDragHelper,
 				start: FLBuilder._rowDragStart,
@@ -630,7 +671,7 @@
 			}));
 
 			// Columns
-			$('.fl-col-sortable-proxy').sortable($.extend({}, defaults, {
+			$('.fl-col-sortable-proxy', window.parent.document).sortable($.extend({}, defaults, {
 				connectWith: moduleConnections,
 				helper: FLBuilder._colDragHelper,
 				start: FLBuilder._colDragStart,
@@ -638,13 +679,16 @@
 			}));
 
 			// Modules
-			$(FLBuilder._contentClass + ' .fl-col-content').sortable($.extend({}, defaults, {
+			$('.fl-module-sortable-proxy', window.parent.document).sortable($.extend({}, defaults, {
 				connectWith: moduleConnections,
-				handle: '.fl-module-overlay .fl-block-overlay-actions .fl-block-move',
 				helper: FLBuilder._moduleDragHelper,
-				items: '.fl-module, .fl-col-group',
 				start: FLBuilder._moduleDragStart,
 				stop: FLBuilder._moduleDragStop
+			}));
+
+			$(FLBuilder._contentClass + ' .fl-col-content').sortable($.extend({}, defaults, {
+				cancel: '.fl-module, .fl-col-group',
+				handle: '.fl-module-sortable-proxy',
 			}));
 
 			// Drop targets
@@ -663,7 +707,10 @@
 		 */
 		_refreshSortables: function()
 		{
-			$( '.ui-sortable' ).sortable( 'refresh' );
+			var sortables = $( '.ui-sortable' ).add( '.ui-sortable', window.parent.document );
+
+			sortables.sortable( 'refresh' );
+			sortables.sortable( 'refreshPositions' );
 		},
 
 		/**
@@ -687,187 +734,215 @@
 		 */
 		_bindEvents: function()
 		{
+			var isTouch = FLBuilderLayout._isTouch();
+
 			/* Links */
 			$excludedLinks = $('.fl-builder-bar a, .fl-builder--content-library-panel a, .fl-page-nav .nav a'); // links in ui shouldn't be disabled.
 			$('a').not($excludedLinks).on('click', FLBuilder._preventDefault);
 			$('.fl-page-nav .nav a').on('click', FLBuilder._headerLinkClicked);
-			$('body').delegate('.fl-builder-content a', 'click', FLBuilder._preventDefault);
-			$('body').delegate('button.fl-builder-button', 'mouseup', this._buttonMouseUp.bind(this) );
+			$('body').on( 'click', '.fl-builder-content a', FLBuilder._preventDefault);
+			$('body').on( 'mouseup', 'button.fl-builder-button', this._buttonMouseUp.bind(this) );
 
 			/* Heartbeat */
 			$(document).on('heartbeat-tick', FLBuilder._initPostLock);
 
 			/* Unload Warning */
-			$(window).on('beforeunload', FLBuilder._warnBeforeUnload);
+			$(window.parent).on('beforeunload', FLBuilder._warnBeforeUnload);
 
-			/* Submenus */
-			$('body').delegate('.fl-builder-has-submenu', 'click', FLBuilder._submenuParentClicked);
-			$('body').delegate('.fl-builder-has-submenu a', 'click', FLBuilder._submenuChildClicked);
-			$('body').delegate('.fl-builder-submenu', 'mouseenter', FLBuilder._submenuMouseenter);
-			$('body').delegate('.fl-builder-submenu', 'mouseleave', FLBuilder._submenuMouseleave);
-			$('body').delegate('.fl-builder-submenu .fl-builder-has-submenu', 'mouseenter', FLBuilder._submenuNestedParentMouseenter);
+			/* Lite Version */
+			$('body', window.parent.document).on( 'click', '.fl-builder-blocks-pro-expand', FLBuilder._toggleProModules);
+			$('body', window.parent.document).on( 'click', '.fl-builder-upgrade-button', FLBuilder._upgradeClicked);
 
 			/* Panel */
-			$('.fl-builder-panel-actions .fl-builder-panel-close').on('click', FLBuilder._closePanel);
-			$('.fl-builder-blocks-section-title').on('click', FLBuilder._blockSectionTitleClicked);
-			$('body').delegate('.fl-builder-node-template-actions', 'mousedown', FLBuilder._stopPropagation);
-			$('body').delegate('.fl-builder-node-template-edit', 'mousedown', FLBuilder._stopPropagation);
-			$('body').delegate('.fl-builder-node-template-delete', 'mousedown', FLBuilder._stopPropagation);
-			$('body').delegate('.fl-builder-node-template-edit', 'click', FLBuilder._editNodeTemplateClicked);
-			$('body').delegate('.fl-builder-node-template-delete', 'click', FLBuilder._deleteNodeTemplateClicked);
-			$('body').delegate('.fl-builder-block', 'mousedown', FLBuilder._blockDragInit );
-			$('body').on('mouseup', FLBuilder._blockDragCancel);
+			$('.fl-builder-panel-actions .fl-builder-panel-close', window.parent.document).on('click', FLBuilder._closePanel);
+			$('body', window.parent.document).on( 'mousedown', '.fl-builder-node-template-actions', FLBuilder._stopPropagation);
+			$('body', window.parent.document).on( 'mousedown', '.fl-builder-node-template-edit', FLBuilder._stopPropagation);
+			$('body', window.parent.document).on( 'mousedown', '.fl-builder-node-template-delete', FLBuilder._stopPropagation);
+			$('body', window.parent.document).on( 'click', '.fl-builder-node-template-edit', FLBuilder._editNodeTemplateClicked);
+			$('body', window.parent.document).on( 'click', '.fl-builder-node-template-delete', FLBuilder._deleteNodeTemplateClicked);
+			$('body', window.parent.document).on( 'mousedown', '.fl-builder-block:not(.fl-builder-block-disabled)', FLBuilder._blockDragInit );
+			$('body', window.parent.document).on('mouseup', FLBuilder._blockDragCancel);
 
 			/* Actions Lightbox */
-			$('body').delegate('.fl-builder-actions .fl-builder-cancel-button', 'click', FLBuilder._cancelButtonClicked);
+			$('body', window.parent.document).on( 'click', '.fl-builder-actions .fl-builder-cancel-button', FLBuilder._cancelButtonClicked);
 
 			/* Tools Actions */
-			$('body').delegate('.fl-builder-save-user-template-button', 'click', FLBuilder._saveUserTemplateClicked);
-			$('body').delegate('.fl-builder-duplicate-layout-button', 'click', FLBuilder._duplicateLayoutClicked);
-			$('body').delegate('.fl-builder-layout-settings-button', 'click', FLBuilder._layoutSettingsClicked);
-			$('body').delegate('.fl-builder-layout-settings .fl-builder-settings-save', 'click', FLBuilder._saveLayoutSettingsClicked);
-			$('body').delegate('.fl-builder-layout-settings .fl-builder-settings-cancel', 'click', FLBuilder._cancelLayoutSettingsClicked);
-			$('body').delegate('.fl-builder-global-settings-button', 'click', FLBuilder._globalSettingsClicked);
-			$('body').delegate('.fl-builder-global-settings .fl-builder-settings-save', 'click', FLBuilder._saveGlobalSettingsClicked);
-			$('body').delegate('.fl-builder-global-settings .fl-builder-settings-cancel', 'click', FLBuilder._cancelLayoutSettingsClicked);
+			$('body', window.parent.document).on( 'click', '.fl-builder-layout-settings .fl-builder-settings-save', FLBuilder._saveLayoutSettingsClicked);
+			$('body', window.parent.document).on( 'click', '.fl-builder-layout-settings .fl-builder-settings-cancel', FLBuilder._cancelLayoutSettingsClicked);
+			$('body', window.parent.document).on( 'click', '.fl-builder-global-settings .fl-builder-settings-save', FLBuilder._saveGlobalSettingsClicked);
+			$('body', window.parent.document).on( 'click', '.fl-builder-global-settings .fl-builder-settings-cancel', FLBuilder._cancelLayoutSettingsClicked);
 
 			/* Template Panel Tab */
-			$('body').delegate('.fl-user-template', 'click', FLBuilder._userTemplateClicked);
-			$('body').delegate('.fl-user-template-edit', 'click', FLBuilder._editUserTemplateClicked);
-			$('body').delegate('.fl-user-template-delete', 'click', FLBuilder._deleteUserTemplateClicked);
-			$('body').delegate('.fl-builder-template-replace-button', 'click', FLBuilder._templateReplaceClicked);
-			$('body').delegate('.fl-builder-template-append-button', 'click', FLBuilder._templateAppendClicked);
-			$('body').delegate('.fl-builder-template-actions .fl-builder-cancel-button', 'click', FLBuilder._templateCancelClicked);
+			$('body', window.parent.document).on( 'click', '.fl-user-template', FLBuilder._userTemplateClicked);
+			$('body', window.parent.document).on( 'click', '.fl-user-template-edit', FLBuilder._editUserTemplateClicked);
+			$('body', window.parent.document).on( 'click', '.fl-user-template-delete', FLBuilder._deleteUserTemplateClicked);
+			$('body', window.parent.document).on( 'click', '.fl-builder-template-replace-button', FLBuilder._templateReplaceClicked);
+			$('body', window.parent.document).on( 'click', '.fl-builder-template-append-button', FLBuilder._templateAppendClicked);
+			$('body', window.parent.document).on( 'click', '.fl-builder-template-actions .fl-builder-cancel-button', FLBuilder._templateCancelClicked);
 
 			/* User Template Settings */
-			$('body').delegate('.fl-builder-user-template-settings .fl-builder-settings-save', 'click', FLBuilder._saveUserTemplateSettings);
-
-			/* Help Actions */
-			$('body').delegate('.fl-builder-help-tour-button', 'click', FLBuilder._startHelpTour);
-			$('body').delegate('.fl-builder-knowledge-base-button', 'click', FLBuilder._viewKnowledgeBaseClicked);
-			$('body').delegate('.fl-builder-forums-button', 'click', FLBuilder._visitForumsClicked);
+			$('body', window.parent.document).on( 'click', '.fl-builder-user-template-settings .fl-builder-settings-save', FLBuilder._saveUserTemplateSettings);
 
 			/* Welcome Actions */
-			$('body').delegate('.fl-builder-no-tour-button', 'click', FLBuilder._noTourButtonClicked);
-			$('body').delegate('.fl-builder-yes-tour-button', 'click', FLBuilder._yesTourButtonClicked);
+			$('body', window.parent.document).on( 'click', '.fl-builder-no-tour-button', FLBuilder._noTourButtonClicked);
+			$('body', window.parent.document).on( 'click', '.fl-builder-yes-tour-button', FLBuilder._yesTourButtonClicked);
 
 			/* Alert Lightbox */
-			$('body').delegate('.fl-builder-alert-close', 'click', FLBuilder._alertClose);
+			$('body', window.parent.document).on( 'click', '.fl-builder-alert-close', FLBuilder._alertClose);
 
 			/* General Overlays */
-			$('body').delegate('.fl-block-overlay', 'contextmenu', FLBuilder._onContextmenu);
+			$('body').on( 'contextmenu', '.fl-block-overlay', FLBuilder._onContextmenu);
+
+			/* Overlay Submenus */
+			$('body').on( 'click touchend', '.fl-builder-has-submenu', FLBuilder._submenuParentClicked);
+			$('body').on( 'mouseenter', '.fl-builder-submenu-hover', FLBuilder._hoverMenuParentMouseEnter);
+			$('body').on( 'mouseleave', '.fl-builder-submenu-hover', FLBuilder._hoverMenuParentMouseLeave);
+			$('body').on( 'click touchend', '.fl-builder-has-submenu a', FLBuilder._submenuChildClicked);
+			$('body').on( 'mouseenter', '.fl-builder-submenu', FLBuilder._submenuMouseenter);
+			$('body').on( 'mouseleave', '.fl-builder-submenu', FLBuilder._submenuMouseleave);
+			$('body').on( 'mouseenter', '.fl-builder-submenu .fl-builder-has-submenu', FLBuilder._submenuNestedParentMouseenter);
 
 			/* Rows */
-			$('body').delegate('.fl-row-overlay .fl-block-remove', 'click', FLBuilder._deleteRowClicked);
-			$('body').delegate('.fl-row-overlay .fl-block-copy', 'click', FLBuilder._rowCopyClicked);
-			$('body').delegate('.fl-row-overlay .fl-block-move', 'mousedown', FLBuilder._rowDragInit);
-			$('body').delegate('.fl-row-overlay .fl-block-settings', 'click', FLBuilder._rowSettingsClicked);
-			$('body').delegate('.fl-row-overlay', 'click', FLBuilder._rowSettingsClicked);
-			$('body').delegate('.fl-builder-row-settings .fl-builder-settings-save', 'click', FLBuilder._saveSettings);
+			$('body').on( 'click touchend', '.fl-row-overlay .fl-block-remove', FLBuilder._deleteRowClicked);
+			$('body').on( 'click touchend', '.fl-row-overlay .fl-block-copy', FLBuilder._rowCopyClicked);
+			$('body').on( 'mousedown', '.fl-row-overlay .fl-block-move', FLBuilder._rowDragInit);
+			$('body').on( 'touchstart', '.fl-row-overlay .fl-block-move', FLBuilder._rowDragInitTouch);
+			$('body').on( 'click touchend', '.fl-row-overlay .fl-block-settings', FLBuilder._rowSettingsClicked);
+			$('body').on( 'click touchend', '.fl-row-quick-copy', FLBuilder._rowCopySettingsClicked);
+			$('body').on( 'click touchend', '.fl-row-quick-paste', FLBuilder._rowPasteSettingsClicked);
+			$('body', window.parent.document).on( 'click', '.fl-builder-row-settings .fl-builder-settings-save', FLBuilder._saveSettings);
+
+			// Row touch or mouse specific events.
+			if ( isTouch ) {
+				$('body').on( 'touchend', '.fl-row-overlay', FLBuilder._rowSettingsClicked);
+			} else {
+				$('body').on( 'click', '.fl-row-overlay', FLBuilder._rowSettingsClicked);
+			}
 
 			/* Rows Submenu */
-			$('body').delegate('.fl-block-col-submenu .fl-block-row-reset', 'click', FLBuilder._resetRowWidthClicked);
+			$('body').on( 'click touchend', '.fl-block-col-submenu .fl-block-row-reset', FLBuilder._resetRowWidthClicked);
 
 			/* Columns */
-			$('body').delegate('.fl-col-overlay .fl-block-move', 'mousedown', FLBuilder._colDragInit);
-			$('body').delegate('.fl-block-col-copy', 'click', FLBuilder._copyColClicked);
-			$('body').delegate('.fl-col-overlay .fl-block-remove', 'click', FLBuilder._deleteColClicked);
-			$('body').delegate('.fl-col-overlay .fl-block-settings', 'click', FLBuilder._colSettingsClicked);
-			$('body').delegate('.fl-col-overlay', 'click', FLBuilder._colSettingsClicked);
-			$('body').delegate('.fl-builder-col-settings .fl-builder-settings-save', 'click', FLBuilder._saveSettings);
+			$('body').on( 'mousedown', '.fl-col-overlay .fl-block-move', FLBuilder._colDragInit);
+			$('body').on( 'touchstart', '.fl-col-overlay .fl-block-move', FLBuilder._colDragInitTouch);
+			$('body').on( 'click touchend', '.fl-block-col-copy', FLBuilder._copyColClicked);
+			$('body').on( 'click touchend', '.fl-col-overlay .fl-block-remove', FLBuilder._deleteColClicked);
+			$('body').on( 'click touchend', '.fl-col-overlay .fl-block-settings', FLBuilder._colSettingsClicked);
+			$('body').on( 'click touchend', '.fl-col-quick-copy', FLBuilder._colCopySettingsClicked);
+			$('body').on( 'click touchend', '.fl-col-quick-paste', FLBuilder._colPasteSettingsClicked);
+			$('body', window.parent.document).on( 'click', '.fl-builder-col-settings .fl-builder-settings-save', FLBuilder._saveSettings);
+
+			// Column touch or mouse specific events.
+			if ( isTouch ) {
+				$('body').on( 'touchend', '.fl-col-overlay', FLBuilder._colSettingsClicked);
+			} else {
+				$('body').on( 'click', '.fl-col-overlay', FLBuilder._colSettingsClicked);
+			}
 
 			/* Columns Submenu */
-			$('body').delegate('.fl-block-col-submenu .fl-block-col-move', 'mousedown', FLBuilder._colDragInit);
-			$('body').delegate('.fl-block-col-submenu .fl-block-col-edit', 'click', FLBuilder._colSettingsClicked);
-			$('body').delegate('.fl-block-col-submenu .fl-block-col-delete', 'click', FLBuilder._deleteColClicked);
-			$('body').delegate('.fl-block-col-submenu .fl-block-col-reset', 'click', FLBuilder._resetColumnWidthsClicked);
-			$('body').delegate('.fl-block-col-submenu li', 'mouseenter', FLBuilder._showColHighlightGuide);
-			$('body').delegate('.fl-block-col-submenu li', 'mouseleave', FLBuilder._removeColHighlightGuides);
+			$('body').on( 'mousedown', '.fl-block-col-submenu .fl-block-col-move', FLBuilder._colDragInit);
+			$('body').on( 'touchstart', '.fl-block-col-submenu .fl-block-col-move', FLBuilder._colDragInitTouch);
+			$('body').on( 'click touchend', '.fl-block-col-submenu .fl-block-col-edit', FLBuilder._colSettingsClicked);
+			$('body').on( 'click touchend', '.fl-block-col-submenu .fl-block-col-delete', FLBuilder._deleteColClicked);
+			$('body').on( 'click touchend', '.fl-block-col-submenu .fl-block-col-reset', FLBuilder._resetColumnWidthsClicked);
+			$('body').on( 'mouseenter', '.fl-block-col-submenu li', FLBuilder._showColHighlightGuide);
+			$('body').on( 'mouseleave', '.fl-block-col-submenu li', FLBuilder._removeColHighlightGuides);
 
 			/* Columns Submenu (Parent Column) */
-			$('body').delegate('.fl-block-col-submenu .fl-block-col-move-parent', 'mousedown', FLBuilder._colDragInit);
-			$('body').delegate('.fl-block-col-submenu .fl-block-col-edit-parent', 'click', FLBuilder._colSettingsClicked);
+			$('body').on( 'mousedown', '.fl-block-col-submenu .fl-block-col-move-parent', FLBuilder._colDragInit);
+			$('body').on( 'touchstart', '.fl-block-col-submenu .fl-block-col-move-parent', FLBuilder._colDragInitTouch);
+			$('body').on( 'click touchend', '.fl-block-col-submenu .fl-block-col-edit-parent', FLBuilder._colSettingsClicked);
 
 			/* Modules */
-			$('body').delegate('.fl-module-overlay .fl-block-remove', 'click', FLBuilder._deleteModuleClicked);
-			$('body').delegate('.fl-module-overlay .fl-block-copy', 'click', FLBuilder._moduleCopyClicked);
-			$('body').delegate('.fl-module-overlay .fl-block-move', 'mousedown', FLBuilder._blockDragInit);
-			$('body').delegate('.fl-module-overlay .fl-block-settings', 'click', FLBuilder._moduleSettingsClicked);
-			$('body').delegate('.fl-module-overlay', 'click', FLBuilder._moduleSettingsClicked);
-			$('body').delegate('.fl-builder-module-settings .fl-builder-settings-save', 'click', FLBuilder._saveModuleClicked);
-			$('body').delegate('.fl-module-overlay .fl-block-col-settings', 'click', FLBuilder._colSettingsClicked);
+			$('body').on( 'click touchend', '.fl-module-overlay .fl-block-remove', FLBuilder._deleteModuleClicked);
+			$('body').on( 'click touchend', '.fl-module-overlay .fl-block-copy', FLBuilder._moduleCopyClicked);
+			$('body').on( 'mousedown', '.fl-module-overlay .fl-block-move', FLBuilder._moduleDragInit);
+			$('body').on( 'touchstart', '.fl-module-overlay .fl-block-move', FLBuilder._moduleDragInitTouch);
+			$('body').on( 'click touchend', '.fl-module-overlay .fl-block-settings', FLBuilder._moduleSettingsClicked);
+			$('body').on( 'click touchend', '.fl-module-quick-copy', FLBuilder._moduleCopySettingsClicked);
+			$('body').on( 'click touchend', '.fl-module-quick-paste', FLBuilder._modulePasteSettingsClicked);
+			$('body').on( 'click touchend', '.fl-module-overlay .fl-block-col-settings', FLBuilder._colSettingsClicked);
+			$('body', window.parent.document).on( 'click', '.fl-builder-module-settings .fl-builder-settings-save', FLBuilder._saveModuleClicked);
+
+			// Module touch or mouse specific events.
+			if ( isTouch ) {
+				$('body').on( 'touchend', '.fl-module-overlay', FLBuilder._moduleSettingsClicked);
+			} else {
+				$('body').on( 'click', '.fl-module-overlay', FLBuilder._moduleSettingsClicked);
+			}
 
 			/* Node Templates */
-			$('body').delegate('.fl-builder-settings-save-as', 'click', FLBuilder._showNodeTemplateSettings);
-			$('body').delegate('.fl-builder-node-template-settings .fl-builder-settings-save', 'click', FLBuilder._saveNodeTemplate);
+			$('body', window.parent.document).on( 'click', '.fl-builder-settings-save-as', FLBuilder._showNodeTemplateSettings);
+			$('body', window.parent.document).on( 'click', '.fl-builder-node-template-settings .fl-builder-settings-save', FLBuilder._saveNodeTemplate);
 
 			/* Settings */
-			$('body').delegate('.fl-builder-settings-tabs a', 'click', FLBuilder._settingsTabClicked);
-			$('body').delegate('.fl-builder-settings-tabs a', 'show', FLBuilder._calculateSettingsTabsOverflow);
-			$('body').delegate('.fl-builder-settings-tabs a', 'hide', FLBuilder._calculateSettingsTabsOverflow);
-			$('body').delegate('.fl-builder-settings-cancel', 'click', FLBuilder._settingsCancelClicked);
+			$('body', window.parent.document).on( 'click', '.fl-builder-settings-tabs a', FLBuilder._settingsTabClicked);
+			$('body', window.parent.document).on( 'show', '.fl-builder-settings-tabs a', FLBuilder._calculateSettingsTabsOverflow);
+			$('body', window.parent.document).on( 'hide', '.fl-builder-settings-tabs a', FLBuilder._calculateSettingsTabsOverflow);
+			$('body', window.parent.document).on( 'click', '.fl-builder-settings-cancel', FLBuilder._settingsCancelClicked);
 
 			/* Settings Tabs Overflow menu */
-			$('body').delegate('.fl-builder-settings-tabs-overflow-menu > a', 'click', FLBuilder._settingsTabsToOverflowMenuItemClicked.bind(this));
-			$('body').delegate('.fl-builder-settings-tabs-more', 'click', FLBuilder._toggleTabsOverflowMenu.bind(this) );
-			$('body').delegate('.fl-builder-settings-tabs-overflow-click-mask', 'click', FLBuilder._hideTabsOverflowMenu.bind(this));
+			$('body', window.parent.document).on( 'click', '.fl-builder-settings-tabs-overflow-menu > a', FLBuilder._settingsTabsToOverflowMenuItemClicked.bind(this));
+			$('body', window.parent.document).on( 'click', '.fl-builder-settings-tabs-more', FLBuilder._toggleTabsOverflowMenu.bind(this) );
+			$('body', window.parent.document).on( 'click', '.fl-builder-settings-tabs-overflow-click-mask', FLBuilder._hideTabsOverflowMenu.bind(this));
 
 			/* Tooltips */
-			$('body').delegate('.fl-help-tooltip-icon', 'mouseover', FLBuilder._showHelpTooltip);
-			$('body').delegate('.fl-help-tooltip-icon', 'mouseout', FLBuilder._hideHelpTooltip);
+			$('body', window.parent.document).on( 'mouseover', '.fl-help-tooltip-icon', FLBuilder._showHelpTooltip);
+			$('body', window.parent.document).on( 'mouseout', '.fl-help-tooltip-icon', FLBuilder._hideHelpTooltip);
 
 			/* Multiple Fields */
-			$('body').delegate('.fl-builder-field-add', 'click', FLBuilder._addFieldClicked);
-			$('body').delegate('.fl-builder-field-copy', 'click', FLBuilder._copyFieldClicked);
-			$('body').delegate('.fl-builder-field-delete', 'click', FLBuilder._deleteFieldClicked);
+			$('body', window.parent.document).on( 'click', '.fl-builder-field-add', FLBuilder._addFieldClicked);
+			$('body', window.parent.document).on( 'click', '.fl-builder-field-copy', FLBuilder._copyFieldClicked);
+			$('body', window.parent.document).on( 'click', '.fl-builder-field-delete', FLBuilder._deleteFieldClicked);
 
 			/* Photo Fields */
-			$('body').delegate('.fl-photo-field .fl-photo-select', 'click', FLBuilder._selectSinglePhoto);
-			$('body').delegate('.fl-photo-field .fl-photo-edit', 'click', FLBuilder._selectSinglePhoto);
-			$('body').delegate('.fl-photo-field .fl-photo-replace', 'click', FLBuilder._selectSinglePhoto);
-			$('body').delegate('.fl-photo-field .fl-photo-remove', 'click', FLBuilder._singlePhotoRemoved);
+			$('body', window.parent.document).on( 'click', '.fl-photo-field .fl-photo-select', FLBuilder._selectSinglePhoto);
+			$('body', window.parent.document).on( 'click', '.fl-photo-field .fl-photo-edit', FLBuilder._selectSinglePhoto);
+			$('body', window.parent.document).on( 'click', '.fl-photo-field .fl-photo-replace', FLBuilder._selectSinglePhoto);
+			$('body', window.parent.document).on( 'click', '.fl-photo-field .fl-photo-remove', FLBuilder._singlePhotoRemoved);
 
 			/* Multiple Photo Fields */
-			$('body').delegate('.fl-multiple-photos-field .fl-multiple-photos-select', 'click', FLBuilder._selectMultiplePhotos);
-			$('body').delegate('.fl-multiple-photos-field .fl-multiple-photos-edit', 'click', FLBuilder._selectMultiplePhotos);
-			$('body').delegate('.fl-multiple-photos-field .fl-multiple-photos-add', 'click', FLBuilder._selectMultiplePhotos);
+			$('body', window.parent.document).on( 'click', '.fl-multiple-photos-field .fl-multiple-photos-select', FLBuilder._selectMultiplePhotos);
+			$('body', window.parent.document).on( 'click', '.fl-multiple-photos-field .fl-multiple-photos-edit', FLBuilder._selectMultiplePhotos);
+			$('body', window.parent.document).on( 'click', '.fl-multiple-photos-field .fl-multiple-photos-add', FLBuilder._selectMultiplePhotos);
 
 			/* Video Fields */
-			$('body').delegate('.fl-video-field .fl-video-select', 'click', FLBuilder._selectSingleVideo);
-			$('body').delegate('.fl-video-field .fl-video-replace', 'click', FLBuilder._selectSingleVideo);
-			$('body').delegate('.fl-video-field .fl-video-remove', 'click', FLBuilder._singleVideoRemoved);
+			$('body', window.parent.document).on( 'click', '.fl-video-field .fl-video-select', FLBuilder._selectSingleVideo);
+			$('body', window.parent.document).on( 'click', '.fl-video-field .fl-video-replace', FLBuilder._selectSingleVideo);
+			$('body', window.parent.document).on( 'click', '.fl-video-field .fl-video-remove', FLBuilder._singleVideoRemoved);
 
 			/* Multiple Audio Fields */
-			$('body').delegate('.fl-multiple-audios-field .fl-multiple-audios-select', 'click', FLBuilder._selectMultipleAudios);
-			$('body').delegate('.fl-multiple-audios-field .fl-multiple-audios-edit', 'click', FLBuilder._selectMultipleAudios);
-			$('body').delegate('.fl-multiple-audios-field .fl-multiple-audios-add', 'click', FLBuilder._selectMultipleAudios);
+			$('body', window.parent.document).on( 'click', '.fl-multiple-audios-field .fl-multiple-audios-select', FLBuilder._selectMultipleAudios);
+			$('body', window.parent.document).on( 'click', '.fl-multiple-audios-field .fl-multiple-audios-edit', FLBuilder._selectMultipleAudios);
+			$('body', window.parent.document).on( 'click', '.fl-multiple-audios-field .fl-multiple-audios-add', FLBuilder._selectMultipleAudios);
 
 			/* Icon Fields */
-			$('body').delegate('.fl-icon-field .fl-icon-select', 'click', FLBuilder._selectIcon);
-			$('body').delegate('.fl-icon-field .fl-icon-replace', 'click', FLBuilder._selectIcon);
-			$('body').delegate('.fl-icon-field .fl-icon-remove', 'click', FLBuilder._removeIcon);
+			$('body', window.parent.document).on( 'click', '.fl-icon-field .fl-icon-select', FLBuilder._selectIcon);
+			$('body', window.parent.document).on( 'click', '.fl-icon-field .fl-icon-replace', FLBuilder._selectIcon);
+			$('body', window.parent.document).on( 'click', '.fl-icon-field .fl-icon-remove', FLBuilder._removeIcon);
 
 			/* Settings Form Fields */
-			$('body').delegate('.fl-form-field .fl-form-field-edit', 'click', FLBuilder._formFieldClicked);
-			$('body').delegate('.fl-form-field-settings .fl-builder-settings-save', 'click', FLBuilder._saveFormFieldClicked);
+			$('body', window.parent.document).on( 'click', '.fl-form-field .fl-form-field-edit', FLBuilder._formFieldClicked);
+			$('body', window.parent.document).on( 'click', '.fl-form-field-settings .fl-builder-settings-save', FLBuilder._saveFormFieldClicked);
 
 			/* Layout Fields */
-			$('body').delegate('.fl-layout-field-option', 'click', FLBuilder._layoutFieldClicked);
+			$('body', window.parent.document).on( 'click', '.fl-layout-field-option', FLBuilder._layoutFieldClicked);
 
 			/* Links Fields */
-			$('body').delegate('.fl-link-field-select', 'click', FLBuilder._linkFieldSelectClicked);
-			$('body').delegate('.fl-link-field-search-cancel', 'click', FLBuilder._linkFieldSelectCancelClicked);
+			$('body', window.parent.document).on( 'click', '.fl-link-field-select', FLBuilder._linkFieldSelectClicked);
+			$('body', window.parent.document).on( 'click', '.fl-link-field-search-cancel', FLBuilder._linkFieldSelectCancelClicked);
 
 			/* Loop Settings Fields */
-			$('body').delegate('.fl-loop-data-source-select select[name=data_source]', 'change', FLBuilder._loopDataSourceChange);
-			$('body').delegate('.fl-custom-query select[name=post_type]', 'change', FLBuilder._customQueryPostTypeChange);
+			$('body', window.parent.document).on( 'change', '.fl-loop-data-source-select select[name=data_source]', FLBuilder._loopDataSourceChange);
+			$('body', window.parent.document).on( 'change', '.fl-custom-query select[name=post_type]', FLBuilder._customQueryPostTypeChange);
+			$('body', window.parent.document).on( 'change', '.fl-custom-query select[name="post_type[]"]', FLBuilder._customQueryPostTypesChange);
 
 			/* Text Fields - Add Predefined Value Selector */
-			$('body').delegate('.fl-text-field-add-value', 'change', FLBuilder._textFieldAddValueSelectChange);
+			$('body', window.parent.document).on( 'change', '.fl-text-field-add-value', FLBuilder._textFieldAddValueSelectChange);
 
 			/* Number Fields */
-			$('body').delegate('.fl-field input[type=number]', 'focus', FLBuilder._onNumberFieldFocus );
-			$('body').delegate('.fl-field input[type=number]', 'blur', FLBuilder._onNumberFieldBlur );
+			$('body', window.parent.document).on( 'focus', '.fl-field input[type=number]', FLBuilder._onNumberFieldFocus );
+			$('body', window.parent.document).on( 'blur', '.fl-field input[type=number]', FLBuilder._onNumberFieldBlur );
 
 			// Live Preview
 			FLBuilder.addHook( 'didCompleteAJAX', FLBuilder._refreshSettingsPreviewReference );
@@ -893,7 +968,7 @@
 		_rebindEvents: function() {
 			$('a').on('click', FLBuilder._preventDefault);
 			$('.fl-page-nav .nav a').on('click', FLBuilder._headerLinkClicked);
-			$('body').delegate('.fl-builder-content a', 'click', FLBuilder._preventDefault);
+			$('body').on( 'click', '.fl-builder-content a', FLBuilder._preventDefault);
 		},
 
 		/**
@@ -908,13 +983,13 @@
 		{
 			var content = $(FLBuilder._contentClass);
 
-			content.delegate('.fl-row', 'mouseenter', FLBuilder._rowMouseenter);
-			content.delegate('.fl-row', 'mouseleave', FLBuilder._rowMouseleave);
-			content.delegate('.fl-row-overlay', 'mouseleave', FLBuilder._rowMouseleave);
-			content.delegate('.fl-col', 'mouseenter', FLBuilder._colMouseenter);
-			content.delegate('.fl-col', 'mouseleave', FLBuilder._colMouseleave);
-			content.delegate('.fl-module', 'mouseenter', FLBuilder._moduleMouseenter);
-			content.delegate('.fl-module', 'mouseleave', FLBuilder._moduleMouseleave);
+			content.on( 'mouseenter touchstart', '.fl-row', FLBuilder._rowMouseenter);
+			content.on( 'mouseleave', '.fl-row', FLBuilder._rowMouseleave);
+			content.on( 'mouseleave', '.fl-row-overlay', FLBuilder._rowMouseleave);
+			content.on( 'mouseenter touchstart', '.fl-col', FLBuilder._colMouseenter);
+			content.on( 'mouseleave', '.fl-col', FLBuilder._colMouseleave);
+			content.on( 'mouseenter touchstart', '.fl-module', FLBuilder._moduleMouseenter);
+			content.on( 'mouseleave', '.fl-module', FLBuilder._moduleMouseleave);
 		},
 
 		/**
@@ -929,12 +1004,12 @@
 		{
 			var content = $(FLBuilder._contentClass);
 
-			content.undelegate('.fl-row', 'mouseenter', FLBuilder._rowMouseenter);
+			content.undelegate('.fl-row', 'mouseenter touchstart', FLBuilder._rowMouseenter);
 			content.undelegate('.fl-row', 'mouseleave', FLBuilder._rowMouseleave);
 			content.undelegate('.fl-row-overlay', 'mouseleave', FLBuilder._rowMouseleave);
-			content.undelegate('.fl-col', 'mouseenter', FLBuilder._colMouseenter);
+			content.undelegate('.fl-col', 'mouseenter touchstart', FLBuilder._colMouseenter);
 			content.undelegate('.fl-col', 'mouseleave', FLBuilder._colMouseleave);
-			content.undelegate('.fl-module', 'mouseenter', FLBuilder._moduleMouseenter);
+			content.undelegate('.fl-module', 'mouseenter touchstart', FLBuilder._moduleMouseenter);
 			content.undelegate('.fl-module', 'mouseleave', FLBuilder._moduleMouseleave);
 		},
 
@@ -991,8 +1066,7 @@
 		_headerLinkClicked: function(e)
 		{
 			var link = $(this),
-
-			href = link.attr('href');
+				href = link.attr('href');
 
 			// ignore links with a #hash
 			if( this.hash ) {
@@ -1020,13 +1094,71 @@
 		 */
 		_warnBeforeUnload: function()
 		{
-			var rowSettings     = $('.fl-builder-row-settings').length > 0,
-				colSettings     = $('.fl-builder-col-settings').length > 0,
-				moduleSettings  = $('.fl-builder-module-settings').length > 0;
+			var rowSettings     = $('.fl-builder-row-settings', window.parent.document).length > 0,
+				colSettings     = $('.fl-builder-col-settings', window.parent.document).length > 0,
+				moduleSettings  = $('.fl-builder-module-settings', window.parent.document).length > 0;
 
 			if(rowSettings || colSettings || moduleSettings) {
 				return FLBuilderStrings.unloadWarning;
 			}
+		},
+
+		/* Lite Version
+		----------------------------------------------------------*/
+
+		/**
+		 * Opens a new window with the upgrade URL when the
+		 * upgrade button is clicked.
+		 *
+		 * @since 1.0
+		 * @access private
+		 * @method _upgradeClicked
+		 */
+		_upgradeClicked: function()
+		{
+			window.parent.open(FLBuilderConfig.upgradeUrl);
+		},
+
+		/**
+		 * Toggles the pro module section in lite.
+		 *
+		 * @since 2.4
+		 */
+		_toggleProModules: function()
+		{
+			var button = $( '.fl-builder-blocks-pro-expand', window.parent.document ),
+				closed = $( '.fl-builder-blocks-pro-closed', window.parent.document ),
+				open = $( '.fl-builder-blocks-pro-open', window.parent.document );
+
+			button.toggleClass( 'fl-builder-blocks-pro-expand-rotate' );
+
+			if ( closed.length ) {
+				closed.removeClass( 'fl-builder-blocks-pro-closed' );
+				closed.addClass( 'fl-builder-blocks-pro-open' );
+			} else {
+				open.removeClass( 'fl-builder-blocks-pro-open' );
+				open.addClass( 'fl-builder-blocks-pro-closed' );
+			}
+		},
+
+		/**
+		 * Shows the the pro message lightbox.
+		 *
+		 * @since 2.4
+		 */
+		_showProMessage: function( feature )
+		{
+			if ( ! FLBuilderConfig.lite ) {
+				return
+			}
+
+			var alert = new FLLightbox({
+					className: 'fl-builder-pro-lightbox',
+					destroyOnClose: true
+				}),
+				template = wp.template( 'fl-pro-lightbox' );
+
+			alert.open( template( { feature : feature } ) );
 		},
 
 		/* TipTips
@@ -1041,16 +1173,24 @@
 		 */
 		_initTipTips: function()
 		{
-			$('.fl-tip:not(.fl-has-tip)').each( function(){
+			var classname = '.fl-tip:not(.fl-has-tip)',
+				tips = $( classname ).add( classname, window.parent.document );
+
+			tips.each( function(){
 				var ele = $( this );
 				ele.addClass( 'fl-has-tip' );
 				if ( undefined == ele.attr( 'data-title' ) ) {
 					ele.attr( 'data-title', ele.attr( 'title' ) );
 				}
-			} ).tipTip( {
-				defaultPosition : 'top',
-				delay           : 1000
-			} );
+			} )
+
+			if ( ! FLBuilderLayout._isTouch() ) {
+				tips.tipTip( {
+					defaultPosition : 'top',
+					delay           : 300,
+					maxWidth        : 'auto'
+				} );
+			}
 		},
 
 		/**
@@ -1063,6 +1203,7 @@
 		_hideTipTips: function()
 		{
 			$('#tiptip_holder').stop().hide();
+			$('#tiptip_holder', window.parent.document).stop().hide();
 		},
 
 		/* Submenus
@@ -1078,17 +1219,15 @@
 		 */
 		_submenuParentClicked: function( e )
 		{
-			var body     = $( 'body' ),
-				parent 	 = $( this ),
-				submenu  = parent.find( '.fl-builder-submenu' );
+			var body    = $( 'body' ),
+				parent  = $( this ),
+				submenu = parent.find( '.fl-builder-submenu' );
 
 			if ( parent.hasClass( 'fl-builder-submenu-open' ) ) {
 				body.removeClass( 'fl-builder-submenu-open' );
 				parent.removeClass( 'fl-builder-submenu-open' );
 				parent.removeClass( 'fl-builder-submenu-right' );
-			}
-			else {
-
+			} else {
 				if( parent.offset().left + submenu.width() > $( window ).width() ) {
 					parent.addClass( 'fl-builder-submenu-right' );
 				}
@@ -1102,6 +1241,52 @@
 			FLBuilder._hideTipTips();
 			e.preventDefault();
 			e.stopPropagation();
+		},
+
+		/**
+		 * Callback for when the parent of a submenu is hovered.
+		 *
+		 * @since 2.6
+		 * @access private
+		 * @method _hoverMenuParentMouseEnter
+		 * @param {Object} e The event object.
+		 */
+		_hoverMenuParentMouseEnter: function (e) {
+			e.stopPropagation();
+
+			var body    = $('body'),
+				parent  = $(this),
+				submenu = parent.find('.fl-builder-submenu');
+
+			// remove classes first
+			$('.fl-builder-submenu-right').removeClass('fl-builder-submenu-right');
+			$('.fl-builder-submenu-open').removeClass('fl-builder-submenu-open');
+			$('.fl-row-menu-active').removeClass('fl-row-menu-active');
+
+			// determine align
+			if (parent.offset().left + submenu.width() > $(window).width()) {
+				parent.addClass('fl-builder-submenu-right');
+			}
+
+			// add classes
+			parent.closest('.fl-row-overlay').addClass('fl-row-menu-active');
+			body.addClass('fl-builder-submenu-open');
+			parent.addClass('fl-builder-submenu-open');
+		},
+
+		/**
+		 * Callback for when the parent of a submenu is unhovered.
+		 *
+		 * @since 2.6
+		 * @access private
+		 * @method _hoverMenuParentMouseLeave
+		 * @param {Object} e The event object.
+		 */
+		_hoverMenuParentMouseLeave: function (e) {
+			// remove classes
+			$('.fl-builder-submenu-right').removeClass('fl-builder-submenu-right');
+			$('.fl-builder-submenu-open').removeClass('fl-builder-submenu-open');
+			$('.fl-row-menu-active').removeClass('fl-row-menu-active');
 		},
 
 		/**
@@ -1133,6 +1318,10 @@
 		 */
 		_submenuMouseenter: function( e )
 		{
+			if ($(this).parent().hasClass('fl-builder-submenu-hover')) {
+				return;
+			}
+
 			var menu 	= $( this ),
 				timeout = menu.data( 'timeout' );
 
@@ -1151,6 +1340,10 @@
 		 */
 		_submenuMouseleave: function( e )
 		{
+			if ($(this).parent().hasClass('fl-builder-submenu-hover')) {
+				return;
+			}
+
 			var body    = $( 'body' ),
 				menu 	= $( this ),
 				timeout = setTimeout( function() {
@@ -1159,7 +1352,6 @@
 				}, 500 );
 
 			menu.closest('.fl-row-overlay').removeClass('fl-row-menu-active');
-
 			menu.data( 'timeout', timeout );
 		},
 
@@ -1174,11 +1366,18 @@
 		 */
 		_submenuNestedParentMouseenter: function( e )
 		{
-			var parent 	 = $( this ),
-				submenu  = parent.find( '.fl-builder-submenu' );
+			var parent = $( this );
+			var submenu = parent.find( '.fl-builder-submenu' );
+			var winWidth = $( window ).width();
+			var leftSpace = parent.offset().left;
+			var rightSpace = winWidth - ( parent.width() + leftSpace );
+			var menusWidth = parent.width() + leftSpace + submenu.width();
 
-			if( parent.width() + parent.offset().left + submenu.width() > $( window ).width() ) {
+			if ( menusWidth > winWidth && submenu.width() < leftSpace ) {
 				parent.addClass( 'fl-builder-submenu-right' );
+			} else if ( submenu.width() > rightSpace ) {
+				var left = parent.width() - ( submenu.width() - rightSpace );
+				submenu.css( 'left', left );
 			}
 		},
 
@@ -1196,19 +1395,6 @@
 
 		/* Bar
 		----------------------------------------------------------*/
-
-		/**
-		 * Opens a new window with the upgrade URL when the
-		 * upgrade button is clicked.
-		 *
-		 * @since 1.0
-		 * @access private
-		 * @method _upgradeClicked
-		 */
-		_upgradeClicked: function()
-		{
-			window.open(FLBuilderConfig.upgradeUrl);
-		},
 
 		/**
 		 * Fires blur on mouse up to avoid focus ring when clicked with mouse.
@@ -1262,30 +1448,6 @@
 			FLBuilder.triggerHook('toggleContentPanel');
 		},
 
-		/**
-		 * Opens or closes a section in the builder's content panel
-		 * when a section title is clicked.
-		 *
-		 * @since 1.0
-		 * @access private
-		 * @method _blockSectionTitleClicked
-		 */
-		_blockSectionTitleClicked: function()
-		{
-			var title   = $(this),
-				section = title.parent();
-
-			if(section.hasClass('fl-active')) {
-				section.removeClass('fl-active');
-			}
-			else {
-				$('.fl-builder-blocks-section').removeClass('fl-active');
-				section.addClass('fl-active');
-			}
-
-			FLBuilder._initScrollbars();
-		},
-
 		/* Save Actions
 		----------------------------------------------------------*/
 
@@ -1295,13 +1457,13 @@
 		* @since 2.0
 		* @access private
 		* @method _publishLayout
-		* @param bool whether or not builder should exit after publish
+		* @param {Boolean} shouldExit Whether or not builder should exit after publish
+		* @param {Boolean} openLightbox Whether or not to keep the lightboxes open.
 		* @return void
 		*/
-		_publishLayout: function( shouldExit ) {
-
+		_publishLayout: function( shouldExit, openLightbox ) {
 			// Save existing settings first if any exist. Don't proceed if it fails.
-			if ( ! FLBuilder._triggerSettingsSave( false, true ) ) {
+			if ( ! FLBuilder._triggerSettingsSave( openLightbox, true ) ) {
 				return;
 			}
 
@@ -1309,9 +1471,9 @@
 				var shouldExit = true;
 			}
 
-			FLBuilder.ajax( {
-				action: 'save_layout'
-			}, this._onPublishComplete.bind( this, shouldExit ) );
+			const actions = FL.Builder.data.getLayoutActions()
+			const callback = FLBuilder._onPublishComplete.bind( FLBuilder, shouldExit )
+			actions.saveLayout( true, shouldExit, callback )
 		},
 
 		/**
@@ -1347,7 +1509,9 @@
 			// Change the admin bar status dot to green if it isn't already
 			$('#wp-admin-bar-fl-builder-frontend-edit-link .fl-builder-admin-bar-status-dot').css('color', '#6bc373');
 
-			FLBuilder.triggerHook( 'didPublishLayout' );
+			FLBuilder.triggerHook( 'didPublishLayout', {
+				shouldExit: shouldExit,
+			} );
 		},
 
 		/**
@@ -1361,9 +1525,8 @@
 		{
 			FLBuilder.showAjaxLoader();
 
-			FLBuilder.ajax({
-				action: 'save_draft'
-			}, FLBuilder._exit);
+			const actions = FL.Builder.data.getLayoutActions()
+			actions.saveDraft()
 		},
 
 		/**
@@ -1382,9 +1545,8 @@
 
 				FLBuilder.showAjaxLoader();
 
-				FLBuilder.ajax({
-					action: 'clear_draft_layout'
-				}, FLBuilder._exit);
+				const actions = FL.Builder.data.getLayoutActions()
+				actions.discardDraft()
 			} else {
 				FLBuilder.triggerHook('didCancelDiscard');
 			}
@@ -1415,26 +1577,26 @@
 		 */
 		_exit: function()
 		{
-			var href = window.location.href;
+			var href = window.parent.location.href;
 
 			try {
-				var flbuilder = typeof window.opener.FLBuilder != 'undefined'
+				var flbuilder = typeof window.parent.opener.FLBuilder != 'undefined'
 			}
 			catch(err) {
 				var flbuilder = false
 			}
 
-			if ( FLBuilderConfig.isUserTemplate && typeof window.opener != 'undefined' && window.opener ) {
+			if ( FLBuilderConfig.isUserTemplate && typeof window.parent.opener != 'undefined' && window.parent.opener ) {
 
 				if ( flbuilder ) {
 					if ( 'undefined' === typeof FLBuilderGlobalNodeId ) {
-						window.opener.FLBuilder._updateLayout();
+						window.parent.opener.FLBuilder._updateLayout();
 					} else {
-						window.opener.FLBuilder._updateNode( FLBuilderGlobalNodeId );
+						window.parent.opener.FLBuilder._updateNode( FLBuilderGlobalNodeId );
 					}
 				}
 
-				window.close();
+				window.parent.close();
 			}
 			else {
 
@@ -1442,12 +1604,13 @@
 					href = FLBuilder._exitUrl;
 				}
 				else {
+					href = href.replace( '&fl_builder_ui', '' );
 					href = href.replace( '?fl_builder&', '?' );
 					href = href.replace( '?fl_builder', '' );
 					href = href.replace( '&fl_builder', '' );
 				}
 
-				window.location.href = href;
+				window.parent.location.href = href;
 			}
 		},
 
@@ -1458,10 +1621,10 @@
 		 * @return void
 		 */
 		_exitWithoutRefresh: function() {
-			var href = window.location.href;
+			var href = window.parent.location.href;
 
 			try {
-				var flbuilder = typeof window.opener.FLBuilder != 'undefined'
+				var flbuilder = typeof window.parent.opener.FLBuilder != 'undefined'
 			}
 			catch(err) {
 				var flbuilder = false
@@ -1471,13 +1634,13 @@
 
 				if ( flbuilder ) {
 					if ( 'undefined' === typeof FLBuilderGlobalNodeId ) {
-						window.opener.FLBuilder._updateLayout();
+						window.parent.opener.FLBuilder._updateLayout();
 					} else {
-						window.opener.FLBuilder._updateNode( FLBuilderGlobalNodeId );
+						window.parent.opener.FLBuilder._updateNode( FLBuilderGlobalNodeId );
 					}
 				}
 
-				window.close();
+				window.parent.close();
 			}
 			else {
 				FLBuilder.triggerHook('endEditingSession');
@@ -1516,8 +1679,9 @@
 		{
 			var adminUrl = FLBuilderConfig.adminUrl;
 
-			window.location.href = adminUrl + 'post.php?post='+ response +'&action=edit';
+			window.parent.location.href = adminUrl + 'post.php?post='+ response +'&action=edit';
 		},
+
 
 		/* Layout Settings
 		----------------------------------------------------------*/
@@ -1550,7 +1714,7 @@
 		 */
 		_layoutSettingsInitCSS: function()
 		{
-			var css = $( '.fl-builder-settings #fl-field-css textarea:not(.ace_text-input)' );
+			var css = $( '.fl-builder-settings #fl-field-css textarea:not(.ace_text-input)', window.parent.document );
 
 			css.on( 'change', FLBuilder._layoutSettingsCSSChanged );
 
@@ -1582,7 +1746,7 @@
 		 */
 		_layoutSettingsCSSDoChange: function()
 		{
-			var form	 = $( '.fl-builder-settings' ),
+			var form	 = $( '.fl-builder-settings', window.parent.document ),
 				textarea = $( this ),
 				field    = textarea.parents( '#fl-field-css' );
 
@@ -1621,13 +1785,8 @@
 			FLBuilder._lightbox.close();
 			FLBuilder._layoutSettingsCSSCache = null;
 
-			FLBuilder.ajax( {
-				action: 'save_layout_settings',
-				settings: settings
-			}, function() {
-				FLBuilder.triggerHook( 'didSaveLayoutSettingsComplete', settings );
-				FLBuilder._updateLayout();
-			} );
+			const actions = FL.Builder.data.getLayoutActions()
+			actions.saveLayoutSettings( settings )
 		},
 
 		/**
@@ -1640,7 +1799,7 @@
 		 */
 		_cancelLayoutSettingsClicked: function()
 		{
-			var form = $( '.fl-builder-settings' );
+			var form = $( '.fl-builder-settings', window.parent.document );
 
 			if ( form.hasClass( 'fl-builder-layout-settings' ) ) {
 				$( '#fl-builder-layout-css' ).html( FLBuilder._layoutSettingsCSSCache );
@@ -1650,6 +1809,20 @@
 			}
 
 			FLBuilder._layoutSettingsCSSCache = null;
+		},
+
+		/**
+		 * Completes the ajax call for saving layout settings.
+		 *
+		 * @since 2.5
+		 * @access private
+		 * @method _saveLayoutSettingsComplete
+		 * @param {Object} the settings object
+		 */
+		_saveLayoutSettingsComplete: function( settings )
+		{
+			FLBuilder.triggerHook( 'didSaveLayoutSettingsComplete', settings )
+			FLBuilder._updateLayout()
 		},
 
 		/* Global Settings
@@ -1665,12 +1838,17 @@
 		 */
 		_globalSettingsClicked: function()
 		{
+			const settings = FLBuilderSettingsConfig.settings.global
+			settings.color_scheme = FL.Builder.data.getSystemState().colorScheme
+
 			FLBuilderSettingsForms.render( {
 				id        : 'global',
 				className : 'fl-builder-global-settings',
-				settings  : FLBuilderSettingsConfig.settings.global
+				settings  : settings
 			}, function() {
 				FLBuilder._layoutSettingsInitCSS();
+				FLBuilder.original_shapes = FLBuilderSettingsConfig.settings.global.shape_form;
+
 			} );
 		},
 
@@ -1692,12 +1870,15 @@
 				FLBuilder.showAjaxLoader();
 				FLBuilder._layoutSettingsCSSCache = null;
 
-				FLBuilder.ajax({
-					action: 'save_global_settings',
-					settings: settings
-				}, FLBuilder._saveGlobalSettingsComplete);
+				const actions = FL.Builder.data.getLayoutActions()
+				actions.saveGlobalSettings( settings )
 
 				FLBuilder._lightbox.close();
+
+				// if number of global shapes has changed then refresh.
+				if ( 'undefined' != typeof FLBuilder.original_shapes && FLBuilder.original_shapes.length !== settings.shape_form.length ) {
+					FLBuilder._shapesEdited = true;
+				}
 			}
 		},
 
@@ -1711,11 +1892,13 @@
 		 */
 		_saveGlobalSettingsComplete: function( response )
 		{
-			FLBuilderConfig.global = FLBuilder._jsonParse( response );
-
-			FLBuilder.triggerHook( 'didSaveGlobalSettingsComplete', FLBuilderConfig.global );
+			FLBuilder.triggerHook( 'didSaveGlobalSettingsComplete', FLBuilder._jsonParse( response ) );
 
 			FLBuilder._updateLayout();
+
+			if ( FLBuilder._shapesEdited === true ) {
+				window.parent.location.reload(true);
+			}
 		},
 
 		/* Template Selector
@@ -1754,7 +1937,7 @@
 
 				// If the template is blank, no need to ask
 				if(index == 0) {
-					if(confirm(FLBuilderStrings.changeTemplateMessage)) {
+					if( confirm( FLBuilderStrings.changeTemplateMessage ) ) {
 						FLBuilder._lightbox._node.hide();
 						FLBuilder._applyTemplate(0, false, type);
 					}
@@ -1855,30 +2038,16 @@
 		 * @param {Boolean} append Whether the new template should be appended or not.
 		 * @param {String} type The type of template. Either core or user.
 		 */
-		_applyTemplate: function(id, append, type)
+		_applyTemplate: function( id, append, type )
 		{
-			append  = typeof append === 'undefined' || !append ? '0' : '1';
-			type    = typeof type === 'undefined' ? 'core' : type;
+			append  = typeof append === 'undefined' || ! append ? '0' : '1'
+			type    = typeof type === 'undefined' ? 'core' : type
 
 			FLBuilder._lightbox.close();
 			FLBuilder.showAjaxLoader();
 
-			if(type == 'core') {
-
-				FLBuilder.ajax({
-					action: 'apply_template',
-					template_id: id,
-					append: append
-				}, FLBuilder._applyTemplateComplete);
-			}
-			else {
-
-				FLBuilder.ajax({
-					action: 'apply_user_template',
-					template_id: id,
-					append: append
-				}, FLBuilder._applyUserTemplateComplete);
-			}
+			const actions = FL.Builder.data.getLayoutActions()
+			actions.applyTemplate( id, append, type )
 
 			FLBuilder.triggerHook('didApplyTemplate');
 		},
@@ -1932,6 +2101,11 @@
 		 */
 		_saveUserTemplateClicked: function()
 		{
+			if ( FLBuilderConfig.lite ) {
+				FLBuilder._showProMessage( 'Saving Templates' );
+				return;
+			}
+
 			FLBuilderSettingsForms.render( {
 				id        : 'user_template',
 				className : 'fl-builder-user-template-settings',
@@ -1958,10 +2132,8 @@
 
 			if(valid) {
 
-				FLBuilder.ajax({
-					action: 'save_user_template',
-					settings: settings
-				}, FLBuilder._saveUserTemplateSettingsComplete);
+				const actions = FL.Builder.data.getLayoutActions()
+				actions.saveUserTemplateSettings( settings )
 
 				FLBuilder._lightbox.close();
 			}
@@ -2029,7 +2201,7 @@
 			e.preventDefault();
 			e.stopPropagation();
 
-			window.open($(this).attr('href'));
+			window.parent.open($(this).attr('href'));
 		},
 
 		/**
@@ -2044,7 +2216,7 @@
 		{
 			var template = $( this ).closest( '.fl-user-template' ),
 				id		 = template.attr( 'data-id' ),
-				all		 = $( '.fl-user-template[data-id=' + id + ']' ),
+				all		 = $( '.fl-user-template[data-id=' + id + ']', window.parent.document ),
 				parent   = null,
 				index    = null,
 				i        = null,
@@ -2052,10 +2224,8 @@
 
 			if ( confirm( FLBuilderStrings.deleteTemplate ) ) {
 
-				FLBuilder.ajax( {
-					action: 'delete_user_template',
-					template_id: id
-				} );
+				const actions = FL.Builder.data.getLayoutActions()
+				actions.deleteUserTemplate( id )
 
 				// Remove the item from library
 				for(i in FLBuilderConfig.contentItems.template) {
@@ -2071,35 +2241,6 @@
 			}
 
 			e.stopPropagation();
-		},
-
-		/* Help Actions
-		----------------------------------------------------------*/
-
-		/**
-		 * Opens a new window with the knowledge base URL when the
-		 * view knowledge base button is clicked.
-		 *
-		 * @since 1.4.9
-		 * @access private
-		 * @method _viewKnowledgeBaseClicked
-		 */
-		_viewKnowledgeBaseClicked: function()
-		{
-			window.open( FLBuilderConfig.help.knowledge_base_url );
-		},
-
-		/**
-		 * Opens a new window with the forums URL when the
-		 * visit forums button is clicked.
-		 *
-		 * @since 1.4.9
-		 * @access private
-		 * @method _visitForumsClicked
-		 */
-		_visitForumsClicked: function()
-		{
-			window.open( FLBuilderConfig.help.forums_url );
 		},
 
 		/* Help Tour
@@ -2254,12 +2395,8 @@
 
 			FLBuilder._showNodeLoading( nodeId );
 
-			FLBuilder.ajax( {
-				action  : 'render_node',
-				node_id : nodeId
-			}, function( response ) {
-				FLBuilder._renderLayout( FLBuilder._jsonParse( response ), callback );
-			}.bind( this ) );
+			const actions = FL.Builder.data.getLayoutActions()
+			actions.renderNode( nodeId, callback )
 		},
 
 		/**
@@ -2274,9 +2411,11 @@
 		{
 			FLBuilder.showAjaxLoader();
 
-			FLBuilder.ajax({
-				action: 'render_layout'
-			}, FLBuilder._renderLayout);
+			const actions = FL.Builder.data.getLayoutActions()
+			actions.renderLayout()
+
+			// Refresh Node Data
+			actions.fetchLayout()
 		},
 
 		/**
@@ -2519,11 +2658,16 @@
 			FLBuilder._disableGlobalRows();
 			FLBuilder._disableGlobalCols();
 			FLBuilder._destroyOverlayEvents();
-			FLBuilder._removeAllOverlays();
 			FLBuilder._initSortables();
 			$( 'body' ).addClass( 'fl-builder-dragging' );
+			$( 'body', window.parent.document ).addClass( 'fl-builder-dragging' );
 			$( '.fl-builder-empty-message' ).hide();
 			$( '.fl-sortable-disabled' ).removeClass( 'fl-sortable-disabled' );
+
+			// Remove all action overlays if this isn't a touch for a proxy item.
+			if ( 'touchstart' !== e.type && ! $( e.target ).hasClass( 'fl-sortable-proxy-item ' ) ) {
+				FLBuilder._removeAllOverlays();
+			}
 
 			// Scroll to the node that is dragging.
 			if ( initialPos > 0 ) {
@@ -2588,7 +2732,7 @@
 					title = ui.item.find('.fl-builder-block-title').text();
 				}
 				else {
-					title = ui.item.attr('data-name');
+					title = ui.item.data('name');
 				}
 			}
 			else if(parent.hasClass('fl-col-drop-target')) {
@@ -2662,13 +2806,15 @@
 		 */
 		_blockPreventSort: function( item, parent )
 		{
-			var prevent     = false,
-				isRowBlock  = item.hasClass( 'fl-builder-block-row' ),
-				isCol       = item.hasClass( 'fl-col-sortable-proxy-item' ),
-				isParentCol = parent.hasClass( 'fl-col-content' ),
-				isColTarget = parent.hasClass( 'fl-col-drop-target' ),
-				group       = parent.parents( '.fl-col-group:not(.fl-col-group-nested)' ),
-				nestedGroup = parent.parents( '.fl-col-group-nested' );
+			var prevent              = false,
+				isRowBlock           = item.hasClass( 'fl-builder-block-row' ),
+				isCol                = item.hasClass( 'fl-col-sortable-proxy-item' ),
+				isModuleItem         = item.hasClass('fl-builder-block-module'),
+				isParentColGlobal    = parent.closest('.fl-col[data-template-url]').hasClass('fl-node-global'),
+				isParentCol          = parent.hasClass( 'fl-col-content' ),
+				isColTarget          = parent.hasClass( 'fl-col-drop-target' ),
+				group                = parent.parents( '.fl-col-group:not(.fl-col-group-nested)' ),
+				nestedGroup          = parent.parents( '.fl-col-group-nested' );
 
 			// Prevent columns in nested columns.
 			if ( ( isRowBlock || isCol ) && isParentCol && nestedGroup.length > 0 ) {
@@ -2706,6 +2852,11 @@
 
 			// Prevent more than 4 nested columns.
 			if ( isColTarget && nestedGroup.length > 0 && nestedGroup.find( '.fl-col:visible' ).length > 3 ) {
+				prevent = true;
+			}
+
+			// Prevent module from being dropped to a Global Col except when editing a column template.
+			if ( isModuleItem && isParentColGlobal && 'column' !== FLBuilderConfig.userTemplateType ) {
 				prevent = true;
 			}
 
@@ -2756,6 +2907,7 @@
 			FLBuilder._enableGlobalCols();
 			FLBuilder._setupEmptyLayout();
 			$( 'body' ).removeClass( 'fl-builder-dragging' );
+			$( 'body', window.parent.document ).removeClass( 'fl-builder-dragging' );
 
 			// Scroll the page back to where it was.
 			scrollTo( 0, parent.offset().top - initialPos );
@@ -2781,9 +2933,11 @@
 				FLBuilder._enableGlobalRows();
 				FLBuilder._setupEmptyLayout();
 				$( 'body' ).removeClass( 'fl-builder-dragging' );
+				$( 'body', window.parent.document ).removeClass( 'fl-builder-dragging' );
 				$( '.fl-node-drag-init' ).removeClass( 'fl-node-drag-init' );
 				$( '.fl-node-dragging' ).removeClass( 'fl-node-dragging' );
 				scrollTo( 0, FLBuilder._dragInitialScrollTop );
+				FLBuilder.triggerHook('didCancelDrag');
 			}
 		},
 
@@ -2798,11 +2952,23 @@
 		 */
 		_reorderNode: function( nodeId, position )
 		{
-			FLBuilder.ajax( {
-				action: 'reorder_node',
-				node_id: nodeId,
-				position: position
-			} );
+			const actions = FL.Builder.getActions()
+			actions.moveNode( nodeId, position )
+		},
+
+		/**
+		 * Handle completion after reorder ajax.
+		 *
+		 * @since 2.5
+		 * @access private
+		 * @method _reorderNodeComplete
+		 * @param Object ajax response
+		 */
+		_reorderNodeComplete: function( response ) {
+			var data = FLBuilder._jsonParse( response );
+			var hook = 'didMove' + data.nodeType.charAt(0).toUpperCase() + data.nodeType.slice(1);
+			FLBuilder.triggerHook( 'didMoveNode', data );
+			FLBuilder.triggerHook( hook, data );
 		},
 
 		/**
@@ -2817,12 +2983,24 @@
 		 */
 		_moveNode: function( newParent, nodeId, position )
 		{
-			FLBuilder.ajax({
-				action: 'move_node',
-				new_parent: newParent,
-				node_id: nodeId,
-				position: position
-			});
+			const actions = FL.Builder.getActions()
+			actions.moveNode( nodeId, position, newParent )
+		},
+
+		/**
+		 * Finishes a move node operation.
+		 *
+		 * @since 2.5
+		 * @access private
+		 * @method _moveNodeComplete
+		 * @param Object ajax response
+		 */
+		_moveNodeComplete: function( response )
+		{
+			const data = FLBuilder._jsonParse( response );
+			const hook = 'didMove' + data.nodeType.charAt( 0 ).toUpperCase() + data.nodeType.slice( 1 );
+			FLBuilder.triggerHook( 'didMoveNode', data );
+			FLBuilder.triggerHook( hook, data );
 		},
 
 		/**
@@ -2857,6 +3035,7 @@
 			var overlayPos 	= 0,
 				overlay 	= null,
 				isRow		= node.hasClass( 'fl-row' ),
+				nodeId = node.attr('data-node'),
 				content		= isRow ? node.find( '> .fl-row-content-wrap' ) : node.find( '> .fl-node-content' ),
 				margins 	= {
 					'top' 		: parseInt( content.css( 'margin-top' ), 10 ),
@@ -2868,6 +3047,8 @@
 
 			// Add the active class to the node.
 			node.addClass( 'fl-block-overlay-active' );
+
+			FL.Builder.data.getOutlinePanelActions().setFocusNode( nodeId );
 
 			// Init TipTips
 			FLBuilder._initTipTips();
@@ -2913,6 +3094,7 @@
 				overflowItems = [],
 				menuData      = [],
 				template	  = wp.template( 'fl-overlay-overflow-menu' );
+
 
 			// Use the original copy if we have one.
 			if ( undefined != original ) {
@@ -2997,6 +3179,7 @@
 			$('.fl-module').removeClass('fl-module-adjust-height');
 			$('body').removeClass( 'fl-builder-row-resizing' );
 			FLBuilder._closeAllSubmenus();
+			FL.Builder.data.getOutlinePanelActions().setFocusNode( false );
 		},
 
 		/**
@@ -3072,24 +3255,33 @@
 		 */
 		_rowMouseenter: function()
 		{
+			if ( 'undefined' == typeof FLBuilderSettingsConfig.nodes ) {
+				return;
+			}
 			var row        	= $( this ),
+				id			= row.attr('data-node'),
                 rowTop     	= row.offset().top,
                 childTop   	= null,
                 overlay    	= null,
                 template   	= wp.template( 'fl-row-overlay' ),
-				mode 		= FLBuilderResponsiveEditing._mode;
-
+				mode 		= FLBuilderResponsiveEditing._mode,
+				settings 	= FLBuilderSettingsConfig.nodes[ id ];
 
 			if ( row.closest( '.fl-builder-node-loading' ).length ) {
 				return;
 			}
             else if ( ! row.hasClass( 'fl-block-overlay-active' ) ) {
 
+				// Remove existing overlays.
+				FLBuilder._removeRowOverlays();
                 // Append the overlay.
                 overlay = FLBuilder._appendOverlay( row, template( {
-                    node : row.attr('data-node'),
+                    node : id,
 	                global : row.hasClass( 'fl-node-global' ),
 					hasRules : row.hasClass( 'fl-node-has-rules' ),
+					rulesTextRow : row.attr('data-rules-text'),
+					rulesTypeRow : row.attr('data-rules-type'),
+					nodeLabel : settings?.node_label,
                 } ) );
 
                 // Adjust the overlay position if covered by negative margin content.
@@ -3130,13 +3322,17 @@
 		 */
 		_rowMouseleave: function(e)
 		{
-			var toElement       = $(e.toElement) || $(e.relatedTarget),
+			var target			= $( e.target ),
+				toElement       = $(e.toElement) || $(e.relatedTarget),
 				isOverlay       = toElement.hasClass('fl-row-overlay'),
 				isOverlayChild  = toElement.closest('.fl-row-overlay').length > 0,
 				isTipTip        = toElement.is('#tiptip_holder'),
 				isTipTipChild   = toElement.closest('#tiptip_holder').length > 0;
 
-			if(isOverlay || isOverlayChild || isTipTip || isTipTipChild) {
+			if ( target.closest( '.fl-block-col-resize' ).length ) {
+				return;
+			}
+			if ( isOverlay || isOverlayChild || isTipTip || isTipTipChild ) {
 				return;
 			}
 
@@ -3171,7 +3367,7 @@
 		_rowDragInit: function( e )
 		{
 			var handle = $( e.target ),
-				helper = $( '.fl-row-sortable-proxy-item' ),
+				helper = $( '.fl-row-sortable-proxy-item', window.parent.document ),
 				row    = handle.closest( '.fl-row' );
 
 			row.addClass( 'fl-node-dragging' );
@@ -3181,6 +3377,34 @@
 			e.target = helper[ 0 ];
 
 			helper.trigger( e );
+		},
+
+		/**
+		 * @method _rowDragInitTouch
+		 * @param {Object} e The event object.
+		 */
+		_rowDragInitTouch: function( startEvent )
+		{
+			var handle = $( startEvent.target ),
+				helper = $( '.fl-row-sortable-proxy-item', window.parent.document ),
+				row    = handle.closest( '.fl-row' ),
+				moved  = false;
+
+			handle.on( 'touchmove', function( moveEvent ) {
+				if ( ! moved ) {
+					startEvent.currentTarget = row[0];
+					FLBuilder._rowDragInit( startEvent );
+					moved = true;
+				}
+				moveEvent.target = helper[0];
+				helper.trigger( moveEvent );
+			} );
+
+			handle.on( 'touchend', function( endEvent ) {
+				endEvent.target = helper[0];
+		        helper.trigger( endEvent );
+		        endEvent.stopPropagation();
+			} );
 		},
 
 		/**
@@ -3290,9 +3514,6 @@
 
 				// Show the builder panel.
 				FLBuilder._showPanel();
-
-				// Show the module list.
-				$( '.fl-builder-modules' ).siblings( '.fl-builder-blocks-section-title' ).eq( 0 ).trigger( 'click' );
 			}
 			// Reorder a row.
 			else {
@@ -3318,7 +3539,7 @@
 				}
 
 				// Revert the proxy to its parent.
-				$( '.fl-row-sortable-proxy' ).append( ui.item );
+				$( '.fl-row-sortable-proxy', window.parent.document ).append( ui.item );
 			}
 		},
 
@@ -3338,12 +3559,8 @@
 
 			FLBuilder._newRowPosition = position;
 
-			FLBuilder.ajax({
-				action: 'render_new_row',
-				cols: cols,
-				position: position,
-				module: module,
-			}, FLBuilder._addRowComplete);
+			const actions = FL.Builder.data.getLayoutActions()
+			actions.addRow( cols, position, module )
 		},
 
 		/**
@@ -3382,21 +3599,10 @@
 		 */
 		_deleteRowClicked: function( e )
 		{
-			var row    = $(this).closest('.fl-row'),
-				result = null;
+			var id    = $( e.target ).closest( '.fl-row' ).data( 'node' );
+			var actions = FL.Builder.getActions()
+			actions.deleteNode( id )
 
-			if(!row.find('.fl-module').length) {
-				FLBuilder._deleteRow(row);
-			}
-			else {
-				result = confirm(FLBuilderStrings.deleteRowMessage);
-
-				if(result) {
-					FLBuilder._deleteRow(row);
-				}
-			}
-
-			FLBuilder._removeAllOverlays();
 			e.stopPropagation();
 		},
 
@@ -3412,10 +3618,8 @@
 		{
 			var nodeId = row.attr('data-node');
 
-			FLBuilder.ajax({
-				action: 'delete_node',
-				node_id: nodeId
-			});
+			const actions = FL.Builder.data.getLayoutActions()
+			actions.deleteNode( nodeId )
 
 			row.empty();
 			row.remove();
@@ -3425,7 +3629,7 @@
 		},
 
 		/**
-		 * Duplicates a row.
+		 * Listen for duplicate click.
 		 *
 		 * @since 1.3.8
 		 * @access private
@@ -3434,11 +3638,64 @@
 		 */
 		_rowCopyClicked: function(e)
 		{
-			var win		 	= $( window ),
-				row      	= $( this ).closest( '.fl-row' ),
-				nodeId   	= row.attr( 'data-node' ),
+			var id = $( this ).closest( '.fl-row' ).attr( 'data-node' );
+			FLBuilder._copyRow( id );
+
+			e.stopPropagation();
+		},
+
+		/**
+		 * Copy settings of a row.
+		 *
+		 * @since 2.6
+		 * @access private
+		 * @method _rowCopySettingsClicked
+		 */
+		_rowCopySettingsClicked: function () {
+			const menuEl = $(this);
+			const nodeId = menuEl.closest('.fl-row').data('node');
+
+			// bind copy to the el
+			FLBuilderSettingsCopyPaste._bindCopyToElement(menuEl, 'row', nodeId, true);
+		},
+
+		/**
+		 * Paste settings of a row.
+		 *
+		 * @since 2.6
+		 * @access private
+		 * @method _rowPasteSettingsClicked
+		 */
+		_rowPasteSettingsClicked: function () {
+			const menuEl   = $(this);
+			const menuText = menuEl.text();
+			const nodeId   = menuEl.closest('.fl-row').data('node');
+			const success  = FLBuilderSettingsCopyPaste._importFromClipboard('row', nodeId);
+
+			if (!success) {
+				// set button text
+				menuEl.text(FLBuilderStrings.module_import.error);
+
+				// restore button text
+				setTimeout(() => {
+					menuEl.text(menuText)
+				}, 1000);
+			}
+		},
+
+		/**
+		 * Duplicate a row.
+		 *
+		 * @since 2.5
+		 * @access private
+		 * @method _copyRow
+		 * @param String id of node
+		 * @return void
+		 */
+		_copyRow: function( nodeId ) {
+			var row      	= FLBuilder._getJQueryElement( nodeId ),
 				clone    	= row.clone(),
-				form	 	= $( '.fl-builder-settings[data-node]' ),
+				form	 	= $( '.fl-builder-settings[data-node]', window.parent.document ),
 				formNodeId 	= form.attr( 'data-node' ),
 				formNode	= ( formNodeId === nodeId ) ? row : row.find( '[data-node="' + formNodeId + '"]' ),
 				settings 	= null;
@@ -3450,30 +3707,27 @@
 
 			clone.addClass( 'fl-node-' + nodeId + '-clone fl-builder-node-clone' );
 			clone.find( '.fl-block-overlay' ).remove();
+			clone.removeAttr( 'data-node' );
 			row.after( clone );
 			FLBuilder._showNodeLoading( nodeId + '-clone' );
 
-			if ( win.scrollTop() + win.height() < clone.offset().top ) {
-				$( 'html, body' ).animate( {
-					scrollTop: clone.offset().top + clone.height() - win.height()
-				}, 500 );
-			}
+			// Animate scroll to new element
+			const el  = clone.get(0);
+			el.scrollIntoView( {
+				behavior: 'smooth',
+				block: 'center',
+			} );
 
-			FLBuilder.ajax( {
-				action: 'copy_row',
-				node_id: nodeId,
-				settings: settings,
-				settings_id: formNodeId
-			}, function( response ) {
+			const actions = FL.Builder.data.getLayoutActions()
+			const callback = function( response ) {
 				var data = FLBuilder._jsonParse( response );
 				data.nodeParent = $( FLBuilder._contentClass );
 				data.nodePosition = $( FLBuilder._contentClass + ' > .fl-row' ).index( clone );
 				data.duplicatedRow = nodeId;
 				data.onAddNewHTML = function() { clone.remove() };
 				FLBuilder._rowCopyComplete( data );
-			} );
-
-			e.stopPropagation();
+			}
+			actions.copyRow( nodeId, settings, formNodeId, callback )
 		},
 
 		/**
@@ -3504,19 +3758,37 @@
 		 */
 		_rowSettingsClicked: function( e )
 		{
-			var button = $( this ),
-				nodeId = button.closest( '.fl-row' ).attr( 'data-node' ),
-				global = button.closest( '.fl-block-overlay-global' ).length > 0,
-				win    = null;
+			var button = $( this),
+				nodeId = $( this ).closest( '.fl-row' ).attr( 'data-node' ),
+				global = button.closest( '.fl-block-overlay-global' ).length > 0;
 
+			// Allow clicks from settings button or overlay if global node but not in global node editing page
+			if ( button.hasClass( 'fl-block-settings' ) || ( global && 'row' != FLBuilderConfig.userTemplateType ) ) {
+				const actions = FL.Builder.data.getLayoutActions()
+				actions.displaySettings( nodeId )
+			}
+
+			e.stopPropagation()
+		},
+
+		/**
+		 * Show settings for a row node
+		 *
+		 * @since 2.?
+		 * @access private
+		 * @method _showRowSettings
+		 */
+		_showRowSettings: function( nodeId, global )
+		{
+			let win = null;
+
+			// If we're on a global row template page
 			if ( global && 'row' != FLBuilderConfig.userTemplateType ) {
 				if ( FLBuilderConfig.userCanEditGlobalTemplates ) {
-					win = window.open( $( '.fl-row[data-node="' + nodeId + '"]' ).attr( 'data-template-url' ) );
+					win = window.parent.open( $( '.fl-row[data-node="' + nodeId + '"]' ).attr( 'data-template-url' ) );
 					win.FLBuilderGlobalNodeId = nodeId;
 				}
-			}
-			else if ( button.hasClass( 'fl-block-settings' ) ) {
-
+			} else {
 				FLBuilderSettingsForms.render( {
 					id        : 'row',
 					nodeId    : nodeId,
@@ -3529,12 +3801,10 @@
 						type: 'row'
 					}
 				}, function() {
-					$( '#fl-field-width select' ).on( 'change', FLBuilder._rowWidthChanged );
-					$( '#fl-field-content_width select' ).on( 'change', FLBuilder._rowWidthChanged );
+					$( '#fl-field-width select', window.parent.document ).on( 'change', FLBuilder._rowWidthChanged );
+					$( '#fl-field-content_width select', window.parent.document ).on( 'change', FLBuilder._rowWidthChanged );
 				} );
 			}
-
-			e.stopPropagation();
 		},
 
 		/**
@@ -3547,9 +3817,9 @@
 		 */
 		_rowWidthChanged: function()
 		{
-			var rowWidth     = $( '#fl-field-width select' ).val(),
-				contentWidth = $( '#fl-field-content_width select' ).val(),
-				maxWidth     = $( '#fl-field-max_content_width' );
+			var rowWidth     = $( '#fl-field-width select', window.parent.document ).val(),
+				contentWidth = $( '#fl-field-content_width select', window.parent.document ).val(),
+				maxWidth     = $( '#fl-field-max_content_width', window.parent.document );
 
 			if ( 'fixed' == rowWidth || ( 'full' == rowWidth && 'fixed' == contentWidth ) ) {
 				maxWidth.show();
@@ -3572,7 +3842,7 @@
 				nodeId   = row.attr( 'data-node' ),
 				content  = row.find( '.fl-row-content' ),
 				width    = FLBuilderConfig.global.row_width + 'px',
-				settings = $( '.fl-builder-row-settings' );
+				settings = $( '.fl-builder-row-settings', window.parent.document );
 
 			if ( row.hasClass( 'fl-row-fixed-width' ) ) {
 				row.css( 'max-width', width );
@@ -3584,11 +3854,8 @@
 				settings.find( '[name=max_content_width]' ).val( '' );
 			}
 
-			FLBuilder.ajax({
-				action	: 'resize_row_content',
-				node	: nodeId,
-				width   : ''
-			});
+			const actions = FL.Builder.data.getLayoutActions()
+			actions.resetRowWidth( nodeId )
 
 			FLBuilder._closeAllSubmenus();
 			FLBuilder.triggerHook( 'didResetRowWidth', nodeId );
@@ -3764,10 +4031,14 @@
 		 * @access private
 		 * @method _colMouseenter
 		 */
-		_colMouseenter: function()
+		_colMouseenter: function( e )
 		{
+			if ( 'undefined' == typeof FLBuilderSettingsConfig.nodes ) {
+				return;
+			}
 			var col 	 	  	= $( this ),
 				group           = col.closest( '.fl-col-group' ),
+				id				= group.attr( 'data-node' ),
 				groupLoading    = group.hasClass( 'fl-col-group-has-child-loading' ),
 				global		  	= col.hasClass( 'fl-node-global' ),
 				parentGlobal  	= col.parents( '.fl-node-global' ).length > 0,
@@ -3791,7 +4062,9 @@
 				userCanResizeRows = FLBuilderConfig.rowResize.userCanResizeRows,
 				hasRules		= col.hasClass( 'fl-node-has-rules' ),
 				template 		= wp.template( 'fl-col-overlay' ),
-				overlay			= null;
+				overlay			= null,
+				colNode 		= col.attr( 'data-node' ),
+				settings 		= FLBuilderSettingsConfig.nodes[ colNode ];
 
 			if ( FLBuilderConfig.simpleUi && ! global ) {
 				return;
@@ -3839,6 +4112,7 @@
 					rowIsFixedWidth 	: rowIsFixedWidth,
 					userCanResizeRows 	: userCanResizeRows,
 					hasRules			: hasRules,
+					nodeLabel 			: settings?.node_label,
 				} ) );
 
 				// Build the overlay overflow menu if needed.
@@ -3896,6 +4170,7 @@
 			cols.find('.fl-col-overlay').remove();
 			$('body').removeClass('fl-block-overlay-muted');
 			FLBuilder._closeAllSubmenus();
+			FL.Builder.data.getOutlinePanelActions().setFocusNode( false );
 		},
 
 		/**
@@ -3926,7 +4201,7 @@
 		_colDragInit: function( e )
 		{
 			var handle = $( e.target ),
-				helper = $( '.fl-col-sortable-proxy-item' ),
+				helper = $( '.fl-col-sortable-proxy-item', window.parent.document ),
 				col    = handle.closest( '.fl-col' );
 
 			if ( handle.hasClass( 'fl-block-col-move-parent' ) ) {
@@ -3941,6 +4216,34 @@
 			e.target = helper[ 0 ];
 
 			helper.trigger( e );
+		},
+
+		/**
+		 * @method _colDragInitTouch
+		 * @param {Object} e The event object.
+		 */
+		_colDragInitTouch: function( startEvent )
+		{
+			var handle = $( startEvent.target ),
+				helper = $( '.fl-col-sortable-proxy-item', window.parent.document ),
+				col    = handle.closest( '.fl-col' ),
+				moved  = false;
+
+			handle.on( 'touchmove', function( moveEvent ) {
+				if ( ! moved ) {
+					startEvent.currentTarget = col[0];
+					FLBuilder._colDragInit( startEvent );
+					moved = true;
+				}
+				moveEvent.target = helper[0];
+				helper.trigger( moveEvent );
+			} );
+
+			handle.on( 'touchend', function( endEvent ) {
+				endEvent.target = helper[0];
+		        helper.trigger( endEvent );
+		        endEvent.stopPropagation();
+			} );
 		},
 
 		/**
@@ -4029,21 +4332,15 @@
 				FLBuilder._resetColumnWidths( newGroup );
 
 				// Save the column move via AJAX.
+				const actions = FL.Builder.data.getLayoutActions()
+
 				if ( oldGroupId == newGroupId ) {
-					FLBuilder.ajax( {
-						action: 'reorder_col',
-						node_id: colId,
-						position: col.index()
-					} );
+
+					FL.Builder.getActions().moveNode( colId, col.index() )
 				}
 				else {
-					FLBuilder.ajax( {
-						action: 'move_col',
-						node_id: colId,
-						new_parent: newGroupId,
-						position: col.index(),
-						resize: [ oldGroupId, newGroupId ]
-					} );
+
+					FL.Builder.getActions().moveNode( colId, col.index(), newGroupId, [ oldGroupId, newGroupId ] )
 				}
 
 				// Trigger a layout resize.
@@ -4087,7 +4384,7 @@
 			}
 
 			// Revert the proxy to its parent.
-			$( '.fl-col-sortable-proxy' ).append( ui.item );
+			$( '.fl-col-sortable-proxy', window.parent.document ).append( ui.item );
 
 			// Finish the drag.
 			FLBuilder._highlightEmptyCols();
@@ -4107,14 +4404,10 @@
 		 */
 		_colSettingsClicked: function(e)
 		{
-			var button   	= $( this ),
-				col      	= button.closest('.fl-col'),
-				content  	= col.find( '> .fl-col-content' ),
-				hasSubmenu  = button.parent().find( 'ul.fl-builder-submenu' ).length > 0,
-				global   	= button.closest( '.fl-block-overlay-global' ).length > 0,
-				isGlobalCol	= button.closest( '.fl-block-overlay-global' ).hasClass( 'fl-col-overlay' ),
-				isColTemplate = 'column' != FLBuilderConfig.userTemplateType && 'undefined' !== typeof col.attr( 'data-template-url' ),
-				nodeId   	= null;
+			var button = $( this ),
+				col    = button.closest('.fl-col'),
+				id     = col.attr( 'data-node' ),
+				global = button.closest( '.fl-block-overlay-global' ).length > 0;
 
 			if ( FLBuilder._colResizing ) {
 				return;
@@ -4123,25 +4416,72 @@
 				return;
 			}
 
-			if ( hasSubmenu && ! button.hasClass( 'fl-col-overlay') ) {
-				return;
-			}
-
+			// If we clicked the edit parent button
 			if ( button.hasClass( 'fl-block-col-edit-parent' ) ) {
-			    col = col.parents( '.fl-col' );
+				id = col.parents( '.fl-col' ).attr( 'data-node' )
 			}
 
-			nodeId = col.attr('data-node');
+			const actions = FL.Builder.data.getLayoutActions()
+			actions.displaySettings( id )
 
-			if ( global && isGlobalCol && isColTemplate ) {
+			e.stopPropagation();
+		},
+
+		/**
+		 * Copy settings of a column.
+		 *
+		 * @since 2.6
+		 * @access private
+		 * @method _colCopySettingsClicked
+		 */
+		_colCopySettingsClicked: function () {
+			const menuEl = $(this);
+			const nodeId = menuEl.closest('.fl-col').data('node');
+
+			// bind copy to the el
+			FLBuilderSettingsCopyPaste._bindCopyToElement(menuEl, 'column', nodeId);
+		},
+
+		/**
+		 * Paste settings of a column.
+		 *
+		 * @since 2.6
+		 * @access private
+		 * @method _colPasteSettingsClicked
+		 */
+		_colPasteSettingsClicked: function () {
+			const menuEl   = $(this);
+			const menuText = menuEl.text();
+			const nodeId   = menuEl.closest('.fl-col').data('node');
+			const success  = FLBuilderSettingsCopyPaste._importFromClipboard('column', nodeId);
+
+			if (!success) {
+				// set button text
+				menuEl.text(FLBuilderStrings.module_import.error);
+
+				// restore button text
+				setTimeout(() => {
+					menuEl.text(menuText)
+				}, 1000);
+			}
+		},
+
+		/**
+		 * Show Column Settings Form
+		 *
+		 * @since 2.?
+		 * @access private
+		 * @method _showColSettings
+		 */
+		_showColSettings: function( nodeId, global, isNodeTemplate ) {
+
+			if ( global && isNodeTemplate && 'row' !== FLBuilderConfig.userTemplateType ) {
 				if ( FLBuilderConfig.userCanEditGlobalTemplates ) {
-					win = window.open( $( '.fl-col[data-node="' + nodeId + '"]' ).attr( 'data-template-url' ) );
+					let win = window.parent.open( $( '.fl-col[data-node="' + nodeId + '"]' ).attr( 'data-template-url' ) );
 					win.FLBuilderGlobalNodeId = nodeId;
-
 				}
 			}
 			else {
-
 				FLBuilderSettingsForms.render( {
 					id        : 'col',
 					nodeId    : nodeId,
@@ -4154,13 +4494,12 @@
 						type: 'col'
 					}
 				}, function() {
+					var col = $('.fl-col.fl-node-' + nodeId )
 					if ( col.siblings( '.fl-col' ).length === 0  ) {
-						$( '#fl-field-size, #fl-field-equal_height, #fl-field-content_alignment' ).hide();
+						$( '#fl-field-equal_height, #fl-field-content_alignment', window.parent.document ).hide();
 					}
 				} );
 			}
-
-			e.stopPropagation();
 		},
 
 		/**
@@ -4173,11 +4512,26 @@
 		 */
 		_copyColClicked: function( e )
 		{
-			var col    		= $( this ).closest( '.fl-col' ),
-				nodeId 		= col.attr( 'data-node' ),
+			var id = $( this ).closest( '.fl-col' ).attr( 'data-node' );
+			FLBuilder._copyColumn( id );
+
+			e.stopPropagation();
+		},
+
+		/**
+		 * Handle Column Duplication
+		 *
+		 * @since 2.5
+		 * @access private
+		 * @method _copyColumn
+		 * @param String id of node
+		 * @return void
+		 */
+		_copyColumn: function( nodeId ) {
+			var col         = FLBuilder._getJQueryElement( nodeId ),
 				clone  		= col.clone(),
 				group  		= col.parent(),
-				form	 	= $( '.fl-builder-settings[data-node]' ),
+				form	 	= $( '.fl-builder-settings[data-node]', window.parent.document ),
 				formNodeId 	= form.attr( 'data-node' ),
 				formNode	= ( formNodeId === nodeId ) ? col : col.find( '[data-node="' + formNodeId + '"]' ),
 				settings 	= null;
@@ -4189,26 +4543,22 @@
 
 			clone.addClass( 'fl-node-' + nodeId + '-clone fl-builder-node-clone' );
 			clone.find( '.fl-block-overlay' ).remove();
+			clone.removeAttr( 'data-node' );
 			col.after( clone );
 
 			FLBuilder._showNodeLoading( nodeId + '-clone' );
 			FLBuilder._resetColumnWidths( group );
 
-			FLBuilder.ajax( {
-				action: 'copy_col',
-				node_id: nodeId,
-				settings: settings,
-				settings_id: formNodeId
-			}, function( response ){
+			const actions = FL.Builder.data.getLayoutActions()
+			const callback = function( response ) {
 				var data = FLBuilder._jsonParse( response );
 				data.nodeParent = group;
 				data.nodePosition = clone.index();
 				data.duplicatedColumn = nodeId;
 				data.onAddNewHTML = function() { clone.remove() };
 				FLBuilder._copyColComplete( data );
-			} );
-
-			e.stopPropagation();
+			}
+			actions.copyColumn( nodeId, settings, formNodeId, callback )
 		},
 
 		/**
@@ -4240,18 +4590,26 @@
 		 */
 		_deleteColClicked: function( e )
 		{
-			var button         = $( this ),
-				col            = button.closest( '.fl-col' ),
-				parentGroup    = col.closest( '.fl-col-group' ),
-				parentCol      = col.parents( '.fl-col' ),
-				hasParentCol   = parentCol.length > 0,
-				parentChildren = parentCol.find( '> .fl-col-content > .fl-module, > .fl-col-content > .fl-col-group' ),
-				siblingCols    = col.siblings( '.fl-col' ),
-				result         = true;
+			var id = $( e.target ).closest( '.fl-col' ).data( 'node' );
+			var actions = FL.Builder.getActions();
+			actions.deleteNode( id );
 
-			if ( col.find( '.fl-module' ).length > 0 ) {
-				result = confirm( FLBuilderStrings.deleteColumnMessage );
-			}
+			e.stopPropagation();
+
+			// Trigger the col-deleted hook.
+			FLBuilder.triggerHook( 'col-deleted' );
+		},
+
+		/**
+		 * Handle selecting the proper dom node to delete in nested column situations.
+		 */
+		_getColToDelete: function( initialCol ) {
+			var col            = initialCol,
+			parentGroup        = col.closest( '.fl-col-group' ),
+			parentCol          = col.parents( '.fl-col' ),
+			hasParentCol       = parentCol.length > 0,
+			parentChildren     = parentCol.find( '> .fl-col-content > .fl-module, > .fl-col-content > .fl-col-group' ),
+			siblingCols        = col.siblings( '.fl-col' );
 
 			// Handle deleting of nested columns.
 			if ( hasParentCol && 1 === parentChildren.length ) {
@@ -4263,15 +4621,7 @@
 					col = parentGroup;
 				}
 			}
-
-			if ( result ) {
-				FLBuilder._deleteCol( col );
-				FLBuilder._removeAllOverlays();
-				FLBuilder._highlightEmptyCols();
-				FLBuilder._resizeLayout();
-			}
-
-			e.stopPropagation();
+			return col
 		},
 
 		/**
@@ -4321,11 +4671,8 @@
 					} );
 				}
 
-				FLBuilder.ajax({
-					action          : 'delete_col',
-					node_id         : nodeId,
-					new_width       : width
-				});
+				const actions = FL.Builder.data.getLayoutActions()
+				actions.deleteColumn( nodeId, width )
 
 				FLBuilder._initDropTargets();
 				FLBuilder._initSortables();
@@ -4348,10 +4695,12 @@
 		_addCols: function( col, insert, type, nested, module )
 		{
 			var parent   = col.closest( '.fl-col-group' ),
-				position = parent.find( '.fl-col' ).index( col );
+				position = parent.find( '.fl-col' ).index( col ),
+				id       = col.attr('data-node');
 
 			type   = typeof type == 'undefined' ? '1-col' : type;
 			nested = typeof nested == 'undefined' ? false : nested;
+			nested = nested ? 1 : 0
 
 			if ( 'after' == insert ) {
 				position++;
@@ -4360,14 +4709,8 @@
 			FLBuilder._showNodeLoadingPlaceholder( parent, position );
 			FLBuilder._removeAllOverlays();
 
-			FLBuilder.ajax( {
-				action          : 'render_new_columns',
-				node_id         : col.attr('data-node'),
-				insert 			: insert,
-				type            : type,
-				nested			: nested ? 1 : 0,
-				module			: module,
-			}, FLBuilder._addColsComplete );
+			const actions = FL.Builder.data.getLayoutActions()
+			actions.addColumns( id, insert, type, nested, module )
 		},
 
 		/**
@@ -4409,7 +4752,7 @@
 		 * @param {Number} position The position of the new column group.
 		 * @param {String} module Optional. The node ID of an existing module to move to this group.
 		 */
-		_addColGroup: function(nodeId, cols, position, module)
+		_addColGroup: function( nodeId, cols, position, module )
 		{
 			var parent = $( '.fl-node-' + nodeId );
 
@@ -4426,14 +4769,8 @@
 			// Show the loader.
 			FLBuilder._showNodeLoadingPlaceholder( FLBuilder._newColGroupParent, position );
 
-			// Send the request.
-			FLBuilder.ajax({
-				action      : 'render_new_column_group',
-				cols        : cols,
-				node_id     : nodeId,
-				position    : position,
-				module		: module,
-			}, FLBuilder._addColGroupComplete);
+			const actions = FL.Builder.data.getLayoutActions()
+			actions.addColumnGroup( nodeId, cols, position, module )
 		},
 
 		/**
@@ -4508,7 +4845,7 @@
 				cols 		   = group.find( '> .fl-col' ),
 				col 		   = resizeParent ? parentCol : handle.closest( '.fl-col' ),
 				colId		   = col.attr( 'data-node' ),
-				colSetting	   = $( '[data-node=' + colId + '] #fl-field-size input' ),
+				colSetting	   = $( '[data-node=' + colId + '] #fl-field-size input', window.parent.document ),
 				sibling 	   = null,
 				siblingId 	   = null,
 				siblingSetting = null,
@@ -4528,7 +4865,7 @@
 			}
 
 			siblingId 	   = sibling.attr( 'data-node' );
-			siblingSetting = $( '[data-node=' + siblingId + '] #fl-field-size input' );
+			siblingSetting = $( '[data-node=' + siblingId + '] #fl-field-size input', window.parent.document );
 
 			// Find the available width.
 			for ( ; i < cols.length; i++ ) {
@@ -4560,12 +4897,15 @@
 				direction		: direction,
 				groupWidth		: group.outerWidth(),
 				col 			: col,
+				id				: col.attr( 'data-node' ),
 				colWidth 		: parseFloat( col[ 0 ].style.width ) / 100,
 				sibling 		: sibling,
+				siblingId		: sibling.attr( 'data-node' ),
 				offset  		: ui.position.left,
 				availWidth		: availWidth,
 				setting			: setting,
-				settingType		: settingType
+				settingType		: settingType,
+				layoutActions	: FL.Builder.data.getLayoutActions()
 			};
 
 			// Set the resizing flag.
@@ -4615,28 +4955,36 @@
 				siblingRound 	= minRound;
 			}
 
-			// Set the feedback values.
-			if ( directionRef == data.direction ) {
-				data.feedbackLeft.html( colRound.toFixed( 1 ) + '%'  ).show();
-				data.feedbackRight.html( siblingRound.toFixed( 1 ) + '%'  ).show();
-			}
-			else {
-				data.feedbackLeft.html( siblingRound.toFixed( 1 ) + '%'  ).show();
-				data.feedbackRight.html( colRound.toFixed( 1 ) + '%'  ).show();
-			}
+			requestAnimationFrame( () => {
 
-			// Set the width attributes.
-			data.col.css( 'width', colRound + '%' );
-			data.sibling.css( 'width', siblingRound + '%' );
+				// rapid DOM manipulations should generally happen inside a requestAnimationFrame
 
-			// Update the setting if the col or sibling's settings are open.
-			if ( data.setting ) {
-				if ( 'col' === data.settingType ) {
-					data.setting.val( parseFloat( data.col[ 0 ].style.width ) );
-				} else if ( 'sibling' === data.settingType ) {
-					data.setting.val( parseFloat( data.sibling[ 0 ].style.width ) );
+				// Set the feedback values.
+				if ( directionRef == data.direction ) {
+					data.feedbackLeft.html( colRound.toFixed( 1 ) + '%'  ).show();
+					data.feedbackRight.html( siblingRound.toFixed( 1 ) + '%'  ).show();
 				}
-			}
+				else {
+					data.feedbackLeft.html( siblingRound.toFixed( 1 ) + '%'  ).show();
+					data.feedbackRight.html( colRound.toFixed( 1 ) + '%'  ).show();
+				}
+
+				// Set the width attributes.
+				data.col.css( 'width', colRound + '%' );
+				data.sibling.css( 'width', siblingRound + '%' );
+
+				// Update the setting if the col or sibling's settings are open.
+				if ( data.setting ) {
+					if ( 'col' === data.settingType ) {
+						data.setting.val( parseFloat( data.col[ 0 ].style.width ) );
+					} else if ( 'sibling' === data.settingType ) {
+						data.setting.val( parseFloat( data.sibling[ 0 ].style.width ) );
+					}
+				}
+
+				// Dispatch to store
+				data.layoutActions.resizeColumn( data.id, colRound, data.siblingId, siblingRound, false )
+			} )
 
 			// Build the overlay overflow menu if needed.
 			FLBuilder._buildOverlayOverflowMenu( overlay );
@@ -4658,7 +5006,7 @@
 		{
 			var data      	 = FLBuilder._colResizeData,
 				overlay   	 = FLBuilder._colResizeData.handle.closest( '.fl-block-overlay' ),
-				colId     	 = data.col.data( 'node' ),
+				colId     	 = data.id,
 				colWidth  	 = parseFloat( data.col[ 0 ].style.width ),
 				siblingId 	 = data.sibling.data( 'node' ),
 				siblingWidth = parseFloat( data.sibling[ 0 ].style.width );
@@ -4667,14 +5015,9 @@
 			FLBuilder._colResizeData.feedbackLeft.hide();
 			FLBuilder._colResizeData.feedbackRight.hide();
 
-			// Save the resize data.
-			FLBuilder.ajax({
-				action			: 'resize_cols',
-				col_id			: colId,
-				col_width		: colWidth,
-				sibling_id		: siblingId,
-				sibling_width	: siblingWidth
-			});
+			// Update layout store
+			const actions = FL.Builder.data.getLayoutActions()
+			actions.resizeColumn( colId, colWidth, siblingId, siblingWidth )
 
 			// Build the overlay overflow menu if needed.
 			FLBuilder._buildOverlayOverflowMenu( overlay );
@@ -4720,7 +5063,7 @@
 				groupIds = [],
 				children = null,
 				i        = 0,
-				settings = $( '.fl-builder-col-settings' ),
+				settings = $( '.fl-builder-col-settings', window.parent.document ),
 				col		 = null;
 
 			if ( isRow ) {
@@ -4747,10 +5090,8 @@
 				settings.find( '#fl-field-size input' ).val( parseFloat( col[ 0 ].style.width ) );
 			}
 
-			FLBuilder.ajax({
-				action		: 'reset_col_widths',
-				group_id	: groupIds
-			});
+			const actions = FL.Builder.data.getLayoutActions()
+			actions.resetColWidths( groupIds )
 
 			FLBuilder.triggerHook( 'col-reset-widths' );
 			FLBuilder._closeAllSubmenus();
@@ -4764,11 +5105,18 @@
 		 * @since 1.6.4
 		 * @access private
 		 * @method _resetColumnWidths
-		 * @param {Object} e The event object.
+		 * @param {Object} jQuery|HTMLElement - the column group node.
 		 */
 		_resetColumnWidths: function( group )
 		{
-			var cols  = group.find( ' > .fl-col:visible' ),
+			// Check jQuery object first. This allows passing a plain HTMLElement in.
+			var isJQueryObject = group instanceof jQuery
+			var colGroup = group
+			if ( ! isJQueryObject ){
+				colGroup = $( group );
+			}
+
+			var cols  = colGroup.find( ' > .fl-col:visible' ),
 				width = 0;
 
 			if ( 6 === cols.length ) {
@@ -4798,9 +5146,15 @@
 		 * @access private
 		 * @method _moduleMouseenter
 		 */
-		_moduleMouseenter: function()
+		_moduleMouseenter: function( e )
 		{
-			var module        = $( this ),
+			if ( 'undefined' == typeof FLBuilderSettingsConfig.nodes ) {
+				return;
+			}
+			var module = $( this ),
+				id       = module.attr( 'data-node' ),
+				settings = FLBuilderSettingsConfig.nodes[ id ],
+				moduleType = module.attr( 'data-type' ),
 				moduleName    = module.attr( 'data-name' ),
 				global		  = module.hasClass( 'fl-node-global' ),
 				parentGlobal  = module.parents( '.fl-node-global' ).length > 0,
@@ -4809,6 +5163,8 @@
 				numCols		  = module.closest( '.fl-col-group' ).find( '> .fl-col' ).length,
 				col           = module.closest( '.fl-col' ),
 				colFirst      = 0 === col.index(),
+				colNode 	  = col.attr( 'data-node' ),
+				colSettings   = FLBuilderSettingsConfig.nodes[ colNode ],
 				colLast       = numCols === col.index() + 1,
 				parentCol     = col.parents( '.fl-col' ),
 				hasParentCol  = parentCol.length > 0,
@@ -4821,13 +5177,13 @@
 				rowIsFixedWidth = !! row.find('.fl-row-fixed-width').addBack('.fl-row-fixed-width').length,
 				userCanResizeRows = FLBuilderConfig.rowResize.userCanResizeRows,
 				hasRules	  = module.hasClass( 'fl-node-has-rules' ),
+				rulesTextModule     = module.attr('data-rules-text'),
+				rulesTypeModule     = module.attr('data-rules-type'),
+				rulesTextCol    = col.attr('data-rules-text'),
+				rulesTypeCol    = col.attr('data-rules-type'),
 				colHasRules	  = col.hasClass( 'fl-node-has-rules' ),
 				template	  = wp.template( 'fl-module-overlay' ),
 				overlay       = null;
-
-			// Remove existing overlays.
-			FLBuilder._removeColOverlays();
-			FLBuilder._removeModuleOverlays();
 
 			if ( global && parentGlobal && 'row' != FLBuilderConfig.userTemplateType && isGlobalRow ) {
 				return;
@@ -4843,10 +5199,16 @@
 			}
 			else if ( ! module.hasClass( 'fl-block-overlay-active' ) ) {
 
+				// Remove existing overlays.
+				FLBuilder._removeColOverlays();
+				FLBuilder._removeModuleOverlays();
 				// Append the template.
 				overlay = FLBuilder._appendOverlay( module, template( {
 					global 		  		: global,
+					moduleType	  		: moduleType,
 					moduleName	  		: moduleName,
+					nodeLabel			: settings?.node_label,
+					colNodeLabel 		: colSettings?.node_label,
 					groupLoading  		: groupLoading,
 					numCols		  		: numCols,
 					colFirst      		: colFirst,
@@ -4857,9 +5219,13 @@
 					parentFirst   		: parentFirst,
 					parentLast    		: parentLast,
 					rowIsFixedWidth 	: rowIsFixedWidth,
-					userCanResizeRows 	: userCanResizeRows,
-					hasRules			: hasRules,
-					colHasRules			: colHasRules,
+					userCanResizeRows : userCanResizeRows,
+					hasRules          : hasRules,
+					rulesTextModule   : rulesTextModule,
+					rulesTypeModule   : rulesTypeModule,
+					rulesTextCol      : rulesTextCol,
+					rulesTypeCol      : rulesTypeCol,
+					colHasRules       : colHasRules,
 				} ) );
 
 				// Build the overlay overflow menu if necessary.
@@ -4910,6 +5276,7 @@
 			modules.find('.fl-module-overlay').remove();
 			$('body').removeClass('fl-block-overlay-muted');
 			FLBuilder._closeAllSubmenus();
+			FL.Builder.data.getOutlinePanelActions().setFocusNode( false );
 		},
 
 		/**
@@ -4924,7 +5291,58 @@
 		 */
 		_moduleDragHelper: function(e, item)
 		{
-			return $('<div class="fl-builder-block-drag-helper">' + item.attr('data-name') + '</div>');
+			var module = $( '.fl-node-' + item.data( 'node' ) )
+
+			return $('<div class="fl-builder-block-drag-helper">' + module.attr('data-name') + '</div>');
+		},
+
+		/**
+		 * @method _moduleDragInit
+		 * @param {Object} e The event object.
+		 */
+		_moduleDragInit: function( e )
+		{
+			var handle = $( e.target ),
+				helper = $( '.fl-module-sortable-proxy-item', window.parent.document ),
+				module = handle.closest( '.fl-module' );
+
+			module.addClass( 'fl-node-dragging' );
+
+			FLBuilder._blockDragInit( e );
+
+			e.target = helper[ 0 ];
+
+			helper.data( 'node', module.data( 'node' ) )
+			helper.data( 'name', module.data( 'name' ) )
+		    helper.trigger( e );
+		},
+
+		/**
+		 * @method _moduleDragInitTouch
+		 * @param {Object} e The event object.
+		 */
+		_moduleDragInitTouch: function( startEvent )
+		{
+			var handle = $( startEvent.target ),
+				helper = $( '.fl-module-sortable-proxy-item', window.parent.document ),
+				module = handle.closest( '.fl-module' ),
+				moved  = false;
+
+			handle.on( 'touchmove', function( moveEvent ) {
+				if ( ! moved ) {
+					startEvent.currentTarget = module[0];
+					FLBuilder._moduleDragInit( startEvent );
+					moved = true;
+				}
+				moveEvent.target = helper[0];
+				helper.trigger( moveEvent );
+			} );
+
+			handle.on( 'touchend', function( endEvent ) {
+				endEvent.target = helper[0];
+				helper.trigger( endEvent );
+				endEvent.stopPropagation();
+			} );
 		},
 
 		/**
@@ -4938,8 +5356,11 @@
 		 */
 		_moduleDragStart: function( e, ui )
 		{
-			$( ui.item ).data( 'original-position', ui.item.index() );
+			var module = $( '.fl-node-dragging' );
 
+			module.hide();
+
+			FLBuilder._removeRowOverlays();
 			FLBuilder._blockDragStart( e, ui );
 		},
 
@@ -4956,8 +5377,9 @@
 		{
 			FLBuilder._blockDragStop( e, ui );
 
-			var item     = ui.item,
-				parent   = item.parent(),
+			var module	 = $( '.fl-node-dragging' ).removeClass( 'fl-node-dragging' ),
+				item     = ui.item,
+				parent   = ui.item.parent(),
 				node     = null,
 				position = 0,
 				parentId = 0;
@@ -5014,39 +5436,47 @@
 				// Remove the drag helper.
 				item.remove();
 			}
-			// Cancel the drop if the sortable is disabled?
-			else if ( parent.hasClass( 'fl-sortable-disabled' ) ) {
-				$( e.target ).append( ui.item );
-				$( e.target ).children().eq( ui.item.data( 'original-position' ) ).before( ui.item );
-				FLBuilder._highlightEmptyCols();
-				return;
-			}
-			// A module was dropped into a row position.
-			else if ( parent.hasClass( 'fl-row-drop-target' ) ) {
-				node     = item.closest( '.fl-row' );
-				position = item.closest( '.fl-builder-content' ).children( '.fl-row' ).index( node );
-				position = item.closest( '.fl-drop-target-last' ).length ? position + 1 : position;
-				FLBuilder._addRow( '1-col', position, item.attr( 'data-node' ) );
-				item.remove();
-			}
-			// A module was dropped into a column group position.
-			else if ( parent.hasClass( 'fl-col-group-drop-target' ) ) {
-				node     = item.closest( '.fl-col-group' );
-				position = item.closest( '.fl-row-content ').find( ' > .fl-col-group' ).index( node );
-				position = item.closest( '.fl-drop-target-last' ).length ? position + 1 : position;
-				FLBuilder._addColGroup( item.closest( '.fl-row' ).attr( 'data-node' ), '1-col', position, item.attr( 'data-node' ) );
-				item.remove();
-			}
-			// A module was dropped into a column position.
-			else if ( parent.hasClass( 'fl-col-drop-target' ) ) {
-				node     = item.closest( '.fl-col' );
-				position = item.closest( '.fl-col-drop-target-last' ).length ? 'after' : 'before';
-				FLBuilder._addCols( node, position, '1-col', item.closest( '.fl-col-group-nested' ).length > 0, item.attr( 'data-node' ) );
-				item.remove();
-			}
-			// A module was dropped into another column.
+			// An existing module was dropped.
 			else {
-				FLBuilder._reorderModule( item );
+
+				// Cancel the drop if the sortable is disabled?
+				if ( parent.hasClass( 'fl-sortable-disabled' ) ) {
+					FLBuilder._highlightEmptyCols();
+					module.show();
+				}
+				// A module was dropped into a row position.
+				else if ( parent.hasClass( 'fl-row-drop-target' ) ) {
+					node     = item.closest( '.fl-row' );
+					position = item.closest( '.fl-builder-content' ).children( '.fl-row' ).index( node );
+					position = item.closest( '.fl-drop-target-last' ).length ? position + 1 : position;
+					FLBuilder._addRow( '1-col', position, module.attr( 'data-node' ) );
+					module.remove();
+				}
+				// A module was dropped into a column group position.
+				else if ( parent.hasClass( 'fl-col-group-drop-target' ) ) {
+					node     = item.closest( '.fl-col-group' );
+					position = item.closest( '.fl-row-content ').find( ' > .fl-col-group' ).index( node );
+					position = item.closest( '.fl-drop-target-last' ).length ? position + 1 : position;
+					FLBuilder._addColGroup( item.closest( '.fl-row' ).attr( 'data-node' ), '1-col', position, module.attr( 'data-node' ) );
+					module.remove();
+				}
+				// A module was dropped into a column position.
+				else if ( parent.hasClass( 'fl-col-drop-target' ) ) {
+					node     = item.closest( '.fl-col' );
+					position = item.closest( '.fl-col-drop-target-last' ).length ? 'after' : 'before';
+					FLBuilder._addCols( node, position, '1-col', item.closest( '.fl-col-group-nested' ).length > 0, module.attr( 'data-node' ) );
+					module.remove();
+				}
+				// A module was dropped into another column.
+				else {
+					ui.item.after( module );
+					ui.item.remove();
+					module.show();
+					FLBuilder._reorderModule( module );
+				}
+
+				// Revert the proxy to its parent.
+				$( '.fl-module-sortable-proxy', window.parent.document ).append( ui.item );
 			}
 
 			FLBuilder._resizeLayout();
@@ -5086,15 +5516,41 @@
 		 */
 		_deleteModuleClicked: function(e)
 		{
-			var module = $(this).closest('.fl-module'),
-				result = confirm(FLBuilderStrings.deleteModuleMessage);
-
-			if(result) {
-				FLBuilder._deleteModule(module);
-				FLBuilder._removeAllOverlays();
-			}
+			var id = $( e.target ).closest('.fl-module').data( 'node' );
+			var actions = FL.Builder.getActions()
+			actions.deleteNode( id )
 
 			e.stopPropagation();
+		},
+
+		/**
+		 * Returns a JQuery reference to the HTMLElement for particular node.
+		 *
+		 * @since 2.5
+		 * @access private
+		 * @method _getjQueryElement
+		 * @return {JQuery} dom reference.
+		 */
+		_getJQueryElement: function( id ) {
+			return $( FLBuilder._contentClass ).find( '[data-node="' + id + '"]' )
+		},
+
+		/**
+		 * Checks if a node requires a confirmation message before deleting.
+		 *
+		 * @since 2.5
+		 * @access private
+		 * @method _needsDeleteConfirmation
+		 * @return bool
+		 */
+		_needsDeleteConfirmation: function( node ) {
+			if ( 'module' === node.type ) {
+				return true
+			}
+
+			// Otherwise check if the container has modules
+			const el = FLBuilder._getJQueryElement( node.node )
+			return el.find( '.fl-module' ).length > 0
 		},
 
 		/**
@@ -5110,17 +5566,18 @@
 			var row    = module.closest('.fl-row'),
 				nodeId = module.attr('data-node');
 
-			FLBuilder.ajax({
-				action: 'delete_node',
-				node_id: nodeId
-			});
+			const actions = FL.Builder.data.getLayoutActions()
+			actions.deleteNode( nodeId )
 
 			module.empty();
 			module.remove();
 			row.removeClass('fl-block-overlay-muted');
 			FLBuilder._highlightEmptyCols();
 			FLBuilder._removeAllOverlays();
-			FLBuilder.triggerHook( 'didDeleteModule', nodeId );
+			FLBuilder.triggerHook( 'didDeleteModule', {
+				nodeId: nodeId,
+				moduleType: module.attr( 'data-type' ),
+			} );
 		},
 
 		/**
@@ -5133,44 +5590,55 @@
 		 */
 		_moduleCopyClicked: function(e)
 		{
-			var win		 = $( window ),
-				module   = $( this ).closest( '.fl-module' ),
-				nodeId   = module.attr( 'data-node' ),
-				parent   = module.parent(),
+			const id = $( this ).closest( '.fl-module' ).data( 'node' );
+			const actions = FL.Builder.getActions()
+			actions.copyNode( id );
+
+			e.stopPropagation();
+		},
+
+		/**
+		  * Duplicate a module for a given id.
+		  */
+		_copyModule: function( id )
+		{
+			var module   = FLBuilder._getJQueryElement( id ),
 				clone    = module.clone(),
-				form	 = $( '.fl-builder-module-settings[data-node=' + nodeId + ']' ),
-				settings = null;
+				parent   = module.parent(),
+				form	 = $( '.fl-builder-module-settings[data-node=' + id + ']', window.parent.document ),
+				settings = {};
 
 			if ( form.length ) {
 				settings = FLBuilder._getSettings( form );
-				FLBuilderSettingsConfig.nodes[ nodeId ] = settings;
+				FLBuilderSettingsConfig.nodes[ id ] = settings;
 			}
 
-			clone.addClass( 'fl-node-' + nodeId + '-clone' + ' fl-builder-node-clone' );
+			// Setup clone
+			clone.addClass( 'fl-node-' + id + '-clone fl-builder-node-clone' );
 			clone.find( '.fl-block-overlay' ).remove();
+			clone.removeAttr( 'data-node' );
 			module.after( clone );
-			FLBuilder._showNodeLoading( nodeId + '-clone' );
 
-			if ( win.scrollTop() + win.height() < clone.offset().top ) {
-				$( 'html, body' ).animate( {
-					scrollTop: clone.offset().top + clone.height() - win.height()
-				}, 500 );
-			}
+			// Show Loader
+			FLBuilder._showNodeLoading( id + '-clone' );
 
-			FLBuilder.ajax({
-				action: 'copy_module',
-				node_id: nodeId,
-				settings: settings
-			}, function( response ) {
+			// Animate scroll to new element
+			const el  = clone.get(0);
+			el.scrollIntoView( {
+				behavior: 'smooth',
+				block: 'center',
+			} );
+
+			const actions = FL.Builder.data.getLayoutActions()
+			const callback = function( response ) {
 				var data = FLBuilder._jsonParse( response );
 				data.nodeParent   = parent;
 				data.nodePosition = parent.find( ' > .fl-col-group, > .fl-module' ).index( clone );
-				data.duplicatedModule = nodeId;
+				data.duplicatedModule = id;
 				data.onAddNewHTML = function() { clone.remove() };
 				FLBuilder._moduleCopyComplete( data );
-			} );
-
-			e.stopPropagation();
+			}
+			actions.copyModule( id, settings, callback )
 		},
 
 		/**
@@ -5185,8 +5653,9 @@
 		{
 			FLBuilder._renderLayout( data, function(){
 				FLBuilder.triggerHook( 'didDuplicateModule', {
-					newNodeId : data.nodeId,
-					oldNodeId : data.duplicatedModule
+					newNodeId  : data.nodeId,
+					oldNodeId  : data.duplicatedModule,
+					moduleType : data.moduleType,
 				} );
 			} );
 		},
@@ -5217,12 +5686,50 @@
 				return;
 			}
 
-			FLBuilder._showModuleSettings( {
-				type     : type,
-				nodeId   : nodeId,
-				parentId : parentId,
-				global   : global
-			} );
+			// Show module settings
+			const actions = FL.Builder.getActions();
+			actions.openSettings( nodeId );
+		},
+
+		/**
+		 * Copy settings of a module.
+		 *
+		 * @since 2.6
+		 * @access private
+		 * @method _moduleCopySettingsClicked
+		 */
+		_moduleCopySettingsClicked: function () {
+			const menuEl = $(this);
+			const nodeId = menuEl.closest('.fl-module').data('node');
+			const type   = menuEl.closest('.fl-module').data('type');
+
+			// bind copy to the el
+			FLBuilderSettingsCopyPaste._bindCopyToElement(menuEl, type, nodeId);
+		},
+
+		/**
+		 * Copy settings of a module.
+		 *
+		 * @since 2.6
+		 * @access private
+		 * @method _modulePasteSettingsClicked
+		 */
+		_modulePasteSettingsClicked: function () {
+			const menuEl   = $(this);
+			const menuText = menuEl.text();
+			const nodeId   = menuEl.closest('.fl-module').data('node');
+			const type     = menuEl.closest('.fl-module').data('type');
+			const success  = FLBuilderSettingsCopyPaste._importFromClipboard(type, nodeId);
+
+			if (!success) {
+				// set button text
+				menuEl.text(FLBuilderStrings.module_import.error);
+
+				// restore button text
+				setTimeout(() => {
+					menuEl.text(menuText)
+				}, 1000);
+			}
 		},
 
 		/**
@@ -5242,7 +5749,7 @@
 
 			var config   = FLBuilderSettingsConfig.modules[ data.type ],
 				settings = data.settings ? data.settings : FLBuilderSettingsConfig.nodes[ data.nodeId ],
-				head 	 = $( 'head' ),
+				head 	 = $( 'head', window.parent.document ),
 				layout   = null;
 
 			// Add settings CSS and JS.
@@ -5251,7 +5758,6 @@
 					head.append( config.assets.css );
 				}
 				if ( '' !== config.assets.js ) {
-
 					head.append( config.assets.js );
 				}
 				FLBuilder._loadedModuleAssets.push( data.type );
@@ -5276,12 +5782,14 @@
 					type     : 'module',
 					layout   : data.layout,
 					callback : function() {
-						FLBuilder.triggerHook( 'didAddModule', data.nodeId );
+						FLBuilder.triggerHook( 'didAddModule', {
+							nodeId: data.nodeId,
+							moduleType: settings.type,
+						} );
 					}
 				}
 			}, callback );
 		},
-
 		/**
 		 * Validates the module settings and saves them if
 		 * the form is valid.
@@ -5344,16 +5852,13 @@
 				FLBuilder._newModulePosition = position;
 			}
 
-			// Send the request.
-			FLBuilder.ajax( {
-				action          : 'render_new_module',
-				parent_id       : parentId,
-				type            : type,
-				position        : position,
-				node_preview    : 1,
-				widget          : typeof widget === 'undefined' ? '' : widget,
-				alias           : typeof alias === 'undefined' ? '' : alias
-			}, FLBuilder._addModuleComplete );
+			// Dispatch to layout store
+			const actions = FL.Builder.data.getLayoutActions()
+			actions.addModule( type, parentId, position, {
+				widget: typeof widget === 'undefined' ? '' : widget,
+				alias: typeof alias === 'undefined' ? '' : alias,
+				nodePreview: 1
+			} )
 		},
 
 		/**
@@ -5367,7 +5872,8 @@
 		 */
 		_addModuleComplete: function( response )
 		{
-			var data = FLBuilder._jsonParse( response );
+			var data             = FLBuilder._jsonParse( response ),
+			    showSettingsForm = false;
 
 			// Setup a preview layout if we have one.
 			if ( data.layout ) {
@@ -5383,14 +5889,19 @@
 				data.settings = FLBuilderSettingsConfig.defaults.modules[ data.type ];
 			}
 
-			// Render the module if a settings form is already open.
-			if ( $( 'form.fl-builder-settings' ).length ) {
+			// Render the module if a settings form is already open or if it's a global saved module.
+			if ( $( 'form.fl-builder-settings', window.parent.document ).length || data.global ) {
 				if ( data.layout ) {
 					FLBuilder._renderLayout( data.layout );
+					showSettingsForm = true;
 				}
 			} else {
+				showSettingsForm = true;
+			}
+
+			if ( showSettingsForm ) {
 				FLBuilder._showModuleSettings( data, function() {
-					$( '.fl-builder-module-settings' ).data( 'new-module', '1' );
+					$( '.fl-builder-module-settings', window.parent.document ).data( 'new-module', '1' );
 				} );
 			}
 		},
@@ -5443,7 +5954,7 @@
 		 */
 		_showNodeTemplateSettings: function( e )
 		{
-			var form     = $( '.fl-builder-settings-lightbox .fl-builder-settings' ),
+			var form     = $( '.fl-builder-settings-lightbox .fl-builder-settings', window.parent.document ),
 				nodeId   = form.attr( 'data-node' ),
 				title    = FLBuilderStrings.saveModule;
 
@@ -5471,7 +5982,7 @@
 				}
 			}, function() {
 				if ( ! FLBuilderConfig.userCanEditGlobalTemplates ) {
-					$( '#fl-field-global' ).hide();
+					$( '#fl-field-global', window.parent.document ).hide();
 				}
 			} );
 		},
@@ -5485,7 +5996,7 @@
 		 */
 		_saveNodeTemplate: function()
 		{
-			var form   = $( '.fl-builder-node-template-settings' ),
+			var form   = $( '.fl-builder-node-template-settings', window.parent.document ),
 				nodeId = form.attr( 'data-node' ),
 				valid  = form.validate().form();
 
@@ -5493,14 +6004,8 @@
 
 				FLBuilder._showNodeLoading( nodeId );
 
-				FLBuilder.ajax({
-					action	 : 'save_node_template',
-					node_id  : nodeId,
-					settings : FLBuilder._getSettings( form )
-				}, function( response ) {
-					FLBuilder._saveNodeTemplateComplete( response );
-					FLBuilder._hideNodeLoading( nodeId );
-				} );
+				const actions = FL.Builder.data.getLayoutActions()
+				actions.saveNodeTemplate( nodeId, FLBuilder._getSettings( form ) )
 
 				FLBuilder._lightbox.close();
 			}
@@ -5516,7 +6021,7 @@
 		_saveNodeTemplateComplete: function( response )
 		{
 			var data 		   = FLBuilder._jsonParse( response ),
-				panel 		   = $( '.fl-builder-saved-' + data.type + 's' ),
+				panel 		   = $( '.fl-builder-saved-' + data.type + 's', window.parent.document ),
 				blocks 		   = panel.find( '.fl-builder-block' ),
 				block   	   = null,
 				text    	   = '',
@@ -5721,14 +6226,9 @@
 				FLBuilder._showNodeLoadingPlaceholder( parent, position );
 			}
 
-			// Apply and render the node template.
-			FLBuilder.ajax({
-				action	 	  : action,
-				template_id   : item.attr( 'data-id' ),
-				template_type : item.attr( 'data-type' ),
-				parent_id     : parentId,
-				position 	  : position
-			}, function( response ) {
+			const templateId = item.attr( 'data-id' )
+			const templateType = item.attr( 'data-type' )
+			const ajaxCallback = function( response ) {
 				if ( action.indexOf( 'row' ) > -1 ) {
 					var data = FLBuilder._jsonParse( response );
 					FLBuilder.triggerHook( 'didApplyRowTemplateComplete', data.config );
@@ -5740,7 +6240,19 @@
 				} else {
 					callback( response );
 				}
-			} );
+			}
+
+			let type = 'module'
+			if ( 'render_new_col_template' === action ) {
+				type = 'column'
+			}
+			if ( 'render_new_row_template' === action ) {
+				type = 'row'
+			}
+
+			// Dispatch to layout store
+			const actions = FL.Builder.data.getLayoutActions()
+			actions.addNodeTemplate( type, templateId, templateType, parentId, position, ajaxCallback )
 
 			// Remove the helper.
 			item.remove();
@@ -5760,7 +6272,7 @@
 			e.preventDefault();
 			e.stopPropagation();
 
-			window.open( $( this ).attr( 'href' ) );
+			window.parent.open( $( this ).attr( 'href' ) );
 		},
 
 		/**
@@ -5779,9 +6291,9 @@
 				blocks  	= panel.find( '.fl-builder-block' ),
 				block  		= button.closest( '.fl-builder-block' ),
 				global 		= block.hasClass( 'fl-builder-block-global' ),
-				callback 	= global ? FLBuilder._updateLayout : undefined,
 				message     = global ? FLBuilderStrings.deleteGlobalTemplate : FLBuilderStrings.deleteTemplate,
-				index       = null;
+				index       = null,
+				id          = block.attr( 'data-id' );
 
 			if ( confirm( message ) ) {
 
@@ -5804,10 +6316,8 @@
 				}
 
 				// Delete the template.
-				FLBuilder.ajax({
-					action 	     : 'delete_node_template',
-					template_id  : block.attr( 'data-id' )
-				}, callback);
+				const actions = FL.Builder.data.getLayoutActions()
+				actions.deleteNodeTemplate( id, global )
 
 				// Remove the item from library
 				index = _.findIndex(FLBuilderConfig.contentItems.template, {
@@ -5832,7 +6342,7 @@
 		 */
 		_initSettingsForms: function()
 		{
-			FLBuilder._initSections();
+			FLBuilder._initSettingsSections();
 			FLBuilder._initButtonGroupFields();
 			FLBuilder._initCompoundFields();
 			FLBuilder._CodeFieldSSLCheck();
@@ -5847,6 +6357,7 @@
 			FLBuilder._initAutoSuggestFields();
 			FLBuilder._initLinkFields();
 			FLBuilder._initFontFields();
+			FLBuilder._initPostTypeFields();
 			FLBuilder._initOrderingFields();
 			FLBuilder._initTimezoneFields();
 			FLBuilder._initDimensionFields();
@@ -5856,8 +6367,8 @@
 			FLBuilder._calculateSettingsTabsOverflow();
 			FLBuilder._lightbox._resizeEditors();
 
-			$( '.fl-builder-settings-fields' ).css( 'visibility', 'visible' );
-			$( '.fl-builder-settings button' ).on( 'click', function( e ) { e.preventDefault() } )
+			$( '.fl-builder-settings-fields', window.parent.document ).css( 'visibility', 'visible' );
+			$( '.fl-builder-settings button', window.parent.document ).on( 'click', function( e ) { e.preventDefault() } )
 			/**
 		     * Hook for settings form init.
 		     */
@@ -5889,8 +6400,8 @@
 		 */
 		_setSettingsFormContent: function( html )
 		{
-			$( '.fl-legacy-settings' ).remove();
-			$( 'body' ).append( html );
+			$( '.fl-legacy-settings', window.parent.document ).remove();
+			$( 'body', window.parent.document ).append( html );
 		},
 
 		/**
@@ -5914,13 +6425,19 @@
 			form.find( '.fl-builder-settings-tabs .fl-active' ).removeClass( 'fl-active' );
 			form.find( 'a[href*=' + id + ']' ).addClass( 'fl-active' );
 
+			if ( FLBuilderConfig.rememberTab ) {
+				localStorage.setItem( 'fl-builder-settings-tab', id );
+			} else {
+				localStorage.setItem( 'fl-builder-settings-tab', '' );
+			}
+
 			FLBuilder._focusFirstSettingsControl();
 
 			e.preventDefault();
 		},
 
 		_resetSettingsTabsState: function() {
-			var $lightbox = $('.fl-lightbox:visible');
+			var $lightbox = $('.fl-lightbox:visible', window.parent.document);
 
 			FLBuilder._hideTabsOverflowMenu();
 
@@ -5939,7 +6456,7 @@
 		*/
 		_calculateSettingsTabsOverflow: function() {
 
-			var $lightbox = $('.fl-lightbox:visible'),
+			var $lightbox = $('.fl-lightbox:visible', window.parent.document),
 				lightboxWidth = $lightbox.outerWidth(),
 				isSlim = $lightbox.hasClass('fl-lightbox-width-slim'),
 				$tabWrap = $lightbox.find('.fl-builder-settings-tabs'),
@@ -6031,7 +6548,7 @@
 		* @return void
 		*/
 		_settingsTabsToOverflowMenuItemClicked: function(e) {
-			var $item = $(e.currentTarget),
+			var $item = $(e.currentTarget, window.parent.document),
 				handle = $item.attr('href'),
 				$tabsWrap = $item.closest('.fl-lightbox-header-wrap').find('.fl-builder-settings-tabs'),
 				$tab = $tabsWrap.find('a[href="' + handle + '"]'),
@@ -6052,7 +6569,7 @@
 		* @return bool
 		*/
 		_hasOverflowTabs: function() {
-			var $lightbox = $('.fl-lightbox:visible'),
+			var $lightbox = $('.fl-lightbox:visible', window.parent.document),
 				$tabs = $lightbox.find('.fl-builder-settings-tabs-overflow-menu a');
 
 			if ( $tabs.length > 0 ) {
@@ -6070,7 +6587,7 @@
 
 			if ( ! FLBuilder._hasOverflowTabs() ) return;
 
-			var $lightbox = $('.fl-lightbox:visible');
+			var $lightbox = $('.fl-lightbox:visible', window.parent.document);
 			$lightbox.find('.fl-builder-settings-tabs-overflow-menu').css('display', 'flex');
 			$lightbox.find('.fl-builder-settings-tabs-overflow-click-mask').show();
 			this.isShowingSettingsTabsOverflowMenu = true;
@@ -6080,7 +6597,7 @@
 		* Hide the overflow menu
 		*/
 		_hideTabsOverflowMenu: function() {
-			var $lightbox = $('.fl-lightbox:visible');
+			var $lightbox = $('.fl-lightbox:visible', window.parent.document);
 			$lightbox.find('.fl-builder-settings-tabs-overflow-menu').css('display', 'none');
 			$lightbox.find('.fl-builder-settings-tabs-overflow-click-mask').hide();
 			this.isShowingSettingsTabsOverflowMenu = false;
@@ -6099,6 +6616,18 @@
 		},
 
 		/**
+		 * Setup section toggling for all sections
+		 *
+		 * @since 2.2
+		 * @access private
+		 * @method _initSettingsSections
+		 * @return void
+		 */
+		_initSettingsSections: function() {
+			$( '.fl-builder-settings:visible', window.parent.document ).find( '.fl-builder-settings-section' ).each( FLBuilder._initSection );
+		},
+
+		/**
 		 * Reverts an active preview and hides the lightbox when
 		 * the cancel button of a settings lightbox is clicked.
 		 *
@@ -6109,8 +6638,8 @@
 		 */
 		_settingsCancelClicked: function(e)
 		{
-			var nestedLightbox = $( '.fl-builder-lightbox[data-parent]' ),
-				moduleSettings = $('.fl-builder-module-settings'),
+			var nestedLightbox = $( '.fl-builder-lightbox[data-parent]', window.parent.document ),
+				moduleSettings = $( '.fl-builder-module-settings', window.parent.document ),
 				existingNodes  = null,
 				previewModule  = null,
 				previewCol     = null,
@@ -6142,6 +6671,9 @@
 				FLBuilder.preview.revert();
 			}
 
+			const actions = FL.Builder.data.getLayoutActions()
+			actions.cancelDisplaySettings()
+
 			FLBuilder.preview = null;
 			FLLightbox.closeParent(this);
 			FLBuilder.triggerHook( 'didCancelNodeSettings' );
@@ -6153,7 +6685,7 @@
 		 * @since 2.0
 		 */
 		_focusFirstSettingsControl: function() {
-			var form   = $( '.fl-builder-settings:visible' ),
+			var form   = $( '.fl-builder-settings:visible', window.parent.document ),
 				tab    = form.find( '.fl-builder-settings-tab.fl-active' ),
 				nodeId = form.data( 'node' ),
 				field  = tab.find('.fl-field').first(),
@@ -6164,10 +6696,10 @@
 				return;
 			}
 
-			if ( 'undefined' !== typeof tinyMCE && input.hasClass('fl-editor-field') ) {
+			if ( 'undefined' !== typeof window.parent.tinyMCE && input.hasClass('fl-editor-field') ) {
 				// TinyMCE fields
 				var id = input.find('textarea.wp-editor-area').attr('id');
-				tinyMCE.get( id ).focus();
+				window.parent.tinyMCE.get( id ).focus();
 			} else {
 				// Everybody else
 				setTimeout(function() {
@@ -6193,7 +6725,7 @@
 		 */
 		_initSettingsValidation: function(rules, messages)
 		{
-			var form = $('.fl-builder-settings').last();
+			var form = $('.fl-builder-settings', window.parent.document).last();
 
 			if ( ! messages ) {
 				messages = {}
@@ -6231,7 +6763,7 @@
 		 */
 		_toggleSettingsTabErrors: function()
 		{
-			var form      = $('.fl-builder-settings:visible'),
+			var form      = $('.fl-builder-settings:visible', window.parent.document),
 				tabs      = form.find('.fl-builder-settings-tab'),
 				tab       = null,
 				tabErrors = null,
@@ -6272,10 +6804,9 @@
 				i        	= 0,
 				k        	= 0,
 				value	 	= '',
-				name     	= '',
 				key      	= '',
 				keys      	= [],
-				matches	 	= [],
+				setting		= null,
 				settings 	= {};
 
 			// Loop through the form data.
@@ -6283,71 +6814,66 @@
 
 				value = data[ i ].value.replace( /\r/gm, '' ).replace( /&#39;/g, "'" );
 
+				// Don't save fields without a name.
+				if ( 'undefined' === data[ i ].name ) {
+					continue;
+				}
+
 				// Don't save text editor textareas.
 				if ( data[ i ].name.indexOf( 'flrich' ) > -1 ) {
 					continue;
 				}
+
 				// Support foo[]... setting keys.
-				else if ( data[ i ].name.indexOf( '[' ) > -1 ) {
+				if ( data[ i ].name.indexOf( '[' ) > -1 ) {
 
-					name 	= data[ i ].name.replace( /\[(.*)\]/, '' );
-					key  	= data[ i ].name.replace( name, '' );
-					keys	= [];
-					matches = key.match( /\[[^\]]*\]/g );
+					// Get the top level settings key and subkeys.
+					key = data[ i ].name.replace( /\[(.*)\]/, '' );
+					keys = data[ i ].name.replace( key, '' ).replace( '[', '' ).replaceAll( ']', '' ).split( '[' );
 
-					// Remove [] from the keys.
-					for ( k = 0; k < matches.length; k++ ) {
-
-						if ( '[]' == matches[ k ] ) {
-							continue;
+					// Set the top level settings key.
+					if ( 'undefined' === typeof settings[ key ] ) {
+						if ( 1 === keys.length && '' === keys[ 0 ] ) {
+							settings[ key ] = [];
+						} else {
+							settings[ key ] = {};
 						}
-
-						keys.push( matches[ k ].replace( /\[|\]/g, '' ) );
 					}
 
-					// foo[][key][key] or foo[][key][][key]
-					if ( key.match( /\[\]\[[^\]]*\]\[[^\]]+\]/ ) || key.match( /\[\]\[[^\]]*\]\[\]\[[^\]]+\]/ ) ) {
+					// Reference to use in the keys loop below.
+					setting = settings[ key ];
 
-						if ( 'undefined' == typeof settings[ name ] ) {
-							settings[ name ] = {};
-						}
-						if ( 'undefined' == typeof settings[ name ][ keys[ 0 ] ] ) {
-							settings[ name ][ keys[ 0 ] ] = {};
-						}
+					// Set the subkeys and value.
+					for ( k = 0; k < keys.length; k++ ) {
 
-						settings[ name ][ keys[ 0 ] ][ keys[ 1 ] ] = value;
-
-					}
-					// foo[][key][]
-					else if ( key.match( /\[\]\[[^\]]*\]\[\]/ ) ) {
-
-						if ( 'undefined' == typeof settings[ name ] ) {
-							settings[ name ] = {};
-						}
-						if ( 'undefined' == typeof settings[ name ][ keys[ 0 ] ] ) {
-							settings[ name ][ keys[ 0 ] ] = [];
+						// Handle foo[] arrays otherwise ignore empty keys.
+						if ( '' === keys[ k ] ) {
+							if ( 1 === keys.length ) {
+								setting.push( value );
+								break;
+							} else {
+								continue;
+							}
 						}
 
-						settings[ name ][ keys[ 0 ] ].push( value );
-					}
-					// foo[][key]
-					else if ( key.match( /\[\]\[[^\]]*\]/ ) ) {
-
-						if ( 'undefined' == typeof settings[ name ] ) {
-							settings[ name ] = {};
+						// Handle foo[][bar][] or foo[][bar][][baz][] style arrays.
+						if ( keys.length - 2 === k && '' === keys[ keys.length - 1 ] ) {
+							if ( $.inArray( typeof setting[ keys[ k ] ], [ 'undefined', 'string' ] ) > -1 ) {
+								setting[ keys[ k ] ] = [];
+							}
+							setting[ keys[ k ] ].push( value );
+							break;
 						}
 
-						settings[ name ][ keys[ 0 ] ] = value;
-
-					}
-					// foo[]
-					else if ( key.match( /\[\]/ ) ) {
-
-						if ( 'undefined' == typeof settings[ name ] ) {
-							settings[ name ] = [];
+						// Handle everything else as objects like foo[bar], foo[][bar] or foo[bar][baz].
+						if ( keys.length - 1 === k ) {
+							setting[ keys[ k ] ] = value;
+						} else {
+							if ( $.inArray( typeof setting[ keys[ k ] ], [ 'undefined', 'string' ] ) > -1 ) {
+								setting[ keys[ k ] ] = {};
+							}
+							setting = setting[ keys[ k ] ];
 						}
-
-						settings[ name ].push( value );
 					}
 				}
 				// Standard name/value pair.
@@ -6359,7 +6885,7 @@
 			// Update auto suggest values.
 			for ( key in settings ) {
 
-				if ( 'undefined' != typeof settings[ 'as_values_' + key ] ) {
+				if ( 'undefined' !== typeof settings[ 'as_values_' + key ] ) {
 
 					settings[ key ] = $.grep(
 						settings[ 'as_values_' + key ].split( ',' ),
@@ -6378,7 +6904,7 @@
 			// In the case of multi-select or checkboxes we need to put the blank setting back in.
 			$.each( form.find( '[name]' ), function( key, input ) {
 				var name = $( input ).attr( 'name' ).replace( /\[(.*)\]/, '' );
-				if ( ! ( name in settings ) ) {
+				if ( ! ( name in settings ) && 'undefined' !== name ) {
 					settings[ name ] = '';
 				}
 			});
@@ -6431,7 +6957,7 @@
 
 			if ( original ) {
 				for ( key in original ) {
-					if ( $( '#fl-field-' + key ).length || all ) {
+					if ( key.match( /[a-z0-9-_]+$/ ) && $( '#fl-field-' + key ).length || all ) {
 						settings[ key ] = original[ key ];
 					}
 				}
@@ -6483,7 +7009,7 @@
 		 */
 		_saveSettings: function( render )
 		{
-			var form      = $( '.fl-builder-settings-lightbox .fl-builder-settings' ),
+			var form      = $( '.fl-builder-settings-lightbox .fl-builder-settings', window.parent.document ),
 				newModule = form.data( 'new-module' ),
 				nodeId    = form.attr( 'data-node' ),
 				settings  = FLBuilder._getSettings( form ),
@@ -6496,31 +7022,77 @@
 
 			// Only proceed if the settings have changed.
 			if ( preview && ! preview._settingsHaveChanged() && FLBuilder.isUndefined( newModule ) ) {
+				preview.clear();
 				FLBuilder._lightbox.close();
 				return;
 			}
 
-			// Show the loader.
-			FLBuilder._showNodeLoading( nodeId );
+			function finishSavingSettings() {
 
-			// Update the settings config object.
-			FLBuilderSettingsConfig.nodes[ nodeId ] = settings;
+				// Show the loader.
+				FLBuilder._showNodeLoading( nodeId );
 
-			// Make the AJAX call.
-			FLBuilder.ajax( {
-				action          : 'save_settings',
-				node_id         : nodeId,
-				settings        : settings
-			}, FLBuilder._saveSettingsComplete.bind( this, render, preview ) );
+				// Update the settings config object.
+				FLBuilderSettingsConfig.nodes[ nodeId ] = settings;
 
-			// Trigger the hook.
-			FLBuilder.triggerHook( 'didSaveNodeSettings', {
-				nodeId   : nodeId,
-				settings : settings
-			} );
+				// Dispatch to store
+				const actions = FL.Builder.data.getLayoutActions()
+				const callback = FLBuilder._saveSettingsComplete.bind( this, render )
+				actions.updateNodeSettings( nodeId, settings, callback )
 
-			// Close the lightbox.
-			FLBuilder._lightbox.close();
+				// Trigger the hook.
+				FLBuilder.triggerHook( 'didSaveNodeSettings', {
+					nodeId   : nodeId,
+					settings : settings
+				} );
+
+				// Close the lightbox.
+				FLBuilder._lightbox.close();
+			}
+
+			if ( FLBuilderConfig.userCaps.unfiltered_html ) {
+				finishSavingSettings()
+			} else {
+				FLBuilderSettingsForms.showLightboxLoader()
+				FLBuilder.ajax( {
+					action          : 'verify_settings',
+					settings        : settings,
+				}, function( response ) {
+					if ( 'true' === response ) {
+						finishSavingSettings()
+					} else {
+						msg = '<p style="font-weight:bold;text-align:center;">' + FLBuilderStrings.noScriptWarn.heading + '</p>';
+						if ( FLBuilderConfig.userCaps.global_unfiltered_html ) {
+							msg += '<p>' + FLBuilderStrings.noScriptWarn.global + '</p>';
+						} else {
+							msg += '<p>' + FLBuilderStrings.noScriptWarn.message + '</p>';
+						}
+
+						msg += '<p><div class="fl-diff"></div></p>';
+						msg += '<p>' + FLBuilderStrings.noScriptWarn.footer + '</p>';
+						FLBuilderSettingsForms.hideLightboxLoader()
+						FLBuilder.alert( msg );
+						data = $.parseJSON(response);
+						if ( '' !== data.diff  ) {
+							$('.fl-diff', window.parent.document).html( data.diff );
+							$('.fl-diff', window.parent.document).prepend( '<p>' + FLBuilderStrings.codeErrorDetected + '</p>');
+							$('.fl-diff .diff-deletedline', window.parent.document).each(function(){
+								if ( $(this).find('del').length < 1 ) {
+									$(this).css('background-color', 'rgb(255, 192, 203, 0.7)').css('padding', '10px').css('border', '1px solid pink');
+								} else {
+									$(this).find('del').css('background-color', 'rgb(255, 192, 203, 0.7)').css('border', '1px solid pink');
+								}
+							});
+							console.log( '============' );
+							console.log( 'key: ' + data.key );
+							console.log( 'value: ' + data.value );
+							console.log( 'parsed: ' + data.parsed );
+							console.log( '============' );
+						}
+
+					}
+				} );
+			}
 		},
 
 		/**
@@ -6531,17 +7103,21 @@
 		 * @access private
 		 * @method _saveSettingsComplete
 		 * @param {Boolean} render Whether the layout should render after saving.
-		 * @param {Object} preview The preview object for this settings save.
 		 * @param {String} response The layout data from the server.
 		 */
-		_saveSettingsComplete: function( render, preview, response )
+		_saveSettingsComplete: function( render, response )
 		{
-			var data 	 = FLBuilder._jsonParse( response ),
-				callback = function() {
-					if( preview && data.layout.partial && data.layout.nodeId === preview.nodeId ) {
+			var data 	 	= FLBuilder._jsonParse( response ),
+				type	 	= data.layout.nodeType,
+				moduleType	= data.layout.moduleType,
+				hook	 	= 'didSave' + type.charAt(0).toUpperCase() + type.slice(1) + 'SettingsComplete',
+				preview		= FLBuilder.preview,
+				callback 	= function() {
+					if (preview && data.layout.partial && data.layout.nodeId === preview.nodeId && !FLBuilder._publishAndRemain ) {
 						preview.clear();
-						preview = null;
+						FLBuilder.preview = null;
 					}
+					FLBuilder._publishAndRemain = false;
 				};
 
 			if ( true === render ) {
@@ -6551,8 +7127,17 @@
 			}
 
 			FLBuilder.triggerHook( 'didSaveNodeSettingsComplete', {
-				nodeId   : data.node_id,
-				settings : data.settings
+				nodeId   	: data.node_id,
+				nodeType 	: type,
+				moduleType	: moduleType,
+				settings 	: data.settings
+			} );
+
+			FLBuilder.triggerHook( hook, {
+				nodeId   	: data.node_id,
+				nodeType 	: type,
+				moduleType	: moduleType,
+				settings 	: data.settings
 			} );
 		},
 
@@ -6573,13 +7158,18 @@
 			var form	   = FLBuilder._lightbox._node.find( 'form.fl-builder-settings' ),
 				lightboxId = FLBuilder._lightbox._node.data( 'instance-id' ),
 				lightbox   = FLLightbox._instances[ lightboxId ],
-				nested     = $( '.fl-lightbox-wrap[data-parent]:visible' ),
+				nested     = $( '.fl-lightbox-wrap[data-parent]:visible', window.parent.document ),
 				changed    = false,
 				valid	   = true;
 
 			disableClose = _.isUndefined( disableClose ) ? false : disableClose;
 			showAlert 	 = _.isUndefined( showAlert ) ? false : showAlert;
-			destroy 	 = _.isUndefined( destroy ) ? true : destroy;
+			destroy 	 = _.isUndefined( destroy ) ? ! disableClose : destroy;
+
+			// prevent clearing preview.
+			if (!destroy) {
+				FLBuilder._publishAndRemain = true;
+			}
 
 			if ( form.length ) {
 
@@ -6590,13 +7180,13 @@
 					nested.find( '.fl-builder-settings-save' ).trigger( 'click' );
 
 					// Don't proceed if not saved.
-					if ( nested.find( 'label.error' ).length || $( '.fl-builder-alert-lightbox:visible' ).length ) {
+					if ( nested.find( 'label.error' ).length || $( '.fl-builder-alert-lightbox:visible', window.parent.document ).length ) {
 						valid = false;
 					}
 				}
 
 				// Do a validation check of the main form to see if we should save.
-				if ( valid && ! form.validate().form() ) {
+				if ( valid && ! form.validate({ignore: '.fl-ignore-validation'}).form() ) {
 					valid = false;
 				}
 
@@ -6620,14 +7210,13 @@
 					}
 
 					// Don't proceed if not saved.
-					if ( form.find( 'label.error' ).length || $( '.fl-builder-alert-lightbox:visible' ).length ) {
+					if ( form.find( 'label.error' ).length || $( '.fl-builder-alert-lightbox:visible', window.parent.document ).length ) {
 						valid = false;
 					}
 				}
 
 				// Destroy the settings form?
 				if ( destroy ) {
-
 					FLBuilder._destroySettingsForms();
 
 					// Destroy the preview if settings don't have changes.
@@ -6635,6 +7224,9 @@
 						FLBuilder.preview.clear();
 						FLBuilder.preview = null;
 					}
+				} else {
+					// cache current settings
+					FLBuilderSettingsForms.cacheCurrentSettings();
 				}
 
 				// Close the main lightbox if it doesn't have changes and closing isn't disabled.
@@ -6646,12 +7238,15 @@
 			if ( ! valid ) {
 				FLBuilder.triggerHook( 'didFailSettingsSave' );
 				FLBuilder._toggleSettingsTabErrors();
-				if ( showAlert && ! $( '.fl-builder-alert-lightbox:visible' ).length ) {
+				if ( showAlert && ! $( '.fl-builder-alert-lightbox:visible', window.parent.document ).length ) {
 					FLBuilder.alert( FLBuilderStrings.settingsHaveErrors );
 				}
 			} else {
 				FLBuilder.triggerHook( 'didTriggerSettingsSave' );
 			}
+
+			// Reset preview clearing
+			FLBuilder._publishAndRemain = false;
 
 			return valid;
 		},
@@ -6694,7 +7289,7 @@
 				resizable: true
 			}, settings );
 
-			var parentBoxWrap  = $( '.fl-lightbox-wrap:visible' ),
+			var parentBoxWrap  = $( '.fl-lightbox-wrap:visible', window.parent.document ),
 				parentBox      = parentBoxWrap.find( '.fl-lightbox' ),
 				nestedBoxObj   = new FLLightbox( settings ),
 				nestedBoxWrap  = nestedBoxObj._node,
@@ -6718,15 +7313,19 @@
 		 */
 		_closeNestedSettings: function()
 		{
-			var nestedBoxWrap = $( '.fl-builder-lightbox[data-parent]:visible' ),
+			var nestedBoxWrap = $( '.fl-builder-lightbox[data-parent]:visible', window.parent.document ),
 				nestedBox     = nestedBoxWrap.find( '.fl-lightbox' ),
 				nestedBoxId   = nestedBoxWrap.attr( 'data-instance-id' ),
 				nestedBoxObj  = FLLightbox._instances[ nestedBoxId ],
 				parentBoxId   = nestedBoxWrap.attr( 'data-parent' ),
-				parentBoxWrap = $( '[data-instance-id="' + parentBoxId + '"]' ),
+				parentBoxWrap = $( '[data-instance-id="' + parentBoxId + '"]', window.parent.document ),
 				parentBox     = parentBoxWrap.find( '.fl-lightbox' ),
 				parentBoxForm = parentBoxWrap.find('form'),
 				parentBoxObj  = FLLightbox._instances[ parentBoxId ];
+
+			if ( ! nestedBoxObj ) {
+				return
+			}
 
 			nestedBoxObj.on( 'close', function() {
 				parentBox.attr( 'style', nestedBox.attr( 'style' ) );
@@ -6735,6 +7334,7 @@
 				parentBoxWrap.find( 'label.error' ).remove();
 				parentBoxForm.validate().hideErrors();
 				FLBuilder._toggleSettingsTabErrors();
+				FLBuilder._initMultipleFields();
 			} );
 
 			nestedBoxObj.close();
@@ -6768,18 +7368,6 @@
 		},
 
 		/**
-		 * Setup section toggling for all sections
-		 *
-		 * @since 2.2
-		 * @access private
-		 * @method _initSections
-		 * @return void
-		 */
-		_initSections: function() {
-			$( '.fl-builder-settings:visible' ).find( '.fl-builder-settings-section' ).each( FLBuilder._initSection );
-		},
-
-		/**
 		 * Setup section toggling
 		 *
 		 * @since 2.2
@@ -6808,7 +7396,8 @@
 		 */
 		_initButtonGroupFields: function()
 		{
-			$( '.fl-builder-settings:visible' ).find( '.fl-button-group-field' ).each( FLBuilder._initButtonGroupField );
+			$( '.fl-builder-settings:visible', window.parent.document )
+				.find( '.fl-button-group-field' ).each( FLBuilder._initButtonGroupField );
 		},
 
 		/**
@@ -6822,31 +7411,71 @@
 		{
 			var wrap = $( this ),
 				options = wrap.find( '.fl-button-group-field-option' ),
-				input = wrap.find( 'input' );
+				multiple = wrap.data( 'multiple' ),
+				min = wrap.data( 'min' ),
+				max = wrap.data( 'max' ),
+				input = wrap.find( 'input' ),
+				value = function( format ) {
+					var val = [];
+
+					options.each(function(i, option) {
+						if ($(option).attr('data-selected') === '1') {
+							val.push($(option).attr('data-value'));
+						}
+					})
+
+					if ( 'array' == format ) {
+						return val;
+					}
+
+					return val.join(',');
+				};
 
 			options.on( 'click', function() {
-				var option = $( this );
+				var option = $( this ),
+					length = value( 'array' ).length;
+
 				if ( '1' == option.attr( 'data-selected' ) ) {
-					option.attr( 'data-selected', '0' );
-					input.val( '' ).trigger( 'change' );
+					if ( false == min ) {
+						option.attr( 'data-selected', '0' );
+					} else {
+						if ( length - 1 >= min ) {
+							option.attr( 'data-selected', '0' );
+						}
+					}
 				} else {
-					options.attr( 'data-selected', '0' );
-					option.attr( 'data-selected', '1' );
-					input.val( option.data( 'value' ) ).trigger( 'change' );
+					// Unset other options
+					if ( multiple !== true ) {
+						options.attr( 'data-selected', '0' );
+					}
+
+					if ( false == max ) {
+						option.attr( 'data-selected', '1' );
+					} else {
+						if ( length + 1 <= max ) {
+							option.attr( 'data-selected', '1' );
+						}
+					}
 				}
+
+				input.val( value( '' ) ).trigger( 'change' );
 			} );
 
 			// Handle value being changed externally
 			input.on( 'change', function( e ) {
-				var value = input.val(),
-					option = options.filter( '[data-value="' + value + '"]' );
+				var value = input.val().split(',');
 
 				// Unset other options
-				options.attr('data-selected', '0' );
+				if (multiple !== true) {
+					options.attr('data-selected', '0' );
+				}
 
-				// Set the matching one.
-				option.attr( 'data-selected', '1' );
+				$.each(value, function(i, val) {
+					var option = options.filter( '[data-value="' + val + '"]' );
 
+					// Set the matching one.
+					option.attr( 'data-selected', '1' );
+				});
 			});
 		},
 
@@ -6862,7 +7491,8 @@
 		 */
 		_initCompoundFields: function()
 		{
-			$( '.fl-builder-settings:visible' ).find( '.fl-compound-field' ).each( FLBuilder._initCompoundField );
+			$( '.fl-builder-settings:visible', window.parent.document )
+				.find( '.fl-compound-field' ).each( FLBuilder._initCompoundField );
 		},
 
 		/**
@@ -6921,7 +7551,7 @@
 		 */
 		_initAutoSuggestFields: function()
 		{
-			var fields = $('.fl-builder-settings:visible .fl-suggest-field'),
+			var fields = $('.fl-builder-settings:visible .fl-suggest-field', window.parent.document),
 				field  = null,
 				values = null,
 				name   = null,
@@ -6947,7 +7577,8 @@
 				}, function( response ) {
 					values = FLBuilder._jsonParse( response );
 					for ( name in values ) {
-						$( '.fl-suggest-field[name="' + name + '"]' ).attr( 'data-value', values[ name ] );
+						$( '.fl-suggest-field[name="' + name + '"]', window.parent.document )
+							.attr( 'data-value', values[ name ] );
 					}
 					fields.each( FLBuilder._initAutoSuggestField );
 				} );
@@ -7005,7 +7636,22 @@
 		 */
 		_updateAutoSuggestField: function(element, item, selections)
 		{
+			var that = this;
+
 			$(this).siblings('.as-values').val(selections.join(',')).trigger('change');
+
+			// sortable stuff.
+			$(this).parents( '.as-selections').sortable({
+				items : ':not(.as-original)',
+				'update': function( event, ui ) {
+					var selected = [];
+					set = that.parents( '.as-selections').find('li.as-selection-item');
+					$.each(set, function(i,n) {
+						selected.push($(n).attr('data-value'));
+					});
+					$(that).siblings('.as-values').val(selected.join(',')).trigger('change');
+				}
+			})
 		},
 
 		/* Code Fields
@@ -7033,7 +7679,8 @@
 		_initCodeFields: function()
 		{
 			if ( ! FLBuilder._codeDisabled ) {
-				$( '.fl-builder-settings:visible' ).find( '.fl-code-field' ).each( FLBuilder._initCodeField );
+				$( '.fl-builder-settings:visible', window.parent.document )
+					.find( '.fl-code-field' ).each( FLBuilder._initCodeField );
 			}
 		},
 
@@ -7056,9 +7703,12 @@
 					position:   'absolute',
 					height:     parseInt( textarea.attr( 'rows' ), 10 ) * 20
 				} ),
-				editor = null;
+				editor = null,
+				global_layout = ( settings.hasClass('fl-builder-global-settings') || settings.hasClass('fl-builder-layout-settings' ) ) ? true : false;
 
 			editDiv.insertBefore( textarea );
+			editDiv.attr('contentEditable', true );
+			editDiv.addClass('fl-ignore-validation');
 			textarea.css( 'display', 'none' );
 			ace.require( 'ace/ext/language_tools' );
 			editor = ace.edit( editDiv[0] );
@@ -7103,15 +7753,22 @@
 					}
 				}
 
-				if ( hasError && ! errorBtn.length && FLBuilderConfig.CheckCodeErrors ) {
+				val = editor.getSession().getValue();
+
+				if( global_layout && hasError && null !== val.match( /<\/iframe>|<\/script>/gm ) ) {
+					saveBtn.addClass( 'fl-builder-settings-error' );
+					saveBtn.on( 'click', FLBuilder._showCodeFieldCriticalError );
+				}
+				if ( hasError && ! saveBtn.hasClass( 'fl-builder-settings-error' ) && errorBtn.length && FLBuilderConfig.CheckCodeErrors ) {
 					saveBtn.addClass( 'fl-builder-settings-error' );
 					saveBtn.on( 'click', FLBuilder._showCodeFieldError );
-				} else if ( ! hasError && errorBtn.length ) {
+				}
+				if ( ! hasError ) {
 					errorBtn.removeClass( 'fl-builder-settings-error' );
 					errorBtn.off( 'click', FLBuilder._showCodeFieldError );
+					errorBtn.off( 'click', FLBuilder._showCodeFieldCriticalError );
 				}
 			});
-
 			textarea.closest( '.fl-field' ).data( 'editor', editor );
 		},
 
@@ -7128,7 +7785,7 @@
 			FLBuilder.confirm( {
 			    message: FLBuilderStrings.codeError,
 			    cancel: function(){
-					var saveBtn = $( '.fl-builder-settings:visible .fl-builder-settings-save' );
+					var saveBtn = $( '.fl-builder-settings:visible .fl-builder-settings-save', window.parent.document );
 					saveBtn.removeClass( 'fl-builder-settings-error' );
 					saveBtn.off( 'click', FLBuilder._showCodeFieldError );
 					saveBtn.trigger( 'click' );
@@ -7138,6 +7795,11 @@
 			        cancel: FLBuilderStrings.codeErrorIgnore
 			    }
 			} );
+		},
+
+		_showCodeFieldCriticalError: function( e ) {
+			e.stopImmediatePropagation();
+			FLBuilder.alert( FLBuilderStrings.codeerrorhtml );
 		},
 
 		/* Multiple Fields
@@ -7152,45 +7814,47 @@
 		 */
 		_initMultipleFields: function()
 		{
-			var multiples = $('.fl-builder-settings:visible .fl-builder-field-multiples'),
+			$('.fl-builder-settings:visible .fl-builder-field-multiples', window.parent.document).each(function(){
+				var multiples = $(this),
 				multiple  = null,
 				fields    = null,
 				i         = 0,
 				cursorAt  = FLBuilderConfig.isRtl ? { left: 10 } : { right: 10 },
 				limit     = multiples.attr( 'data-limit' ) || 0,
-				count     = $('tbody.fl-builder-field-multiples').find('tr').length || 0
+				count     = multiples.find('tr').length || 0
 
-			if( parseInt(limit) > 0 && count -1 >= parseInt( limit ) ) {
-				$('.fl-builder-field-copy').hide()
-				$('.fl-builder-field-add').fadeOut()
-			} else {
-				$('.fl-builder-field-copy, .fl-builder-field-add').show()
-			}
-
-			for( ; i < multiples.length; i++) {
-
-				multiple = multiples.eq(i);
-				fields = multiple.find('.fl-builder-field-multiple');
-
-				if(fields.length === 1) {
-					fields.eq(0).find('.fl-builder-field-actions').addClass('fl-builder-field-actions-single');
+				if( parseInt(limit) > 0 && count -1 >= parseInt( limit ) ) {
+					multiples.find('.fl-builder-field-copy').hide()
+					multiples.find('.fl-builder-field-add').fadeOut()
+				} else {
+					multiples.find('.fl-builder-field-copy, .fl-builder-field-add').show()
 				}
-				else {
-					fields.find('.fl-builder-field-actions').removeClass('fl-builder-field-actions-single');
-				}
-			}
 
-			$('.fl-builder-field-multiples').sortable({
-				items: '.fl-builder-field-multiple',
-				cursor: 'move',
-				cursorAt: cursorAt,
-				distance: 5,
-				opacity: 0.5,
-				placeholder: 'fl-builder-field-dd-zone',
-				stop: FLBuilder._fieldDragStop,
-				tolerance: 'pointer',
-				axis: "y"
-			});
+				for( ; i < multiples.length; i++) {
+
+					multiple = multiples.eq(i);
+					fields = multiple.find('.fl-builder-field-multiple');
+
+					if(fields.length === 1) {
+						fields.eq(0).find('.fl-builder-field-actions').addClass('fl-builder-field-actions-single');
+					}
+					else {
+						fields.find('.fl-builder-field-actions').removeClass('fl-builder-field-actions-single');
+					}
+				}
+
+				$('.fl-builder-field-multiples', window.parent.document).sortable({
+					items: '.fl-builder-field-multiple',
+					cursor: 'move',
+					cursorAt: cursorAt,
+					distance: 5,
+					opacity: 0.5,
+					placeholder: 'fl-builder-field-dd-zone',
+					stop: FLBuilder._fieldDragStop,
+					tolerance: 'pointer',
+					axis: "y"
+				});
+			}); // end loop
 		},
 
 		/**
@@ -7232,6 +7896,8 @@
 					defaultVal = FLBuilderSettingsConfig.defaults.modules[ formType ][ fieldName ][0];
 					clone.find('input, textarea, select').val( defaultVal );
 				}
+
+				FLBuilder._renumberFields( clone.closest( '.fl-field' ) );
 			}
 		},
 
@@ -7254,7 +7920,9 @@
 			row.after(clone);
 			FLBuilder._renumberFields(row.parent());
 			FLBuilder._initMultipleFields();
-			FLBuilder.preview.delayPreview();
+			if ( FLBuilder.preview ) {
+				FLBuilder.preview.delayPreview();
+			}
 		},
 
 		/**
@@ -7275,7 +7943,9 @@
 				row.remove();
 				FLBuilder._renumberFields(parent);
 				FLBuilder._initMultipleFields();
-				FLBuilder.preview.delayPreview();
+				if ( FLBuilder.preview ) {
+					FLBuilder.preview.delayPreview();
+				}
 			}
 		},
 
@@ -7287,14 +7957,31 @@
 		 * @method _renumberFields
 		 * @param {Object} table A table element with multiple fields.
 		 */
-		_renumberFields: function(table)
+		_renumberFields: function( table )
 		{
-			var rows = table.find('.fl-builder-field-multiple'),
-				i    = 0;
+			var rows = table.find( '.fl-builder-field-multiple' );
 
-			for( ; i < rows.length; i++) {
-				rows.eq(i).find('th label span.fl-builder-field-index').html(i + 1);
-			}
+			rows.each( function( i, row ) {
+				$( row ).find( 'th label span.fl-builder-field-index' ).html( i + 1 );
+				FLBuilder._renumberFieldAttr( row, 'name', i );
+				FLBuilder._renumberFieldAttr( row, 'id', i );
+				FLBuilder._renumberFieldAttr( row, 'for', i );
+			} );
+		},
+
+		/**
+		 * @since 2.5
+		 * @access private
+		 * @method _renumberFieldAttr
+		 * @param {String} value
+		 */
+		_renumberFieldAttr: function( row, key, i )
+		{
+			$( row ).find( '[' + key + ']' ).each( function( k, ele ) {
+				var value = $( ele ).attr( key );
+				value = value.replace( /\[(\d+)\]/, '[' + ( i ) + ']' );
+				$( ele ).attr( key, value );
+			} );
 		},
 
 		/**
@@ -7324,7 +8011,9 @@
 		{
 			FLBuilder._renumberFields(ui.item.parent());
 
-			FLBuilder.preview.delayPreview();
+			if ( FLBuilder.preview ) {
+				FLBuilder.preview.delayPreview();
+			}
 		},
 
 		/* Select Fields
@@ -7339,14 +8028,16 @@
 		 */
 		_initSelectFields: function()
 		{
-			var selects = $( '.fl-builder-settings:visible' ).find( 'select' );
+			var selects = $( '.fl-builder-settings:visible', window.parent.document )
+				.find( 'select' );
 
 			selects.on( 'change', FLBuilder._settingsSelectChanged );
 			selects.trigger( 'change' );
 			selects.on( 'change', FLBuilder._calculateSettingsTabsOverflow );
 
 			// Button groups use the same options and toggling behavior as selects.
-			var buttonGroups = $( '.fl-builder-settings:visible' ).find( '.fl-button-group-field input[type=hidden]' );
+			var buttonGroups = $( '.fl-builder-settings:visible', window.parent.document )
+				.find( '.fl-button-group-field input[type=hidden]' );
 
 			buttonGroups.on( 'change', FLBuilder._settingsSelectChanged );
 			buttonGroups.trigger( 'change' );
@@ -7369,23 +8060,37 @@
 				hide    = select.attr('data-hide'),
 				trigger = select.attr('data-trigger'),
 				val     = select.val(),
-				i       = 0;
+				i       = 0,
+				mode = FLBuilderResponsiveEditing._mode,
+				responsive = select.closest( '.fl-field-responsive-setting' ),
+				modeClass = 'fl-field-responsive-setting-' + mode,
+				allowToggle = false;
 
-			// TOGGLE sections, fields or tabs.
+			if ( responsive.length ) {
+				if(!select.parent().hasClass(modeClass)) {
+					return;
+				}
+			}
+ 			// TOGGLE sections, fields or tabs.
 			if(typeof toggle !== 'undefined') {
 
 				toggle = FLBuilder._jsonParse(toggle);
+				allowToggle = true;
 
 				for(i in toggle) {
-					FLBuilder._settingsSelectToggle(toggle[i].fields, 'hide', '#fl-field-');
-					FLBuilder._settingsSelectToggle(toggle[i].sections, 'hide', '#fl-builder-settings-section-');
-					FLBuilder._settingsSelectToggle(toggle[i].tabs, 'hide', 'a[href*=fl-builder-settings-tab-', ']');
+					if ( allowToggle ){
+						FLBuilder._settingsSelectToggle(toggle[i].fields, 'hide', '#fl-field-');
+						FLBuilder._settingsSelectToggle(toggle[i].sections, 'hide', '#fl-builder-settings-section-');
+						FLBuilder._settingsSelectToggle(toggle[i].tabs, 'hide', 'a[href*=fl-builder-settings-tab-', ']');
+					}
 				}
 
 				if(typeof toggle[val] !== 'undefined') {
-					FLBuilder._settingsSelectToggle(toggle[val].fields, 'show', '#fl-field-');
-					FLBuilder._settingsSelectToggle(toggle[val].sections, 'show', '#fl-builder-settings-section-');
-					FLBuilder._settingsSelectToggle(toggle[val].tabs, 'show', 'a[href*=fl-builder-settings-tab-', ']');
+					if ( allowToggle ){
+						FLBuilder._settingsSelectToggle(toggle[val].fields, 'show', '#fl-field-');
+						FLBuilder._settingsSelectToggle(toggle[val].sections, 'show', '#fl-builder-settings-section-');
+						FLBuilder._settingsSelectToggle(toggle[val].tabs, 'show', 'a[href*=fl-builder-settings-tab-', ']');
+					}
 				}
 			}
 
@@ -7441,7 +8146,7 @@
 
 				for( ; i < inputArray.length; i++) {
 
-					$('.fl-builder-settings:visible').find(prefix + inputArray[i] + suffix)[func]();
+					$('.fl-builder-settings:visible', window.parent.document).find(prefix + inputArray[i] + suffix)[func]();
 
 					// Resize code editor fields.
 					$( prefix + inputArray[i] + suffix ).parent().find( '.fl-field[data-type="code"]' ).each( function() {
@@ -7470,7 +8175,7 @@
 			FLBuilder.colorPicker  = new FLBuilderColorPicker({
 				mode: 'hsv',
 				elements: '.fl-color-picker .fl-color-picker-value',
-		    	presets: colorPresets,
+				presets: colorPresets,
 				labels: {
 					colorPresets 		: FLBuilderStrings.colorPresets,
 					colorPicker 		: FLBuilderStrings.colorPicker,
@@ -7481,15 +8186,14 @@
 					noPresets			: FLBuilderStrings.noPresets,
 					presetAdded			: FLBuilderStrings.presetAdded,
 				}
-		    });
+			});
 
-			$( FLBuilder.colorPicker ).on( 'presetRemoved presetAdded', function( event, data ) {
-	    		FLBuilder.ajax({
+			$( FLBuilder.colorPicker ).on( 'presetRemoved presetAdded presetSorted', function( event, data ) {
+				FLBuilder.ajax({
 					action: 'save_color_presets',
 					presets: data.presets
 				});
-
-	    	});
+			});
 
 		},
 
@@ -7505,7 +8209,8 @@
 		 */
 		_initGradientPickers: function()
 		{
-			$( '.fl-builder-settings:visible .fl-gradient-picker' ).each( FLBuilder._initGradientPicker );
+			$( '.fl-builder-settings:visible .fl-gradient-picker', window.parent.document )
+				.each( FLBuilder._initGradientPicker );
 		},
 
 		/**
@@ -7545,7 +8250,8 @@
 		 */
 		_initPhotoFields: function()
 		{
-			var selects = $( '.fl-builder-settings:visible' ).find( '.fl-photo-field select' );
+			var selects = $( '.fl-builder-settings:visible', window.parent.document )
+				.find( '.fl-photo-field select' );
 
 			selects.on( 'change', FLBuilder._toggleSettingsOnIconChange );
 			selects.trigger( 'change' );
@@ -7564,11 +8270,11 @@
 				FLBuilder._singlePhotoSelector = wp.media({
 					title: FLBuilderStrings.selectPhoto,
 					button: { text: FLBuilderStrings.selectPhoto },
-					library : { type : 'image' },
+					library : { type : FLBuilderConfig.uploadTypes.image },
 					multiple: false
 				});
 				FLBuilder._singlePhotoSelector.on( 'open', FLBuilder._wpmedia_reset_errors );
-				_wpPluploadSettings['defaults']['multipart_params']['fl_upload_type']= 'photo';
+				window.parent._wpPluploadSettings['defaults']['multipart_params']['fl_upload_type']= 'photo';
 			}
 		},
 
@@ -7632,12 +8338,23 @@
 				preview    = wrap.find('.fl-photo-preview img'),
 				srcSelect  = wrap.find('select');
 
+			if ( photo.url && photo.url.endsWith( '.svg' ) ) {
+				photo.sizes = {
+					full: {
+						url: photo.url,
+						filename: photo.url.split( '/' ).pop(),
+						height: '',
+						width: ''
+					}
+				}
+			}
+
 			photoField.val(photo.id);
 			preview.attr('src', FLBuilder._getPhotoSrc(photo));
 			wrap.removeClass('fl-photo-empty').removeClass('fl-photo-no-attachment');
 			wrap.find('label.error').remove();
 			srcSelect.show();
-			srcSelect.html(FLBuilder._getPhotoSizeOptions(photo));
+			srcSelect.html(FLBuilder._getPhotoSizeOptions(photo,srcSelect.val()));
 			srcSelect.trigger('change');
 			FLBuilderSettingsConfig.attachments[ photo.id ] = photo;
 		},
@@ -7707,7 +8424,9 @@
 				size     = null,
 				selected = null,
 				check    = null,
+				doneselected = false,
 				title    = '',
+				titleSize = '',
 				titles = {
 					full      : FLBuilderStrings.fullSize,
 					large     : FLBuilderStrings.large,
@@ -7726,30 +8445,61 @@
 					selectedSize = selectedSize.split(/[\\/]/).pop();
 				}
 
+				/**
+				 * We need to make a check here to be sure that the selectedSize
+				 * is actually the image we selected, or the previous image
+				 * otherwise it will default to the 1st in the select (thumbnail)
+				 */
+				selectedverified = false;
+				for(sizecheck in photo.sizes) {
+					if ( photo.sizes[ sizecheck ].url.split(/[\\/]/).pop() === selectedSize ) {
+						selectedverified = true;
+						break;
+					}
+				}
+
+				if ( ! selectedverified ) {
+					selectedSize = false;
+				}
+
+
 				for(size in photo.sizes) {
 
+					selected = '';
+
 					if ( 'undefined' != typeof titles[ size ] ) {
-						title = titles[ size ] + ' - ';
+						title = titles[ size ];
 					}
 					else if ( 'undefined' != typeof FLBuilderConfig.customImageSizeTitles[ size ] ) {
-						title = FLBuilderConfig.customImageSizeTitles[ size ] + ' - ';
+						title = FLBuilderConfig.customImageSizeTitles[ size ];
 					}
 					else {
 						title = '';
 					}
 
-					selected = '';
-
 					if ( ! selectedSize ) {
-						selected = size == 'full' ? ' selected="selected"' : '';
-					} else if( selectedSize === photo.sizes[ size ].url.split(/[\\/]/).pop() ) {
+
+						if ( typeof FLBuilderConfig.photomodulesize !== 'undefined' && size === FLBuilderConfig.photomodulesize && ! doneselected ) {
+							selected = ' selected="selected"';
+							doneselected = true;
+						} else if( size == FLBuilderConfig.defaultImageSize && ! doneselected ){
+							selected = ' selected="selected"';
+							doneselected = true;
+						}
+
+					} else if( selectedSize === photo.sizes[ size ].url.split(/[\\/]/).pop() && ! doneselected ) {
 						selected = ' selected="selected"';
+						doneselected = true;
 					}
 
-					html += '<option value="' + photo.sizes[size].url + '"' + selected + '>' + title + photo.sizes[size].width + ' x ' + photo.sizes[size].height + '</option>';
+					if ( photo.sizes[size].width && photo.sizes[size].height ) {
+						title = title ? title + ' - ' : title
+						titleSize = photo.sizes[size].width + ' x ' + photo.sizes[size].height
+					}
+
+					html += '<option data-size="' + size + '" value="' + photo.sizes[size].url + '"' + selected + '>' + title + titleSize + '</option>';
 				}
 			}
-
 			return html;
 		},
 
@@ -7819,7 +8569,7 @@
 			if(FLBuilder._multiplePhotoSelector) {
 				FLBuilder._multiplePhotoSelector.dispose();
 			}
-
+			window.parent._wpPluploadSettings['defaults']['multipart_params']['fl_upload_type']= 'photo';
 			// Store the current gallery frame.
 			FLBuilder._multiplePhotoSelector = wp.media({
 				frame:     'post',
@@ -7879,16 +8629,23 @@
 		_initSingleVideoSelector: function()
 		{
 			if(FLBuilder._singleVideoSelector === null) {
+				var defaultFileExtensions = window.parent._wpPluploadSettings.defaults.filters.mime_types[0].extensions;
+
+				window.parent._wpPluploadSettings['defaults']['multipart_params']['fl_upload_type'] = 'video';
+				window.parent._wpPluploadSettings.defaults.filters.mime_types[0].extensions         = FLBuilderConfig.uploadTypes.videoTypes;
 
 				FLBuilder._singleVideoSelector = wp.media({
 					title: FLBuilderStrings.selectVideo,
 					button: { text: FLBuilderStrings.selectVideo },
-					library : { type : 'video' },
+					library: { type: [ 'video/mp4', 'video/webm' ] },
 					multiple: false
 				});
 
 				FLBuilder._singleVideoSelector.on( 'open', FLBuilder._wpmedia_reset_errors );
-				_wpPluploadSettings['defaults']['multipart_params']['fl_upload_type']= 'video';
+
+				FLBuilder._singleVideoSelector.on( 'close', function () {
+					window.parent._wpPluploadSettings.defaults.filters.mime_types[0].extensions = defaultFileExtensions;
+				});
 			}
 		},
 
@@ -8073,7 +8830,8 @@
 		 */
 		_initIconFields: function()
 		{
-			var inputs = $( '.fl-builder-settings:visible' ).find( '.fl-icon-field input' );
+			var inputs = $( '.fl-builder-settings:visible', window.parent.document )
+				.find( '.fl-icon-field input' );
 
 			inputs.on( 'change', FLBuilder._toggleSettingsOnIconChange );
 			inputs.trigger( 'change' );
@@ -8201,11 +8959,19 @@
 				nodeSettings	: FLBuilder._getSettings( form ),
 				settings  		: FLBuilder._jsonParse( settings.replace( /&#39;/g, "'" ) ),
 				lightbox		: lightbox,
-				helper			: helper,
-				rules 			: helper ? helper.rules : null
+				rules 			: helper ? helper.rules : null,
+				helper			: {
+					init: function () {
+						if ( helper ) {
+							helper.init();
+						}
+						FLBuilder._initFormFieldSettingsPreview( lightbox );
+					}
+				},
 			}, function() {
 				link.attr( 'id', 'fl-' + lightbox._node.attr( 'data-instance-id' ) );
 				lightbox._node.find( 'form.fl-builder-settings' ).attr( 'data-type', type );
+				FLBuilderResponsiveEditing._switchAllSettingsToCurrentMode();
 			} );
 		},
 
@@ -8220,64 +8986,145 @@
 		 */
 		_saveFormFieldClicked: function()
 		{
-			var form          = $(this).closest('.fl-builder-settings'),
-				lightboxId    = $(this).closest('.fl-lightbox-wrap').attr('data-instance-id'),
-				type          = form.attr('data-type'),
-				settings      = FLBuilder._getSettings(form),
+			var form = $( this ).closest( '.fl-builder-settings' );
+			var saved = FLBuilder._saveFormFieldSettings( form );
+
+			if ( saved ) {
+				FLBuilder._closeNestedSettings();
+			} else {
+				FLBuilder._toggleSettingsTabErrors();
+			}
+		},
+
+		/**
+		 * Initialize settings preview for a form field.
+		 *
+		 * @since 2.5
+		 * @access private
+		 * @method _initFormFieldSettingsPreview
+		 * @param {Object} lightbox
+		 */
+		_initFormFieldSettingsPreview: function( lightbox )
+		{
+			var fields = lightbox._node.find( '.fl-field' );
+			var editors = lightbox._node.find( 'textarea.wp-editor-area' );
+
+
+			fields.find( 'input:not([type=hidden]), textarea' ).on( 'input', FLBuilder._previewFormFieldSettings );
+			fields.find( 'input[type=hidden], select' ).on( 'change', FLBuilder._previewFormFieldSettings );
+
+			shapename = fields.find('input[name=shape_name]');
+			shapeorig = fields.find('input[name=shape_original]');
+			if ( shapename.length > 0 ) {
+				shapeorig.hide();
+				shapename.on( 'keyup', function() {
+					FLBuilder._shapesEdited = true;
+				});
+				if ( shapename.val().length > 0 && shapeorig.val().length < 1 ) {
+					shapeorig.val( shapename.val() );
+				}
+			}
+
+			if ( 'undefined' !== typeof window.parent.tinyMCE ) {
+				editors.each( function ( i, editor ) {
+					editor = window.parent.tinyMCE.get( $( editor ).attr( 'id' ) );
+					editor.on( 'change', FLBuilder._previewFormFieldSettings );
+					editor.on( 'keyup', FLBuilder._previewFormFieldSettings );
+				} );
+			}
+		},
+
+		/**
+		 * Previews the settings for a nested form field when
+		 * a setting is changed.
+		 *
+		 * @since 2.5
+		 * @access private
+		 * @method _previewFormFieldSettings
+		 */
+		_previewFormFieldSettings: function()
+		{
+			var ele = this.formElement ? this.formElement : this;
+			var form = $( ele ).closest( '.fl-builder-settings' );
+			var timeout = form.data( 'timeout' );
+
+			if ( timeout ) {
+				clearTimeout( timeout );
+			}
+
+			timeout = setTimeout( function () {
+				FLBuilder._saveFormFieldSettings( form );
+			}, 1000 );
+
+			form.data( 'timeout', timeout );
+		},
+
+		/**
+		 * Saves the settings for a nested form field.
+		 *
+		 * @since 2.5
+		 * @access private
+		 * @method _saveFormFieldSettings
+		 * @param {Object} form
+		 * @return {Boolean} Whether the save was successful or not.
+		 */
+		_saveFormFieldSettings: function( form )
+		{
+			var lightboxId    = form.closest( '.fl-lightbox-wrap' ).attr( 'data-instance-id' ),
+				type          = form.attr( 'data-type' ),
+				settings      = FLBuilder._getSettings( form ),
 				oldSettings   = {},
-				helper        = FLBuilder._moduleHelpers[type],
-				link          = $('.fl-builder-settings #fl-' + lightboxId),
-				preview       = link.parent().attr('data-preview-text'),
+				helper        = FLBuilder._moduleHelpers[ type ],
+				link          = $( '.fl-builder-settings #fl-' + lightboxId, window.parent.document ),
+				preview       = link.parent().attr( 'data-preview-text' ),
 				previewField  = form.find( '#fl-field-' + preview ),
-				previewText   = settings[preview],
-				selectPreview = $( 'select[name="' + preview + '"]' ),
-				tmp           = document.createElement('div'),
+				previewText   = settings[ preview ],
+				selectPreview = $( 'select[name="' + preview + '"]', window.parent.document ),
+				tmp           = document.createElement( 'div' ),
 				valid         = true;
 
 			if ( selectPreview.length > 0 ) {
 				previewText = selectPreview.find( 'option[value="' + settings[ preview ] + '"]' ).text();
 			}
-			if(typeof helper !== 'undefined') {
 
+			if ( typeof helper !== 'undefined' ) {
 				form.find('label.error').remove();
 				form.validate().hideErrors();
 				valid = form.validate().form();
-
-				if(valid) {
+				if ( valid ) {
 					valid = helper.submit();
 				}
 			}
-			if(valid) {
 
-				if(typeof preview !== 'undefined' && typeof previewText !== 'undefined') {
-
-					if('icon' === previewField.data('type')) {
+			if ( valid ) {
+				if ( typeof preview !== 'undefined' && typeof previewText !== 'undefined' ) {
+					if ( 'icon' === previewField.data( 'type' ) ) {
 						previewText = '<i class="' + previewText + '"></i>';
 					}
-					else if(previewText.length > 35) {
+					else if ( previewText.length > 35 ) {
 						tmp.innerHTML = previewText;
-						previewText = (tmp.textContent || tmp.innerText || '').replace(/^(.{35}[^\s]*).*/, "$1")  + '...';
+						previewText = ( tmp.textContent || tmp.innerText || '' ).replace( /^(.{35}[^\s]*).*/, "$1" ) + '...';
+					}
+					if( 'filter_meta_label' == preview && ! previewText ) {
+						previewText = settings[ 'filter_meta_key' ];
+					}
+					link.siblings( '.fl-form-field-preview-text' ).html( previewText );
+				}
+
+				if ( link.length > 0 ) {
+					oldSettings = link.siblings( 'input' ).val().replace( /&#39;/g, "'" );
+
+					if ( '' != oldSettings ) {
+						settings = $.extend( FLBuilder._jsonParse( oldSettings ), settings );
 					}
 
-					link.siblings('.fl-form-field-preview-text').html(previewText);
+					link.siblings( 'input' ).val( JSON.stringify( settings ) ).trigger( 'change' );
 				}
-
-				oldSettings = link.siblings('input').val().replace(/&#39;/g, "'");
-
-				if ( '' != oldSettings ) {
-					settings = $.extend( FLBuilder._jsonParse( oldSettings ), settings );
-				}
-
-				link.siblings('input').val(JSON.stringify(settings)).trigger('change');
-
-				FLBuilder._closeNestedSettings();
 
 				return true;
 			}
-			else {
-				FLBuilder._toggleSettingsTabErrors();
-				return false;
-			}
+
+			return false;
 		},
 
 		/* Layout Fields
@@ -8311,7 +9158,8 @@
 		 */
 		_initLinkFields: function()
 		{
-			$('.fl-builder-settings:visible .fl-link-field').each(FLBuilder._initLinkField);
+			$('.fl-builder-settings:visible .fl-link-field', window.parent.document)
+				.each(FLBuilder._initLinkField);
 		},
 
 		/**
@@ -8343,7 +9191,11 @@
 				showResultListWhenNoMatch   : true,
 				queryParam                  : 'fl_as_query',
 				selectionLimit              : 1,
-				afterSelectionAdd           : FLBuilder._updateLinkField
+				afterSelectionAdd           : FLBuilder._updateLinkField,
+				formatList: function(data, elem){
+					var new_elem = elem.html(data.name + '<span class="type">[' + data.type + ']</span>');
+					return new_elem;
+				}
 			});
 
 			checkboxes.on( 'click', FLBuilder._linkFieldCheckboxClicked );
@@ -8434,7 +9286,8 @@
 		 * @method _initFontFields
 		 */
 		_initFontFields: function(){
-			$('.fl-builder-settings:visible .fl-font-field').each( FLBuilder._initFontField );
+			$('.fl-builder-settings:visible .fl-font-field', window.parent.document)
+				.each( FLBuilder._initFontField );
 		},
 
 		/**
@@ -8450,13 +9303,68 @@
 				font   = wrap.find( '.fl-font-field-font' ),
 				weight = wrap.find( '.fl-font-field-weight' );
 
+			if ( FLBuilderConfig.select2Enabled ) {
+				font.select2({width:'100%'})
+					.on('select2:open', function(e){
+						$('.select2-search__field').attr('placeholder', FLBuilderStrings.placeholderSelect2);
+					})
+			}
+
+			$('body', window.parent.document).on({
+					mouseenter: function () {
+						var highlighted_item = jQuery(this).text(),
+						group = jQuery(this).parent().parent().attr("aria-label"),
+						head = jQuery("head", window.parent.document),
+						url = 'https://fonts.googleapis.com/css?family=' + highlighted_item,
+						link_id = highlighted_item.toLowerCase().replace( ' ', '-' ),
+						parent_id = $(this).parent().parent().parent().attr('id');
+						if ( ! parent_id ) {
+							return false;
+						}
+						if( parent_id.indexOf('select2-typographyfont_family') < 0 ) {
+							return false;
+						}
+						if ( 'Google' === group ) {
+							linkElement = "<link id='" + link_id + "' rel='stylesheet' href='" + url + "' type='text/css' media='screen'>";
+							jQuery(this).css('font-family', '"' + highlighted_item + '"' );
+							if ( jQuery( '#' + link_id ).length > 0 ) {
+								return false;
+							}
+							head.append(linkElement);
+						}
+					}
+				}, '.select2-results__option.select2-results__option--highlighted');
+
 			font.on( 'change', function(){
 				FLBuilder._getFontWeights( font );
 			} );
 
 			if ( value.indexOf( 'family' ) > -1 ) {
 
-				value = FLBuilder._jsonParse( value );
+				var value = FLBuilder._jsonParse( value );
+				var valid = false;
+
+				fonts = FLBuilderFontFamilies;
+
+				Object.keys(fonts.system).forEach(function(name){
+					if ( name === value.family ) {
+						valid = true
+					}
+				});
+
+				Object.keys(fonts.google).forEach(function(name){
+					if ( name === value.family ) {
+						valid = true
+					}
+				});
+
+				if ( ! valid && 'Default' !== value.family ) {
+					value = {
+						'family' : 'Default',
+						'weight' : '400'
+					};
+				}
+
 				font.val( value.family );
 				font.trigger( 'change' );
 
@@ -8477,7 +9385,7 @@
 		_getFontWeights: function( currentFont ){
 			var selectWeight = currentFont.closest( '.fl-font-field' ).find( '.fl-font-field-weight' ),
 				font         = currentFont.val(),
-				weight 	 	   = selectWeight.val(),
+				weight 	 	 = selectWeight.val(),
 				weightMap    = FLBuilderConfig.FontWeights,
 				weights      = {},
 				recentList   = currentFont.closest( '.fl-font-field' ).find( '.recent-fonts option' )
@@ -8489,7 +9397,7 @@
 					.filter(function (i, o) { return o.value === font; })
 					.length > 0;
 
-				if ( false === exists ) {
+				if ( false === exists && 'Default' !== font ) {
 						currentFont.closest( '.fl-font-field' ).find( '.recent-fonts' ).append( $('<option>', {
 							value: font,
 							text: font
@@ -8528,7 +9436,21 @@
 				tinymce.ui.FloatPanel.zIndex = 100100; // Fix zIndex issue in wp 4.8.1
 			}
 
-			$( '.fl-builder-hidden-editor' ).each( FLBuilder._initEditorField );
+			$( '.fl-builder-hidden-editor', window.parent.document ).each( function() {
+				FLBuilder._initEditorField.call( this, window.parent );
+			} );
+
+			if ( FLBuilder.UIIFrame.isEnabled() ) {
+				$( '.fl-builder-hidden-editor' ).each( function() {
+					FLBuilder._initEditorField.call( this, window );
+				} );
+			}
+
+			if ( 'undefined' !== typeof window.parent.acf ) {
+				window.parent.acf.add_filter( 'wysiwyg_tinymce_settings', function( mceInit, id ) {
+					return $.extend( {}, tinyMCEPreInit.mceInit.flbuildereditor, mceInit );
+				} )
+			}
 		},
 
 		/**
@@ -8540,7 +9462,10 @@
 		 */
 		_initEditorFields: function()
 		{
-			$( '.fl-builder-settings:visible .fl-editor-field' ).each( FLBuilder._initEditorField );
+			$( '.fl-builder-settings:visible .fl-editor-field', window.parent.document )
+				.each( function() {
+					FLBuilder._initEditorField.call( this, window.parent );
+				} );
 		},
 
 		/**
@@ -8548,15 +9473,16 @@
 		 *
 		 * @since 2.0
 		 * @method _initEditorField
+		 * @param {Object} The window object to init on.
 		 */
-		_initEditorField: function()
+		_initEditorField: function( win )
 		{
 			var field	 = $( this ),
 				textarea = field.find( 'textarea' ),
 				name 	 = field.attr( 'data-name' ),
 				editorId = 'flrich' + new Date().getTime() + '_' + name,
 				html 	 = FLBuilderConfig.wp_editor,
-				config	 = tinyMCEPreInit,
+				config	 = win.tinyMCEPreInit,
 				buttons  = Number( field.attr( 'data-buttons' ) ),
 				rows  	 = field.attr( 'data-rows' ),
 				init     = null,
@@ -8564,13 +9490,12 @@
 
 			html = html.replace( /flbuildereditor/g , editorId );
 			config = FLBuilder._jsonParse( JSON.stringify( config ).replace( /flbuildereditor/g , editorId ) );
-
 			config = JSONfn.parse( JSONfn.stringify( config ).replace( /flbuildereditor/g , editorId ) );
 
 			textarea.after( html ).remove();
-			$( 'textarea#' + editorId ).val( textarea.val() )
+			$( 'textarea#' + editorId, win.document ).val( textarea.val() )
 
-			if ( undefined !== typeof tinymce && undefined !== config.mceInit[ editorId ] ) {
+			if ( undefined !== typeof win.tinymce && undefined !== config.mceInit[ editorId ] ) {
 
 				init = config.mceInit[ editorId ];
 
@@ -8581,23 +9506,24 @@
 					});
 				}
 
-				wrap = tinymce.$( '#wp-' + editorId + '-wrap' );
+				wrap = $( '#wp-' + editorId + '-wrap', win.document );
 				wrap.find( 'textarea' ).attr( 'rows', rows );
+				wrap.find( 'textarea' ).attr( 'contentEditable', true );
 
 				if ( ! buttons ) {
 					wrap.find( '.wp-media-buttons' ).remove();
 				}
 
 				if ( ( wrap.hasClass( 'tmce-active' ) || ! config.qtInit.hasOwnProperty( editorId ) ) && ! init.wp_skip_init ) {
-					tinymce.init( init );
+					win.tinymce.init( init );
 				}
 			}
 
-			if ( undefined !== typeof quicktags ) {
-				quicktags( config.qtInit[ editorId ] );
+			if ( undefined !== typeof win.quicktags ) {
+				win.quicktags( config.qtInit[ editorId ] );
 			}
 
-			window.wpActiveEditor = editorId;
+			win.wpActiveEditor = editorId;
 		},
 
 		/**
@@ -8609,7 +9535,7 @@
 		 */
 		_reinitEditorFields: function()
 		{
-			if ( ! $( '.fl-lightbox-resizable:visible' ).length ) {
+			if ( ! $( '.fl-lightbox-resizable:visible', window.parent.document ).length ) {
 				return;
 			}
 
@@ -8618,20 +9544,21 @@
 
 				var i, id;
 
-				if ( 'undefined' === typeof tinymce ) {
+				if ( 'undefined' === typeof window.parent.tinymce ) {
 					return;
 				}
 
-				for ( i = tinymce.editors.length - 1; i > -1 ; i-- ) {
-					if ( ! tinymce.editors[ i ].inline ) {
-						id = tinymce.editors[ i ].id;
-						tinyMCE.execCommand( 'mceRemoveEditor', true, id );
-						tinyMCE.execCommand( 'mceAddEditor', true, id );
+				for ( i = window.parent.tinymce.editors.length - 1; i > -1 ; i-- ) {
+					if ( ! window.parent.tinymce.editors[ i ].inline ) {
+						id = window.parent.tinymce.editors[ i ].id;
+						window.parent.tinyMCE.execCommand( 'mceRemoveEditor', true, id );
+						window.parent.tinyMCE.execCommand( 'mceAddEditor', true, id );
 					}
 				}
 
 				if ( FLBuilder.preview ) {
-					FLBuilder.preview._initDefaultFieldPreviews( $( '.fl-field[data-type="editor"]' ) );
+					var fields = $( '.fl-field[data-type="editor"]', window.parent.document );
+					FLBuilder.preview._initDefaultFieldPreviews( fields );
 				}
 
 			}, 1 );
@@ -8647,18 +9574,18 @@
 		{
 			var i, id;
 
-			if ( 'undefined' === typeof tinymce ) {
+			if ( 'undefined' === typeof window.parent.tinymce ) {
 				return;
 			}
 
-			for ( i = tinymce.editors.length - 1; i > -1 ; i-- ) {
-				if ( ! tinymce.editors[ i ].inline ) {
-					tinyMCE.execCommand( 'mceRemoveEditor', true, tinymce.editors[ i ].id );
+			for ( i = window.parent.tinymce.editors.length - 1; i > -1 ; i-- ) {
+				if ( ! window.parent.tinymce.editors[ i ].inline ) {
+					window.parent.tinyMCE.execCommand( 'mceRemoveEditor', true, window.parent.tinymce.editors[ i ].id );
 				}
 			}
 
-			$( '.wplink-autocomplete' ).remove();
-			$( '.ui-helper-hidden-accessible' ).remove();
+			$( '.wplink-autocomplete', window.parent.document ).remove();
+			$( '.ui-helper-hidden-accessible', window.parent.document ).remove();
 		},
 
 		/**
@@ -8670,7 +9597,7 @@
 		 */
 		_updateEditorFields: function()
 		{
-			var wpEditors = $('.fl-builder-settings:visible textarea.wp-editor-area');
+			var wpEditors = $('.fl-builder-settings:visible textarea.wp-editor-area', window.parent.document);
 
 			wpEditors.each(FLBuilder._updateEditorField);
 		},
@@ -8692,13 +9619,13 @@
 				wrap      = textarea.closest( '.wp-editor-wrap' ),
 				id        = textarea.attr( 'id' ),
 				setting   = field.attr( 'data-name' ),
-				editor    = typeof tinymce == 'undefined' ? false : tinymce.get( id ),
+				editor    = typeof window.parent.tinymce == 'undefined' ? false : window.parent.tinymce.get( id ),
 				hidden    = textarea.siblings( 'textarea[name="' + setting + '"]' ),
 				wpautop   = field.data( 'wpautop' );
 
 			// Add a hidden textarea if we don't have one.
 			if ( 0 === hidden.length ) {
-				hidden = $( '<textarea name="' + setting + '"></textarea>' ).hide();
+				hidden = $( '<textarea name="' + setting + '"></textarea>', window.parent.document ).hide();
 				textarea.after( hidden );
 			}
 
@@ -8708,8 +9635,8 @@
 				if ( editor && wrap.hasClass( 'tmce-active' ) ) {
 					hidden.val( editor.getContent() );
 				}
-				else if ( 'undefined' != typeof switchEditors ) {
-					hidden.val( switchEditors.wpautop( textarea.val() ) );
+				else if ( 'undefined' != typeof window.parent.switchEditors ) {
+					hidden.val( window.parent.switchEditors.wpautop( textarea.val() ) );
 				}
 				else {
 					hidden.val( textarea.val() );
@@ -8729,6 +9656,28 @@
 		----------------------------------------------------------*/
 
 		/**
+		 * Initializes all post type fields in a settings form.
+		 *
+		 * @since  2.6
+		 * @access private
+		 * @method _initPostTypeFields
+		 */
+		_initPostTypeFields: function(){
+			$('.fl-builder-settings:visible #fl-field-post_type').each( FLBuilder._initPostTypeField );
+		},
+
+		/**
+		 * @since 2.6
+		 */
+		_initPostTypeField: function() {
+			var wrap   = $( this ),
+			postType = wrap.find('select');
+			if ( FLBuilderConfig.select2Enabled ) {
+				postType.select2({width:'50%'});
+			}
+		},
+
+		/**
 		 * Callback for the data source of loop settings changes.
 		 *
 		 * @since 1.10
@@ -8739,8 +9688,24 @@
 		{
 			var val = $( this ).val();
 
-			$('.fl-loop-data-source').hide();
-			$('.fl-loop-data-source[data-source="' + val + '"]').show();
+			$('.fl-loop-data-source', window.parent.document).hide();
+			$('.fl-loop-data-source[data-source="' + val + '"]', window.parent.document).show();
+		},
+
+		/**
+		 * Callback for when the post types of a custom query changes.
+		 *
+		 * @since 2.6.2
+		 * @access private
+		 * @method _customQueryPostTypesChange
+		 */
+		_customQueryPostTypesChange: function()
+		{
+			var postTypes = $(this).val();
+			$('.fl-custom-query-filter').hide();
+			for ( val of postTypes ) {
+				$('.fl-custom-query-' + val + '-filter').show();
+			}
 		},
 
 		/**
@@ -8754,8 +9719,8 @@
 		{
 			var val = $(this).val();
 
-			$('.fl-custom-query-filter').hide();
-			$('.fl-custom-query-' + val + '-filter').show();
+			$('.fl-custom-query-filter', window.parent.document).hide();
+			$('.fl-custom-query-' + val + '-filter', window.parent.document).show();
 		},
 
 		/* Ordering Fields
@@ -8770,7 +9735,8 @@
 		 */
 		_initOrderingFields: function()
 		{
-			$( '.fl-builder-settings:visible .fl-ordering-field-options' ).each( FLBuilder._initOrderingField );
+			$( '.fl-builder-settings:visible .fl-ordering-field-options', window.parent.document )
+				.each( FLBuilder._initOrderingField );
 		},
 
 		/**
@@ -8823,31 +9789,25 @@
 		 */
 		_textFieldAddValueSelectChange: function()
 		{
-
 			var dropdown     = $( this ),
-			    textField    = $( 'input[name="' + dropdown.data( 'target' ) + '"]' ),
+			    textField    = $( 'input[name="' + dropdown.data( 'target' ) + '"]', window.parent.document ),
 			    currentValue = textField.val(),
 			    addingValue  = dropdown.val(),
 			    newValue     = '';
 
 			// Adding selected value to target text field only once
+			if ( -1 == currentValue.indexOf( addingValue ) ) {
 
-				if ( -1 == currentValue.indexOf( addingValue ) ) {
+				newValue = ( currentValue.trim() + ' ' + addingValue.trim() ).trim();
 
-					newValue = ( currentValue.trim() + ' ' + addingValue.trim() ).trim();
-
-					textField
-						.val( newValue )
-						.trigger( 'change' )
-						.trigger( 'keyup' );
-
-				}
+				textField
+					.val( newValue )
+					.trigger( 'change' )
+					.trigger( 'keyup' );
+			}
 
 			// Resetting the selector
-
-				dropdown
-					.val( '' );
-
+			dropdown.val( '' );
 		},
 
 		/* Number Fields
@@ -8895,7 +9855,8 @@
 		 * @method _initTimezoneFields
 		 */
 		_initTimezoneFields: function() {
-			$( '.fl-builder-settings:visible .fl-field[data-type=timezone]' ).each( FLBuilder._initTimezoneField );
+			$( '.fl-builder-settings:visible .fl-field[data-type=timezone]', window.parent.document )
+				.each( FLBuilder._initTimezoneField );
 		},
 
 		/**
@@ -8921,7 +9882,7 @@
 		 * @method _initDimensionFields
 		 */
 		_initDimensionFields: function() {
-			var form = $( '.fl-builder-settings:visible' );
+			var form = $( '.fl-builder-settings:visible', window.parent.document );
 
 			form.find( '.fl-field[data-type=dimension]' ).each( FLBuilder._initDimensionField );
 			form.find( '.fl-dimension-field-link' ).on( 'click', FLBuilder._dimensionFieldLinkClicked );
@@ -8984,7 +9945,7 @@
 		 * @method _initDimensionFieldLinking
 		 */
 		_initResponsiveDimensionFieldLinking: function() {
-			var form = $( '.fl-builder-settings:visible' );
+			var form = $( '.fl-builder-settings:visible', window.parent.document );
 			form.find( '.fl-field[data-type=dimension]' ).each( FLBuilder._initDimensionFieldLinking );
 		},
 
@@ -9094,7 +10055,7 @@
 		 * @method _initFieldPopupSliders
 		 */
 		_initFieldPopupSliders: function() {
-			var form = $( '.fl-builder-settings:visible' ),
+			var form = $( '.fl-builder-settings:visible', window.parent.document ),
 				sliders = form.find( '.fl-field-popup-slider' );
 
 			sliders.each( FLBuilder._initFieldPopupSlider );
@@ -9108,12 +10069,12 @@
 		 * @method _initFieldPopupSlider
 		 */
 		_initFieldPopupSlider: function() {
-			var body = $( 'body' ),
+			var body = $( 'body', window.parent.document ),
 				wrapper = $( this ),
 				slider = wrapper.find( '.fl-field-popup-slider-input' ),
 				arrow = wrapper.find( '.fl-field-popup-slider-arrow' ),
 				name = wrapper.data( 'input' ),
-				input = $( 'input[name="' + name + '"]' );
+				input = $( 'input[name="' + name + '"]', window.parent.document );
 
 			input.on( 'click', function() {
 
@@ -9139,7 +10100,7 @@
 				input.addClass( 'fl-field-popup-slider-focus' );
 				wrapper.show();
 
-				var tab = $( '.fl-builder-settings:visible .fl-builder-settings-tab.fl-active' ),
+				var tab = $( '.fl-builder-settings:visible .fl-builder-settings-tab.fl-active', window.parent.document ),
 					tabOffset = tab.offset(),
 					inputOffset = input.offset(),
 					inputWidth = input.width(),
@@ -9167,9 +10128,9 @@
 		 */
 		_hideFieldPopupSliders: function( e ) {
 			var target = e ? $( e.target ) : null,
-				body = $( 'body' ),
-				sliders = $( '.fl-field-popup-slider:visible' ),
-				inputs = $( '.fl-field-popup-slider-focus' );
+				body = $( 'body', window.parent.document ),
+				sliders = $( '.fl-field-popup-slider:visible', window.parent.document ),
+				inputs = $( '.fl-field-popup-slider-focus', window.parent.document );
 
 			if ( target ) {
 				if ( target.closest( '.fl-field-popup-slider' ).length ) {
@@ -9230,7 +10191,7 @@
 		/* Preset Fields
 		---------------------------------------------------- */
 		_initPresetFields: function() {
-			var form = $( '.fl-builder-settings:visible' ),
+			var form = $( '.fl-builder-settings:visible', window.parent.document ),
 				fields = form.find( '.fl-preset-select-controls' );
 
 			fields.each( FLBuilder._initPresetField );
@@ -9249,7 +10210,7 @@
 			var value = $( e.currentTarget ).val();
 				presetLists = FLBuilderConfig.presets,
 				presets = presetLists[type],
-				form = $( '.fl-builder-settings:visible' );
+				form = $( '.fl-builder-settings:visible', window.parent.document );
 
 			if ( 'undefined' !== presets && 'undefined' !== presets[value] ) {
 				var settings = presets[value].settings;
@@ -9311,25 +10272,27 @@
 			// Tell the server that the builder is active.
 			data.fl_builder = 1;
 
+			data.safemode = FLBuilderConfig.safemode
+
 			// Append the builder namespace to the action.
 			data.fl_action = data.action;
 
 			// Prevent ModSecurity false positives if our fix is enabled.
 			if ( 'undefined' != typeof data.settings ) {
 				data.settings = FLBuilder._ajaxModSecFix( $.extend( true, {}, data.settings ) );
+				data.settings = FLBuilder._inputVarsCheck( data.settings );
 			}
 			if ( 'undefined' != typeof data.node_settings ) {
 				data.node_settings = FLBuilder._ajaxModSecFix( $.extend( true, {}, data.node_settings ) );
+				data.node_settings = FLBuilder._inputVarsCheck( data.node_settings );
 			}
 
 			if ( 'undefined' != typeof data.node_preview ) {
 				data.node_preview = FLBuilder._ajaxModSecFix( $.extend( true, {}, data.node_preview ) );
+				data.node_preview = FLBuilder._inputVarsCheck( data.node_preview );
 			}
 
-			data.settings      = FLBuilder._inputVarsCheck( data.settings );
-			data.node_settings = FLBuilder._inputVarsCheck( data.node_settings );
-
-			if ( 'error' === data.settings || 'error' === data.node_settings ) {
+			if ( 'error' === data.settings || 'error' === data.node_settings || 'error' === data.node_preview ) {
 				return 0;
 			}
 
@@ -9351,9 +10314,10 @@
 				switch(xhr.status) {
 					case 403:
 					case 409:
+					case 418: // Dreamhost trying to be funny
 						msg  = 'Something you entered has triggered a ' + xhr.status + ' error.<br /><br />This is nearly always due to mod_security settings from your hosting provider.'
 						if ( ! window.crash_vars.white_label ) {
-							msg += '<br /><br />See this <a target="_blank" style="color: #428bca;font-size:inherit" href="https://kb.wpbeaverbuilder.com/article/40-403-forbidden-or-blocked-error">Knowledge Base</a> article for more info.</br />'
+							msg += '<br /><br />See this <a target="_blank" style="color: #428bca;font-size:inherit" href="https://docs.wpbeaverbuilder.com/beaver-builder/troubleshooting/common-issues/403-forbidden-or-blocked-error">Knowledge Base</a> article for more info.</br />'
 						}
 					break;
 				}
@@ -9370,10 +10334,15 @@
 
 		_inputVarsCheck: function( o ) {
 
-			var maxInput = FLBuilderConfig.MaxInputVars || 0;
+			let maxInput = FLBuilderConfig.MaxInputVars || 0;
+			let debug    = FLBuilderConfig.debug || false;
+			let data     = JSON.stringify(o).match(/[^\\]":/g) || {};
+			let count    = data.length;
 
-			if ( 'undefined' != typeof o && maxInput > 0 ) {
-				count = $.map( o, function(n, i) { return i; }).length;
+			if ( 'undefined' != typeof count ) {
+				if ( debug ) {
+					console.log('Debug: Input Vars ' + count + '/' + maxInput );
+				}
 				if ( count > maxInput ) {
 					FLBuilder.alert( '<h1 style="font-size:2em;text-align:center">Critical Issue</h1><br />The number of settings being saved (' + count + ') exceeds the PHP Max Input Vars setting (' + maxInput + ').<br />Please contact your host to have this value increased, the default is 1000.' );
 					console.log( 'Vars Count: ' + count );
@@ -9413,7 +10382,8 @@
 		 */
 		_ajaxUrl: function(params)
 		{
-			var url     = window.location.href.split( '#' ).shift(),
+			var config  = FLBuilderConfig,
+				url     = config.shortlink,
 				param   = null;
 
 			if(typeof params !== 'undefined') {
@@ -9423,7 +10393,6 @@
 					url += param + '=' + params[param];
 				}
 			}
-
 			return url;
 		},
 
@@ -9435,8 +10404,8 @@
 		 */
 		showAjaxLoader: function()
 		{
-			if( 0 === $( '.fl-builder-lightbox-loading' ).length ) {
-				$( '.fl-builder-loading' ).show();
+			if( 0 === $( '.fl-builder-lightbox-loading', window.parent.document ).length ) {
+				$( '.fl-builder-loading', window.parent.document ).show();
 			}
 		},
 
@@ -9448,7 +10417,7 @@
 		 */
 		hideAjaxLoader: function()
 		{
-			$( '.fl-builder-loading' ).hide();
+			$( '.fl-builder-loading', window.parent.document ).hide();
 		},
 
 		/**
@@ -9568,11 +10537,12 @@
 				else {
 
 					for ( prop in settings ) {
+						type = typeof settings[ prop ]
 
-						if ( 'string' == typeof settings[ prop ] ) {
+						if ( 'string' == type || 'number' == type ) {
 							settings[ prop ] = FLBuilder._btoa( settings[ prop ] );
 						}
-						else if( 'object' == typeof settings[ prop ] ) {
+						else if( 'object' == type ) {
 							settings[ prop ] = FLBuilder._ajaxModSecFix( settings[ prop ] );
 						}
 					}
@@ -9603,8 +10573,8 @@
 		 * @method _wpmedia_reset_errors
 		 */
 		_wpmedia_reset_errors: function() {
-			$('.upload-error').remove()
-			$('.media-uploader-status' ).removeClass( 'errors' ).hide()
+			$( '.upload-error', window.parent.document ).remove()
+			$( '.media-uploader-status', window.parent.document ).removeClass( 'errors' ).hide()
 		},
 
 		/* Lightboxes
@@ -9689,6 +10659,7 @@
 		 */
 		_lightboxClosed: function()
 		{
+			FL.Builder.data.getOutlinePanelActions().setActiveNode( false );
 			FLBuilder.triggerHook( 'settings-lightbox-closed' );
 			FLBuilder._lightbox.empty();
 			clearTimeout( FLBuilder._lightboxScrollbarTimeout );
@@ -9717,6 +10688,11 @@
 		/* Alert Lightboxes
 		----------------------------------------------------------*/
 
+		_checkEnv: function() {
+			if ( 'svg' === FLBuilderConfig.fontAwesome ) {
+				FLBuilder.alert( FLBuilderStrings.fontAwesome)
+			}
+		},
 		/**
 		 * Shows the alert lightbox with a message.
 		 *
@@ -9745,13 +10721,18 @@
 				template  = wp.template( 'fl-crash-lightbox' ),
 				product   = window.crash_vars.product,
 				labeled   = window.crash_vars.white_label,
-				label_txt = window.crash_vars.labeled_txt;
+				label_txt = window.crash_vars.labeled_txt,
+				info      = '';
 
 
 
-				message  = product + " has detected a plugin conflict that is preventing the page from saving.<p>( In technical terms there’s probably a PHP error in Ajax. )</p>"
-				info     = "<p>If you contact Beaver Builder Support, we need to know what the error is in the JavaScript console in your browser.</p>"
+				message  = product + ' ' + window.crash_vars.strings.intro;
 
+				info    += "<h3 style='font-size:26px;line-height:26px;'>" + window.crash_vars.strings.try + "</h3>";
+				info    += "<p>" + window.crash_vars.strings.troubleshoot + "</p>";
+				info    += "<h3 style='font-size:22px;line-height:22px;padding-top:20px;border-top:1px solid black;'>" + window.crash_vars.strings.hand + "</h3>";
+				info    += "<h3 style='font-size:18px;line-height:18px;'>" + window.crash_vars.strings.step_one + "</h3>";
+				info    += "<p>" + window.crash_vars.strings.if_contact + "</p>";
 				info     +="<div><div style='width:49%;float:left;'>"
 				info     +="<p>MacOS Users:<br />Chrome: View > Developer > JavaScript Console<br />Firefox: Tools > Web Developer > Browser Console<br />Safari: Develop > Show JavaScript console</p>"
 				info     +="</div>"
@@ -9760,10 +10741,12 @@
 				info     +="<p>Windows Users:<br />Chrome: Settings > More Tools > Developer > Console<br />Firefox: Menu/Settings > Web Developer > Web Console<br />Edge: Settings and More > More Tools > Console</p>"
 				info     +="</div></div>"
 
-				info     +="<p style='display:inline-block;'>Copy the errors you find there and submit them with your Support ticket. It saves us having to ask you that as a second step.<br /><br />If you want to troubleshoot further, you can check our <a class='link' target='_blank' href='https://kb.wpbeaverbuilder.com/article/42-known-beaver-builder-incompatibilities'>Knowledge Base</a> for plugins we know to be incompatible. Then deactivate your plugins one by one while you try to save the page in the Beaver Builder editor. When the page saves normally, you have identified the plugin causing the conflict. <a class='link' target='_blank' href='https://www.wpbeaverbuilder.com/beaver-builder-support/'>Contact Support</a> if you need further help.</p>"
+				info    += "<h3 style='font-size:18px;line-height:18px;display:inline-block'>" + window.crash_vars.strings.step_two + "</h3>";
+
+				info     +="<p style='display:inline-block;'>" + window.crash_vars.strings.contact + "</p>"
 
 				if ( FLBuilderConfig.MaxInputVars <= 3000 ) {
-					info += '<br /><br />The PHP config value max_input_vars is only set to ' + FLBuilderConfig.MaxInputVars + '. If you are using 3rd party addons this could very likely be the cause of this error. [<a class="link" href="https://kb.wpbeaverbuilder.com/article/746-troubleshooting-number-of-settings-being-saved-exceeds-php-max-input-vars">doc link</a>].'
+					info += '<br /><br />The PHP config value max_input_vars is only set to ' + FLBuilderConfig.MaxInputVars + '. If you are using 3rd party addons this could very likely be the cause of this error. [<a class="link" href="https://docs.wpbeaverbuilder.com/beaver-builder/troubleshooting/common-issues/exceeds-php-max-input-vars">doc link</a>].'
 				}
 
 				debug    = false
@@ -9987,7 +10970,127 @@
 		 */
 		isBoolean: function(value) {
 			return value === true || value === false
-		}
+		},
+
+		/**
+		 * Check if the operating system is set to dark mode.
+		 *
+		 * @since 2.6
+		 * @return bool
+		 */
+		_isSystemColorSchemeDark: function() {
+			return window.matchMedia && window.matchMedia( '( prefers-color-scheme: dark )' ).matches
+		},
+
+		/**
+		 * Get the static color scheme value even if matching the operating system.
+		 *
+		 * @since 2.6
+		 * @return string (light|dark)
+		 */
+		_getComputedColorScheme: function() {
+			const colorScheme = FL.Builder.data.getSystemState().colorScheme
+			if ( 'auto' === colorScheme ) {
+				return FLBuilder._isSystemColorSchemeDark() ? 'dark' : 'light'
+			}
+			return colorScheme
+		},
+
+		/**
+		 * Setup color scheme handling
+		 *
+		 * @since 2.6
+		 * @param {string} key
+		 * @param {any} data
+		 * @return void
+		 */
+		_initColorScheme: function() {
+			FLBuilder._setColorSchemeBodyClasses( FLBuilder._getComputedColorScheme() )
+
+			// Listen for system color scheme changes
+			window.matchMedia( '(prefers-color-scheme: dark)' )
+				.addEventListener( 'change', FLBuilder._systemColorSchemeChanged )
+		},
+
+		/**
+		 * Listen for changes to the operating system color scheme value.
+		 *
+		 * @since 2.6
+		 * @param MediaQueryListEvent e
+		 * @param {any} data
+		 * @return void
+		 */
+		_systemColorSchemeChanged: function( e ) {
+			const colorScheme = FL.Builder.data.getSystemState().colorScheme
+
+			if ( 'auto' !== colorScheme ) {
+				return
+			}
+			if ( e.matches ) {
+				FLBuilder._setColorSchemeBodyClasses( 'dark' )
+			} else {
+				FLBuilder._setColorSchemeBodyClasses( 'light' )
+			}
+		},
+
+		/**
+		 * Add/Remove appropriate color scheme body classes.
+		 *
+		 * @since 2.6
+		 * @param String name (light|dark|auto)
+		 * @return void
+		 */
+		_setColorSchemeBodyClasses: function( name ) {
+			const parentClasses = window.parent.document.body.classList
+			const childClasses = document.body.classList
+			let add = name
+
+			// Handle 'auto' value
+			if ( 'auto' === name ) {
+				add = FLBuilder._getComputedColorScheme()
+			}
+
+			const remove = 'dark' === add ? 'light' : 'dark'
+
+			parentClasses.remove( `fl-builder-ui-skin--${remove}`, `fluid-color-scheme-${remove}` );
+			childClasses.remove( `fl-builder-ui-skin--${remove}`, `fluid-color-scheme-${remove}` );
+			parentClasses.add( `fl-builder-ui-skin--${add}`, `fluid-color-scheme-${add}` );
+			childClasses.add( `fl-builder-ui-skin--${add}`, `fluid-color-scheme-${add}` );
+		},
+
+		/**
+		 * Get sandbox data.
+		 * @since 2.6
+		 * @param {string} data the JSON containing error(s)
+		 */
+		getSandbox: function (key) {
+			if (key in this._sandbox) {
+				return this._sandbox[key];
+			}
+			return false;
+		},
+
+		/**
+		 * Set sandbox data.
+		 * @since 2.6
+		 * @param {string} key
+		 * @param {any} data
+		 * @return {void}
+		 */
+		setSandbox: function (key, data) {
+			this._sandbox[key] = data;
+		},
+
+		/**
+		 * Delete sandbox data.
+		 * @since 2.6
+		 * @param {string} key
+		 * @param {any} data
+		 * @return {void}
+		 */
+		deleteSandbox: function (key) {
+			delete this._sandbox[key];
+		},
 	};
 
 	/* Start the party!!! */

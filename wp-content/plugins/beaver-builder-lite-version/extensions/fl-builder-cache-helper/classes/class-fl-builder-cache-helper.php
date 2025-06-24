@@ -8,18 +8,66 @@ class Plugin {
 
 	private static $plugins = array();
 
+	private $allowed_plugins = array(
+		'acf',
+		'autooptimize',
+		'breeze',
+		'cacheenabler',
+		'cloudflare',
+		'defines',
+		'fastest',
+		'godaddy',
+		'hummingbird',
+		'kinsta',
+		'nginxhelper',
+		'pagely',
+		'pantheon',
+		'pressidium',
+		'siteground',
+		'spinupwp',
+		'supercache',
+		'swift',
+		'varnish',
+		'w3cache',
+		'wordpress',
+		'wpengine',
+	);
+
 	private $actions = array(
 		'fl_builder_cache_cleared',
 		'fl_builder_after_save_layout',
 		'fl_builder_after_save_user_template',
-		'upgrader_process_complete',
 	);
 
 	function __construct() {
 
 		add_action( 'plugins_loaded', array( $this, 'unload_helper_plugin' ) );
 		add_action( 'plugins_loaded', array( $this, 'load_files' ) );
+		add_action( 'admin_init', array( $this, 'check_urls' ) );
 		add_action( 'fl_builder_admin_settings_save', array( $this, 'save_settings' ) );
+	}
+
+	/**
+	 * If the base url has changed clear bb cached css/js
+	 * @since 2.4.1
+	 */
+	public function check_urls() {
+		$replace = array( 'https://', 'http://' );
+		$current = str_replace( $replace, '', get_option( 'siteurl' ) );
+		$saved   = str_replace( $replace, '', base64_decode( get_option( 'fl_site_url' ), true ) );
+
+		if ( $current !== $saved ) {
+			\FLBuilderUtils::update_option( 'fl_site_url', base64_encode( $current ) );
+			if ( '' !== $saved ) {
+				\FLBuilderModel::delete_asset_cache_for_all_posts();
+				if ( class_exists( '\FLCustomizer' ) && method_exists( '\FLCustomizer', 'clear_all_css_cache' ) ) {
+					\FLCustomizer::clear_all_css_cache();
+				}
+
+				\FLBuilder::log( 'Beaver Builder: URL change detected, cache cleared.' );
+				do_action( 'fl_site_url_changed', $current, $saved );
+			}
+		}
 	}
 
 	/**
@@ -82,7 +130,14 @@ class Plugin {
 		foreach ( glob( FL_BUILDER_CACHE_HELPER_DIR . 'plugins/*.php' ) as $file ) {
 
 			$classname = 'FLCacheClear\\' . ucfirst( str_replace( '.php', '', basename( $file ) ) );
-			include_once( $file );
+
+			if ( ! in_array( pathinfo( $file, PATHINFO_FILENAME ), $this->allowed_plugins ) ) {
+				$this->triggererror( $file );
+				return false;
+			} else {
+				include_once( $file );
+			}
+
 			$class = new $classname();
 
 			$actions = isset( $class->actions ) ? $class->actions : $this->actions;
@@ -108,6 +163,23 @@ class Plugin {
 				$this->add_filters( $class, $filters );
 			}
 		}
+	}
+
+	/**
+	 * @since 2.6.1
+	 */
+	private function triggererror( $file ) {
+		$filename = basename( $file );
+		$message  = "An unexpected file ($filename) was found, possible malware! File: $file";
+
+		( ! \FLBuilderAJAX::doing_ajax() && ! isset( $_GET['fl_builder'] ) ) ? trigger_error( $message, E_USER_WARNING ) : false;
+		$args = array(
+			'content' => $message,
+			'id'      => pathinfo( $file, PATHINFO_FILENAME ),
+			'only'    => false,
+			'class'   => 'notice-error',
+		);
+		\FLBuilderAdminNotices::register_notice( $args );
 	}
 
 	/**

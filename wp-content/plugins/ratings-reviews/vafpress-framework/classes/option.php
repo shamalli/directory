@@ -1,6 +1,8 @@
 <?php
 
-class VP_W2RR_Option
+// @codingStandardsIgnoreFile
+
+class W2RR_VP_Option
 {
 
 	private $_option_key;
@@ -48,25 +50,25 @@ class VP_W2RR_Option
 			'minimum_role'          => 'edit_theme_options',
 			'menu_page'             => 'themes.php',
 			'layout'                => 'fixed',
-			'page_title'            => __( 'Vafpress Options', 'vp_w2rr_textdomain' ),
-			'menu_label'            => __( 'Vafpress Options', 'vp_w2rr_textdomain' ),
+			'page_title'            => esc_html__( 'Vafpress Options', 'w2rr' ),
+			'menu_label'            => esc_html__( 'Vafpress Options', 'w2rr' ),
 			'priority'              => 10,
 		), $configs);
 
 		// options config filter
-		$configs = apply_filters('vp_w2rr_option_configuration_array'  , $configs, $configs['option_key']);
-		$configs = apply_filters('vp_w2rr_option_configuration_array-' . $configs['option_key'], $configs);
+		$configs = apply_filters('w2rr_vp_option_configuration_array'  , $configs, $configs['option_key']);
+		$configs = apply_filters('w2rr_vp_option_configuration_array-' . $configs['option_key'], $configs);
 
 		// extract the configs
 		extract($configs);
 
 		// check and set required configs
 		if(isset($option_key)) $this->set_option_key($option_key);
-		else throw new Exception(__( 'Option Key is required', 'vp_w2rr_textdomain' ), 1);
+		else throw new Exception(esc_html__( 'Option Key is required', 'w2rr' ), 1);
 		if(isset($template)) $this->set_template($template);
-		else throw new Exception(__( 'Template Array/File is required', 'vp_w2rr_textdomain' ), 1);
+		else throw new Exception(esc_html__( 'Template Array/File is required', 'w2rr' ), 1);
 		if(isset($page_slug)) $this->set_page_slug($page_slug);
-		else throw new Exception(__( 'Page Slug is required', 'vp_w2rr_textdomain' ), 1);
+		else throw new Exception(esc_html__( 'Page Slug is required', 'w2rr' ), 1);
 
 		// swim in the pool
 		self::$pool[$this->get_option_key()] = &$this;
@@ -82,23 +84,23 @@ class VP_W2RR_Option
 		if(isset($menu_label))            $this->set_menu_label($menu_label);
 
 		// add first_activation hook to save initial values to db
-		add_action('vp_w2rr_option_first_activation', array($this, 'initial_db_setup'));
+		add_action('w2rr_vp_option_first_activation', array($this, 'initial_db_setup'));
 
 		// check if option key not existed init data from default values
 		$options = get_option( $this->get_option_key() );
 		if( $options === FALSE )
 		{
-			do_action('vp_w2rr_option_first_activation');
+			do_action('w2rr_vp_option_first_activation');
 		}
 
 		// init options from db and expose to the api
 		$this->init_options_from_db();
 
 		// setup ajax
-		add_action('wp_ajax_vp_w2rr_ajax_' . $this->get_option_key() . '_export_option', array($this, 'ajax_export_option'));
-		add_action('wp_ajax_vp_w2rr_ajax_' . $this->get_option_key() . '_import_option', array($this, 'ajax_import_option'));
-		add_action('wp_ajax_vp_w2rr_ajax_' . $this->get_option_key() . '_save'         , array($this, 'ajax_save'));
-		add_action('wp_ajax_vp_w2rr_ajax_' . $this->get_option_key() . '_restore'      , array($this, 'ajax_restore'));
+		add_action('wp_ajax_w2rr_vp_ajax_' . $this->get_option_key() . '_export_option', array($this, 'ajax_export_option'));
+		add_action('wp_ajax_w2rr_vp_ajax_' . $this->get_option_key() . '_import_option', array($this, 'ajax_import_option'));
+		add_action('wp_ajax_w2rr_vp_ajax_' . $this->get_option_key() . '_save'         , array($this, 'ajax_save'));
+		add_action('wp_ajax_w2rr_vp_ajax_' . $this->get_option_key() . '_restore'      , array($this, 'ajax_restore'));
 
 		// register menu page
 		add_action( 'admin_menu', array($this, 'register_menu_page'), $priority );
@@ -168,19 +170,19 @@ class VP_W2RR_Option
 
 	public function dev_mode_notice()
 	{
-		VP_W2RR_WP_Util::admin_notice(__("Development Mode is Active, options' values won't be saved into database.", 'vp_w2rr_textdomain'), false);
+		W2RR_VP_WP_Util::admin_notice(esc_html__("Development Mode is Active, options' values won't be saved into database.", 'w2rr'), false);
 	}
 
 	public function enqueue_scripts_and_styles()
 	{	
-		$opt_loader = VP_W2RR_WP_Loader::instance();
+		$opt_loader = W2RR_VP_WP_Loader::instance();
 		$opt_loader->add_types( $this->get_field_types(), 'option' );
 		$opt_loader->add_main_js( 'vp-option' );
 		$opt_loader->add_main_css( 'vp-option' );
 		$opt_loader->add_js_data( 'vp-option', 'custom_local.name', $this->_option_key );
-		$opt_loader->add_js_data( 'vp-option', 'custom_local.SAVE_SUCCESS', VP_W2RR_Option_Control_Set::SAVE_SUCCESS );
-		$opt_loader->add_js_data( 'vp-option', 'custom_local.SAVE_NOCHANGES', VP_W2RR_Option_Control_Set::SAVE_NOCHANGES );
-		$opt_loader->add_js_data( 'vp-option', 'custom_local.SAVE_FAILED', VP_W2RR_Option_Control_Set::SAVE_FAILED );
+		$opt_loader->add_js_data( 'vp-option', 'custom_local.SAVE_SUCCESS', W2RR_VP_Option_Control_Set::SAVE_SUCCESS );
+		$opt_loader->add_js_data( 'vp-option', 'custom_local.SAVE_NOCHANGES', W2RR_VP_Option_Control_Set::SAVE_NOCHANGES );
+		$opt_loader->add_js_data( 'vp-option', 'custom_local.SAVE_FAILED', W2RR_VP_Option_Control_Set::SAVE_FAILED );
 	}
 
 	function save_and_reinit()
@@ -195,17 +197,17 @@ class VP_W2RR_Option
 		$opt = $this->get_options_set()->get_values();
 
 		// save and re-init action hook
-		do_action('vp_w2rr_option_save_and_reinit', $opt, $result['status'], $this->get_option_key());
+		do_action('w2rr_vp_option_save_and_reinit', $opt, $result['status'], $this->get_option_key());
 
 		// option key specific save and re-init action hook
-		do_action('vp_w2rr_option_save_and_reinit-' . $this->get_option_key(), $opt, $result['status']);
+		do_action('w2rr_vp_option_save_and_reinit-' . $this->get_option_key(), $opt, $result['status']);
 
 		return $result;
 	}
 
 	function ajax_save()
 	{
-		$result = $this->vp_w2rr_verify_nonce();
+		$result = $this->w2rr_vp_verify_nonce();
 		
 		if($result['status'])
 		{
@@ -215,7 +217,7 @@ class VP_W2RR_Option
 			$option  = $_POST['option'];
 			$nonce   = $_POST['nonce'];
 
-			$option  = VP_W2RR_Util_Array::unite( $option, 'name', 'value' );
+			$option  = W2RR_VP_Util_Array::unite( $option, 'name', 'value' );
 			$option  = $this->get_options_set()->normalize_values($option);
 
 			// stripslashes added by WP in $_GET / $_POST
@@ -230,16 +232,16 @@ class VP_W2RR_Option
 			$opt = $this->get_options_set()->get_values();
 
 			// before ajax save action hook
-			do_action('vp_w2rr_option_before_ajax_save', $opt);
+			do_action('w2rr_vp_option_before_ajax_save', $opt);
 
 			// save and re-init options
 			$result = $this->save_and_reinit();
 
 			// after ajax save action hook
-			do_action('vp_w2rr_option_after_ajax_save', $opt, $old_opt, $result['status'], $this->get_option_key());
+			do_action('w2rr_vp_option_after_ajax_save', $opt, $old_opt, $result['status'], $this->get_option_key());
 
 			// option key specific after ajax save action hook
-			do_action('vp_w2rr_option_after_ajax_save-' . $this->get_option_key(), $opt, $old_opt, $result['status']);
+			do_action('w2rr_vp_option_after_ajax_save-' . $this->get_option_key(), $opt, $old_opt, $result['status']);
 		}
 
 		if (ob_get_length()) ob_clean();
@@ -250,7 +252,7 @@ class VP_W2RR_Option
 
 	function ajax_restore()
 	{
-		$result = $this->vp_w2rr_verify_nonce();
+		$result = $this->w2rr_vp_verify_nonce();
 		
 		if( $result['status'] )
 		{
@@ -268,7 +270,7 @@ class VP_W2RR_Option
 			$set->setup($options);
 
 			// before ajax save action hook
-			do_action('vp_w2rr_option_before_ajax_restore', $options);
+			do_action('w2rr_vp_option_before_ajax_restore', $options);
 
 			// save and re-init options
 			$result  = $this->save_and_reinit();
@@ -276,10 +278,10 @@ class VP_W2RR_Option
 			$options = $this->get_options_set()->get_values();
 
 			// after ajax restore action hook
-			do_action('vp_w2rr_option_after_ajax_restore', $options, $old_opt, $result['status'], $this->get_option_key());
+			do_action('w2rr_vp_option_after_ajax_restore', $options, $old_opt, $result['status'], $this->get_option_key());
 
 			// after ajax restore action hook
-			do_action('vp_w2rr_option_after_ajax_restore-' . $this->get_option_key(), $options, $old_opt, $result['status']);
+			do_action('w2rr_vp_option_after_ajax_restore-' . $this->get_option_key(), $options, $old_opt, $result['status']);
 		}
 
 		if (ob_get_length()) ob_clean();
@@ -290,12 +292,12 @@ class VP_W2RR_Option
 
 	function ajax_import_option()
 	{
-		global $vp_w2rr_set, $vp_w2rr_config;
+		global $w2rr_vp_set, $w2rr_vp_config;
 
 		$options = null;
 		$old_opt = null;
 
-		$result = $this->vp_w2rr_verify_nonce();
+		$result = $this->w2rr_vp_verify_nonce();
 		
 		if($result['status'])
 		{
@@ -307,7 +309,7 @@ class VP_W2RR_Option
 			if(empty($option))
 			{
 				$result['status']  = false;
-				$result['message'] = __("Can not be empty", 'vp_w2rr_textdomain');
+				$result['message'] = esc_html__("Can not be empty", 'w2rr');
 			}
 			else
 			{
@@ -332,16 +334,16 @@ class VP_W2RR_Option
 				else
 				{
 					$result['status']  = false;
-					$result['message'] = __("Invalid data", 'vp_w2rr_textdomain');
+					$result['message'] = esc_html__("Invalid data", 'w2rr');
 				}
 			}
 		}
 
 		// after ajax import action hook
-		do_action('vp_w2rr_option_after_ajax_import', $options, $old_opt, $result['status'], $this->get_option_key());
+		do_action('w2rr_vp_option_after_ajax_import', $options, $old_opt, $result['status'], $this->get_option_key());
 
 		// after ajax import action hook
-		do_action('vp_w2rr_option_after_ajax_import-' . $this->get_option_key(), $options, $old_opt, $result['status']);
+		do_action('w2rr_vp_option_after_ajax_import-' . $this->get_option_key(), $options, $old_opt, $result['status']);
 
 		if (ob_get_length()) ob_clean();
 		header('Content-type: application/json');
@@ -356,7 +358,7 @@ class VP_W2RR_Option
 		$sr_options = null;
 		$db_options = null;
 
-		$result = $this->vp_w2rr_verify_nonce();
+		$result = $this->w2rr_vp_verify_nonce();
 
 		if($result['status'])
 		{
@@ -365,16 +367,16 @@ class VP_W2RR_Option
 
 			$result = array(
 				'status' => true,
-				'message'=> __("Successful", 'vp_w2rr_textdomain'),
+				'message'=> esc_html__("Successful", 'w2rr'),
 				'option' => $sr_options,
 			);
 		}
 
 		// after ajax export action hook
-		do_action('vp_w2rr_option_after_ajax_export', $db_options, $sr_options, $result['status'], $this->get_option_key());
+		do_action('w2rr_vp_option_after_ajax_export', $db_options, $sr_options, $result['status'], $this->get_option_key());
 
 		// after ajax export action hook
-		do_action('vp_w2rr_option_after_ajax_export-' . $this->get_option_key(), $db_options, $sr_options, $result['status']);
+		do_action('w2rr_vp_option_after_ajax_export-' . $this->get_option_key(), $db_options, $sr_options, $result['status']);
 
 
 		if (ob_get_length()) ob_clean();
@@ -383,19 +385,19 @@ class VP_W2RR_Option
 		die();
 	}
 
-	function vp_w2rr_verify_nonce()
+	function w2rr_vp_verify_nonce()
 	{
 		$nonce  = $_POST['nonce'];
 		$verify = check_ajax_referer('vafpress', 'nonce', false);
 		if($verify)
 		{
 			$result['status']  = true;
-			$result['message'] = __("Successful", 'vp_w2rr_textdomain');	
+			$result['message'] = esc_html__("Successful", 'w2rr');	
 		}
 		else
 		{
 			$result['status']  = false;
-			$result['message'] = __("Unverified Access", 'vp_w2rr_textdomain');
+			$result['message'] = esc_html__("Unverified Access. Please refresh the page.", 'w2rr');
 		}
 		return $result;
 	}
@@ -410,14 +412,14 @@ class VP_W2RR_Option
 		$opt = $set->get_values();
 
 		// before db options db action hook
-		do_action('vp_w2rr_option_before_db_init', $opt);
+		do_action('w2rr_vp_option_before_db_init', $opt);
 
 		// save to db
 		$result = $this->save_and_reinit();
 
 		// after db options db action hook
-		do_action('vp_w2rr_option_after_db_init', $opt, $result['status'], $this->get_option_key());
-		do_action('vp_w2rr_option_after_db_init-' . $this->get_option_key(), $opt, $result['status']);
+		do_action('w2rr_vp_option_after_db_init', $opt, $result['status'], $this->get_option_key());
+		do_action('w2rr_vp_option_after_db_init-' . $this->get_option_key(), $opt, $result['status']);
 	}
 
 	public function init_options()
@@ -461,9 +463,9 @@ class VP_W2RR_Option
 		else if(is_array($this->get_template()))
 			$template = $this->get_template();
 		else
-			throw new Exception(__( 'Invalid template supplied', 'vp_w2rr_textdomain' ), 1);
+			throw new Exception(esc_html__( 'Invalid template supplied', 'w2rr' ), 1);
 
-		$parser = new VP_W2RR_Option_Parser();
+		$parser = new W2RR_VP_Option_Parser();
 		$set    = $parser->parse_array_options($template, $this->use_auto_group_naming());
 		$set->set_layout($this->get_layout());
 
@@ -473,27 +475,27 @@ class VP_W2RR_Option
 		if( $this->use_util_menu() )
 		{
 			// setup utility menu
-			$util_menu = new VP_W2RR_Option_Control_Group_Menu();
-			$util_menu->set_title(__('Utility', 'vp_w2rr_textdomain'));
+			$util_menu = new W2RR_VP_Option_Control_Group_Menu();
+			$util_menu->set_title(esc_html__('Utility', 'w2rr'));
 			$util_menu->set_name('menu_util');
 			$util_menu->set_icon('font-awesome:fa-ambulance');
 
 			// setup restore default section
-			$restore_section = new VP_W2RR_Option_Control_Group_Section();
-			$restore_section->set_title(__('Restore Default', 'vp_w2rr_textdomain'));
+			$restore_section = new W2RR_VP_Option_Control_Group_Section();
+			$restore_section->set_title(esc_html__('Restore Default', 'w2rr'));
 			$restore_section->set_name('section_restore');
 
 			// setup restore button
-			$restore_button = new VP_W2RR_Option_Control_Field_Restore();
+			$restore_button = new W2RR_VP_Option_Control_Field_Restore();
 			$restore_section->add_field($restore_button);
 
 			// setup exim section
-			$exim_section = new VP_W2RR_Option_Control_Group_Section();
-			$exim_section->set_title(__('Export/Import', 'vp_w2rr_textdomain'));
+			$exim_section = new W2RR_VP_Option_Control_Group_Section();
+			$exim_section->set_title(esc_html__('Export/Import', 'w2rr'));
 			$exim_section->set_name('section_exim');
 
 			// setup exim field
-			$exim_field = new VP_W2RR_Option_Control_Field_ImpExp();
+			$exim_field = new W2RR_VP_Option_Control_Field_ImpExp();
 			$exim_section->add_field($exim_field);
 
 			// add exim section
@@ -511,11 +513,10 @@ class VP_W2RR_Option
 
 	public function get_field_types()
 	{
-		// $this->init_options_set();
 		return $this->get_options_set()->get_field_types();
 	}
 
-	// @todo return `vp_w2rr_option` like function
+	// @todo return `w2rr_vp_option` like function
 	public function create_get_option_helper()
 	{
 

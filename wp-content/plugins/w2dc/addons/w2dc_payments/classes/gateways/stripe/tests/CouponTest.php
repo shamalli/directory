@@ -17,7 +17,7 @@ class CouponTest extends TestCase
             )
         );
         $this->assertSame($id, $c->id);
-        // @codingStandardsIgnoreStart
+        // @codingStandardsIgnoreFile
         $this->assertSame(25, $c->percent_off);
         // @codingStandardsIgnoreEnd
         $c->metadata['foo'] = 'bar';

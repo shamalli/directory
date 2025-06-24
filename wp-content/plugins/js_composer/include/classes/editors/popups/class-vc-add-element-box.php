@@ -120,9 +120,6 @@ class Vc_Add_Element_Box {
 		return apply_filters( 'vc_add_new_category_filter', WPBMap::getUserCategories() );
 	}
 
-	/**
-	 *
-	 */
 	public function render() {
 		vc_include_template( 'editors/popups/vc_ui-panel-add-element.tpl.php', array(
 			'box' => $this,

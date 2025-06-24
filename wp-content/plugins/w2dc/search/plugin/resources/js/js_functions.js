@@ -246,6 +246,13 @@ var wcsearch_do_scroll = true;
 				}
 			}
 			
+			if (this.input.find("select.wcsearch-selectbox-input").length) {
+				var val = this.input.find("select.wcsearch-selectbox-input").val();
+				var name = this.input.find("select.wcsearch-selectbox-input").attr("name");
+				
+				return { name: name, value: val };
+			}
+			
 			return '';
 		},
 		this.reset = function() {
@@ -307,9 +314,15 @@ var wcsearch_do_scroll = true;
 				var option = slider.slider("option");
 				var input = this.input.find("input");
 				
-				slider.slider("value", option.min);
-				slider.slider("option", "slide")(null, { value: option.min });
-				input.val("");
+				if (this.input.data("default_values")) {
+					var value = this.input.data("default_values");
+				} else {
+					var value = option.min;
+				}
+				
+				slider.slider("value", value);
+				slider.slider("option", "slide")(null, { value: value });
+				input.val(value);
 			}
 			
 			wcsearch_request_processing = false;
@@ -430,11 +443,9 @@ var wcsearch_do_scroll = true;
 				
 				$("#wcsearch-sticky-scroll-background-"+id).css({ position: "relative" });
 				
-				//if ($(document).width() >= 768) {
 				var args = {id: id, obj: $(this), toppadding: toppadding};
 				$(window).scroll(args, wcsearch_scroll_function);
 				wcsearch_scroll_function({data: args});
-				//}
 			}
 		});
 	}
@@ -653,6 +664,17 @@ var wcsearch_do_scroll = true;
 	});
 	
 	$("body").on("change",
+			".wcsearch-search-model-input-range input," +
+			".wcsearch-search-model-input-single-slider input",
+	function() {
+		var input = $(this).parents(".wcsearch-search-model-input");
+		var values = $(this).val();
+		input.attr("data-values", values);
+		
+		wcsearch_model_update_placeholders();
+	});
+	
+	$("body").on("change",
 			".wcsearch-search-model-input-1," +
 			".wcsearch-search-model-input-2",
 	function() {
@@ -858,6 +880,7 @@ var wcsearch_do_scroll = true;
 	}
 	
 	window.wcsearch_get_query_string_param = function(param_name) {
+		
 		var param_value;
 		var parts = wcsearch_query_string.split('&');
 		$.each(parts, function(index, key_value) {
@@ -870,6 +893,7 @@ var wcsearch_do_scroll = true;
 		return param_value;
 	}
 	window.wcsearch_extend_query_string_params = function(params) {
+		
 		var parts = wcsearch_query_string.split('&');
 		for (const [key, value] of Object.entries(params)) {
 			var key_exists = false;
@@ -889,71 +913,87 @@ var wcsearch_do_scroll = true;
 		wcsearch_query_string = parts.join('&');
 	}
 	
-	window.wcsearch_insert_param_in_uri = function(key, value) {
-		var key = encodeURIComponent(key);
-		var value = encodeURIComponent(value);
-		
+	window.wcsearch_insert_param_in_uri = function(...args) {
+
 		var hash = window.location.hash.substring(1);
 
-		var kvp = document.location.search.substr(1).split('&').filter(Boolean);
-		let i=0;
-
-		for(; i<kvp.length; i++){
-			if (kvp[i].startsWith(key + '=')) {
-				let pair = kvp[i].split('=');
-				pair[1] = value;
-				kvp[i] = pair.join('=');
-				break;
-			}
-		}
-
-		if (i >= kvp.length){
-			kvp[kvp.length] = [key,value].join('=');
+		if (!Array.isArray(args[0]) && args.length == 2) {
+			args = [[args[0], args[1]]];
 		}
 		
-		let params = kvp.join('&');
+		var parts = document.location.search.substr(1).split('&').filter(Boolean);
+		for (let [key, value] of args) {
+			key = encodeURIComponent(key);
+			value = encodeURIComponent(value);
+			
+			let key_exists = false;
+			$.each(parts, function(index, key_value) {
+				key_value = key_value.split('=');
+				if (key == key_value[0]) {
+					parts[index] = key+'='+value;
+					key_exists = true;
+					return;
+				}
+			});
+			if (!key_exists) {
+				parts.push(key+'='+value);
+			}
+		}
+		
+		let params = parts.join('&');
 
 		if (hash) {
 			hash = '#' + hash;
 		}
 
-		window.history.pushState("", "", "?"+params+hash);
+		window.history.pushState("", "", "?" + params + hash);
 	}
 	
-	window.wcsearch_remove_param_from_uri = function(key) {
-		var key = encodeURIComponent(key);
+	window.wcsearch_remove_param_from_uri = function(...args) {
 		
-		var kvp = document.location.search.substr(1).split('&').filter(Boolean);
-		let i=0;
+		var hash = window.location.hash.substring(1);
 		
-		for(; i<kvp.length; i++){
-			if (kvp[i].startsWith(key + '=')) {
-				kvp.splice(i, 1);
-				break;
-			}
+		var parts = document.location.search.substr(1).split('&').filter(Boolean);
+		for (let key of args) {
+			key = encodeURIComponent(key);
+			
+			let _parts = parts.slice(); // copy array, do not affect splice on _parts when we do $.each
+			
+			$.each(_parts, function(index, key_value) {
+				key_value = key_value.split('=');
+				if (key == key_value[0]) {
+					parts.splice(index, 1)
+					return;
+				}
+			});
 		}
 		
-		let params = kvp.join('&');
+		let params = parts.join('&');
+		
+		if (hash) {
+			hash = '#' + hash;
+		}
 		
 		if (params) {
-			window.history.pushState("", "", "?" + params);
+			window.history.pushState("", "", "?" + params + hash);
 		} else {
 			// remove params from URL
 			var href = window.location.href;
 			var url  = href.split('?');
-			window.history.pushState("", "", url[0]);
+			window.history.pushState("", "", url[0] + hash);
 		}
 		
 	}
 	
 	window.wcsearch_get_uri_param = function(param) {
+		
 		var href = window.location.href;
 		var url  = href.split('?');
 		if (url.length == 2) {
 			var parts = url[1].split('&');
 			
-			for (var key in parts) {
-				var key_value = parts[key].split('=');
+			for (let key in parts) {
+				let key_value = parts[key].split('=');
 				if (param == key_value[0]) {
 					return key_value[1];
 				}
@@ -1218,11 +1258,9 @@ var wcsearch_do_scroll = true;
 						wcsearch_get_loop().html(response_from_the_action_function.products);
 					}
 					
-					//wcsearch_ajax_loader_target_hide(wcsearch_js_objects.loop_selector_name);
 				},
 				complete: function() {
 					wcsearch_request_processing = false;
-					//wcsearch_ajax_loader_target_hide(wcsearch_js_objects.loop_selector_name);
 				}
 		});
 	}
@@ -1395,7 +1433,7 @@ var wcsearch_do_scroll = true;
 				complete: function() {
 					$(wcsearch_dropdowns).each(function(i, dropdown) {
 						if (typeof dropdown.input != "undefined" && dropdown.input.hasClass("ui-autocomplete-input") && dropdown.is_open) {
-							dropdown.input.trigger("click");
+							dropdown.input.autocomplete("search", dropdown.input.val());
 						}
 					});
 				}
@@ -1429,6 +1467,39 @@ var wcsearch_do_scroll = true;
 		}
 	}
 	
+	var wcsearch_pointer_interal;
+	window.wcsearch_show_pointer = function(form, input, message, time = 5000) {
+		
+		form.parent().find(".wcsearch-apply-filters-float-btn").remove();
+		if (wcsearch_pointer_interal) {
+			clearInterval(wcsearch_pointer_interal);
+		}
+		
+		var input_top = input.offset().top;
+		var form_top = form.offset().top;
+		var pointer = $("<div />")
+		.html('<span>' + message + '</span>')
+		.addClass("wcsearch-apply-filters-float-btn")
+		.css({ top: (input_top - form_top - 22) })
+		.insertBefore(form)
+		.on("click", function() {
+			if (!wcsearch_request_processing) {
+				wcsearch_submit_form(form);
+				
+				if (wcsearch_get_loop()) {
+					$("html, body").animate({
+						scrollTop: wcsearch_get_loop().offset().top
+					});
+				}
+			}
+		});
+		
+		wcsearch_pointer_interal = setInterval(function() {
+			clearInterval(wcsearch_pointer_interal);
+			form.parent().find(".wcsearch-apply-filters-float-btn").fadeOut(300, function() { $(this).remove() });
+		}, time);
+	}
+	
 	$(document).on("change", ".wcsearch-search-input input, .wcsearch-search-input select", function(e) {
 		
 		var input = $(this);
@@ -1436,40 +1507,12 @@ var wcsearch_do_scroll = true;
 		var input_div = input.parents(".wcsearch-search-input");
 		var form = input.parents("form");
 		
-		var interval;
 		if (input.attr("type") == 'radio' || input.attr("type") == 'checkbox') {
 			
 			var use_pointer = input.parents(".wcsearch-search-input").data("use_pointer");
 			
 			if (use_pointer) {
-				form.parent().find(".wcsearch-apply-filters-float-btn").remove();
-				if (interval) {
-					clearInterval(interval);
-				}
-				
-				var input_top = input.offset().top;
-				var form_top = form.offset().top;
-				var pointer = $("<div />")
-				.html('<span>Search</span>')
-				.addClass("wcsearch-apply-filters-float-btn")
-				.css({ top: (input_top - form_top - 22) })
-				.insertBefore(form)
-				.on("click", function() {
-					if (!wcsearch_request_processing) {
-						wcsearch_submit_form(form);
-						
-						if (wcsearch_get_loop()) {
-							$("html, body").animate({
-								scrollTop: wcsearch_get_loop().offset().top
-							});
-						}
-					}
-				});
-				
-				interval = setInterval(function() {
-					clearInterval(interval);
-					form.parent().find(".wcsearch-apply-filters-float-btn").fadeOut(300, function() { $(this).remove() });
-				}, 5000);
+				wcsearch_show_pointer(form, input, 'Search');
 			}
 		}
 		
@@ -1822,11 +1865,7 @@ var wcsearch_do_scroll = true;
 						if (navigator.userAgent.match(/(iPod|iPhone|iPad)/)) {
 							$('.ui-autocomplete').off('menufocus hover mouseover mouseenter');
 						}
-					}/*,
-					close: function() {
-						input.trigger("focus");
-						input.autocomplete("search", "");
-					}*/
+					}
 				});
 			},
 			
@@ -1858,7 +1897,7 @@ var wcsearch_do_scroll = true;
 					}
 					
 					var item_li_class = "";
-					if (typeof item.selected != "undefined" && item.selected) {
+					if (typeof item.option != "undefined" && $(item.option).data("selected")) {
 						item_li_class = item_li_class + " wcsearch-dropdowns-menu-selected-item";
 					}
 					
@@ -1940,24 +1979,42 @@ var wcsearch_do_scroll = true;
 				this._on(input, {
 					reset: function() {
 						this.button.trigger("click");
+						
+						this.element.children("option").map(function() {
+							$(this).removeData("selected").removeAttr("data-selected");
+						});
 					},
 					autocompleteselect: function(event, ui) {
 						this._trigger("select", event, {
 							item: ui.item
 						});
+						
+						// setup selected term in the options list
+						this.element.children("option").map(function() {
+							if ($(this).data("termid") == ui.item.value) {
+								$(this).data("selected", "selected").attr("data-selected", "selected");
+							} else {
+								$(this).removeData("selected").removeAttr("data-selected");
+							}
+						});
 
 						if (ui.item.is_term) {
-							var name = ui.item.name;
+							var name = wcsearch_HTML_entity_decode(ui.item.name);
+							
 							$('#selected_tax\\['+id+'\\]').val(ui.item.value);
+							
+							input.val(name);
+							
 							$('#selected_tax\\['+id+'\\]').trigger("wcsearch:selected_tax_change");
 							$('#selected_tax\\['+id+'\\]').trigger("change");
 						} else {
-							var name = ui.item.value;
+							var name = wcsearch_HTML_entity_decode(ui.item.value);
+							
 							$('#selected_tax\\['+id+'\\]').val('');
+
+							input.val(name).trigger("change");
 						}
-						name = $('<textarea />').html(name).text(); // HTML Entity Decode
 						
-						input.val(name);
 						input.trigger("blur");
 						
 						event.preventDefault();
@@ -1969,9 +2026,10 @@ var wcsearch_do_scroll = true;
 						// open list only when it already has a value
 						if (!input.autocomplete("widget").is(":visible") && (input.val() || element.data("open-on-click"))) {
 							
-							// show all on click
+							// show all on click, empty search opens full list
 							input.trigger("focusout");
-							input.autocomplete("search", '');
+							input.autocomplete("search", input.val());  // when click after close - it will get searched results
+							// ------------- input.autocomplete("search", ''); - will give all results
 								
 							wcsearch_continue_recounting();
 						} else {
@@ -2011,7 +2069,7 @@ var wcsearch_do_scroll = true;
 					if ($('#selected_tax\\['+id+'\\]').val()) {
 						// submit search form on input reset
 						$('#selected_tax\\['+id+'\\]').val('');
-						//$('#selected_tax\\['+id+'\\]').trigger("change"); // probably unnecessary trigger
+						//------------- $('#selected_tax\\['+id+'\\]').trigger("change"); -  necessary trigger on double call on double call
 						
 						// trigger custom event
 						$('#selected_tax\\['+id+'\\]').trigger("wcsearch:selected_tax_change");
@@ -2022,7 +2080,7 @@ var wcsearch_do_scroll = true;
 					wcsearch_do_scroll = false;
 
 					if (_this._openMobileKeyboard()) {
-						//input.autocomplete("search", input.val());
+						// -------------input.autocomplete("search", input.val()); - call submit by this
 					} else {
 						// Pass empty string as value to search for, displaying all results
 						input.autocomplete("search", '');
@@ -2210,7 +2268,7 @@ var wcsearch_do_scroll = true;
 						if ($('#selected_tax\\['+id+'\\]').val()) {
 							// submit search form on input reset
 							$('#selected_tax\\['+id+'\\]').val('');
-							//$('#selected_tax\\['+id+'\\]').trigger("change"); // probably unnecessary trigger
+							// ------------- $('#selected_tax\\['+id+'\\]').trigger("change"); - necessary trigger on double call
 							
 							// trigger custom event
 							$('#selected_tax\\['+id+'\\]').trigger("wcsearch:selected_tax_change");
@@ -2225,7 +2283,7 @@ var wcsearch_do_scroll = true;
 					}
 
 					if (_this._openMobileKeyboard()) {
-						//input.autocomplete("search", input.val());
+						// ------------- input.autocomplete("search", input.val()); - call submit by this
 					} else {
 						// Pass empty string as value to search for, displaying all results
 						input.autocomplete("search", '');
@@ -2278,6 +2336,10 @@ var wcsearch_do_scroll = true;
 						
 						input_place_id.val('');
 						
+						this.element.children("option").map(function() {
+							$(this).removeData("selected").removeAttr("data-selected");
+						});
+						
 						// do not use trigger("click"), otherwise it will click on "My location" button
 						input.val('');
 						if ($('#selected_tax\\['+id+'\\]').val()) {
@@ -2304,23 +2366,33 @@ var wcsearch_do_scroll = true;
 						} else {
 							input_place_id.val('');
 						}
-
+						
 						if (ui.item.is_term) {
-							var name = ui.item.name;
+							var name = wcsearch_HTML_entity_decode(ui.item.name);
+							
 							$('#selected_tax\\['+id+'\\]').val(ui.item.value);
-							element.val(ui.item.value);
+							
+							// setup selected term in the options list
+							this.element.children("option").map(function() {
+								if ($(this).data("termid") == ui.item.value) {
+									$(this).data("selected", "selected").attr("data-selected", "selected");
+								} else {
+									$(this).removeData("selected").removeAttr("data-selected");
+								}
+							});
+							
+							input.val(name);
+							
 							$('#selected_tax\\['+id+'\\]').trigger("wcsearch:selected_tax_change");
 							$('#selected_tax\\['+id+'\\]').trigger("change");
 						} else {
-							wcsearch_do_scroll = false;
-							var name = ui.item.value;
+							var name = wcsearch_HTML_entity_decode(ui.item.value);
+							
 							$('#selected_tax\\['+id+'\\]').val('');
-							wcsearch_do_scroll = false;
-							element.val('');
+							
+							input.val(name).trigger("change");
 						}
-						name = $('<textarea />').html(name).text(); // HTML Entity Decode
 						
-						input.val(name);
 						input.trigger("blur");
 						
 						event.preventDefault();
@@ -2469,7 +2541,7 @@ var wcsearch_do_scroll = true;
 					wcsearch_do_scroll = false;
 
 					if (_this._openMobileKeyboard()) {
-						//input.autocomplete("search", input.val());
+						// ------------- input.autocomplete("search", input.val()); - call submit by this
 					} else {
 						// Pass empty string as value to search for, displaying all results
 						input.autocomplete("search", '');
@@ -2521,6 +2593,10 @@ var wcsearch_do_scroll = true;
 						
 						input_place_id.val('');
 						
+						this.element.children("option").map(function() {
+							$(this).removeData("selected").removeAttr("data-selected");
+						});
+						
 						// do not use trigger("click"), otherwise it will click on "My location" button
 						input.val('');
 						input.trigger('change');
@@ -2540,7 +2616,7 @@ var wcsearch_do_scroll = true;
 							input_place_id.val('');
 						}
 
-						var name = $('<textarea />').html(ui.item.value).text(); // HTML Entity Decode
+						var name = wcsearch_HTML_entity_decode(ui.item.value);
 						
 						input.val(name);
 						input.trigger('change');
@@ -2710,6 +2786,10 @@ var wcsearch_do_scroll = true;
 				this._on(input, {
 					reset: function() {
 						this.button.trigger("click");
+						
+						this.element.children("option").map(function() {
+							$(this).removeData("selected").removeAttr("data-selected");
+						});
 					},
 					autocompleteselect: function(event, ui) {
 						this._trigger("select", event, {
@@ -2857,6 +2937,13 @@ var wcsearch_do_scroll = true;
 				this._on(input, {
 					reset: function() {
 						this.button.trigger("click");
+						
+						this.element.children("option").map(function() {
+							$(this).removeData("selected").removeAttr("data-selected");
+						});
+					},
+					autocompletechange: function(event, ui) {
+						console.log(ui);
 					},
 					autocompleteselect: function(event, ui) {
 						this._trigger("select", event, {
@@ -2867,14 +2954,24 @@ var wcsearch_do_scroll = true;
 							var name = ui.item.name;
 							$('#selected_tax\\['+id+'\\]').val(ui.item.value);
 							element.val(ui.item.value);
+							
+							// setup selected term in the options list
+							this.element.children("option").map(function() {
+								if ($(this).data("termid") == ui.item.value) {
+									$(this).data("selected", "selected").attr("data-selected", "selected");
+								} else {
+									$(this).removeData("selected").removeAttr("data-selected");
+								}
+							});
+							
 						} else {
 							var name = ui.item.value;
 							$('#selected_tax\\['+id+'\\]').val('');
 							element.val('');
 						}
-						//$('#selected_tax\\['+id+'\\]').trigger("change"); // this triggers the submission twice
+						// ------------- $('#selected_tax\\['+id+'\\]').trigger("change"); - this triggers the submission twice
 						
-						name = $('<textarea />').html(name).text(); // HTML Entity Decode
+						name = wcsearch_HTML_entity_decode(name);
 						input.val(name);
 						input.trigger('change');
 
@@ -2996,9 +3093,6 @@ var wcsearch_do_scroll = true;
 			},
 			
 			_destroy: function() {
-				// comment this line in hierarhical,
-				// it gives error: too much recursion
-				//this.wrapper.remove();
 				this.element.show();
 			},
 		});
@@ -3078,6 +3172,10 @@ var wcsearch_do_scroll = true;
 				this._on(input, {
 					reset: function() {
 						this.button.trigger("click");
+						
+						this.element.children("option").map(function() {
+							$(this).removeData("selected").removeAttr("data-selected");
+						});
 					},
 					autocompleteselect: function(event, ui) {
 						this._trigger("select", event, {
@@ -3212,9 +3310,6 @@ var wcsearch_do_scroll = true;
 			},
 			
 			_destroy: function() {
-				// comment this line in hierarhical,
-				// it gives error: too much recursion
-				//this.wrapper.remove();
 				this.element.show();
 			},
 		});
@@ -3287,6 +3382,10 @@ var wcsearch_do_scroll = true;
 				}
 			);
 		}
+	}
+	
+	function wcsearch_HTML_entity_decode(str){
+		return $('<textarea />').html(str).text(); // HTML Entity Decode
 	}
 	
 	function first(p){for(var i in p)return p[i];}

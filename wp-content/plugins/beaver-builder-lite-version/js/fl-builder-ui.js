@@ -118,7 +118,9 @@
         * @return void
         */
         reset: function() {
-            Mousetrap.reset();
+        	if ( ! FLBuilder.UIIFrame.isEnabled() ) {
+				Mousetrap.reset();
+			}
         },
 
         /**
@@ -175,6 +177,11 @@
                 FLBuilder.ContentPanel.hide();
                 return;
             }
+
+						if ( FLBuilder.UIIFrame.isEnabled() ) {
+							FLBuilder.UIIFrame.exitResponsiveEditing();
+							return;
+						}
         },
 
         /**
@@ -198,6 +205,12 @@
         * @return void
         */
         onEndEditingSession: function() {
+
+            const actions = FL.Builder.data.getSystemActions()
+            actions.setIsEditing( false )
+
+			document.documentElement.classList.remove( 'fl-builder-assistant-visible' )
+
             this.reset();
             this.addShortcut('restartEditingSession', 'mod+e');
         },
@@ -207,6 +220,15 @@
         * @return void
         */
         onRestartEditingSession: function() {
+
+            const actions = FL.Builder.data.getSystemActions()
+            actions.setIsEditing( true )
+
+			const currentPanel = FL.Builder.data.getSystemState().currentPanel
+			if ( 'assistant' === currentPanel ) {
+				document.documentElement.classList.add( 'fl-builder-assistant-visible' )
+			}
+
             this.reset();
             this.setDefaultKeyboardShortcuts();
         },
@@ -238,7 +260,7 @@
 
         onNextPrevTabShortcut: function( direction, e ) {
 
-            var $lightbox = $('.fl-lightbox:visible'),
+            var $lightbox = $('.fl-lightbox:visible', window.parent.document),
                 $tabs = $lightbox.find('.fl-builder-settings-tabs a'),
                 $activeTab,
                 $nextTab;
@@ -273,74 +295,6 @@
         },
     };
 
-    var KeyShortcutsUI = {
-
-        isShowing: false,
-
-        /**
-        * Fire up the keyboard shortcut UI
-        *
-        * @return void
-        */
-        init: function() {
-
-            this.render();
-
-            FLBuilder.addHook( 'showKeyboardShortcuts', this.show.bind( this ) );
-        },
-
-        /**
-        * Render the UI into the DOM
-        *
-        * @return void
-        */
-        render: function() {
-            var renderUI = wp.template('fl-keyboard-shortcuts'),
-                renderData = FLBuilderConfig.keyboardShortcuts;
-
-            this.$el = $( renderUI( renderData ) );
-            $('body').append( this.$el );
-
-            this.$el.find('.dismiss-shortcut-ui').on('click', this.hide.bind( this ) );
-            this.$el.on('click', this.hide.bind( this ) );
-        },
-
-        /**
-        * Show the keyboard shortcut UI
-        *
-        * @return void
-        */
-        show: function() {
-            if ( this.isShowing ) return;
-            this.$el.addClass('is-showing');
-            this.isShowing = true;
-        },
-
-        /**
-        * Hide the keyboard shortcut UI
-        *
-        * @return void
-        */
-        hide: function() {
-            if ( !this.isShowing ) return;
-            this.$el.removeClass('is-showing');
-            this.isShowing = false;
-        },
-
-        /**
-        * Toggle the UI on and off
-        *
-        * @return void
-        */
-        toggle: function() {
-            if ( this.isShowing ) {
-                this.hide();
-            } else {
-                this.show();
-            }
-        },
-    }
-
 
     /**
     * Publish actions button bar UI
@@ -359,15 +313,15 @@
         */
         init: function() {
 
-            this.$el = $('.fl-builder-publish-actions');
-            this.$defaultBarButtons = $('.fl-builder-bar-actions');
-            this.$clickAwayMask = $('.fl-builder-publish-actions-click-away-mask');
+            this.$el = $('.fl-builder-publish-actions', window.parent.document);
+            this.$defaultBarButtons = $('.fl-builder-bar-actions', window.parent.document);
+            this.$clickAwayMask = $('.fl-builder-publish-actions-click-away-mask', window.parent.document);
 
             this.$doneBtn = this.$defaultBarButtons.find('.fl-builder-done-button');
             this.$doneBtn.on('click', this.onDoneTriggered.bind(this));
 
             this.$actions = this.$el.find('.fl-builder-button');
-            this.$actions.on('click', this.onActionClicked.bind(this));
+            this.$actions.on('click touchend', this.onActionClicked.bind(this));
 
             FLBuilder.addHook('triggerDone', this.onDoneTriggered.bind(this));
 
@@ -476,11 +430,11 @@
         * @return void
         */
         init: function() {
-            this.$el = $('body');
-            this.$mainToolbar = $('.fl-builder-bar');
-            this.$mainToolbarContent = this.$mainToolbar.find('.fl-builder-bar-content');
+            this.$el = $('body', window.parent.document);
+            this.$mainToolbar = $('.fl-builder-bar', window.parent.document);
+            this.$mainToolbarContent = this.$mainToolbar.find('.fl-builder-bar-content', window.parent.document);
             this.$wpAdminBar = $('#wpadminbar');
-            this.$endPreviewBtn = $('.fl-builder--preview-actions .end-preview-btn');
+            this.$endPreviewBtn = $('.fl-builder--preview-actions .end-preview-btn', window.parent.document);
 
             FLBuilder.addHook('endEditingSession', this.endEditingSession.bind(this) );
             FLBuilder.addHook('previewLayout', this.togglePreview.bind(this) );
@@ -489,7 +443,7 @@
             this.$endPreviewBtn.on('click', this.endPreview.bind(this));
 
             // Preview mode device size icons
-            this.$deviceIcons = $('.fl-builder--preview-actions i');
+            this.$deviceIcons = $('.fl-builder--preview-actions i', window.parent.document);
             this.$deviceIcons.on('click', this.onDeviceIconClick.bind(this));
 
             // Admin bar link to re-enable editor
@@ -507,6 +461,7 @@
             FLBuilder.addHook('didEnterRevisionPreview', this.hide.bind(this));
             FLBuilder.addHook('didExitRevisionPreview', this.show.bind(this));
             FLBuilder.addHook('didPublishLayout', this.onPublish.bind(this));
+         // FLBuilder.addHook('didPublishLayout', this.onPublishCacheClear.bind(this));
         },
 
         /**
@@ -520,8 +475,8 @@
             FLBuilder._removeColHighlightGuides();
             FLBuilder._unbindEvents();
 
-            $('html').removeClass('fl-builder-edit').addClass('fl-builder-show-admin-bar');
-            $('body').removeClass('fl-builder-edit');
+            $('html').add( 'html', window.parent.document ).removeClass('fl-builder-edit').addClass('fl-builder-show-admin-bar');
+            $('body').add( 'body', window.parent.document ).removeClass('fl-builder-edit');
             $('#wpadminbar a').attr('tabindex', null );
 			$( FLBuilder._contentClass ).removeClass( 'fl-builder-content-editing' );
             this.hideMainToolbar();
@@ -540,8 +495,8 @@
             FLBuilder._highlightEmptyCols();
 			FLBuilder._rebindEvents();
 
-            $('html').addClass('fl-builder-edit').removeClass('fl-builder-show-admin-bar');
-            $('body').addClass('fl-builder-edit');
+            $('html').add( 'html', window.parent.document ).addClass('fl-builder-edit').removeClass('fl-builder-show-admin-bar');
+            $('body').add( 'html', window.parent.document ).addClass('fl-builder-edit');
             $('#wpadminbar a').attr('tabindex', '-1');
 			$( FLBuilder._contentClass ).addClass( 'fl-builder-content-editing' );
             this.showMainToolbar();
@@ -568,6 +523,20 @@
             $dot.css('color', '#6bc373');
         },
 
+		/**
+		 * Reload url via ajax, this rebuilds the cache files.
+		 */
+		onPublishCacheClear: function() {
+
+			FLBuilder.ajax({
+				action: 'clear_cache_for_layout',
+			}, function(response) {
+				console.log(response);
+			});
+		},
+
+
+
         /**
         * Hides the entire UI.
         * @return void
@@ -577,7 +546,7 @@
 	            FLBuilder._unbindEvents();
 	            FLBuilder._destroyOverlayEvents();
 	            FLBuilder._removeAllOverlays();
-	            $('html').removeClass('fl-builder-edit')
+	            $('html').add( 'html', window.parent.document ).removeClass('fl-builder-edit')
 	            $('body').removeClass('admin-bar');
 	            this.hideMainToolbar();
 	            FLBuilder.ContentPanel.hide();
@@ -596,7 +565,7 @@
 	            FLBuilder._bindOverlayEvents();
 	            this.showMainToolbar();
 	            FLBuilderResponsiveEditing._switchTo('default');
-	            $('html').addClass('fl-builder-edit');
+	            $('html').add( 'html', window.parent.document ).addClass('fl-builder-edit');
 	            $('body').addClass('admin-bar');
 	            FLBuilder.triggerHook('didShowEditingUI');
 	        }
@@ -615,8 +584,8 @@
 
             this.isPreviewing = true;
             this.hide();
-            $('html').addClass('fl-builder-preview');
-            $('html, body').removeClass('fl-builder-edit');
+            $('html').add( 'html', window.parent.document ).addClass('fl-builder-preview');
+            $('html, body').add( 'html, body', window.parent.document ).removeClass('fl-builder-edit');
             FLBuilder._removeEmptyRowAndColHighlights();
             FLBuilder._removeColHighlightGuides();
             FLBuilder.triggerHook('didBeginPreview');
@@ -631,9 +600,9 @@
             this.isPreviewing = false;
             this.show();
             FLBuilder._highlightEmptyCols();
-			FLBuilderResponsivePreview.exit();
-            $('html').removeClass('fl-builder-preview');
-            $('html, body').addClass('fl-builder-edit');
+            FLBuilderResponsivePreview.exit();
+            $('html').add( 'html', window.parent.document ).removeClass('fl-builder-preview');
+            $('html, body').add( 'html, body', window.parent.document ).addClass('fl-builder-edit');
         },
 
         /**
@@ -654,7 +623,7 @@
         */
         hideMainToolbar: function() {
             this.$mainToolbar.addClass('is-hidden');
-            $('html').removeClass('fl-builder-is-showing-toolbar');
+            $( 'html', window.parent.document ).removeClass('fl-builder-is-showing-toolbar');
         },
 
         /**
@@ -664,7 +633,7 @@
         showMainToolbar: function() {
             this.unmuteToolbar();
             this.$mainToolbar.removeClass('is-hidden');
-            $('html').addClass('fl-builder-is-showing-toolbar');
+            $( 'html', window.parent.document ).addClass('fl-builder-is-showing-toolbar');
         },
 
         /**
@@ -674,6 +643,7 @@
         onDeviceIconClick: function(e) {
             var mode = $(e.target).data('mode');
             FLBuilderResponsivePreview.switchTo(mode);
+            FLBuilderResponsivePreview._showSize(mode);
         },
 
         /**
@@ -721,6 +691,8 @@
          */
         onEnterBuilder: function() {
             history.replaceState( {}, document.title, FLBuilderConfig.editUrl );
+            const actions = FL.Builder.data.getSystemActions()
+            actions.setIsEditing( true )
             this.isEditing = true;
         },
 
@@ -731,6 +703,8 @@
          */
         onLeaveBuilder: function() {
             history.replaceState( {}, document.title, FLBuilderConfig.url );
+            const actions = FL.Builder.data.getSystemActions()
+            actions.setIsEditing( false )
             this.isEditing = false;
         },
     };
@@ -745,7 +719,7 @@
         * @return void
         */
         init: function() {
-            this.$searchBox = $('.fl-builder--search');
+            this.$searchBox = $('.fl-builder--search', window.parent.document);
             this.$searchBoxInput = this.$searchBox.find('input#fl-builder-search-input');
             this.$searchBoxClear = this.$searchBox.find('.search-clear');
 
@@ -830,16 +804,16 @@
 
             if (data.total > 0) {
                 var $html = $(this.renderSearchResults(data)),
-                    $panel = $('.fl-builder--search-results-panel');
+                    $panel = $('.fl-builder--search-results-panel', window.parent.document);
     			$panel.html($html);
 
     			FLBuilder._initSortables();
             } else {
                 var $html = $(this.renderNoResults(data)),
-                    $panel = $('.fl-builder--search-results-panel');
+                    $panel = $('.fl-builder--search-results-panel', window.parent.document);
     			$panel.html($html);
             }
-			$('body').addClass('fl-builder-search-results-panel-is-showing');
+			$('body', window.parent.document).addClass('fl-builder-search-results-panel-is-showing');
         },
 
         /**
@@ -847,7 +821,7 @@
         * @return void
         */
         hideSearchResults: function() {
-        	$('body').removeClass('fl-builder-search-results-panel-is-showing');
+        	$('body', window.parent.document).removeClass('fl-builder-search-results-panel-is-showing');
         },
     };
 
@@ -882,8 +856,8 @@
             if ( this.userCanResize() ) {
                 var $layoutContent = $( FLBuilder._contentClass );
 
-                $layoutContent.delegate('.fl-block-row-resize', 'mouseenter', this.onDragHandleHover.bind(this) );
-                $layoutContent.delegate('.fl-block-row-resize', 'mousedown', this.onDragHandleDown.bind(this) );
+				$layoutContent.on( 'mouseenter touchstart', '.fl-row', this.onDragHandleHover.bind(this) );
+                $layoutContent.on( 'mousedown touchstart', '.fl-block-row-resize', this.onDragHandleDown.bind(this) );
             }
         },
 
@@ -902,54 +876,90 @@
         */
         onDragHandleHover: function(e) {
 
-            if (this.drag.isDragging) {
-	            return
-            };
+			if (this.drag.isDragging) {
+				return
+			};
 
-            var originalWidth,
+            var $this = this,
+			    originalWidth,
             	$handle = $(e.target),
 				row = $handle.closest('.fl-row'),
 				node = row.data('node'),
-				settings = FLBuilderSettingsConfig.nodes[ node ],
-				form = $( '.fl-builder-row-settings[data-node=' + node + ']' ),
+				form = $( '.fl-builder-row-settings[data-node=' + node + ']', window.parent.document ),
 				unitField = form.find( '[name=max_content_width_unit]' ),
-				unit = unitField.length ? unitField.val() : settings.max_content_width_unit;
+				unit = 'px';
 
-			this.$row = row;
-			this.$rowContent = this.$row.find('.fl-row-content');
+			$this.onSettingsReady(node, function(settings){
 
-            this.row = {
-                node: node,
-                form: form,
-				unit: unit,
-                isFixedWidth: this.$row.hasClass('fl-row-fixed-width'),
-				parentWidth: 'vw' === unit ? $( window ).width() : this.$row.parent().width(),
-            };
+				// Get unit.
+				if (unitField.length) {
+					unit = unitField.val();
+				} else if ('undefined' !== typeof settings) {
+					unit = settings.max_content_width_unit;
+				}
 
-            this.drag = {
-                edge: null,
-                isDragging: false,
-                originalPosition: null,
-                originalWidth: null,
-                calculatedWidth: null,
-                operation: null,
-            };
+				$this.$row = row;
+				$this.$rowContent = $this.$row.find('.fl-row-content');
 
-            if (this.row.isFixedWidth) {
-                this.drag.originalWidth = this.$row.width();
-            } else {
-                this.drag.originalWidth = this.$rowContent.width();
-            }
+	            $this.row = {
+	                node: node,
+	                form: form,
+					unit: unit,
+	                isFixedWidth: $this.$row.hasClass('fl-row-fixed-width'),
+					parentWidth: 'vw' === unit ? $( window ).width() : $this.$row.parent().width(),
+	            };
 
-            this.dragInit();
+	            $this.drag = {
+	                edge: null,
+	                isDragging: false,
+	                originalPosition: null,
+	                originalWidth: null,
+	                calculatedWidth: null,
+	                operation: null,
+	            };
+
+	            if ($this.row.isFixedWidth) {
+	                $this.drag.originalWidth = $this.$row.width();
+	            } else {
+	                $this.drag.originalWidth = $this.$rowContent.width();
+	            }
+
+	            $this.dragInit();
+			});
         },
+
+		/**
+        * Check if FLBuilderSettingsConfig.node is available.
+        * @return void
+        */
+		onSettingsReady: function(nodeId, callback) {
+			var nodes = 'undefined' !== typeof FLBuilderSettingsConfig.nodes ? FLBuilderSettingsConfig.nodes : null;
+
+			if (null !== nodes && 'undefined' !== typeof nodes[ nodeId ] ) {
+				callback( nodes[ nodeId ] );
+
+				if (null != RowResize._mouseEnterTimeout) {
+					clearTimeout( RowResize._mouseEnterTimeout );
+					RowResize._mouseEnterTimeout = null;
+				}
+			} else {
+				// If settings is not yet available, check again by timeout.
+				clearTimeout( RowResize._mouseEnterTimeout );
+				RowResize._mouseEnterTimeout = setTimeout(this.onSettingsReady.bind(this), 350, nodeId, callback);
+			}
+		},
 
         /**
         * Handle mouse down on the drag handle
         * @return void
         */
         onDragHandleDown: function() {
-            $('body').addClass( 'fl-builder-row-resizing' );
+            $('body').add( 'body', window.parent.document ).addClass( 'fl-builder-row-resizing' );
+
+			if (null != RowResize._mouseEnterTimeout) {
+				clearTimeout( RowResize._mouseEnterTimeout );
+				RowResize._mouseEnterTimeout = null;
+			}
         },
 
         /**
@@ -973,7 +983,7 @@
         */
         dragStart: function(e, ui) {
 
-	        var body    = $( 'body' ),
+	        var body    = $( 'body' ).add( 'body', window.parent.document ),
 	        	$handle = $(ui.helper);
 
             this.drag.isDragging = true;
@@ -1015,60 +1025,63 @@
                 minAllowedWidth = FLBuilderConfig.rowResize.minAllowedWidth,
                 maxAllowedWidth = FLBuilderConfig.rowResize.maxAllowedWidth;
 
-            if (originalPosition !== currentPosition) {
+            if ( FLBuilderConfig.isRtl ) {
+                edge = ( 'w' == edge ) ? 'e' : 'w'; // Flip the direction
+            }
 
-                if ( FLBuilderConfig.isRtl ) {
-                    edge = ( 'w' == edge ) ? 'e' : 'w'; // Flip the direction
-                }
-
-                if (originalPosition > currentPosition) {
-                    if (edge === 'w') {
-                        this.drag.operation = '+';
-                    } else {
-                        this.drag.operation = '-';
-                    }
+            if (originalPosition > currentPosition) {
+                if (edge === 'w') {
+                    this.drag.operation = '+';
                 } else {
-                    if (edge === 'e') {
-                        this.drag.operation = '+';
-                    } else {
-                        this.drag.operation = '-';
-                    }
+                    this.drag.operation = '-';
                 }
-
-                distance = Math.abs(originalPosition - currentPosition);
-
-                if (this.drag.operation === '+') {
-                    this.drag.calculatedWidth = originalWidth + (distance * 2);
+            } else {
+                if (edge === 'e') {
+                    this.drag.operation = '+';
                 } else {
-                    this.drag.calculatedWidth = originalWidth - (distance * 2);
-                }
-
-                if ( false !== minAllowedWidth && this.drag.calculatedWidth < minAllowedWidth ) {
-	                this.drag.calculatedWidth = minAllowedWidth;
-                }
-
-                if ( false !== maxAllowedWidth && this.drag.calculatedWidth > maxAllowedWidth ) {
-	                this.drag.calculatedWidth = maxAllowedWidth;
-                }
-
-                if (this.row.isFixedWidth) {
-                    this.$row.css('max-width', this.drag.calculatedWidth + 'px');
-                }
-
-                this.$rowContent.css('max-width', this.drag.calculatedWidth + 'px');
-
-				if ( 'px' !== this.row.unit ) {
-					this.drag.calculatedWidth = Math.round( this.drag.calculatedWidth / this.row.parentWidth * 100 );
-				}
-
-                if (!_.isUndefined(this.$feedback)) {
-                    this.$feedback.html(this.drag.calculatedWidth + this.row.unit).show();
-                }
-
-                if ( this.row.form.length ) {
-	                this.row.form.find( '[name=max_content_width]' ).val( this.drag.calculatedWidth );
+                    this.drag.operation = '-';
                 }
             }
+
+            distance = Math.abs(originalPosition - currentPosition);
+
+            if (this.drag.operation === '+') {
+                this.drag.calculatedWidth = originalWidth + (distance * 2);
+            } else {
+                this.drag.calculatedWidth = originalWidth - (distance * 2);
+            }
+
+            if ( false !== minAllowedWidth && this.drag.calculatedWidth < minAllowedWidth ) {
+                this.drag.calculatedWidth = minAllowedWidth;
+            }
+
+            if ( false !== maxAllowedWidth && this.drag.calculatedWidth > maxAllowedWidth ) {
+                this.drag.calculatedWidth = maxAllowedWidth;
+            }
+
+            if (this.row.isFixedWidth) {
+                this.$row.css('max-width', this.drag.calculatedWidth + 'px');
+            }
+
+            this.$rowContent.css('max-width', this.drag.calculatedWidth + 'px');
+
+            if ( 'px' !== this.row.unit ) {
+                this.drag.calculatedWidth = Math.round( this.drag.calculatedWidth / this.row.parentWidth * 100 );
+            }
+
+            if (!_.isUndefined(this.$feedback)) {
+                this.$feedback.html(this.drag.calculatedWidth + this.row.unit).show();
+            }
+
+            if ( this.row.form.length ) {
+                this.row.form.find( '[name=max_content_width]' ).val( this.drag.calculatedWidth );
+            }
+
+            // Dispatch update to store
+            requestAnimationFrame( () => {
+                const actions = FL.Builder.data.getLayoutActions()
+                actions.resizeRowContent( this.row.node, this.drag.calculatedWidth, false )
+            } )
         },
 
         /**
@@ -1084,22 +1097,16 @@
                 this.$feedback.hide();
             }
 
-            var data = {
-	                action: 'resize_row_content',
-	                node: this.row.node,
-	                width: this.drag.calculatedWidth
-	            },
-            	body = $( 'body' );
+            // Dispatch update to store
+            const actions = FL.Builder.data.getLayoutActions()
+            actions.resizeRowContent( this.row.node, this.drag.calculatedWidth )
 
-            FLBuilder.ajax(data);
             FLBuilder._bindOverlayEvents();
-            body.removeClass( 'fl-builder-row-resizing' );
+            $( 'body' ).add( 'body', window.parent.document ).removeClass( 'fl-builder-row-resizing' );
 
             $( '.fl-block-overlay' ).each( function() {
 	            FLBuilder._buildOverlayOverflowMenu( $( this ) );
             } );
-
-            $('body').removeClass( 'fl-builder-row-resizing' );
 
             // Set the resizing flag to false with a timeout so other events get the right value.
 			setTimeout( function() { FLBuilder._colResizing = false; }, 50 );
@@ -1151,8 +1158,8 @@
             this.$el = $html;
             this.el = $html.get(0);
             EditingUI.$mainToolbar = this.$el;
-            $('body').prepend($html);
-            $('html').addClass('fl-builder-is-showing-toolbar');
+			$( 'html', window.parent.document ).addClass( 'fl-builder-is-showing-toolbar' );
+            $( 'body', window.parent.document ).prepend( $html );
         },
 
         /**
@@ -1162,14 +1169,8 @@
         */
         initTipTips: function() {
 
-            // Saving indicator tooltip
-			$('.fl-builder--saving-indicator').tipTip({
-				defaultPosition: 'bottom',
-				edgeOffset: 14
-			});
-
 			// Publish actions tooltip
-			$('.fl-builder-publish-actions .fl-builder-button-group .fl-builder-button').tipTip({
+			$('.fl-builder-publish-actions .fl-builder-button-group .fl-builder-button', window.parent.document).tipTip({
 				defaultPosition: 'bottom',
 				edgeOffset: 6
 			});
@@ -1180,7 +1181,7 @@
         },
 
         onNotificationsLoaded: function() {
-            $('body').removeClass('fl-builder-has-new-notifications');
+            $('body').add( 'body', window.parent.document ).removeClass('fl-builder-has-new-notifications');
 
             var data = {
 	                action: 'fl_builder_notifications',
@@ -1206,12 +1207,11 @@
             Toolbar.init();
             FLBuilder.ContentPanel.alignPanelArrow();
         } else {
-            $('html').addClass('fl-builder-no-toolbar');
+            $('html').add( 'html', window.parent.document ).addClass('fl-builder-no-toolbar');
         }
         // End Render Order
 
         KeyShortcuts.init();
-        KeyShortcutsUI.init();
         EditingUI.init();
         BrowserState.init();
         RowResize.init();

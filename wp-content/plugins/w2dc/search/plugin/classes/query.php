@@ -28,7 +28,6 @@ class wcsearch_query {
 		add_action('pre_get_posts', array($this, 'pre_get_posts'));
 
 		$this->query = new WP_Query($this->q_args);
-		//var_dump($this->query->request);
 		
 		remove_action('pre_get_posts', array($this, 'pre_get_posts'));
 	}

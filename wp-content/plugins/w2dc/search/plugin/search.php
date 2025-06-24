@@ -1,20 +1,23 @@
 <?php
 /*
-Plugin Name: WooCommerce Search & Filter
+Plugin Name: Search Forms
 Plugin URI: https://www.salephpscripts.com/wordpress-search/
 Description: Search and filter WooCommerce products
-Version: 1.2.10
-WC tested up to: 7.7
+Version: 1.2.14
+Requires Plugins: woocommerce
+WC tested up to: 9.8
 Author: salephpscripts.com
 Author URI: https://www.salephpscripts.com
-License: GPLv2 or any later version
+License: GPL
 */
+
+// @codingStandardsIgnoreFile
 
 if (defined("WCSEARCH_VERSION")) {
 	return ;
 }
 
-define('WCSEARCH_VERSION', '1.2.10');
+define('WCSEARCH_VERSION', '1.2.13');
 
 define('WCSEARCH_PATH', plugin_dir_path(__FILE__));
 define('WCSEARCH_URL', plugins_url('/', __FILE__));
@@ -25,6 +28,8 @@ define('WCSEARCH_RESOURCES_PATH', WCSEARCH_PATH . 'resources/');
 define('WCSEARCH_RESOURCES_URL', WCSEARCH_URL . 'resources/');
 
 define('WCSEARCH_FORM_TYPE', 'wcsearch_form');
+
+define('WCSEARCH_PLUGIN_SLUG', 'search-forms');
 
 include_once WCSEARCH_PATH . 'install.php';
 include_once WCSEARCH_PATH . 'classes/admin.php';
@@ -48,7 +53,6 @@ include_once WCSEARCH_PATH . 'classes/ajax_controller.php';
 include_once WCSEARCH_PATH . 'classes/widgets/widget.php';
 include_once WCSEARCH_PATH . 'classes/widgets/search.php';
 include_once WCSEARCH_PATH . 'classes/search_form.php';
-include_once WCSEARCH_PATH . 'classes/updater.php';
 include_once WCSEARCH_PATH . 'functions.php';
 include_once WCSEARCH_PATH . 'functions_wc.php';
 
@@ -78,7 +82,6 @@ $wcsearch_shortcodes_init = array(
 class wcsearch_plugin {
 	public $admin;
 	public $demo_data_manager;
-	public $updater;
 
 	public $search_forms;
 	public $ajax_controller;
@@ -108,7 +111,7 @@ class wcsearch_plugin {
 	public function init() {
 		global $wcsearch_instance, $wcsearch_shortcodes, $wpdb;
 
-		add_action('plugins_loaded', array($this, 'load_textdomains'));
+		add_action('init', array($this, 'load_textdomains'));
 		
 		foreach ($wcsearch_shortcodes AS $shortcode=>$function) {
 			add_shortcode($shortcode, array($this, 'renderShortcode'));
@@ -352,16 +355,14 @@ class wcsearch_plugin {
 	}
 	
 	public function load_textdomains() {
-		load_plugin_textdomain('WCSEARCH', '', dirname(plugin_basename( __FILE__ )) . '/languages');
+		
+		load_plugin_textdomain('wcsearch', '', dirname(plugin_basename( __FILE__ )) . '/languages');
 	}
 	
 	public function loadClasses() {
 		$this->search_forms = new wcsearch_search_forms_manager;
 		$this->ajax_controller = new wcsearch_ajax_controller;
 		$this->admin = new wcsearch_admin;
-		if (wcsearch_is_standalone_plugin()) {
-			$this->updater = new wcsearch_updater(__FILE__, get_option('wcsearch_purchase_code'), get_option('wcsearch_access_token'));
-		}
 	}
 
 	public function wcsearch_no_texturize($shortcodes) {
@@ -445,6 +446,8 @@ class wcsearch_plugin {
 	}
 	
 	public function visible_search_params() {
+		global $wp;
+		
 		if ($query_array = wcsearch_get_query_string()) {
 			$visible_search_params = array();
 			$visible_search_params = apply_filters("wcsearch_visible_params", $visible_search_params, $query_array);
@@ -452,8 +455,13 @@ class wcsearch_plugin {
 			echo '<div class="wcsearch-visible-search-params">';
 			
 			foreach ($visible_search_params AS $query_string=>$param_label) {
-				$permalink = '?' . $query_string;
-				echo '<div class="wcsearch-search-param"><a class="wcsearch-search-param-delete" href="' . $permalink . '">×</a>';
+				
+				$permalink = home_url($wp->request);
+				if ($query_string) {
+					$permalink = '?' . $query_string;
+				}
+				
+				echo '<div class="wcsearch-search-param"><a class="wcsearch-search-param-delete" href="' . esc_url($permalink) . '">×</a>';
 				echo wp_kses(
 						wp_unslash($param_label),
 						array(
@@ -476,7 +484,7 @@ class wcsearch_plugin {
 	
 	public function search_form_on_shop_page() {
 		
-		if (is_shop() || is_product_category() || is_product_tag()) {
+		if (wcsearch_is_shop() || wcsearch_is_product_category() || wcsearch_is_product_tag()) {
 			// wrap the loop only the first time
 			if (!wp_doing_ajax()) {
 				$search_form_id = wcsearch_getValue($_REQUEST, 'wcsearch_test_form');
@@ -566,20 +574,20 @@ class wcsearch_plugin {
 
 		$args = array(
 				'labels' => array(
-						'name' => esc_html__('Search Forms', 'WCSEARCH'),
-						'singular_name' => esc_html__('Search Form', 'WCSEARCH'),
-						'add_new' => esc_html__('Create new search form', 'WCSEARCH'),
-						'add_new_item' => esc_html__('Create new search form', 'WCSEARCH'),
-						'edit_item' => esc_html__('Edit search form', 'WCSEARCH'),
-						'new_item' => esc_html__('New search form', 'WCSEARCH'),
-						'view_item' => esc_html__('View search form', 'WCSEARCH'),
-						'search_items' => esc_html__('Search search forms', 'WCSEARCH'),
-						'not_found' =>  esc_html__('No search forms found', 'WCSEARCH'),
-						'not_found_in_trash' => esc_html__('No search forms found in trash', 'WCSEARCH'),
-						'item_updated' => esc_html__('Search form updated', 'WCSEARCH'),
-						'item_published' => esc_html__('Search form published', 'WCSEARCH'),
+						'name' => esc_html__('Search Forms', 'wcsearch'),
+						'singular_name' => esc_html__('Search Form', 'wcsearch'),
+						'add_new' => esc_html__('Create new search form', 'wcsearch'),
+						'add_new_item' => esc_html__('Create new search form', 'wcsearch'),
+						'edit_item' => esc_html__('Edit search form', 'wcsearch'),
+						'new_item' => esc_html__('New search form', 'wcsearch'),
+						'view_item' => esc_html__('View search form', 'wcsearch'),
+						'search_items' => esc_html__('Search search forms', 'wcsearch'),
+						'not_found' =>  esc_html__('No search forms found', 'wcsearch'),
+						'not_found_in_trash' => esc_html__('No search forms found in trash', 'wcsearch'),
+						'item_updated' => esc_html__('Search form updated', 'wcsearch'),
+						'item_published' => esc_html__('Search form published', 'wcsearch'),
 				),
-				'description' => esc_html__('Search forms', 'WCSEARCH'),
+				'description' => esc_html__('Search forms', 'wcsearch'),
 				'public' => false,
 				'publicly_queryable' => false, // removes "Preview changes" button
 				'show_ui' => true,
@@ -638,23 +646,23 @@ class wcsearch_plugin {
 			
 			wp_enqueue_script('jquery', false, array(), false, false);
 
-			wp_register_style('wcsearch_frontend', WCSEARCH_RESOURCES_URL . 'css/frontend.css', array(), WCSEARCH_VERSION);
+			wp_register_style('wcsearch-frontend', WCSEARCH_RESOURCES_URL . 'css/frontend.css', array(), WCSEARCH_VERSION);
 
 			if (function_exists('is_rtl') && is_rtl()) {
-				wp_register_style('wcsearch_frontend_rtl', WCSEARCH_RESOURCES_URL . 'css/frontend-rtl.css', array(), WCSEARCH_VERSION);
+				wp_register_style('wcsearch-frontend-rtl', WCSEARCH_RESOURCES_URL . 'css/frontend-rtl.css', array(), WCSEARCH_VERSION);
 			}
 
-			wp_register_style('wcsearch_font_awesome', WCSEARCH_RESOURCES_URL . 'css/font-awesome.css', array(), WCSEARCH_VERSION);
+			wp_register_style('wcsearch-font-awesome', WCSEARCH_RESOURCES_URL . 'css/font-awesome.css', array(), WCSEARCH_VERSION);
 
-			wp_register_script('wcsearch_js_functions', WCSEARCH_RESOURCES_URL . 'js/js_functions.js', array('jquery'), WCSEARCH_VERSION, true);
+			wp_register_script('wcsearch-js-functions', WCSEARCH_RESOURCES_URL . 'js/js_functions.js', array('jquery'), WCSEARCH_VERSION, true);
 
 			// this jQuery UI version 1.10.4
 			$ui_theme = 'smoothness';
 			wp_register_style('wcsearch-jquery-ui-style', WCSEARCH_RESOURCES_URL . 'css/jquery-ui/themes/' . $ui_theme . '/jquery-ui.css');
 
-			wp_enqueue_style('wcsearch_font_awesome');
-			wp_enqueue_style('wcsearch_frontend');
-			wp_enqueue_style('wcsearch_frontend_rtl');
+			wp_enqueue_style('wcsearch-font-awesome');
+			wp_enqueue_style('wcsearch-frontend');
+			wp_enqueue_style('wcsearch-frontend-rtl');
 
 			wp_enqueue_script('jquery-ui-draggable');
 			wp_enqueue_script('jquery-ui-selectmenu');
@@ -666,7 +674,7 @@ class wcsearch_plugin {
 				wp_enqueue_style('wcsearch-jquery-ui-style');
 			}
 
-			wp_enqueue_script('wcsearch_js_functions');
+			wp_enqueue_script('wcsearch-js-functions');
 
 			$wcsearch_enqueued = true;
 		}
@@ -675,9 +683,9 @@ class wcsearch_plugin {
 	public function enqueue_scripts_styles_custom($load_scripts_styles = false) {
 		if ((($this->frontend_controllers || $load_scripts_styles)) || get_option('wcsearch_force_include_js_css')) {
 			if ($frontend_custom = wcsearch_isResource('css/frontend-custom.css')) {
-				wp_register_style('wcsearch_frontend-custom', $frontend_custom, array(), WCSEARCH_VERSION);
+				wp_register_style('wcsearch-frontend-custom', $frontend_custom, array(), WCSEARCH_VERSION);
 				
-				wp_enqueue_style('wcsearch_frontend-custom');
+				wp_enqueue_style('wcsearch-frontend-custom');
 			}
 		}
 	}
@@ -704,10 +712,10 @@ class wcsearch_plugin {
 						'default_query' => wcsearch_get_default_query(), // submits along with other data to 'wcsearch_search_request'
 						'desktop_screen_width' => 992,
 						'mobile_screen_width' => 768,
-						'radio_reset_btn_title' => esc_html__('unselect', 'WCSEARCH'),
+						'radio_reset_btn_title' => esc_html__('unselect', 'wcsearch'),
 						'geocode_functions' => wcsearch_geocode_functions(),
-						'prediction_note' => esc_html__('search nearby', 'WCSEARCH'),
-						'get_my_location_title' => esc_html__('My location', 'WCSEARCH'),
+						'prediction_note' => esc_html__('search nearby', 'wcsearch'),
+						'get_my_location_title' => esc_html__('My location', 'wcsearch'),
 						'adapter_options' => $adapter_options,
 						'reset_same_inputs' => apply_filters("wcsearch_reset_same_inputs", true), // do reset the same type of inputs before submit
 				)
@@ -729,8 +737,8 @@ class wcsearch_plugin {
 	public function plugin_row_meta($links, $file) {
 		if (dirname(plugin_basename(__FILE__) == $file)) {
 			$row_meta = array(
-					'docs' => '<a href="https://www.salephpscripts.com/wordpress-search/demo/documentation/">' . esc_html__("Documentation", "WCSEARCH") . '</a>',
-					'codecanoyn' => '<a href="https://www.salephpscripts.com/wc-search/#changelog">' . esc_html__("Changelog", "WCSEARCH") . '</a>',
+					'docs' => '<a href="https://www.salephpscripts.com/wordpress-search/demo/documentation/">' . esc_html__("Documentation", "wcsearch") . '</a>',
+					'codecanoyn' => '<a href="https://www.salephpscripts.com/wc-search/#changelog">' . esc_html__("Changelog", "wcsearch") . '</a>',
 			);
 	
 			return array_merge($links, $row_meta);
@@ -741,7 +749,7 @@ class wcsearch_plugin {
 	
 	public function plugin_action_links($links) {
 		$action_links = array(
-				'settings' => '<a href="' . admin_url('admin.php?page=wcsearch_settings') . '">' . esc_html__("Settings", "WCSEARCH") . '</a>',
+				'settings' => '<a href="' . admin_url('admin.php?page=wcsearch_settings') . '">' . esc_html__("Settings", "wcsearch") . '</a>',
 		);
 	
 		return array_merge($action_links, $links);

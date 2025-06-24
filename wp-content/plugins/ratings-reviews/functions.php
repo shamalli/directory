@@ -15,6 +15,22 @@ if (!function_exists('w2rr_getValue')) {
 	}
 }
 
+function w2rr_esc_($content, $domain = false) {
+
+	$allowed_html = 'post';
+
+	if ($domain) {
+		return wp_kses(__($content, $domain), $allowed_html);
+	} else {
+		return wp_kses($content, $allowed_html);
+	}
+}
+
+function w2rr_esc_e($content, $domain = false) {
+
+	echo w2rr_esc_($content, $domain);
+}
+
 add_filter('wp_redirect', 'w2rr_redirect_with_messages');
 function w2rr_redirect_with_messages($location) {
 	global $w2rr_messages;
@@ -172,7 +188,9 @@ function w2rr_getCustomResourceDirURL($dir) {
  * 
  */
 function w2rr_isTemplate($template) {
-	if ($template) {
+	
+	// check if it is real template file
+	if ($template && (strlen($template) != strlen(str_replace('.tpl.php', '', $template)))) {
 		$custom_template = str_replace('.tpl.php', '', $template) . '-custom.tpl.php';
 		$templates = array(
 				$custom_template,
@@ -311,8 +329,19 @@ function w2rr_add_homepage_id($url) {
 	return $url;
 }
 
-function w2rr_getDatePickerFormat() {
+function w2rr_getDateFormat() {
 	$wp_date_format = get_option('date_format');
+
+	if (!$wp_date_format) {
+		$wp_date_format = "d/m/Y";
+	}
+
+	return $wp_date_format;
+}
+
+function w2rr_getDatePickerFormat() {
+	$wp_date_format = w2rr_getDateFormat();
+	
 	return str_replace(
 			array('S',  'd', 'j',  'l',  'm', 'n',  'F',  'Y'),
 			array('',  'dd', 'd', 'DD', 'mm', 'm', 'MM', 'yy'),
@@ -391,7 +420,7 @@ function w2rr_crop_content($post_id, $limit = 35, $strip_html = true, $has_link 
 	}
 	
 	if (!$readmore_text) {
-		$readmore_text = esc_html__('&#91;...&#93;', 'W2RR');
+		$readmore_text = esc_html__('&#91;...&#93;', 'w2rr');
 	}
 
 	$raw_content = str_replace(']]>', ']]&gt;', $raw_content);
@@ -437,8 +466,6 @@ function w2rr_remove_shortcodes($m) {
 }
 
 function w2rr_is_anyone_in_taxonomy($tax) {
-	//global $wpdb;
-	//return $wpdb->get_var('SELECT COUNT(*) FROM ' . $wpdb->term_taxonomy . ' WHERE `taxonomy`="' . $tax . '"');
 	
 	return count(get_categories(array('taxonomy' => $tax, 'hide_empty' => false, 'parent' => 0, 'number' => 1)));
 }
@@ -456,7 +483,7 @@ function w2rr_comments_open() {
 }
 
 function w2rr_comments_label($post) {
-	$label =  _n('Comment', 'Comments', $post->post->comment_count, 'W2RR') . ' (' . $post->post->comment_count . ')';
+	$label =  _n('Comment', 'Comments', $post->post->comment_count, 'w2rr') . ' (' . $post->post->comment_count . ')';
 	
 	$label = apply_filters('w2rr_comments_label', $label, $post);
 	
@@ -464,7 +491,7 @@ function w2rr_comments_label($post) {
 }
 
 function w2rr_comments_reply_label($post) {
-	$label =  sprintf(_n('%d reply', '%d replies', $post->post->comment_count, 'W2RR'), $post->post->comment_count);
+	$label =  sprintf(_n('%d reply', '%d replies', $post->post->comment_count, 'w2rr'), $post->post->comment_count);
 	
 	$label = apply_filters('w2rr_comments_reply_label', $label, $post);
 	
@@ -1164,7 +1191,7 @@ function w2rr_wpmlTranslationCompleteNotice() {
 
 	if (function_exists('wpml_object_id_filter') && $sitepress && defined('WPML_ST_VERSION')) {
 		echo '<p class="description">';
-		esc_html_e('After save do not forget to set completed translation status for this string on String Translation page.', 'W2RR');
+		esc_html_e('After save do not forget to set completed translation status for this string on String Translation page.', 'w2rr');
 		echo '</p>';
 	}
 }
@@ -1435,11 +1462,6 @@ function w2rr_isReview() {
 	}
 	
 	return false;
-	
-	/* $queried_object = get_queried_object();
-	if (get_post_type($queried_object) == W2RR_REVIEW_TYPE) {
-		return w2rr_getReview($queried_object);
-	} */
 }
 
 function w2rr_isAllReviews() {
@@ -1449,11 +1471,6 @@ function w2rr_isAllReviews() {
 			return w2rr_getReview($post);
 		}
 	}
-	
-	/* $queried_object = get_queried_object();
-	if (is_object($queried_object) && get_class($queried_object) == 'WP_Post_Type' && $queried_object->name == W2RR_REVIEW_TYPE) {
-		return true;
-	} */
 }
 
 function w2rr_isRRPageInAdmin() {
@@ -1573,6 +1590,8 @@ function w2rr_locate_template() {
 	}
 
 	$templates[] = 'page.php';
+	
+	$templates = apply_filters("w2rr_locate_template", $templates);
 
 	return locate_template($templates);
 }

@@ -41,7 +41,7 @@ add_filter('style_loader_src', '_remove_script_version', 15, 1); */
 
 add_action('wp_enqueue_scripts', 'enqueue_scripts_styles');
 function enqueue_scripts_styles() {
-	wp_register_script('w2dc_theme_script', get_stylesheet_directory_uri() . '/js.js', array('jquery'), false, true);
+	wp_register_script('w2dc_theme_script', get_stylesheet_directory_uri() . '/js.js', array('jquery', 'wdt-main'), false, true);
 	wp_enqueue_script('w2dc_theme_script');
 }
 /* add_action('wp_head', 'format_sticky_nav');
@@ -154,7 +154,7 @@ add_action('wdt_before_navigation', 'submit_listing', 12);
 
 
 if (function_exists("w2rr_addMessage")) {
-	w2rr_addMessage(esc_html__('Reviews and votes displayed by our Ratings & Reviews plugin for WordPress', 'W2DC') . '<br /><a href="https://www.salephpscripts.com/ratings-reviews/" target="_blank">read more</a>' ,'error');
+	//w2rr_addMessage(esc_html__('Reviews and votes displayed by our Ratings & Reviews plugin for WordPress', 'W2DC') . '<br /><a href="https://www.salephpscripts.com/ratings-reviews/" target="_blank">read more</a>' ,'error');
 }
 /* add_action('w2dc_pre_comments_tab', 'pre_comments_tab');
 function pre_comments_tab() {
@@ -180,5 +180,50 @@ function w2dc_map_language( $lang ) {
 	return $lang;
 }
 add_filter( 'w2dc_map_language', 'w2dc_map_language' );
+
+function w2dc_recaptcha_language( $lang ) {
+	
+	$lang = 'en';
+	
+	return $lang;
+}
+add_filter( 'w2dc_recaptcha_language', 'w2dc_recaptcha_language' );
+
+
+// remove 'Posts' from admin
+add_filter('register_post_type_args', function($args, $postType){
+	if ($postType === 'post') {
+		$args['public']                = false;
+		$args['show_ui']               = false;
+		$args['show_in_menu']          = false;
+		$args['show_in_admin_bar']     = false;
+		$args['show_in_nav_menus']     = false;
+		$args['can_export']            = false;
+		$args['has_archive']           = false;
+		$args['exclude_from_search']   = true;
+		$args['publicly_queryable']    = false;
+		$args['show_in_rest']          = false;
+		$args['map_meta_cap']          = false;
+		$args['capabilities'] = array(
+			'edit_post' => false,
+			'read_post' => false,
+			'delete_post' => false,
+			'edit_posts' => false,
+			'edit_others_posts' => false,
+			'publish_posts' => false,
+			'read' => false,
+			'delete_posts' => false,
+			'delete_private_posts' => false,
+			'delete_published_posts' => false,
+			'delete_others_posts' => false,
+			'edit_private_posts' => false,
+			'edit_published_posts' => false,
+			'create_posts' => false,
+		);
+	}
+
+	return $args;
+}, 0, 2);
+
 
 ?>

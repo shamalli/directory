@@ -1,3 +1,8 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <div class="wcsearch-search-model-input wcsearch-search-model-input-tax-range" <?php echo $search_model->getOptionsString(); ?>>
 	<label class="wcsearch-search-model-input-label"><?php echo esc_html($title); ?></label>
 	

@@ -11,7 +11,9 @@ return array(
 		
 		<img src="[base_url]/wp-content/uploads/listings_logos_settings.png" class="alignnone size-full" />
 		
-		<strong>Images required</strong> - when enabled, it is required to upload images to a listing suring submission.
+		<strong>Images required</strong> - when enabled, it is required to upload images to a listing during submission.
+		
+		<i class="fa fa-exclamation-triangle"></i> Number of images allowed to upload you can control at the <a href="[base_url]/documentation/listings-levels/">listings levels settings</a>.
 		
 		<strong>Enable lightbox on images gallery</strong> - switch on/off lightbox effect for images gallery on single listing pages.
 		
@@ -25,11 +27,11 @@ return array(
 		
 		<strong>Default logo image</strong> - this image will appear when listing owner did not upload own logo.
 		
-		<strong>Enable 100% width of images gallery</strong> - make images galley full width of single listing page. When disabled - next setting will be used.
+		<strong>Enable 100% width of images gallery</strong> - make images gallery full width of single listing page. When disabled - next setting will be used.
 		
 		<strong>Images gallery width (in pixels)</strong> - this option works when previous setting was switched off. Images gallery on listing page places at the left side within provided width, right side contains text information.
 		
-		<strong>Images gallery height (in pixels)</strong> - set to 0 to fit full width.
+		<strong>Images gallery height (in pixels)</strong> - set specific height or set to 0 to fit full height and width of image depending of available space.
 		
 		<strong>Do crop images gallery</strong> - this setting fits images for their proportions you preferred on your site:
 		<ul>

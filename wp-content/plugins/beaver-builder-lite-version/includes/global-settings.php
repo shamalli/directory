@@ -37,38 +37,104 @@ FLBuilder::register_settings_form('global', array(
 					'title'  => __( 'Rows', 'fl-builder' ),
 					'fields' => array(
 						'row_margins'               => array(
-							'type'       => 'unit',
+							'type'       => 'dimension',
 							'label'      => __( 'Margins', 'fl-builder' ),
+							'slider'     => true,
 							'default'    => '0',
-							'sanitize'   => 'absint',
-							'responsive' => array(
-								'placeholder' => array(
-									'default'    => '0',
-									'medium'     => '',
-									'responsive' => '',
-								),
-							),
 							'units'      => array(
 								'px',
 								'%',
 							),
-						),
-						'row_padding'               => array(
-							'type'       => 'unit',
-							'label'      => __( 'Padding', 'fl-builder' ),
-							'default'    => '20',
-							'sanitize'   => 'absint',
 							'responsive' => array(
-								'placeholder' => array(
+								'default'      => array(
 									'default'    => '0',
+									'large'      => '',
 									'medium'     => '',
 									'responsive' => '',
 								),
+								'default_unit' => array(
+									'default'    => 'px',
+									'large'      => 'px',
+									'medium'     => 'px',
+									'responsive' => 'px',
+								),
+								'placeholder'  => array(
+									'default'    => array(
+										'top'    => '0',
+										'right'  => '0',
+										'bottom' => '0',
+										'left'   => '0',
+									),
+									'large'      => array(
+										'top'    => '',
+										'right'  => '',
+										'bottom' => '',
+										'left'   => '',
+									),
+									'medium'     => array(
+										'top'    => '',
+										'right'  => '',
+										'bottom' => '',
+										'left'   => '',
+									),
+									'responsive' => array(
+										'top'    => '',
+										'right'  => '',
+										'bottom' => '',
+										'left'   => '',
+									),
+								),
 							),
+						),
+						'row_padding'               => array(
+							'type'       => 'dimension',
+							'label'      => __( 'Padding', 'fl-builder' ),
+							'slider'     => true,
+							'default'    => '20',
 							'units'      => array(
 								'px',
 								'em',
 								'%',
+							),
+							'responsive' => array(
+								'default_unit' => array(
+									'default'    => 'px',
+									'large'      => 'px',
+									'medium'     => 'px',
+									'responsive' => 'px',
+								),
+								'default'      => array(
+									'default'    => '20',
+									'large'      => '',
+									'medium'     => '',
+									'responsive' => '',
+								),
+								'placeholder'  => array(
+									'default'    => array(
+										'top'    => '0',
+										'right'  => '0',
+										'bottom' => '0',
+										'left'   => '0',
+									),
+									'large'      => array(
+										'top'    => '',
+										'right'  => '',
+										'bottom' => '',
+										'left'   => '',
+									),
+									'medium'     => array(
+										'top'    => '',
+										'right'  => '',
+										'bottom' => '',
+										'left'   => '',
+									),
+									'responsive' => array(
+										'top'    => '',
+										'right'  => '',
+										'bottom' => '',
+										'left'   => '',
+									),
+								),
 							),
 						),
 						'row_width'                 => array(
@@ -114,38 +180,103 @@ FLBuilder::register_settings_form('global', array(
 					'title'  => __( 'Columns', 'fl-builder' ),
 					'fields' => array(
 						'column_margins' => array(
-							'type'       => 'unit',
+							'type'       => 'dimension',
 							'label'      => __( 'Margins', 'fl-builder' ),
+							'slider'     => true,
 							'default'    => '',
-							'sanitize'   => 'absint',
-							'responsive' => array(
-								'placeholder' => array(
-									'default'    => '0',
-									'medium'     => '',
-									'responsive' => '',
-								),
-							),
 							'units'      => array(
 								'px',
 								'%',
 							),
-						),
-						'column_padding' => array(
-							'type'       => 'unit',
-							'label'      => __( 'Padding', 'fl-builder' ),
-							'default'    => '',
-							'sanitize'   => 'absint',
 							'responsive' => array(
-								'placeholder' => array(
-									'default'    => '0',
+								'default'      => array(
+									'default'    => '',
+									'large'      => '',
 									'medium'     => '',
 									'responsive' => '',
 								),
+								'default_unit' => array(
+									'default'    => 'px',
+									'medium'     => 'px',
+									'responsive' => 'px',
+								),
+								'placeholder'  => array(
+									'default'    => array(
+										'top'    => '0',
+										'right'  => '0',
+										'bottom' => '0',
+										'left'   => '0',
+									),
+									'large'      => array(
+										'top'    => '',
+										'right'  => '',
+										'bottom' => '',
+										'left'   => '',
+									),
+									'medium'     => array(
+										'top'    => '',
+										'right'  => '',
+										'bottom' => '',
+										'left'   => '',
+									),
+									'responsive' => array(
+										'top'    => '',
+										'right'  => '',
+										'bottom' => '',
+										'left'   => '',
+									),
+								),
 							),
+						),
+						'column_padding' => array(
+							'type'       => 'dimension',
+							'label'      => __( 'Padding', 'fl-builder' ),
+							'slider'     => true,
+							'default'    => '',
 							'units'      => array(
 								'px',
 								'em',
 								'%',
+							),
+							'responsive' => array(
+								'default_unit' => array(
+									'default'    => 'px',
+									'medium'     => 'px',
+									'large'      => 'px',
+									'responsive' => 'px',
+								),
+								'default'      => array(
+									'default'    => '',
+									'large'      => '',
+									'medium'     => '',
+									'responsive' => '',
+								),
+								'placeholder'  => array(
+									'default'    => array(
+										'top'    => '0',
+										'right'  => '0',
+										'bottom' => '0',
+										'left'   => '0',
+									),
+									'large'      => array(
+										'top'    => '',
+										'right'  => '',
+										'bottom' => '',
+										'left'   => '',
+									),
+									'medium'     => array(
+										'top'    => '',
+										'right'  => '',
+										'bottom' => '',
+										'left'   => '',
+									),
+									'responsive' => array(
+										'top'    => '',
+										'right'  => '',
+										'bottom' => '',
+										'left'   => '',
+									),
+								),
 							),
 						),
 					),
@@ -154,20 +285,54 @@ FLBuilder::register_settings_form('global', array(
 					'title'  => __( 'Modules', 'fl-builder' ),
 					'fields' => array(
 						'module_margins' => array(
-							'type'       => 'unit',
+							'type'       => 'dimension',
 							'label'      => __( 'Margins', 'fl-builder' ),
+							'slider'     => true,
 							'default'    => '20',
-							'sanitize'   => 'absint',
-							'responsive' => array(
-								'placeholder' => array(
-									'default'    => '0',
-									'medium'     => '',
-									'responsive' => '',
-								),
-							),
 							'units'      => array(
 								'px',
 								'%',
+							),
+							'responsive' => array(
+								'default_unit' => array(
+									'default'    => 'px',
+									'large'      => 'px',
+									'medium'     => 'px',
+									'responsive' => 'px',
+								),
+								'default'      => array(
+									'default'    => '20',
+									'large'      => '',
+									'medium'     => '',
+									'responsive' => '',
+								),
+								'placeholder'  => array(
+									'default'    => array(
+										'top'    => '0',
+										'right'  => '0',
+										'bottom' => '0',
+										'left'   => '0',
+									),
+
+									'large'      => array(
+										'top'    => '',
+										'right'  => '',
+										'bottom' => '',
+										'left'   => '',
+									),
+									'medium'     => array(
+										'top'    => '',
+										'right'  => '',
+										'bottom' => '',
+										'left'   => '',
+									),
+									'responsive' => array(
+										'top'    => '',
+										'right'  => '',
+										'bottom' => '',
+										'left'   => '',
+									),
+								),
 							),
 						),
 					),
@@ -185,7 +350,8 @@ FLBuilder::register_settings_form('global', array(
 							),
 							'toggle'  => array(
 								'1' => array(
-									'fields' => array( 'auto_spacing', 'responsive_breakpoint', 'medium_breakpoint', 'responsive_col_max_width' ),
+									'fields' => array( 'auto_spacing', 'responsive_breakpoint', 'medium_breakpoint', 'large_breakpoint', 'responsive_col_max_width' ),
+									'fields' => array( 'auto_spacing', 'responsive_breakpoint', 'medium_breakpoint', 'large_breakpoint', 'responsive_col_max_width', 'responsive_preview' ),
 								),
 							),
 						),
@@ -198,6 +364,16 @@ FLBuilder::register_settings_form('global', array(
 								'1' => __( 'Yes', 'fl-builder' ),
 							),
 							'help'    => __( 'When auto spacing is enabled, the builder will automatically adjust the margins and padding in your layout once the small device breakpoint is reached. Most users will want to leave this enabled.', 'fl-builder' ),
+						),
+						'large_breakpoint'         => array(
+							'type'        => 'text',
+							'label'       => __( 'Large Device Breakpoint', 'fl-builder' ),
+							'default'     => '1200',
+							'maxlength'   => '4',
+							'size'        => '5',
+							'description' => 'px',
+							'sanitize'    => 'absint',
+							'help'        => __( 'The browser width at which the layout will adjust for large devices.', 'fl-builder' ),
 						),
 						'medium_breakpoint'        => array(
 							'type'        => 'text',
@@ -219,6 +395,16 @@ FLBuilder::register_settings_form('global', array(
 							'sanitize'    => 'absint',
 							'help'        => __( 'The browser width at which the layout will adjust for small devices such as phones.', 'fl-builder' ),
 						),
+						'responsive_preview'       => array(
+							'type'    => 'select',
+							'label'   => __( 'Use responsive settings in previews?', 'fl-builder' ),
+							'default' => '0',
+							'options' => array(
+								'0' => __( 'No', 'fl-builder' ),
+								'1' => __( 'Yes', 'fl-builder' ),
+							),
+							'help'    => __( 'Preview and responsive editing will use these values when enabled.', 'fl-builder' ),
+						),
 						'responsive_col_max_width' => array(
 							'type'    => 'select',
 							'label'   => __( 'Enable Column Max Width', 'fl-builder' ),
@@ -227,7 +413,7 @@ FLBuilder::register_settings_form('global', array(
 								'0' => __( 'No', 'fl-builder' ),
 								'1' => __( 'Yes', 'fl-builder' ),
 							),
-							'help'    => __( 'When enabled, columns assigned 50% width or less are limited to max width 400px when screen width reaches or goes below the small device breakpoint.' ),
+							'help'    => __( 'When enabled, columns assigned 50% width or less are limited to max width 400px when screen width reaches or goes below the small device breakpoint.', 'fl-builder' ),
 						),
 						'responsive_base_fontsize' => array(
 							'type'        => 'text',

@@ -1,6 +1,6 @@
 <?php
 
-class VP_W2DC_WP_Loader
+class W2DC_VP_WP_Loader
 {
 
 	private static $_instance;
@@ -34,7 +34,7 @@ class VP_W2DC_WP_Loader
 
 	private function __construct()
 	{
-		$this->_dependencies = apply_filters( 'vp_w2dc_dependencies_array', VP_W2DC_Util_Config::instance()->load('dependencies') );
+		$this->_dependencies = apply_filters( 'w2dc_vp_dependencies_array', W2DC_VP_Util_Config::instance()->load('dependencies') );
 		$this->_types        = array(
 			'option'             => array(),
 			'metabox'            => array(),
@@ -138,7 +138,7 @@ class VP_W2DC_WP_Loader
 			wp_enqueue_style($name);
 		}
 
-		do_action( 'vp_w2dc_after_dependencies_loader_build' );
+		do_action( 'w2dc_vp_after_dependencies_loader_build' );
 
 	}
 
@@ -149,24 +149,24 @@ class VP_W2DC_WP_Loader
 
 	private function build_localize_data()
 	{
-		$messages = VP_W2DC_Util_Config::instance()->load('messages');
+		$messages = W2DC_VP_Util_Config::instance()->load('messages');
 		$localize = array(
 			'use_upload'               => $this->_use_media_upload,
 			'use_new_media_upload'     => $this->_use_wp_35_media_upload,
-			'public_url'               => VP_W2DC_PUBLIC_URL,
+			'public_url'               => W2DC_VP_PUBLIC_URL,
 			'wp_include_url'           => includes_url(),
 			'nonce'                    => wp_create_nonce( 'vafpress' ),
 			'val_msg'                  => $messages['validation'],
 			'util_msg'                 => $messages['util'],
 			'ctrl_msg'                 => $messages['control'],
 			// validatable data
-			'alphabet_validatable'     => apply_filters( 'vp_w2dc_alphabet_validatable'    , array( 'vp-textbox', 'vp-textarea' ) ),
-			'alphanumeric_validatable' => apply_filters( 'vp_w2dc_alphanumeric_validatable', array( 'vp-textbox', 'vp-textarea' ) ),
-			'numeric_validatable'      => apply_filters( 'vp_w2dc_numeric_validatable'     , array( 'vp-textbox', 'vp-textarea' ) ),
-			'email_validatable'        => apply_filters( 'vp_w2dc_email_validatable'       , array( 'vp-textbox', 'vp-textarea' ) ),
-			'url_validatable'          => apply_filters( 'vp_w2dc_url_validatable'         , array( 'vp-textbox', 'vp-textarea' ) ),
-			'maxlength_validatable'    => apply_filters( 'vp_w2dc_maxlength_validatable'   , array( 'vp-toggle', 'vp-radiobutton', 'vp-radioimage', 'vp-select' ) ),
-			'minlength_validatable'    => apply_filters( 'vp_w2dc_minlength_validatable'   , array( 'vp-toggle', 'vp-radiobutton', 'vp-radioimage', 'vp-select' ) ),
+			'alphabet_validatable'     => apply_filters( 'w2dc_vp_alphabet_validatable'    , array( 'vp-textbox', 'vp-textarea' ) ),
+			'alphanumeric_validatable' => apply_filters( 'w2dc_vp_alphanumeric_validatable', array( 'vp-textbox', 'vp-textarea' ) ),
+			'numeric_validatable'      => apply_filters( 'w2dc_vp_numeric_validatable'     , array( 'vp-textbox', 'vp-textarea' ) ),
+			'email_validatable'        => apply_filters( 'w2dc_vp_email_validatable'       , array( 'vp-textbox', 'vp-textarea' ) ),
+			'url_validatable'          => apply_filters( 'w2dc_vp_url_validatable'         , array( 'vp-textbox', 'vp-textarea' ) ),
+			'maxlength_validatable'    => apply_filters( 'w2dc_vp_maxlength_validatable'   , array( 'vp-toggle', 'vp-radiobutton', 'vp-radioimage', 'vp-select' ) ),
+			'minlength_validatable'    => apply_filters( 'w2dc_vp_minlength_validatable'   , array( 'vp-toggle', 'vp-radiobutton', 'vp-radioimage', 'vp-select' ) ),
 		);
 		$this->_localize = array_merge($this->_localize, $localize);
 	}

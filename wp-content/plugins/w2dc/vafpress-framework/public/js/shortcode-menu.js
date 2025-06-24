@@ -1,4 +1,6 @@
 (function($){
+	"use strict";
+	
 	$(document).ready(function(){
 		if(!jQuery.fn.insertAtCaret)
 		{
@@ -78,14 +80,14 @@
 						break;
 					case 'vp-checkimage':
 						// trigger change since form reset doesn't trigger it
-						$(this).find('input').change();
+						$(this).find('input').trigger("change");
 						break;
 					case 'vp-radioimage':
 						// trigger change since form reset doesn't trigger it
-						$(this).find('input').change();
+						$(this).find('input').trigger("change");
 						break;
 					case 'vp-codeeditor':
-						$(this).find('textarea').first().val($(this).find('textarea').text()).change();
+						$(this).find('textarea').first().val($(this).find('textarea').text()).trigger("change");
 						break;
 				}
 			});
@@ -99,19 +101,19 @@
 				// re-init select2vp fontawesome
 				$(this).find('.vp-js-fontawesome').select2vp("destroy");
 
-				vp_w2dc.init_fontawesome_chooser($(this).find('.vp-js-fontawesome'));
-				vp_w2dc.init_select2vp($(this).find('.vp-js-select2vp'));
-				vp_w2dc.init_sorter($(this).find('.vp-js-sorter'));
+				w2dc_vp.init_fontawesome_chooser($(this).find('.vp-js-fontawesome'));
+				w2dc_vp.init_select2vp($(this).find('.vp-js-select2vp'));
+				w2dc_vp.init_sorter($(this).find('.vp-js-sorter'));
 			}
 			return $(this);
 		};
 
 		// init controls
-		vp_w2dc.init_controls($('.vp-sc-main'));
+		w2dc_vp.init_controls($('.vp-sc-main'));
 
 		// shortcode image controls event bind
-		vp_w2dc.custom_check_radio_event(".vp-sc-dialog", ".vp-checkimage .field .input label");
-		vp_w2dc.custom_check_radio_event(".vp-sc-dialog", ".vp-radioimage .field .input label");
+		w2dc_vp.custom_check_radio_event(".vp-sc-dialog", ".vp-checkimage .field .input label");
+		w2dc_vp.custom_check_radio_event(".vp-sc-dialog", ".vp-radioimage .field .input label");
 
 		$('.vp-sc-menu li a').on('click', function(ev){
 			ev.preventDefault();
@@ -134,7 +136,7 @@
 		});
 
 		$('.vp-sc-element .vp-sc-element-heading').unbind();
-		$('.vp-sc-element .vp-sc-element-heading a').bind('click.vp_w2dc_sc', function(e){
+		$('.vp-sc-element .vp-sc-element-heading a').on('click.w2dc_vp_sc', function(e){
 			e.preventDefault();
 
 			var $parent = $(this).parents('li'),
@@ -143,7 +145,7 @@
 
 			if($parent.hasClass('active'))
 			{
-				$form.vp_w2dc_slideUp();
+				$form.w2dc_vp_slideUp();
 				$form.scReset();
 				$parent.removeClass('active');
 			}
@@ -153,23 +155,23 @@
 				    $modal = $(this).parents('.vp-sc-dialog').first();
 
 				$modal.find('.vp-sc-element').removeClass('active');
-				$modal.find('.vp-sc-element-form').vp_w2dc_slideUp();
+				$modal.find('.vp-sc-element-form').w2dc_vp_slideUp();
 
 				if($form.exists())
 				{
 					$parent.addClass('active');
-					$form.vp_w2dc_slideDown();
+					$form.w2dc_vp_slideDown();
 				}
 				else
 				{
 					code = decodeEntities(code);
-					$modal.trigger('vp_w2dc_insert_shortcode', code);
+					$modal.trigger('w2dc_vp_insert_shortcode', code);
 					$modal.trigger('reveal:close');
 				}
 			}
 		});
 
-		$('.vp-sc-insert').bind('click.vp_w2dc_sc_insert', function(e){
+		$('.vp-sc-insert').on('click.w2dc_vp_sc_insert', function(e){
 			e.preventDefault();
 			var $modal  = $(this).parents('.vp-sc-dialog'),
 			    $parent = $(this).parents('.vp-sc-element'),
@@ -180,8 +182,8 @@
 			    atts    = '';
 
 			// trigger non reloading form submit, so that any event binded on this called
-			$form.on('submit', function(e){vp_w2dc.tinyMCE_save(); e.preventDefault();});
-			$form.submit();
+			$form.on('submit', function(e){w2dc_vp.tinyMCE_save(); e.preventDefault();});
+			$form.trigger('submit');
 
 			// gather unique names of the options
 			$fields.each(function(i){
@@ -213,20 +215,20 @@
 			// print shortcode to editor					
 			code = code.replace(']', atts + ']');
 			code = decodeEntities(code);
-			$modal.trigger('vp_w2dc_insert_shortcode', code);
+			$modal.trigger('w2dc_vp_insert_shortcode', code);
 
 			// reset form and close dialog
 			$('.vp-sc-element').removeClass('active');
-			$form.vp_w2dc_slideUp();
+			$form.w2dc_vp_slideUp();
 			$form.scReset();
 			$modal.trigger('reveal:close');
 		});
 
-		$('.vp-sc-cancel').bind('click.vp_w2dc_sc_cancel', function(e){
+		$('.vp-sc-cancel').on('click.w2dc_vp_sc_cancel', function(e){
 			e.preventDefault();
 			$('.vp-sc-element').removeClass('active');
 			var $form   = $(this).parents('.vp-sc-element-form')
-			$form.vp_w2dc_slideUp();
+			$form.w2dc_vp_slideUp();
 			$form.scReset();
 		});
 

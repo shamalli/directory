@@ -12,6 +12,7 @@ use Elementor\Icons_Manager;
 use Elementor\Repeater;
 use Elementor\Utils;
 use ElementorPro\Base\Base_Widget;
+use ElementorPro\Plugin;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
@@ -33,6 +34,28 @@ class Price_Table extends Base_Widget {
 
 	public function get_keywords() {
 		return [ 'pricing', 'table', 'product', 'image', 'plan', 'button' ];
+	}
+
+	protected function is_dynamic_content(): bool {
+		return false;
+	}
+
+	public function has_widget_inner_wrapper(): bool {
+		return ! Plugin::elementor()->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
+	/**
+	 * Get style dependencies.
+	 *
+	 * Retrieve the list of style dependencies the widget requires.
+	 *
+	 * @since 3.24.0
+	 * @access public
+	 *
+	 * @return array Widget style dependencies.
+	 */
+	public function get_style_depends(): array {
+		return [ 'widget-price-table' ];
 	}
 
 	protected function register_controls() {
@@ -127,6 +150,9 @@ class Price_Table extends Base_Widget {
 			[
 				'label' => esc_html__( 'Custom Symbol', 'elementor-pro' ),
 				'type' => Controls_Manager::TEXT,
+				'ai' => [
+					'active' => false,
+				],
 				'condition' => [
 					'currency_symbol' => 'custom',
 				],
@@ -141,6 +167,9 @@ class Price_Table extends Base_Widget {
 				'default' => '39.99',
 				'dynamic' => [
 					'active' => true,
+				],
+				'ai' => [
+					'active' => false,
 				],
 			]
 		);
@@ -190,6 +219,9 @@ class Price_Table extends Base_Widget {
 				'type' => Controls_Manager::TEXT,
 				'dynamic' => [
 					'active' => true,
+				],
+				'ai' => [
+					'active' => false,
 				],
 				'default' => esc_html__( 'Monthly', 'elementor-pro' ),
 			]
@@ -294,7 +326,6 @@ class Price_Table extends Base_Widget {
 			[
 				'label' => esc_html__( 'Link', 'elementor-pro' ),
 				'type' => Controls_Manager::URL,
-				'placeholder' => esc_html__( 'https://your-link.com', 'elementor-pro' ),
 				'default' => [
 					'url' => '#',
 				],
@@ -402,7 +433,7 @@ class Price_Table extends Base_Widget {
 			[
 				'label' => esc_html__( 'Padding', 'elementor-pro' ),
 				'type' => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', '%', 'em' ],
+				'size_units' => [ 'px', '%', 'em', 'rem', 'vw', 'custom' ],
 				'selectors' => [
 					'{{WRAPPER}} .elementor-price-table__header' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
@@ -498,7 +529,7 @@ class Price_Table extends Base_Widget {
 			[
 				'label' => esc_html__( 'Padding', 'elementor-pro' ),
 				'type' => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', '%', 'em' ],
+				'size_units' => [ 'px', '%', 'em', 'rem', 'vw', 'custom' ],
 				'selectors' => [
 					'{{WRAPPER}} .elementor-price-table__price' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
@@ -548,7 +579,6 @@ class Price_Table extends Base_Widget {
 				'type' => Controls_Manager::SLIDER,
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
 					],
 				],
@@ -630,7 +660,6 @@ class Price_Table extends Base_Widget {
 				'type' => Controls_Manager::SLIDER,
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
 					],
 				],
@@ -840,7 +869,7 @@ class Price_Table extends Base_Widget {
 			[
 				'label' => esc_html__( 'Padding', 'elementor-pro' ),
 				'type' => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', '%', 'em' ],
+				'size_units' => [ 'px', '%', 'em', 'rem', 'vw', 'custom' ],
 				'selectors' => [
 					'{{WRAPPER}} .elementor-price-table__features-list' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
@@ -969,14 +998,20 @@ class Price_Table extends Base_Widget {
 			[
 				'label' => esc_html__( 'Weight', 'elementor-pro' ),
 				'type' => Controls_Manager::SLIDER,
+				'size_units' => [ 'px', 'em', 'rem', 'custom' ],
 				'default' => [
 					'size' => 2,
-					'unit' => 'px',
 				],
 				'range' => [
 					'px' => [
 						'min' => 1,
 						'max' => 10,
+					],
+					'em' => [
+						'max' => 1,
+					],
+					'rem' => [
+						'max' => 1,
 					],
 				],
 				'condition' => [
@@ -1007,14 +1042,20 @@ class Price_Table extends Base_Widget {
 			[
 				'label' => esc_html__( 'Gap', 'elementor-pro' ),
 				'type' => Controls_Manager::SLIDER,
+				'size_units' => [ 'px', 'em', 'rem', 'custom' ],
 				'default' => [
 					'size' => 15,
-					'unit' => 'px',
 				],
 				'range' => [
 					'px' => [
 						'min' => 1,
 						'max' => 50,
+					],
+					'em' => [
+						'max' => 5,
+					],
+					'rem' => [
+						'max' => 5,
 					],
 				],
 				'condition' => [
@@ -1053,7 +1094,7 @@ class Price_Table extends Base_Widget {
 			[
 				'label' => esc_html__( 'Padding', 'elementor-pro' ),
 				'type' => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', '%', 'em' ],
+				'size_units' => [ 'px', '%', 'em', 'rem', 'vw', 'custom' ],
 				'selectors' => [
 					'{{WRAPPER}} .elementor-price-table__footer' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
@@ -1159,7 +1200,7 @@ class Price_Table extends Base_Widget {
 			[
 				'label' => esc_html__( 'Border Radius', 'elementor-pro' ),
 				'type' => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', '%' ],
+				'size_units' => [ 'px', '%', 'em', 'rem', 'custom' ],
 				'selectors' => [
 					'{{WRAPPER}} .elementor-price-table__button' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
@@ -1171,7 +1212,7 @@ class Price_Table extends Base_Widget {
 			[
 				'label' => esc_html__( 'Text Padding', 'elementor-pro' ),
 				'type' => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', 'em', '%' ],
+				'size_units' => [ 'px', '%', 'em', 'rem', 'custom' ],
 				'selectors' => [
 					'{{WRAPPER}} .elementor-price-table__button' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
@@ -1287,7 +1328,7 @@ class Price_Table extends Base_Widget {
 			[
 				'label' => esc_html__( 'Margin', 'elementor-pro' ),
 				'type' => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', '%', 'em' ],
+				'size_units' => [ 'px', '%', 'em', 'rem', 'vw', 'custom' ],
 				'default' => [
 					'top' => 15,
 					'right' => 30,
@@ -1339,10 +1380,16 @@ class Price_Table extends Base_Widget {
 			[
 				'label' => esc_html__( 'Distance', 'elementor-pro' ),
 				'type' => Controls_Manager::SLIDER,
+				'size_units' => [ 'px', 'em', 'rem', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 50,
+					],
+					'em' => [
+						'max' => 5,
+					],
+					'rem' => [
+						'max' => 5,
 					],
 				],
 				'selectors' => [

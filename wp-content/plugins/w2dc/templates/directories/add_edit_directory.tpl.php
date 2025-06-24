@@ -1,11 +1,16 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <?php w2dc_renderTemplate('admin_header.tpl.php'); ?>
 
 <h2>
 	<?php
 	if ($directory_id)
-		_e('Edit directory', 'W2DC');
+		esc_html_e('Edit directory', 'w2dc');
 	else
-		_e('Create new directory', 'W2DC');
+		esc_html_e('Create new directory', 'w2dc');
 	?>
 </h2>
 
@@ -15,7 +20,7 @@
 		<tbody>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Directory name', 'W2DC'); ?><span class="w2dc-red-asterisk">*</span></label>
+					<label><?php esc_html_e('Directory name', 'w2dc'); ?><span class="w2dc-red-asterisk">*</span></label>
 				</th>
 				<td>
 					<input
@@ -27,7 +32,7 @@
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Single form', 'W2DC'); ?><span class="w2dc-red-asterisk">*</span></label>
+					<label><?php esc_html_e('Single form', 'w2dc'); ?><span class="w2dc-red-asterisk">*</span></label>
 				</th>
 				<td>
 					<input
@@ -40,7 +45,7 @@
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Plural form', 'W2DC'); ?><span class="w2dc-red-asterisk">*</span></label>
+					<label><?php esc_html_e('Plural form', 'w2dc'); ?><span class="w2dc-red-asterisk">*</span></label>
 				</th>
 				<td>
 					<input
@@ -53,14 +58,14 @@
 			</tr>
 			<tr>
 				<td colspan="2">
-					<?php _e('Notice about slugs:', 'W2DC'); ?>
+					<?php esc_html_e('Notice about slugs:', 'w2dc'); ?>
 					<br />
-					<?php _e('Slugs must contain only alpha-numeric characters, underscores or dashes. All slugs must be unique and different. Slugs must not match slugs of pages.', 'W2DC'); ?>
+					<?php esc_html_e('Slugs must contain only alpha-numeric characters, underscores or dashes. All slugs must be unique and different. Slugs must not match slugs of pages.', 'w2dc'); ?>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Listing slug', 'W2DC'); ?><span class="w2dc-red-asterisk">*</span></label>
+					<label><?php esc_html_e('Listing slug', 'w2dc'); ?><span class="w2dc-red-asterisk">*</span></label>
 				</th>
 				<td>
 					<input
@@ -72,7 +77,7 @@
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Category slug', 'W2DC'); ?><span class="w2dc-red-asterisk">*</span></label>
+					<label><?php esc_html_e('Category slug', 'w2dc'); ?><span class="w2dc-red-asterisk">*</span></label>
 				</th>
 				<td>
 					<input
@@ -84,7 +89,7 @@
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Location slug', 'W2DC'); ?><span class="w2dc-red-asterisk">*</span></label>
+					<label><?php esc_html_e('Location slug', 'w2dc'); ?><span class="w2dc-red-asterisk">*</span></label>
 				</th>
 				<td>
 					<input
@@ -96,7 +101,7 @@
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Tag slug', 'W2DC'); ?><span class="w2dc-red-asterisk">*</span></label>
+					<label><?php esc_html_e('Tag slug', 'w2dc'); ?><span class="w2dc-red-asterisk">*</span></label>
 				</th>
 				<td>
 					<input
@@ -108,36 +113,36 @@
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Assigned categories in the search', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Assigned categories in the search', 'w2dc'); ?></label>
 					<?php echo w2dc_get_wpml_dependent_option_description(); ?>
 				</th>
 				<td>
-					<p class="description"><?php _e('You may define some special categories available for this directory', 'W2DC'); ?></p>
+					<p class="description"><?php esc_html_e('You may define some special categories available for this directory', 'w2dc'); ?></p>
 					<?php w2dc_termsSelectList('categories', W2DC_CATEGORIES_TAX, $directory->categories); ?>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Assigned locations in the search', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Assigned locations in the search', 'w2dc'); ?></label>
 					<?php echo w2dc_get_wpml_dependent_option_description(); ?>
 				</th>
 				<td>
-					<p class="description"><?php _e('You may define some special locations available for this directory', 'W2DC'); ?></p>
+					<p class="description"><?php esc_html_e('You may define some special locations available for this directory', 'w2dc'); ?></p>
 					<?php w2dc_termsSelectList('locations', W2DC_LOCATIONS_TAX, $directory->locations); ?>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Listings levels', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Listings levels', 'w2dc'); ?></label>
 				</th>
 				<td>
-					<p class="description"><?php _e('You may define some special levels available for this directory', 'W2DC'); ?></p>
-					<select multiple="multiple" name="levels[]" class="w2dc-form-control w2dc-form-group" style="height: 300px">
-						<option value="" <?php if (!$directory->levels) echo 'selected'; ?>><?php _e('- Select All -', 'W2DC'); ?></option>
+					<p class="description"><?php esc_html_e('You may define some special levels available for this directory', 'w2dc'); ?></p>
+					<select multiple="multiple" name="levels[]" class="w2dc-form-control w2dc-form-group w2dc-height-300">
+						<option value="" <?php if (!$directory->levels) echo 'selected'; ?>><?php esc_html_e('- Select All -', 'w2dc'); ?></option>
 						<?php
 						foreach ($w2dc_instance->levels->levels_array AS $level):
 						?>
-						<option value="<?php echo $level->id; ?>" <?php if (in_array($level->id, $directory->levels)) echo 'selected'; ?>><?php echo $level->name; ?></option>
+						<option value="<?php w2dc_esc_e($level->id); ?>" <?php if (in_array($level->id, $directory->levels)) echo 'selected'; ?>><?php w2dc_esc_e($level->name); ?></option>
 						<?php endforeach; ?>
 					</select>
 				</td>
@@ -147,9 +152,9 @@
 	
 	<?php
 	if ($directory_id)
-		submit_button(__('Save changes', 'W2DC'));
+		submit_button(esc_html__('Save changes', 'w2dc'));
 	else
-		submit_button(__('Create directory', 'W2DC'));
+		submit_button(esc_html__('Create directory', 'w2dc'));
 	?>
 </form>
 

@@ -11,7 +11,8 @@
 namespace RankMath\Analytics\Workflow;
 
 use Exception;
-use MyThemeShop\Helpers\DB;
+use RankMath\Helpers\DB;
+use RankMath\Google\Console as GoogleConsole;
 use function as_unschedule_all_actions;
 
 defined( 'ABSPATH' ) || exit;
@@ -25,8 +26,11 @@ class Console extends Base {
 	 * Constructor.
 	 */
 	public function __construct() {
+
+		$this->create_tables();
+
 		// If console is not connected, ignore all no need to proceed.
-		if ( ! \RankMath\Google\Console::is_console_connected() ) {
+		if ( ! GoogleConsole::is_console_connected() ) {
 			return;
 		}
 
@@ -83,8 +87,8 @@ class Console extends Base {
 		}
 
 		// Make sure that collations match the objects table.
-		$objects_coll = \RankMath\Helper::get_table_collation( 'rank_math_analytics_objects' );
-		\RankMath\Helper::check_collation( $table, 'all', $objects_coll );
+		$objects_coll = DB::get_table_collation( 'rank_math_analytics_objects' );
+		DB::check_collation( $table, 'all', $objects_coll );
 	}
 
 	/**
@@ -100,7 +104,9 @@ class Console extends Base {
 			return;
 		}
 
+		update_option( 'rank_math_analytics_first_fetch', 'fetching' );
+
 		// Fetch now.
-		$this->create_jobs( $days, 'console' );
+		$this->schedule_single_action( $days, 'console' );
 	}
 }

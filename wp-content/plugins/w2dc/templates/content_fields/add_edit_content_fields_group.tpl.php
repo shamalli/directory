@@ -3,9 +3,9 @@
 <h2>
 	<?php
 	if ($group_id)
-		_e('Edit content fields group', 'W2DC');
+		esc_html_e('Edit content fields group', 'w2dc');
 	else
-		_e('Create new content fields group', 'W2DC');
+		esc_html_e('Create new content fields group', 'w2dc');
 	?>
 </h2>
 
@@ -15,7 +15,7 @@
 		<tbody>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Fields Group name', 'W2DC'); ?><span class="w2dc-red-asterisk">*</span></label>
+					<label><?php esc_html_e('Fields Group name', 'w2dc'); ?><span class="w2dc-red-asterisk">*</span></label>
 				</th>
 				<td>
 					<input
@@ -29,7 +29,7 @@
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('On tab', 'W2DC'); ?></label>
+					<label><?php esc_html_e('On tab', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<input
@@ -37,12 +37,12 @@
 						type="checkbox"
 						value="1"
 						<?php checked($content_fields_group->on_tab); ?> />
-					<p class="description"><?php _e("Place this group on separate tab on single listings pages", 'W2DC'); ?></p>
+					<p class="description"><?php esc_html_e("Place this group on separate tab on single listings pages", 'w2dc'); ?></p>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">
-					<label><?php _e('Hide from anonymous users', 'W2DC'); ?></label>
+					<label><?php esc_html_e('Hide from anonymous users', 'w2dc'); ?></label>
 				</th>
 				<td>
 					<input
@@ -50,7 +50,7 @@
 						type="checkbox"
 						value="1"
 						<?php checked($content_fields_group->hide_anonymous); ?> />
-					<p class="description"><?php _e("This group of fields will be shown only for registered users", 'W2DC'); ?></p>
+					<p class="description"><?php esc_html_e("This group of fields will be shown only for registered users", 'w2dc'); ?></p>
 				</td>
 			</tr>
 		</tbody>
@@ -58,9 +58,9 @@
 	
 	<?php
 	if ($group_id)
-		submit_button(__('Save changes', 'W2DC'));
+		submit_button(esc_html__('Save changes', 'w2dc'));
 	else
-		submit_button(__('Create content fields group', 'W2DC'));
+		submit_button(esc_html__('Create content fields group', 'w2dc'));
 	?>
 </form>
 

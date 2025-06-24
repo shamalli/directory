@@ -1,6 +1,6 @@
 <?php
 
-class VP_W2DC_Control_Field_CodeEditor extends VP_W2DC_Control_Field
+class W2DC_VP_Control_Field_CodeEditor extends W2DC_VP_Control_Field
 {
 
 	/**
@@ -43,7 +43,7 @@ class VP_W2DC_Control_Field_CodeEditor extends VP_W2DC_Control_Field
 			'mode'  => $this->get_editor_mode(),
 			'theme' => $this->get_editor_theme(),
 		);
-		$this->add_data('opt', VP_W2DC_Util_Text::make_opt($opt));
+		$this->add_data('opt', W2DC_VP_Util_Text::make_opt($opt));
 		parent::_setup_data();
 	}
 
@@ -51,7 +51,7 @@ class VP_W2DC_Control_Field_CodeEditor extends VP_W2DC_Control_Field
 	{
 		$this->_setup_data();
 		$this->add_data('is_compact', $is_compact);
-		return VP_W2DC_View::instance()->load('control/codeeditor', $this->get_data());
+		return W2DC_VP_View::instance()->load('control/codeeditor', $this->get_data());
 	}
 
 	public function set_value($_value)

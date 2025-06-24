@@ -10,7 +10,9 @@
 
 defined( 'ABSPATH' ) || exit;
 
+use Automattic\WooCommerce\Enums\OrderInternalStatus;
 use Automattic\WooCommerce\Internal\DataStores\Orders\CustomOrdersTableController;
+use Automattic\WooCommerce\Admin\Features\Features;
 
 /**
  * Post types Class.
@@ -108,6 +110,7 @@ class WC_Post_Types {
 						'not_found'             => __( 'No categories found', 'woocommerce' ),
 						'item_link'             => __( 'Product Category Link', 'woocommerce' ),
 						'item_link_description' => __( 'A link to a product category.', 'woocommerce' ),
+						'template_name'         => _x( 'Products by Category', 'Template name', 'woocommerce' ),
 					),
 					'show_in_rest'          => true,
 					'show_ui'               => true,
@@ -153,6 +156,7 @@ class WC_Post_Types {
 						'not_found'                  => __( 'No tags found', 'woocommerce' ),
 						'item_link'                  => __( 'Product Tag Link', 'woocommerce' ),
 						'item_link_description'      => __( 'A link to a product tag.', 'woocommerce' ),
+						'template_name'              => _x( 'Products by Tag', 'Template name', 'woocommerce' ),
 					),
 					'show_in_rest'          => true,
 					'show_ui'               => true,
@@ -365,358 +369,76 @@ class WC_Post_Types {
 					'has_archive'         => $has_archive,
 					'show_in_nav_menus'   => true,
 					'show_in_rest'        => true,
-					'template'            => array(
-						array(
-							'woocommerce/product-tab',
-							array(
-								'id'    => 'general',
-								'title' => __( 'General', 'woocommerce' ),
-							),
-							array(
-								array(
-									'woocommerce/product-section',
-									array(
-										'title'       => __( 'Basic details', 'woocommerce' ),
-										'description' => __( 'This info will be displayed on the product page, category pages, social media, and search results.', 'woocommerce' ),
-										'icon'        => array(
-											'src' => '<svg xmlns="http://www.w3.org/2000/svg" view-box="0 0 24 24"><path fill-rule="evenodd" d="M5 5.5h14a.5.5 0 01.5.5v1.5a.5.5 0 01-.5.5H5a.5.5 0 01-.5-.5V6a.5.5 0 01.5-.5zM4 9.232A2 2 0 013 7.5V6a2 2 0 012-2h14a2 2 0 012 2v1.5a2 2 0 01-1 1.732V18a2 2 0 01-2 2H6a2 2 0 01-2-2V9.232zm1.5.268V18a.5.5 0 00.5.5h12a.5.5 0 00.5-.5V9.5h-13z" clip-rule="evenodd" /></svg>',
-										),
-									),
-									array(
-										array(
-											'woocommerce/product-name',
-											array(
-												'name' => 'Product name',
-											),
-										),
-										array(
-											'woocommerce/product-summary',
-										),
-										array(
-											'core/columns',
-											array(),
-											array(
-												array(
-													'core/column',
-													array(
-														'templateLock' => 'all',
-													),
-													array(
-														array(
-															'woocommerce/product-pricing',
-															array(
-																'name' => 'regular_price',
-																'label' => __( 'List price', 'woocommerce' ),
-																'showPricingSection' => true,
-															),
-														),
-													),
-												),
-												array(
-													'core/column',
-													array(
-														'templateLock' => 'all',
-													),
-													array(
-														array(
-															'woocommerce/product-pricing',
-															array(
-																'name' => 'sale_price',
-																'label' => __( 'Sale price', 'woocommerce' ),
-															),
-														),
-													),
-												),
-											),
-										),
-									),
-								),
-								array(
-									'woocommerce/product-section',
-									array(
-										'title'       => __( 'Images', 'woocommerce' ),
-										'description' => sprintf(
-											/* translators: %1$s: Images guide link opening tag. %2$s: Images guide link closing tag.*/
-											__( 'Drag images, upload new ones or select files from your library. For best results, use JPEG files that are 1000 by 1000 pixels or larger. %1$sHow to prepare images?%2$s.', 'woocommerce' ),
-											'<a href="http://woocommerce.com/#" target="_blank" rel="noreferrer">',
-											'</a>'
-										),
-									),
-									array(
-										array(
-											'woocommerce/product-images',
-											array(
-												'images' => array(),
-											),
-										),
-									),
-								),
-							),
-						),
-						array(
-							'woocommerce/product-tab',
-							array(
-								'id'    => 'pricing',
-								'title' => __( 'Pricing', 'woocommerce' ),
-							),
-							array(
-								array(
-									'woocommerce/product-section',
-									array(
-										'title'       => __( 'Pricing', 'woocommerce' ),
-										'description' => sprintf(
-											/* translators: %1$s: Images guide link opening tag. %2$s: Images guide link closing tag.*/
-											__( 'Set a competitive price, put the product on sale, and manage tax calculations. %1$sHow to price your product?%2$s', 'woocommerce' ),
-											'<a href="https://woocommerce.com/posts/how-to-price-products-strategies-expert-tips/" target="_blank" rel="noreferrer">',
-											'</a>'
-										),
-										'icon'        => array(
-											'src' => '<svg xmlns="http://www.w3.org/2000/svg" view-box="0 0 24 24"><path fill-rule="evenodd" d="M16.83 6.342l.602.3.625-.25.443-.176v12.569l-.443-.178-.625-.25-.603.301-1.444.723-2.41-.804-.475-.158-.474.158-2.41.803-1.445-.722-.603-.3-.625.25-.443.177V6.215l.443.178.625.25.603-.301 1.444-.722 2.41.803.475.158.474-.158 2.41-.803 1.445.722zM20 4l-1.5.6-1 .4-2-1-3 1-3-1-2 1-1-.4L5 4v17l1.5-.6 1-.4 2 1 3-1 3 1 2-1 1 .4 1.5.6V4zm-3.5 6.25v-1.5h-8v1.5h8zm0 3v-1.5h-8v1.5h8zm-8 3v-1.5h8v1.5h-8z" clip-rule="evenodd" /></svg>',
-										),
-									),
-									array(
-										array(
-											'core/columns',
-											array(),
-											array(
-												array(
-													'core/column',
-													array(
-														'templateLock' => 'all',
-													),
-													array(
-														array(
-															'woocommerce/product-pricing',
-															array(
-																'name' => 'regular_price',
-																'label' => __( 'List price', 'woocommerce' ),
-																'showPricingSection' => true,
-															),
-														),
-													),
-												),
-												array(
-													'core/column',
-													array(
-														'templateLock' => 'all',
-													),
-													array(
-														array(
-															'woocommerce/product-pricing',
-															array(
-																'name' => 'sale_price',
-																'label' => __( 'Sale price', 'woocommerce' ),
-															),
-														),
-													),
-												),
-											),
-										),
-										array(
-											'woocommerce/product-schedule-sale-fields',
-										),
-										array(
-											'woocommerce/product-radio',
-											array(
-												'title'    => __( 'Charge sales tax on', 'woocommerce' ),
-												'property' => 'tax_status',
-												'options'  => array(
-													array(
-														'label' => __( 'Product and shipping', 'woocommerce' ),
-														'value' => 'taxable',
-													),
-													array(
-														'label' => __( 'Only shipping', 'woocommerce' ),
-														'value' => 'shipping',
-													),
-													array(
-														'label' => __( "Don't charge tax", 'woocommerce' ),
-														'value' => 'none',
-													),
-												),
-											),
-										),
-										array(
-											'woocommerce/collapsible',
-											array(
-												'toggleText'       => __( 'Advanced', 'woocommerce' ),
-												'initialCollapsed' => true,
-												'persistRender'    => true,
-											),
-											array(
-												array(
-													'woocommerce/product-radio',
-													array(
-														'title'    => __( 'Tax class', 'woocommerce' ),
-														'description' => sprintf(
-															/* translators: %1$s: Learn more link opening tag. %2$s: Learn more link closing tag.*/
-															__( 'Apply a tax rate if this product qualifies for tax reduction or exemption. %1$sLearn more%2$s.', 'woocommerce' ),
-															'<a href="https://woocommerce.com/document/setting-up-taxes-in-woocommerce/#shipping-tax-class" target="_blank" rel="noreferrer">',
-															'</a>'
-														),
-														'property' => 'tax_class',
-														'options'  => array(
-															array(
-																'label' => __( 'Standard', 'woocommerce' ),
-																'value' => '',
-															),
-															array(
-																'label' => __( 'Reduced rate', 'woocommerce' ),
-																'value' => 'reduced-rate',
-															),
-															array(
-																'label' => __( 'Zero rate', 'woocommerce' ),
-																'value' => 'zero-rate',
-															),
-														),
-													),
-												),
-											),
-										),
-									),
-								),
-							),
-						),
-						array(
-							'woocommerce/product-tab',
-							array(
-								'id'    => 'inventory',
-								'title' => __( 'Inventory', 'woocommerce' ),
-							),
-							array(
-								array(
-									'woocommerce/product-section',
-									array(
-										'title'       => __( 'Inventory', 'woocommerce' ),
-										'description' => sprintf(
-											/* translators: %1$s: Inventory settings link opening tag. %2$s: Inventory settings link closing tag.*/
-											__( 'Set up and manage inventory for this product, including status and available quantity. %1$sManage store inventory settings%2$s', 'woocommerce' ),
-											'<a href="' . admin_url( 'admin.php?page=wc-settings&tab=products&section=inventory' ) . '" target="_blank" rel="noreferrer">',
-											'</a>'
-										),
-										'icon'        => array(
-											'src' => '<svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M2 2H14C14.2761 2 14.5 2.22386 14.5 2.5V9.5H11.5H10C10 10.6046 9.10457 11.5 8 11.5C6.89543 11.5 6 10.6046 6 9.5H4.5H1.5V2.5C1.5 2.22386 1.72386 2 2 2ZM1.5 11V14.5C1.5 14.7761 1.72386 15 2 15H14C14.2761 15 14.5 14.7761 14.5 14.5V11H11.1632C10.6015 12.1825 9.3962 13 8 13C6.6038 13 5.39855 12.1825 4.83682 11H1.5ZM0 9.5V2.5C0 1.39543 0.895431 0.5 2 0.5H14C15.1046 0.5 16 1.39543 16 2.5V9.5V11V14.5C16 15.6046 15.1046 16.5 14 16.5H2C0.895431 16.5 0 15.6046 0 14.5V11V9.5Z" fill="#1E1E1E"/></svg>',
-										),
-									),
-									array(
-										array(
-											'woocommerce/product-sku',
-										),
-										array(
-											'woocommerce/product-track-inventory-fields',
-										),
-										array(
-											'woocommerce/collapsible',
-											array(
-												'toggleText'       => __( 'Advanced', 'woocommerce' ),
-												'initialCollapsed' => true,
-												'persistRender'    => true,
-											),
-											array(
-												array(
-													'woocommerce/conditional',
-													array(
-														'mustMatch' => array(
-															'manage_stock' => array( true ),
-														),
-													),
-													array(
-														array(
-															'woocommerce/product-radio',
-															array(
-																'title'    => __( 'When out of stock', 'woocommerce' ),
-																'property' => 'backorders',
-																'options'  => array(
-																	array(
-																		'label' => __( 'Allow purchases', 'woocommerce' ),
-																		'value' => 'yes',
-																	),
-																	array(
-																		'label' => __(
-																			'Allow purchases, but notify customers',
-																			'woocommerce'
-																		),
-																		'value' => 'notify',
-																	),
-																	array(
-																		'label' => __( "Don't allow purchases", 'woocommerce' ),
-																		'value' => 'no',
-																	),
-																),
-															),
-														),
-														array(
-															'woocommerce/product-inventory-email',
-														),
-													),
-												),
-												array(
-													'woocommerce/product-checkbox',
-													array(
-														'title'    => __(
-															'Restrictions',
-															'woocommerce'
-														),
-														'label'    => __(
-															'Limit purchases to 1 item per order',
-															'woocommerce'
-														),
-														'property' => 'sold_individually',
-														'tooltip' => __(
-															'When checked, customers will be able to purchase only 1 item in a single order. This is particularly useful for items that have limited quantity, like art or handmade goods.',
-															'woocommerce'
-														),
-													),
-												),
-
-											),
-										),
-
-									),
-								),
-							),
-
-						),
-						array(
-							'woocommerce/product-tab',
-							array(
-								'id'    => 'shipping',
-								'title' => __( 'Shipping', 'woocommerce' ),
-							),
-							array(
-								array(
-									'woocommerce/product-section',
-									array(
-										'title'       => __( 'Fees & dimensions', 'woocommerce' ),
-										'description' => sprintf(
-											/* translators: %1$s: How to get started? link opening tag. %2$s: How to get started? link closing tag.*/
-											__( 'Set up shipping costs and enter dimensions used for accurate rate calculations. %1$sHow to get started?%2$s.', 'woocommerce' ),
-											'<a href="https://woocommerce.com/posts/how-to-calculate-shipping-costs-for-your-woocommerce-store/" target="_blank" rel="noreferrer">',
-											'</a>'
-										),
-										'icon'        => array(
-											'src' => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M3.5 7.75C3.5 6.7835 4.2835 6 5.25 6H14.75H15.5V6.75V9H17.25H17.5607L17.7803 9.21967L20.7803 12.2197L21 12.4393V12.75V14.75C21 15.7165 20.2165 16.5 19.25 16.5H19.2377C19.2458 16.5822 19.25 16.6656 19.25 16.75C19.25 18.1307 18.1307 19.25 16.75 19.25C15.3693 19.25 14.25 18.1307 14.25 16.75C14.25 16.6656 14.2542 16.5822 14.2623 16.5H14H10.2377C10.2458 16.5822 10.25 16.6656 10.25 16.75C10.25 18.1307 9.13071 19.25 7.75 19.25C6.36929 19.25 5.25 18.1307 5.25 16.75C5.25 16.6656 5.25418 16.5822 5.26234 16.5H4.25H3.5V15.75V7.75ZM14 15V9.75V9V7.5H5.25C5.11193 7.5 5 7.61193 5 7.75V15H5.96464C6.41837 14.5372 7.05065 14.25 7.75 14.25C8.44935 14.25 9.08163 14.5372 9.53536 15H14ZM18.5354 15H19.25C19.3881 15 19.5 14.8881 19.5 14.75V13.0607L16.9393 10.5H15.5V14.5845C15.8677 14.3717 16.2946 14.25 16.75 14.25C17.4493 14.25 18.0816 14.5372 18.5354 15ZM6.7815 16.5C6.76094 16.5799 6.75 16.6637 6.75 16.75C6.75 17.3023 7.19772 17.75 7.75 17.75C8.30228 17.75 8.75 17.3023 8.75 16.75C8.75 16.6637 8.73906 16.5799 8.7185 16.5C8.60749 16.0687 8.21596 15.75 7.75 15.75C7.28404 15.75 6.89251 16.0687 6.7815 16.5ZM15.7815 16.5C15.7609 16.5799 15.75 16.6637 15.75 16.75C15.75 17.3023 16.1977 17.75 16.75 17.75C17.3023 17.75 17.75 17.3023 17.75 16.75C17.75 16.6637 17.7391 16.5799 17.7185 16.5C17.7144 16.4841 17.7099 16.4683 17.705 16.4526C17.5784 16.0456 17.1987 15.75 16.75 15.75C16.284 15.75 15.8925 16.0687 15.7815 16.5Z" fill="#1E1E1E"/></svg>',
-										),
-									),
-									array(
-										array(
-											'woocommerce/product-shipping-fee-fields',
-											array(
-												'title' => __( 'Shipping fee', 'woocommerce' ),
-											),
-										),
-										array(
-											'woocommerce/product-shipping-dimensions-fields',
-										),
-									),
-								),
-							),
-						),
-					),
-					'template_lock'       => 'all',
 				)
 			)
 		);
+
+		// Register the product form post type wne the feature is enabled.
+		if ( Features::is_enabled( 'product-editor-template-system' ) ) {
+			register_post_type(
+				'product_form',
+				/**
+				 * Allow developers to customize the product form post type registration arguments.
+				 *
+				 * @since 9.1.0
+				 * @param array $args The default post type registration arguments.
+				 */
+				apply_filters(
+					'woocommerce_register_post_type_product_form',
+					array(
+						'labels'
+						=> array(
+							'name'                  => __( 'Product Forms', 'woocommerce' ),
+							'singular_name'         => __( 'Product Form', 'woocommerce' ),
+							'all_items'             => __( 'All Product Form', 'woocommerce' ),
+							'menu_name'             => _x( 'Product Forms', 'Admin menu name', 'woocommerce' ),
+							'add_new'               => __( 'Add New', 'woocommerce' ),
+							'add_new_item'          => __( 'Add new product form', 'woocommerce' ),
+							'edit'                  => __( 'Edit', 'woocommerce' ),
+							'edit_item'             => __( 'Edit product form', 'woocommerce' ),
+							'new_item'              => __( 'New product form', 'woocommerce' ),
+							'view_item'             => __( 'View product form', 'woocommerce' ),
+							'view_items'            => __( 'View product forms', 'woocommerce' ),
+							'search_items'          => __( 'Search product forms', 'woocommerce' ),
+							'not_found'             => __( 'No product forms found', 'woocommerce' ),
+							'not_found_in_trash'    => __( 'No product forms found in trash', 'woocommerce' ),
+							'parent'                => __( 'Parent product form', 'woocommerce' ),
+							'featured_image'        => __( 'Product form image', 'woocommerce' ),
+							'set_featured_image'    => __( 'Set product form image', 'woocommerce' ),
+							'remove_featured_image' => __( 'Remove product form image', 'woocommerce' ),
+							'use_featured_image'    => __( 'Use as product form image', 'woocommerce' ),
+							'insert_into_item'      => __( 'Insert into product form', 'woocommerce' ),
+							'uploaded_to_this_item' => __( 'Uploaded to this product form', 'woocommerce' ),
+							'filter_items_list'     => __( 'Filter product forms', 'woocommerce' ),
+							'items_list_navigation' => __( 'Product forms navigation', 'woocommerce' ),
+							'items_list'            => __( 'Product forms list', 'woocommerce' ),
+							'item_link'             => __( 'Product form Link', 'woocommerce' ),
+							'item_link_description' => __( 'A link to a product form.', 'woocommerce' ),
+						),
+						'description'         => __( 'This is where you can set up product forms for various product types in your dashboard.', 'woocommerce' ),
+						'public'              => true,
+						'menu_icon'           => 'dashicons-forms',
+						'capability_type'     => 'product',
+						'map_meta_cap'        => true,
+						'publicly_queryable'  => true,
+						'hierarchical'        => false, // Hierarchical causes memory issues - WP loads all records!
+						'rewrite'             => $permalinks['product_rewrite_slug'] ? array(
+							'slug'       => $permalinks['product_rewrite_slug'],
+							'with_front' => false,
+							'feeds'      => true,
+						) : false,
+						'query_var'           => true,
+						'supports'            => $supports,
+						'has_archive'         => $has_archive,
+						'show_in_rest'        => true,
+						'show_ui'             => true,
+						'show_in_menu'        => true,
+						'exclude_from_search' => true,
+						'show_in_nav_menus'   => false,
+					)
+				)
+			);
+		}
 
 		register_post_type(
 			'product_variation',
@@ -784,7 +506,6 @@ class WC_Post_Types {
 					'public'                           => false,
 					'hierarchical'                     => false,
 					'supports'                         => false,
-					'exclude_from_orders_screen'       => false,
 					'add_order_meta_boxes'             => false,
 					'exclude_from_order_count'         => true,
 					'exclude_from_order_views'         => false,
@@ -910,7 +631,7 @@ class WC_Post_Types {
 		$order_statuses = apply_filters(
 			'woocommerce_register_shop_order_post_statuses',
 			array(
-				'wc-pending'    => array(
+				OrderInternalStatus::PENDING    => array(
 					'label'                     => _x( 'Pending payment', 'Order status', 'woocommerce' ),
 					'public'                    => false,
 					'exclude_from_search'       => false,
@@ -919,7 +640,7 @@ class WC_Post_Types {
 					/* translators: %s: number of orders */
 					'label_count'               => _n_noop( 'Pending payment <span class="count">(%s)</span>', 'Pending payment <span class="count">(%s)</span>', 'woocommerce' ),
 				),
-				'wc-processing' => array(
+				OrderInternalStatus::PROCESSING => array(
 					'label'                     => _x( 'Processing', 'Order status', 'woocommerce' ),
 					'public'                    => false,
 					'exclude_from_search'       => false,
@@ -928,7 +649,7 @@ class WC_Post_Types {
 					/* translators: %s: number of orders */
 					'label_count'               => _n_noop( 'Processing <span class="count">(%s)</span>', 'Processing <span class="count">(%s)</span>', 'woocommerce' ),
 				),
-				'wc-on-hold'    => array(
+				OrderInternalStatus::ON_HOLD    => array(
 					'label'                     => _x( 'On hold', 'Order status', 'woocommerce' ),
 					'public'                    => false,
 					'exclude_from_search'       => false,
@@ -937,7 +658,7 @@ class WC_Post_Types {
 					/* translators: %s: number of orders */
 					'label_count'               => _n_noop( 'On hold <span class="count">(%s)</span>', 'On hold <span class="count">(%s)</span>', 'woocommerce' ),
 				),
-				'wc-completed'  => array(
+				OrderInternalStatus::COMPLETED  => array(
 					'label'                     => _x( 'Completed', 'Order status', 'woocommerce' ),
 					'public'                    => false,
 					'exclude_from_search'       => false,
@@ -946,7 +667,7 @@ class WC_Post_Types {
 					/* translators: %s: number of orders */
 					'label_count'               => _n_noop( 'Completed <span class="count">(%s)</span>', 'Completed <span class="count">(%s)</span>', 'woocommerce' ),
 				),
-				'wc-cancelled'  => array(
+				OrderInternalStatus::CANCELLED  => array(
 					'label'                     => _x( 'Cancelled', 'Order status', 'woocommerce' ),
 					'public'                    => false,
 					'exclude_from_search'       => false,
@@ -955,7 +676,7 @@ class WC_Post_Types {
 					/* translators: %s: number of orders */
 					'label_count'               => _n_noop( 'Cancelled <span class="count">(%s)</span>', 'Cancelled <span class="count">(%s)</span>', 'woocommerce' ),
 				),
-				'wc-refunded'   => array(
+				OrderInternalStatus::REFUNDED   => array(
 					'label'                     => _x( 'Refunded', 'Order status', 'woocommerce' ),
 					'public'                    => false,
 					'exclude_from_search'       => false,
@@ -964,7 +685,7 @@ class WC_Post_Types {
 					/* translators: %s: number of orders */
 					'label_count'               => _n_noop( 'Refunded <span class="count">(%s)</span>', 'Refunded <span class="count">(%s)</span>', 'woocommerce' ),
 				),
-				'wc-failed'     => array(
+				OrderInternalStatus::FAILED     => array(
 					'label'                     => _x( 'Failed', 'Order status', 'woocommerce' ),
 					'public'                    => false,
 					'exclude_from_search'       => false,

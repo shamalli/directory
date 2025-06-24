@@ -1,3 +1,8 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <?php if (w2dc_get_dynamic_option('w2dc_listing_title_font')): ?>
 header.w2dc-listing-header h2 {
 	font-size: <?php echo w2dc_get_dynamic_option('w2dc_listing_title_font'); ?>px;
@@ -204,7 +209,7 @@ div.w2dc-content .wpcf7-form .wpcf7-submit:hover {
 .w2dc-content .w2dc-map-info-window-title {
 	background-color: <?php echo w2dc_get_dynamic_option('w2dc_primary_color'); ?>;
 }
-.w2dc-content .mapboxgl-popup-content {
+.w2dc-mapboxgl-popup-container {
 	width: <?php echo w2dc_get_dynamic_option('w2dc_map_infowindow_width'); ?>px;
 }
 .w2dc-content .w2dc-category-label,
@@ -222,7 +227,7 @@ div.w2dc-content .w2dc-pagination > li.w2dc-active > span:focus {
 	border-color: <?php echo w2dc_get_dynamic_option('w2dc_primary_color'); ?>;
 	color: #FFFFFF;
 }
-figure.w2dc-listing-logo figcaption {
+.w2dc-listing-logo-caption {
 	background-color: <?php echo w2dc_get_dynamic_option('w2dc_primary_color'); ?>;
 }
 .w2dc-found-listings .w2dc-badge {
@@ -290,7 +295,7 @@ figure.w2dc-listing-logo figcaption {
 		margin-left: 20px;
 		margin-right: 0;
 	}
-	.w2dc-listings-block figure.w2dc-listing-logo .w2dc-listing-logo-img img {
+	.w2dc-listings-block .w2dc-listing-logo .w2dc-listing-logo-img img {
 		width: <?php echo w2dc_get_dynamic_option('w2dc_listing_thumb_width'); ?>px;
 	}
 	.w2dc-listings-list-view .w2dc-listing-text-content-wrap {
@@ -309,7 +314,7 @@ figure.w2dc-listing-logo figcaption {
 <?php endif; ?>
 
 <?php if (w2dc_get_dynamic_option('w2dc_grid_view_logo_ratio')): ?>
-.w2dc-listings-grid figure.w2dc-listing-logo .w2dc-listing-logo-img-wrap:before {
+.w2dc-listings-grid .w2dc-listing-logo .w2dc-listing-logo-img-wrap:before {
 	padding-top: <?php echo w2dc_get_dynamic_option('w2dc_grid_view_logo_ratio'); ?>%;
 }
 <?php endif; ?>
@@ -335,10 +340,6 @@ figure.w2dc-listing-logo figcaption {
 		float: right;
 		margin: 0 0 20px 20px;
 	}
-	/* temporarily */
-	/*.w2dc-single-listing-text-content-wrap {
-		margin-left: <?php echo w2dc_get_dynamic_option('w2dc_single_logo_width')+20; ?>px;
-	}*/
 }
 <?php endif; ?>
 
@@ -355,7 +356,7 @@ figure.w2dc-listing-logo figcaption {
 <?php endif; ?>
 
 <?php if (w2dc_get_dynamic_option('w2dc_listing_logo_bg_mode')): ?>
-figure.w2dc-listing-logo .w2dc-listing-logo-img {
+.w2dc-listing-logo .w2dc-listing-logo-img {
 	background-size: <?php echo w2dc_get_dynamic_option('w2dc_listing_logo_bg_mode'); ?>;
 }
 <?php endif; ?>

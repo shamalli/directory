@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Helper class for the SendinBlue API.
+ * Helper class for the Brevo/SendinBlue API.
  *
  * @since 1.5.6
  */
@@ -37,7 +37,7 @@ final class FLBuilderServiceSendinBlue extends FLBuilderService {
 			require_once FL_BUILDER_DIR . 'includes/vendor/sendinblue/Mailin.php';
 		}
 
-		$this->api_instance = new Mailin_Rest( 'https://api.sendinblue.com/v2.0', $access_key );
+		$this->api_instance = new Mailin_Rest( 'https://api.brevo.com/v3', $access_key );
 
 		return $this->api_instance;
 	}
@@ -62,17 +62,19 @@ final class FLBuilderServiceSendinBlue extends FLBuilderService {
 
 		// Make sure we have an access key.
 		if ( ! isset( $fields['access_key'] ) || empty( $fields['access_key'] ) ) {
-			$response['error'] = __( 'Error: You must provide an Access Key.', 'fl-builder' );
+			$response['error'] = __( 'Error: You must provide an API Key.', 'fl-builder' );
+		} elseif ( ! strstr( $fields['access_key'], 'xkeysib-' ) ) {
+			$response['error'] = __( 'Error: API key needs to be upgraded to v3.', 'fl-builder' );
 		} else {
 
 			$api    = $this->get_api( $fields['access_key'] );
 			$result = $api->get_account();
 
 			if ( ! is_array( $result ) ) {
-				$response['error'] = __( 'There was an error connecting to SendinBlue. Please try again.', 'fl-builder' );
-			} elseif ( isset( $result['code'] ) && 'failure' == $result['code'] ) {
+				$response['error'] = __( 'There was an error connecting to Brevo. Please try again.', 'fl-builder' );
+			} elseif ( isset( $result['code'] ) && 'unauthorized' == $result['code'] ) {
 				/* translators: %s: error */
-				$response['error'] = sprintf( __( 'Error: Could not connect to SendinBlue. %s', 'fl-builder' ), $result['message'] );
+				$response['error'] = sprintf( __( 'Error: Could not connect to Brevo. %s', 'fl-builder' ), $result['message'] );
 			} else {
 				$response['data'] = array(
 					'access_key' => $fields['access_key'],
@@ -96,8 +98,8 @@ final class FLBuilderServiceSendinBlue extends FLBuilderService {
 			'row_class' => 'fl-builder-service-connect-row',
 			'class'     => 'fl-builder-service-connect-input',
 			'type'      => 'text',
-			'label'     => __( 'Access Key', 'fl-builder' ),
-			'help'      => __( 'Your Access Key can be found in your SendinBlue account under API & Integration > Manager Your Keys > Version 2.0 > Access Key.', 'fl-builder' ),
+			'label'     => __( 'API Key', 'fl-builder' ),
+			'help'      => __( 'Your API Key can be found in your Brevo account under SMTP & API > API Keys.', 'fl-builder' ),
 			'preview'   => array(
 				'type' => 'none',
 			),
@@ -125,15 +127,15 @@ final class FLBuilderServiceSendinBlue extends FLBuilderService {
 			'html'  => '',
 		);
 
-		$result = $api->get_lists( 1, 50 );
+		$result = $api->get_lists( 50 );
 
 		if ( ! is_array( $result ) ) {
-			$response['error'] = __( 'There was an error connecting to SendinBlue. Please try again.', 'fl-builder' );
-		} elseif ( isset( $result['code'] ) && 'failure' == $result['code'] ) {
+			$response['error'] = __( 'There was an error connecting to Brevo. Please try again.', 'fl-builder' );
+		} elseif ( isset( $result['code'] ) && 'unauthorized' == $result['code'] ) {
 			/* translators: %s: error */
-			$response['error'] = sprintf( __( 'Error: Could not connect to SendinBlue. %s', 'fl-builder' ), $result['message'] );
+			$response['error'] = sprintf( __( 'Error: Could not connect to Brevo. %s', 'fl-builder' ), $result['message'] );
 		} else {
-			$response['html'] = $this->render_list_field( $result['data']['lists'], $settings );
+			$response['html'] = $this->render_list_field( $result['lists'], $settings );
 		}
 
 		return $response;
@@ -156,7 +158,7 @@ final class FLBuilderServiceSendinBlue extends FLBuilderService {
 		);
 
 		foreach ( $lists as $list ) {
-			$options[ $list['id'] ] = $list['name'];
+			$options[ $list['id'] ] = esc_attr( $list['name'] );
 		}
 
 		FLBuilder::render_settings_field( 'list_id', array(
@@ -174,7 +176,7 @@ final class FLBuilderServiceSendinBlue extends FLBuilderService {
 	}
 
 	/**
-	 * Subscribe an email address to SendinBlue.
+	 * Subscribe an email address to Brevo/SendinBlue.
 	 *
 	 * @since 1.5.6
 	 * @param object $settings A module settings object.
@@ -191,41 +193,41 @@ final class FLBuilderServiceSendinBlue extends FLBuilderService {
 		);
 
 		if ( ! $account_data ) {
-			$response['error'] = __( 'There was an error subscribing to SendinBlue. The account is no longer connected.', 'fl-builder' );
+			$response['error'] = __( 'There was an error subscribing to Brevo. The account is no longer connected.', 'fl-builder' );
 		} else {
 
 			$api  = $this->get_api( $account_data['access_key'] );
-			$data = array();
+			$data = new stdClass();
 
 			if ( $name ) {
 
 				$contact_attrs = $api->get_contact_attributes();
-
-				$names = explode( ' ', $name );
-
+				$names         = explode( ' ', $name );
 				if ( isset( $names[0] ) ) {
-					$data['NAME'] = $names[0];
+					$data->NAME = $names[0]; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 
 					if ( in_array( 'FIRSTNAME', $contact_attrs ) ) {
-						$data['FIRSTNAME'] = $names[0];
+						$data->FIRSTNAME = $names[0]; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 					}
 				}
 				if ( isset( $names[1] ) ) {
-					$data['SURNAME'] = $names[1];
+					$data->SURNAME = $names[1]; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 
 					if ( in_array( 'LASTNAME', $contact_attrs ) ) {
-						$data['LASTNAME'] = $names[1];
+						$data->LASTNAME = $names[1]; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 					}
 				}
 			}
+			$settings->list_id = (int) $settings->list_id;
+			$result            = $api->create_update_user( $email, $data, false, array( $settings->list_id ), true, array(), false );
 
-			$result = $api->create_update_user( $email, $data, 0, array( $settings->list_id ), array(), 0 );
-
-			if ( ! is_array( $result ) ) {
-				$response['error'] = __( 'There was an error subscribing to SendinBlue. Please try again.', 'fl-builder' );
-			} elseif ( isset( $result['code'] ) && 'failure' == $result['code'] ) {
-				/* translators: %s: error */
-				$response['error'] = sprintf( __( 'Error: Could not subscribe to SendinBlue. %s', 'fl-builder' ), $result['message'] );
+			if ( isset( $result['code'] ) && 'unauthorized' == $result['code'] ) {
+				if ( 'Key not found' === $result['message'] ) {
+					$response['error'] = 'Error: API key needs to be upgraded to v3.';
+				} else {
+					/* translators: %s: error */
+					$response['error'] = sprintf( __( 'Error: Could not subscribe to Brevo. %s', 'fl-builder' ), $result['message'] );
+				}
 			}
 		}
 

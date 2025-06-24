@@ -1,6 +1,6 @@
 <?php
 
-class VP_W2RR_FileSystem
+class W2RR_VP_FileSystem
 {
 
 	private static $_instance = null;

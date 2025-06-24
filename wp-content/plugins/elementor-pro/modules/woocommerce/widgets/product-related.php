@@ -5,6 +5,7 @@ use Elementor\Controls_Manager;
 use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
 use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
 use Elementor\Group_Control_Typography;
+use ElementorPro\Plugin;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
@@ -26,6 +27,24 @@ class Product_Related extends Products_Base {
 
 	public function get_keywords() {
 		return [ 'woocommerce', 'shop', 'store', 'related', 'similar', 'product' ];
+	}
+
+	public function has_widget_inner_wrapper(): bool {
+		return ! Plugin::elementor()->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
+	/**
+	 * Get style dependencies.
+	 *
+	 * Retrieve the list of style dependencies the widget requires.
+	 *
+	 * @since 3.24.0
+	 * @access public
+	 *
+	 * @return array Widget style dependencies.
+	 */
+	public function get_style_depends(): array {
+		return [ 'widget-woocommerce-products' ];
 	}
 
 	protected function register_controls() {
@@ -177,7 +196,7 @@ class Product_Related extends Products_Base {
 			[
 				'label' => esc_html__( 'Spacing', 'elementor-pro' ),
 				'type' => Controls_Manager::SLIDER,
-				'size_units' => [ 'px', 'em' ],
+				'size_units' => [ 'px', 'em', 'rem', 'custom' ],
 				'selectors' => [
 					'.woocommerce {{WRAPPER}}.elementor-wc-products .products > h2' => 'margin-bottom: {{SIZE}}{{UNIT}}',
 				],
@@ -195,7 +214,7 @@ class Product_Related extends Products_Base {
 	protected function render() {
 		global $product;
 
-		$product = wc_get_product();
+		$product = $this->get_product();
 
 		if ( ! $product ) {
 			return;
@@ -223,6 +242,8 @@ class Product_Related extends Products_Base {
 			$args['columns'] = $settings['columns'];
 		}
 
+		$args = array_map( 'sanitize_text_field', $args );
+
 		// Get visible related products then sort them at random.
 		$args['related_products'] = array_filter( array_map( 'wc_get_product', wc_get_related_products( $product->get_id(), $args['posts_per_page'], $product->get_upsell_ids() ) ), 'wc_products_array_filter_visible' );
 
@@ -238,7 +259,8 @@ class Product_Related extends Products_Base {
 		if ( $related_products_html ) {
 			$related_products_html = str_replace( '<ul class="products', '<ul class="products elementor-grid', $related_products_html );
 
-			echo wp_kses_post( $related_products_html );
+			// PHPCS - Doesn't need to be escaped since it's a WooCommerce template, and 3rd party plugins might hook into it.
+			echo $related_products_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
 		if ( 'yes' === $settings['automatically_align_buttons'] ) {

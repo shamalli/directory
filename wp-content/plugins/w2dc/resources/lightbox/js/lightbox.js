@@ -12,6 +12,8 @@
  * @preserve
  */
 
+"use strict";
+
 // Uses Node, AMD or browser globals to create a module.
 (function (root, factory) {
     if (typeof define === 'function' && define.amd) {
@@ -46,8 +48,6 @@
     fadeDuration: 600,
     fitImagesInViewport: true,
     imageFadeDuration: 600,
-    // maxWidth: 800,
-    // maxHeight: 600,
     positionFromTop: 50,
     resizeDuration: 700,
     showImageNumberLabel: true,

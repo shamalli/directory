@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 class w2dc_item_listing {
 	public $name = 'listing';
 	public $item_id;
@@ -33,7 +35,7 @@ class w2dc_item_listing {
 				return $listing->title();
 			}
 		} else {
-			return __('N/A', 'W2DC');
+			return esc_html__('N/A', 'w2dc');
 		}
 	}
 	
@@ -41,7 +43,7 @@ class w2dc_item_listing {
 		if ($listing = $this->getItem()) {
 			return $listing->post->ID;
 		} else {
-			return __('N/A', 'W2DC');
+			return esc_html__('N/A', 'w2dc');
 		}
 	}
 
@@ -50,7 +52,7 @@ class w2dc_item_listing {
 			$listing_id = $listing->post->ID;
 			return '<a href="' . apply_filters('w2dc_get_edit_listing_link', get_edit_post_link($listing_id), $listing_id) . '">' . $listing->title() . '</a>';
 		} else {
-			return __('N/A', 'W2DC');
+			return esc_html__('N/A', 'w2dc');
 		}
 	}
 	
@@ -58,15 +60,15 @@ class w2dc_item_listing {
 		if ($listing = $this->getItem()) {
 			return array('active_interval' => $listing->level->active_interval, 'active_period' => $listing->level->active_period);
 		} else {
-			return __('N/A', 'W2DC');
+			return esc_html__('N/A', 'w2dc');
 		}
 	}
 	
 	public function getItemOptionsString() {
 		if ($listing = $this->getItem()) {
-			return __('Listing level - ', 'W2DC') . $listing->level->name . '; ' . __('Active period - ', 'W2DC') . $listing->level->getActivePeriodString();
+			return esc_html__('Listing level - ', 'w2dc') . $listing->level->name . '; ' . esc_html__('Active period - ', 'w2dc') . $listing->level->getActivePeriodString();
 		} else {
-			return __('N/A', 'W2DC');
+			return esc_html__('N/A', 'w2dc');
 		}
 	}
 
@@ -111,10 +113,10 @@ function w2dc_pay_invoice_link($listing) {
 	
 	if ($listing->post->post_author == get_current_user_id() && ($listing->status == 'unpaid' || $listing->status == 'expired')) {
 		if (($invoice = getLastInvoiceByListingId($listing->post->ID)) && w2dc_current_user_can_edit_listing($invoice->post->ID) && current_user_can('edit_published_posts')) {
-			echo '<br /><a href="' . w2dc_get_edit_invoice_link($invoice->post->ID) . '" title="' . esc_attr($invoice->post->post_title) . '">' . __('pay invoice', 'W2DC') . '</a>';
+			echo '<br /><a href="' . w2dc_get_edit_invoice_link($invoice->post->ID) . '" title="' . esc_attr($invoice->post->post_title) . '">' . esc_html__('pay invoice', 'w2dc') . '</a>';
 		} elseif (!is_admin() && $w2dc_instance->listings_packages->can_user_create_listing_in_level($listing->level->id)) {
-			$title = esc_attr(strip_tags($w2dc_instance->listings_packages->available_listings_descr($listing->level->id, __('renew', 'W2DC'))));
-			echo '<br /><a href="' . add_query_arg('apply_listing_payment', $listing->post->ID) . '" title="' . $title . '">' . __('apply payment', 'W2DC') . '</a>';
+			$title = esc_attr(strip_tags($w2dc_instance->listings_packages->available_listings_descr($listing->level->id, esc_html__('renew', 'w2dc'))));
+			echo '<br /><a href="' . add_query_arg('apply_listing_payment', $listing->post->ID) . '" title="' . $title . '">' . esc_html__('apply payment', 'w2dc') . '</a>';
 		}
 	}
 }
@@ -126,20 +128,19 @@ function w2dc_create_new_listing_invoice($listing) {
 		if (recalcPrice($listing->level->price) > 0) {
 			$invoice_args = array(
 					'item' => 'listing',
-					'title' => sprintf(__('Invoice for activation of listing: %s', 'W2DC'), $listing->title()),
+					'title' => sprintf(esc_html__('Invoice for activation of listing: %s', 'w2dc'), $listing->title()),
 					'is_subscription' => ($listing->level->eternal_active_period) ? false : true,
 					'price' => $listing->level->price,
 					'item_id' => $listing->post->ID,
 					'author_id' => $listing->post->post_author
 			);
 			if ($invoice_id = call_user_func_array('w2dc_create_invoice', $invoice_args)) {
-				w2dc_addMessage(__('New invoice was created successfully, listing will become active after payment', 'W2DC'));
+				w2dc_addMessage(esc_html__('New invoice was created successfully, listing will become active after payment', 'w2dc'));
 				update_post_meta($listing->post->ID, '_listing_status', 'unpaid');
 				if ($listing->post->post_status != 'pending') {
 					global $wpdb;
 					
-					// wp_update_post() can fall into inifinite loop on certain occasions
-					$wpdb->query("UPDATE {$wpdb->posts} SET post_status='pending' WHERE ID={$listing->post->ID}");
+					$wpdb->query($wpdb->prepare("UPDATE {$wpdb->posts} SET post_status='pending' WHERE ID=%d", $listing->post->ID));
 				}
 	
 				if (is_user_logged_in() && w2dc_current_user_can_edit_listing($invoice_id) && $edit_invoice_link = w2dc_get_edit_invoice_link($invoice_id, 'url')) {
@@ -165,7 +166,7 @@ function w2dc_renew_listing_invoice($continue, $listing, $continue_invoke_hooks)
 			if (recalcPrice($listing->level->price) > 0) {
 				$invoice_args = array(
 						'item' => 'listing',
-						'title' => sprintf(__('Invoice for renewal of listing: %s', 'W2DC'), $listing->title()),
+						'title' => sprintf(esc_html__('Invoice for renewal of listing: %s', 'w2dc'), $listing->title()),
 						'is_subscription' => ($listing->level->eternal_active_period) ? false : true,
 						'price' => $listing->level->price,
 						'item_id' => $listing->post->ID,
@@ -173,7 +174,7 @@ function w2dc_renew_listing_invoice($continue, $listing, $continue_invoke_hooks)
 				);
 				if ($invoice_id = call_user_func_array('w2dc_create_invoice', $invoice_args)) {
 					if (is_user_logged_in()) {
-						w2dc_addMessage(sprintf(__('New <a href="%s">invoice</a> was created successfully, listing will become active after payment', 'W2DC'), w2dc_get_edit_invoice_link($invoice_id, 'url')));
+						w2dc_addMessage(sprintf(wp_kses(__('New <a href="%s">invoice</a> was created successfully, listing will become active after payment', 'w2dc'), 'post'), w2dc_get_edit_invoice_link($invoice_id, 'url')));
 					}
 	
 					if ($listing->status == 'expired') {
@@ -189,14 +190,5 @@ function w2dc_renew_listing_invoice($continue, $listing, $continue_invoke_hooks)
 
 	return $continue;
 }
-
-// expire listing when level change
-/* add_filter('w2dc_listing_level_change_after_expiration', 'w2dc_listing_level_change_after_expiration');
-function w2dc_listing_level_change_after_expiration($listing) {
-
-	if (recalcPrice($listing->level->price) > 0) {
-		$listing->makeExpired();
-	}
-} */
 
 ?>

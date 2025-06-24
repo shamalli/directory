@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 add_filter("wcsearch_query_args", "wcsearch_query_args_keywords", 10, 2);
 function wcsearch_query_args_keywords($q_args, $args) {
 	if (!empty($args['keywords'])) {

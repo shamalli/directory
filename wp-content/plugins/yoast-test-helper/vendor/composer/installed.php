@@ -1,24 +1,23 @@
-<?php return array (
-  'root' => 
-  array (
-    'pretty_version' => 'dev-develop',
-    'version' => 'dev-develop',
-    'aliases' => 
-    array (
+<?php return array(
+    'root' => array(
+        'name' => 'yoast/test-helper',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => '1431e80790025e99a5bb5760deeb51b495475902',
+        'type' => 'wordpress-plugin',
+        'install_path' => __DIR__ . '/../../',
+        'aliases' => array(),
+        'dev' => false,
     ),
-    'reference' => '5a95fe3318b2b5a120a203fadf2b52e2f1ed866c',
-    'name' => 'yoast/test-helper',
-  ),
-  'versions' => 
-  array (
-    'yoast/test-helper' => 
-    array (
-      'pretty_version' => 'dev-develop',
-      'version' => 'dev-develop',
-      'aliases' => 
-      array (
-      ),
-      'reference' => '5a95fe3318b2b5a120a203fadf2b52e2f1ed866c',
+    'versions' => array(
+        'yoast/test-helper' => array(
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '1431e80790025e99a5bb5760deeb51b495475902',
+            'type' => 'wordpress-plugin',
+            'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
     ),
-  ),
 );

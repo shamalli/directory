@@ -383,7 +383,7 @@ class Breadcrumbs {
 
 		$type_object = get_post_type_object( $post_type );
 		if ( ! empty( $type_object->has_archive ) ) {
-			$this->add_crumb( $type_object->labels->singular_name, get_post_type_archive_link( $post_type ) );
+			$this->add_crumb( $type_object->labels->name, get_post_type_archive_link( $post_type ) );
 		}
 	}
 
@@ -447,7 +447,7 @@ class Breadcrumbs {
 
 	/**
 	 * Single post trail.
-	 * 
+	 *
 	 * @copyright Copyright (C) 2008-2019, Yoast BV
 	 * The following code is a derivative work of the code from the Yoast (https://github.com/Yoast/wordpress-seo/), which is licensed under GPL v3.
 	 *

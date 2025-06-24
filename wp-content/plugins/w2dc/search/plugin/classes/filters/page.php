@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 add_filter("wcsearch_query_args_validate", "wcsearch_query_args_validate_page");
 function wcsearch_query_args_validate_page($args) {
 	if (!empty($args['page'])) {

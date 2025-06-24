@@ -1,6 +1,6 @@
 <?php
 
-class VP_W2DC_Control_Field_Upload extends VP_W2DC_Control_Field
+class W2DC_VP_Control_Field_Upload extends W2DC_VP_Control_Field
 {
 
 	public function __construct()
@@ -20,7 +20,7 @@ class VP_W2DC_Control_Field_Upload extends VP_W2DC_Control_Field
 
 	public function _setup_data()
 	{
-		$preview = VP_W2DC_Util_Res::get_preview_from_url($this->get_value());
+		$preview = W2DC_VP_Util_Res::get_preview_from_url($this->get_value());
 		$this->add_data('preview', $preview);
 		parent::_setup_data();
 	}
@@ -29,7 +29,7 @@ class VP_W2DC_Control_Field_Upload extends VP_W2DC_Control_Field
 	{
 		$this->_setup_data();
 		$this->add_data('is_compact', $is_compact);
-		return VP_W2DC_View::instance()->load('control/upload', $this->get_data());
+		return W2DC_VP_View::instance()->load('control/upload', $this->get_data());
 	}
 
 }

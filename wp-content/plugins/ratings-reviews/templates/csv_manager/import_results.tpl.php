@@ -12,11 +12,11 @@
 	<?php wp_nonce_field(W2RR_PATH, 'w2rr_csv_import_nonce');?>
 
 	<?php if ($log['errors'] || $test_mode): ?>
-	<?php submit_button(esc_html__('Go back', 'W2RR'), 'primary', 'goback', false); ?>
+	<?php submit_button(esc_html__('Go back', 'w2rr'), 'primary', 'goback', false); ?>
 	&nbsp;&nbsp;&nbsp;
 	<?php endif; ?>
 
-	<a href="<?php echo admin_url('admin.php?page=w2rr_csv_import'); ?>" class="button button-primary"><?php esc_html_e('Import new file', 'W2RR'); ?></a>
+	<a href="<?php echo admin_url('admin.php?page=w2rr_csv_import'); ?>" class="button button-primary"><?php esc_html_e('Import new file', 'w2rr'); ?></a>
 </form>
 
 <?php w2rr_renderTemplate('admin_footer.tpl.php'); ?>

@@ -1,3 +1,8 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <div class="wcsearch-search-model-input wcsearch-search-model-hours" <?php echo $search_model->getOptionsString(); ?>>
 	<?php if ($display == "checkbox"): ?>
 	<div class="wcsearch-checkbox">

@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 add_filter("wcsearch_query_args_validate", "wcsearch_query_args_validate_featured");
 function wcsearch_query_args_validate_featured($args) {
 	if (!empty($args['featured'])) {
@@ -26,7 +28,7 @@ function wcsearch_query_args_featured($q_args, $args) {
 add_filter("wcsearch_visible_params", "wcsearch_visible_params_featured", 10, 2);
 function wcsearch_visible_params_featured($params, $query_array) {
 	if (!empty($query_array['featured'])) {
-		$label = esc_html__("Featured", "WCSEARCH");
+		$label = esc_html__("Featured", "wcsearch");
 		
 		unset($query_array['featured']);
 		$query_string = http_build_query($query_array);

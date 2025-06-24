@@ -24,17 +24,17 @@ return array(
 				'override' => false,
 			),
 			'bootstrap-colorpicker' => array(
-				'path'     => VP_W2RR_PUBLIC_URL . '/js/vendor/bootstrap-colorpicker.js',
+				'path'     => W2RR_VP_PUBLIC_URL . '/js/vendor/bootstrap-colorpicker.js',
 				'deps'     => array('jquery'),
 				'ver'      => false,
 			),
 			'tipsy' => array(
-				'path'     => VP_W2RR_PUBLIC_URL . '/js/vendor/jquery.tipsy.js',
+				'path'     => W2RR_VP_PUBLIC_URL . '/js/vendor/jquery.tipsy.js',
 				'deps'     => array('jquery'),
 				'ver'      => '1.0.0a'
 			),
 			'scrollspy' => array(
-				'path'     => VP_W2RR_PUBLIC_URL . '/js/vendor/jquery-scrollspy.js',
+				'path'     => W2RR_VP_PUBLIC_URL . '/js/vendor/jquery-scrollspy.js',
 				'deps'     => array('jquery'),
 				'ver'      => false,
 			),
@@ -64,44 +64,44 @@ return array(
 				'ver'      => '1.9.2',
 			),
 			'jquery-typing' => array(
-				'path'     => VP_W2RR_PUBLIC_URL . '/js/vendor/jquery.typing-0.2.0.min.js',
+				'path'     => W2RR_VP_PUBLIC_URL . '/js/vendor/jquery.typing-0.2.0.min.js',
 				'deps'     => array('jquery'),
 				'ver'      => '0.2',
 			),
 			'ace-editor' => array(
-				'path'     => VP_W2RR_PUBLIC_URL . '/js/vendor/ace/ace.js',
+				'path'     => W2RR_VP_PUBLIC_URL . '/js/vendor/ace/ace.js',
 				'deps'     => array(),
 				'ver'      => '1.0.0',
 			),
 			'select2vp' => array(
-				'path'     => VP_W2RR_PUBLIC_URL . '/js/vendor/select2vp.min.js',
+				'path'     => W2RR_VP_PUBLIC_URL . '/js/vendor/select2vp.min.js',
 				'deps'     => array('jquery'),
 				'ver'      => '3.3.2',
 				'override' => true,
 			),
 			'select2vp-sortable' => array(
-				'path'     => VP_W2RR_PUBLIC_URL . '/js/vendor/select2vp.sortable.js',
+				'path'     => W2RR_VP_PUBLIC_URL . '/js/vendor/select2vp.sortable.js',
 				'deps'     => array('jquery', 'jquery-ui-sortable', 'select2vp'),
 				'ver'      => '1.0.0',
 				'override' => true,
 			),
 			'reveal' => array(
-				'path'     => VP_W2RR_PUBLIC_URL . '/js/vendor/jquery.reveal.js',
+				'path'     => W2RR_VP_PUBLIC_URL . '/js/vendor/jquery.reveal.js',
 				'deps'     => array('jquery'),
 				'ver'      => '1.0.0',
 			),
 			'kia-metabox' => array(
-				'path'     => VP_W2RR_PUBLIC_URL . '/js/kia-metabox.js',
+				'path'     => W2RR_VP_PUBLIC_URL . '/js/kia-metabox.js',
 				'deps'     => array('jquery', 'editor'),
 				'ver'      => '1.0',
 				'override' => true,
 			),
 			'w2rr_shared' => array(
-				'path'     => VP_W2RR_PUBLIC_URL . '/js/w2rr_shared.min.js',
+				'path'     => W2RR_VP_PUBLIC_URL . '/js/shared.min.js',
 				'deps'     => array(),
 				'ver'      => '1.1',
 				'localize' => array(
-					'name' => 'vp_w2rr_wp',
+					'name' => 'w2rr_vp_wp',
 					'keys' => array(
 						'use_upload', 'use_new_media_upload', 'public_url', 'wp_include_url', 'val_msg', 'ctrl_msg',
 						'alphabet_validatable', 'alphanumeric_validatable', 'numeric_validatable', 'email_validatable',
@@ -110,38 +110,38 @@ return array(
 				)
 			),
 			'vp-option' => array(
-				'path'     => VP_W2RR_PUBLIC_URL . '/js/option.min.js',
+				'path'     => W2RR_VP_PUBLIC_URL . '/js/option.min.js',
 				'deps'     => array(),
 				'ver'      => '2.0',
 				'localize' => array(
-					'name' => 'vp_w2rr_opt',
+					'name' => 'w2rr_vp_opt',
 					'keys' => array(
 						'util_msg', 'nonce'
 					)
 				)
 			),
 			'vp-metabox' => array(
-				'path'     => VP_W2RR_PUBLIC_URL . '/js/metabox.min.js',
+				'path'     => W2RR_VP_PUBLIC_URL . '/js/metabox.min.js',
 				'deps'     => array(),
 				'ver'      => '2.0',
 				'localize' => array(
-					'name' => 'vp_w2rr_mb',
+					'name' => 'w2rr_vp_mb',
 					'keys' => array(
 						'use_upload', 'use_new_media_upload'
 					)
 				)
 			),
 			'vp-shortcode-qt' => array(
-				'path'     => VP_W2RR_PUBLIC_URL . '/js/shortcode-quicktags.js',
+				'path'     => W2RR_VP_PUBLIC_URL . '/js/shortcode-quicktags.js',
 				'deps'     => array('reveal'),
 				'ver'      => '1.0.0',
 			),
 			'vp-shortcode' => array(
-				'path'     => VP_W2RR_PUBLIC_URL . '/js/shortcode-menu.js',
+				'path'     => W2RR_VP_PUBLIC_URL . '/js/shortcode-menu.js',
 				'deps'     => array('reveal', 'vp-shortcode-qt'),
 				'ver'      => '2.0',
 				'localize' => array(
-					'name' => 'vp_w2rr_ext_sc',
+					'name' => 'w2rr_vp_ext_sc',
 					'keys' => array(
 						'use_upload', 'use_new_media_upload', 'public_url'
 					)
@@ -157,39 +157,39 @@ return array(
 		'always' => array('tipsy', 'font-awesome_w2rr'),
 		'paths' => array(
 			'bootstrap-colorpicker' => array(
-				'path' => VP_W2RR_PUBLIC_URL . '/css/vendor/bootstrap-colorpicker.css',
+				'path' => W2RR_VP_PUBLIC_URL . '/css/vendor/bootstrap-colorpicker.css',
 				'deps' => array(),
 			),
 			'tipsy' => array(
-				'path' => VP_W2RR_PUBLIC_URL . '/css/vendor/tipsy.css',
+				'path' => W2RR_VP_PUBLIC_URL . '/css/vendor/tipsy.css',
 				'deps' => array(),
 			),
 			'jqui' => array(
-				'path' => VP_W2RR_PUBLIC_URL . '/css/vendor/jqueryui/themes/' . $jqui_theme . '/jquery-ui-1.9.2.custom.min.css',
+				'path' => W2RR_VP_PUBLIC_URL . '/css/vendor/jqueryui/themes/' . $jqui_theme . '/jquery-ui-1.9.2.custom.min.css',
 				'deps' => array(),
 			),
 			'font-awesome_w2rr' => array(
-				'path' => VP_W2RR_PUBLIC_URL . '/css/vendor/font-awesome.min.css',
+				'path' => W2RR_VP_PUBLIC_URL . '/css/vendor/font-awesome.min.css',
 				'deps' => array(),
 			),
 			'select2vp' => array(
-				'path' => VP_W2RR_PUBLIC_URL . '/css/vendor/select2vp.css',
+				'path' => W2RR_VP_PUBLIC_URL . '/css/vendor/select2vp.css',
 				'deps' => array(),
 			),
 			'reveal' => array(
-				'path' => VP_W2RR_PUBLIC_URL . '/css/vendor/reveal.css',
+				'path' => W2RR_VP_PUBLIC_URL . '/css/vendor/reveal.css',
 				'deps' => array(),
 			),
 			'vp-option' => array(
-				'path' => VP_W2RR_PUBLIC_URL . '/css/option.min.css',
+				'path' => W2RR_VP_PUBLIC_URL . '/css/option.min.css',
 				'deps' => array(),
 			),
 			'vp-metabox' => array(
-				'path' => VP_W2RR_PUBLIC_URL . '/css/metabox.min.css',
+				'path' => W2RR_VP_PUBLIC_URL . '/css/metabox.min.css',
 				'deps' => array(),
 			),
 			'vp-shortcode' => array(
-				'path' => VP_W2RR_PUBLIC_URL . '/css/shortcode.min.css',
+				'path' => W2RR_VP_PUBLIC_URL . '/css/shortcode.min.css',
 				'deps' => array('reveal'),
 			),
 		),

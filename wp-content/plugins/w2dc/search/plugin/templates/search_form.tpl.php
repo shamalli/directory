@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 /**
  * [WCSEARCH_MAIN_SHORTCODE] works in this way:
  * $search_controller($args) {
@@ -10,7 +12,7 @@
  */
 $search_form->getSearchFormStyles();
 ?>
-<div id="wcsearch-search-wrapper-<?php echo $search_form->search_form_id; ?>" class="wcsearch-content wcsearch-search-wrapper">
+<div id="wcsearch-search-wrapper-<?php wcsearch_esc_e($search_form->search_form_id); ?>" class="wcsearch-content wcsearch-search-wrapper">
 	<?php if ($search_form->args['sticky_scroll']): ?>
 	<div class="wcsearch-sticky-scroll">
 	<?php endif; ?>

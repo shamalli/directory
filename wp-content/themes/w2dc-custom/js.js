@@ -1,17 +1,21 @@
 jQuery(document).ready(function($) {
 	
 	var toppadding = 0;
+	
 	function calc_sticky_toppadding() {
+		
 		toppadding = 0;
 		if (toppadding == 0 && $('body').hasClass('admin-bar')) {
 			toppadding = 32;
 		}
+		
 		if ($('.site-header.header-fixed.fixed:visible').length) {
 			if ($('.site-header.header-fixed.fixed:visible').css("position") == 'fixed') {
 				var headerHeight = $('.site-header.header-fixed.fixed').outerHeight();
 				toppadding = toppadding + headerHeight;
 			}
 		}
+		
 		$('.w2dc-theme-sticky').height($(window).height()-toppadding).css('top', toppadding);
 	}
 	

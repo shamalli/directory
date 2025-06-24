@@ -1,5 +1,7 @@
 <?php 
 
+// @codingStandardsIgnoreFile
+
 class w2dc_listings_manager {
 	public $current_listing;
 	
@@ -49,12 +51,9 @@ class w2dc_listings_manager {
 			// the post with empty title will not call this filter!
 			add_filter('wp_insert_post_data', array($this, 'validateListing'), 99, 2);
 
-			// adapted for WPML
-			//if (!isset($_POST['icl_trid'])) {
-				add_filter('redirect_post_location', array($this, 'redirectAfterSave'));
-				
-				add_action('save_post_' . W2DC_POST_TYPE, array($this, 'saveListing'), 10, 3);
-			//}
+			add_filter('redirect_post_location', array($this, 'redirectAfterSave'));
+			
+			add_action('save_post_' . W2DC_POST_TYPE, array($this, 'saveListing'), 10, 3);
 		}
 		
 		// update terms counts
@@ -62,8 +61,6 @@ class w2dc_listings_manager {
 
 		// adapted for WPML
 		add_action('icl_make_duplicate', array($this, 'handle_wpml_make_duplicate'), 10, 4);
-		//add_action('w2dc_listing_creation', array($this, 'wpml_copy_translations'));
-		//add_action('w2dc_listing_creation_front', array($this, 'wpml_copy_translations'));
 		
 		add_action('post_updated', array($this, 'avoid_redirection_plugin'), 10, 1);
 		
@@ -104,7 +101,7 @@ class w2dc_listings_manager {
 	public function addListingInfoMetabox($post_type) {
 		if ($post_type == W2DC_POST_TYPE) {
 			add_meta_box('w2dc_listing_info',
-					__('Listing Info', 'W2DC'),
+					esc_html__('Listing Info', 'w2dc'),
 					array($this, 'listingInfoMetabox'),
 					W2DC_POST_TYPE,
 					'side',
@@ -116,7 +113,7 @@ class w2dc_listings_manager {
 		$listing = w2dc_getCurrentListingInAdmin();
 		if ($post_type == W2DC_POST_TYPE && !$this->current_listing->level->eternal_active_period && (get_option('w2dc_change_expiration_date') || current_user_can('manage_options'))) {
 			add_meta_box('w2dc_listing_expiration_date',
-					__('Listing expiration date', 'W2DC'),
+					esc_html__('Listing expiration date', 'w2dc'),
 					array($this, 'listingExpirationDateMetabox'),
 					W2DC_POST_TYPE,
 					'normal',
@@ -128,7 +125,7 @@ class w2dc_listings_manager {
 		$listing = w2dc_getCurrentListingInAdmin();
 		if ($post_type == W2DC_POST_TYPE && current_user_can('manage_options')) {
 			add_meta_box('w2dc_listing_order_date',
-					__('Listing sorting date', 'W2DC'),
+					esc_html__('Listing sorting date', 'w2dc'),
 					array($this, 'listingOrderDateMetabox'),
 					W2DC_POST_TYPE,
 					'normal',
@@ -139,7 +136,7 @@ class w2dc_listings_manager {
 	public function addClaimingMetabox($post_type) {
 		if ($post_type == W2DC_POST_TYPE) {
 			add_meta_box('w2dc_listing_claim',
-					__('Listing claim', 'W2DC'),
+					esc_html__('Listing claim', 'w2dc'),
 					array($this, 'listingClaimMetabox'),
 					W2DC_POST_TYPE,
 					'normal',
@@ -150,7 +147,7 @@ class w2dc_listings_manager {
 	public function addContactEmailMetabox($post_type) {
 		if ($post_type == W2DC_POST_TYPE) {
 			add_meta_box('w2dc_contact_email',
-					__('Contact email', 'W2DC'),
+					esc_html__('Contact email', 'w2dc'),
 					array($this, 'listingContactEmailMetabox'),
 					W2DC_POST_TYPE,
 					'normal',
@@ -179,7 +176,7 @@ class w2dc_listings_manager {
 				add_action('admin_enqueue_scripts', array($w2dc_instance->media_manager, 'admin_enqueue_scripts_styles'));
 			
 				add_meta_box('w2dc_media_metabox',
-				__('Listing media', 'W2DC'),
+				esc_html__('Listing media', 'w2dc'),
 				array($w2dc_instance->media_manager, 'mediaMetabox'),
 				W2DC_POST_TYPE,
 				'normal',
@@ -208,12 +205,13 @@ class w2dc_listings_manager {
 			}
 			w2dc_renderTemplate('listings/expiration_date_metabox.tpl.php', array('listing' => $listing, 'dateformat' => w2dc_getDatePickerFormat()));
 		} else {
-			echo "<p>".__('Renew listing first!', 'W2DC')."</p>";
-			$renew_link = strip_tags(apply_filters('w2dc_renew_option', __('renew listing', 'W2DC'), $listing));
+			echo "<p>".esc_html__('Renew listing first!', 'w2dc')."</p>";
+			$renew_link = strip_tags(apply_filters('w2dc_renew_option', esc_html__('renew listing', 'w2dc'), $listing));
 			if (get_option('w2dc_fsubmit_addon') && isset($w2dc_instance->dashboard_page_url) && $w2dc_instance->dashboard_page_url)
 				echo '<br /><a href="' . w2dc_dashboardUrl(array('w2dc_action' => 'renew_listing', 'listing_id' => $listing->post->ID)) . '"><span class="w2dc-fa w2dc-fa-refresh w2dc-fa-lg"></span> ' . $renew_link . '</a>';
 			else
 				echo '<br /><a href="' . admin_url('options.php?page=w2dc_renew&listing_id=' . $listing->post->ID) . '"><span class="w2dc-fa w2dc-fa-refresh w2dc-fa-lg"></span> ' . $renew_link . '</a>';
+			do_action('w2dc_listing_status_option', $listing);
 		}
 	}
 	
@@ -228,12 +226,13 @@ class w2dc_listings_manager {
 			}
 			w2dc_renderTemplate('listings/order_date_metabox.tpl.php', array('listing' => $listing, 'dateformat' => w2dc_getDatePickerFormat()));
 		} else {
-			echo "<p>".__('Renew listing first!', 'W2DC')."</p>";
-			$renew_link = strip_tags(apply_filters('w2dc_renew_option', __('renew listing', 'W2DC'), $listing));
+			echo "<p>".esc_html__('Renew listing first!', 'w2dc')."</p>";
+			$renew_link = strip_tags(apply_filters('w2dc_renew_option', esc_html__('renew listing', 'w2dc'), $listing));
 			if (get_option('w2dc_fsubmit_addon') && isset($w2dc_instance->dashboard_page_url) && $w2dc_instance->dashboard_page_url)
 				echo '<br /><a href="' . w2dc_dashboardUrl(array('w2dc_action' => 'renew_listing', 'listing_id' => $listing->post->ID)) . '"><span class="w2dc-fa w2dc-fa-refresh w2dc-fa-lg"></span> ' . $renew_link . '</a>';
 			else
 				echo '<br /><a href="' . admin_url('options.php?page=w2dc_renew&listing_id=' . $listing->post->ID) . '"><span class="w2dc-fa w2dc-fa-refresh w2dc-fa-lg"></span> ' . $renew_link . '</a>';
+			do_action('w2dc_listing_status_option', $listing);
 		}
 	}
 
@@ -252,11 +251,11 @@ class w2dc_listings_manager {
 	public function add_listings_table_columns($columns) {
 		global $w2dc_instance;
 
-		$w2dc_columns['w2dc_level'] = __('Level', 'W2DC') . (($w2dc_instance->directories->isMultiDirectory()) ? '/' . __('Directory', 'W2DC') : '');
-		$w2dc_columns['w2dc_expiration_date'] = __('Expiration date', 'W2DC');
-		$w2dc_columns['w2dc_status'] = __('Status', 'W2DC');
+		$w2dc_columns['w2dc_level'] = esc_html__('Level', 'w2dc') . (($w2dc_instance->directories->isMultiDirectory()) ? '/' . esc_html__('Directory', 'w2dc') : '');
+		$w2dc_columns['w2dc_expiration_date'] = esc_html__('Expiration date', 'w2dc');
+		$w2dc_columns['w2dc_status'] = esc_html__('Status', 'w2dc');
 		if (get_option('w2dc_fsubmit_addon') && get_option('w2dc_claim_functionality')) {
-			$w2dc_columns['w2dc_claim'] = __('Claim', 'W2DC');
+			$w2dc_columns['w2dc_claim'] = esc_html__('Claim', 'w2dc');
 		}
 
 		return array_slice($columns, 0, 2, true) + $w2dc_columns + array_slice($columns, 2, count($columns)-2, true);
@@ -271,8 +270,8 @@ class w2dc_listings_manager {
 				$listing->loadListingFromPost($post_id);
 
 				if ($listing->level && $listing->level->isUpgradable())
-					echo '<a href="' . admin_url('options.php?page=w2dc_upgrade&listing_id=' . $post_id) . '" title="' . esc_attr__('Change level', 'W2DC') . '">';
-				echo $listing->level->name;
+					echo '<a href="' . admin_url('options.php?page=w2dc_upgrade&listing_id=' . $post_id) . '" title="' . esc_html__('Change level', 'w2dc') . '">';
+				w2dc_esc_e($listing->level->name);
 				if ($listing->level && $listing->level->isUpgradable())
 					echo ' <span class="w2dc-fa w2dc-fa-cog w2dc-fa-lg"></span></a>';
 
@@ -286,18 +285,18 @@ class w2dc_listings_manager {
 				$listing = new w2dc_listing();
 				$listing->loadListingFromPost($post_id);
 				if ($listing->level && $listing->level->eternal_active_period)
-					_e('Eternal active period', 'W2DC');
+					esc_html_e('Eternal active period', 'w2dc');
 				else {
 					if ((get_option('w2dc_change_expiration_date') || current_user_can('manage_options')) && $listing->status == 'active')
-						echo '<a href="' . admin_url('options.php?page=w2dc_changedate&listing_id=' . $post_id) . '" title="' . esc_attr__('change expiration date', 'W2DC') . '">' . date_i18n(get_option('date_format') . ' ' . get_option('time_format'), intval($listing->expiration_date)) . '</a>';
+						echo '<a href="' . admin_url('options.php?page=w2dc_changedate&listing_id=' . $post_id) . '" title="' . esc_html__('change expiration date', 'w2dc') . '">' . w2dc_formatDateTime($listing->expiration_date) . '</a>';
 					else
-						echo date_i18n(get_option('date_format') . ' ' . get_option('time_format'), intval($listing->expiration_date));
+						echo w2dc_formatDateTime($listing->expiration_date);
 
 					if ($listing->status == 'expired') {
-						$renew_link = apply_filters('w2dc_renew_option', __('renew listing', 'W2DC'), $listing);
+						$renew_link = apply_filters('w2dc_renew_option', esc_html__('renew listing', 'w2dc'), $listing);
 						echo '<br /><a href="' . admin_url('options.php?page=w2dc_renew&listing_id=' . $post_id) . '"><span class="w2dc-fa w2dc-fa-refresh w2dc-fa-lg"></span> ' . $renew_link . '</a>';
 					} elseif ($listing->expiration_date > time()) {
-						echo '<br />' . human_time_diff(time(), $listing->expiration_date) . '&nbsp;' . __('left', 'W2DC');
+						echo '<br />' . human_time_diff(time(), $listing->expiration_date) . '&nbsp;' . esc_html__('left', 'w2dc');
 					}
 				}
 				break;
@@ -305,13 +304,13 @@ class w2dc_listings_manager {
 				$listing = new w2dc_listing();
 				$listing->loadListingFromPost($post_id);
 				if ($listing->status == 'active')
-					echo '<span class="w2dc-badge w2dc-listing-status-active">' . __('active', 'W2DC') . '</span>';
+					echo '<span class="w2dc-badge w2dc-listing-status-active">' . esc_html__('active', 'w2dc') . '</span>';
 				elseif ($listing->status == 'expired')
-					echo '<span class="w2dc-badge w2dc-listing-status-expired">' . __('expired', 'W2DC') . '</span>';
+					echo '<span class="w2dc-badge w2dc-listing-status-expired">' . esc_html__('expired', 'w2dc') . '</span>';
 				elseif ($listing->status == 'unpaid')
-					echo '<span class="w2dc-badge w2dc-listing-status-unpaid">' . __('unpaid', 'W2DC') . '</span>';
+					echo '<span class="w2dc-badge w2dc-listing-status-unpaid">' . esc_html__('unpaid', 'w2dc') . '</span>';
 				elseif ($listing->status == 'stopped')
-					echo '<span class="w2dc-badge w2dc-listing-status-stopped">' . __('stopped', 'W2DC') . '</span>';
+					echo '<span class="w2dc-badge w2dc-listing-status-stopped">' . esc_html__('stopped', 'w2dc') . '</span>';
 				do_action('w2dc_listing_status_option', $listing);
 				break;
 			case "w2dc_claim":
@@ -322,7 +321,7 @@ class w2dc_listings_manager {
 					if ($listing->claim->isClaimed())
 						echo $listing->claim->getClaimMessage();
 					elseif ($listing->is_claimable)
-						_e('Claimable', 'W2DC');
+						esc_html_e('Claimable', 'w2dc');
 				}
 				break;
 		}
@@ -334,7 +333,7 @@ class w2dc_listings_manager {
 			$listing->loadListingFromPost($post);
 			
 			if ($listing->level->raiseup_enabled && $listing->status == 'active' && $listing->post->post_status == 'publish' && w2dc_current_user_can_edit_listing($listing->post->ID)) {
-				$raise_up_link = apply_filters('w2dc_raiseup_option', __('raise up listing', 'W2DC'), $listing);
+				$raise_up_link = apply_filters('w2dc_raiseup_option', esc_html__('raise up listing', 'w2dc'), $listing);
 				$actions['raise_up'] = '<a href="' . admin_url('options.php?page=w2dc_raise_up&listing_id=' . $post->ID) . '"><span class="w2dc-fa w2dc-fa-level-up w2dc-fa-lg"></span> ' . $raise_up_link . '</a>';
 			}
 			
@@ -348,38 +347,38 @@ class w2dc_listings_manager {
 			return;
 
 		echo '<select name="w2dc_post_status_filter">';
-		echo '<option value="">' . __('Any post status', 'W2DC') . '</option>';
-		echo '<option ' . selected(w2dc_getValue($_GET, 'w2dc_post_status_filter'), 'publish', false ) . 'value="publish">' . __('Published', 'W2DC') . '</option>';
-		echo '<option ' . selected(w2dc_getValue($_GET, 'w2dc_post_status_filter'), 'pending', false ) . 'value="pending">' . __('Pending', 'W2DC') . '</option>';
-		echo '<option ' . selected(w2dc_getValue($_GET, 'w2dc_post_status_filter'), 'draft', false ) . 'value="draft">' . __('Draft', 'W2DC') . '</option>';
+		echo '<option value="">' . esc_html__('Any post status', 'w2dc') . '</option>';
+		echo '<option ' . selected(w2dc_getValue($_GET, 'w2dc_post_status_filter'), 'publish', false ) . 'value="publish">' . esc_html__('Published', 'w2dc') . '</option>';
+		echo '<option ' . selected(w2dc_getValue($_GET, 'w2dc_post_status_filter'), 'pending', false ) . 'value="pending">' . esc_html__('Pending', 'w2dc') . '</option>';
+		echo '<option ' . selected(w2dc_getValue($_GET, 'w2dc_post_status_filter'), 'draft', false ) . 'value="draft">' . esc_html__('Draft', 'w2dc') . '</option>';
 		echo '</select>';
 
 		echo '<select name="w2dc_listing_status_filter">';
-		echo '<option value="">' . __('Any listing status', 'W2DC') . '</option>';
-		echo '<option ' . selected(w2dc_getValue($_GET, 'w2dc_listing_status_filter'), 'active', false ) . 'value="active">' . __('Active', 'W2DC') . '</option>';
-		echo '<option ' . selected(w2dc_getValue($_GET, 'w2dc_listing_status_filter'), 'expired', false ) . 'value="expired">' . __('Expired', 'W2DC') . '</option>';
-		echo '<option ' . selected(w2dc_getValue($_GET, 'w2dc_listing_status_filter'), 'unpaid', false ) . 'value="unpaid">' . __('Unpaid', 'W2DC') . '</option>';
+		echo '<option value="">' . esc_html__('Any listing status', 'w2dc') . '</option>';
+		echo '<option ' . selected(w2dc_getValue($_GET, 'w2dc_listing_status_filter'), 'active', false ) . 'value="active">' . esc_html__('Active', 'w2dc') . '</option>';
+		echo '<option ' . selected(w2dc_getValue($_GET, 'w2dc_listing_status_filter'), 'expired', false ) . 'value="expired">' . esc_html__('Expired', 'w2dc') . '</option>';
+		echo '<option ' . selected(w2dc_getValue($_GET, 'w2dc_listing_status_filter'), 'unpaid', false ) . 'value="unpaid">' . esc_html__('Unpaid', 'w2dc') . '</option>';
 		echo '</select>';
 
 		if ($w2dc_instance->directories->isMultiDirectory()) {
 			echo '<select name="w2dc_directory_filter">';
-			echo '<option value="">' . __('All directories', 'W2DC') . '</option>';
+			echo '<option value="">' . esc_html__('All directories', 'w2dc') . '</option>';
 			foreach ($w2dc_instance->directories->directories_array AS $directory)
 				echo '<option ' . selected(w2dc_getValue($_GET, 'w2dc_directory_filter'), $directory->id, false ) . 'value="' . $directory->id . '">' . $directory->name . '</option>';
 			echo '</select>';
 		}
 
 		echo '<select name="w2dc_level_filter">';
-		echo '<option value="">' . __('All listings levels', 'W2DC') . '</option>';
+		echo '<option value="">' . esc_html__('All listings levels', 'w2dc') . '</option>';
 		foreach ($w2dc_instance->levels->levels_array AS $level)
 			echo '<option ' . selected(w2dc_getValue($_GET, 'w2dc_level_filter'), $level->id, false ) . 'value="' . $level->id . '">' . $level->name . '</option>';
 		echo '</select>';
 
 		if (get_option('w2dc_fsubmit_addon') && get_option('w2dc_claim_functionality')) {
 			echo '<select name="w2dc_claim_filter">';
-			echo '<option value="">' . __('Any listings claim', 'W2DC') . '</option>';
-			echo '<option ' . selected(w2dc_getValue($_GET, 'w2dc_claim_filter'), 'claimable', false ) . 'value="claimable">' . __('Only claimable', 'W2DC') . '</option>';
-			echo '<option ' . selected(w2dc_getValue($_GET, 'w2dc_claim_filter'), 'claimed', false ) . 'value="claimed">' . __('Awaiting approval', 'W2DC') . '</option>';
+			echo '<option value="">' . esc_html__('Any listings claim', 'w2dc') . '</option>';
+			echo '<option ' . selected(w2dc_getValue($_GET, 'w2dc_claim_filter'), 'claimable', false ) . 'value="claimable">' . esc_html__('Only claimable', 'w2dc') . '</option>';
+			echo '<option ' . selected(w2dc_getValue($_GET, 'w2dc_claim_filter'), 'claimed', false ) . 'value="claimed">' . esc_html__('Awaiting approval', 'w2dc') . '</option>';
 			echo '</select>';
 		}
 	}
@@ -478,8 +477,8 @@ class w2dc_listings_manager {
 
 	public function addRaiseUpPage() {
 		add_submenu_page('options.php',
-				__('Raise up listing', 'W2DC'),
-				__('Raise up listing', 'W2DC'),
+				esc_html__('Raise up listing', 'w2dc'),
+				esc_html__('Raise up listing', 'w2dc'),
 				'publish_posts',
 				'w2dc_raise_up',
 				array($this, 'raiseUpListing')
@@ -492,10 +491,10 @@ class w2dc_listings_manager {
 				$action = 'show';
 				$referer = wp_get_referer();
 				if (isset($_GET['raiseup_action']) && $_GET['raiseup_action'] == 'raiseup') {
-					if ($this->current_listing->processRaiseUp())
-						w2dc_addMessage(__('Listing was raised up successfully!', 'W2DC'));
-					/* else
-						w2dc_addMessage(__('An error has occurred and listing was not raised up', 'W2DC'), 'error'); */
+					if ($this->current_listing->processRaiseUp()) {
+						w2dc_addMessage(esc_html__('Listing was raised up successfully!', 'w2dc'));
+					}
+
 					$action = $_GET['raiseup_action'];
 					$referer = $_GET['referer'];
 				}
@@ -508,8 +507,8 @@ class w2dc_listings_manager {
 
 	public function addRenewPage() {
 		add_submenu_page('options.php',
-				__('Renew listing', 'W2DC'),
-				__('Renew listing', 'W2DC'),
+				esc_html__('Renew listing', 'w2dc'),
+				esc_html__('Renew listing', 'w2dc'),
 				'publish_posts',
 				'w2dc_renew',
 				array($this, 'renewListing')
@@ -523,10 +522,9 @@ class w2dc_listings_manager {
 				$referer = wp_get_referer();
 				if (isset($_GET['renew_action']) && $_GET['renew_action'] == 'renew') {
 					if ($this->current_listing->processActivate(true, false)) {
-						w2dc_addMessage(__('Listing was renewed successfully!', 'W2DC'));
+						w2dc_addMessage(esc_html__('Listing was renewed successfully!', 'w2dc'));
 					}
-					/* else
-						w2dc_addMessage(__('An error has occurred and listing was not renewed', 'W2DC'), 'error'); */
+
 					$action = $_GET['renew_action'];
 					$referer = $_GET['referer'];
 				}
@@ -540,8 +538,8 @@ class w2dc_listings_manager {
 	public function addChangeDatePage() {
 		if (get_option('w2dc_change_expiration_date') || current_user_can('manage_options'))
 			add_submenu_page('options.php',
-					__('Change expiration date', 'W2DC'),
-					__('Change expiration date', 'W2DC'),
+					esc_html__('Change expiration date', 'w2dc'),
+					esc_html__('Change expiration date', 'w2dc'),
 					'publish_posts',
 					'w2dc_changedate',
 					array($this, 'changeDateListingPage')
@@ -568,14 +566,14 @@ class w2dc_listings_manager {
 	
 	public function changeExpirationDate() {
 		$w2dc_form_validation = new w2dc_form_validation();
-		$w2dc_form_validation->set_rules('expiration_date_tmstmp', __('Expiration date', 'W2DC'), 'required|integer');
-		$w2dc_form_validation->set_rules('expiration_date_hour', __('Expiration hour', 'W2DC'), 'required|integer');
-		$w2dc_form_validation->set_rules('expiration_date_minute', __('Expiration minute', 'W2DC'), 'required|integer');
+		$w2dc_form_validation->set_rules('expiration_date_tmstmp', esc_html__('Expiration date', 'w2dc'), 'required|integer');
+		$w2dc_form_validation->set_rules('expiration_date_hour', esc_html__('Expiration hour', 'w2dc'), 'required|integer');
+		$w2dc_form_validation->set_rules('expiration_date_minute', esc_html__('Expiration minute', 'w2dc'), 'required|integer');
 
 		if ($w2dc_form_validation->run()) {
 			// show message when expiration date was changed and listing was already created
 			if ($this->current_listing->saveExpirationDate($w2dc_form_validation->result_array()) && get_post_meta($this->current_listing->post->ID, '_listing_created', true)) {
-				w2dc_addMessage(__('Expiration date of listing was changed successfully!', 'W2DC'));
+				w2dc_addMessage(esc_html__('Expiration date of listing was changed successfully!', 'w2dc'));
 				$this->current_listing->loadListingFromPost($this->current_listing->post->ID);
 			}
 		} elseif ($error_string = $w2dc_form_validation->error_array()) {
@@ -585,14 +583,14 @@ class w2dc_listings_manager {
 	
 	public function changeOrderDate() {
 		$w2dc_form_validation = new w2dc_form_validation();
-		$w2dc_form_validation->set_rules('order_date_tmstmp', __('Sorting date', 'W2DC'), 'required|integer');
-		$w2dc_form_validation->set_rules('order_date_hour', __('Sorting hour', 'W2DC'), 'required|integer');
-		$w2dc_form_validation->set_rules('order_date_minute', __('Sorting minute', 'W2DC'), 'required|integer');
+		$w2dc_form_validation->set_rules('order_date_tmstmp', esc_html__('Sorting date', 'w2dc'), 'required|integer');
+		$w2dc_form_validation->set_rules('order_date_hour', esc_html__('Sorting hour', 'w2dc'), 'required|integer');
+		$w2dc_form_validation->set_rules('order_date_minute', esc_html__('Sorting minute', 'w2dc'), 'required|integer');
 
 		if ($w2dc_form_validation->run()) {
 			// show message when expiration date was changed and listing was already created
 			if ($this->current_listing->saveOrderDate($w2dc_form_validation->result_array()) && get_post_meta($this->current_listing->post->ID, '_listing_created', true)) {
-				w2dc_addMessage(__('Sorting date of listing was changed successfully!', 'W2DC'));
+				w2dc_addMessage(esc_html__('Sorting date of listing was changed successfully!', 'w2dc'));
 				$this->current_listing->loadListingFromPost($this->current_listing->post->ID);
 			}
 		} elseif ($error_string = $w2dc_form_validation->error_array()) {
@@ -602,8 +600,8 @@ class w2dc_listings_manager {
 	
 	public function addUpgradePage() {
 		add_submenu_page('options.php',
-				__('Change level of listing', 'W2DC'),
-				__('Change level of listing', 'W2DC'),
+				esc_html__('Change level of listing', 'w2dc'),
+				esc_html__('Change level of listing', 'w2dc'),
 				'publish_posts',
 				'w2dc_upgrade',
 				array($this, 'upgradeListingPage')
@@ -619,14 +617,16 @@ class w2dc_listings_manager {
 				$referer = wp_get_referer();
 				if (isset($_GET['upgrade_action']) && $_GET['upgrade_action'] == 'upgrade') {
 					$w2dc_form_validation = new w2dc_form_validation();
-					$w2dc_form_validation->set_rules('new_level_id', __('New level ID', 'W2DC'), 'required|integer');
+					$w2dc_form_validation->set_rules('new_level_id', esc_html__('New level ID', 'w2dc'), 'required|integer');
 
 					if ($w2dc_form_validation->run()) {
-						if ($this->current_listing->changeLevel($w2dc_form_validation->result_array('new_level_id')))
-							w2dc_addMessage(__('Listing level was changed successfully!', 'W2DC'));
+						if ($this->current_listing->changeLevel($w2dc_form_validation->result_array('new_level_id'))) {
+							w2dc_addMessage(esc_html__('Listing level was changed successfully!', 'w2dc'));
+						}
 						$action = $_GET['upgrade_action'];
-					} else
-						w2dc_addMessage(__('New level must be selected!', 'W2DC'), 'error');
+					} else {
+						w2dc_addMessage(esc_html__('New level must be selected!', 'w2dc'), 'error');
+					}
 					
 					$referer = $_GET['referer'];
 				}
@@ -640,8 +640,8 @@ class w2dc_listings_manager {
 	
 	public function addBulkUpgradePage() {
 		add_submenu_page('options.php',
-				__('Change level of listings', 'W2DC'),
-				__('Change level of listings', 'W2DC'),
+				esc_html__('Change level of listings', 'w2dc'),
+				esc_html__('Change level of listings', 'w2dc'),
 				'publish_posts',
 				'w2dc_upgrade_bulk',
 				array($this, 'upgradeListingsBulkPage')
@@ -652,15 +652,15 @@ class w2dc_listings_manager {
 		global $w2dc_instance;
 	
 		if (isset($_GET['listings_ids'])) {
-			$listings_ids = array_map('intval', explode(',', $_GET['listings_ids']));
+			$listings_ids = array_map('intval', wp_parse_id_list($_GET['listings_ids']));
 
 			$action = 'show';
-			$referer = $_GET['referer'];
+			$referer = esc_attr($_GET['referer']);
 			if (isset($_GET['upgrade_action']) && $_GET['upgrade_action'] == 'upgrade') {
 				$action = $_GET['upgrade_action'];
 
 				$w2dc_form_validation = new w2dc_form_validation();
-				$w2dc_form_validation->set_rules('new_level_id', __('New level ID', 'W2DC'), 'required|integer');
+				$w2dc_form_validation->set_rules('new_level_id', esc_html__('New level ID', 'w2dc'), 'required|integer');
 				if ($w2dc_form_validation->run()) {
 					$new_level_id = $w2dc_form_validation->result_array('new_level_id');
 					$upgraded = 0;
@@ -673,7 +673,7 @@ class w2dc_listings_manager {
 								exit();
 					}
 					if ($upgraded)
-						w2dc_addMessage(sprintf(_n('%d listing has changed level successfully!', '%d listings have changed levels successfully!', $upgraded, 'W2DC'), $upgraded));
+						w2dc_addMessage(sprintf(_n('%d listing has changed level successfully!', '%d listings have changed levels successfully!', $upgraded, 'w2dc'), $upgraded));
 				} else
 					exit();
 			}
@@ -693,8 +693,8 @@ class w2dc_listings_manager {
 				"use strict";
 
 				$(function() {
-					$('<option>').val('upgrade').text('<?php echo esc_js(__('Change level', 'W2DC')); ?>').appendTo("select[name='action']");
-					$('<option>').val('upgrade').text('<?php echo esc_js(__('Change level', 'W2DC')); ?>').appendTo("select[name='action2']");
+					$('<option>').val('upgrade').text('<?php echo esc_js(esc_html__('Change level', 'w2dc')); ?>').appendTo("select[name='action']");
+					$('<option>').val('upgrade').text('<?php echo esc_js(esc_html__('Change level', 'w2dc')); ?>').appendTo("select[name='action2']");
 				});
 			})(jQuery);
 		</script>
@@ -733,8 +733,8 @@ class w2dc_listings_manager {
 	
 	public function addProcessClaimPage() {
 		add_submenu_page('options.php',
-				__('Approve or decline claim', 'W2DC'),
-				__('Approve or decline claim', 'W2DC'),
+				esc_html__('Approve or decline claim', 'w2dc'),
+				esc_html__('Approve or decline claim', 'w2dc'),
 				'publish_posts',
 				'w2dc_process_claim',
 				array($this, 'processClaim')	
@@ -752,7 +752,7 @@ class w2dc_listings_manager {
 						if (get_option('w2dc_claim_approval_notification')) {
 							$claimer = get_userdata($this->current_listing->claim->claimer_id);
 	
-							$subject = __('Approval of claim notification', 'W2DC');
+							$subject = esc_html__('Approval of claim notification', 'w2dc');
 								
 							$body = str_replace('[claimer]', $claimer->display_name,
 									str_replace('[listing]', $this->current_listing->post->post_title,
@@ -761,13 +761,13 @@ class w2dc_listings_manager {
 								
 							w2dc_mail($claimer->user_email, $subject, $body);
 						}
-						w2dc_addMessage(__('Listing claim was approved successfully!', 'W2DC'));
+						w2dc_addMessage(esc_html__('Listing claim was approved successfully!', 'w2dc'));
 					} elseif ($_GET['claim_action'] == 'decline') {
 						$this->current_listing->claim->deleteRecord();
 						if (get_option('w2dc_claim_decline_notification')) {
 							$claimer = get_userdata($this->current_listing->claim->claimer_id);
 
-							$subject = __('Claim decline notification', 'W2DC');
+							$subject = esc_html__('Claim decline notification', 'w2dc');
 								
 							$body = str_replace('[claimer]', $claimer->display_name,
 									str_replace('[listing]', $this->current_listing->post->post_title,
@@ -776,7 +776,7 @@ class w2dc_listings_manager {
 							w2dc_mail($claimer->user_email, $subject, $body);
 						}
 						update_post_meta($this->current_listing->post->ID, '_is_claimable', true);
-						w2dc_addMessage(__('Listing claim was declined!', 'W2DC'));
+						w2dc_addMessage(esc_html__('Listing claim was declined!', 'w2dc'));
 					}
 					$action = 'processed';
 					$referer = $_GET['referer'];
@@ -841,7 +841,7 @@ class w2dc_listings_manager {
 		$this->current_listing->loadListingFromPost($post_id);
 		$w2dc_instance->current_listing = $this->current_listing;
 
-		// $w2dc_instance::setCurrentDirectory() for the frontend or self::setCurrentDirectory() for the backend
+		// ------------- $w2dc_instance::setCurrentDirectory() for the frontend or self::setCurrentDirectory() for the backend
 		if ($w2dc_instance->current_directory) {
 			update_post_meta($post_id, '_directory_id', $w2dc_instance->current_directory->id);
 		}
@@ -870,7 +870,7 @@ class w2dc_listings_manager {
 			$this->loadCurrentListing($postarr['ID']);
 			if ($this->current_listing->directory->id != $directory->id) {
 				update_post_meta($this->current_listing->post->ID, '_directory_id', $directory->id);
-				w2dc_addMessage(__("Listing directory was changed!", "W2DC"));
+				w2dc_addMessage(esc_html__("Listing directory was changed!", "w2dc"));
 			}
 		}
 		
@@ -888,8 +888,8 @@ class w2dc_listings_manager {
 	
 			$errors = array();
 			
-			if (!isset($postarr['post_title']) || !$postarr['post_title'] || $postarr['post_title'] == __('Auto Draft'))
-				$errors[] = __('Listing title field required', 'W2DC');
+			if (!isset($postarr['post_title']) || !$postarr['post_title'] || $postarr['post_title'] == esc_html__('Auto Draft'))
+				$errors[] = esc_html__('Listing title field required', 'w2dc');
 
 			$post_categories_ids = array();
 			if ($this->current_listing->level->categories_number > 0 || $this->current_listing->level->unlimited_categories) {
@@ -922,20 +922,19 @@ class w2dc_listings_manager {
 					if (is_email($_POST['contact_email']) || empty($_POST['contact_email'])) {
 						update_post_meta($this->current_listing->post->ID, '_contact_email', $_POST['contact_email']);
 					} else {
-						$errors[] = __("Contact email is invalid", "W2DC");
+						$errors[] = esc_html__("Contact email is invalid", "w2dc");
 					}
 				}
 			}
 	
 			// only successfully validated listings can be completed
 			if ($errors) {
-				//$data['post_status'] = 'draft';
 	
 				foreach ($errors AS $error) {
 					w2dc_addMessage($error, 'error');
 				}
 			} else {
-				w2dc_addMessage(__('Listing was saved successfully!', 'W2DC'));
+				w2dc_addMessage(esc_html__('Listing was saved successfully!', 'w2dc'));
 			}
 		}
 		return $data;
@@ -996,8 +995,11 @@ class w2dc_listings_manager {
 				}
 				
 				add_post_meta($this->current_listing->post->ID, '_listing_created', true);
-				//add_post_meta($this->current_listing->post->ID, '_order_date', time());
-				$this->changeOrderDate();
+				
+				if (current_user_can('manage_options')) {
+					$this->changeOrderDate();
+				}
+				
 				add_post_meta($this->current_listing->post->ID, '_listing_status', 'active');
 
 				apply_filters('w2dc_listing_creation', $this->current_listing);
@@ -1007,10 +1009,12 @@ class w2dc_listings_manager {
 				}
 					
 				if ($this->current_listing->status == 'expired') {
-					w2dc_addMessage(esc_attr__("You can't publish listing until it has expired status! Renew listing first!", 'W2DC'), 'error');
+					w2dc_addMessage(esc_html__("You can't publish listing until it has expired status! Renew listing first!", 'w2dc'), 'error');
 				}
 				
-				$this->changeOrderDate();
+				if (current_user_can('manage_options')) {
+					$this->changeOrderDate();
+				}
 				
 				do_action('w2dc_listing_update', $this->current_listing);
 			}
@@ -1035,16 +1039,11 @@ class w2dc_listings_manager {
 		
 		$w2dc_instance->locations_manager->deleteLocations($post_id);
 		
-		$ids = $wpdb->get_col("SELECT ID FROM {$wpdb->posts} WHERE post_parent = $post_id AND post_type = 'attachment'");
+		$ids = $wpdb->get_col($wpdb->prepare("SELECT ID FROM {$wpdb->posts} WHERE post_parent = %d AND post_type = 'attachment'", $post_id));
 		$force_delete = apply_filters('w2dc_force_delete_attachment', false, $post_id);
 		foreach ($ids as $id) {
 			wp_delete_attachment($id, $force_delete);
 		}
-
-		/* $children = get_children(array('post_parent' => $post_id));
-		if (is_array($children) && count($children) > 0)
-			foreach($children as $child)
-				wp_delete_post($child->ID, true); */
 	}
 
 	// adapted for WPML
@@ -1074,10 +1073,15 @@ class w2dc_listings_manager {
 					$insert_values['map_icon_file'] = $location->map_icon_file;
 				}
 				$keys = array_keys($insert_values);
-				array_walk($keys, 'w2dc_wrapKeys');
-				array_walk($insert_values, 'w2dc_wrapValues');
+
+				// duplicate locations data in postmeta in order to export it as ordinary wordpress fields
+				foreach ($keys AS $key) {
+					if ($key != 'post_id') {
+						add_post_meta($id, '_'.$key, $insert_values[$key]);
+					}
+				}
 				
-				$wpdb->query("INSERT INTO {$wpdb->w2dc_locations_relationships} (" . implode(', ', $keys) . ") VALUES (" . implode(', ', $insert_values) . ")");
+				$wpdb->insert($wpdb->w2dc_locations_relationships, $insert_values);
 			}
 		}
 	}
@@ -1100,32 +1104,6 @@ class w2dc_listings_manager {
 						$iclTranslationManagement->reset_duplicate_flag($new_listing_id);
 					}
 			}
-
-			/* global $ICL_Pro_Translation;
-
-			$master_post_id = $listing->post->ID;
-
-			require_once( ICL_PLUGIN_PATH . '/lib/icl_api.php' );
-			require_once( ICL_PLUGIN_PATH . '/lib/xml2array.php' );
-			require_once( ICL_PLUGIN_PATH . '/inc/translation-management/pro-translation.class.php' );
-			require_once( ICL_PLUGIN_PATH . '/inc/translation-management/translation-management.class.php' );
-			
-			$iclTranslationManagement = include_once W2DC_PATH . 'wpml-workaround.php';
-			
-			$ICL_Pro_Translation      = new ICL_Pro_Translation();
-			
-			$post_type = get_post_type($master_post_id);
-			if ($sitepress->is_translated_post_type($post_type)) {
-				$sitepress->set_setting('sync_post_taxonomies', false);
-				foreach ($languages AS $lang_code=>$lang) {
-					if ($lang_code != ICL_LANGUAGE_CODE)
-						if ($new_listing_id = $iclTranslationManagement->make_duplicate($master_post_id, $lang_code)) {
-							$iclTranslationManagement->duplicate_taxonomies($master_post_id, $lang_code);
-							$iclTranslationManagement->duplicate_custom_fields($master_post_id, $lang_code);
-							$iclTranslationManagement->reset_duplicate_flag($new_listing_id);
-						}
-				}
-			} */
 		}
 	}
 

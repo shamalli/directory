@@ -1,10 +1,10 @@
 <?php
 
-class VP_W2DC_Metabox_Depsloader
+class W2DC_VP_Metabox_Depsloader
 {
 
 	/**
-	 * ARRAY OF VP_W2DC_METABOX_ALCHEMY OBJECT
+	 * ARRAY OF W2DC_VP_METABOX_ALCHEMY OBJECT
 	 * @var [type]
 	 */
 	private $things;
@@ -16,30 +16,30 @@ class VP_W2DC_Metabox_Depsloader
 
 	public function build()
 	{
-		$vp_w2dc_metabox_used = false;
+		$w2dc_vp_metabox_used = false;
 		$metaboxes = $this->things;
 
 		$result = array(
 			'scripts'              => array(),
 			'styles'               => array(),
-			'localize_name'        => 'vp_w2dc_mb',
+			'localize_name'        => 'w2dc_vp_mb',
 			'localize_default'     => array(),
 			'localize'             => array(),
 			'use_upload'           => false,
 			'use_new_media_upload' => false,
 			'main_js'              => array(
 				'name' => 'vp-metabox',
-				'path' => VP_W2DC_PUBLIC_URL . '/js/metabox.min.js'
+				'path' => W2DC_VP_PUBLIC_URL . '/js/metabox.min.js'
 			),
 			'main_css'             => array(
 				'name' => 'vp-metabox',
-				'path' => VP_W2DC_PUBLIC_URL . '/css/metabox.min.css'
+				'path' => W2DC_VP_PUBLIC_URL . '/css/metabox.min.css'
 			),
 		);
 
-		$script_always = VP_W2DC_Util_Config::instance()->load('dependencies', 'scripts.always');
-		$style_always  = VP_W2DC_Util_Config::instance()->load('dependencies', 'styles.always');
-		$messages      = VP_W2DC_Util_Config::instance()->load('messages');
+		$script_always = W2DC_VP_Util_Config::instance()->load('dependencies', 'scripts.always');
+		$style_always  = W2DC_VP_Util_Config::instance()->load('dependencies', 'styles.always');
+		$messages      = W2DC_VP_Util_Config::instance()->load('messages');
 
 		$result['localize']['val_msg'] = $messages['validation'];
 
@@ -52,7 +52,7 @@ class VP_W2DC_Metabox_Depsloader
 				{
 					function inner_build($fields, &$result)
 					{
-						$rules = VP_W2DC_Util_Config::instance()->load('dependencies', 'rules');
+						$rules = W2DC_VP_Util_Config::instance()->load('dependencies', 'rules');
 						foreach ($fields as $field)
 						{
 							if($field['type'] == 'group')
@@ -76,10 +76,10 @@ class VP_W2DC_Metabox_Depsloader
 				}
 				inner_build($metabox->template, $result);
 				// at least one metabox used, then let's load
-				$vp_w2dc_metabox_used = true;
+				$w2dc_vp_metabox_used = true;
 			}
 
-			if($vp_w2dc_metabox_used)
+			if($w2dc_vp_metabox_used)
 			{
 				$result['scripts'] = array_merge($result['scripts'], $script_always);
 				$result['styles']  = array_merge($result['styles'], $style_always);

@@ -7,7 +7,7 @@ return array(
 	<div class="w2dc-docs w2dc-docs-side">
 		<h2 id="titles_slugs_permalinks">Titles, Slugs and Permalinks</h2>
 	
-		Manage directory title and permalinks structure at the General Settings tab of <em>"Directory Admin -> Directory Settigns"</em> page.
+		Manage directory title and permalinks structure at the General Settings tab of <em>"Directory Admin -> Directory Settings"</em> page.
 		<img src="[base_url]/wp-content/uploads/title_slugs_permalinks.png" />
 		
 		<strong>Directory title</strong> - this string will appear in the title of all frontend pages related with the directory plugin. This could be overwritten by <a href="[base_url]/documentation/search-engine-optimization/">Yoast SEO plugin</a>.

@@ -72,7 +72,7 @@ class w2rr_add_review_controller extends w2rr_frontend_controller {
 					if (!isset($_POST['review_id']) || !isset($_POST['review_id_hash']) || !is_numeric($_POST['review_id']) || md5($_POST['review_id'] . wp_salt()) != $_POST['review_id_hash']) {
 						// Create Auto-Draft
 						$new_post_args = array(
-								'post_title' => esc_html__('Auto Draft', 'W2RR'),
+								'post_title' => esc_html__('Auto Draft', 'w2rr'),
 								'post_type' => W2RR_REVIEW_TYPE,
 								'post_status' => 'auto-draft'
 						);
@@ -116,8 +116,8 @@ class w2rr_add_review_controller extends w2rr_frontend_controller {
 							}
 							
 							$w2rr_form_validation = new w2rr_form_validation();
-							$w2rr_form_validation->set_rules('w2rr_user_contact_name', esc_html__('Contact Name', 'W2RR'), $required);
-							$w2rr_form_validation->set_rules('w2rr_user_contact_email', esc_html__('Contact Email', 'W2RR'), 'valid_email' . $required);
+							$w2rr_form_validation->set_rules('w2rr_user_contact_name', esc_html__('Contact Name', 'w2rr'), $required);
+							$w2rr_form_validation->set_rules('w2rr_user_contact_email', esc_html__('Contact Email', 'w2rr'), 'valid_email' . $required);
 							if (!$w2rr_form_validation->run()) {
 								$errors[] = $w2rr_form_validation->error_array();
 							}
@@ -126,16 +126,16 @@ class w2rr_add_review_controller extends w2rr_frontend_controller {
 							$this->w2rr_user_contact_email = $w2rr_form_validation->result_array('w2rr_user_contact_email');
 						}
 							
-						if (!isset($_POST['post_title']) || !trim($_POST['post_title']) || $_POST['post_title'] == esc_html__('Auto Draft', 'W2RR')) {
-							$errors[] = esc_html__('Review title field required', 'W2RR');
-							$post_title = esc_html__('Auto Draft', 'W2RR');
+						if (!isset($_POST['post_title']) || !trim($_POST['post_title']) || $_POST['post_title'] == esc_html__('Auto Draft', 'w2rr')) {
+							$errors[] = esc_html__('Review title field required', 'w2rr');
+							$post_title = esc_html__('Auto Draft', 'w2rr');
 						} else {
 							$post_title = trim($_POST['post_title']);
 						}
 						
 						$post_content = '';
 						if (empty($_POST['post_content']) && get_option('w2rr_enable_description')) {
-							$errors[] = esc_html__('Review description field required!', 'W2RR');
+							$errors[] = esc_html__('Review description field required!', 'w2rr');
 						} elseif (!empty($_POST['post_content'])) {
 							$post_content = $_POST['post_content'];
 						}
@@ -147,7 +147,7 @@ class w2rr_add_review_controller extends w2rr_frontend_controller {
 						}
 							
 						if (!w2rr_is_recaptcha_passed()) {
-							$errors[] = esc_attr__("Anti-bot test wasn't passed!", 'W2RR');
+							$errors[] = esc_attr__("Anti-bot test wasn't passed!", 'w2rr');
 						}
 						
 						// adapted for WPML
@@ -161,7 +161,7 @@ class w2rr_add_review_controller extends w2rr_frontend_controller {
 						&&
 						(!isset($_POST['w2rr_tospage']) || !$_POST['w2rr_tospage'])
 						) {
-							$errors[] = esc_html__('Please check the box to agree the Terms of Services.', 'W2RR');
+							$errors[] = esc_html__('Please check the box to agree the Terms of Services.', 'w2rr');
 						}
 						
 						$w2rr_instance->reviews_manager->saveReviewRatings($review_id);
@@ -235,7 +235,7 @@ class w2rr_add_review_controller extends w2rr_frontend_controller {
 										}
 			
 										if (get_option('w2rr_newuser_notification')) {
-											$subject = esc_html__('Registration notification', 'W2RR');
+											$subject = esc_html__('Registration notification', 'w2rr');
 											$body = str_replace('[author]', $display_author_name,
 													str_replace('[review]', $post_title,
 													str_replace('[login]', $login_author_name,
@@ -243,7 +243,7 @@ class w2rr_add_review_controller extends w2rr_frontend_controller {
 											get_option('w2rr_newuser_notification')))));
 			
 											if (w2rr_mail($author_email, $subject, $body)) {
-												w2rr_addMessage(esc_html__('New user was created and added to the site, login and password were sent to provided contact email.', 'W2RR'));
+												w2rr_addMessage(esc_html__('New user was created and added to the site, login and password were sent to provided contact email.', 'w2rr'));
 											}
 										}
 									}
@@ -256,11 +256,11 @@ class w2rr_add_review_controller extends w2rr_frontend_controller {
 			
 							if (get_option('w2rr_reviews_moderation')) {
 								$post_status = 'pending';
-								$message = esc_attr__("Review was saved successfully! Now it's awaiting moderators approval.", 'W2RR');
+								$message = esc_attr__("Review was saved successfully! Now it's awaiting moderators approval.", 'w2rr');
 								update_post_meta($review_id, '_requires_moderation', true);
 							} else {
 								$post_status = 'publish';
-								$message = esc_html__('Review was saved successfully! Now you can manage it in your dashboard.', 'W2RR');
+								$message = esc_html__('Review was saved successfully! Now you can manage it in your dashboard.', 'w2rr');
 							}
 			
 							$postarr = array(
@@ -292,7 +292,7 @@ class w2rr_add_review_controller extends w2rr_frontend_controller {
 			
 								if (get_option('w2rr_newreview_admin_notification')) {
 									if ($author = get_userdata($review->post->post_author)) {
-										$subject = esc_html__('Notification about new review creation (do not reply)', 'W2RR');
+										$subject = esc_html__('Notification about new review creation (do not reply)', 'w2rr');
 										$body = str_replace('[user]', $author->display_name,
 												str_replace('[review]', $post_title,
 														str_replace('[link]', admin_url('post.php?post='.$review->post->ID.'&action=edit'),
@@ -326,13 +326,13 @@ class w2rr_add_review_controller extends w2rr_frontend_controller {
 			
 					if (get_current_user_id()) {
 						$current_user = wp_get_current_user();
-						$logout_link = "<a href='".wp_logout_url()."'>" . esc_html__('Log out', 'W2RR') . "</a>";
+						$logout_link = "<a href='".wp_logout_url()."'>" . esc_html__('Log out', 'w2rr') . "</a>";
 						
-						w2rr_addMessage(sprintf(esc_html__("You are logged in as %s. %s or continue submission in this account.", "W2RR"), $current_user->display_name, $logout_link));
+						w2rr_addMessage(sprintf(esc_html__("You are logged in as %s. %s or continue submission in this account.", "w2rr"), $current_user->display_name, $logout_link));
 					} elseif (in_array(get_option('w2rr_reviews_allowed_users'), array('guests', 'required_contact_form'))) {
-						$login_link = "<a href='".wp_login_url()."'>" . esc_html__('log in', 'W2RR') . "</a>";
+						$login_link = "<a href='".wp_login_url()."'>" . esc_html__('log in', 'w2rr') . "</a>";
 						
-						w2rr_addMessage(sprintf(esc_html__("Returning user? Please %s or register in this submission form.", "W2RR"), $login_link));
+						w2rr_addMessage(sprintf(esc_html__("Returning user? Please %s or register in this submission form.", "w2rr"), $login_link));
 					}
 					
 					if (!empty($review->post)) {
@@ -357,9 +357,9 @@ class w2rr_add_review_controller extends w2rr_frontend_controller {
 					$this->template = 'ratings_reviews/review_add.tpl.php';
 					
 					if (!current_user_can('manage_options') && get_option('w2rr_reviews_allowed_users') == 'admin') {
-						w2rr_addMessage(esc_html__("Only admins can post reviews.", "W2RR"));
+						w2rr_addMessage(esc_html__("Only admins can post reviews.", "w2rr"));
 					} elseif (get_option('w2rr_reviews_number_allowed') && w2rr_getReviewsCounterByAuthorByPost($target_post->post->ID) >= get_option('w2rr_reviews_number_allowed')) {
-						w2rr_addMessage(sprintf(esc_html__("You are not allowed to create more than %d review(s) for one post.", "W2RR"), get_option('w2rr_reviews_number_allowed')));
+						w2rr_addMessage(sprintf(esc_html__("You are not allowed to create more than %d review(s) for one post.", "w2rr"), get_option('w2rr_reviews_number_allowed')));
 					}
 				}
 			}

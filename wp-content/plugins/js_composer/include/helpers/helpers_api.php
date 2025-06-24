@@ -275,7 +275,7 @@ if ( ! function_exists( 'vc_add_default_templates' ) ) {
 	 * @since 4.3
 	 */
 	function vc_add_default_templates( $data ) {
-		return visual_composer()->templatesPanelEditor()->addDefaultTemplates( $data );
+		return wpbakery()->templatesPanelEditor()->addDefaultTemplates( $data );
 	}
 }
 
@@ -520,6 +520,7 @@ function vc_map_integrate_parse_atts( $base_shortcode, $integrated_shortcode, $a
 	$data = array();
 	if ( is_array( $params ) && ! empty( $params ) ) {
 		foreach ( $params as $param ) {
+			$value = '';
 			if ( isset( $atts[ $param['param_name'] ] ) ) {
 				$value = $atts[ $param['param_name'] ];
 			}

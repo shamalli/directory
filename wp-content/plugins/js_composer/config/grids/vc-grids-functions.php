@@ -12,6 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function vc_autocomplete_taxonomies_field_render( $term ) {
 	$vc_taxonomies_types = vc_taxonomies_types();
+	// phpcs:ignore
 	$terms = get_terms( array_keys( $vc_taxonomies_types ), array(
 		'include' => array( $term['value'] ),
 		'hide_empty' => false,
@@ -40,6 +41,7 @@ function vc_autocomplete_taxonomies_field_search( $search_string ) {
 	if ( empty( $vc_taxonomies_types ) ) {
 		return array();
 	}
+	// phpcs:ignore
 	$vc_taxonomies = get_terms( $vc_taxonomies_types, array(
 		'hide_empty' => false,
 		'search' => $search_string,

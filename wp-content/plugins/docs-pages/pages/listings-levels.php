@@ -43,7 +43,7 @@ return array(
 		
 		<strong>Do listings have own pages?</strong> - this option could disable listings self pages, so there will not be any links to listings pages, just that information on excerpt pages.
 		
-		<strong>Enable nofollow attribute for links to single listings pages</strong> - <a href="https://support.google.com/webmasters/answer/96569">Description from Google Webmaster Tools</a>
+		<strong>Enable nofollow attribute for links to single listings pages</strong> - <a href="https://developers.google.com/search/docs/crawling-indexing/qualify-outbound-links">Description from Google Docs</a>
 		
 		<strong>Enable google map</strong> - users have an ability to place location(s) marker on Google map.
 		

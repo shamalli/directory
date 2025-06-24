@@ -458,7 +458,7 @@ class Vc_ParamAnimation {
 	public function __construct( $settings, $value ) {
 		$this->settings = $settings;
 		$this->value = $value;
-		wp_register_style( 'vc_animate-css', vc_asset_url( 'lib/bower/animate-css/animate.min.css' ), array(), WPB_VC_VERSION );
+		wp_register_style( 'vc_animate-css', vc_asset_url( 'lib/vendor/node_modules/animate.css/animate.min.css' ), array(), WPB_VC_VERSION );
 	}
 
 	/**
@@ -485,7 +485,12 @@ class Vc_ParamAnimation {
 				$build_style_select .= '<optgroup ' . ( isset( $style['label'] ) ? 'label="' . esc_attr( $style['label'] ) . '"' : '' ) . '>';
 				if ( is_array( $style['values'] ) && ! empty( $style['values'] ) ) {
 					foreach ( $style['values'] as $key => $value ) {
-						$build_style_select .= '<option value="' . ( is_array( $value ) ? $value['value'] : $value ) . '">' . esc_html( $key ) . '</option>';
+						$selected = '';
+						$option_value = is_array( $value ) ? $value['value'] : $value;
+						if ( $option_value === $this->value ) {
+							$selected = 'selected="selected"';
+						}
+						$build_style_select .= '<option value="' . ( $option_value ) . '" ' . $selected . '>' . esc_html( $key ) . '</option>';
 					}
 				}
 				$build_style_select .= '</optgroup>';
@@ -496,7 +501,7 @@ class Vc_ParamAnimation {
 			$output .= $left_side;
 
 			$right_side = '<div class="vc_col-sm-6">';
-			$right_side .= '<div class="vc_param-animation-style-preview"><button class="vc_btn vc_btn-grey vc_btn-sm vc_param-animation-style-trigger">' . esc_html__( 'Animate it', 'js_composer' ) . '</button></div>';
+			$right_side .= '<div class="vc_param-animation-style-preview"><button class="vc_btn-grey vc_general vc_param-animation-style-trigger vc_ui-button vc_ui-button-shape-rounded">' . esc_html__( 'Animate it', 'js_composer' ) . '</button></div>';
 			$right_side .= '</div>';
 			$output .= $right_side;
 		}

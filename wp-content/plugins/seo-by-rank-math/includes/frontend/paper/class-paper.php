@@ -14,8 +14,8 @@ use RankMath\Post;
 use RankMath\Helper;
 use RankMath\Sitemap\Router;
 use RankMath\Traits\Hooker;
-use MyThemeShop\Helpers\Str;
-use MyThemeShop\Helpers\Url;
+use RankMath\Helpers\Str;
+use RankMath\Helpers\Url;
 use RankMath\Helpers\Security;
 
 defined( 'ABSPATH' ) || exit;
@@ -165,7 +165,7 @@ class Paper {
 
 		// Capitalize Titles.
 		if ( Helper::get_settings( 'titles.capitalize_titles' ) ) {
-			$this->title = ucwords( $this->title );
+			$this->title = Str::mb_ucwords( $this->title );
 		}
 
 		$this->title = wp_strip_all_tags( stripslashes( $this->title ), true );
@@ -315,14 +315,14 @@ class Paper {
 			return $this->keywords;
 		}
 
-		$this->keywords = $this->paper->keywords();
-
 		/**
 		 * Allows filtering of the meta keywords.
 		 *
 		 * @param array $keywords The meta keywords to be echoed.
 		 */
-		return $this->do_filter( 'frontend/keywords', $this->keywords );
+		$this->keywords = $this->do_filter( 'frontend/keywords', $this->paper->keywords() );
+
+		return $this->keywords;
 	}
 
 	/**
@@ -545,5 +545,13 @@ class Paper {
 		}
 
 		return apply_filters( 'rank_math/paper/auto_generated_description/apply_shortcode', false );
+	}
+
+	/**
+	 * Clears and reinitializes the object.
+	 */
+	public static function reset() {
+		self::$instance = null;
+		return self::get();
 	}
 }

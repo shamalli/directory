@@ -16,10 +16,9 @@ function vcv_disable_gutenberg_for_classic_editor( $post ) {
 function vc_gutenberg_add_settings( $settings ) {
 	global $wp_version;
 	if ( function_exists( 'the_gutenberg_project' ) || version_compare( $wp_version, '4.9.8', '>' ) ) {
-		$settings->addField( 'general', esc_html__( 'Disable Gutenberg Editor', 'js_composer' ), 'gutenberg_disable', 'vc_gutenberg_sanitize_disable_callback', 'vc_gutenberg_disable_render_callback' );
+		$settings->addField( 'general', esc_html__( 'Disable Gutenberg Editor', 'js_composer' ), 'gutenberg_disable', 'vc_gutenberg_sanitize_disable_callback', 'vc_gutenberg_disable_render_callback', array('info' => esc_html__( 'Disable Gutenberg Editor.', 'js_composer' ) ) );
 	}
 }
-
 /**
  * @param $rules
  *
@@ -33,15 +32,14 @@ function vc_gutenberg_sanitize_disable_callback( $rules ) {
  * Not responsive checkbox callback function
  */
 function vc_gutenberg_disable_render_callback() {
+    // phpcs:ignore
 	$checked = ( $checked = get_option( 'wpb_js_gutenberg_disable' ) ) ? $checked : false;
 	?>
 	<label>
 		<input type="checkbox"<?php echo esc_attr( $checked ) ? ' checked' : ''; ?> value="1"
-			   name="<?php echo 'wpb_js_gutenberg_disable' ?>">
+			name="<?php echo 'wpb_js_gutenberg_disable' ?>">
 		<?php esc_html_e( 'Disable', 'js_composer' ) ?>
-	</label><br/>
-	<p
-			class="description indicator-hint"><?php esc_html_e( 'Disable Gutenberg Editor.', 'js_composer' ); ?></p>
+	</label>
 	<?php
 }
 

@@ -1,11 +1,16 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+?>
 <script>
 	if (typeof w2dc_datetime_input_attrs == 'undefined') {
 		var w2dc_datetime_input_attrs = [];
 	}
 	w2dc_datetime_input_attrs.push({
-			field_id: <?php echo $content_field->id; ?>,
+			field_id: <?php w2dc_esc_e($content_field->id); ?>,
 			isRTL: <?php echo (function_exists('is_rtl') && is_rtl()) ? 1 : 0; ?>,
-			dateFormat: '<?php echo $dateformat; ?>',
+			dateFormat: '<?php w2dc_esc_e($dateformat); ?>',
 			firstDay: <?php echo intval(get_option('start_of_week')); ?>,
 			lang_code: "<?php echo (w2dc_getDatePickerLangCode(get_locale())) ? w2dc_getDatePickerLangCode(get_locale()) : 0; ?>",
 			date_end: <?php echo ($content_field->value['date_end']) ? $content_field->value['date_end'] : 0; ?>,
@@ -14,46 +19,46 @@
 			date_start_formatted: "<?php echo date('d/m/Y', $content_field->value['date_start']); ?>"
 	});
 </script>
-<div class="w2dc-form-group w2dc-field w2dc-field-input-block w2dc-field-input-block-<?php echo $content_field->id; ?>">
+<div class="w2dc-form-group w2dc-field w2dc-field-input-block w2dc-field-input-block-<?php w2dc_esc_e($content_field->id); ?>">
 	<div class="w2dc-col-md-2">
 		<label class="w2dc-control-label">
-			<?php echo $content_field->name; ?><?php if ($content_field->canBeRequired() && $content_field->is_required): ?><span class="w2dc-red-asterisk">*</span><?php endif; ?>
+			<?php w2dc_esc_e($content_field->name); ?><?php if ($content_field->canBeRequired() && $content_field->is_required): ?><span class="w2dc-red-asterisk">*</span><?php endif; ?>
 		</label>
 	</div>
 	<div class="w2dc-col-md-10">
 		<div class="w2dc-row w2dc-form-group w2dc-clearfix">
 			<div class="w2dc-col-md-4">
-				<?php _e('Start', 'W2DC'); ?> 
+				<?php esc_html_e('Start', 'w2dc'); ?> 
 				<div class="w2dc-field-input-start-date w2dc-has-feedback">
-					<input type="text" id="w2dc-field-input-<?php echo $content_field->id; ?>-start" class="w2dc-field-input-datetime w2dc-form-control" />
+					<input type="text" id="w2dc-field-input-<?php w2dc_esc_e($content_field->id); ?>-start" class="w2dc-field-input-datetime w2dc-form-control" />
 					<span class="w2dc-glyphicon w2dc-glyphicon-calendar w2dc-form-control-feedback"></span>
-					<input type="hidden" name="w2dc-field-input-<?php echo $content_field->id; ?>-start" value="<?php echo esc_attr($content_field->value['date_start']); ?>"/>
+					<input type="hidden" name="w2dc-field-input-<?php w2dc_esc_e($content_field->id); ?>-start" value="<?php echo esc_attr($content_field->value['date_start']); ?>"/>
 				</div>
 				
-				<?php _e('End', 'W2DC'); ?> 
+				<?php esc_html_e('End', 'w2dc'); ?> 
 				<div class="w2dc-field-input-end-date w2dc-has-feedback">
-					<input type="text" id="w2dc-field-input-<?php echo $content_field->id; ?>-end" class="w2dc-field-input-datetime w2dc-form-control" />
+					<input type="text" id="w2dc-field-input-<?php w2dc_esc_e($content_field->id); ?>-end" class="w2dc-field-input-datetime w2dc-form-control" />
 					<span class="w2dc-glyphicon w2dc-glyphicon-calendar w2dc-form-control-feedback"></span>
-					<input type="hidden" name="w2dc-field-input-<?php echo $content_field->id; ?>-end" value="<?php echo esc_attr($content_field->value['date_end']); ?>"/>
+					<input type="hidden" name="w2dc-field-input-<?php w2dc_esc_e($content_field->id); ?>-end" value="<?php echo esc_attr($content_field->value['date_end']); ?>"/>
 				</div>
 			</div>
 			<div class="w2dc-col-md-2">
 				<br />
-				<input type="button" class="w2dc-btn w2dc-btn-primary" id="w2dc-reset-date-<?php echo $content_field->id; ?>-start" value="<?php esc_attr_e('reset', 'W2DC')?>" />
+				<input type="button" class="w2dc-btn w2dc-btn-primary" id="w2dc-reset-date-<?php w2dc_esc_e($content_field->id); ?>-start" value="<?php esc_attr_e('reset', 'w2dc')?>" />
 				<br />
 				<br />
-				<input type="button" class="w2dc-btn w2dc-btn-primary" id="w2dc-reset-date-<?php echo $content_field->id; ?>-end" value="<?php esc_attr_e('reset', 'W2DC')?>" />
+				<input type="button" class="w2dc-btn w2dc-btn-primary" id="w2dc-reset-date-<?php w2dc_esc_e($content_field->id); ?>-end" value="<?php esc_attr_e('reset', 'w2dc')?>" />
 			</div>
 		</div>
 		<?php if ($content_field->is_time): ?>
 		<div class="w2dc-row w2dc-form-group w2dc-clearfix">
 			<div class="w2dc-col-md-3">
-				<?php _e('Time:', 'W2DC'); ?>
+				<?php esc_html_e('Time:', 'w2dc'); ?>
 			</div>
 		</div>
 		<div class="w2dc-row w2dc-form-group w2dc-clearfix">
 			<div class="w2dc-col-md-3">
-				<select name="w2dc-field-input-hour_<?php echo $content_field->id; ?>" class="w2dc-form-control">
+				<select name="w2dc-field-input-hour_<?php w2dc_esc_e($content_field->id); ?>" class="w2dc-form-control">
 					<option value="00" <?php if ($content_field->value['hour'] == '00') echo 'selected'; ?>>00</option>
 					<option value="01" <?php if ($content_field->value['hour'] == '01') echo 'selected'; ?>>01</option>
 					<option value="02" <?php if ($content_field->value['hour'] == '02') echo 'selected'; ?>>02</option>
@@ -81,7 +86,7 @@
 				</select>
 			</div>
 			<div class="w2dc-col-md-3">
-				<select name="w2dc-field-input-minute_<?php echo $content_field->id; ?>" class="w2dc-form-control">
+				<select name="w2dc-field-input-minute_<?php w2dc_esc_e($content_field->id); ?>" class="w2dc-form-control">
 					<option value="00" <?php if ($content_field->value['minute'] == '00') echo 'selected'; ?>>00</option>
 					<option value="01" <?php if ($content_field->value['minute'] == '01') echo 'selected'; ?>>01</option>
 					<option value="02" <?php if ($content_field->value['minute'] == '02') echo 'selected'; ?>>02</option>
@@ -146,6 +151,6 @@
 			</div>
 		</div>
 		<?php endif; ?>
-		<?php if ($content_field->description): ?><p class="description"><?php echo $content_field->description; ?></p><?php endif; ?>
+		<?php if ($content_field->description): ?><p class="description"><?php w2dc_esc_e($content_field->description); ?></p><?php endif; ?>
 	</div>
 </div>

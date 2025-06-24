@@ -1,44 +1,25 @@
 <?php
 
-global $w2dc_content_field_widget_params;
-$w2dc_content_field_widget_params = array(
-		array(
-				'type' => 'contentfield',
-				'param_name' => 'id',
-				'heading' => __('Content field', 'W2DC'),
-		),
-		array(
-				'type' => 'textfield',
-				'param_name' => 'listing',
-				'heading' => __('Listing ID', 'W2DC'),
-				'description' => __('Leave empty if you place it on single listing page', 'W2DC'),
-		),
-		array(
-				'type' => 'textfield',
-				'param_name' => 'classes',
-				'heading' => __('CSS classes', 'W2DC'),
-				'description' => __('CSS classes to add to content field wrapper', 'W2DC'),
-		),
-		array(
-				'type' => 'checkbox',
-				'param_name' => 'visibility',
-				'heading' => __("Show only on directory pages", "W2DC"),
-				'value' => 0,
-				'description' => __("Otherwise it will load plugin's files on all pages", "W2DC"),
-		),
-);
+// @codingStandardsIgnoreFile
 
-class w2dc_content_field_widget extends w2dc_widget {
+add_action('init', function() {
+	global $w2dc_breadcrumbs_widget_params;
+	$w2dc_breadcrumbs_widget_params = array(
+			
+	);
+}, 0);
+
+class w2dc_breadcrumbs_widget extends w2dc_widget {
 
 	public function __construct() {
-		global $w2dc_instance, $w2dc_content_field_widget_params;
+		global $w2dc_instance, $w2dc_breadcrumbs_widget_params;
 
 		parent::__construct(
-				'w2dc_content_field_shortcode_widget',
-				__('Directory - Content field', 'W2DC')
+				'w2dc_breadcrumbs_shortcode_widget',
+				esc_html__('Directory widget - Breadcrumbs', 'w2dc')
 		);
 
-		$this->convertParams($w2dc_content_field_widget_params);
+		$this->convertParams($w2dc_breadcrumbs_widget_params);
 	}
 	
 	public function render_widget($instance, $args) {
@@ -58,8 +39,8 @@ class w2dc_content_field_widget extends w2dc_widget {
 			if (!empty($title)) {
 				echo $args['before_title'] . $title . $args['after_title'];
 			}
-			echo '<div class="w2dc-content w2dc-widget w2dc-breadcrumbs-widget">';
-			$controller = new w2dc_content_field_controller();
+			echo '<div class="w2dc-content w2dc-widget w2dc-content-field-widget">';
+			$controller = new w2dc_breadcrumbs_controller();
 			$controller->init($instance);
 			echo $controller->display();
 			echo '</div>';

@@ -1,6 +1,8 @@
 <?php 
 
 class w2rr_ajax_controller {
+	
+	public $review_id;
 
 	public function __construct() {
 		add_action('wp_ajax_w2rr_get_sharing_buttons', array($this, 'get_sharing_buttons'));
@@ -28,7 +30,6 @@ class w2rr_ajax_controller {
 				'reviews_order_by' => 'post_date',
 				'reviews_order' => 'DESC',
 				'hide_order' => 0,
-				'author' => 0,
 				'paged' => 1,
 				'include_get_params' => 1,
 				'template' => 'ratings_reviews/reviews_block.tpl.php',

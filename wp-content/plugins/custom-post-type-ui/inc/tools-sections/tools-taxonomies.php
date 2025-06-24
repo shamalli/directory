@@ -16,11 +16,21 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 1.2.0 Added $cptui_taxonomies parameter.
  */
 function cptui_get_taxonomy_code( $cptui_taxonomies = [], $single = false ) {
+	// Whitespace very much matters here, thus why it's all flush against the left side.
 	if ( ! empty( $cptui_taxonomies ) ) {
 		$callback = 'cptui_register_my_taxes';
 		if ( $single ) {
 			$key      = key( $cptui_taxonomies );
-			$callback = 'cptui_register_my_taxes_' . str_replace( '-', '_', esc_html( $cptui_taxonomies[ $key ]['name'] ) );
+			$callback = 'cptui_register_my_taxes_unknown'; // new fallback
+			if ( ! empty( $cptui_taxonomies[ $key ]['name'] ) ) {
+				// If we have a name value.
+				$suffix = esc_html( $cptui_taxonomies[ $key ]['name'] );
+
+				// if somehow our escaping is returning a null value.
+				if ( ! empty( $suffix ) ) {
+					$callback = 'cptui_register_my_taxes_' . str_replace( '-', '_', $suffix );
+				}
+			}
 		}
 		ob_start();
 		?>
@@ -101,6 +111,7 @@ function cptui_get_single_taxonomy_registery( $taxonomy = [] ) {
 	$rest_base             = ! empty( $taxonomy['rest_base'] ) ? $taxonomy['rest_base'] : $taxonomy['name'];
 	$rest_controller_class = ! empty( $taxonomy['rest_controller_class'] ) ? $taxonomy['rest_controller_class'] : 'WP_REST_Terms_Controller';
 	$rest_namespace        = ! empty( $taxonomy['rest_namespace'] ) ? $taxonomy['rest_namespace'] : 'wp/v2';
+	$sort                  = ( ! empty( $taxonomy['sort'] ) && false !== get_disp_boolean( $taxonomy['sort'] ) ) ? 'true' : 'false';
 
 	if ( ! empty( $taxonomy['meta_box_cb'] ) ) {
 		$meta_box_cb = ( false !== get_disp_boolean( $taxonomy['meta_box_cb'] ) ) ? '"' . $taxonomy['meta_box_cb'] . '"' : 'false';
@@ -169,7 +180,7 @@ foreach ( $taxonomy['labels'] as $key => $label ) {
 		"rest_controller_class" => "<?php echo $rest_controller_class; ?>",
 		"rest_namespace" => "<?php echo $rest_namespace; ?>",
 		"show_in_quick_edit" => <?php echo $show_in_quick_edit; ?>,
-		"sort" => <?php echo disp_boolean( $taxonomy['sort'] ); ?>,
+		"sort" => <?php echo $sort; ?>,
 <?php if ( $show_graphql ) : ?>
 		"show_in_graphql" => <?php echo disp_boolean( $taxonomy['show_in_graphql'] ); ?>,
 		"graphql_single_name" => "<?php echo esc_html( $taxonomy['graphql_single_name'] ); ?>",

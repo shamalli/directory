@@ -13,7 +13,7 @@ namespace RankMath\Image_Seo;
 use stdClass;
 use RankMath\Helper;
 use RankMath\Traits\Hooker;
-use MyThemeShop\Helpers\HTML;
+use RankMath\Helpers\HTML;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -23,6 +23,20 @@ defined( 'ABSPATH' ) || exit;
 class Add_Attributes {
 
 	use Hooker;
+
+	/**
+	 * Stores the image alt format if it is set.
+	 *
+	 * @var string|false
+	 */
+	public $is_alt;
+
+	/**
+	 * Stores the image title format if it is set.
+	 *
+	 * @var string|false
+	 */
+	public $is_title;
 
 	/**
 	 * The Constructor.
@@ -107,7 +121,7 @@ class Add_Attributes {
 	 * @param null|int $post_id The post ID.
 	 * @return object
 	 */
-	private function get_post( $post_id = null) {
+	private function get_post( $post_id = null ) {
 		$post = \get_post( $post_id );
 		if ( empty( $post ) ) {
 			$post = new stdClass();

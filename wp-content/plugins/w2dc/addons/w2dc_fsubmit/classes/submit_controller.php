@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+// @codingStandardsIgnoreFile
 
 class w2dc_submit_controller extends w2dc_frontend_controller {
 	
@@ -7,7 +9,8 @@ class w2dc_submit_controller extends w2dc_frontend_controller {
 	public $w2dc_user_contact_email;
 
 	public function init($args = array()) {
-		global $w2dc_instance, $w2dc_fsubmit_instance;
+		global $w2dc_instance;
+		global $w2dc_fsubmit_instance;
 
 		parent::init($args);
 		
@@ -25,9 +28,12 @@ class w2dc_submit_controller extends w2dc_frontend_controller {
 				'levels' => null,
 				'directory' => null,
 				'options' => '',
+				'categories' => array(), // exact categories to display in select list
 		), $args);
 		
 		$this->args = $shortcode_atts;
+		
+		$this->add_template_args(array('categories' => $this->args['categories']));
 		
 		$directory = null;
 		if ($this->args['directory']) {
@@ -95,7 +101,7 @@ class w2dc_submit_controller extends w2dc_frontend_controller {
 			$level = $w2dc_instance->levels->getLevelById($level_id);
 
 			if (!array_key_exists($level_id, $this->levels) || !w2dc_is_user_allowed($level->who_can_submit)) {
-				w2dc_addMessage(__('You are not allowed to submit in this level. Choose another level.', 'W2DC'), 'error');
+				w2dc_addMessage(esc_html__('You are not allowed to submit in this level. Choose another level.', 'w2dc'), 'error');
 				wp_redirect(w2dc_submitUrl());
 			}
 
@@ -118,7 +124,7 @@ class w2dc_submit_controller extends w2dc_frontend_controller {
 				if (!isset($_POST['listing_id']) || !isset($_POST['listing_id_hash']) || !is_numeric($_POST['listing_id']) || md5($_POST['listing_id'] . wp_salt()) != $_POST['listing_id_hash']) {
 					// Create Auto-Draft
 					$new_post_args = array(
-							'post_title' => __('Auto Draft', 'W2DC'),
+							'post_title' => esc_html__('Auto Draft', 'w2dc'),
 							'post_type' => W2DC_POST_TYPE,
 							'post_status' => 'auto-draft'
 					);
@@ -135,7 +141,7 @@ class w2dc_submit_controller extends w2dc_frontend_controller {
 								'logo_enabled' => $listing->level->logo_enabled,
 						));
 					} else {
-						wp_die(esc_html__('Auto draft can not be created!', 'W2DC'));
+						wp_die(esc_html__('Auto draft can not be created!', 'w2dc'));
 					}
 				} elseif (isset($_POST['submit']) && (isset($_POST['_submit_nonce']) && wp_verify_nonce($_POST['_submit_nonce'], 'w2dc_submit'))) {
 					// This is existed Auto-Draft
@@ -166,8 +172,8 @@ class w2dc_submit_controller extends w2dc_frontend_controller {
 							$required = '';
 						}
 						$w2dc_form_validation = new w2dc_form_validation();
-						$w2dc_form_validation->set_rules('w2dc_user_contact_name', __('Contact Name', 'W2DC'), $required);
-						$w2dc_form_validation->set_rules('w2dc_user_contact_email', __('Contact Email', 'W2DC'), 'valid_email' . $required);
+						$w2dc_form_validation->set_rules('w2dc_user_contact_name', esc_html__('Contact Name', 'w2dc'), $required);
+						$w2dc_form_validation->set_rules('w2dc_user_contact_email', esc_html__('Contact Email', 'w2dc'), 'valid_email' . $required);
 						if (!$w2dc_form_validation->run()) {
 							$errors[] = $w2dc_form_validation->error_array();
 						}
@@ -176,9 +182,9 @@ class w2dc_submit_controller extends w2dc_frontend_controller {
 						$this->w2dc_user_contact_email = $w2dc_form_validation->result_array('w2dc_user_contact_email');
 					}
 
-					if (!isset($_POST['post_title']) || !trim($_POST['post_title']) || $_POST['post_title'] == __('Auto Draft', 'W2DC')) {
-						$errors[] = __('Listing title field required', 'W2DC');
-						$post_title = __('Auto Draft', 'W2DC');
+					if (!isset($_POST['post_title']) || !trim($_POST['post_title']) || $_POST['post_title'] == esc_html__('Auto Draft', 'w2dc')) {
+						$errors[] = esc_html__('Listing title field required', 'w2dc');
+						$post_title = esc_html__('Auto Draft', 'w2dc');
 					} else {
 						$post_title = trim($_POST['post_title']);
 					}
@@ -217,7 +223,7 @@ class w2dc_submit_controller extends w2dc_frontend_controller {
 					
 					if (get_option('w2dc_listing_contact_form') && get_option('w2dc_custom_contact_email')) {
 						$w2dc_form_validation = new w2dc_form_validation();
-						$w2dc_form_validation->set_rules('contact_email', __('Contact email', 'W2DC'), 'valid_email');
+						$w2dc_form_validation->set_rules('contact_email', esc_html__('Contact email', 'w2dc'), 'valid_email');
 					
 						if (!$w2dc_form_validation->run()) {
 							$errors[] = $w2dc_form_validation->error_array();
@@ -227,7 +233,7 @@ class w2dc_submit_controller extends w2dc_frontend_controller {
 					}
 
 					if (!w2dc_is_recaptcha_passed()) {
-						$errors[] = esc_attr__("Anti-bot test wasn't passed!", 'W2DC');
+						$errors[] = esc_attr__("Anti-bot test wasn't passed!", 'w2dc');
 					}
 
 					// adapted for WPML
@@ -241,7 +247,7 @@ class w2dc_submit_controller extends w2dc_frontend_controller {
 					&&
 					(!isset($_POST['w2dc_tospage']) || !$_POST['w2dc_tospage'])
 					) {
-						$errors[] = __('Please check the box to agree the Terms of Services.', 'W2DC');
+						$errors[] = esc_html__('Please check the box to agree the Terms of Services.', 'w2dc');
 					}
 
 					if ($errors) {
@@ -311,7 +317,7 @@ class w2dc_submit_controller extends w2dc_frontend_controller {
 									}
 	
 									if (get_option('w2dc_newuser_notification')) {
-										$subject = __('Registration notification', 'W2DC');
+										$subject = esc_html__('Registration notification', 'w2dc');
 										$body = str_replace('[author]', $display_author_name,
 												str_replace('[listing]', $post_title,
 												str_replace('[login]', $login_author_name,
@@ -319,7 +325,7 @@ class w2dc_submit_controller extends w2dc_frontend_controller {
 										get_option('w2dc_newuser_notification')))));
 
 										if (w2dc_mail($author_email, $subject, $body)) {
-											w2dc_addMessage(__('New user was created and added to the site, login and password were sent to provided contact email.', 'W2DC'));
+											w2dc_addMessage(esc_html__('New user was created and added to the site, login and password were sent to provided contact email.', 'w2dc'));
 										}
 									}
 								}
@@ -332,11 +338,11 @@ class w2dc_submit_controller extends w2dc_frontend_controller {
 
 						if (get_option('w2dc_fsubmit_moderation')) {
 							$post_status = 'pending';
-							$message = esc_attr__("Listing was saved successfully! Now it's awaiting moderators approval.", 'W2DC');
+							$message = esc_html__("Listing was saved successfully! Now it's awaiting moderators approval.", 'w2dc');
 							update_post_meta($listing_id, '_requires_moderation', true);
 						} else {
 							$post_status = 'publish';
-							$message = __('Listing was saved successfully! Now you can manage it in your dashboard.', 'W2DC');
+							$message = esc_html__('Listing was saved successfully! Now you can manage it in your dashboard.', 'w2dc');
 						}
 
 						$postarr = array(
@@ -380,7 +386,7 @@ class w2dc_submit_controller extends w2dc_frontend_controller {
 							if (get_option('w2dc_newlisting_admin_notification')) {
 								$author = get_userdata($listing->post->post_author);
 
-								$subject = __('Notification about new listing creation (do not reply)', 'W2DC');
+								$subject = esc_html__('Notification about new listing creation (do not reply)', 'w2dc');
 								$body = str_replace('[user]', $author->display_name,
 										str_replace('[listing]', $post_title,
 										str_replace('[link]', admin_url('post.php?post='.$listing->post->ID.'&action=edit'),
@@ -410,12 +416,12 @@ class w2dc_submit_controller extends w2dc_frontend_controller {
 				
 				if (get_current_user_id()) {
 					$current_user = wp_get_current_user();
-					w2dc_addMessage(sprintf(__("You are logged in as %s. <a href='%s'>Log out</a> or continue submission in this account.", "W2DC"), $current_user->display_name, wp_logout_url(w2dc_submitUrl())));
+					w2dc_addMessage(sprintf(wp_kses(__("You are logged in as %s. <a href='%s'>Log out</a> or continue submission in this account.", "w2dc"), 'post'), $current_user->display_name, wp_logout_url(w2dc_submitUrl())));
 					if ($package_message = $w2dc_instance->listings_packages->submitlisting_level_message($w2dc_instance->current_listing->level)) {
 						w2dc_addMessage($package_message);
 					}
 				} elseif (get_option('w2dc_fsubmit_login_mode') == 2 || get_option('w2dc_fsubmit_login_mode') == 3) {
-					w2dc_addMessage(sprintf(__("Returning user? Please <a href='%s'>Log in</a> or register in this submission form.", "W2DC"), wp_login_url()));
+					w2dc_addMessage(sprintf(wp_kses(__("Returning user? Please <a href='%s'>Log in</a> or register in this submission form.", "w2dc"), 'post'), wp_login_url()));
 				}
 				
 				$editor_options = array('media_buttons' => false, 'editor_class' => 'w2dc-editor-class');
